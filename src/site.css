@@ -47,13 +47,18 @@ h1, h2, h3, h4, h5, h6 { font-size: clamp(1.05rem, 1.8vw, 1.25rem); line-height:
 .magazine-logo { margin: 0 0 1rem; }
 .magazine-logo img { display: block; max-width: min(100%, 28rem); max-height: 9rem; width: auto; height: auto; object-fit: contain; }
 .magazine-logo figcaption { margin-top: .25rem; font-size: .75rem; }
-.catalog-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; padding: 0; margin-block: 1rem; }
+.catalog-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; padding: 0; margin-block: 1rem; overflow-wrap: anywhere; }
 .catalog-grid > li { display: flex; flex-direction: column; min-width: 0; list-style: none; margin: 0; padding: 1rem; border: 1px solid var(--pico-muted-border-color); border-radius: var(--pico-border-radius); background: var(--pico-card-background-color); }
 .catalog-grid h2 { margin-bottom: .4rem; }
 .game-catalog .catalog-grid h2 { font-size: .95rem; }
 .catalog-grid p { margin: 0; }
 .catalog-grid h2 + p { margin-top: auto; }
-@media (min-width: 480px) { .catalog-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 479px) {
+  .catalog-grid { gap: .5rem; }
+  .catalog-grid > li { padding: .6rem; }
+  .catalog-grid h2, .game-catalog .catalog-grid h2 { font-size: .9rem; }
+  .catalog-grid .meta { font-size: .75rem; }
+}
 @media (min-width: 768px) { .catalog-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 @media (min-width: 1024px) { .catalog-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 @media (min-width: 1280px) { .catalog-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); } }

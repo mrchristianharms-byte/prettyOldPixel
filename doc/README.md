@@ -609,10 +609,12 @@ erhalten bleiben; die Jahrgangsüberschrift macht hierzu keine Aussage.
   Die Jahrgangsanzahl wird nur bei bekannten Heftjahren angezeigt; ohne
   Heftjahr entfällt die Angabe statt „0 Jahrgänge“. Heftnummern allein oder
   das Veröffentlichungsdatum eines Videos ergeben keinen Heftjahrgang.
-  Das CSS-Raster zeigt eine Spalte,
-  ab 480px zwei, ab 768px drei, ab 1024px vier und ab 1280px höchstens
+  Das CSS-Raster zeigt bereits auf kleinen Mobilgeräten zwei Spalten,
+  ab 768px drei, ab 1024px vier und ab 1280px höchstens
   fünf Spalten. Alphabetische Reihenfolge, Links und Paginierung mit
   höchstens 60 Einträgen funktionieren unverändert ohne JavaScript.
+  Unter 480px sind Kachelabstände, Innenabstände und Schriftgrößen kompakter;
+  lange Titel und Metadaten umbrechen ohne horizontalen Überlauf.
 - Mengenangaben unterscheiden Einzahl und Mehrzahl (`1 Video`, `2 Videos`,
   `1 Jahrgang`, `2 Jahrgänge`). Video-Veröffentlichungsdaten erscheinen
   kompakt als `23.11.2016, 18:42`, in der schmalen Folgenliste nur als
