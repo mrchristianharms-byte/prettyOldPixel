@@ -71,8 +71,8 @@ test("erzeugt echte Seitenlinks, selbstreferenzierende Canonicals und paginierte
   const second = pages.get("videos/seite/2/index.html").html;
   assert.equal((first.match(/<li><article>/gu) ?? []).length, 50);
   assert.equal((second.match(/<li><article>/gu) ?? []).length, 3);
-  assert.ok(second.includes(`rel="canonical" href="${config.absolute("videos/seite/2/")}"`));
-  assert.ok(second.includes(`href="${config.href("videos/")}" rel="prev"`));
+  assert.ok(second.includes('rel="canonical" href="./"'));
+  assert.ok(second.includes('href="../../" rel="prev"'));
   assert.ok(![...pages.values()].some((page) => /href="[^"]*\/spiele\/|href="[^"]*\/zeitschriften\//u.test(page.html)));
   assert.ok(validateSite(pages, assets, config).maxHtmlGzip < 50 * 1024);
 });
@@ -92,6 +92,40 @@ test("rendert News vollständig ohne Laufzeit-JavaScript und setzt VideoObject-M
   assert.equal(graph.at(-1)["@type"], "BreadcrumbList");
   assert.equal((video.match(/<script/gu) ?? []).length, 2);
   assert.ok(!video.includes("dateModified"));
+});
+
+test("erzeugt standortunabhängige Seiten mit relativen Links, Assets, Canonicals und JSON-LD", () => {
+  for (const input of [fixture(), issueFixture()]) {
+    const { pages, config, assets } = render(input);
+    const relocated = render(input, "https://example.org/anderer/tiefer/pfad/");
+    assert.deepEqual([...relocated.pages], [...pages]);
+    validateSite(pages, assets, relocated.config);
+    validateSite(pages, assets, createSiteConfig("http://localhost:8000/"));
+    for (const page of pages.values()) {
+      assert.ok(!page.html.includes(config.baseUrl));
+      assert.ok(!page.html.includes('href="/'));
+      assert.ok(!page.html.includes('src="/'));
+      assert.ok(page.html.includes(`rel="stylesheet" href="${config.href("assets/site.css", page.route)}"`));
+      assert.ok(page.html.includes(`property="og:url" content="${config.href(page.route, page.route)}"`));
+      const breadcrumbs = JSON.parse(page.html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/u)[1])["@graph"].at(-1);
+      assert.equal(breadcrumbs.itemListElement[0].item, config.href("", page.route));
+    }
+  }
+});
+
+test("lehnt absolute interne Metadaten und Skriptpfade ab", () => {
+  const { pages, config, assets } = render(issueFixture());
+  const page = pages.get("news/index.html");
+  const original = page.html;
+  page.html = original.replace('"@id":"./#page"', `"@id":"${config.absolute("news/")}#page"`);
+  assert.notEqual(page.html, original);
+  assert.throws(() => validateSite(pages, assets, config), /seitenrelativ/u);
+  page.html = original.replace('property="og:url" content="./"', `property="og:url" content="${config.absolute("news/")}"`);
+  assert.throws(() => validateSite(pages, assets, config), /seitenrelativ/u);
+  page.html = original;
+  const detail = [...pages.values()].find((page) => page.html.includes('type="module"'));
+  detail.html = detail.html.replace(/(<script type="module" src=")[^"]+/u, `$1${config.absolute("assets/video-series.js")}`);
+  assert.throws(() => validateSite(pages, assets, config), /seitenrelativ/u);
 });
 
 test("escapet Quelltexte und JSON-LD, verlinkt nur HTTP(S) und kennzeichnet externe Ziele", () => {
@@ -124,7 +158,7 @@ test("lädt vor Aktivierung keinen YouTube-Player und dokumentiert den aktuellen
   for (const text of ["nicht kommerziell", "GitHub Pages", "i.ytimg.com", "youtube-nocookie.com", "keine YouTube-IFrame-API", "Session Storage"]) {
     assert.ok(privacy.includes(text), text);
   }
-  for (const page of pages.values()) assert.ok(page.html.includes('href="/prettyOldPixel/datenschutz/"'));
+  for (const page of pages.values()) assert.ok(page.html.includes(`href="${createSiteConfig().href("datenschutz/", page.route)}"`));
   assert.ok(pages.get("404.html").html.includes('content="noindex, follow"'));
 });
 
@@ -148,12 +182,16 @@ test("stellt Zeitschriften mit Archiv-Match-Typ dar, ohne Cover-Hotlinks oder Ph
 test("validiert defekte Links, Fragmente und HTML-/CSS-Budgets als Build-Fehler", () => {
   const { pages, config, assets } = render(fixture(1));
   const original = pages.get("index.html").html;
-  pages.get("index.html").html += '<a href="/prettyOldPixel/fehlt/">Falsch</a>';
+  pages.get("index.html").html += '<a href="fehlt/">Falsch</a>';
   assert.throws(() => validateSite(pages, assets, config), /Nicht erzeugtes Linkziel/u);
   pages.get("index.html").html = `${original}<a href="#nicht-vorhanden">Falsch</a>`;
   assert.throws(() => validateSite(pages, assets, config), /Unbekanntes Fragment/u);
   pages.get("index.html").html = `${original}<a href="/videos/">Falsch</a>`;
   assert.throws(() => validateSite(pages, assets, config), /Projektpfad/u);
+  for (const url of ["/prettyOldPixel/news/", `${config.baseUrl}news/`]) {
+    pages.get("index.html").html = `${original}<a href="${url}">Falsch</a>`;
+    assert.throws(() => validateSite(pages, assets, config), /seitenrelativ/u);
+  }
   pages.get("index.html").html = `${original}<a href="https://example.com/">Extern</a>`;
   assert.throws(() => validateSite(pages, assets, config), /ohne Kennzeichnung/u);
   pages.get("index.html").html = `${original}<img src="https://example.com/cover.jpg" width="320" height="180" alt="Cover">`;
@@ -270,7 +308,8 @@ test("setzt Sitemap-lastmod nur bei Inhaltsänderungen und erhält Zeitpunkte au
   assert.equal(await readFile(path.join(restoredOutput, "sitemap.xml"), "utf8"), await readFile(sitemapPath, "utf8"));
 
   await generateSite({ ...options, now: laterTime + 86400000, baseUrl: "https://example.com/other/" });
-  assert.ok(Object.values((await readManifest()).pages).every((page) => page.lastModified === new Date(laterTime + 86400000).toISOString()));
+  assert.deepEqual((await readManifest()).pages, updated.pages);
+  assert.ok((await readFile(sitemapPath, "utf8")).includes("https://example.com/other/news/"));
 });
 
 test("migriert alte Manifeste und lehnt beschädigte Änderungsdaten vor dem Schreiben ab", async (t) => {
@@ -333,7 +372,8 @@ test("unterstützt lokale Vorschau-Basis und verweigert das Überschreiben von Q
   const options = await setup(t, fixture(1));
   await generateSite({ ...options, baseUrl: "http://localhost:4173/" });
   const html = await readFile(path.join(options.outputDirectory, "index.html"), "utf8");
-  assert.ok(html.includes('href="/videos/"'));
-  assert.ok(html.includes('href="http://localhost:4173/"'));
+  assert.ok(html.includes('href="videos/"'));
+  assert.ok(html.includes('rel="canonical" href="./"'));
+  assert.ok(!html.includes("http://localhost:4173/"));
   await assert.rejects(generateSite({ ...options, outputDirectory: options.cacheDirectory }), /Unsicheres Ausgabeverzeichnis/u);
 });

@@ -33,13 +33,13 @@ export function validateSite(pages, assets, config) {
     maxHtmlGzip = Math.max(bytes, maxHtmlGzip);
     if (bytes > 50 * 1024) throw new Error(`${file}: HTML überschreitet 50 KiB gzip (${bytes} Bytes).`);
     if ((page.html.match(/<h1(?:\s|>)/gu) ?? []).length !== 1) throw new Error(`${file}: Genau eine h1 erforderlich.`);
-    if (!page.html.includes(`<link rel="canonical" href="${config.absolute(page.route)}">`)) throw new Error(`${file}: Canonical fehlt.`);
+    if (!page.html.includes(`<link rel="canonical" href="${config.href(page.route, page.route)}">`)) throw new Error(`${file}: Canonical fehlt.`);
     const scripts = [...page.html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gu)];
     if (scripts[0]?.[1] !== ' type="application/ld+json"' || scripts.length > 2
       || (scripts.length === 2 && !/^ type="module" src="[^"]+"$/u.test(scripts[1][1]))) {
       throw new Error(`${file}: Nur JSON-LD und ein lokales Videowechsel-Modul sind erlaubt.`);
     }
-    JSON.parse(scripts[0][2]);
+    const schema = JSON.parse(scripts[0][2]);
     for (const match of page.html.matchAll(/<(a|img|iframe|link|script)\b[^>]*>/gu)) {
       const tag = match[0];
       const url = /\b(?:href|src)="([^"]*)"/u.exec(tag)?.[1];
@@ -55,22 +55,37 @@ export function validateSite(pages, assets, config) {
         throw new Error(`${file}: Unerlaubte externe Ressource ${target.href}`);
       }
     }
-    for (const match of page.html.matchAll(/\b(?:href|src)="([^"]*)"/gu)) {
-      const value = match[1].replaceAll("&amp;", "&");
+    function validateUrl(value, checkFragment = true) {
       const target = new URL(value, config.absolute(page.route));
       if (target.origin !== new URL(config.baseUrl).origin) {
         if (!["http:", "https:"].includes(target.protocol)) throw new Error(`${file}: Unerlaubtes Linkprotokoll.`);
-        continue;
+        return;
       }
       if (!target.pathname.startsWith(config.basePath)) throw new Error(`${file}: Link außerhalb des Projektpfads: ${value}`);
+      if (/^(?:\/|[a-z][a-z\d+.-]*:)/iu.test(value)) throw new Error(`${file}: Interner Link muss seitenrelativ sein: ${value}`);
       const relative = target.pathname.slice(config.basePath.length);
       const targetFile = relative.endsWith("/") || !relative ? `${relative}index.html` : relative;
       if (!files.has(targetFile)) throw new Error(`${file}: Nicht erzeugtes Linkziel ${value}`);
-      if (target.hash && pages.has(targetFile)) {
+      if (checkFragment && target.hash && pages.has(targetFile)) {
         const fragment = decodeURIComponent(target.hash.slice(1));
         if (!pages.get(targetFile).html.includes(`id="${escapeHtml(fragment)}"`)) throw new Error(`${file}: Unbekanntes Fragment ${value}`);
       }
     }
+    for (const match of page.html.matchAll(/\b(?:href|src)="([^"]*)"/gu)) {
+      validateUrl(match[1].replaceAll("&amp;", "&"));
+    }
+    const ogUrl = /<meta property="og:url" content="([^"]*)">/u.exec(page.html)?.[1];
+    if (ogUrl) validateUrl(ogUrl.replaceAll("&amp;", "&"));
+    function validateSchema(value, key) {
+      if (Array.isArray(value)) {
+        for (const item of value) validateSchema(item, key);
+      } else if (value && typeof value === "object") {
+        for (const [property, item] of Object.entries(value)) validateSchema(item, property);
+      } else if (typeof value === "string" && ["@id", "url", "item", "sameAs", "embedUrl", "thumbnailUrl"].includes(key)) {
+        validateUrl(value, false);
+      }
+    }
+    validateSchema(schema);
   }
   return { cssGzip, jsGzip, maxHtmlGzip };
 }
@@ -145,13 +160,13 @@ export async function generateSite({
   const cssFile = `assets/site.${hash(css).slice(0, 12)}.css`;
   const jsFile = `assets/video-series.${hash(seriesJs).slice(0, 12)}.js`;
   const assets = new Map([[cssFile, css], [jsFile, seriesJs], ["assets/pico-LICENSE.txt", license], [".nojekyll", ""]]);
-  const pages = renderSite(model, config, config.href(cssFile), config.href(jsFile));
+  const pages = renderSite(model, config, cssFile, jsFile);
   const budgets = validateSite(pages, assets, config);
   const manifest = {
     version: 2, baseUrl: config.baseUrl,
     pages: Object.fromEntries([...pages].map(([file, page]) => {
       const fingerprint = hash(page.html);
-      const previous = previousManifest?.baseUrl === config.baseUrl ? previousManifest.pages[file] : null;
+      const previous = previousManifest?.pages[file];
       return [file, {
         fingerprint, contentPublishedAt: page.contentPublishedAt,
         lastModified: previous?.fingerprint === fingerprint && previous.lastModified ? previous.lastModified : changedAt,

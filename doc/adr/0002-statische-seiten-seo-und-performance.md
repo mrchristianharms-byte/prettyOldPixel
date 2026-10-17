@@ -102,11 +102,20 @@ unbemerkt brechen. Unbekannte Ausgaben bekommen keine spekulative Detailseite.
 Seiten ohne belastbaren Inhalt werden nicht vorsorglich angelegt.
 
 Eine zentrale Konfiguration enthält die öffentliche Basis-URL einschließlich
-eines eventuellen GitHub-Pages-Projektpfads. Alle Links und Assets berücksichtigen
-diesen Pfad. Canonical-URLs und Sitemap-Einträge verwenden absolute HTTPS-URLs.
+eines eventuellen GitHub-Pages-Projektpfads. Interne Links, Assets, Paginierung,
+Canonical-URLs und `og:url` werden relativ zur jeweiligen Seite erzeugt,
+nicht als vollständige URL oder als wurzelrelativer Projektpfad. Das HTML kann
+dadurch ohne Neugenerierung unter einem anderen Host oder Unterpfad liegen.
+Diese Portabilität ist eine bewusste Abweichung von der üblichen Empfehlung,
+Canonical- und Open-Graph-URLs absolut auszugeben; relative URLs werden gegen
+die Dokumentadresse aufgelöst. Es gibt kein fest verdrahtetes `<base>`-Element.
+Sitemap-Einträge verwenden weiterhin absolute HTTPS-URLs; auch die
+`Sitemap:`-Referenz in `robots.txt` bleibt eine vollständige URL.
 Die Produktions-Basis-URL ist die öffentliche Projektseite dieses Repositorys:
 `https://mrchristianharms-byte.github.io/prettyOldPixel/`.
-Der Unterpfad `/prettyOldPixel/` ist Bestandteil aller Produktionspfade.
+Der Unterpfad `/prettyOldPixel/` ist Bestandteil der aufgelösten
+Produktionsadressen, nicht der im HTML gespeicherten relativen Verweise.
+Externe YouTube-/Archivadressen bleiben vollständig.
 
 Allgemeine Kataloglisten zeigen höchstens 50 Einträge pro Seite.
 Die vollständige Folgenliste eines Spiels bzw. einer einzelnen Ausgabe ist davon ausgenommen und darf
@@ -150,7 +159,11 @@ Für JSON-LD verwenden wir je nach Seite:
 - `VideoGame` für Spiele; Beziehungen zu Videos werden über `about` ausgedrückt.
 - `BreadcrumbList` für die sichtbare hierarchische Navigation.
 
-Entitäten bekommen stabile, absolute `@id`-URLs. Zeitschriften- und Spielenamen
+Entitäten bekommen stabile, seitenrelative `@id`-Verweise, die gegen die
+Dokumentadresse zur vollständigen Entitäts-URL aufgelöst werden. Interne
+`url`- und Breadcrumb-Verweise sind ebenfalls seitenrelativ; externe
+Schema.org-, YouTube- und Archivadressen bleiben unverändert.
+Zeitschriften- und Spielenamen
 stehen in `name`, passende Themen zusätzlich in `about` bzw. `keywords`.
 Diese Angaben werden nur aus bestätigten Zuordnungen erstellt. Ein
 `meta name="keywords"` ist nicht unsere SEO-Strategie: Google verwendet dieses

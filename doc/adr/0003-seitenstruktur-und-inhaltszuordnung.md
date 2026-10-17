@@ -80,8 +80,9 @@ Diese können fremde oder thematisch andere Playlists betreffen und beweisen
 keine Mitgliedschaft. Maßgeblich sind die tatsächlich abgefragten
 Mitgliederlisten im Playlist-Cache.
 
-Datenerfassung, bestätigte Spielezuordnung und Spieleseiten sind umgesetzt.
-Die Phasenerkennung und zusätzliche Kategorieübersichten folgen separat.
+Datenerfassung, bestätigte Spielezuordnung, Spieleseiten sowie konservative
+Abschnitts-/Reihenerkennung sind umgesetzt. Zusätzliche Kategorieübersichten
+und Player-Komfortfunktionen folgen separat.
 
 ## Entscheidung
 
@@ -180,6 +181,17 @@ Archivtreffer ergänzt werden; Ordnerlinks reichen dafür nicht aus.
 Widersprüche werden gemeldet. Titelkorrekturen ohne Identitätsänderung ändern
 die Ausgaben-ID nicht.
 
+Öffentliche Ausgabepfade werden davon getrennt aus Zeitschriftenname und
+finaler Heftbezeichnung gebildet, zum Beispiel
+`/zeitschriften/amiga-joker/ausgaben/amiga-joker-1-1990/`.
+Erst nach der Zusammenführung aller Heftdaten wird der lesbare Slug festgelegt.
+Unterschiedliche Hefte mit demselben Slug erhalten deterministische
+`-variante-N`-Zusätze; Quellreihenfolge und Abrufzeit spielen keine Rolle.
+Die interne Hash-ID bleibt erhalten, erscheint aber nicht mehr im Pfad.
+Eine Titelkorrektur kann den öffentlichen Pfad ändern. Alle Links und
+SEO-Metadaten verwenden die neue Route; alte Hash-Pfade werden nicht als
+zusätzliche Seiten oder Weiterleitungen ausgegeben.
+
 ### 3. Spielereihen: ein konkreter Spieletitel als Entität
 
 Eine Spieleseite bündelt Videos zu **einem konkreten Spiel**, nicht automatisch
@@ -230,6 +242,29 @@ angezeigt. Eine Folgennummer allein beweist kein Unboxing oder Abschlussgespräc
 dafür werden Playlist-Kontext und eindeutige Titelmerkmale verwendet.
 Später gestartete Durchläufe bleiben als eigene Gruppe erkennbar, damit mehrfach
 vorhandene Folgenummern nicht vermischt werden.
+
+**Umgesetzt:** Die Spieleseite hat eine zusätzliche statische Übersicht
+„Abschnitte und Reihen“ mit echten Links auf die vorhandenen Video-Fragmente.
+Abschnitte und Quellreihen stehen auch bei jeder Folge und ihrer Beschreibung.
+Es entstehen weder neue Videoseiten noch leere Phasen. Die Erkennung steht in
+[`src/site-game-series.mjs`](../../src/site-game-series.mjs).
+
+Ausdrückliche Titelmerkmale belegen Intro/Unboxing, Abschlussgespräch/Fazit
+und Interview. re.consider und re.minder bleiben eigene Beitragsarten, auch
+wenn deren Titel ebenfalls „Intro“ oder „Fazit“ enthält. Sonstige Mitglieder
+bestätigter re.play-/re.connect-Reihen und ausdrücklich markierte Spielstreams
+werden dem Spielverlauf zugeordnet. Fehlender oder widersprüchlicher
+Formatkontext bleibt unter „Weitere Beiträge / ungeklärt“ sichtbar. Die
+Quellbelege werden im normalisierten Modell erhalten.
+
+Quellplaylist und Format bilden die Basis einer unterscheidbaren Reihe.
+Ausdrückliche Angaben „Staffel N“, „Durchlauf N“ und „N. Durchlauf“ gelten ab
+dem betreffenden datierten Video bis zum nächsten Marker derselben Quellreihe.
+Sie greifen nicht auf andere Playlists, Formate oder undatierte Folgen über.
+Vorherige Videos erhalten keine nachträglich geratene Staffelnummer.
+Folgenummer-Resets, „Neustart“, ein Abschlussgespräch oder zeitliche Lücken
+beweisen allein keinen neuen Durchlauf. Die Gruppen dienen der Orientierung,
+nicht einer Umordnung der chronologischen Gesamtliste.
 
 Die Wiedergabereihenfolge läuft vom **zuerst veröffentlichten Video zum
 letzten, neuesten Video**. Sortiert wird aufsteigend nach dem tatsächlichen
@@ -553,5 +588,5 @@ ADR 0002; ein unveränderter Build darf diese nicht austauschen.
 Diese ADR dokumentiert die geplante Seitenstruktur und die getroffenen
 Kategorieentscheidungen. Video- und Playlist-Erfassung, News, Gesamtkatalog und
 die Zeitschriftenstruktur bis zu Ausgabenseiten sowie bestätigte Spieleidentitäten
-und Spieleseiten sind umgesetzt. Phasenerkennung, Player-Komfortfunktionen
-und weitere Kategorieübersichten folgen separat.
+und Spieleseiten mit Abschnitts-/Reihenübersicht sind umgesetzt.
+Player-Komfortfunktionen und weitere Kategorieübersichten folgen separat.

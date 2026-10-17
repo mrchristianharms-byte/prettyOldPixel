@@ -22,8 +22,8 @@ Videobeschreibungen bleiben Bestandteil des statischen HTML.
 vollständiger Videoliste, Beschreibungen und lokalem Videowechsel-Modul sind
 umgesetzt. Spiele erhalten geprüfte Playlist-/Video-Zuordnungen, belegte
 Hauptplattformen und Quellschreibweisen aus dem gepflegten Spielekatalog.
-Phasenerkennung, Kapitelsteuerung, Partnerlisten und automatische Fortsetzung
-folgen separat.
+Abschnitts-/Reihenerkennung mit statischen Sprunglinks ist ebenfalls umgesetzt.
+Kapitelsteuerung, Partnerlisten und automatische Fortsetzung folgen separat.
 
 ## Entscheidung
 
@@ -35,8 +35,8 @@ folgen separat.
 | `/spiele/<slug>/#video-<youtube-id>` | Auswahl eines Videos auf derselben Spieleseite |
 | `/zeitschriften/<slug>/` | Zeitschrift, Jahrgänge und Videos |
 | `/zeitschriften/<slug>/<jahr>/` | Jahrgang, Ausgaben und zugeordnete Videos |
-| `/zeitschriften/<slug>/ausgaben/<ausgaben-id>/` | Heftinformationen, Player und sämtliche Videoteile |
-| `/zeitschriften/<slug>/ausgaben/<ausgaben-id>/#video-<youtube-id>` | Auswahl eines Videoteils auf derselben Ausgabenseite |
+| `/zeitschriften/<slug>/ausgaben/<hefttitel-slug>/` | Heftinformationen, Player und sämtliche Videoteile |
+| `/zeitschriften/<slug>/ausgaben/<hefttitel-slug>/#video-<youtube-id>` | Auswahl eines Videoteils auf derselben Ausgabenseite |
 | `/videos/` | Paginierter Katalog mit Links zu vorhandenen Videoabschnitten bzw. YouTube |
 
 Die Zwei-Video-Schwelle für Spiele bleibt bestehen. Unklare Ausgaben erzeugen
@@ -55,6 +55,8 @@ Video-Fragmente und strukturierten Listen ihren eigenen Spielkontext.
 
 Ausgaben- und Video-IDs sind stabile Identitäten, keine laufenden Positionen.
 Ein geändertes `2/10` ändert das Video-Fragment nicht.
+Die interne Ausgaben-ID ist nicht der öffentliche Dateipfad: Dieser enthält
+den normalisierten Zeitschriften-/Hefttitel gemäß ADR 0003.
 
 ### 2. Statische Inhalte und minimale Verbesserung durch JavaScript
 
@@ -100,17 +102,43 @@ neuesten, bei Zeitgleichheit nach ID. Ursprüngliche Folgenummern wie `#0` oder
 Unbekannte Veröffentlichungsdaten bleiben separat erreichbar und werden nicht
 in eine erfundene Autoplay-Sequenz einsortiert.
 
+Die zusätzliche Übersicht „Abschnitte und Reihen“ bietet echte
+`#video-<id>`-Links zu vorhandenen Phasen und Quellreihen. Jede Folge zeigt
+ihren Abschnitt und ihre Reihe sowohl in der vollständigen Liste als auch
+beim aktiven Video. Die Gruppierung ändert weder Positionsnummern noch
+Vorher-/Nachher-Links oder JSON-LD-Listenreihenfolge. Sie funktioniert statisch
+und benötigt kein weiteres Laufzeitscript.
+
+Abschnitte beruhen auf expliziten Titelmerkmalen und bestätigtem Playlist-Kontext
+gemäß ADR 0003, nicht auf geratenen Folgenummern. Quellreihen unterscheiden
+Playlists und Formate; ausdrückliche Staffel-/Durchlaufmarker gelten nur ab
+ihrem datierten Video innerhalb derselben Quellreihe. Unklare Beiträge bleiben
+entsprechend gekennzeichnet und zugänglich. Es werden weder fehlende
+Abschlussgespräche noch zusätzliche Durchläufe erfunden.
+
 Ausgabenseiten zeigen Zeitschrift, Heftbezeichnung, Jahr, Monat(e), Heftnummer
 und Sonderheftkennzeichen soweit bekannt sowie gekennzeichnete Archivlinks.
 Videoteile folgen den Regeln aus ADR 0003.
 
+Heft-, Spiel- und aktive Videometadaten sind kompakte semantische
+Definitionslisten mit gruppierten Beschriftungs-/Wertpaaren. Breite Displays
+zeigen ein automatisch mehrspaltiges Raster, schmale Displays unter 576 Pixeln
+eine einspaltige Liste mit Beschriftung neben dem Wert. Lange Titel und Werte
+umbrechen innerhalb ihrer Spalte; es gibt weder abgeschnittene Informationen
+noch horizontales Scrollen. Die Darstellung benötigt kein JavaScript.
+
 ### 4. Responsive Darstellung und Navigation
 
-Der Player nutzt die volle verfügbare Inhaltsbreite mit reserviertem
-Seitenverhältnis. Die Videoliste verkleinert ihn nicht zu einer Seitenspalte.
-Unter dem Player stehen auf Desktop die aktive Beschreibung und daneben die
-vollständige Videoliste. Mobil ist diese Liste über ein natives
-`details`/`summary`-Menü mit Unicode-Burger und Text erreichbar.
+Auf Spieleseiten beginnt die vollständige Videoliste auf Desktop rechtsbündig
+auf Höhe des Seitentitels. Titel, Spielinformationen, Player und aktive
+Beschreibung stehen links in der Hauptspalte. Der Player nutzt deren volle
+Breite mit reserviertem Seitenverhältnis. Dies ersetzt für Spieleseiten die
+bisherige vollbreite Playerdarstellung mit darunter beginnender Liste.
+Ausgabenseiten behalten den Player über die gesamte Inhaltsbreite; darunter
+stehen aktive Beschreibung und rechts daneben die Videoliste.
+Unter 768 Pixeln stehen Spielinhalt und Liste nicht nebeneinander. Das native
+`details`/`summary`-Menü mit Unicode-Burger und Text steht bei Spielen oberhalb
+des Titels, bei Ausgaben unterhalb des Players.
 Alle Links funktionieren auch ohne das Modul; Fokus und aktive Auswahl sind
 sichtbar und mit Tastatur zugänglich.
 

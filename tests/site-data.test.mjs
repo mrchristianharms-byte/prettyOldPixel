@@ -33,9 +33,9 @@ function sources(count = 3) {
 test("berücksichtigt den GitHub-Projektpfad und erstellt stabile Slugs", () => {
   const config = createSiteConfig();
   assert.equal(config.baseUrl, productionUrl);
-  assert.equal(config.href("news/"), "/prettyOldPixel/news/");
+  assert.equal(config.href("news/"), "news/");
   assert.equal(config.absolute("videos/abc/"), `${productionUrl}videos/abc/`);
-  assert.equal(createSiteConfig("http://localhost:8000/test").href(), "/test/");
+  assert.equal(createSiteConfig("http://localhost:8000/test").href(), "./");
   assert.equal(slugify("Blätterabend & Spaß"), "blatterabend-spass");
   for (const route of ["/videos/", "../oops", "videos/?q=x", "videos\\oops"]) {
     assert.throws(() => config.href(route), /Ungültiger/u);
@@ -43,6 +43,27 @@ test("berücksichtigt den GitHub-Projektpfad und erstellt stabile Slugs", () => 
   for (const base of ["file:///tmp", "javascript:alert(1)", "https://user:password@example.com/", "https://example.com/?x"]) {
     assert.throws(() => createSiteConfig(base));
   }
+});
+
+test("berechnet seitenrelative Links für verschachtelte Seiten, Assets und einzelne HTML-Dateien", () => {
+  const config = createSiteConfig();
+  const cases = [
+    ["", "", "./"],
+    ["news/", "", "news/"],
+    ["", "news/", "../"],
+    ["videos/", "videos/seite/2/", "../../"],
+    ["videos/seite/2/", "videos/", "seite/2/"],
+    ["spiele/cadaver/", "spiele/cadaver/", "./"],
+    ["assets/site.css", "zeitschriften/pc-games/1992/ausgaben/11/", "../../../../../assets/site.css"],
+    ["datenschutz/", "404.html", "datenschutz/"],
+    ["404.html", "404.html", "404.html"],
+  ];
+  for (const [target, from, expected] of cases) {
+    assert.equal(config.href(target, from), expected);
+    assert.equal(config.forPage(from).href(target), expected);
+    assert.equal(new URL(expected, config.absolute(from)).href, config.absolute(target));
+  }
+  assert.equal({ ...config, pageSize: 2 }.forPage("news/").pageSize, 2);
 });
 
 test("verknüpft Quellen mit Herkunft, ohne Playlist-Titel als Spiele zu erfinden", () => {

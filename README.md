@@ -25,7 +25,12 @@ Fehlermeldung ab und erhält die letzte erfolgreiche Ausgabe.
 
 Die Produktionsadresse lautet
 https://mrchristianharms-byte.github.io/prettyOldPixel/.
-Alle internen Links, Assets und Canonicals berücksichtigen `/prettyOldPixel/`.
+Alle internen Links und Assets werden relativ zur jeweiligen Seite erzeugt,
+z. B. `../news/` oder `../../assets/site.<hash>.css`, ohne fest eingebauten
+Projektpfad. Auch Canonicals, `og:url`, Paginierung und interne JSON-LD-URLs
+einschließlich `@id` sind seitenrelativ. Nur die Sitemap enthält vollständige
+Seiten-URLs; ihre `Sitemap:`-Referenz in `robots.txt` bleibt ebenfalls absolut.
+Externe YouTube-/Archivlinks und Schema.org-Bezeichner bleiben unverändert.
 Die generierten Dateien unter `public/` sind Build-Artefakte und gehören nicht
 in neue Commits; GitHub Actions erzeugt und prüft sie vor dem Deployment.
 
@@ -41,6 +46,13 @@ von Video und Beschreibung; ohne JavaScript sind alle Beschreibungen sichtbar.
 **Es gibt keine separate Seite pro Video.** News und Katalog führen zum
 Videoabschnitt einer vorhandenen Ausgabe bzw. eines Spiels, sonst direkt zu YouTube.
 
+Archivverweise auf Zeitschriftenseiten erscheinen als kleine Ordner-, Lese-
+und Downloadsymbole direkt unter den jeweiligen Videolinks. Die vollständige
+Beschriftung mit Anbieter und Hinweis auf die externe Website bleibt für
+Screenreader und als Tooltip erhalten. Auch die Archivübersicht einer Ausgabe
+verwendet diese Symbole; Lese-/Downloadlinks erscheinen nur bei bestätigten
+Hefttreffern. Die Icons sind eingebettete SVGs ohne zusätzliche Netzabfragen.
+
 Für eine lokale Vorschau ohne Projekt-Unterpfad:
 
 ```sh
@@ -48,9 +60,17 @@ npm run generate:site -- --base-url http://localhost:8000/
 python3 -m http.server 8000 --bind 127.0.0.1 --directory public
 ```
 
-Dann http://localhost:8000/ öffnen. Vor einem manuellen Produktions-Upload erneut
-`npm run generate:site` ohne lokale Basis-URL ausführen. Ein direktes Öffnen der
-HTML-Dateien über `file://` bildet die absoluten Website-Pfade nicht korrekt ab.
+Dann http://localhost:8000/ öffnen. Der HTML-/Asset-Baum funktioniert unverändert
+im Webroot oder in einem beliebigen Unterverzeichnis. Vor einem manuellen
+Produktions-Upload erneut `npm run generate:site` ohne lokale Basis-URL ausführen,
+damit Sitemap und Robots-Referenz auf die Produktionsadresse zeigen. Ein reiner
+Wechsel der Basis-URL ändert weder HTML noch dessen `lastModified`.
+Für die Vorschau einen HTTP-Server verwenden: Verzeichnislinks und ES-Module
+funktionieren beim direkten Öffnen per `file://` nicht browserübergreifend.
+Wird `404.html` vom Hoster unter einer beliebig tiefen, nicht existierenden URL
+ausgeliefert, beziehen sich relative Links auf diese angefragte URL; ohne
+serverseitige Umleitung kann eine statische relative Fehlerseite das nicht
+für alle Pfadtiefen ausgleichen.
 
 Die gemeinsame Datenaufbereitung verknüpft Playlist-Mitgliedschaften per Video-ID
 und normalisiert Zeitschriften mit Ausgaben und Archivlinks. Videos einer
@@ -99,8 +119,29 @@ Schritten; es gibt keine Links auf noch nicht erzeugte Bereichsseiten.
   Spieleseiten bzw. ihren `#video-<id>`-Abschnitten. Die Spielezuordnung ist auch
   neben einer Zeitschriftenzuordnung sichtbar. Ohne eigene Ausgabe hat ein
   Video die alphabetisch nach Slug erste bestätigte Spieleseite als Ziel.
-- Phasenerkennung, Kapitelsteuerung, Partnerlisten und automatische
-  Folgenfortsetzung sind noch nicht implementiert.
+- Die aufklappbare Übersicht „Abschnitte und Reihen“ führt per echten
+  Video-Fragmentlinks zu Intro/Unboxing, Spielverlauf, Abschluss/Fazit,
+  Interviews, re.consider und re.minder, soweit vorhanden. Dieselben
+  Abschnitts-/Reihenangaben stehen in der vollständigen Folgenliste und beim
+  ausgewählten Video. Die Reihenfolge bleibt chronologisch, auch wenn nach
+  einem Abschlussgespräch noch weitere Spielvideos erscheinen.
+- `src/site-game-series.mjs` erkennt Abschnitte nur aus ausdrücklichen
+  Titelmerkmalen und bestätigtem Playlist-Kontext. Eine Folgenummer `#0` oder
+  `#1` allein ist kein Intro; „Abschluss Level 1“ ist kein Abschlussgespräch.
+  Bei widersprüchlichem oder fehlendem Formatkontext bleibt der Beitrag als
+  „Weitere Beiträge / ungeklärt“ zugänglich. Erkennung und Quellbelege stehen
+  im normalisierten Seitenmodell; es gibt keine neuen Online-Abfragen.
+- Quellreihen werden anhand der bestätigten Playlists und Titel-Formate
+  unterschieden, etwa re.play, streamstag und re.connect beim selben Spiel.
+  Ausdrückliche Angaben wie „Staffel 2“, „Durchlauf 2“ oder „2. Durchlauf“
+  kennzeichnen benannte Durchläufe. Die Angabe gilt ab diesem datierten Video
+  bis zur nächsten Angabe innerhalb derselben Quellreihe; undatierte Videos
+  erben sie nicht. Sinkende Folgenummern, lange Pausen oder „Neustart“ erzeugen
+  keinen geratenen neuen Durchlauf. Unbenannte Quellreihen erhalten keine
+  erfundene Staffelnummer.
+- Nur belegte, nicht leere Abschnitte werden dargestellt. Alles funktioniert
+  ohne zusätzliches JavaScript und ohne weitere Unterseiten. Kapitelsteuerung,
+  Partnerlisten und automatische Folgenfortsetzung folgen separat.
 
 ### Blätterabend nach Zeitschrift und Jahrgang
 
@@ -114,7 +155,7 @@ Schritten; es gibt keine Links auf noch nicht erzeugte Bereichsseiten.
   Fehlt eine Teilnummer, bleibt dieses Video an seinem chronologischen Platz;
   die bekannten Teilnummern werden relativ zueinander geordnet. Ein früheres
   unnummeriertes Video wird nicht pauschal hinter „Teil 2“ verschoben.
-- `/zeitschriften/<slug>/ausgaben/<id>/` wird nur bei ausreichend eindeutigen
+- `/zeitschriften/<slug>/ausgaben/<hefttitel-slug>/` wird nur bei ausreichend eindeutigen
   Heftdaten erzeugt. Die Seite enthält Heftangaben, Archivlinks, einen gemeinsamen
   Player und alle Videobeschreibungen. Die Auswahl erfolgt per
   `#video-<youtube-id>` auf derselben Seite. Nur Übersichten werden bei mehr
@@ -125,11 +166,24 @@ Schritten; es gibt keine Links auf noch nicht erzeugte Bereichsseiten.
 - Fehlende Heftdaten dürfen aus anderen Einträgen mit **demselben eindeutigen
   Archivtreffer** ergänzt werden. Ein Ordnerlink allein genügt nicht.
   Widersprüchliche Angaben werden gemeldet und nicht zu einer Ausgabe vereinigt.
-- Ausgaben-IDs verwenden einen Hash der Heftidentität: bei regulären Heften
+- Interne Ausgaben-IDs verwenden einen Hash der Heftidentität: bei regulären Heften
   Jahr und Monate bzw. Nummer, bei Sonderheften einen eindeutigen Archivlink
   bzw. Jahr und Sonderheftnummer. Eine reine Titel-/Beschriftungskorrektur ändert
   die Identität nicht. Eine Korrektur bisher unbekannter Identitätsdaten kann
   eine neue Zuordnung erzeugen; alte generierte Seiten werden entfernt.
+- Der öffentliche Ausgabepfad verwendet dagegen den normalisierten
+  Zeitschriftennamen plus endgültige Heftbezeichnung, beispielsweise
+  `/zeitschriften/amiga-joker/ausgaben/amiga-joker-1-1990/`.
+  Titelgleiche, aber unterschiedliche Sonderhefte erhalten deterministische
+  `-variante-N`-Zusätze. Die Titel werden erst nach der Zusammenführung der
+  Heftdaten bestimmt. Titelkorrekturen können damit den öffentlichen Pfad
+  ändern, ohne die interne Heftidentität zu ändern. News, Übersichten,
+  Canonicals, JSON-LD und Sitemap verwenden gemeinsam den neuen Pfad.
+  Alte Hash-Pfade werden beim Neugenerieren entfernt, nicht weitergeleitet.
+- Heft-, Spiel- und Videometadaten stehen in kompakten semantischen
+  Definitionslisten: auf breiten Displays als mehrspaltiges Raster, unter
+  576 Pixeln einspaltig mit Beschriftung und Wert nebeneinander. Lange Werte
+  umbrechen; fehlende optionale Angaben werden nicht ergänzt.
 - News und Videokatalog verlinken Zeitschrift, Jahrgang und vorhandene
   Ausgabenseite einschließlich Video-Fragment. Mehrfachzuordnungen bleiben
   erhalten. Ausgaben-Breadcrumbs gehören zur gemeinsamen Seite; der aktive
@@ -153,7 +207,11 @@ Schritten; es gibt keine Links auf noch nicht erzeugte Bereichsseiten.
   Browser-Titel ohne Seitenwechsel. Ein gemeinsamer Player verhindert parallele
   Wiedergaben; bei einer anderen Auswahl wird zunächst nur das Vorschaubild
   angezeigt. Direktlinks und Zurück/Vorwärts verwenden Video-Fragmente.
-  Mobil steht die Videoliste in einem nativen Burger-Menü, auf Desktop daneben.
+  Mobil steht die Videoliste in einem nativen Burger-Menü. Auf Spieleseiten
+  beginnt sie auf Desktop als rechte Seitenleiste auf Höhe des Seitentitels;
+  Spielinformationen, Player und Beschreibung stehen in der linken Hauptspalte.
+  Mobil steht das Menü oberhalb des Spieltitels. Ausgabenseiten behalten ihren
+  vollbreiten Player und die darunter rechts angeordnete Videoliste.
 - Beschreibungen, Titel und strukturierte Daten werden sicher escaped.
   HTTP(S)-Links in Beschreibungen und Archivverweise sind extern gekennzeichnet.
 - News verwenden `publishedAt` einschließlich Zeitzone, nicht Abrufzeiten.

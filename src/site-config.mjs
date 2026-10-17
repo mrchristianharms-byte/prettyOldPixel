@@ -1,3 +1,5 @@
+import path from "node:path";
+
 export const productionUrl = "https://mrchristianharms-byte.github.io/prettyOldPixel/";
 
 export function createSiteConfig(baseUrl = productionUrl) {
@@ -7,20 +9,34 @@ export function createSiteConfig(baseUrl = productionUrl) {
   }
   if (!url.pathname.endsWith("/")) url.pathname += "/";
   const basePath = url.pathname;
-  function href(route = "") {
-    if (route.startsWith("/") || route.includes("..") || /[?#\\]/u.test(route)) {
+  function checkRoute(route) {
+    if (route.startsWith("/") || route.includes("..") || /[?:#\\]/u.test(route)) {
       throw new Error(`Ungültiger relativer Seitenpfad: ${route}`);
     }
-    return `${basePath}${route}`;
   }
-  return {
+  function href(route = "", fromRoute = "") {
+    checkRoute(route);
+    checkRoute(fromRoute);
+    const directory = fromRoute.endsWith("/") ? fromRoute : path.posix.dirname(fromRoute);
+    const relative = path.posix.relative(directory || ".", route || ".");
+    return relative ? `${relative}${route.endsWith("/") || !route ? "/" : ""}` : "./";
+  }
+  const config = {
     name: "Pretty Old Pixel",
     baseUrl: url.href,
     basePath,
     pageSize: 50,
     href,
-    absolute: (route = "") => new URL(href(route), url.origin).href,
+    absolute: (route = "") => {
+      checkRoute(route);
+      return new URL(route, url).href;
+    },
+    forPage(route) {
+      checkRoute(route);
+      return { ...this, href: (target = "") => href(target, route) };
+    },
   };
+  return config;
 }
 
 export const catalogRoute = (page) => page === 1 ? "videos/" : `videos/seite/${page}/`;

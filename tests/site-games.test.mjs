@@ -123,7 +123,13 @@ test("rendert eine vollständige Spieleseite mit Metadaten, Player und Beschreib
   const html = pages.get("spiele/cadaver/index.html").html;
   assert.equal((html.match(/data-video-panel /gu) ?? []).length, 65);
   assert.equal((html.match(/<iframe /gu) ?? []).length, 1);
+  assert.ok(html.includes('class="game-detail">\n<div class="game-content"><h1>Cadaver'));
+  assert.equal((html.match(/class="episode-menu"/gu) ?? []).length, 1);
+  assert.ok(html.includes('</aside></div><details class="episode-menu"'));
   assert.ok(html.includes("Video 65/65"));
+  assert.ok(html.includes('<div><dt>Spieltitel</dt><dd>Cadaver</dd></div>'));
+  assert.ok(html.includes('<div><dt>Hauptplattform laut Quellplaylist</dt><dd>Amiga</dd></div>'));
+  assert.equal((html.match(/<dl class="detail-meta">/gu) ?? []).length, 66);
   assert.ok(html.includes("keine Beschreibung vorhanden"));
   assert.ok(!html.includes(' hidden'));
   assert.ok(!html.includes("autoplay="));
@@ -136,12 +142,12 @@ test("rendert eine vollständige Spieleseite mit Metadaten, Player und Beschreib
   assert.deepEqual(game.alternateName, ["Cadaver (Amiga)"]);
   assert.equal(game.publisher, undefined);
   assert.deepEqual(schema.find((item) => item["@type"] === "CollectionPage").mainEntity.itemListElement.map((item) => item.url),
-    Array.from({ length: 65 }, (_, index) => `${config.absolute("spiele/cadaver/")}#video-${videoId(index)}`));
+    Array.from({ length: 65 }, (_, index) => `./#video-${videoId(index)}`));
   assert.equal(schema.filter((item) => item["@type"] === "VideoObject").length, 65);
   assert.ok(schema.filter((item) => item["@type"] === "VideoObject").every((item) => item.about[0].name === "Cadaver"));
   assert.deepEqual(schema.at(-1).itemListElement.map((item) => item.name), ["Startseite", "Spiele", "Cadaver"]);
   assert.ok(budgets.maxHtmlGzip < 50 * 1024);
-  assert.ok(pages.get("news/index.html").html.includes(`${config.href("spiele/cadaver/")}#video-${videoId(64)}`));
+  assert.ok(pages.get("news/index.html").html.includes(`${config.href("spiele/cadaver/", "news/")}#video-${videoId(64)}`));
   assert.ok(pages.get("index.html").html.includes("1 Spielereihen entdecken"));
 });
 
@@ -169,15 +175,15 @@ test("behält Spiel- und Ausgabenkontexte bei Mehrfachzuordnungen korrekt bei", 
   const { pages, model, config } = render(input);
   const issue = model.videoById.get(videoId(0)).magazines[0].issue;
   const news = pages.get("news/index.html").html;
-  assert.ok(news.includes(`${config.href(issue.route)}#video-${videoId(1)}`));
-  assert.ok(news.includes('href="/prettyOldPixel/spiele/cadaver/"'));
+  assert.ok(news.includes(`${config.href(issue.route, "news/")}#video-${videoId(1)}`));
+  assert.ok(news.includes('href="../spiele/cadaver/"'));
   for (const route of ["spiele/cadaver/", issue.route]) {
     const schema = graph(pages.get(`${route}index.html`).html);
     const videos = schema.filter((item) => item["@type"] === "VideoObject");
-    assert.ok(videos.every((video) => video.url.startsWith(`${config.absolute(route)}#video-`)));
+    assert.ok(videos.every((video) => video.url.startsWith("./#video-")));
     assert.ok(videos.every((video) => video.about.some((entity) => entity["@type"] === "VideoGame")));
     assert.ok(schema.find((item) => item["@type"] === "CollectionPage").mainEntity.itemListElement
-      .every((item) => item.url.startsWith(`${config.absolute(route)}#video-`)));
+      .every((item) => item.url.startsWith("./#video-")));
   }
 });
 
@@ -192,6 +198,34 @@ test("hält Routen und HTML bei geänderter Quellreihenfolge und Abrufzeiten sta
   input.playlists.checkedAt = "2099-01-01";
   const second = render(input);
   assert.deepEqual([...first.pages], [...second.pages]);
+});
+
+test("zeigt Phasen und Reihen als echte Abschnittslinks, ohne die chronologische Gesamtliste umzubauen", () => {
+  const input = fixture(6);
+  [
+    "Cadaver [re.play - #1] Intro und Unboxing",
+    "Cadaver [re.play - #2] Abschluss Level 1",
+    "Cadaver [re.play - #3] Abschlussgespräch",
+    "Cadaver [re.play - #4] Es geht weiter",
+    "Cadaver [streamstag] Neue Runde",
+    "Cadaver [re.minder]",
+  ].forEach((title, index) => { input.videos.videos[index].title = title; });
+  const { pages, model } = render(input);
+  const game = model.games[0];
+  assert.deepEqual(game.videos, Array.from({ length: 6 }, (_, index) => videoId(index)));
+  assert.deepEqual(game.series.entries.map((entry) => entry.phase.id),
+    ["intro", "gameplay", "conclusion", "gameplay", "gameplay", "reminder"]);
+  assert.deepEqual(game.series.runs.map((run) => run.videos),
+    [[videoId(0), videoId(1), videoId(2), videoId(3)], [videoId(4)], [videoId(5)]]);
+  const html = pages.get("spiele/cadaver/index.html").html;
+  assert.ok(html.includes('class="series-guide"'));
+  for (const phase of game.series.phases) assert.ok(html.includes(`<strong>${phase.label}</strong>`));
+  assert.ok(!html.includes("Interview / Gespräch"));
+  const guide = html.slice(html.indexOf('<details class="series-guide">'), html.indexOf('<section aria-label="Videoplayer">'));
+  for (const id of game.videos) assert.ok(guide.includes(`href="#video-${id}"`));
+  assert.match(html, /id="video-g0000000002"[\s\S]*?href="#video-g0000000003">Nächster Teil/u);
+  assert.deepEqual(graph(html).find((item) => item["@type"] === "CollectionPage").mainEntity.itemListElement.map((item) => item.position),
+    [1, 2, 3, 4, 5, 6]);
 });
 
 test("validiert die gepflegten Identitäten und meldet fehlende Zusatzbeiträge", () => {
@@ -226,7 +260,7 @@ test("aktualisiert Spieleseiten offline und entfernt sie beim Unterschreiten der
       "blaetterabend-videos.json": input.magazines,
     }).map(([name, value]) => writeFile(path.join(cacheDirectory, name), JSON.stringify(value))));
   }
-  const options = { cacheDirectory, outputDirectory, logger: { warn() {}, log() {} } };
+  const options = { cacheDirectory, outputDirectory, now: Date.parse("2026-01-01T00:00:00Z"), logger: { warn() {}, log() {} } };
   await save();
   const first = await generateSite(options);
   const file = path.join(outputDirectory, "spiele/cadaver/index.html");
@@ -236,6 +270,17 @@ test("aktualisiert Spieleseiten offline und entfernt sie beim Unterschreiten der
   const second = await generateSite(options);
   assert.equal(second.reused, first.files);
   assert.equal((await stat(file)).mtimeMs, mtime);
+  const manifestFile = path.join(outputDirectory, "build-manifest.json");
+  const before = JSON.parse(await readFile(manifestFile, "utf8")).pages;
+  input.videos.videos[0].title = "Cadaver [re.play - #1] Intro und Unboxing";
+  await save();
+  options.now += 86400000;
+  await generateSite(options);
+  const after = JSON.parse(await readFile(manifestFile, "utf8")).pages;
+  assert.equal(after["spiele/cadaver/index.html"].lastModified, "2026-01-02T00:00:00.000Z");
+  assert.equal(after["spiele/cadaver/index.html"].contentPublishedAt, before["spiele/cadaver/index.html"].contentPublishedAt);
+  assert.deepEqual(after["datenschutz/index.html"], before["datenschutz/index.html"]);
+  assert.ok((await readFile(file, "utf8")).includes("<strong>Intro / Unboxing</strong>"));
   input.videos.videos[0].description = "Aktualisierte Beschreibung";
   await save();
   await generateSite(options);

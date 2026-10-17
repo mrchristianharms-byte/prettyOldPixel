@@ -4,6 +4,7 @@ import { createHash } from "node:crypto";
 import { slugify } from "./site-config.mjs";
 import { secondsToIsoDuration } from "./fetch-youtube-videos.mjs";
 import { gameDefinitions } from "./games.mjs";
+import { structureGameSeries } from "./site-game-series.mjs";
 
 function requireValue(condition, message) {
   if (!condition) throw new Error(message);
@@ -112,7 +113,7 @@ function finalizeMagazines(magazineById, videoById, warnings) {
           const id = `${issue.special && archiveKey ? "archiv" : issue.year ?? "unbekannt"}-${createHash("sha256").update(JSON.stringify(identity)).digest("hex").slice(0, 12)}`;
           let entity = magazine.issues.get(id);
           if (!entity) {
-            entity = { ...issue, id, route: `${magazine.route}ausgaben/${id}/`, videos: [], archives: [] };
+            entity = { ...issue, id, route: null, videos: [], archives: [] };
             magazine.issues.set(id, entity);
             issueCandidates.set(id, []);
           }
@@ -150,6 +151,25 @@ function finalizeMagazines(magazineById, videoById, warnings) {
       // Unnummerierte Videos behalten ihren chronologischen Platz, statt etwa hinter Teil 2 zu rutschen.
       issue.videos = chronologicalVideos.map((id) => part(id) === null ? id : numbered[numberedIndex++]);
       issue.archives.sort((a, b) => JSON.stringify(a).localeCompare(JSON.stringify(b), "en"));
+    }
+    const issuesBySlug = new Map();
+    for (const issue of magazine.issues.values()) {
+      const slug = slugify(`${magazine.name} ${issue.label}`);
+      if (!issuesBySlug.has(slug)) issuesBySlug.set(slug, []);
+      issuesBySlug.get(slug).push(issue);
+    }
+    const usedSlugs = new Set(issuesBySlug.keys());
+    for (const [slug, issues] of issuesBySlug) {
+      issues.sort((a, b) => a.id.localeCompare(b.id, "en"));
+      let variant = 1;
+      for (const issue of issues) {
+        let routeSlug = slug;
+        if (issues.length > 1) {
+          do { routeSlug = `${slug}-variante-${variant++}`; } while (usedSlugs.has(routeSlug));
+          usedSlugs.add(routeSlug);
+        }
+        issue.route = `${magazine.route}ausgaben/${routeSlug}/`;
+      }
     }
     function compareEntries(a, b) {
       const ai = a.mention.issue;
@@ -217,6 +237,7 @@ function normalizeGames(definitions, playlists, videoById, warnings) {
       videos: videos.map((video) => video.id),
       playlists: sources.map((playlist) => ({ id: playlist.id, title: playlist.title, url: `https://www.youtube.com/playlist?list=${playlist.id}` })),
     };
+    game.series = structureGameSeries(videos, sources, [game.name, ...game.aliases]);
     for (const video of videos) video.games.push({ id, name, route: game.route });
     games.push(game);
   }
