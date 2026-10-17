@@ -123,9 +123,10 @@ test("rendert eine vollständige Spieleseite mit Metadaten, Player und Beschreib
   const html = pages.get("spiele/cadaver/index.html").html;
   assert.equal((html.match(/data-video-panel /gu) ?? []).length, 65);
   assert.equal((html.match(/<iframe /gu) ?? []).length, 1);
-  assert.ok(html.includes('class="game-detail">\n<div class="game-content"><h1>Cadaver'));
+  assert.ok(html.includes('class="detail-layout">\n<div class="detail-main">\n<h1 class="detail-heading" title="Cadaver">Cadaver'));
   assert.equal((html.match(/class="episode-menu"/gu) ?? []).length, 1);
-  assert.ok(html.includes('</aside></div><details class="episode-menu"'));
+  assert.ok(html.indexOf('class="detail-player"') < html.indexOf('class="episode-menu"'));
+  assert.ok(html.indexOf('class="detail-player"') < html.indexOf('<dl class="detail-meta">'));
   assert.ok(html.includes("Video 65/65"));
   assert.ok(html.includes('<div><dt>Spieltitel</dt><dd>Cadaver</dd></div>'));
   assert.ok(html.includes('<div><dt>Hauptplattform laut Quellplaylist</dt><dd>Amiga</dd></div>'));
@@ -148,7 +149,7 @@ test("rendert eine vollständige Spieleseite mit Metadaten, Player und Beschreib
   assert.deepEqual(schema.at(-1).itemListElement.map((item) => item.name), ["Startseite", "Spiele", "Cadaver"]);
   assert.ok(budgets.maxHtmlGzip < 50 * 1024);
   assert.ok(pages.get("news/index.html").html.includes(`${config.href("spiele/cadaver/", "news/")}#video-${videoId(64)}`));
-  assert.ok(pages.get("index.html").html.includes("1 Spielereihen entdecken"));
+  assert.ok(pages.get("index.html").html.includes("<dt>Spiele</dt><dd>1</dd>"));
 });
 
 test("paginiert den Spieleindex, aber nicht Spieleseiten", () => {
@@ -221,7 +222,7 @@ test("zeigt Phasen und Reihen als echte Abschnittslinks, ohne die chronologische
   assert.ok(html.includes('class="series-guide"'));
   for (const phase of game.series.phases) assert.ok(html.includes(`<strong>${phase.label}</strong>`));
   assert.ok(!html.includes("Interview / Gespräch"));
-  const guide = html.slice(html.indexOf('<details class="series-guide">'), html.indexOf('<section aria-label="Videoplayer">'));
+  const guide = html.slice(html.indexOf('<details class="series-guide">'), html.indexOf('<div class="video-panels">'));
   for (const id of game.videos) assert.ok(guide.includes(`href="#video-${id}"`));
   assert.match(html, /id="video-g0000000002"[\s\S]*?href="#video-g0000000003">Nächster Teil/u);
   assert.deepEqual(graph(html).find((item) => item["@type"] === "CollectionPage").mainEntity.itemListElement.map((item) => item.position),

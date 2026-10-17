@@ -92,6 +92,56 @@ test("rendert News vollständig ohne Laufzeit-JavaScript und setzt VideoObject-M
   assert.ok(!video.includes("dateModified"));
 });
 
+test("zeigt auf der Startseite korrekte Statistik statt neuer Videos und zählt Heftausgaben nur einmal", () => {
+  const input = issueFixture();
+  input.videos.videos[0].durationSeconds = 3600;
+  input.videos.videos[1].durationSeconds = 1800;
+  const { pages, config, assets } = render(input);
+  const home = pages.get("index.html").html;
+  for (const [label, value] of [["Videos insgesamt", "2"], ["Zeitschriften", "1"], ["Heftausgaben", "1"], ["Spiele", "0"], ["Playlists", "0"], ["Stunden Video", "1"]]) {
+    assert.ok(home.includes(`<dt>${label}</dt><dd>${value}</dd>`), label);
+  }
+  assert.ok(home.includes('datetime="2020-01-01T00:00:00.000Z"'));
+  assert.ok(home.includes("nicht das Gründungsdatum"));
+  assert.ok(home.includes('href="zeitschriften/"'));
+  assert.ok(home.includes('href="news/"'));
+  assert.ok(home.includes("nicht addierbar"));
+  assert.ok(!home.includes('class="video-list"'));
+  assert.ok(!home.includes("Neu auf dem Kanal"));
+  assert.ok(!home.includes("VideoObject"));
+  assert.ok(!home.includes("ItemList"));
+  assert.ok(!home.includes("iframe"));
+  assert.ok(!home.includes('script type="module"'));
+  validateSite(pages, assets, config);
+});
+
+test("kennzeichnet unvollständige Laufzeiten und fehlenden Kanalbeginn ohne erfundene Werte", () => {
+  const input = fixture(2);
+  input.videos.videos[0].durationSeconds = 7200;
+  input.videos.videos[1].durationSeconds = null;
+  for (const video of input.videos.videos) video.publishedAt = null;
+  const home = render(input).pages.get("index.html").html;
+  assert.ok(home.includes("<dt>Stunden Video</dt><dd>2</dd>"));
+  assert.ok(home.includes("Bekannte Laufzeiten: 1 von 2 Videos"));
+  assert.ok(home.includes("ohne bekannte Veröffentlichungsdaten nicht bestimmbar"));
+  assert.ok(!home.includes("datetime="));
+  input.videos.videos[0].durationSeconds = null;
+  assert.ok(!render(input).pages.get("index.html").html.includes("<dt>Stunden Video</dt>"));
+});
+
+test("berechnet Startseitenzahlen nur aus öffentlichen Videos und aktualisiert Mengen ohne Videoliste", async (t) => {
+  const input = fixture(2);
+  input.videos.videos.push({ id: "f0000000000", title: "Zukunft", publishedAt: "2099-01-01T00:00:00Z" });
+  const options = await setup(t, input);
+  await generateSite(options);
+  const homeFile = path.join(options.outputDirectory, "index.html");
+  assert.ok((await readFile(homeFile, "utf8")).includes("<dt>Videos insgesamt</dt><dd>2</dd>"));
+  input.videos.videos.shift();
+  await options.save(input);
+  await generateSite(options);
+  assert.ok((await readFile(homeFile, "utf8")).includes("<dt>Videos insgesamt</dt><dd>1</dd>"));
+});
+
 test("erzeugt standortunabhängige Seiten mit relativen Links, Assets, Canonicals und JSON-LD", () => {
   for (const input of [fixture(), issueFixture()]) {
     const { pages, config, assets } = render(input);
@@ -149,6 +199,7 @@ test("lädt vor Aktivierung keinen YouTube-Player und dokumentiert den aktuellen
   assert.ok(html.includes('srcdoc="'));
   assert.ok(html.includes('name="issue-player"'));
   assert.ok(html.includes('target="issue-player"'));
+  assert.ok(html.includes('Vorschaubild von YouTube · Player erst nach Aktivierung. <a href="#datenschutzhinweis">Datenschutzhinweise</a>'));
   assert.equal((html.match(/<iframe /gu) ?? []).length, 1);
   assert.equal((html.match(/data-video-panel /gu) ?? []).length, 2);
   assert.ok(html.includes("keine Beschreibung vorhanden"));
@@ -227,6 +278,8 @@ test("baut offline mit Projektpfad, Sitemap und Inhalts-Manifest; übernimmt unv
   const leadStyles = stylesheet.match(/\.lead\s*\{([^}]*)\}/u)?.[1];
   assert.ok(leadStyles);
   assert.doesNotMatch(leadStyles, /(?:max-)?width\s*:|white-space\s*:|text-wrap\s*:/u);
+  assert.match(stylesheet, /\.detail-heading\s*\{[^}]*white-space:\s*nowrap;[^}]*text-overflow:\s*ellipsis/u);
+  assert.match(stylesheet, /\.video-player\s*\{[^}]*max-height:\s*min\(60svh,\s*calc\(100svh - 12rem\)\)/u);
   const sitemap = await readFile(path.join(options.outputDirectory, "sitemap.xml"), "utf8");
   assert.ok(sitemap.includes("https://mrchristianharms-byte.github.io/prettyOldPixel/news/"));
   assert.ok(!sitemap.includes("404.html"));

@@ -301,8 +301,10 @@ test("stellt Heft- und Videometadaten als kompaktes semantisches Raster dar", ()
   const { model, pages } = render(fixture(2));
   const issue = [...model.magazines[0].issues.values()][0];
   const html = pages.get(`${issue.route}index.html`).html;
-  assert.ok(!html.includes('class="game-detail"'));
-  assert.ok(html.includes('<div class="series-layout"><details class="episode-menu"'));
+  assert.ok(html.includes('class="detail-layout"'));
+  assert.ok(html.includes('<h1 class="detail-heading"'));
+  assert.ok(html.indexOf('class="detail-player"') < html.indexOf('class="episode-menu"'));
+  assert.ok(html.indexOf('class="detail-player"') < html.indexOf('<dl class="detail-meta">'));
   assert.equal((html.match(/<dl class="detail-meta">/gu) ?? []).length, 3);
   assert.ok(html.includes('<div><dt>Zeitschrift</dt><dd><a href="../../">PC Games</a></dd></div>'));
   assert.ok(html.includes("<div><dt>Ausgabe</dt><dd>11/1992</dd></div>"));

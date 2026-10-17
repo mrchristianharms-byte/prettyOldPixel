@@ -9,6 +9,10 @@ const defaultSourceFile = path.join(projectRoot, "cache", "youtube-videos.json")
 const defaultTargetFile = path.join(projectRoot, "cache", "blaetterabend-videos.json");
 
 const BLAETTERABEND_PATTERN = /bl(?:ä|ae)tterabend/i;
+// Vom Nutzer bestätigte Heftzuordnung bei nicht aussagekräftigem Originaltitel.
+const CONFIRMED_MAGAZINE_TITLES = new Map([
+  ["6R6Go1LhCMI", "Power Play 10/1990"],
+]);
 
 // Longer names must come first so "Amiga Joker" wins over "Amiga".
 const MAGAZINES = [
@@ -221,8 +225,23 @@ export function parseBlaetterabendTitle(title) {
 }
 
 export function extractBlaetterabendVideos(videos) {
+  const selected = new Set(videos.filter((video) =>
+    BLAETTERABEND_PATTERN.test(video.title) || CONFIRMED_MAGAZINE_TITLES.has(video.id)));
+  for (const video of videos) {
+    if (selected.has(video)) continue;
+    const text = cleanTitle(video.title);
+    const matches = findMagazines(text);
+    if (!matches.length) continue;
+    const readingFormat = /\[re\.read\b/i.test(video.title);
+    const adjacentIssue = matches.some((match, index) => {
+      const after = text.slice(match.end, matches[index + 1]?.start ?? text.length);
+      return /^\s*[-–:|]?\s*(?:\d|#|(?:nr|no)\b|ausgabe\b|sonderheft\b|sonderausgabe\b|special\b)/i.test(after)
+        && parseIssue(after, after) !== null;
+    });
+    if (readingFormat || adjacentIssue) selected.add(video);
+  }
   return videos
-    .filter((video) => BLAETTERABEND_PATTERN.test(video.title))
+    .filter((video) => selected.has(video))
     .map((video) => ({
       id: video.id,
       url: `https://www.youtube.com/watch?v=${video.id}`,
@@ -230,6 +249,9 @@ export function extractBlaetterabendVideos(videos) {
       publishedAt: video.publishedAt,
       durationSeconds: video.durationSeconds,
       ...parseBlaetterabendTitle(video.title),
+      ...(CONFIRMED_MAGAZINE_TITLES.has(video.id) ? {
+        magazines: parseBlaetterabendTitle(CONFIRMED_MAGAZINE_TITLES.get(video.id)).magazines,
+      } : {}),
     }));
 }
 
@@ -296,6 +318,7 @@ export async function generateBlaetterabendList({
   await writeJson(targetFile, result);
 
   log(`${videos.length} Blätterabend-Videos gespeichert: ${targetFile}`);
+  log(`  Davon ${videos.filter((video) => !BLAETTERABEND_PATTERN.test(video.title)).length} weitere Zeitschriftenvideos aus dem zweiten Titeldurchlauf.`);
   const magazines = videos.flatMap((video) => video.magazines);
   if (kultmags) {
     logLinkStats(log, "kultmags.com", magazines.map((magazine) => magazine.kultmags?.match ?? "none"));

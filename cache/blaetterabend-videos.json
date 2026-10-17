@@ -6,8 +6,8 @@
     "title": "Pretty Old Pixel",
     "url": "https://www.youtube.com/@PrettyOldPixel"
   },
-  "generatedAt": "2026-10-17T10:44:01.191Z",
-  "count": 240,
+  "generatedAt": "2026-10-17T14:42:09.801Z",
+  "count": 247,
   "videos": [
     {
       "id": "0lPh2VZfUeo",
@@ -2050,7 +2050,29 @@
       "title": "Blätterabend - Nach Zuschauerabstimmung",
       "publishedAt": "2025-01-26T10:00:08-08:00",
       "durationSeconds": 10697,
-      "magazines": [],
+      "magazines": [
+        {
+          "name": "Power Play",
+          "issue": {
+            "label": "10/1990",
+            "number": null,
+            "months": [
+              10
+            ],
+            "year": 1990,
+            "special": false
+          },
+          "kultmags": {
+            "match": "issue",
+            "matchedBy": "month",
+            "title": "Power Play 1990-10",
+            "pageUrl": "https://www.kultmags.com/mags.php?folder=UG93ZXIgUGxheS8xOTkw",
+            "readerUrl": "https://reader.kultmags.com/Power%20Play%201990-10",
+            "downloadUrl": "https://www.kultmags.com/Power%20Play/1990/Power%20Play%201990-10.rar",
+            "coverUrl": "https://www.kultmags.com/Power%20Play/1990/Power%20Play%201990-10.rar.jpg"
+          }
+        }
+      ],
       "part": null
     },
     {
@@ -5415,6 +5437,25 @@
       "part": null
     },
     {
+      "id": "GMF5SxCxE6M",
+      "url": "https://www.youtube.com/watch?v=GMF5SxCxE6M",
+      "title": "Power Play - Strategie für Geniesser  - Steinwallen [re.read] 18.01.2022 [German/Deutsch]",
+      "publishedAt": "2022-01-18T15:17:21-08:00",
+      "durationSeconds": 13911,
+      "magazines": [
+        {
+          "name": "Power Play",
+          "issue": null,
+          "kultmags": {
+            "match": "folder",
+            "title": "Power Play",
+            "pageUrl": "https://www.kultmags.com/mags.php?folder=UG93ZXIgUGxheQ%3D%3D"
+          }
+        }
+      ],
+      "part": null
+    },
+    {
       "id": "QGOLTdOPNeI",
       "url": "https://www.youtube.com/watch?v=QGOLTdOPNeI",
       "title": "Blätterabend - PC Joker 1/94 [re.read] 11.01.2022 [German/Deutsch]",
@@ -7105,6 +7146,99 @@
       "part": null
     },
     {
+      "id": "hyRdUcqm_kg",
+      "url": "https://www.youtube.com/watch?v=hyRdUcqm_kg",
+      "title": "PowerPlay 11/92 [streamstag] 18.02.2019 [German/Deutsch]",
+      "publishedAt": "2020-02-18T13:32:14-08:00",
+      "durationSeconds": 6734,
+      "magazines": [
+        {
+          "name": "Power Play",
+          "issue": {
+            "label": "11/1992",
+            "number": null,
+            "months": [
+              11
+            ],
+            "year": 1992,
+            "special": false
+          },
+          "kultmags": {
+            "match": "issue",
+            "matchedBy": "month",
+            "title": "Power Play 1992-11",
+            "pageUrl": "https://www.kultmags.com/mags.php?folder=UG93ZXIgUGxheS8xOTky",
+            "readerUrl": "https://reader.kultmags.com/Power%20Play%201992-11",
+            "downloadUrl": "https://www.kultmags.com/Power%20Play/1992/Power%20Play%201992-11.rar",
+            "coverUrl": "https://www.kultmags.com/Power%20Play/1992/Power%20Play%201992-11.rar.jpg"
+          }
+        }
+      ],
+      "part": null
+    },
+    {
+      "id": "QFDAwIptSZc",
+      "url": "https://www.youtube.com/watch?v=QFDAwIptSZc",
+      "title": "PowerPlay 3/93 [streamstag] 11.02.2019 [German/Deutsch]",
+      "publishedAt": "2020-02-11T14:04:36-08:00",
+      "durationSeconds": 8311,
+      "magazines": [
+        {
+          "name": "Power Play",
+          "issue": {
+            "label": "3/1993",
+            "number": null,
+            "months": [
+              3
+            ],
+            "year": 1993,
+            "special": false
+          },
+          "kultmags": {
+            "match": "issue",
+            "matchedBy": "month",
+            "title": "Power Play 1993-03",
+            "pageUrl": "https://www.kultmags.com/mags.php?folder=UG93ZXIgUGxheS8xOTkz",
+            "readerUrl": "https://reader.kultmags.com/Power%20Play%201993-03",
+            "downloadUrl": "https://www.kultmags.com/Power%20Play/1993/Power%20Play%201993-03.rar",
+            "coverUrl": "https://www.kultmags.com/Power%20Play/1993/Power%20Play%201993-03.rar.jpg"
+          }
+        }
+      ],
+      "part": null
+    },
+    {
+      "id": "l9uWmaXG3tg",
+      "url": "https://www.youtube.com/watch?v=l9uWmaXG3tg",
+      "title": "PowerPlay 9/92 [streamstag] 28.01.2019 [German/Deutsch]",
+      "publishedAt": "2020-01-28T13:44:40-08:00",
+      "durationSeconds": 7362,
+      "magazines": [
+        {
+          "name": "Power Play",
+          "issue": {
+            "label": "9/1992",
+            "number": null,
+            "months": [
+              9
+            ],
+            "year": 1992,
+            "special": false
+          },
+          "kultmags": {
+            "match": "issue",
+            "matchedBy": "month",
+            "title": "Power Play 1992-09",
+            "pageUrl": "https://www.kultmags.com/mags.php?folder=UG93ZXIgUGxheS8xOTky",
+            "readerUrl": "https://reader.kultmags.com/Power%20Play%201992-09",
+            "downloadUrl": "https://www.kultmags.com/Power%20Play/1992/Power%20Play%201992-09.rar",
+            "coverUrl": "https://www.kultmags.com/Power%20Play/1992/Power%20Play%201992-09.rar.jpg"
+          }
+        }
+      ],
+      "part": null
+    },
+    {
       "id": "SsbOZe4P8y4",
       "url": "https://www.youtube.com/watch?v=SsbOZe4P8y4",
       "title": "Blätterabend Power Play 5/92",
@@ -7161,6 +7295,93 @@
             "readerUrl": "https://reader.kultmags.com/Power%20Play%201992-02",
             "downloadUrl": "https://www.kultmags.com/Power%20Play/1992/Power%20Play%201992-02.rar",
             "coverUrl": "https://www.kultmags.com/Power%20Play/1992/Power%20Play%201992-02.rar.jpg"
+          }
+        }
+      ],
+      "part": null
+    },
+    {
+      "id": "QnQeWXLN3a8",
+      "url": "https://www.youtube.com/watch?v=QnQeWXLN3a8",
+      "title": "Amiga Joker Sonderheft - Simulationen [streamstag] 26.11.2019 [German/Deutsch]",
+      "publishedAt": "2019-11-26T13:56:10-08:00",
+      "durationSeconds": 8042,
+      "magazines": [
+        {
+          "name": "Amiga Joker",
+          "issue": {
+            "label": "Sonderheft",
+            "number": null,
+            "months": [],
+            "year": null,
+            "special": true
+          },
+          "kultmags": {
+            "match": "folder",
+            "title": "Amiga Joker",
+            "pageUrl": "https://www.kultmags.com/mags.php?folder=QW1pZ2EgSm9rZXI%3D"
+          }
+        }
+      ],
+      "part": null
+    },
+    {
+      "id": "herlOLMWhnk",
+      "url": "https://www.youtube.com/watch?v=herlOLMWhnk",
+      "title": "PowerPlay 6/92 [streamstag] 12.11.2019 [German/Deutsch]",
+      "publishedAt": "2019-11-12T14:07:05-08:00",
+      "durationSeconds": 8680,
+      "magazines": [
+        {
+          "name": "Power Play",
+          "issue": {
+            "label": "6/1992",
+            "number": null,
+            "months": [
+              6
+            ],
+            "year": 1992,
+            "special": false
+          },
+          "kultmags": {
+            "match": "issue",
+            "matchedBy": "month",
+            "title": "Power Play 1992-06",
+            "pageUrl": "https://www.kultmags.com/mags.php?folder=UG93ZXIgUGxheS8xOTky",
+            "readerUrl": "https://reader.kultmags.com/Power%20Play%201992-06",
+            "downloadUrl": "https://www.kultmags.com/Power%20Play/1992/Power%20Play%201992-06.rar",
+            "coverUrl": "https://www.kultmags.com/Power%20Play/1992/Power%20Play%201992-06.rar.jpg"
+          }
+        }
+      ],
+      "part": null
+    },
+    {
+      "id": "YzelSZYeuFo",
+      "url": "https://www.youtube.com/watch?v=YzelSZYeuFo",
+      "title": "PowerPlay 4/94 [streamstag] 29.10.2019 [German/Deutsch]",
+      "publishedAt": "2019-10-29T15:16:47-07:00",
+      "durationSeconds": 9105,
+      "magazines": [
+        {
+          "name": "Power Play",
+          "issue": {
+            "label": "4/1994",
+            "number": null,
+            "months": [
+              4
+            ],
+            "year": 1994,
+            "special": false
+          },
+          "kultmags": {
+            "match": "issue",
+            "matchedBy": "month",
+            "title": "Power Play 1994-04",
+            "pageUrl": "https://www.kultmags.com/mags.php?folder=UG93ZXIgUGxheS8xOTk0",
+            "readerUrl": "https://reader.kultmags.com/Power%20Play%201994-04",
+            "downloadUrl": "https://www.kultmags.com/Power%20Play/1994/Power%20Play%201994-04.rar",
+            "coverUrl": "https://www.kultmags.com/Power%20Play/1994/Power%20Play%201994-04.rar.jpg"
           }
         }
       ],

@@ -19,14 +19,14 @@ Zeitschriftenarchive sowie die Veröffentlichung des Verzeichnisses `docs/`
 Ein strukturierter Spielekatalog wurde auf dieser Grundlage ergänzt.
 
 **Umsetzungsstand (Schritte 1 und 2):** Der Offline-Build erzeugt jetzt
-Startseite, News, paginierten Videokatalog, Datenschutzseite,
+Startseite mit Statistik, News, Datenschutzseite,
 Sitemap, Robots-Datei und 404. Gemeinsame Templates, lokale Pico-CSS-Version
 2.1.1 samt Lizenz, sichere Metadaten und Build-Budgets sind umgesetzt.
 Zeitschriftenindex, Zeitschriften-, Jahrgangs- und eindeutige Ausgabenseiten
 sind im dritten Schritt hinzugekommen; News und Videos verlinken diese Ziele.
 Bestätigte Spieleseiten und Spieleindex sind ebenfalls umgesetzt.
-Player-Komfortfunktionen wie Kapitelsteuerung und automatische Fortsetzung
-folgen separat.
+Statische Kapitel-Zeitlinks und erwähnte Kanäle sind ebenfalls umgesetzt.
+API-Kapitelsteuerung und automatische Fortsetzung folgen separat.
 **Korrigierte Seitenstruktur:** Es gibt keine separate Seite pro Video.
 Player und Beschreibungen stehen auf der jeweiligen Ausgabe-/Spieleseite.
 Ein kleines lokales Modul wechselt dort die Auswahl per Video-Fragment;

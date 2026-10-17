@@ -6,6 +6,7 @@ import { secondsToIsoDuration } from "./fetch-youtube-videos.mjs";
 import { gameDefinitions } from "./games.mjs";
 import { structureGameSeries } from "./site-game-series.mjs";
 import { sectionDefinitions } from "./sections.mjs";
+import { extractVideoDetails } from "./site-video-details.mjs";
 
 function requireValue(condition, message) {
   if (!condition) throw new Error(message);
@@ -366,6 +367,7 @@ export function normalizeSources({ videos: videoCache, playlists: playlistCache,
       duration: seconds === undefined || seconds === null ? null : secondsToIsoDuration(seconds),
       playlists: [], magazines: [], games: [], sections: [], blaetterabend: false,
     };
+    Object.assign(video, extractVideoDetails(video, videoCache.channel));
     videos.push(video);
     videoById.set(video.id, video);
   }

@@ -23,7 +23,8 @@ vollständiger Videoliste, Beschreibungen und lokalem Videowechsel-Modul sind
 umgesetzt. Spiele erhalten geprüfte Playlist-/Video-Zuordnungen, belegte
 Hauptplattformen und Quellschreibweisen aus dem gepflegten Spielekatalog.
 Abschnitts-/Reihenerkennung mit statischen Sprunglinks ist ebenfalls umgesetzt.
-Kapitelsteuerung, Partnerlisten und automatische Fortsetzung folgen separat.
+Statische Kapitel-Zeitlinks und explizite Kanalverweise sind umgesetzt.
+API-Kapitelsteuerung und automatische Fortsetzung folgen separat.
 
 ## Entscheidung
 
@@ -69,7 +70,7 @@ Ein lokales, inhaltsgehashtes Modul ergänzt auf Detailseiten:
 - Auswahl per echtem Link `href="#video-<id>"`, auch aus anderen Seiten.
 - Initiale Auswahl aus dem Fragment; ohne Video-Fragment erstes Video.
 - Ein- und Ausblenden der bereits statisch vorhandenen Beschreibungen.
-- Ein gemeinsamer vollbreiter Player; ein Wechsel ersetzt den bisherigen
+- Ein gemeinsamer Player über die Breite der linken Inhaltsspalte; ein Wechsel ersetzt den bisherigen
   Frame-Inhalt durch ein Vorschaubild und stoppt eine laufende Wiedergabe.
 - Markierung der aktiven Folge, Positionsanzeige und Aktualisierung des
   Browser-Titels. Zurück/Vorwärts berücksichtigt Fragmentwechsel.
@@ -129,18 +130,24 @@ noch horizontales Scrollen. Die Darstellung benötigt kein JavaScript.
 
 ### 4. Responsive Darstellung und Navigation
 
-Auf Spieleseiten beginnt die vollständige Videoliste auf Desktop rechtsbündig
-auf Höhe des Seitentitels. Titel, Spielinformationen, Player und aktive
-Beschreibung stehen links in der Hauptspalte. Der Player nutzt deren volle
-Breite mit reserviertem Seitenverhältnis. Dies ersetzt für Spieleseiten die
-bisherige vollbreite Playerdarstellung mit darunter beginnender Liste.
-Ausgabenseiten behalten den Player über die gesamte Inhaltsbreite; darunter
-stehen aktive Beschreibung und rechts daneben die Videoliste.
-Unter 768 Pixeln stehen Spielinhalt und Liste nicht nebeneinander. Das native
-`details`/`summary`-Menü mit Unicode-Burger und Text steht bei Spielen oberhalb
-des Titels, bei Ausgaben unterhalb des Players.
+Spiel- und Ausgabenseiten verwenden dasselbe Template auf Grundlage des
+Spielelayouts. Die vollständige Videoliste beginnt auf Desktop rechtsbündig
+auf Höhe des Seitentitels. Links stehen der kompakte einzeilige Titel und
+direkt darunter der gemeinsame Player; alle Metadaten, Reiheninformationen
+und Beschreibungen folgen unter dem Video. Lange Seitentitel werden optisch
+mit Auslassung dargestellt, bleiben als vollständiger Text und Tooltip erhalten.
+Der Player nutzt die Spaltenbreite mit reserviertem Seitenverhältnis und
+höchstens 60 Prozent der kleinen Viewporthöhe. Kopfbereich und Navigation
+haben reduzierte vertikale Abstände.
+Unter 768 Pixeln steht das native `details`/`summary`-Menü mit Unicode-Burger
+und Text auf beiden Seitentypen unter dem Player und vor den Metadaten.
 Alle Links funktionieren auch ohne das Modul; Fokus und aktive Auswahl sind
 sichtbar und mit Tastatur zugänglich.
+Bei initialen Video-Fragmenten richtet das Modul den sichtbaren Ausschnitt
+am Player aus. Der aktive Inhaltsabschnitt erhält dazu einen passenden
+Scroll-Abstand, damit ein später nativer Browser-Fragmentsprung den Player
+nicht wieder aus dem sichtbaren Bereich schiebt. Ohne JavaScript bleibt
+die normale Navigation zu den vollständigen Beschreibungen erhalten.
 
 Die Positionsanzeige `Video 1/10` ist die einsbasierte Position in der
 deduplizierten Liste, nicht die Originalnummer im YouTube-Titel.
@@ -158,7 +165,17 @@ Die Videoposition steht im aktiven Inhaltsabschnitt und Browser-Titel.
 Der Jahrgang bleibt separat verlinkt. Vorher-/Nachher-Links wechseln das
 Video-Fragment innerhalb derselben Seite.
 
-### 5. Kapitel und Partner (späterer Ausbauschritt)
+### 5. Kapitel und Partner
+
+**Umgesetzt:** Die Beschreibung wird offline in Kapitel und erwähnte Kanäle
+aufbereitet. Sichtbare Kapitel bleiben externe Zeitlinks, ohne zusätzliche
+Player-Skripte. Die API-basierte Steuerung des aktivierten Players ist noch offen.
+Zeitzeilen benötigen einen aufsteigenden Block mit mindestens zwei Einträgen
+ab Null oder eine direkte Kapitel-/Zeitmarkenüberschrift. Dies vermeidet
+Fehltreffer bei einzelnen Uhrzeiten. Bekannte Videolängen begrenzen die Marken,
+gleiche Sekunden werden dedupliziert. Leere Abschnitte entfallen.
+Die Darstellung liegt pro Video in dessen Spiel-/Ausgabepanel und funktioniert
+unverändert ohne JavaScript; die Originalbeschreibung bleibt erhalten.
 
 Kapitel stammen aus bestätigten Zeitzeilen wie `01:30 Gameplay` oder
 YouTube-Zeitlinks zum betreffenden Video (`t=90`, `t=1m30s`, `start=90`).

@@ -67,13 +67,48 @@ test("liefert die Ausgabe strukturiert", () => {
   });
 });
 
-test("filtert nur Videos mit Blätterabend im Titel", () => {
+test("übernimmt Blätterabend und ergänzt übrige Titel mit bestätigtem Zeitschriftenkontext", () => {
   const videos = extractBlaetterabendVideos([
     { id: "a", title: "Blätterabend - ASM 9/93", publishedAt: "2021-01-26T00:00:00Z", durationSeconds: 60 },
     { id: "b", title: "Cadaver [re.play - #16]", publishedAt: "2026-10-16T00:00:00Z", durationSeconds: 60 },
+    { id: "YzelSZYeuFo", title: "PowerPlay 4/94 [streamstag] 29.10.2019 [German/Deutsch]" },
+    { id: "c", title: "Amiga Joker Sonderheft - Simulationen [streamstag] 26.11.2019" },
+    { id: "d", title: "Power Play - Strategie für Geniesser - Steinwallen [re.read] 18.01.2022" },
+    { id: "e", title: "Ace of Aces [re.play - #8] Das Abschlussgespräch 1986" },
+    { id: "f", title: "Joystick reparieren [re.ware] 29.10.2019" },
+    { id: "g", title: "Gespräch über Power Play 29.10.2019" },
   ]);
-  assert.deepEqual(videos.map(({ id }) => id), ["a"]);
+  assert.deepEqual(videos.map(({ id }) => id), ["a", "YzelSZYeuFo", "c", "d"]);
   assert.equal(videos[0].url, "https://www.youtube.com/watch?v=a");
+  assert.equal(videos[1].magazines[0].name, "Power Play");
+  assert.equal(videos[1].magazines[0].issue.label, "4/1994");
+  assert.equal(videos[3].magazines[0].issue, null);
+});
+
+test("wendet bestätigte Heftzuordnungen nur auf die konkrete Video-ID an und erhält den Originaltitel", () => {
+  const title = "Blätterabend - Nach Zuschauerabstimmung - Teil 2";
+  const videos = extractBlaetterabendVideos([
+    { id: "6R6Go1LhCMI", title },
+    { id: "other", title },
+  ]);
+  assert.equal(videos[0].title, title);
+  assert.equal(videos[0].part, 2);
+  assert.deepEqual(videos[0].magazines, [{
+    name: "Power Play",
+    issue: { label: "10/1990", number: null, months: [10], year: 1990, special: false },
+  }]);
+  assert.deepEqual(videos[1].magazines, []);
+});
+
+test("erfasst im echten Cache zusätzliche Zeitschriftenvideos ohne Ace-of-Aces-Fehltreffer", async () => {
+  const source = JSON.parse(await readFile(new URL("../cache/youtube-videos.json", import.meta.url), "utf8"));
+  const videos = extractBlaetterabendVideos(source.videos);
+  const additional = videos.filter((video) => !/bl(?:ä|ae)tterabend/i.test(video.title));
+  assert.deepEqual(additional.map((video) => video.id).sort(), [
+    "GMF5SxCxE6M", "hyRdUcqm_kg", "QFDAwIptSZc", "l9uWmaXG3tg",
+    "QnQeWXLN3a8", "herlOLMWhnk", "YzelSZYeuFo",
+  ].sort());
+  assert.ok(!videos.some((video) => video.title.startsWith("Ace of Aces")));
 });
 
 test("schreibt die Ergebnisliste als JSON-Datei", async () => {
@@ -83,13 +118,17 @@ test("schreibt die Ergebnisliste als JSON-Datei", async () => {
   try {
     await writeFile(sourceFile, JSON.stringify({
       channel: { handle: "PrettyOldPixel" },
-      videos: [{ id: "a", title: "Blätterabend - ASM 9/93", publishedAt: "2021-01-26T00:00:00Z", durationSeconds: 60 }],
+      videos: [
+        { id: "a", title: "Blätterabend - ASM 9/93", publishedAt: "2021-01-26T00:00:00Z", durationSeconds: 60 },
+        { id: "YzelSZYeuFo", title: "PowerPlay 4/94 [streamstag] 29.10.2019 [German/Deutsch]" },
+      ],
     }));
     await generateBlaetterabendList({ sourceFile, targetFile, log: () => {}, kultmags: false });
 
     const result = JSON.parse(await readFile(targetFile, "utf8"));
-    assert.equal(result.count, 1);
+    assert.equal(result.count, 2);
     assert.equal(result.videos[0].magazines[0].issue.label, "9/1993");
+    assert.equal(result.videos[1].magazines[0].issue.label, "4/1994");
   } finally {
     await rm(directory, { recursive: true, force: true });
   }

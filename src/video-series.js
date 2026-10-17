@@ -19,6 +19,8 @@ for (const series of document.querySelectorAll("[data-video-series]")) {
     document.title = `${series.dataset.title} – ${panel.querySelector("h2").textContent} | Pretty Old Pixel`;
     active = panel;
     if (narrow.matches) menu.open = false;
+    // Native fragment scrolling can run after the module during initial navigation.
+    panel.style.scrollMarginTop = `${panel.getBoundingClientRect().top - player.getBoundingClientRect().top}px`;
     if (focus) {
       panel.focus({ preventScroll: true });
       player.scrollIntoView({ block: "start" });
@@ -28,7 +30,11 @@ for (const series of document.querySelectorAll("[data-video-series]")) {
   menu.open = !narrow.matches;
   narrow.addEventListener("change", () => { menu.open = !narrow.matches; });
   select();
-  if (location.hash === `#${active.id}`) player.scrollIntoView({ block: "start" });
+  if (location.hash === `#${active.id}`) {
+    const showPlayer = () => requestAnimationFrame(() => player.scrollIntoView({ block: "start" }));
+    if (document.readyState === "complete") showPlayer();
+    else addEventListener("load", showPlayer, { once: true });
+  }
   series.classList.add("enhanced");
   addEventListener("hashchange", () => select(true));
 }

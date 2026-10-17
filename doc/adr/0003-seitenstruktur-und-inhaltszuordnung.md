@@ -82,7 +82,8 @@ Mitgliederlisten im Playlist-Cache.
 
 Datenerfassung, bestätigte Spielezuordnung, Spieleseiten sowie konservative
 Abschnitts-/Reihenerkennung sowie Hardware-, Retrospektiven- und
-Interviewübersichten sind umgesetzt. Player-Komfortfunktionen folgen separat.
+Interviewübersichten sind umgesetzt. Statische Kapitel-Zeitlinks und explizite
+Kanalverweise ergänzen die Videoabschnitte. API-Player-Komfortfunktionen folgen separat.
 
 ## Entscheidung
 
@@ -102,7 +103,12 @@ Detailseiten je Spiel bzw. Ausgabe bleiben erhalten. Ein kanalweiter Gesamtkatal
 wird nicht mehr erzeugt: `/videos/` samt Folgeseiten, Navigation und Verweisen
 entfällt. Alte Ausgaben werden beim Build aus Dateien, Sitemap und Manifest entfernt.
 Der vollständige Video-Cache bleibt die Datenbasis; nicht zugeordnete ältere Videos
-erhalten keine Ersatzseite. Die begrenzte News-/Startseitenvorschau bleibt bestehen.
+erhalten keine Ersatzseite. Die begrenzte News-Übersicht bleibt bestehen.
+Die Startseite zeigt statt neuer Videos ein responsives Statistikraster mit
+Video-, Zeitschriften-, Heft-, Spiele- und Playlistzahlen sowie bekannten
+Videostunden. Der älteste öffentliche Upload belegt den Beginn der erfassten
+Videogeschichte, nicht das unbekannte Gründungsdatum. Verlinkte Themenkacheln
+zeigen Videozahlen; Mehrfachzuordnungen machen diese Zahlen nicht addierbar.
 Videos werden innerhalb dieser Seiten über `#video-<id>` ausgewählt.
 Ohne sichere vorhandene Detailseite führen Videolinks direkt zu YouTube.
 
@@ -624,4 +630,6 @@ Kategorieentscheidungen. Video- und Playlist-Erfassung, News und
 die Zeitschriftenstruktur bis zu Ausgabenseiten sowie bestätigte Spieleidentitäten
 und Spieleseiten mit Abschnitts-/Reihenübersicht sind umgesetzt.
 Hardware-, Retrospektiven- und Interviewübersichten sind ebenfalls umgesetzt.
-Player-Komfortfunktionen und abschließende Veröffentlichungsprüfungen folgen separat.
+Kapitel-Zeitlinks und erwähnte Kanäle sind in den Spiel-/Ausgabepanels umgesetzt.
+API-Kapitelsteuerung, automatische Fortsetzung und abschließende
+Veröffentlichungsprüfungen folgen separat.
