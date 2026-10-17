@@ -1,4 +1,4 @@
-import { catalogRoute, paginatedRoute } from "./site-config.mjs";
+import { paginatedRoute } from "./site-config.mjs";
 import { httpUrl } from "./site-data.mjs";
 
 export function escapeHtml(value) {
@@ -137,7 +137,7 @@ function layout({ route, title, description, body, schema, crumbs, image, noinde
       "@type": "ListItem", position: index + 1, name: crumb.name, item: config.href(crumb.route),
     })),
   };
-  const navigation = [["", "Startseite"], ["news/", "News"], ...(hasMagazines ? [["zeitschriften/", "Zeitschriften"]] : []), ...(hasGames ? [["spiele/", "Spiele"]] : []), ...sections.map((section) => [section.route, section.name]), ["videos/", "Alle Videos"]];
+  const navigation = [["", "Startseite"], ["news/", "News"], ...(hasMagazines ? [["zeitschriften/", "Zeitschriften"]] : []), ...(hasGames ? [["spiele/", "Spiele"]] : []), ...sections.map((section) => [section.route, section.name])];
   const selected = navigation.map(([target]) => target).find((prefix) => prefix && route.startsWith(prefix)) ?? route;
   return `<!doctype html>
 <html lang="de">
@@ -258,7 +258,7 @@ ${externalLink("https://docs.github.com/en/site-policy/privacy-policies/github-g
 <p>Externe Links sind mit ↗ und einem zugänglichen Hinweis gekennzeichnet. Erst beim Aufrufen wird das jeweilige Ziel besucht; die direkte Vorschaubild-Einbindung ist davon ausgenommen. Diese Website setzt selbst keine Tracking-Cookies ein, verwendet keine Analytics-Dienste und schreibt keine Daten in Local Storage oder Session Storage.</p>
 <h2>Hinweise vor Veröffentlichung</h2>
 <p>Der private, nicht kommerzielle Betrieb allein befreit nicht automatisch von gesetzlichen Informations- oder Einwilligungspflichten. Die rechtliche Prüfung einschließlich eventuell erforderlicher weiterer Angaben steht vor der öffentlichen Freigabe aus. Diese Hinweise sind keine Rechtsberatung.</p>
-<p><a href="${config.href("videos/")}">Zum Videokatalog</a></p>`;
+<p><a href="${config.href()}">Zur Startseite und den Themen</a></p>`;
 }
 
 function periodicalSchema(magazine, config) {
@@ -575,16 +575,16 @@ export function renderSite(model, config, cssHref, jsHref = "assets/video-series
   const root = { route: "", name: "Startseite" };
   add({
     route: "", title: "Retrospiele, Blätterabend und neue Videos",
-    description: "Pretty Old Pixel: neue Videos, Retrospiele und Blätterabend mit klassischen Computerzeitschriften. Ein statischer Katalog mit direkten Videolinks.",
+    description: "Pretty Old Pixel: neue Videos, Retrospiele und Blätterabend mit klassischen Computerzeitschriften. Thematische Seiten mit direkten Videolinks.",
     crumbs: [root], schema: collectionSchema(model.news.slice(0, 5), config, ""),
     body: `<h1>Pretty Old Pixel</h1>
 <p class="lead">Retrospiele entdecken, alte Computerzeitschriften durchblättern und Videos wiederfinden.</p>
-<p><a href="${config.href("news/")}">Die 20 neuesten Videos</a> · <a href="${config.href("videos/")}">Alle ${model.videos.length} Videos durchsuchen</a></p>
+<p><a href="${config.href("news/")}">Die 20 neuesten Videos</a></p>
 <section aria-labelledby="bereiche"><h2 id="bereiche">Die Themen</h2>
 ${hasMagazines ? `<p><a href="${config.href("zeitschriften/")}">Blätterabend: Zeitschriften, Jahrgänge und Ausgaben entdecken</a></p>` : ""}
 ${model.games.length ? `<p><a href="${config.href("spiele/")}">Spiele: ${model.games.length} Spielereihen entdecken</a></p>` : ""}
 ${model.sections.map((section) => `<p><a href="${config.href(section.route)}">${escapeHtml(section.name)}</a> · ${section.entries.length} bestätigte Beiträge</p>`).join("")}
-<p>Alle veröffentlichten Videos sind über den Gesamtkatalog erreichbar. Bereichszuordnungen werden nur nach fachlicher Prüfung ergänzt.</p></section>
+<p>Bereichszuordnungen werden nur nach fachlicher Prüfung ergänzt.</p></section>
 <section aria-labelledby="neu"><h2 id="neu">Neu auf dem Kanal</h2>
 ${videoList(model.news.slice(0, 5), config)}
 <p><a href="${config.href("news/")}">Weitere neue Videos ansehen</a></p></section>`,
@@ -595,32 +595,13 @@ ${videoList(model.news.slice(0, 5), config)}
     description: "Die 20 neuesten veröffentlichten Videos von Pretty Old Pixel, chronologisch nach YouTube-Veröffentlichung: Retrospiele, Blätterabend und weitere Themen.",
     crumbs: [root, { route: "news/", name: "News" }],
     schema: collectionSchema(model.news, newsConfig, "news/"),
-    body: `<h1>News – die neuesten Videos</h1><p>Die neuesten Veröffentlichungen, neueste zuerst. Maßgeblich ist das Veröffentlichungsdatum des Videos, nicht der Abruf der Daten.</p>${videoList(model.news, newsConfig)}<p><a href="${newsConfig.href("videos/")}">Alle Videos im Katalog</a></p>`,
+    body: `<h1>News – die neuesten Videos</h1><p>Die neuesten Veröffentlichungen, neueste zuerst. Maßgeblich ist das Veröffentlichungsdatum des Videos, nicht der Abruf der Daten.</p>${videoList(model.news, newsConfig)}`,
   }, model.news);
 
   renderMagazinePages(model, config, add);
   renderGamePages(model, config, add);
   renderSectionPages(model, config, add);
 
-  const pageCount = Math.ceil(model.videos.length / config.pageSize);
-  for (let page = 1; page <= pageCount; page += 1) {
-    const route = catalogRoute(page);
-    const pageConfig = config.forPage(route);
-    const videos = model.videos.slice((page - 1) * config.pageSize, page * config.pageSize);
-    const previous = page > 1 ? catalogRoute(page - 1) : null;
-    const next = page < pageCount ? catalogRoute(page + 1) : null;
-    const pagination = `<nav class="pagination" aria-label="Videokatalog-Seiten">${previous ? `<a href="${pageConfig.href(previous)}" rel="prev">← Vorherige Seite</a>` : ""}
-<span aria-current="page">Seite ${page} von ${pageCount}</span>
-${next ? `<a href="${pageConfig.href(next)}" rel="next">Nächste Seite →</a>` : ""}</nav>
-<details><summary>Alle Katalogseiten</summary><ol class="page-list">${Array.from({ length: pageCount }, (_, index) => `<li><a href="${pageConfig.href(catalogRoute(index + 1))}"${index + 1 === page ? ' aria-current="page"' : ""}>Seite ${index + 1}</a></li>`).join("")}</ol></details>`;
-    add({
-      route, title: `Alle Videos – Seite ${page} von ${pageCount}`,
-      description: `Videokatalog von Pretty Old Pixel, Seite ${page} von ${pageCount}: Retrospiele, Blätterabend und weitere Videos mit Veröffentlichungsdatum und Beschreibung.`,
-      crumbs: page === 1 ? [root, { route, name: "Alle Videos" }] : [root, { route: "videos/", name: "Alle Videos" }, { route, name: `Seite ${page}` }],
-      schema: collectionSchema(videos, pageConfig, route), previous, next,
-      body: `<h1>Alle Videos – Seite ${page}</h1><p>${model.videos.length} Videos, neueste zuerst. Videos ohne belastbares Datum stehen am Ende und sind entsprechend gekennzeichnet.</p>${pagination}${videoList(videos, pageConfig)}${pagination.replace('aria-label="Videokatalog-Seiten"', 'aria-label="Weitere Katalogseiten"')}`,
-    }, videos);
-  }
   add({
     route: "datenschutz/", title: "Datenschutz und Hinweise",
     description: "Hinweise zu GitHub Pages, öffentlichen Metadaten und der direkten YouTube-Einbindung auf dem privaten, nicht kommerziellen Projekt Pretty Old Pixel.",
@@ -630,10 +611,10 @@ ${next ? `<a href="${pageConfig.href(next)}" rel="next">Nächste Seite →</a>` 
   });
   add({
     route: "404.html", file: "404.html", title: "Seite nicht gefunden", noindex: true,
-    description: "Diese Seite wurde nicht gefunden. Über Startseite, News und Videokatalog finden Sie die Videos von Pretty Old Pixel.",
+    description: "Diese Seite wurde nicht gefunden. Über die Startseite und die Themenbereiche finden Sie die Videos von Pretty Old Pixel.",
     crumbs: [root, { route: "404.html", name: "Seite nicht gefunden" }],
     schema: { "@type": "WebPage", name: "Seite nicht gefunden" },
-    body: `<h1>Seite nicht gefunden</h1><p>Unter dieser Adresse gibt es keine Seite.</p><p><a href="${config.href()}">Zur Startseite</a> · <a href="${config.href("videos/")}">Zum Videokatalog</a></p>`,
+    body: `<h1>Seite nicht gefunden</h1><p>Unter dieser Adresse gibt es keine Seite.</p><p><a href="${config.href()}">Zur Startseite und den Themen</a></p>`,
   });
   return pages;
 }

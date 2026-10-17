@@ -41,13 +41,16 @@ werden, damit das Build-Manifest und unveränderte Dateizeitpunkte erhalten blei
 ### Erste Seiten und lokale Vorschau
 
 Umgesetzt sind Startseite, News mit den 20 neuesten veröffentlichten Videos,
-Videokatalog mit maximal 50 Einträgen je Seite,
 Zeitschriftenindex mit Zeitschriften-, Jahrgangs- und Ausgabenseiten,
 Spieleindex und Spieleseiten, Hardware, Retrospektiven sowie Interviews und Gespräche,
 Datenschutz, Sitemap, Robots-Datei und 404-Seite. Alle Inhalte stehen direkt im
 HTML. Nur Spiel-/Ausgabenseiten laden ein kleines lokales JavaScript für die Auswahl
 von Video und Beschreibung; ohne JavaScript sind alle Beschreibungen sichtbar.
-**Es gibt keine separate Seite pro Video.** News und Katalog führen zum
+**Es gibt weder einen Gesamtkatalog unter `/videos/` noch separate Videoseiten.**
+Videos erscheinen auf thematischen Seiten sowie in der begrenzten News-/Startseitenvorschau.
+Nicht zugeordnete ältere Videos bleiben nur im vollständigen JSON-Cache erhalten.
+Beim Build werden alte Katalogseiten einschließlich Sitemap-/Manifest-Einträgen entfernt.
+News und Themenübersichten führen zum
 Videoabschnitt einer vorhandenen Ausgabe bzw. eines Spiels, sonst direkt zu YouTube.
 
 Archivverweise auf Zeitschriftenseiten erscheinen als kleine Ordner-, Lese-
@@ -110,12 +113,12 @@ in `src/sections.mjs`. Es gibt keine Links auf noch nicht erzeugte Bereichsseite
 - Der reine Verpackungsbeitrag `bwVnfQJ-WEw` ist ausdrücklich von Hardware
   ausgeschlossen. Der gemischte Beitrag `XDvGVislnJg` behandelt laut
   Beschreibung Hardware-Reinigung und trägt einen entsprechenden Hinweis.
-  re.list, re.collect und Community-Formate bleiben im Gesamtkatalog.
+  re.list, re.collect und Community-Formate erhalten ohne bestätigte Zuordnung keine Themenübersicht.
 - Bereiche haben höchstens 50 Einträge pro Übersichtsseite. Fehlende
   Beschreibungen sind zulässig; unbekannte Daten stehen bei Hardware und
   Interviews am Ende. Zukünftige oder fehlende Videos werden nicht publiziert.
   Leere Bereiche erzeugen weder Seiten noch Navigationslinks.
-- Startseite, Hauptnavigation, News, Katalog und zugehörige Detailseiten
+- Startseite, Hauptnavigation, News und zugehörige Detailseiten
   verlinken die vorhandenen Bereiche. Die erweiterten Navigationslinks
   umbrechen auf schmalen Displays. Videolinks führen zu vorhandenen
   Spiel-/Ausgabeabschnitten oder extern zu YouTube; keine zusätzlichen
@@ -151,7 +154,7 @@ in `src/sections.mjs`. Es gibt keine Links auf noch nicht erzeugte Bereichsseite
 - Neue Mitglieder bestätigter Playlists werden beim nächsten Offline-Build
   übernommen; Entfernungen ebenfalls. Neue, noch nicht bestätigte re.play-/
   re.connect-Playlists erzeugen einen Build-Hinweis statt einer geratenen
-  Spielezuordnung. Ihre Videos bleiben im Gesamtkatalog erreichbar.
+  Spielezuordnung. Ihre Videos bleiben im lokalen Cache erhalten.
 - Die vollständige Liste läuft chronologisch von alt nach neu, einschließlich
   Zeitzonen und stabiler Video-ID bei Zeitgleichheit. Undatierte Videos stehen
   gekennzeichnet am Ende. Playlistposition und originale Folgenummer im Titel
@@ -159,7 +162,7 @@ in `src/sections.mjs`. Es gibt keine Links auf noch nicht erzeugte Bereichsseite
 - Spieletitel, belegte Hauptplattform und Quellschreibweisen werden sichtbar
   und als `VideoGame`-Metadaten ausgegeben. Entwickler, Publisher, Genre und
   Erscheinungsjahr bleiben ohne Beleg offen; die Quellen sind verlinkt.
-- News, Gesamtkatalog, Startseite und Navigation führen zu vorhandenen
+- News, Startseite und Navigation führen zu vorhandenen
   Spieleseiten bzw. ihren `#video-<id>`-Abschnitten. Die Spielezuordnung ist auch
   neben einer Zeitschriftenzuordnung sichtbar. Ohne eigene Ausgabe hat ein
   Video die alphabetisch nach Slug erste bestätigte Spieleseite als Ziel.
@@ -228,10 +231,10 @@ in `src/sections.mjs`. Es gibt keine Links auf noch nicht erzeugte Bereichsseite
   Definitionslisten: auf breiten Displays als mehrspaltiges Raster, unter
   576 Pixeln einspaltig mit Beschriftung und Wert nebeneinander. Lange Werte
   umbrechen; fehlende optionale Angaben werden nicht ergänzt.
-- News und Videokatalog verlinken Zeitschrift, Jahrgang und vorhandene
+- News und Themenübersichten verlinken Zeitschrift, Jahrgang und vorhandene
   Ausgabenseite einschließlich Video-Fragment. Mehrfachzuordnungen bleiben
   erhalten. Ausgaben-Breadcrumbs gehören zur gemeinsamen Seite; der aktive
-  Videoabschnitt zeigt `Video 2/3`. Aus News/Katalog ist die alphabetisch nach
+  Videoabschnitt zeigt `Video 2/3`. Aus News/Themenübersichten ist die alphabetisch nach
   Slug erste eindeutige Ausgabe das Ziel. Innerhalb der Zeitschriftenübersicht
   führt der Link zur jeweiligen Ausgabe. Ohne sichere Ausgabenseite wird
   eine vorhandene Spieleseite genutzt; ohne sicheres internes Ziel wird
@@ -259,8 +262,8 @@ in `src/sections.mjs`. Es gibt keine Links auf noch nicht erzeugte Bereichsseite
 - Beschreibungen, Titel und strukturierte Daten werden sicher escaped.
   HTTP(S)-Links in Beschreibungen und Archivverweise sind extern gekennzeichnet.
 - News verwenden `publishedAt` einschließlich Zeitzone, nicht Abrufzeiten.
-  Fehlende Beschreibungen sind zulässig. Videos mit unbekanntem Datum bleiben im
-  Katalog; zukünftige Videos werden nicht veröffentlicht.
+  Fehlende Beschreibungen sind zulässig. Videos mit unbekanntem Datum bleiben auf
+  bestätigten Themenseiten sichtbar; zukünftige Videos werden nicht veröffentlicht.
 - Der Build prüft alle internen Links und Fragmente, Canonicals, JSON-LD sowie
   die Budgets von 20 KiB gzip CSS, 5 KiB gzip eigenem JavaScript und
   50 KiB gzip HTML je Seite. Auch lange Reihen müssen diese Budgets einhalten.

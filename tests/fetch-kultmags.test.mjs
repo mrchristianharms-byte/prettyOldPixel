@@ -147,27 +147,28 @@ test("liest im Offline-Modus auch veraltete Caches und meldet fehlende Dateien o
     await assert.rejects(loadKultmagsCatalog(offline), /kultmags-Cache fehlt:.*index.json/u);
   });
 
-  test("behält Ausgabendetails 365 Tage und aktualisiert den Index weiterhin nach 30 Tagen", async () => {
-    await withCatalog(async ({ cacheDir, options }) => {
-      const file = path.join(cacheDir, "magazines", "power-play.json");
-      const before = await readFile(file, "utf8");
-      const start = Date.parse(JSON.parse(before).fetchedAt);
-      const mock = createFetch();
-      const load = (days) => loadKultmagsCatalog({
-        ...options, fetchImpl: mock.fetchImpl, magazineNames: ["Power Play"], now: start + days * 86400000,
-      });
-      await load(29);
-      assert.deepEqual(mock.requests, []);
-      await load(30);
-      assert.deepEqual(mock.requests, ["mags.php"]);
-      mock.requests.length = 0;
-      await load(364);
-      assert.deepEqual(mock.requests, ["mags.php"]);
-      assert.equal(await readFile(file, "utf8"), before);
-      mock.requests.length = 0;
-      await load(365);
-      assert.deepEqual(mock.requests, ["Power Play", "Power Play/1988", "Power Play/Special"]);
-      assert.equal(JSON.parse(await readFile(file, "utf8")).fetchedAt, new Date(start + 365 * 86400000).toISOString());
+});
+
+test("behält Ausgabendetails 365 Tage und aktualisiert den Index weiterhin nach 30 Tagen", async () => {
+  await withCatalog(async ({ cacheDir, options }) => {
+    const file = path.join(cacheDir, "magazines", "power-play.json");
+    const before = await readFile(file, "utf8");
+    const start = Date.parse(JSON.parse(before).fetchedAt);
+    const mock = createFetch();
+    const load = (days) => loadKultmagsCatalog({
+      ...options, fetchImpl: mock.fetchImpl, magazineNames: ["Power Play"], now: start + days * 86400000,
     });
+    await load(29);
+    assert.deepEqual(mock.requests, []);
+    await load(30);
+    assert.deepEqual(mock.requests, ["mags.php"]);
+    mock.requests.length = 0;
+    await load(364);
+    assert.deepEqual(mock.requests, ["mags.php"]);
+    assert.equal(await readFile(file, "utf8"), before);
+    mock.requests.length = 0;
+    await load(365);
+    assert.deepEqual(mock.requests, ["Power Play", "Power Play/1988", "Power Play/Special"]);
+    assert.equal(JSON.parse(await readFile(file, "utf8")).fetchedAt, new Date(start + 365 * 86400000).toISOString());
   });
 });

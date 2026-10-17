@@ -97,8 +97,12 @@ Die Hauptnavigation enthält News und die fünf Inhaltsbereiche:
 5. Retrospektiven
 6. Interviews und Gespräche
 
-Die Startseite verlinkt diese Bereiche und hebt die News hervor. Zusätzlich bleiben die allgemeine
-Videoliste und stabile Detailseiten je Spiel bzw. Ausgabe erhalten.
+Die Startseite verlinkt diese Bereiche und hebt die News hervor. Stabile
+Detailseiten je Spiel bzw. Ausgabe bleiben erhalten. Ein kanalweiter Gesamtkatalog
+wird nicht mehr erzeugt: `/videos/` samt Folgeseiten, Navigation und Verweisen
+entfällt. Alte Ausgaben werden beim Build aus Dateien, Sitemap und Manifest entfernt.
+Der vollständige Video-Cache bleibt die Datenbasis; nicht zugeordnete ältere Videos
+erhalten keine Ersatzseite. Die begrenzte News-/Startseitenvorschau bleibt bestehen.
 Videos werden innerhalb dieser Seiten über `#video-<id>` ausgewählt.
 Ohne sichere vorhandene Detailseite führen Videolinks direkt zu YouTube.
 
@@ -106,7 +110,6 @@ Ohne sichere vorhandene Detailseite führen Videolinks direkt zu YouTube.
 |---|---|
 | `/` | Einstieg mit News-Verweis und den fünf Inhaltsbereichen |
 | `/news/` | Die 20 neuesten veröffentlichten Videos mit Links zu ihren Inhaltsbereichen |
-| `/videos/` | Paginierter Gesamtkatalog |
 | `/zeitschriften/` | Blätterabend-Übersicht nach Zeitschrift |
 | `/zeitschriften/<slug>/` | Zeitschrift mit Jahrgängen und zugehörigen Videos |
 | `/zeitschriften/<slug>/<jahr>/` | Blätterabend-Videos eines Jahrgangs, nach Ausgabe |
@@ -172,7 +175,7 @@ Unbekannte Angaben bleiben auch in den Metadaten unbekannt.
 
 **Umgesetzt:** Zeitschriftenindex, Zeitschriften-, Jahrgangs- und eindeutig
 belegte Ausgabenseiten mit bis zu 50 Einträgen pro Seite. News, Videokatalog und
-Kataloglinks führen zu den vorhandenen Zielen. Reguläre Hefte werden über Jahr
+Themenlinks führen zu den vorhandenen Zielen. Reguläre Hefte werden über Jahr
 und Monate bzw. Heftnummer identifiziert; Sonderhefte über einen eindeutigen
 Archivtreffer bzw. Jahr und Sonderheftnummer. Ein Jahr allein oder eine
 generische Sonderheftbezeichnung reicht nicht für eine Ausgabenseite.
@@ -290,7 +293,7 @@ nicht allein über die Zwei-Video-Schwelle.
 Andere Formate wie re.connect, re.invented und Spieleabend werden nicht
 pauschal anhand des Formats zugeordnet. Eine bestätigte Mitgliedschaft in
 einer Spiel-Playlist darf berücksichtigt werden; ansonsten bleiben diese
-Beiträge zunächst separat im Gesamtkatalog.
+Beiträge zunächst nur im lokalen Cache, sofern keine andere bestätigte Zuordnung besteht.
 
 Spielbezogene Interviews können sowohl auf der Spieleseite als auch im
 Interviewbereich verlinkt sein. Unboxing ist eine Phase einer Spielereihe und
@@ -339,7 +342,7 @@ mit höchstens 50 Einträgen pro Seite, Breadcrumbs und relativen internen URLs.
 Hardware und Gespräche sind nach Veröffentlichung absteigend sortiert,
 undatierte Videos zuletzt. Retrospektiven bleiben thematisch und nach Folge
 gruppiert. Nur nicht leere Bereiche erscheinen in Navigation und Startseite;
-News, Katalog und betroffene Spiel-/Ausgabenseiten zeigen Bereichslinks.
+News und betroffene Spiel-/Ausgabenseiten zeigen Bereichslinks.
 Ohne eigene Entitätsseite führen Videoverweise direkt zu YouTube.
 Es entstehen keine neuen Video-, Geräte- oder Themenunterseiten und keine
 zusätzlichen Player oder Laufzeitscripte. Scraper bleiben vom Build getrennt.
@@ -347,12 +350,12 @@ zusätzlichen Player oder Laufzeitscripte. Scraper bleiben vom Build getrennt.
 Neue Playlist-Mitglieder oder passende Titelwörter werden lediglich als
 Prüfkandidaten gemeldet. Sie werden weder automatisch klassifiziert noch
 aufgrund zufälliger Erwähnungen einem Spiel zugeordnet. Reine
-Verpackungsthemen bleiben ebenso wie andere nicht ausgewählte Formate im
-Gesamtkatalog erreichbar.
+Verpackungsthemen erhalten ebenso wie andere nicht ausgewählte Formate keine
+eigene Übersicht; ihre Daten bleiben im lokalen Cache erhalten.
 
 re.list, re.collect, Community-Veranstaltungen und weitere Formate werden
-zunächst nicht zu Hauptbereichen. Ihre Videos bleiben im Gesamtkatalog
-erreichbar. Eine spätere Erweiterung erfordert eine bewusste Entscheidung.
+zunächst nicht zu Hauptbereichen. Ihre Videos bleiben im lokalen Cache
+erhalten. Eine spätere Erweiterung erfordert eine bewusste Entscheidung.
 
 ### 6. Stabile Datenzuordnung und Aktualisierung
 
@@ -398,7 +401,7 @@ Daten fehlgeschlagener Playlists als unvollständig markiert. Ein solcher
 Zwischenstand darf nicht als vollständiger neuer Katalog veröffentlicht werden.
 Nicht mehr gelistete Playlists werden erst nach einem vollständig erfolgreichen
 Abgleich entfernt. Das Entfernen aus einer Playlist bedeutet nicht automatisch,
-dass das betreffende Video aus dem Gesamtkatalog verschwindet.
+dass das betreffende Video aus dem vollständigen Video-Cache verschwindet.
 
 Neue Zeitschriften und Jahrgänge erhalten automatisch Seiten, sobald sie sicher
 erkannt sind und Videos enthalten. Neue Spieleseiten entstehen beim Erreichen
@@ -445,7 +448,7 @@ Ziel; Indexierung und Rankings können nicht garantiert werden.
 `/news/` zeigt kanalweit die **20 neuesten unterschiedlichen veröffentlichten
 Videos** aus dem vollständigen Video-Cache. Sind weniger vorhanden, werden alle
 angezeigt. Es gibt keine Beschränkung auf Spiele oder Blätterabend und keine
-eigene News-Paginierung; der Gesamtkatalog bleibt verlinkt.
+eigene News-Paginierung und keinen verlinkten Gesamtkatalog.
 
 - Sortiert wird absteigend nach `publishedAt`, bei identischen Zeitpunkten
   stabil nach Video-ID. Datumswerte werden als Zeitpunkte verglichen, nicht
@@ -466,7 +469,7 @@ eigene News-Paginierung; der Gesamtkatalog bleibt verlinkt.
   noch nicht erzeugte Spieleseiten ausgegeben.
 - Bei mehreren sicheren Zuordnungen werden die passenden Ziele verlinkt.
   Andere Formate verweisen auf ihren vorhandenen Bereich; ungeklärte Videos
-  bleiben über den Gesamtkatalog und externe YouTube-Links erreichbar.
+  führen in den News direkt über externe Links zu YouTube.
 
 Die News sind vollständig statisch und besitzen einen eigenen Titel,
 Beschreibung, Canonical-URL sowie `CollectionPage`/`ItemList`-Metadaten.
@@ -614,10 +617,10 @@ ADR 0002; ein unveränderter Build darf diese nicht austauschen.
 - Doppelte Zuordnungen sind gewollt, dürfen aber weder separate Videoseiten
   erzeugen noch Zählungen innerhalb einer Reihe vervielfachen.
 - Inhalte unterhalb der Spiele-Schwelle bleiben zunächst ausschließlich über
-  andere passende Bereiche und den Gesamtkatalog erreichbar.
+  andere bestätigte passende Bereiche erreichbar; ansonsten bleiben sie im lokalen Cache.
 
 Diese ADR dokumentiert die geplante Seitenstruktur und die getroffenen
-Kategorieentscheidungen. Video- und Playlist-Erfassung, News, Gesamtkatalog und
+Kategorieentscheidungen. Video- und Playlist-Erfassung, News und
 die Zeitschriftenstruktur bis zu Ausgabenseiten sowie bestätigte Spieleidentitäten
 und Spieleseiten mit Abschnitts-/Reihenübersicht sind umgesetzt.
 Hardware-, Retrospektiven- und Interviewübersichten sind ebenfalls umgesetzt.

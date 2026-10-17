@@ -89,7 +89,6 @@ Erzeugung aller Seitentypen.
 | Pfad | Inhalt |
 |---|---|
 | `/` | Einstieg und Navigation zu den Katalogen |
-| `/videos/` | Paginierte Videoliste |
 | `/zeitschriften/` | Alphabetischer Zeitschriftenindex |
 | `/zeitschriften/<slug>/` | Zeitschrift, Ausgaben und zugehörige Videos |
 | `/zeitschriften/<slug>/ausgaben/<ausgaben-id>/` | Eindeutig erkannte Ausgabe mit Videos und Archivlinks |
@@ -117,7 +116,8 @@ Der Unterpfad `/prettyOldPixel/` ist Bestandteil der aufgelösten
 Produktionsadressen, nicht der im HTML gespeicherten relativen Verweise.
 Externe YouTube-/Archivadressen bleiben vollständig.
 
-Allgemeine Kataloglisten zeigen höchstens 50 Einträge pro Seite.
+Thematische Übersichtslisten zeigen höchstens 50 Einträge pro Seite.
+Ein kanalweiter Gesamtkatalog wird nicht erzeugt; die News bleiben auf 20 Videos begrenzt.
 Die vollständige Folgenliste eines Spiels bzw. einer einzelnen Ausgabe ist davon ausgenommen und darf
 mehr als 50 Videos enthalten; Größenbudgets bleiben zu prüfen.
 Blätterabend wird vorrangig nach Zeitschrift und Jahrgang gegliedert statt

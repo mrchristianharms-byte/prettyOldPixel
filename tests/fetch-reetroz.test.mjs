@@ -179,30 +179,31 @@ test("liest reetroz offline unabhängig vom Cache-Alter und meldet fehlende Date
     await assert.rejects(loadReetrozCatalog(options), /reetroz-Cache fehlt:.*index.json/u);
   });
 
-  test("behält Ausgabendetails 365 Tage und aktualisiert den Index weiterhin nach 30 Tagen", async () => {
-    await withCacheDir(async (cacheDir) => {
-      const start = Date.parse("2025-01-01T00:00:00Z");
-      const mock = createFetch();
-      const load = (days) => loadReetrozCatalog({
-        ...quiet, cacheDir, fetchImpl: mock.fetchImpl, magazineNames: ["Computer Gaming World"],
-        now: start + days * 86400000,
-      });
-      await load(0);
-      const file = path.join(cacheDir, "magazines", "cgw.json");
-      const before = await readFile(file, "utf8");
-      mock.requests.length = 0;
-      await load(29);
-      assert.deepEqual(mock.requests, []);
-      await load(30);
-      assert.deepEqual(mock.requests, ["/catalog"]);
-      mock.requests.length = 0;
-      await load(364);
-      assert.deepEqual(mock.requests, ["/catalog"]);
-      assert.equal(await readFile(file, "utf8"), before);
-      mock.requests.length = 0;
-      await load(365);
-      assert.deepEqual(mock.requests, ["/magazines/cgw"]);
-      assert.equal(JSON.parse(await readFile(file, "utf8")).fetchedAt, new Date(start + 365 * 86400000).toISOString());
+});
+
+test("behält Ausgabendetails 365 Tage und aktualisiert den Index weiterhin nach 30 Tagen", async () => {
+  await withCacheDir(async (cacheDir) => {
+    const start = Date.parse("2025-01-01T00:00:00Z");
+    const mock = createFetch();
+    const load = (days) => loadReetrozCatalog({
+      ...quiet, cacheDir, fetchImpl: mock.fetchImpl, magazineNames: ["Computer Gaming World"],
+      now: start + days * 86400000,
     });
+    await load(0);
+    const file = path.join(cacheDir, "magazines", "cgw.json");
+    const before = await readFile(file, "utf8");
+    mock.requests.length = 0;
+    await load(29);
+    assert.deepEqual(mock.requests, []);
+    await load(30);
+    assert.deepEqual(mock.requests, ["/catalog"]);
+    mock.requests.length = 0;
+    await load(364);
+    assert.deepEqual(mock.requests, ["/catalog"]);
+    assert.equal(await readFile(file, "utf8"), before);
+    mock.requests.length = 0;
+    await load(365);
+    assert.deepEqual(mock.requests, ["/magazines/cgw"]);
+    assert.equal(JSON.parse(await readFile(file, "utf8")).fetchedAt, new Date(start + 365 * 86400000).toISOString());
   });
 });

@@ -61,18 +61,16 @@ async function setup(t, input = fixture()) {
   };
 }
 
-test("erzeugt echte Seitenlinks, selbstreferenzierende Canonicals und paginierte Kataloge", () => {
+test("erzeugt News und Themenlinks ohne Gesamtkatalog oder separate Videoseiten", () => {
   const { pages, config, assets } = render();
-  assert.equal(pages.size, 6);
-  assert.ok(![...pages.keys()].some((file) => /^videos\/[A-Za-z0-9_-]{11}\//u.test(file)));
+  assert.equal(pages.size, 4);
+  assert.ok(![...pages.keys()].some((file) => file.startsWith("videos/")));
   assert.ok(pages.get("news/index.html").html.includes('href="https://www.youtube.com/watch?v=b0000000052" rel="external"'));
-  assert.ok(pages.has("videos/seite/2/index.html"));
-  const first = pages.get("videos/index.html").html;
-  const second = pages.get("videos/seite/2/index.html").html;
-  assert.equal((first.match(/<li><article>/gu) ?? []).length, 50);
-  assert.equal((second.match(/<li><article>/gu) ?? []).length, 3);
-  assert.ok(second.includes('rel="canonical" href="./"'));
-  assert.ok(second.includes('href="../../" rel="prev"'));
+  for (const page of pages.values()) {
+    assert.ok(!page.html.includes("Alle Videos"));
+    assert.ok(!/href="[^"]*videos\//u.test(page.html));
+    assert.ok(page.html.includes(`rel="canonical" href="${config.href(page.route, page.route)}"`));
+  }
   assert.ok(![...pages.values()].some((page) => /href="[^"]*\/spiele\/|href="[^"]*\/zeitschriften\//u.test(page.html)));
   assert.ok(validateSite(pages, assets, config).maxHtmlGzip < 50 * 1024);
 });
@@ -217,7 +215,7 @@ test("baut offline mit Projektpfad, Sitemap und Inhalts-Manifest; übernimmt unv
   globalThis.fetch = () => { throw new Error("Netzwerk im Build verboten"); };
   t.after(() => { globalThis.fetch = originalFetch; });
   const first = await generateSite(options);
-  assert.equal(first.pages, 6);
+  assert.equal(first.pages, 4);
   assert.equal(first.reused, 0);
   assert.ok(first.cssGzip <= 20 * 1024);
   assert.ok(first.jsGzip <= 5 * 1024);
@@ -226,9 +224,13 @@ test("baut offline mit Projektpfad, Sitemap und Inhalts-Manifest; übernimmt unv
   const stylesheet = await readFile(path.join(options.outputDirectory, "assets", css), "utf8");
   assert.ok(stylesheet.includes("Pico CSS"));
   assert.ok(!stylesheet.includes("sourceMappingURL"));
+  const leadStyles = stylesheet.match(/\.lead\s*\{([^}]*)\}/u)?.[1];
+  assert.ok(leadStyles);
+  assert.doesNotMatch(leadStyles, /(?:max-)?width\s*:|white-space\s*:|text-wrap\s*:/u);
   const sitemap = await readFile(path.join(options.outputDirectory, "sitemap.xml"), "utf8");
   assert.ok(sitemap.includes("https://mrchristianharms-byte.github.io/prettyOldPixel/news/"));
   assert.ok(!sitemap.includes("404.html"));
+  assert.ok(!sitemap.includes("/videos/"));
   assert.equal((sitemap.match(/<lastmod>/gu) ?? []).length, first.pages - 1);
   assert.match(await readFile(path.join(options.outputDirectory, "robots.txt"), "utf8"), /Sitemap: https:.*prettyOldPixel\/sitemap.xml/u);
   const homePath = path.join(options.outputDirectory, "index.html");
@@ -256,15 +258,20 @@ test("ignoriert Abrufzeiten, aktualisiert nur betroffene Inhalte und entfernt ve
   input.videos.videos[0].description = "Korrektur an einem alten Video";
   await options.save(input);
   const changed = await generateSite(options);
-  assert.equal(changed.files - changed.reused, 3); // Katalogseite, Sitemap und Manifest.
+  assert.equal(changed.reused, changed.files);
   assert.equal(await readFile(newsPath, "utf8"), before);
   input.videos.videos.pop();
-  const legacy = path.join(options.outputDirectory, "videos/b0000000052");
-  await mkdir(legacy, { recursive: true });
-  await writeFile(path.join(legacy, "index.html"), "Alte Videoseite");
+  for (const route of ["videos", "videos/seite/2", "videos/b0000000052"]) {
+    const legacy = path.join(options.outputDirectory, route);
+    await mkdir(legacy, { recursive: true });
+    await writeFile(path.join(legacy, "index.html"), "Alter Videokatalog");
+  }
   await options.save(input);
   await generateSite(options);
-  await assert.rejects(stat(path.join(options.outputDirectory, "videos/b0000000052/index.html")), { code: "ENOENT" });
+  await assert.rejects(stat(path.join(options.outputDirectory, "videos")), { code: "ENOENT" });
+  const manifest = JSON.parse(await readFile(path.join(options.outputDirectory, "build-manifest.json"), "utf8"));
+  assert.ok(!Object.keys(manifest.pages).some((file) => file.startsWith("videos/")));
+  assert.ok(!(await readFile(path.join(options.outputDirectory, "sitemap.xml"), "utf8")).includes("/videos/"));
   assert.notEqual(await readFile(newsPath, "utf8"), before);
 });
 
@@ -291,13 +298,12 @@ test("setzt Sitemap-lastmod nur bei Inhaltsänderungen und erhält Zeitpunkte au
   assert.equal(unchanged.reused, unchanged.files);
   assert.equal(await readFile(sitemapPath, "utf8"), firstSitemap);
 
-  input.videos.videos[0].description = "Korrektur eines alten Videos";
+  input.videos.videos.at(-1).description = "Korrektur eines aktuellen Videos";
   await options.save(input);
   await generateSite({ ...options, now: laterTime });
   const updated = await readManifest();
-  assert.equal(updated.pages["videos/seite/2/index.html"].lastModified, new Date(laterTime).toISOString());
-  assert.equal(updated.pages["videos/seite/2/index.html"].contentPublishedAt, first.pages["videos/seite/2/index.html"].contentPublishedAt);
-  assert.equal(updated.pages["news/index.html"].lastModified, first.pages["news/index.html"].lastModified);
+  assert.equal(updated.pages["news/index.html"].lastModified, new Date(laterTime).toISOString());
+  assert.equal(updated.pages["news/index.html"].contentPublishedAt, first.pages["news/index.html"].contentPublishedAt);
   assert.equal(updated.pages["datenschutz/index.html"].lastModified, first.pages["datenschutz/index.html"].lastModified);
   assert.ok((await readFile(sitemapPath, "utf8")).includes(`<lastmod>${new Date(laterTime).toISOString()}</lastmod>`));
 
@@ -372,7 +378,7 @@ test("unterstützt lokale Vorschau-Basis und verweigert das Überschreiben von Q
   const options = await setup(t, fixture(1));
   await generateSite({ ...options, baseUrl: "http://localhost:4173/" });
   const html = await readFile(path.join(options.outputDirectory, "index.html"), "utf8");
-  assert.ok(html.includes('href="videos/"'));
+  assert.ok(html.includes('href="news/"'));
   assert.ok(html.includes('rel="canonical" href="./"'));
   assert.ok(!html.includes("http://localhost:4173/"));
   await assert.rejects(generateSite({ ...options, outputDirectory: options.cacheDirectory }), /Unsicheres Ausgabeverzeichnis/u);

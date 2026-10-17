@@ -39,7 +39,6 @@ export function createSiteConfig(baseUrl = productionUrl) {
   return config;
 }
 
-export const catalogRoute = (page) => page === 1 ? "videos/" : `videos/seite/${page}/`;
 export const paginatedRoute = (route, page) => page === 1 ? route : `${route}seite/${page}/`;
 
 export function slugify(name) {
