@@ -27,7 +27,9 @@ Statische Kapitel-Zeitlinks und explizite Kanalverweise sind umgesetzt.
 Die Player-Aktivierung wird im Browser gemerkt und kann zurückgesetzt werden;
 das lädt weitere Player ohne Autoplay.
 API-Kapitelsteuerung, `Clip`-Metadaten und die standardmäßig ausgeschaltete
-automatische Fortsetzung auf Spieleseiten sind umgesetzt.
+automatische Fortsetzung auf Spiel- und Heftausgabenseiten sind umgesetzt.
+Alle eingebetteten Player verwenden das gemeinsame `videoWidget` mit
+identischen Bedienelementen; Übersichtsseiten bleiben ohne Player.
 
 ## Entscheidung
 
@@ -113,8 +115,8 @@ neuesten, bei Zeitgleichheit nach ID. Ursprüngliche Folgenummern wie `#0` oder
 Unbekannte Veröffentlichungsdaten bleiben separat erreichbar und werden nicht
 in eine erfundene Autoplay-Sequenz einsortiert.
 
-Die zusätzliche Übersicht „Abschnitte und Reihen“ bietet echte
-`#video-<id>`-Links zu vorhandenen Phasen und Quellreihen. Jede Folge zeigt
+Eine zusätzliche Übersicht „Abschnitte und Reihen“ wird nicht angezeigt.
+Die Videoliste enthält die `#video-<id>`-Links. Jede Folge zeigt
 ihren Abschnitt und ihre Reihe sowohl in der vollständigen Liste als auch
 beim aktiven Video. Die Gruppierung ändert weder Positionsnummern noch
 Vorher-/Nachher-Links oder JSON-LD-Listenreihenfolge. Sie funktioniert statisch
@@ -132,9 +134,9 @@ und Sonderheftkennzeichen soweit bekannt sowie gekennzeichnete Archivlinks.
 Videoteile folgen den Regeln aus ADR 0003.
 
 Heft-, Spiel- und aktive Videometadaten sind kompakte semantische
-Definitionslisten mit gruppierten Beschriftungs-/Wertpaaren. Breite Displays
-zeigen ein automatisch mehrspaltiges Raster, schmale Displays unter 576 Pixeln
-eine einspaltige Liste mit Beschriftung neben dem Wert. Lange Titel und Werte
+Definitionslisten mit gruppierten Beschriftungs-/Wertpaaren. Alle Listen
+stehen unabhängig von der Bildschirmbreite in einer gemeinsamen Zeile mit
+gleich breiten Spalten und Beschriftungen oberhalb der Werte. Lange Titel und Werte
 umbrechen innerhalb ihrer Spalte; es gibt weder abgeschnittene Informationen
 noch horizontales Scrollen. Die Darstellung benötigt kein JavaScript.
 
@@ -167,7 +169,7 @@ die normale Navigation zu den vollständigen Beschreibungen erhalten.
 Die Positionsanzeige `Video 1/10` ist die einsbasierte Position in der
 deduplizierten Liste, nicht die Originalnummer im YouTube-Titel.
 Alle Videos eines Spiels bzw. einer Ausgabe bleiben auf derselben Seite,
-auch bei mehr als 50 Videos. Übersichten dürfen weiterhin paginiert sein.
+auch bei mehr als 60 Videos. Übersichten dürfen weiterhin paginiert sein.
 Die HTML-Größenbudgets gelten unverändert; Überschreitungen führen zum klaren
 Build-Fehler statt einer stillen Aufteilung in Videoseiten.
 
@@ -219,23 +221,27 @@ nicht erfunden oder extern nachgeladen.
 ### 6. Automatische Folgenfortsetzung
 
 Manuelle Vorher-/Nachher-Links bleiben immer verfügbar. Nach bewusstem
-Wiedergabestart darf innerhalb eines Spiels eine abschaltbare Option
-„Nächste Folge automatisch“ die Fortsetzung erlauben. Sie ist bei jedem
-Seitenaufruf ausgeschaltet und bis zur API-Bereitschaft deaktiviert.
+Wiedergabestart darf innerhalb eines Spiels oder einer Heftausgabe eine abschaltbare Option
+„Nächste Folge automatisch“ die Fortsetzung erlauben. Ohne bisherige Auswahl
+ist sie aus und bis zur API-Bereitschaft deaktiviert. Die ausdrückliche
+Ein-/Aus-Auswahl wird getrennt von der Player-Freigabe im Local Storage unter
+`pretty-old-pixel:youtube-auto-next` gemerkt. Sie startet beim Seitenaufruf
+keine Wiedergabe. Sicherheitsstopps ändern nicht die gespeicherte Auswahl.
 
 Die offizielle API erkennt `YT.PlayerState.ENDED`; die gespeicherte Dauer
-ersetzt keine Enderkennung. Bei Ende wird auf derselben Spieleseite die nächste
+ersetzt keine Enderkennung. Bei Ende wird auf derselben Spiel- bzw. Ausgabenseite die nächste
 Folge gewählt, das Fragment und die Beschreibung aktualisiert und deren
 Wiedergabe versucht. Es gibt weder eine neue Videoseite noch einen
 seitenübergreifenden Sitzungsmarker. Browserbeschränkungen sind zu respektieren;
 bei blockiertem Autoplay bleibt ein manueller Startlink, keine Schleife.
 
 Ein normaler Direktaufruf startet nichts automatisch. Am Reihenende gibt es
-keinen ungefragten Sprung zu einem anderen Spiel oder einer fremden Playlist.
+keinen ungefragten Sprung zu einem anderen Spiel, einer anderen Heftausgabe oder einer fremden Playlist.
 Die Implementierung verlangt `PLAYING` für das aktive Video vor `ENDED`
 und berücksichtigt nur die unmittelbar folgende datierte Folge.
 Undatierte Videos, Reihenende, Playerfehler und Autoplay-Sperren stoppen
-die Fortsetzung. Es gibt keinen Local-/Session-Storage dafür.
+die Fortsetzung. Nur die Ein-/Aus-Auswahl wird lokal gemerkt, kein Verlauf
+oder Wiedergabefortschritt; Session Storage wird nicht verwendet.
 Manuelle Auswahl oder Zurücknavigation lädt per `cueVideoById`, automatische
 Fortsetzung per `loadVideoById`. Der automatische Wechsel aktualisiert das
 Fragment mittels History-API ohne nativen Seitensprung. Ein blockierter

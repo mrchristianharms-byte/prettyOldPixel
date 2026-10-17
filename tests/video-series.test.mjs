@@ -5,6 +5,7 @@ import { runInNewContext } from "node:vm";
 
 const script = await readFile(new URL("../src/video-series.js", import.meta.url), "utf8");
 const preferenceKey = "pretty-old-pixel:youtube-player-enabled";
+const autoNextKey = "pretty-old-pixel:youtube-auto-next";
 const flush = () => new Promise((resolve) => setImmediate(resolve));
 
 class Element extends EventTarget {
@@ -34,15 +35,17 @@ function click(element, modifiers = {}) {
   return event;
 }
 
-function setup({ values = new Map(), storage, hash = "", search = "", game = true, undated = [], apiFails = false, playerReady = true } = {}) {
+function setup({ values = new Map(), storage, hash = "", search = "", videoIds = ["first", "second", "third"], undated = [], apiFails = false, playerReady = true } = {}) {
   const posterLink = new Element();
-  const activationLink = new Element();
   const reset = new Element();
   const notice = new Element();
   const preferenceNote = new Element();
-  const autoNext = game ? new Element() : null;
+  const previewNote = new Element();
+  previewNote.hidden = false;
+  const autoNext = new Element();
   const manualPlay = new Element();
   const controls = new Element();
+  const externalVideo = new Element();
   const hint = new Element();
   const menu = new Element();
   const events = new EventTarget();
@@ -74,11 +77,12 @@ function setup({ values = new Map(), storage, hash = "", search = "", game = tru
   }
   slot.player = makePlayer();
   const chapterLinks = [];
-  const panels = ["first", "second", "third"].map((id, index) => {
+  const panels = videoIds.map((id, index) => {
     const panel = new Element();
     panel.id = `video-${id}`;
     panel.dataset = {
       poster: `poster-${id}`, playerUrl: `https://www.youtube-nocookie.com/embed/${id}`,
+      videoUrl: `https://www.youtube.com/watch?v=${id}`,
       ...(undated.includes(index) ? {} : { dated: "true" }),
     };
     const chapterLink = new Element();
@@ -96,13 +100,15 @@ function setup({ values = new Map(), storage, hash = "", search = "", game = tru
     dataset: { title: "Spiel" },
     querySelectorAll: (selector) => ({
       "[data-video-panel]": panels, "[data-video-link]": links,
-      "[data-player-activate]": [{ querySelector: () => activationLink }], "[data-chapter-hint]": [hint],
+      "[data-chapter-hint]": [hint],
     })[selector],
     querySelector: (selector) => ({
       iframe: slot.player, ".episode-menu": menu,
       "[data-player-reset]": reset, "[data-player-notice]": notice,
       "[data-player-preference-note]": preferenceNote, "[data-auto-next]": autoNext,
+      "[data-player-preview-note]": previewNote,
       "[data-player-play]": manualPlay, "[data-player-controls]": controls,
+      "[data-player-external] a": externalVideo,
     })[selector],
     classList: { add() {} },
   };
@@ -161,8 +167,8 @@ function setup({ values = new Map(), storage, hash = "", search = "", game = tru
   return {
     get player() { return slot.player; },
     get api() { return instances.at(-1); },
-    posterLink, activationLink, reset, notice, preferenceNote, values, panels, warnings,
-    autoNext, manualPlay, controls, hint, chapterLinks, requests, calls, instances, location, links, window,
+    posterLink, reset, notice, preferenceNote, previewNote, values, panels, warnings,
+    autoNext, manualPlay, controls, externalVideo, hint, chapterLinks, requests, calls, instances, location, links, window,
     expire: () => { for (const callback of [...timers.values()]) callback(); },
     select: (index, eventName = "hashchange") => {
       location.hash = `#${panels[index].id}`;
@@ -178,7 +184,9 @@ test("lädt ohne Aktivierung keine API und nur Vorschaubilder, auch bei Fragment
   assert.equal(state.player.srcdoc, "poster-first");
   assert.equal(state.reset.hidden, true);
   assert.equal(state.preferenceNote.hidden, false);
+  assert.equal(state.previewNote.hidden, false);
   state.select(1);
+  assert.equal(state.externalVideo.href, "https://www.youtube.com/watch?v=second");
   assert.equal(state.player.src, "");
   assert.equal(state.player.srcdoc, "poster-second");
   assert.equal(state.values.size, 0);
@@ -188,9 +196,82 @@ test("lädt ohne Aktivierung keine API und nur Vorschaubilder, auch bei Fragment
   assert.equal(click(state.chapterLinks[1]).defaultPrevented, false);
 });
 
+test("aktualisiert den YouTube-Link bei Auswahl, Zurücknavigation und automatischer Folge", async () => {
+  const state = setup();
+  assert.equal(state.externalVideo.href, "https://www.youtube.com/watch?v=first");
+  state.select(2);
+  assert.equal(state.externalVideo.href, "https://www.youtube.com/watch?v=third");
+  state.select(0, "popstate");
+  assert.equal(state.externalVideo.href, "https://www.youtube.com/watch?v=first");
+  await state.activate();
+  state.autoNext.checked = true;
+  state.api.emit("onStateChange", 1);
+  state.api.emit("onStateChange", 0);
+  assert.equal(state.externalVideo.href, "https://www.youtube.com/watch?v=second");
+});
+
+test("merkt Ein- und Ausschalten der Folgenfortsetzung über Seitenaufrufe ohne Startautoplay", async () => {
+  const state = setup();
+  await state.activate();
+  state.autoNext.checked = true;
+  state.autoNext.dispatchEvent(new Event("change"));
+  assert.equal(state.values.get(autoNextKey), "true");
+  const next = setup({ values: state.values });
+  await flush();
+  assert.equal(next.autoNext.checked, true);
+  assert.equal(next.autoNext.disabled, false);
+  assert.deepEqual(next.calls, []);
+  assert.equal(new URL(next.player.src).searchParams.has("autoplay"), false);
+  next.autoNext.checked = false;
+  next.autoNext.dispatchEvent(new Event("change"));
+  assert.equal(next.values.get(autoNextKey), "false");
+  const off = setup({ values: state.values });
+  await flush();
+  assert.equal(off.autoNext.checked, false);
+  const issue = setup({ values: state.values, videoIds: ["issue-first", "issue-second"] });
+  await flush();
+  assert.equal(issue.autoNext.checked, false);
+  assert.equal(issue.externalVideo.href, "https://www.youtube.com/watch?v=issue-first");
+});
+
+test("ändert gespeicherte Folgenauswahl nicht bei Sicherheitsstopps und Aktivierungsreset", async () => {
+  const values = new Map([[preferenceKey, "true"], [autoNextKey, "true"]]);
+  const state = setup({ values });
+  await flush();
+  state.api.emit("onAutoplayBlocked");
+  assert.equal(state.autoNext.checked, false);
+  assert.equal(values.get(autoNextKey), "true");
+  click(state.reset);
+  assert.equal(values.has(preferenceKey), false);
+  assert.equal(values.get(autoNextKey), "true");
+  state.player.dispatchEvent(new Event("load"));
+  await state.activate();
+  assert.equal(state.autoNext.checked, true);
+  state.select(2);
+  state.api.emit("onStateChange", 1);
+  state.api.emit("onStateChange", 0);
+  assert.equal(state.autoNext.checked, false);
+  assert.equal(values.get(autoNextKey), "true");
+});
+
+test("meldet Fehler beim Speichern der Folgenauswahl und behält sie auf der Seite", async () => {
+  const state = setup({ storage: {
+    getItem: (key) => key === preferenceKey ? "true" : null,
+    setItem: () => { throw new Error("Storage full"); },
+    removeItem() {},
+  } });
+  await flush();
+  state.autoNext.checked = true;
+  state.autoNext.dispatchEvent(new Event("change"));
+  assert.equal(state.autoNext.checked, true);
+  assert.equal(state.notice.hidden, false);
+  assert.equal(state.warnings.length, 1);
+});
+
 test("merkt Aktivierung und lädt spätere Seiten sowie Fragmente ohne Autoplay", async () => {
   const state = setup();
   await state.activate();
+  assert.equal(state.previewNote.hidden, true);
   assert.equal(state.values.get(preferenceKey), "true");
   assert.equal(state.player.srcdoc, "");
   const url = new URL(state.player.src);
@@ -211,11 +292,11 @@ test("merkt Aktivierung und lädt spätere Seiten sowie Fragmente ohne Autoplay"
   assert.deepEqual(nextPage.calls, []);
 });
 
-test("aktiviert über den Textlink, aber nicht bei Klick mit Zusatztaste", async () => {
+test("aktiviert über das Vorschaubild, aber nicht bei Klick mit Zusatztaste", async () => {
   const state = setup();
-  assert.equal(click(state.activationLink, { ctrlKey: true }).defaultPrevented, false);
+  assert.equal(click(state.posterLink, { ctrlKey: true }).defaultPrevented, false);
   assert.equal(state.values.size, 0);
-  click(state.activationLink);
+  click(state.posterLink);
   await flush();
   assert.equal(state.values.get(preferenceKey), "true");
   assert.equal(new URL(state.player.src).pathname, "/embed/first");
@@ -276,6 +357,7 @@ test("setzt Aktivierung zurück, zerstört den alten Player und verhindert spät
   assert.equal(state.player.src, "");
   assert.equal(state.player.srcdoc, "poster-second");
   assert.equal(state.reset.hidden, true);
+  assert.equal(state.previewNote.hidden, false);
   assert.equal(state.autoNext.checked, false);
   old.emit("onReady");
   old.emit("onStateChange", 1);
@@ -363,11 +445,35 @@ test("respektiert Ausschalten, manuelle Auswahl, Zurücknavigation und unbekannt
   assert.ok(state.notice.textContent.includes("ohne Veröffentlichungsdatum"));
   state.select(0, "popstate");
   assert.deepEqual(state.calls.at(-1), ["cue", "first"]);
-  const issue = setup({ game: false });
+  const issue = setup({ videoIds: ["issue-first", "issue-second"] });
   await issue.activate();
   issue.api.emit("onStateChange", 1);
   issue.api.emit("onStateChange", 0);
   assert.deepEqual(issue.calls, []);
+});
+
+test("setzt dieselbe gemerkte Option in Heftausgaben ein und stoppt nach deren letztem Videoteil", async () => {
+  const values = new Map([[preferenceKey, "true"], [autoNextKey, "true"]]);
+  const issue = setup({ values, videoIds: ["issue-first", "issue-second"] });
+  await flush();
+  assert.equal(issue.autoNext.checked, true);
+  assert.deepEqual(issue.calls, []);
+  issue.api.emit("onStateChange", 1);
+  issue.api.emit("onStateChange", 0);
+  assert.deepEqual(issue.calls, [["load", "issue-second"]]);
+  assert.equal(issue.externalVideo.href, "https://www.youtube.com/watch?v=issue-second");
+  issue.api.emit("onStateChange", 1);
+  issue.api.emit("onStateChange", 0);
+  assert.equal(issue.calls.length, 1);
+  assert.equal(issue.autoNext.checked, false);
+  assert.ok(issue.notice.textContent.includes("Ende dieser Videoreihe"));
+  assert.equal(values.get(autoNextKey), "true");
+  const single = setup({ values, videoIds: ["only-issue-video"] });
+  await flush();
+  single.api.emit("onStateChange", 1);
+  single.api.emit("onStateChange", 0);
+  assert.deepEqual(single.calls, []);
+  assert.equal(single.autoNext.checked, false);
 });
 
 test("behandelt Autoplay-Sperren und Playerfehler ohne Weiterleitungsschleife", async () => {

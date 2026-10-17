@@ -125,8 +125,14 @@ test("rendert Kapitel und Kanäle in Spiel- und Ausgabepanels ohne neue Skripte 
     const html = pages.get(file).html;
     assert.ok(html.includes('<body class="detail-page">'));
     assert.ok(html.includes('class="detail-layout">\n<div class="detail-main">\n<h1 class="detail-heading"'));
-    assert.ok(html.indexOf('class="detail-player"') < html.indexOf('class="detail-information"'));
-    assert.ok(html.indexOf('class="detail-player"') < html.indexOf('<dl class="detail-meta">'));
+    assert.ok(html.indexOf('class="detail-player" data-video-widget') < html.indexOf('class="detail-information"'));
+    assert.ok(!html.includes("<h2>YouTube-Einbindung</h2>"));
+    assert.ok(!html.includes("Mit Video 1/"));
+    assert.ok(!html.includes("Die Videos beginnen mit der ältesten Veröffentlichung."));
+    assert.ok(!html.includes("Die vollständige Videoliste beginnt mit dem ältesten Video."));
+    assert.ok(html.includes("</dl>\n<hr>"));
+    assert.ok(html.match(/<footer[\s\S]*?<\/footer>/u)[0].includes(">YouTube-Einbindung und Datenschutz</a>"));
+    assert.ok(html.indexOf('class="detail-player" data-video-widget') < html.indexOf('<dl class="detail-meta">'));
     assert.equal((html.match(/class="episode-menu"/gu) ?? []).length, 1);
     assert.ok(html.includes("Kapitel und Zeitmarken"));
     assert.ok(html.includes("1:30 · &lt;Gameplay&gt;"));
@@ -159,7 +165,17 @@ test("veröffentlicht Clip-Metadaten mit echten Zeitlinks, Grenzen und sichtbare
       assert.ok(clip.endOffset > clip.startOffset && clip.endOffset <= 600);
       assert.ok(html.includes(`data-chapter-seconds="${clip.startOffset}"`));
     }
-    assert.equal(html.includes('data-auto-next disabled'), file.startsWith("spiele/"));
+    assert.ok(html.includes('data-auto-next disabled'));
+    const controls = html.match(/<div class="player-controls meta"[^>]*>[\s\S]*?<\/div>/u)[0];
+    assert.ok(controls.includes("data-player-reset hidden"));
+    assert.ok(controls.includes("data-auto-next disabled"));
+    assert.ok(controls.includes('data-player-external'));
+    assert.ok(!html.includes("YouTube-Player hier aktivieren"));
+    assert.ok(controls.includes(`href="https://www.youtube.com/watch?v=${id}" rel="external"`));
+    assert.ok(html.includes(`<noscript><p><a href="https://www.youtube.com/watch?v=${id}"`));
+    assert.ok(!controls.includes("data-player-controls hidden"));
+    assert.equal((html.match(/data-video-widget/gu) ?? []).length, 1);
+    assert.equal((html.match(/data-player-reset/gu) ?? []).length, 1);
     assert.ok(!html.includes('data-auto-next checked'));
   }
   const unknown = rendered("00:00 Intro\n01:30 Gameplay", null).pages.get("spiele/ein-spiel/index.html").html;
@@ -167,6 +183,23 @@ test("veröffentlicht Clip-Metadaten mit echten Zeitlinks, Grenzen und sichtbare
   assert.equal(schema["@graph"].find((item) => item["@type"] === "VideoObject").hasPart.at(-1).endOffset, undefined);
   const empty = rendered("").pages.get("spiele/ein-spiel/index.html").html;
   assert.ok(!empty.includes('"hasPart"'));
+});
+
+test("setzt dasselbe Video-Widget genau einmal auf jeder Playerseite ein", () => {
+  const { pages } = rendered("");
+  const widgets = [];
+  for (const [file, { html }] of pages) {
+    const count = (html.match(/data-video-widget/gu) ?? []).length;
+    assert.equal(count, html.includes("<iframe ") ? 1 : 0, file);
+    if (!count) continue;
+    const widget = html.match(/<div class="detail-player" data-video-widget>[\s\S]*?<\/div><\/div>/u)[0];
+    for (const selector of ["data-player-reset", "data-auto-next", "data-player-external", "data-player-play"]) {
+      assert.equal((widget.match(new RegExp(selector, "gu")) ?? []).length, 1, `${file}: ${selector}`);
+    }
+    widgets.push(widget);
+  }
+  assert.equal(widgets.length, 2);
+  assert.equal(widgets[0], widgets[1]);
 });
 
 test("lässt leere Kapitel- und Kanalsektionen weg und aktualisiert sie aus Beschreibungen", () => {

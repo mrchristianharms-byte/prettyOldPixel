@@ -32,11 +32,14 @@ for (const series of document.querySelectorAll("[data-video-series]")) {
   const reset = series.querySelector("[data-player-reset]");
   const notice = series.querySelector("[data-player-notice]");
   const preferenceNote = series.querySelector("[data-player-preference-note]");
+  const previewNote = series.querySelector("[data-player-preview-note]");
   const autoNext = series.querySelector("[data-auto-next]");
   const manualPlay = series.querySelector("[data-player-play]");
   const controls = series.querySelector("[data-player-controls]");
+  const externalVideo = series.querySelector("[data-player-external] a");
   const hints = [...series.querySelectorAll("[data-chapter-hint]")];
   const preferenceKey = "pretty-old-pixel:youtube-player-enabled";
+  const autoNextKey = "pretty-old-pixel:youtube-auto-next";
   const narrow = matchMedia("(max-width: 767px)");
   let active;
   let enabled = false;
@@ -46,6 +49,7 @@ for (const series of document.querySelectorAll("[data-video-series]")) {
   let revision = 0;
   let readyTimer;
   let pendingSeek;
+  let autoNextEnabled = false;
 
   function timestampAddress(panel, seconds, replace = false) {
     const url = new URL(location.href);
@@ -62,11 +66,12 @@ for (const series of document.querySelectorAll("[data-video-series]")) {
   }
 
   function storageError(error) {
-    report("Die Player-Einstellung ist in diesem Browser nicht verfügbar. Änderungen gelten möglicherweise nur auf dieser Seite.", error);
+    report("Die Player-Einstellungen sind in diesem Browser nicht verfügbar. Änderungen gelten möglicherweise nur auf dieser Seite.", error);
   }
 
   try {
     enabled = localStorage.getItem(preferenceKey) === "true";
+    if (autoNext) autoNextEnabled = localStorage.getItem(autoNextKey) === "true";
   } catch (error) {
     storageError(error);
   }
@@ -78,7 +83,7 @@ for (const series of document.querySelectorAll("[data-video-series]")) {
     ready = value;
     if (autoNext) {
       autoNext.disabled = !value;
-      if (!value) autoNext.checked = false;
+      autoNext.checked = value && autoNextEnabled;
     }
     for (const hint of hints) hint.textContent = value
       ? "Kapitel im Player anspringen. Mit Strg-/Befehl-Klick öffnen Sie YouTube."
@@ -135,7 +140,7 @@ for (const series of document.querySelectorAll("[data-video-series]")) {
             const next = panels[panels.indexOf(active) + 1];
             if (!active.dataset.dated || !next?.dataset.dated) {
               autoNext.checked = false;
-              notice.textContent = next ? "Videos ohne Veröffentlichungsdatum wählen Sie bitte manuell." : "Sie haben das Ende dieser Spielereihe erreicht.";
+              notice.textContent = next ? "Videos ohne Veröffentlichungsdatum wählen Sie bitte manuell." : "Sie haben das Ende dieser Videoreihe erreicht.";
               notice.hidden = false;
               return;
             }
@@ -168,6 +173,7 @@ for (const series of document.querySelectorAll("[data-video-series]")) {
 
   function loadPlayer(panel, autoplay = false) {
     reset.hidden = false;
+    previewNote.hidden = true;
     if (ready) {
       try {
         if (autoplay) controller.loadVideoById(videoId(panel));
@@ -225,9 +231,16 @@ for (const series of document.querySelectorAll("[data-video-series]")) {
     }
   }
   player.addEventListener("load", connectPoster);
-  for (const item of series.querySelectorAll("[data-player-activate]")) item.querySelector("a").addEventListener("click", activate);
   preferenceNote.hidden = false;
   controls.hidden = false;
+  autoNext?.addEventListener("change", () => {
+    autoNextEnabled = autoNext.checked;
+    try {
+      localStorage.setItem(autoNextKey, String(autoNextEnabled));
+    } catch (error) {
+      storageError(error);
+    }
+  });
   manualPlay.addEventListener("click", () => {
     if (!ready) return;
     try {
@@ -251,6 +264,7 @@ for (const series of document.querySelectorAll("[data-video-series]")) {
     player.removeAttribute("src");
     player.srcdoc = active.dataset.poster;
     reset.hidden = true;
+    previewNote.hidden = false;
     manualPlay.hidden = true;
   });
 
@@ -259,6 +273,7 @@ for (const series of document.querySelectorAll("[data-video-series]")) {
     if (panel === active) return;
     const previous = active;
     active = panel;
+    if (externalVideo) externalVideo.href = panel.dataset.videoUrl;
     pendingSeek = undefined;
     if (!previous && location.hash === `#${panel.id}`) {
       const time = new URL(location.href).searchParams.get("t");

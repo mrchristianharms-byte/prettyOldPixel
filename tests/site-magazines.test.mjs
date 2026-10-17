@@ -49,7 +49,7 @@ function variedFixture() {
   return input;
 }
 
-function render(input = variedFixture(), pageSize = 50) {
+function render(input = variedFixture(), pageSize = createSiteConfig().pageSize) {
   const model = normalizeSources(input);
   const config = { ...createSiteConfig(), pageSize };
   const pages = renderSite(model, config, config.href("assets/test.css"));
@@ -58,6 +58,64 @@ function render(input = variedFixture(), pageSize = 50) {
 }
 
 const graph = (html) => JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/u)[1])["@graph"];
+
+test("zeigt Zeitschriften als Kachelliste mit Titel, Videos und Jahrgängen", () => {
+  const { pages } = render();
+  const html = pages.get("zeitschriften/index.html").html;
+  const grid = html.match(/<ul class="catalog-grid">[\s\S]*?<\/ul>/u)[0];
+  assert.equal((grid.match(/<li><h2><a /gu) ?? []).length, 3);
+  assert.ok(grid.includes('href="amiga-joker/">Amiga Joker</a></h2><p class="meta">1 Video</p><p class="meta">Gesamtlaufzeit: 0:02 h</p><p class="meta">1 Jahrgang</p>'));
+  assert.ok(grid.includes('<p class="meta">2 Jahrgänge</p>'));
+  const detail = pages.get("zeitschriften/amiga-joker/index.html").html;
+  assert.ok(detail.includes("<p>1 Video zu Amiga Joker."));
+  assert.ok(detail.includes(">1991</a> (1 Video)"));
+  assert.ok(grid.indexOf(">Amiga Joker</a>") < grid.indexOf(">PC Games</a>"));
+});
+
+test("summiert Laufzeiten je Zeitschrift unabhängig von der Heftzuordnung und markiert Teilsummen", () => {
+  const input = fixture(4);
+  input.videos.videos[0].durationSeconds = 3601;
+  input.videos.videos[1].durationSeconds = 59;
+  input.videos.videos[2].durationSeconds = null;
+  input.videos.videos[3].durationSeconds = 99999;
+  input.magazines.videos[0].magazines.push(mention(null, "Amiga Joker"));
+  input.magazines.videos[1].magazines.push(mention(null, "Amiga Joker"));
+  input.magazines.videos[2].magazines = [mention(null), mention(null, "Unbekannte Laufzeit")];
+  input.magazines.videos[3].magazines = [];
+  const { pages } = render(input);
+  const grid = pages.get("zeitschriften/index.html").html.match(/<ul class="catalog-grid">[\s\S]*?<\/ul>/u)[0];
+  assert.ok(grid.includes('>Amiga Joker</a></h2><p class="meta">2 Videos</p><p class="meta">Gesamtlaufzeit: 1:01 h</p></li>'));
+  assert.ok(grid.includes('>PC Games</a></h2><p class="meta">3 Videos</p><p class="meta">Bekannte Laufzeit: 1:01 h (2 von 3 Videos)</p><p class="meta">1 Jahrgang</p>'));
+  assert.ok(grid.includes('>Unbekannte Laufzeit</a></h2><p class="meta">1 Video</p><p class="meta">Gesamtlaufzeit unbekannt</p></li>'));
+  assert.ok(!grid.includes("0 Jahrgänge"));
+});
+
+test("lässt die Jahrgangsanzahl bei ACE mit bekannter Heftnummer ohne Heftjahr weg", () => {
+  const input = fixture(1);
+  input.videos.videos[0].title = "Blätterabend - ACE No. 49";
+  input.magazines.videos[0].magazines = [mention(issue(null, [], { number: 49, label: "#49" }), "ACE")];
+  const { model, pages } = render(input);
+  assert.equal(model.magazines[0].years.length, 0);
+  const grid = pages.get("zeitschriften/index.html").html.match(/<ul class="catalog-grid">[\s\S]*?<\/ul>/u)[0];
+  assert.ok(grid.includes('>ACE</a></h2><p class="meta">1 Video</p><p class="meta">Gesamtlaufzeit: 0:02 h</p></li>'));
+  assert.ok(!grid.includes("Jahrgang"));
+  assert.ok(pages.get("zeitschriften/ace/index.html").html.includes("#49"));
+});
+
+test("paginiert den Zeitschriftenindex erst ab der 61. Kachel", () => {
+  const input = fixture(61);
+  input.magazines.videos.forEach((entry, index) => {
+    entry.magazines = [mention(issue(), `Zeitschrift ${String(index).padStart(3, "0")}`)];
+  });
+  const { pages } = render(input);
+  for (const [route, count] of [["zeitschriften/index.html", 60], ["zeitschriften/seite/2/index.html", 1]]) {
+    const grid = pages.get(route).html.match(/<ul class="catalog-grid">[\s\S]*?<\/ul>/u)[0];
+    assert.equal((grid.match(/<li><h2><a /gu) ?? []).length, count);
+    assert.equal(graph(pages.get(route).html)[0].mainEntity.itemListElement.length, count);
+  }
+  input.magazines.videos.pop();
+  assert.ok(!render(input).pages.has("zeitschriften/seite/2/index.html"));
+});
 
 test("gruppiert Ausgaben nach Heftjahr, Monate und Videoteile statt Uploaddatum", () => {
   const model = normalizeSources(variedFixture());
@@ -87,6 +145,26 @@ test("unterscheidet Sonderhefte und erstellt keine spekulativen Seiten aus Jahr 
   assert.ok(pages.get("zeitschriften/index.html").html.includes("Weitere Blätterabende"));
 });
 
+test("benennt Jahrgänge neutral und zeigt Einträge ohne Heftjahr erst nach bekannten Jahrgängen", () => {
+  const { pages } = render();
+  const overview = pages.get("zeitschriften/pc-games/index.html").html;
+  const headings = [...overview.matchAll(/<h2>([^<]+)<\/h2>/gu)].map((match) => match[1]);
+  assert.deepEqual(headings, [
+    "Jahrgang 1992 – Ausgaben",
+    "Jahrgang 1992 – Sonderhefte",
+    "Jahrgang 1993 – Ausgaben",
+    "Jahrgang unbekannt – Ausgaben",
+  ]);
+  const year = pages.get("zeitschriften/pc-games/1992/index.html").html;
+  assert.ok(year.includes("<h2>Jahrgang 1992 – Ausgaben</h2>"));
+  assert.ok(year.includes("<h2>Jahrgang 1992 – Sonderhefte</h2>"));
+  assert.ok(!year.includes("Jahrgang unbekannt"));
+  assert.ok(!overview.includes("Reguläre und ungeklärte Ausgaben"));
+  const knownYearOnly = pages.get("zeitschriften/pc-games/1993/index.html").html;
+  assert.ok(knownYearOnly.includes("<h2>Jahrgang 1993 – Ausgaben</h2>"));
+  assert.ok(knownYearOnly.includes("<h3>PC Games 1993</h3>"));
+});
+
 test("erhält den chronologischen Platz unnummerierter Videos und sortiert bekannte Teile relativ zueinander", () => {
   const input = fixture(4);
   input.magazines.videos[1].part = 3;
@@ -95,7 +173,8 @@ test("erhält den chronologischen Platz unnummerierter Videos und sortiert bekan
   const entity = [...model.magazines[0].issues.values()][0];
   assert.deepEqual(entity.videos, [videoId(0), videoId(3), videoId(2), videoId(1)]);
   const html = pages.get(`${entity.route}index.html`).html;
-  assert.ok(html.indexOf(`href="#video-${videoId(0)}"`) < html.indexOf(`href="#video-${videoId(3)}"`));
+  const menu = html.match(/<details class="episode-menu"[\s\S]*?<\/details>/u)[0];
+  assert.ok(menu.indexOf(`href="#video-${videoId(0)}"`) < menu.indexOf(`href="#video-${videoId(3)}"`));
 });
 
 test("ergänzt fehlende Heftdaten nur aus identischem eindeutigem Archivtreffer", () => {
@@ -142,8 +221,9 @@ test("erzeugt Zeitschriften-/Jahrgangs-/Ausgabenseiten mit sichtbaren Links und 
     november.videos.map((id) => `./#video-${id}`));
   assert.equal(schema.datePublished, undefined);
   assert.ok(detail.includes(`href="${config.href("zeitschriften/pc-games/1992/", november.route)}"`));
-  assert.ok(detail.includes("Mit Video 1/3 beginnen"));
-  assert.ok(detail.indexOf('href="#video-m0000000001"') < detail.indexOf('href="#video-m0000000000"'));
+  assert.ok(!detail.includes("Mit Video 1/3 beginnen"));
+  const menu = detail.match(/<details class="episode-menu"[\s\S]*?<\/details>/u)[0];
+  assert.ok(menu.indexOf('href="#video-m0000000001"') < menu.indexOf('href="#video-m0000000000"'));
   assert.ok(year.indexOf("8+9/1992") < year.indexOf("11/1992"));
   assert.ok(year.indexOf("12/1992") < year.indexOf("1992 – Sonderhefte"));
   for (const page of pages.values()) {
@@ -175,7 +255,7 @@ test("verlinkt News direkt auf die Ausgabe mit Video-Fragment statt separater Vi
   assert.ok(pages.get(`${other.route}index.html`).html.includes(`id="video-${videoId(9)}"`));
 });
 
-test("zeigt kompakte, beschriftete Archivsymbole neben jedem Videotitel", () => {
+test("zeigt Archivsymbole einmal in Klammern neben dem Ausgabentitel statt an Videolinks", () => {
   const input = fixture(2);
   const links = {
     ...archive("1992-11"),
@@ -186,9 +266,17 @@ test("zeigt kompakte, beschriftete Archivsymbole neben jedem Videotitel", () => 
   const entity = [...model.magazines[0].issues.values()][0];
   for (const route of ["zeitschriften/pc-games/", "zeitschriften/pc-games/1992/"]) {
     const html = pages.get(`${route}index.html`).html;
-    const entries = [...html.matchAll(/<li><div class="issue-video-heading"><a href="[^"]*#video-[^"]*">[\s\S]*?<\/ul><\/div>[\s\S]*?<\/li>/gu)];
+    const entries = [...html.matchAll(/<li><div class="issue-video-heading"><a href="[^"]*#video-[^"]*">[\s\S]*?<\/div>[\s\S]*?<\/li>/gu)];
     assert.equal(entries.length, 2);
     for (const [entry] of entries) {
+      assert.ok(!entry.includes('class="archive-icon"'));
+      assert.ok(!entry.includes('class="archive-links"'));
+    }
+    const heading = html.match(/<section class="issue-group"><h3>([\s\S]*?)<\/h3>/u)[1];
+    assert.ok(heading.includes('PC Games 11/1992</a> <span class="archive-links" aria-label="Archivlinks">('));
+    assert.ok(heading.endsWith(")</span>"));
+    {
+      const entry = heading;
       assert.equal((entry.match(/class="archive-icon"/gu) ?? []).length, 3);
       assert.equal((entry.match(/<svg aria-hidden="true"/gu) ?? []).length, 3);
       for (const label of ["Archivordner zur Ausgabe", "Heft lesen", "Heft herunterladen"]) {
@@ -197,9 +285,8 @@ test("zeigt kompakte, beschriftete Archivsymbole neben jedem Videotitel", () => 
       }
       assert.ok(entry.includes('href="https://reader.kultmags.com/1992-11" rel="external"'));
       assert.ok(entry.includes(`href="${links.downloadUrl}" rel="external"`));
-      assert.ok(entry.indexOf('class="archive-links"') < entry.indexOf('<p class="meta">'));
     }
-    assert.equal((html.match(/class="archive-links"/gu) ?? []).length, 2);
+    assert.equal((html.match(/class="archive-links"/gu) ?? []).length, 1);
   }
   const detail = pages.get(`${entity.route}index.html`).html;
   assert.equal((detail.match(/class="archive-icon"/gu) ?? []).length, 3);
@@ -219,7 +306,7 @@ test("zeigt bei bloßem Archivordner keine Lese- oder Downloadsymbole", () => {
   assert.ok(!html.includes("Heft lesen"));
 });
 
-test("paginiert Übersichten mit 50 Videos, behält jedoch alle Videoteile auf einer Ausgabenseite", () => {
+test("paginiert Übersichten mit 60 Videos, behält jedoch alle Videoteile auf einer Ausgabenseite", () => {
   const { model, pages, config } = render(fixture(125));
   const magazine = model.magazines[0];
   const entity = [...magazine.issues.values()][0];
@@ -227,9 +314,9 @@ test("paginiert Übersichten mit 50 Videos, behält jedoch alle Videoteile auf e
     const first = pages.get(`${route}index.html`).html;
     const second = pages.get(`${route}seite/2/index.html`).html;
     const third = pages.get(`${route}seite/3/index.html`).html;
-    assert.equal((first.match(/<li><div class="issue-video-heading"><a href="[^"]*#video-m/gu) ?? []).length, 50);
-    assert.equal((second.match(/<li><div class="issue-video-heading"><a href="[^"]*#video-m/gu) ?? []).length, 50);
-    assert.equal((third.match(/<li><div class="issue-video-heading"><a href="[^"]*#video-m/gu) ?? []).length, 25);
+    assert.equal((first.match(/<li><div class="issue-video-heading"><a href="[^"]*#video-m/gu) ?? []).length, 60);
+    assert.equal((second.match(/<li><div class="issue-video-heading"><a href="[^"]*#video-m/gu) ?? []).length, 60);
+    assert.equal((third.match(/<li><div class="issue-video-heading"><a href="[^"]*#video-m/gu) ?? []).length, 5);
     assert.ok(second.includes('rel="canonical" href="./"'));
     assert.ok(second.includes('href="../../" rel="prev"'));
   }
@@ -245,9 +332,9 @@ test("paginiert große Zeitschriftenindizes und ungeklärte Blätterabend-Videos
     entry.magazines = index < 55 ? [mention(issue(), `Zeitschrift ${String(index).padStart(3, "0")}`)] : [];
   });
   const { pages } = render(input);
-  assert.ok(pages.has("zeitschriften/seite/3/index.html"));
+  assert.ok(!pages.has("zeitschriften/seite/3/index.html"));
   assert.ok(pages.get("zeitschriften/seite/2/index.html").html.includes("Weitere Blätterabende"));
-  assert.equal(graph(pages.get("zeitschriften/seite/3/index.html").html)[0].mainEntity.itemListElement.length, 5);
+  assert.equal(graph(pages.get("zeitschriften/seite/2/index.html").html)[0].mainEntity.itemListElement.length, 45);
 });
 
 test("Ausgaben-IDs und gerenderte Inhalte bleiben bei geänderter Quellreihenfolge stabil", () => {

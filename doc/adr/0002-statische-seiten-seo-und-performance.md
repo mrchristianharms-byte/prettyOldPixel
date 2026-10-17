@@ -27,7 +27,7 @@ sind im dritten Schritt hinzugekommen; News und Videos verlinken diese Ziele.
 Bestätigte Spieleseiten und Spieleindex sind ebenfalls umgesetzt.
 Statische Kapitel-Zeitlinks und erwähnte Kanäle sind ebenfalls umgesetzt.
 API-Kapitelsteuerung, `Clip`-Metadaten und die abschaltbare Folgenfortsetzung
-auf Spieleseiten sind umgesetzt; die API lädt erst nach Player-Freigabe.
+auf Spiel- und Heftausgabenseiten sind umgesetzt; die API lädt erst nach Player-Freigabe.
 **Korrigierte Seitenstruktur:** Es gibt keine separate Seite pro Video.
 Player und Beschreibungen stehen auf der jeweiligen Ausgabe-/Spieleseite.
 Ein kleines lokales Modul wechselt dort die Auswahl per Video-Fragment;
@@ -225,7 +225,7 @@ Ausgabenseite nicht.
   chronologischen Platz.
 
 **Spiele:** Nur explizite Identitäten aus
-[`src/games.mjs`](../../src/games.mjs) mit bestätigten Quellplaylist-IDs,
+[`src/data-games.mjs`](../../src/data-games.mjs) mit bestätigten Quellplaylist-IDs,
 optionalen bestätigten Zusatzvideos und Ausschlüssen. Playlist-Titel oder
 zufällige Titelnennungen allein erzeugen kein Spiel. Eine Seite braucht
 mindestens zwei unterschiedliche verfügbare Videos, die nicht als
@@ -238,7 +238,7 @@ Gameplay und Fazit strukturieren die Reihe zusätzlich, ändern aber weder
 deren Mitgliedschaft noch die Gesamtreihenfolge.
 
 **Hardware:** Nur geprüfte explizite Video-IDs aus
-[`src/sections.mjs`](../../src/sections.mjs). Hardware-/re.ware-Playlists
+[`src/data-sections.mjs`](../../src/data-sections.mjs). Hardware-/re.ware-Playlists
 und Titel mit `re.ware` oder „Hardware“ liefern lediglich Prüfkandidaten.
 Gerätevorstellungen, Restaurierung, Computergrundlagen und Bastelstreams
 sind nach Prüfung enthalten. Der reine Verpackungsbeitrag `bwVnfQJ-WEw`
@@ -247,14 +247,14 @@ Hardware-Reinigung mit Hinweis als gemischter Beitrag enthalten.
 Sortierung: Veröffentlichung absteigend, unbekannte Daten zuletzt.
 
 **Retrospektiven:** Ebenfalls ausschließlich explizit geprüfte Video-IDs
-aus `src/sections.mjs`. Playlist-Mitgliedschaft und `re.trospektive` im
+aus `src/data-sections.mjs`. Playlist-Mitgliedschaft und `re.trospektive` im
 Titel melden nur neue Kandidaten. Aktuell enthalten sind die
 Formateinleitung und zwölf Beiträge zur Geschichte der Flugsimulationen.
 Die gepflegten Felder `topic` und `order` bestimmen Themen und
 Folgenreihenfolge. Doppelte Originalnummern wie `#11` bleiben unverändert
 und werden nicht als alleinige Sortiergrundlage verwendet.
 
-**Interviews und Gespräche:** Explizite IDs aus `src/sections.mjs`, jeweils
+**Interviews und Gespräche:** Explizite IDs aus `src/data-sections.mjs`, jeweils
 mit bestätigten Personen und Thema. Interview-Playlist sowie die Titelwörter
 „Interview“ und „Talk“ liefern nur Prüfkandidaten, keine automatische
 Freigabe. Bestätigte Beiträge außerhalb der Playlist sind zulässig, etwa
@@ -297,10 +297,10 @@ Der Unterpfad `/prettyOldPixel/` ist Bestandteil der aufgelösten
 Produktionsadressen, nicht der im HTML gespeicherten relativen Verweise.
 Externe YouTube-/Archivadressen bleiben vollständig.
 
-Thematische Übersichtslisten zeigen höchstens 50 Einträge pro Seite.
+Thematische Übersichtslisten zeigen höchstens 60 Einträge pro Seite.
 Ein kanalweiter Gesamtkatalog wird nicht erzeugt; die News bleiben auf 20 Videos begrenzt.
 Die vollständige Folgenliste eines Spiels bzw. einer einzelnen Ausgabe ist davon ausgenommen und darf
-mehr als 50 Videos enthalten; Größenbudgets bleiben zu prüfen.
+mehr als 60 Videos enthalten; Größenbudgets bleiben zu prüfen.
 Blätterabend wird vorrangig nach Zeitschrift und Jahrgang gegliedert statt
 durch eine einzige lange Liste erschlossen. Überschreitet eine solche
 Teilübersicht dennoch das Limit, bleibt Paginierung möglich.
@@ -311,6 +311,14 @@ Kein Infinite Scroll als einziger Zugang, keine clientseitigen Hash-Routen
 für Seitentypen und keine nur per JavaScript erreichbaren Inhalte.
 Echte Abschnittsfragmente `#video-<id>` wählen Videos innerhalb derselben
 statischen Detailseite; sie sind keine zusätzlichen indexierbaren Seiten.
+
+Zeitschriften- und Spieleindizes zeigen alphabetische Kachellisten mit
+vorhandenen Metadaten. Das gemeinsame CSS-Raster nutzt eine bis höchstens
+fünf Spalten: 1 unter 480px, 2 ab 480px, 3 ab 768px, 4 ab 1024px und
+5 ab 1280px. Es benötigt kein JavaScript. Alle Überschriften teilen einen
+kompakten Stil; seitliche Innenabstände betragen mindestens 1rem.
+Die Hauptnavigation enthält keinen zusätzlichen „Startseite“-Link;
+Markenlink und Brotkrümel führen weiterhin dorthin.
 
 ### 3. Semantisches HTML und Metadaten
 
@@ -436,7 +444,7 @@ keine zusätzlichen Analytics- oder sonstigen Drittanbieterskripte auf der Websi
   lokale Neukodierung dieser Bilder.
 - YouTube-Videos dürfen über den externen Player eingebunden werden, bevorzugt
   über `youtube-nocookie.com`, ohne Autoplay beim normalen Seitenaufruf.
-  Die ausdrücklich abschaltbare Fortsetzung einer gestarteten Spielereihe ist
+  Die ausdrücklich abschaltbare Fortsetzung innerhalb eines Spiels oder einer Heftausgabe ist
   in [ADR 0004](0004-detailseiten-und-videonavigation.md) geregelt.
   Auf Übersichtsseiten werden nur
   Thumbnails und Links angezeigt. Auf Ausgabe-/Spieleseiten wird der Player
@@ -512,8 +520,9 @@ Die Seite erläutert konkret:
 - Die Auswahl per URL-Fragment und die gemerkte Player-Aktivierung im
   Local Storage einschließlich Zurücksetzen; kein Wiedergabeverlauf,
   kein Sitzungsspeicher, kein eigenes Tracking und keine Analytics-Dienste.
-  Die ausdrücklich eingeschaltete, nur seitenbezogene Folgenfortsetzung
-  bleibt davon getrennt und wird nicht gespeichert.
+  Die ausdrücklich gewählte Folgenfortsetzung wird als separater boolescher
+  Wert im Local Storage gemerkt. Das lädt ohne Player-Freigabe keine
+  YouTube-Steuerung und startet neue Seiten nicht automatisch.
 - Externe Links, deren Ziele erst beim Aufrufen besucht werden.
 
 Formulierungen müssen der tatsächlichen Umsetzung entsprechen. Erforderliche
@@ -583,7 +592,7 @@ Große Listen und lange Beschreibungen gehören zu den Testfällen.
 
 - Datenänderungen erfordern einen erneuten Build und eine Veröffentlichung.
 - Templates, HTML-Escaping, Pfade und Schema.org-Daten müssen gepflegt und getestet werden.
-- Bestätigte Spielezuordnungen stehen im gepflegten Katalog `src/games.mjs`;
+- Bestätigte Spielezuordnungen stehen im gepflegten Katalog `src/data-games.mjs`;
   neue unbestätigte Spiel-Playlists benötigen weiterhin eine inhaltliche Prüfung.
   Die Produktionsadresse ist festgelegt.
 - Lokal gespeicherte Bilder erhöhen das Repository- und Deployment-Volumen;

@@ -3,7 +3,7 @@ import { mkdir, mkdtemp, readFile, rm, stat, writeFile } from "node:fs/promises"
 import path from "node:path";
 import { tmpdir } from "node:os";
 import test from "node:test";
-import { sectionDefinitions } from "../src/sections.mjs";
+import { sectionDefinitions } from "../src/data-sections.mjs";
 import { normalizeSources, loadSiteData } from "../src/site-data.mjs";
 import { createSiteConfig } from "../src/site-config.mjs";
 import { renderSite } from "../src/site-render.mjs";
@@ -35,7 +35,8 @@ function definition(id = "hardware", count = 4) {
 }
 function render(input = fixture(), sections = [definition()], options = {}) {
   const model = normalizeSources(input, { games: [], sections });
-  const config = { ...createSiteConfig(options.baseUrl), pageSize: options.pageSize ?? 50 };
+  const config = createSiteConfig(options.baseUrl);
+  if (options.pageSize !== undefined) config.pageSize = options.pageSize;
   const pages = renderSite(model, config, "assets/test.css");
   validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""]]), config);
   return { model, pages, config };
@@ -151,10 +152,10 @@ test("hält Themen auch bei überlappenden Folgenpositionen in HTML und JSON-LD 
 
 test("paginiert Bereiche und bewahrt relative Links sowie aktive Hauptnavigation", () => {
   for (const id of ["hardware", "retrospektiven", "interviews"]) {
-    const { pages } = render(fixture(51), [definition(id, 51)]);
+    const { pages } = render(fixture(61), [definition(id, 61)]);
     const first = pages.get(`${id}/index.html`).html;
     const second = pages.get(`${id}/seite/2/index.html`).html;
-    assert.equal(graph(first)[0].mainEntity.itemListElement.length, 50);
+    assert.equal(graph(first)[0].mainEntity.itemListElement.length, 60);
     assert.equal(graph(second)[0].mainEntity.itemListElement.length, 1);
     assert.ok(second.includes('rel="canonical" href="./"'));
     assert.ok(second.includes('href="../../" rel="prev"'));

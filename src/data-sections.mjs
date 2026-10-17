@@ -1,4 +1,5 @@
 // Geprüfte Titel, Beschreibungen und Playlist-Mitgliedschaften; neue Treffer benötigen eine eigene Prüfung.
+// Vorgehen: doc/README.md#recherchierte-daten-pflegen
 export const sectionDefinitions = [
   {
     id: "hardware", name: "Hardware",

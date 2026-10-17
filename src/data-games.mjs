@@ -1,6 +1,8 @@
 import { slugify } from "./site-config.mjs";
+import gameReleaseYears from "./data-game-release-years.json" with { type: "json" };
 
 // Geprüfte Einzelspiel-Playlists: Titel und Mitglieder, nicht das Format allein, belegen die Zuordnung.
+// Neue Titel und fehlende Metadaten: doc/README.md#recherchierte-daten-pflegen
 const playlists = [
   ["PLAvthCnzW8Bs", "Wizardry: Proving Grounds of the Mad Overlord"],
   ["PLCdHnxdZabN4", "Mission Critical"],
@@ -178,6 +180,7 @@ export const gameDefinitions = playlists.map(([playlistId, name, platform]) => {
   const id = slugify(`${name}${platform ? ` ${platform}` : ""}`);
   return {
     id, name, aliases: aliases[id] ?? [], platforms: platform ? [platform] : [],
+    release: gameReleaseYears[id] ?? null,
     playlistIds: [playlistId, ...(id === "sid-meier-s-railroad-tycoon-deluxe-ms-dos" ? ["PLZW5k3rtbudqOJb8J0g3KKhWvwBtporbE"] : [])],
     videoIds: supplements[id] ?? [],
     // Die Formatvorstellung in dieser ansonsten spielbezogenen Playlist gehört nicht zum Spiel.

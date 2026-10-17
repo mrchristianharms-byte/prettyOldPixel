@@ -3,9 +3,9 @@ import path from "node:path";
 import { createHash } from "node:crypto";
 import { slugify } from "./site-config.mjs";
 import { secondsToIsoDuration } from "./fetch-youtube-videos.mjs";
-import { gameDefinitions } from "./games.mjs";
+import { gameDefinitions } from "./data-games.mjs";
 import { structureGameSeries } from "./site-game-series.mjs";
-import { sectionDefinitions } from "./sections.mjs";
+import { sectionDefinitions } from "./data-sections.mjs";
 import { extractVideoDetails } from "./site-video-details.mjs";
 
 function requireValue(condition, message) {
@@ -206,6 +206,13 @@ function normalizeGames(definitions, playlists, videoById, warnings) {
     const id = text(definition.id, `${name}.id`);
     requireValue(/^[a-z0-9]+(?:-[a-z0-9]+)*$/u.test(id) && id !== "seite" && !gameIds.has(id), `Ungültige oder doppelte Spiele-ID: ${id}`);
     gameIds.add(id);
+    const release = definition.release ?? null;
+    if (release !== null) {
+      object(release, `${name}.release`);
+      requireValue(Number.isInteger(release.year) && release.year >= 1950 && release.year <= 2200,
+        `${name}: Ungültiges Erscheinungsjahr.`);
+      requireValue(httpUrl(release.source), `${name}: Ungültige Quelle zum Erscheinungsjahr.`);
+    }
     for (const field of ["playlistIds", "videoIds", "platforms", "aliases"]) {
       requireValue(Array.isArray(definition[field]) && definition[field].every((value) => typeof value === "string" && value.trim()),
         `${name}.${field}: Textliste erwartet.`);
@@ -234,8 +241,10 @@ function normalizeGames(definitions, playlists, videoById, warnings) {
     const isReminder = (video) => /\bre\.minder\b/iu.test(video.title);
     if ([...members].filter((videoId) => !isReminder(videoById.get(videoId))).length < 2) continue;
     const videos = [...members].map((videoId) => videoById.get(videoId)).sort(chronological);
+    if (release === null) warnings.push(`${name}: Erscheinungsjahr fehlt; wird als unbekannt angezeigt.`);
     const game = {
       id, name, route: `spiele/${id}/`, platforms: [...definition.platforms].sort(), aliases: [...definition.aliases].sort(),
+      releaseYear: release?.year ?? null, releaseYearSource: release === null ? null : httpUrl(release.source),
       videos: videos.map((video) => video.id),
       playlists: sources.map((playlist) => ({ id: playlist.id, title: playlist.title, url: `https://www.youtube.com/playlist?list=${playlist.id}` })),
     };

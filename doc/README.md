@@ -12,6 +12,7 @@ Dateipfade im Text beziehen sich auf dessen Wurzel.
 - [Kanalstatistik](#startseite-kanal-und-themen-in-zahlen)
 - [Hardware, Retrospektiven und Gespräche](#hardware-retrospektiven-und-gespräche)
 - [Spiele und Reihen](#spiele-und-bestätigte-playlist-zuordnungen)
+- [Neue Videos, Titel und fehlende Metadaten](#recherchierte-daten-pflegen)
 - [Kapitel und erwähnte Kanäle](#kapitel-und-erwähnte-kanäle)
 - [Zeitschriften und Ausgaben](#blätterabend-nach-zeitschrift-und-jahrgang)
 - [Medien, SEO und Builds](#medien-seo-und-unveränderte-builds)
@@ -38,6 +39,9 @@ lokaler Generierung (`generate-*` bzw. `generate:*`). Der Websitegenerator
 heißt `src/generate-site.mjs`, das npm-Ziel `generate:site`; das bisherige
 allgemeine `build`-Ziel entfällt. Gemeinsam genutzte `site-*`-Module sind
 Bausteine des Websitegenerators, keine separaten Abrufscripts.
+Überwiegend recherchierte, dauerhaft gepflegte Daten und einfache
+Zuordnungsmuster erhalten den Präfix `data-`; ausführende Scraper,
+Generatoren und deren Logik behalten ihre bisherigen Präfixe.
 
 Der Build liest ausschließlich die vorhandenen lokalen JSON-Dateien unter
 `cache/` und benötigt keinen Netzwerkzugriff. Scraper werden nicht automatisch
@@ -76,7 +80,8 @@ News und Themenübersichten führen zum
 Videoabschnitt einer vorhandenen Ausgabe bzw. eines Spiels, sonst direkt zu YouTube.
 
 Archivverweise auf Zeitschriftenseiten erscheinen als kleine Ordner-, Lese-
-und Downloadsymbole neben den jeweiligen Videotiteln; auf schmalen Displays
+und Downloadsymbole in Klammern neben dem jeweiligen Zeitschriften-/Ausgabentitel,
+einmal pro Ausgabe statt an jedem Videolink; auf schmalen Displays
 dürfen sie natürlich umbrechen. Die vollständige
 Beschriftung mit Anbieter und Hinweis auf die externe Website bleibt für
 Screenreader und als Tooltip erhalten. Auch die Archivübersicht einer Ausgabe
@@ -108,8 +113,8 @@ Playlist werden zusätzlich chronologisch vom ältesten zum neuesten sortiert;
 Quellpositionen und Mehrfacheinträge bleiben separat erhalten. Fehlende oder
 nicht verfügbare Mitglieder werden gemeldet und nicht als Videos erfunden.
 Playlist-Titel allein bestätigen noch kein Spiel. Die geprüften Spielezuordnungen
-stehen in `src/games.mjs`, die bestätigten Zuordnungen für weitere Bereiche
-in `src/sections.mjs`. Es gibt keine Links auf noch nicht erzeugte Bereichsseiten.
+stehen in `src/data-games.mjs`, die bestätigten Zuordnungen für weitere Bereiche
+in `src/data-sections.mjs`. Es gibt keine Links auf noch nicht erzeugte Bereichsseiten.
 
 ### Startseite: Kanal und Themen in Zahlen
 
@@ -144,7 +149,7 @@ keine externen Ressourcen oder Laufzeit-JavaScript.
   werden wiederverwendet, nicht aus zufälligen Erwähnungen im Text erfunden.
   Dazu gehört auch das Interview mit Andreas und Oliver über die C64-Version
   von Eye of the Beholder, das nicht in der Interview-Playlist enthalten ist.
-- `src/sections.mjs` hält explizite Video-IDs, Themen, bei Gesprächen Personen
+- `src/data-sections.mjs` hält explizite Video-IDs, Themen, bei Gesprächen Personen
   und bei Retrospektiven die Reihenfolge. Titel, Beschreibungen und bestätigte
   Playlist-Mitgliedschaften wurden hierfür geprüft. Änderungen der
   Playlist-Mitgliedschaft allein erzeugen keine ungeprüften Zuordnungen.
@@ -155,7 +160,7 @@ keine externen Ressourcen oder Laufzeit-JavaScript.
   ausgeschlossen. Der gemischte Beitrag `XDvGVislnJg` behandelt laut
   Beschreibung Hardware-Reinigung und trägt einen entsprechenden Hinweis.
   re.list, re.collect und Community-Formate erhalten ohne bestätigte Zuordnung keine Themenübersicht.
-- Bereiche haben höchstens 50 Einträge pro Übersichtsseite. Fehlende
+- Bereiche haben höchstens 60 Einträge pro Übersichtsseite. Fehlende
   Beschreibungen sind zulässig; unbekannte Daten stehen bei Hardware und
   Interviews am Ende. Zukünftige oder fehlende Videos werden nicht publiziert.
   Leere Bereiche erzeugen weder Seiten noch Navigationslinks.
@@ -168,21 +173,102 @@ keine externen Ressourcen oder Laufzeit-JavaScript.
   URL-, Sitemap-, Größenbudget- und Änderungsdatum-Regeln des übrigen Builds.
   Kapitel-Zeitlinks und erwähnte Kanäle stehen auf den Spiel-/Ausgabenseiten.
   Nach Player-Freigabe ergänzt die offizielle YouTube-IFrame-API Kapitelsprünge
-  und eine optionale Folgenfortsetzung auf Spieleseiten.
+  und eine optionale Folgenfortsetzung auf Spiel- und Heftausgabenseiten.
+
+## Recherchierte Daten pflegen
+
+Die Dateien mit Präfix `data-` sind der dauerhaft gepflegte Datenbestand,
+nicht automatisch erzeugte Caches:
+
+| Datei | Pflegeinhalt |
+| --- | --- |
+| [`src/data-games.mjs`](../src/data-games.mjs) | Geprüfte Spieltitel, Plattformen, Playlist-IDs, Aliasse, zusätzliche und ausgeschlossene Video-IDs; einfache Muster zur Bildung der Spielidentität. |
+| [`src/data-game-release-years.json`](../src/data-game-release-years.json) | Pro Spiel-ID ein Erscheinungsjahr (`year`), eine öffentliche Quellen-URL (`source`) und bei Bedarf eine kurze Erklärung (`note`). |
+| [`src/data-sections.mjs`](../src/data-sections.mjs) | Geprüfte Videozuordnungen für Hardware, Retrospektiven und Gespräche mit Themen, Personen und Folgenreihenfolge. |
+
+### Neue Videos oder Titel aufnehmen
+
+1. `npm run fetch:all` lädt neue öffentliche Videos und prüft die
+   Playlist-Mitgliedschaften erneut. Für Blätterabende anschließend
+   `npm run fetch:archives` und `npm run generate:blaetterabend` ausführen.
+   Die Originaltitel und Beschreibungen bleiben als Quellen erhalten;
+   sie werden nicht durch redaktionell geratene Metadaten ersetzt.
+2. `npm run generate:site` ausführen und die Build-Hinweise prüfen.
+   Eine neue Folge in einer bereits bestätigten Spielplaylist wird automatisch
+   dem Spiel zugeordnet. Fehlt sie dort, ihre Zugehörigkeit anhand von Titel,
+   Beschreibung und Quellplaylist prüfen und erst dann als Zusatzvideo in
+   `src/data-games.mjs` aufnehmen. Bekannte Ausschlüsse bleiben bestehen.
+3. Bei einem **neuen Spieltitel** eine eigene bestätigte Spielidentität in
+   `src/data-games.mjs` anlegen: kanonischer Name, gegebenenfalls Plattform,
+   Quellplaylist und belegte Aliasse/Zusatzvideos. Ähnliche Namen, Nachfolger,
+   Plattformversionen und Neuauflagen nicht ungeprüft zusammenlegen.
+   Der Slug aus Name und Plattform ist zugleich der Schlüssel in
+   `src/data-game-release-years.json`; bestehende IDs nicht beiläufig ändern.
+   Eine Spieleseite entsteht erst ab zwei unterschiedlichen verfügbaren
+   Nicht-`re.minder`-Videos.
+4. Für neue **Hardware-, Retrospektiven- oder Gesprächsbeiträge** die konkrete
+   Video-ID in `src/data-sections.mjs` nach Prüfung ergänzen. Thema und bei
+   Gesprächen die Personen belegen; bei Retrospektiven zusätzlich die
+   Reihenfolge pflegen. Ein Titelmuster oder eine Playlist-Mitgliedschaft
+   ist dort nur ein Prüfhinweis, keine automatische Freigabe.
+
+### Fehlende oder widersprüchliche Metadaten
+
+- **Erscheinungsjahr:** Eine verlässliche öffentliche Quelle zur konkreten
+  Spiel-/Plattformversion recherchieren und Jahr plus Quellen-URL in
+  `src/data-game-release-years.json` dauerhaft pflegen. Für eine festgelegte
+  Plattform zählt ihre früheste Veröffentlichung, andernfalls die
+  Erstveröffentlichung des Spiels; Gold-/Deluxe-Ausgaben gesondert prüfen.
+  Nicht das Video-Uploadjahr und nicht ungeprüft eine Jahreszahl aus der
+  Beschreibung übernehmen. Unterschiede zu anderen Plattformen oder
+  Neuauflagen bei Bedarf im `note`-Feld erklären.
+- **Kein belastbarer Beleg:** Nicht raten. Der Generator meldet ein fehlendes
+  Erscheinungsjahr und zeigt es als unbekannt. Der Vollständigkeitstest
+  verlangt für jede gepflegte Spielidentität einen Jahresbeleg; eine neue
+  Identität ist deshalb erst mit diesem Beleg veröffentlichungsfertig.
+  Ungültige Jahreszahlen oder Quellen-URLs brechen den Build ab.
+- **Laufzeit, Veröffentlichungsdatum oder Beschreibung fehlen:** Keine
+  Ersatzwerte erfinden. Fehlende Laufzeiten bleiben unbekannt und
+  Gesamtlaufzeiten werden als Teilsumme gekennzeichnet. Undatierte Videos
+  erscheinen nicht in den News und stehen auf passenden Detailseiten am Ende.
+  Eine fehlende Beschreibung ist zulässig. Bereits  Videodetails
+  werden nicht allein wegen ihres Alters neu geladen; erneutes `fetch:all`
+  behebt fehlende Angaben älterer Cache-Einträge daher nicht automatisch.
+- **Zeitschrift oder Ausgabe unklar:** Keine spekulative Heftseite erzeugen.
+  Titel, Beschreibung und Archivtreffer prüfen. Bestätigte Sonderzuordnungen
+  bzw. neue Zeitschriftentitel gehören zu den Zuordnungsdaten/-mustern in
+  `src/generate-blaetterabend.mjs`; danach die Blätterabend-Datei neu erzeugen.
+  Ungeklärte Angaben bleiben in den vorhandenen unbekannten Gruppen sichtbar.
+
+Zum Abschluss `npm test` und `npm run generate:site` ausführen und die betroffenen
+Kacheln, Detailseiten und Quellenlinks in der lokalen Vorschau kontrollieren.
+Geänderte `src/data-*`-Dateien samt Tests/Dokumentation versionieren; die Website
+unter `docs/` bleibt ein generiertes Artefakt. Das Umbenennen von Datendateien
+erfordert zugleich aktualisierte Imports und Dokumentationsverweise.
 
 ### Spiele und bestätigte Playlist-Zuordnungen
 
-- `/spiele/` zeigt qualifizierte Spiele alphabetisch, mit maximal 50 Spielen je
+- `/spiele/` zeigt qualifizierte Spiele alphabetisch, mit maximal 60 Spielen je
   Übersichtsseite. `/spiele/<slug>/` enthält die Spielinformationen, sämtliche
-  Videos, Beschreibungen und einen gemeinsamen Player. Auch mehr als 50 Videos
+  Videos, Beschreibungen und einen gemeinsamen Player. Auch mehr als 60 Videos
   eines Spiels bleiben auf dieser einen Seite.
-- `src/games.mjs` hält ausdrücklich geprüfte Spielidentitäten mit festen
+- `src/data-games.mjs` hält ausdrücklich geprüfte Spielidentitäten mit festen
   Playlist-IDs, kanonischem Namen, bekannten Plattformen, Quellschreibweisen
   und gegebenenfalls bestätigten zusätzlichen Video-IDs fest. Die Zuordnung
   basiert auf Playlist- und Mitgliedstiteln, nicht allein dem Formatnamen.
   Ähnliche Titel, Nachfolger und Plattformvarianten werden nicht automatisch
   zusammengelegt. Der Slug hängt von der gepflegten Identität ab, nicht von
   späteren Änderungen des gescrapten Playlist-Titels.
+- `src/data-game-release-years.json` pflegt je Spielidentität ein recherchiertes
+  Erscheinungsjahr mit Quellen-URL. Bei festgelegter Plattform zählt die
+  früheste Veröffentlichung dieser Version, andernfalls die Erstveröffentlichung
+  des Spiels; Gold-/Deluxe-Ausgaben werden gesondert berücksichtigt.
+  Die Spielekachel zeigt das Jahr, die Spieleseite zusätzlich den Quellenlink
+  mit Anbietername, etwa „Wikipedia“, „C64-Wiki“ oder „Internet Archive“.
+  Uploadjahre und widersprüchliche Jahresangaben in Videobeschreibungen sind
+  keine automatische Grundlage. Fehlende Jahre werden beim Build gemeldet
+  und sichtbar als unbekannt angezeigt; ungültige Jahre oder Quellen brechen
+  den Build ab. Neue Spielidentitäten benötigen ebenfalls einen Quellenbeleg.
 - Der aktuelle Katalog enthält 144 geprüfte Spielidentitäten aus den
   143 re.play-Playlists und der ebenfalls geprüften 1942-Playlist. Zusätzlich
   ist die re.connect-Playlist zu Railroad Tycoon Deluxe demselben Spiel
@@ -208,12 +294,10 @@ keine externen Ressourcen oder Laufzeit-JavaScript.
   Spieleseiten bzw. ihren `#video-<id>`-Abschnitten. Die Spielezuordnung ist auch
   neben einer Zeitschriftenzuordnung sichtbar. Ohne eigene Ausgabe hat ein
   Video die alphabetisch nach Slug erste bestätigte Spieleseite als Ziel.
-- Die aufklappbare Übersicht „Abschnitte und Reihen“ führt per echten
-  Video-Fragmentlinks zu Intro/Unboxing, Spielverlauf, Abschluss/Fazit,
-  Interviews, re.consider und re.minder, soweit vorhanden. Dieselben
-  Abschnitts-/Reihenangaben stehen in der vollständigen Folgenliste und beim
+- Abschnitts-/Reihenangaben stehen in der vollständigen Folgenliste und beim
   ausgewählten Video. Die Reihenfolge bleibt chronologisch, auch wenn nach
-  einem Abschlussgespräch noch weitere Spielvideos erscheinen.
+  einem Abschlussgespräch noch weitere Spielvideos erscheinen. Eine zusätzliche
+  Übersicht „Abschnitte und Reihen“ wird nicht angezeigt.
 - `src/site-game-series.mjs` erkennt Abschnitte nur aus ausdrücklichen
   Titelmerkmalen und bestätigtem Playlist-Kontext. Eine Folgenummer `#0` oder
   `#1` allein ist kein Intro; „Abschluss Level 1“ ist kein Abschlussgespräch.
@@ -276,18 +360,74 @@ Der Frame bleibt auf `youtube-nocookie.com`, mit `enablejsapi=1` und der
 tatsächlichen Browser-Origin. Fehler oder ausbleibende Antworten werden
 sichtbar gemeldet; externe Links und der manuelle Player bleiben verfügbar.
 
-„Nächste Folge automatisch“ steht ausschließlich auf Spieleseiten und ist bei
-jedem Seitenaufruf aus. Nach Einschalten und echtem `PLAYING`-Ereignis kann ein
+Wiederverwendbare HTML-Komponenten liegen als ES-Module unter `src/widget/`;
+`src/site-render.mjs` importiert sie direkt:
+
+- `video.mjs`: `videoWidget` mit Player, Vorschau und Bedienelementen sowie
+  `playerPoster` für die Vorschau beim Folgenwechsel.
+- `episode-list.mjs`: `episodeList` als unabhängig scrollbar dargestellte
+  Folgenliste mit Fragmentlinks, Laufzeiten, Datum und Spielkontext.
+- `catalog-grid.mjs`: gemeinsame Spiele-/Zeitschriftenkacheln.
+- `metadata.mjs`: gemeinsame semantische Metadatenliste.
+- `video-entry.mjs`: `videoListEntry` für jeden einzelnen Beitrag in News,
+  Hardware, Retrospektiven und Interviews; `videoList` setzt daraus die Liste
+  zusammen. Überschriftenebene, Personen, Thema, Hinweise und Themenverweise
+  bleiben je nach Seitenkontext erhalten. Die Gruppierung von Retrospektiven
+  und die Auswahl/Sortierung der Videos liegen weiterhin im Seitengenerator.
+  Der Titel steht über die volle Breite. Darunter steht eine kleine
+  16:9-Vorschau links; Datum, Kategorie und Beschreibung stehen rechts daneben
+  und sind linksbündig ausgerichtet. Thumbnail und Titel
+  verlinken dasselbe interne Videoziel bzw. YouTube. Die Vorschaubilder kommen
+  direkt von YouTube (`i.ytimg.com`), mit reservierter Bildfläche, Lazy Loading
+  und asynchronem Decoding; die Datenschutzseite beschreibt diesen Abruf.
+
+HTML-Escaping und externe Links liegen gemeinsam in `src/site-html.mjs`,
+Datums-/Laufzeitformatierung in `src/site-format.mjs`. Widgets importieren
+gemeinsame interne Video- und Themenlinks aus `src/site-video-links.mjs`, aber
+nicht den Seitengenerator; so entstehen keine zyklischen Abhängigkeiten.
+Styles bleiben in `src/site.css`, Browserinteraktion in `src/video-series.js`.
+Die Widget-Module werden nur beim Build ausgeführt, nicht zusätzlich im Browser.
+
+Alle eingebetteten Videos verwenden das gemeinsame `videoWidget`:
+Player, Vorschau-/Fehlerhinweise und eine einheitliche Steuerzeile mit
+Aktivierung zurücksetzen, Folgenoption, direktem YouTube-Link und manuellem
+Start bei blockierter Wiedergabe. Spiel- und Heftausgabenseiten setzen genau
+eine Instanz ein; Übersichtsseiten ohne Player erhalten kein leeres Widget.
+
+„Nächste Folge automatisch“ steht auf Spiel- und Heftausgabenseiten und ist ohne
+bisherige Auswahl aus. Ein- und Ausschalten wird als separater boolescher Wert
+`pretty-old-pixel:youtube-auto-next` im Local Storage gemerkt und bei bereiter
+Player-Steuerung wiederhergestellt. Neue Seiten starten weiterhin kein Video.
+Nach Einschalten und echtem `PLAYING`-Ereignis kann ein
 `ENDED`-Ereignis die nächste datierte Folge derselben Seite mit `loadVideoById`
 starten. Die gespeicherte Videolänge wird nicht als Endtimer verwendet.
 Am Reihenende oder vor undatierten Videos wird gestoppt, niemals zu einem
-anderen Spiel gewechselt. Manuelle Auswahl und Zurück/Vorwärts verwenden
+anderen Spiel oder einer anderen Heftausgabe gewechselt. Manuelle Auswahl und Zurück/Vorwärts verwenden
 `cueVideoById` ohne Wiedergabestart. Automatische Wechsel aktualisieren
 URL-Fragment, Beschreibung, Position und Browser-Titel ohne Seitennavigation.
 Browserseitig blockierte Wiedergabe deaktiviert die Fortsetzung und bietet
-„Video manuell starten“. Die Option wird weder lokal noch pro Sitzung gespeichert.
+„Video manuell starten“. Sicherheitsstopps ändern nur den laufenden Zustand,
+nicht die gespeicherte Auswahl. Das Zurücksetzen der Player-Aktivierung lässt
+diese getrennte Auswahl bestehen. Speicherfehler werden sichtbar gemeldet.
+Der direkte YouTube-Link steht in derselben Zeile unter dem Player
+und folgt der aktiven Folge. Der zusätzliche Aktivierungslink im Videopanel
+entfällt; die Aktivierung über das Vorschaubild bleibt erhalten. Ohne JavaScript
+bleiben direkte YouTube-Links je Videopanel erreichbar.
+Der Hinweis zu Vorschaubild und Aktivierung wird bei aktiviertem Player
+ausgeblendet und nach Zurücksetzen wieder angezeigt; Status- und
+Fehlermeldungen bleiben unabhängig davon sichtbar.
+Alle Metadatenlisten unter dem Player (Spiel-/Heftdaten sowie die Angaben
+zur ausgewählten Folge) stehen
+nebeneinander in gleich breiten Spalten, auch bei schmaler Darstellung.
+Lange Werte und Beschriftungen umbrechen innerhalb ihrer Spalte.
 
 ### Blätterabend nach Zeitschrift und Jahrgang
+
+Jahrgangsgruppen heißen beispielsweise „Jahrgang 1996 – Ausgaben“;
+Sonderhefte stehen separat unter „Jahrgang 1996 – Sonderhefte“.
+Einträge ohne bekanntes Heftjahr folgen am Ende unter „Jahrgang unbekannt“.
+Ein bekanntes Heftjahr kann auch bei noch ungeklärter Einzelheftnummer
+erhalten bleiben; die Jahrgangsüberschrift macht hierzu keine Aussage.
 
 - `/zeitschriften/` zeigt die erkannten Zeitschriften alphabetisch sowie eine
   Gruppe „Weitere Blätterabende“ für nicht sicher zugeordnete Blätterabend-Videos.
@@ -303,7 +443,7 @@ Browserseitig blockierte Wiedergabe deaktiviert die Fortsetzung und bietet
   Heftdaten erzeugt. Die Seite enthält Heftangaben, Archivlinks, einen gemeinsamen
   Player und alle Videobeschreibungen. Die Auswahl erfolgt per
   `#video-<youtube-id>` auf derselben Seite. Nur Übersichten werden bei mehr
-  als 50 Einträgen paginiert, nicht die Videos einer einzelnen Ausgabe.
+  als 60 Einträgen paginiert, nicht die Videos einer einzelnen Ausgabe.
 - Ein Jahr allein oder ein generisches „Sonderheft 1996“ erzeugt ohne
   eindeutigen Archivtreffer bzw. Sonderheftnummer keine spekulative Detailseite.
   Diese Videos bleiben im passenden Jahrgang oder in der unbekannten Gruppe.
@@ -341,7 +481,42 @@ Browserseitig blockierte Wiedergabe deaktiviert die Fortsetzung und bietet
 
 ### Medien, SEO und unveränderte Builds
 
+- Die Hauptnavigation enthält die Themenbereiche und News; der Markenlink
+  führt weiterhin zur Startseite, ebenso die Brotkrümelnavigation.
+  Alle Überschriften verwenden eine gemeinsame kompakte Schriftgröße;
+  Spiele-Kacheltitel sind mit 0,95rem zusätzlich verkleinert, um Umbrüche
+  zu reduzieren. Lange Titel bleiben vollständig und dürfen umbrechen.
+  Seitliche Innenabstände von mindestens 1rem halten auch auf schmalen
+  Displays Titel und Navigation vom Fensterrand fern.
+- Zeitschriften- und Spieleübersicht verwenden dieselben Kacheln mit
+  Titel und vorhandenen Metadaten. Neben der Videoanzahl steht die
+  summierte Gesamtlaufzeit der zugehörigen Videos, nach der Summierung auf
+  die nächste volle Minute gerundet (ab 30 Sekunden aufwärts), beispielsweise
+  `3:06 h` (Stunden:Minuten). Jeder Fakt steht in einem eigenen Absatz: Plattform,
+  Erscheinungsjahr, Videoanzahl, Laufzeit bzw. Jahrgänge. Fehlende Laufzeiten werden als bekannte Teilsumme mit
+  Anzahl erfasster Videos bzw. als „Gesamtlaufzeit unbekannt“ kenntlich
+  gemacht; Videos werden innerhalb einer Kachel nicht doppelt gezählt.
+  Die Jahrgangsanzahl wird nur bei bekannten Heftjahren angezeigt; ohne
+  Heftjahr entfällt die Angabe statt „0 Jahrgänge“. Heftnummern allein oder
+  das Veröffentlichungsdatum eines Videos ergeben keinen Heftjahrgang.
+  Das CSS-Raster zeigt eine Spalte,
+  ab 480px zwei, ab 768px drei, ab 1024px vier und ab 1280px höchstens
+  fünf Spalten. Alphabetische Reihenfolge, Links und Paginierung mit
+  höchstens 60 Einträgen funktionieren unverändert ohne JavaScript.
+- Mengenangaben unterscheiden Einzahl und Mehrzahl (`1 Video`, `2 Videos`,
+  `1 Jahrgang`, `2 Jahrgänge`). Video-Veröffentlichungsdaten erscheinen
+  kompakt als `23.11.2016, 18:42`, in der schmalen Folgenliste nur als
+  `23.11.2016`. Alle sichtbaren Datumsangaben auf sämtlichen Seiten verzichten
+  auf Zeitzonen-Zusätze oder UTC-Offsets. Die Berechnung der Video-Daten bleibt
+  in `Europe/Berlin`, einschließlich Sommerzeit;
+  maschinenlesbare ISO-Zeitstempel bleiben unverändert.
+  Die [Regeln für kompakte UI-Komponenten](../.github/instructions/ui-components.instructions.md)
+  gelten für Änderungen an Renderer, Styles und zugehörigen Tests.
 - Sichtbare Seitentexte beschreiben Themen, Videos und Bedienung für Besucher.
+  Spiel- und Ausgabenseiten trennen Metadaten und weitere Inhalte mit
+  horizontalen Linien. Redundante Startlinks und Hinweise zur sichtbaren
+  Folgenreihenfolge entfallen. Informationen zur YouTube-Einbindung stehen
+  auf der Datenschutzseite, erreichbar über den Link im Seitenfuß.
   Interne Auswahlregeln, Cachezugriffe und Buildabläufe stehen nur in dieser
   Dokumentation und den ADRs, nicht in den Einleitungen der Website.
 - Pico CSS **2.1.1** liegt einschließlich MIT-Lizenz unter `src/vendor/`.
@@ -430,7 +605,8 @@ Build-Prüfungen kontrollieren interne Links, JSON-LD und die unveränderten
 Budgets (20 KiB CSS, 5 KiB eigenes JavaScript, 50 KiB HTML, jeweils gzip).
 Browserprüfungen ergänzen Desktop/Mobil, Netzabrufe und den Ohne-JavaScript-Fallback.
 
-Lokaler Prüfstand vom 17.10.2026: 168 Tests unter Node.js 22 erfolgreich;
+Lokaler Prüfstand für Player-Stand `917343c` vom 17.10.2026:
+168 Tests unter Node.js 22 erfolgreich;
 435 HTML-Seiten. CSS 13.558, eigenes JavaScript 3.555 und größtes HTML
 15.727 Bytes gzip. Ein unveränderter Folgebuild übernimmt alle Dateien.
 Im Browser wurden Kapitelsprünge, eigene Zeitmarken-URLs, Fortsetzung,
@@ -440,6 +616,22 @@ alle sieben Folgen der geprüften Spieleseite und ihre externen Kapitel-Links
 sichtbar. Der integrierte Prüf-Browser brach auch einen unabhängig eingebundenen
 echten YouTube-Iframe ab. Reale Medienwiedergabe bis zum Videoende ist deshalb
 dadurch nicht bestätigt; API-Ereignistests ersetzen diese Prüfung nicht.
+
+Der Player-Stand `917343c` wurde mit Actions-Lauf `39045706603` erfolgreich
+auf GitHub Pages veröffentlicht. Live geprüft: Startseite, Spiele- und
+Ausgabenseite, Datenschutz und Zeitschriftenübersicht liefern HTTP 200;
+CSS/JavaScript haben korrekte MIME-Typen und Inhalts-Hashes. Kapitel-URLs
+bleiben auf dem jeweiligen Seitenpfad, Offset-Grenzen und Canonicals sind
+gültig. ETag-Anfragen liefern 304, Cache-Control lautet `max-age=600`,
+und die vorige CSS-Version bleibt mit HTTP 200 erreichbar.
+Vor Aktivierung wurde im Browser nur das YouTube-Vorschaubild, nicht API
+oder Player angefordert. Ein kalter Abruf übertrug rund 14,2 kB CSS und
+3,9 kB JavaScript einschließlich Antwort-Overhead. Auch live bleibt der
+Player auf Desktop/Mobil im anfänglichen sichtbaren Bereich; kein
+horizontaler Überlauf bei 390px. Ein separat gestarteter Chrome bestätigte
+zusätzlich die echte API-Bereitschaft und das Bereitstellen der Zeitmarke;
+eine laufende Medienwiedergabe bis zum echten Ende ließ sich auch dort
+nicht bestätigen.
 
 Eine technische Prüfung ist keine verbindliche Datenschutz- oder Rechtsfreigabe.
 Der Betreiber muss insbesondere erforderliche Betreiber-/Kontaktangaben,

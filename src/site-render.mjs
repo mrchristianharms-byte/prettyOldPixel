@@ -1,22 +1,20 @@
 import { paginatedRoute } from "./site-config.mjs";
 import { httpUrl } from "./site-data.mjs";
+import { escapeHtml, externalLink } from "./site-html.mjs";
+import { durationLabel, videoDate } from "./site-format.mjs";
+import { magazineLinks, sectionLinks, videoHref, videoLink } from "./site-video-links.mjs";
+import { videoWidget, playerPoster } from "./widget/video.mjs";
+import { episodeList } from "./widget/episode-list.mjs";
+import { catalogGrid } from "./widget/catalog-grid.mjs";
+import { metadata } from "./widget/metadata.mjs";
+import { videoList } from "./widget/video-entry.mjs";
 
-export function escapeHtml(value) {
-  return String(value).replace(/[&<>"']/gu, (character) => ({
-    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
-  })[character]);
-}
+export { escapeHtml, externalLink } from "./site-html.mjs";
+export { videoHref } from "./site-video-links.mjs";
 
 export function jsonLd(value) {
   return JSON.stringify(value).replace(/</gu, "\\u003c").replace(/>/gu, "\\u003e")
     .replace(/&/gu, "\\u0026").replace(/\u2028/gu, "\\u2028").replace(/\u2029/gu, "\\u2029");
-}
-
-const externalMark = '<span aria-hidden="true">↗</span><span class="visually-hidden"> (externe Website)</span>';
-export function externalLink(url, label, target = "", icon = "") {
-  const safe = httpUrl(url);
-  if (!safe) throw new Error(`Ungültiger externer Link: ${url}`);
-  return `<a href="${escapeHtml(safe)}" rel="external"${target ? ` target="${escapeHtml(target)}"` : ""}${icon ? ` class="archive-icon" title="${escapeHtml(label)} (externe Website)"` : ""}>${icon ? `${icon}<span class="visually-hidden">${escapeHtml(label)}</span>` : escapeHtml(label)} ${externalMark}</a>`;
 }
 
 export function descriptionHtml(description) {
@@ -33,78 +31,28 @@ export function descriptionHtml(description) {
   }).join("\n");
 }
 
-function excerpt(text, length = 160) {
-  const normalized = text.replace(/\s+/gu, " ").trim();
-  return normalized.length > length ? `${normalized.slice(0, length - 1).trimEnd()}…` : normalized;
+function countLabel(count, singular, plural) {
+  return `${new Intl.NumberFormat("de-DE").format(count)} ${count === 1 ? singular : plural}`;
 }
 
-function dateLabel(iso) {
-  return new Intl.DateTimeFormat("de-DE", { dateStyle: "long", timeStyle: "short", timeZone: "Europe/Berlin" }).format(new Date(iso));
-}
-
-function videoDate(video) {
-  return video.publishedAt
-    ? `<time datetime="${video.publishedAt}">${dateLabel(video.publishedAt)} Uhr (Europe/Berlin)</time>`
-    : "Veröffentlichungsdatum unbekannt";
-}
-
-function durationLabel(seconds) {
-  if (seconds === null) return "";
-  const hours = Math.floor(seconds / 3600);
-  const minutes = Math.floor((seconds % 3600) / 60);
-  return `${hours ? `${hours}:` : ""}${hours ? String(minutes).padStart(2, "0") : minutes}:${String(seconds % 60).padStart(2, "0")}`;
-}
-
-function metadata(fields) {
-  return `<dl class="detail-meta">${fields.map(([label, value]) => `<div><dt>${escapeHtml(label)}</dt><dd>${value}</dd></div>`).join("")}</dl>`;
-}
-
-function magazineLinks(magazine, config) {
-  return `<a href="${config.href(magazine.route)}">${escapeHtml(magazine.name)}</a>${magazine.yearRoute
-    ? ` · <a href="${config.href(magazine.yearRoute)}">Jahrgang ${magazine.issue.year}</a>` : ""}${magazine.issue
-    ? ` · ${magazine.issue.route ? `<a href="${config.href(magazine.issue.route)}">${escapeHtml(magazine.issue.label)}</a>` : escapeHtml(magazine.issue.label)}` : ""}`;
-}
-
-function sectionLinks(video, config) {
-  return video.sections.length ? `<p class="topics">Bereiche: ${video.sections.map((section) => `<a href="${config.href(section.route)}">${escapeHtml(section.name)}</a>`).join(" · ")}</p>` : "";
-}
-
-function topics(video, config) {
-  const games = video.games.length ? `<p class="topics">Spiele: ${video.games.map((game) => `<a href="${config.href(game.route)}">${escapeHtml(game.name)}</a>`).join(" · ")}</p>` : "";
-  if (!video.blaetterabend) return `${games}${sectionLinks(video, config)}`;
-  return `${games}${sectionLinks(video, config)}<p class="topics"><a href="${config.href("zeitschriften/")}">Blätterabend / Zeitschriften</a>: ${video.magazines.length
-    ? video.magazines.map((magazine) => magazineLinks(magazine, config)).join(" · ")
-    : "Zeitschrift ungeklärt"}</p>`;
-}
-
-export function videoHref(video, config, issueRoute) {
-  const route = issueRoute ?? video.magazines.find((magazine) => magazine.issue?.route)?.issue.route ?? video.games[0]?.route;
-  return route ? `${config.href(route)}#video-${video.id}` : video.url;
-}
-
-function videoLink(video, config, label = video.title, issueRoute) {
-  const href = videoHref(video, config, issueRoute);
-  return httpUrl(href)
-    ? externalLink(href, label) : `<a href="${href}">${escapeHtml(label)}</a>`;
-}
-
-function videoList(videos, config, entries = new Map(), headingLevel = 2) {
-  if (!videos.length) return "<p>Noch keine Videos mit bekanntem Veröffentlichungsdatum.</p>";
-  return `<ol class="video-list">${videos.map((video) => {
-    const entry = entries.get(video.id);
-    return `<li><article>
-<h${headingLevel}>${videoLink(video, config)}</h${headingLevel}>
-<p class="meta">${videoDate(video)}${video.durationSeconds !== null ? ` · ${durationLabel(video.durationSeconds)}` : ""}</p>
-${entry ? `<p class="meta">${entry.people.length ? `Im Gespräch: ${escapeHtml(entry.people.join(", "))} · ` : ""}Thema: ${escapeHtml(entry.topic)}</p>${entry.note ? `<p class="meta">${escapeHtml(entry.note)}</p>` : ""}` : ""}
-${topics(video, config)}
-${video.description ? `<p>${escapeHtml(excerpt(video.description, 220))}</p>` : ""}
-</article></li>`;
-  }).join("\n")}</ol>`;
+function videoCount(count) {
+  return countLabel(count, "Video", "Videos");
 }
 
 function latestPublication(videos) {
   const times = videos.map((video) => video.publishedTime).filter((value) => value !== null);
   return times.length ? new Date(Math.max(...times)).toISOString() : null;
+}
+
+function catalogDuration(videoIds, model) {
+  const durations = videoIds.map((id) => model.videoById.get(id).durationSeconds).filter((seconds) => seconds !== null);
+  if (!durations.length) return "Gesamtlaufzeit unbekannt";
+  const minutes = Math.round(durations.reduce((sum, seconds) => sum + seconds, 0) / 60);
+  const hours = Math.floor(minutes / 60);
+  const total = `${hours}:${String(minutes % 60).padStart(2, "0")} h`;
+  return durations.length === videoIds.length
+    ? `Gesamtlaufzeit: ${total}`
+    : `Bekannte Laufzeit: ${total} (${durations.length} von ${videoCount(videoIds.length)})`;
 }
 
 function homeOverview(model, config) {
@@ -120,7 +68,7 @@ function homeOverview(model, config) {
     ["Heftausgaben", number(issues), "Ausgaben zum Durchblättern"],
     ["Spiele", number(model.games.length), "Retrospiele in Videoreihen"],
     ["Playlists", number(model.playlists.length), "Videos nach Themen und Reihen"],
-    ...(knownDurations.length ? [["Stunden Video", number(hours), `${knownDurations.length === model.videos.length ? "Gesamtlaufzeit" : `Bekannte Laufzeiten: ${number(knownDurations.length)} von ${number(model.videos.length)} Videos`}, auf volle Stunden abgerundet`]] : []),
+    ...(knownDurations.length ? [["Stunden Video", number(hours), `${knownDurations.length === model.videos.length ? "Gesamtlaufzeit" : `Bekannte Laufzeiten: ${number(knownDurations.length)} von ${videoCount(model.videos.length)}`}, auf volle Stunden abgerundet`]] : []),
   ];
   const themes = [
     ...(model.magazines.length || model.unresolvedMagazines.length ? [{
@@ -143,7 +91,7 @@ function homeOverview(model, config) {
 ${oldest ? `<p class="channel-history"><span>Videogeschichte seit</span> <strong><time datetime="${oldest.publishedAt}">${new Intl.DateTimeFormat("de-DE", { dateStyle: "long", timeZone: "UTC" }).format(new Date(oldest.publishedTime))}</time></strong><small>Datum des ältesten öffentlichen Videos in dieser Übersicht, nicht das Gründungsdatum des Kanals.</small></p>` : '<p class="meta">Der Beginn der Videogeschichte ist ohne bekannte Veröffentlichungsdaten nicht bestimmbar.</p>'}
 </section>
 <section aria-labelledby="bereiche"><h2 id="bereiche">Die Themen entdecken</h2>
-<div class="theme-grid">${themes.map((theme) => `<article><h3><a href="${config.href(theme.route)}">${escapeHtml(theme.name)}</a></h3><p class="theme-count">${number(theme.count)} Videos</p><p>${escapeHtml(theme.description)}</p></article>`).join("")}</div>
+<div class="theme-grid">${themes.map((theme) => `<article><h3><a href="${config.href(theme.route)}">${escapeHtml(theme.name)}</a></h3><p class="theme-count">${videoCount(theme.count)}</p><p>${escapeHtml(theme.description)}</p></article>`).join("")}</div>
 <p class="meta">Ein Video kann zu mehreren Themen gehören; die Videozahlen der Themen sind daher nicht addierbar.</p></section>
 <p><a href="${config.href("news/")}" role="button" class="outline">Zu den 20 neuesten Videos</a></p>`;
 }
@@ -178,7 +126,7 @@ function layout({ route, title, description, body, schema, crumbs, image, noinde
       "@type": "ListItem", position: index + 1, name: crumb.name, item: config.href(crumb.route),
     })),
   };
-  const navigation = [["", "Startseite"], ["news/", "News"], ...(hasMagazines ? [["zeitschriften/", "Zeitschriften"]] : []), ...(hasGames ? [["spiele/", "Spiele"]] : []), ...sections.map((section) => [section.route, section.name])];
+  const navigation = [["news/", "News"], ...(hasMagazines ? [["zeitschriften/", "Zeitschriften"]] : []), ...(hasGames ? [["spiele/", "Spiele"]] : []), ...sections.map((section) => [section.route, section.name])];
   const selected = navigation.map(([target]) => target).find((prefix) => prefix && route.startsWith(prefix)) ?? route;
   return `<!doctype html>
 <html lang="de">
@@ -215,7 +163,7 @@ ${breadcrumbsMarkup(crumbs, config)}
 ${body}
 </main>
 <footer class="container site-footer"><p>${config.name} · Privates, nicht kommerzielles Projekt.
-<a href="${config.href("datenschutz/")}">Datenschutz und Hinweise</a></p>
+<a href="${config.href("datenschutz/")}">${interactive ? "YouTube-Einbindung und Datenschutz" : "Datenschutz und Hinweise"}</a></p>
 <p>Videos und Vorschaubilder von YouTube.</p></footer>
 </body>
 </html>
@@ -252,20 +200,23 @@ function videoSchema(video, config, route) {
   };
 }
 
-function archiveLinks(archives) {
+function archiveLinks(archives, inline = false) {
   if (!archives.length) return "<p>Kein passender Archivlink vorhanden.</p>";
   const icon = (path) => `<svg aria-hidden="true" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${path}</svg>`;
   const folder = icon('<path d="M3 7V4h6l2 3h10v13H3Z"/>');
   const reader = icon('<path d="M12 5v15M12 5C9 3 5 3 2 4v15c3-1 7-1 10 1 3-2 7-2 10-1V4c-3-1-7-1-10 1Z"/>');
   const download = icon('<path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/>');
-  return `<ul class="archive-links" aria-label="Archivlinks">${archives.flatMap((archive) => {
+  const links = archives.flatMap((archive) => {
     const suffix = archive.match === "issue" ? "Ausgabe" : "Zeitschriftenübersicht";
     return [
-      archive.pageUrl ? `<li>${externalLink(archive.pageUrl, `${archive.provider}: ${archive.match === "issue" && archive.provider === "kultmags" ? "Archivordner zur Ausgabe" : suffix}`, "", folder)}</li>` : "",
-      archive.match === "issue" && archive.readerUrl ? `<li>${externalLink(archive.readerUrl, `${archive.provider}: Heft lesen`, "", reader)}</li>` : "",
-      archive.match === "issue" && archive.downloadUrl ? `<li>${externalLink(archive.downloadUrl, `${archive.provider}: Heft herunterladen`, "", download)}</li>` : "",
+      archive.pageUrl ? externalLink(archive.pageUrl, `${archive.provider}: ${archive.match === "issue" && archive.provider === "kultmags" ? "Archivordner zur Ausgabe" : suffix}`, "", folder) : "",
+      archive.match === "issue" && archive.readerUrl ? externalLink(archive.readerUrl, `${archive.provider}: Heft lesen`, "", reader) : "",
+      archive.match === "issue" && archive.downloadUrl ? externalLink(archive.downloadUrl, `${archive.provider}: Heft herunterladen`, "", download) : "",
     ];
-  }).join("")}</ul>`;
+  }).filter(Boolean);
+  return inline
+    ? `<span class="archive-links" aria-label="Archivlinks">(${links.join(" ")})</span>`
+    : `<ul class="archive-links" aria-label="Archivlinks">${links.map((link) => `<li>${link}</li>`).join("")}</ul>`;
 }
 
 function magazineDetails(video, config) {
@@ -277,20 +228,6 @@ ${!magazine.issue?.route ? "<p>Die genaue Heftausgabe ist unbekannt.</p>" : ""}
 ${archiveLinks(magazine.archives)}</section>`).join("")}</section>`;
 }
 
-function playerPoster(video) {
-  return `<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>YouTube-Player aktivieren</title>
-<style>body{margin:0;background:#171a22;color:#fff;font:1rem system-ui;text-align:center}a{display:grid;place-items:center;position:absolute;inset:0;color:#fff}img{position:absolute;width:100%;height:100%;object-fit:contain;opacity:.5}span{position:relative;padding:1rem;background:#171a22}</style></head>
-<body><a href="${video.embedUrl}" rel="external"><img src="${video.thumbnailUrl}" width="320" height="180" alt=""><span>YouTube-Player aktivieren ↗<br>Erst danach wird der externe Player geladen.</span></a></body></html>`;
-}
-
-function player(video) {
-  return `<section aria-label="Videoplayer">
-<iframe class="video-player" name="issue-player" title="${escapeHtml(`YouTube-Video: ${video.title}`)}" srcdoc="${escapeHtml(playerPoster(video))}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" referrerpolicy="strict-origin-when-cross-origin"></iframe>
-<p class="meta">Vorschaubild von YouTube · Player erst nach Aktivierung. <a href="#datenschutzhinweis">Datenschutzhinweise</a><span data-player-preference-note hidden> Die Aktivierung wird in diesem Browser gemerkt.</span> <button type="button" class="player-reset" data-player-reset hidden>YouTube-Aktivierung zurücksetzen</button></p>
-<p class="meta" data-player-notice role="status" hidden></p>
-</section>`;
-}
-
 function privacyBody(config) {
   return `<h1>Datenschutz und Hinweise</h1>
 <p>Pretty Old Pixel ist ein privates, nicht kommerziell genutztes Projekt zur Übersicht öffentlich verfügbarer Videos.</p>
@@ -300,16 +237,16 @@ ${externalLink("https://docs.github.com/en/site-policy/privacy-policies/github-g
 <h2>Videoinformationen</h2>
 <p>Titel, Beschreibungen und Veröffentlichungsdaten stammen aus öffentlichen Angaben auf YouTube; Heftangaben ergänzen Informationen der Zeitschriftenarchive. Wenn Sie diese Texte lesen, wird keine Verbindung zu YouTube oder den Archiven hergestellt.</p>
 <h2>YouTube-Vorschaubilder</h2>
-<p>Auf Spiel- und Ausgabenseiten wird das Vorschaubild des ausgewählten Videos direkt von i.ytimg.com geladen. Bereits dieser Bildabruf übermittelt insbesondere Ihre IP-Adresse und technische Request-Daten an den Anbieter. Übersichtsseiten enthalten derzeit keine externen Bilder.</p>
+<p>Auf Spiel- und Ausgabenseiten sowie in den Videolisten von News, Hardware, Retrospektiven und Interviews werden Vorschaubilder direkt von i.ytimg.com geladen. Bereits dieser Bildabruf übermittelt insbesondere Ihre IP-Adresse und technische Request-Daten an den Anbieter. Die kleinen Listenvorschauen werden beim Annähern an den sichtbaren Bereich geladen, unabhängig von der Player-Aktivierung. Die Spiele- und Zeitschriftenkataloge enthalten keine externen Bilder.</p>
 <h2>YouTube-Player</h2>
 <p>Der eingebettete Player wird erstmals geladen, wenn Sie „YouTube-Player aktivieren“ wählen. Er verwendet youtube-nocookie.com, den erweiterten Datenschutzmodus von YouTube. Das bedeutet nicht, dass keine Daten verarbeitet werden. Nach der Aktivierung kann YouTube/Google weitere Verbindungen aufbauen und Daten im Rahmen der Wiedergabe verarbeiten. Auf einen externen Player können Sie verzichten und stattdessen einen normalen YouTube-Link verwenden.</p>
 <p>Diese Website merkt sich die Aktivierung in diesem Browser im Local Storage. Danach wird der Player auch bei weiteren Videos und Seitenbesuchen direkt geladen, ohne automatisch abzuspielen. Die Einstellung bleibt bis zum Zurücksetzen oder Löschen der Browserdaten erhalten. Mit „YouTube-Aktivierung zurücksetzen“ unter dem Player können Sie sie jederzeit löschen und wieder zum Vorschaubild wechseln.</p>
 <p>Nach der Aktivierung wird außerdem die offizielle YouTube-IFrame-API von www.youtube.com geladen. Sie ermöglicht Kapitelsprünge im Player und erkennt das Videoende. Dabei wird Ihre IP-Adresse auch an diesen Anbieter übermittelt. Wenn die Steuerung nicht verfügbar ist, bleiben die externen Kapitel-Links und der manuelle Player nutzbar.</p>
-<p>„Nächste Folge automatisch“ ist auf Spieleseiten zunächst aus. Wenn Sie die Option einschalten und ein Video starten, kann am Ende die nächste datierte Folge derselben Spielereihe beginnen. Sie können die Option jederzeit ausschalten. Am Reihenende oder vor Videos ohne Datum stoppt die Fortsetzung. Die Option gilt nur auf der aktuellen Seite und wird nicht gespeichert.</p>
-<p>Gespeichert wird nur die Player-Aktivierung, kein Wiedergabeverlauf. Das ausgewählte Video bleibt in der Seitenadresse erhalten. Ohne JavaScript wird die Aktivierung nicht gemerkt; Kapitel öffnen YouTube, und die Folgenfortsetzung ist nicht verfügbar. Sie können den Player weiterhin einzeln aktivieren, alle Beschreibungen lesen und den YouTube-Links folgen.</p>
+<p>„Nächste Folge automatisch“ ist ohne bisherige Auswahl zunächst aus. Ihre Auswahl wird als eigener Ein-/Aus-Wert in diesem Browser im Local Storage gespeichert und auf weiteren Spiel- und Ausgabenseiten wiederhergestellt. Wenn Sie die Option einschalten und ein Video starten, kann am Ende die nächste datierte Folge desselben Spiels bzw. derselben Heftausgabe beginnen. Sie können die Option jederzeit ausschalten. Am Reihenende, vor Videos ohne Datum oder bei Wiedergabeproblemen stoppt die Fortsetzung, ohne Ihre gespeicherte Auswahl zu ändern. Neue Seiten starten kein Video automatisch. Das Zurücksetzen der YouTube-Aktivierung löscht nicht diese Auswahl; ausschalten können Sie sie am Kontrollkästchen oder durch Löschen der Browserdaten.</p>
+<p>Gespeichert werden nur die Player-Aktivierung und die Einstellung zur automatischen Folgenfortsetzung, kein Wiedergabeverlauf. Das ausgewählte Video bleibt in der Seitenadresse erhalten. Ohne JavaScript werden die Einstellungen nicht gemerkt; Kapitel öffnen YouTube, und die Folgenfortsetzung ist nicht verfügbar. Sie können den Player weiterhin einzeln aktivieren, alle Beschreibungen lesen und den YouTube-Links folgen.</p>
 <p>${externalLink("https://policies.google.com/privacy?hl=de", "Datenschutzerklärung von Google")} · ${externalLink("https://www.youtube.com/t/terms", "Nutzungsbedingungen von YouTube")}</p>
 <h2>Externe Links und eigene Speicherung</h2>
-<p>Externe Links sind mit ↗ und einem zugänglichen Hinweis gekennzeichnet. Erst beim Aufrufen wird das jeweilige Ziel besucht; Vorschaubilder und bereits aktivierte Player sind davon ausgenommen. Diese Website setzt selbst keine Tracking-Cookies ein und verwendet keine Analytics-Dienste. Im Local Storage steht ausschließlich Ihre Player-Aktivierung; Session Storage wird nicht verwendet.</p>
+<p>Externe Links sind mit ↗ und einem zugänglichen Hinweis gekennzeichnet. Erst beim Aufrufen wird das jeweilige Ziel besucht; Vorschaubilder und bereits aktivierte Player sind davon ausgenommen. Diese Website setzt selbst keine Tracking-Cookies ein und verwendet keine Analytics-Dienste. Im Local Storage stehen ausschließlich Ihre Player-Aktivierung und die Einstellung zur automatischen Folgenfortsetzung; Session Storage wird nicht verwendet.</p>
 <p><a href="${config.href()}">Zur Startseite und den Themen</a></p>`;
 }
 
@@ -342,9 +279,7 @@ ${page < pageCount ? `<a href="${config.href(paginatedRoute(baseRoute, page + 1)
 function entryVideoList(entries, model, config) {
   return `<ol class="issue-videos">${entries.map(({ videoId, mention }) => {
     const video = model.videoById.get(videoId);
-    const archives = mention.issue?.route ? mention.issue.archives : mention.archives;
-    return `<li><div class="issue-video-heading">${videoLink(video, config, `${mention.part ? `Teil ${mention.part}: ` : ""}${video.title}`, mention.issue?.route)}
-${archives?.length ? archiveLinks(archives) : ""}</div>
+    return `<li><div class="issue-video-heading">${videoLink(video, config, `${mention.part ? `Teil ${mention.part}: ` : ""}${video.title}`, mention.issue?.route)}</div>
 <p class="meta">${videoDate(video)}${video.durationSeconds !== null ? ` · ${durationLabel(video.durationSeconds)}` : ""}</p></li>`;
   }).join("")}</ol>`;
 }
@@ -354,7 +289,7 @@ function groupedEntries(entries, model, config) {
   for (const entry of entries) {
     const issue = entry.mention.issue;
     const year = issue?.year ?? null;
-    const title = `${year === null ? "Jahrgang unbekannt" : `Jahrgang ${year}`} – ${issue?.special ? "Sonderhefte" : "Reguläre und ungeklärte Ausgaben"}`;
+    const title = `${year === null ? "Jahrgang unbekannt" : `Jahrgang ${year}`} – ${issue?.special ? "Sonderhefte" : "Ausgaben"}`;
     if (!sections.has(title)) sections.set(title, new Map());
     const groups = sections.get(title);
     const key = issue?.id ?? entry.videoId;
@@ -364,11 +299,12 @@ function groupedEntries(entries, model, config) {
   return [...sections].map(([title, groups]) => `<section><h2>${title}</h2>${[...groups.values()].map((group) => {
     const mention = group[0].mention;
     const issue = mention.issue;
+    const archives = issue?.route ? issue.archives : mention.archives;
     return `<section class="issue-group"><h3>${issue?.route
       ? `<a href="${config.href(issue.route)}">${escapeHtml(`${mention.name} ${issue.label}`)}</a>`
-      : issue ? escapeHtml(`${mention.name} ${issue.label}`) : "Heftausgabe unbekannt"}</h3>
+      : issue ? escapeHtml(`${mention.name} ${issue.label}`) : `${escapeHtml(mention.name)} – Heftausgabe unbekannt`}${archives.length ? ` ${archiveLinks(archives, true)}` : ""}</h3>
 ${entryVideoList(group, model, config)}
-${!(issue?.route ? issue.archives : mention.archives).length ? archiveLinks([]) : ""}
+${!archives.length ? archiveLinks([]) : ""}
 </section>`;
   }).join("")}</section>`).join("");
 }
@@ -414,21 +350,26 @@ function renderMagazinePages(model, siteConfig, add) {
     render: (entries, config) => {
       const magazines = entries.filter((entry) => entry.magazine).map((entry) => entry.magazine);
       const unresolved = entries.filter((entry) => !entry.magazine);
-      return `${magazines.length ? `<ul class="magazine-index">${magazines.map((magazine) => `<li><a href="${config.href(magazine.route)}">${escapeHtml(magazine.name)}</a> · ${magazine.videos.length} Videos · ${magazine.years.length} Jahrgänge</li>`).join("")}</ul>` : ""}
+      return `${magazines.length ? catalogGrid(magazines.map((magazine) => ({
+        ...magazine, facts: [
+          videoCount(magazine.videos.length), catalogDuration(magazine.videos, model),
+          ...(magazine.years.length ? [countLabel(magazine.years.length, "Jahrgang", "Jahrgänge")] : []),
+        ],
+      })), config) : ""}
 ${unresolved.length ? `<section><h2>Weitere Blätterabende</h2><p>Bei diesen Videos ist der Zeitschriftentitel unbekannt.</p>${entryVideoList(unresolved.map((entry) => ({ ...entry, mention: {} })), model, config)}</section>` : ""}`;
     },
   });
   for (const magazine of model.magazines) {
     const magazineCrumb = { route: magazine.route, name: magazine.name };
-    const years = (config) => `<nav aria-label="Jahrgänge von ${escapeHtml(magazine.name)}"><ul class="year-list">${magazine.years.map((year) => `<li><a href="${config.href(year.route)}">${year.year}</a> (${year.entries.length} Videos)</li>`).join("")}</ul></nav>`;
+    const years = (config) => `<nav aria-label="Jahrgänge von ${escapeHtml(magazine.name)}"><ul class="year-list">${magazine.years.map((year) => `<li><a href="${config.href(year.route)}">${year.year}</a> (${videoCount(year.entries.length)})</li>`).join("")}</ul></nav>`;
     const unknownIndex = magazine.entries.findIndex((entry) => entry.mention.issue?.year === null || !entry.mention.issue);
-    const unknownLink = (config) => unknownIndex < 0 ? "" : `<p><a href="${config.href(paginatedRoute(magazine.route, Math.floor(unknownIndex / config.pageSize) + 1))}">Jahrgang unbekannt</a>: ${magazine.entries.filter((entry) => !entry.mention.issue || entry.mention.issue.year === null).length} Videos ohne bekanntes Heftjahr.</p>`;
+    const unknownLink = (config) => unknownIndex < 0 ? "" : `<p><a href="${config.href(paginatedRoute(magazine.route, Math.floor(unknownIndex / config.pageSize) + 1))}">Jahrgang unbekannt</a>: ${videoCount(magazine.entries.filter((entry) => !entry.mention.issue || entry.mention.issue.year === null).length)} ohne bekanntes Heftjahr.</p>`;
     addPaginated({
       route: magazine.route, entries: magazine.entries,
       title: `${magazine.name} – Blätterabend-Videos`,
       description: `${magazine.name} im Blätterabend: Jahrgänge, Ausgaben und zugehörige Videos mit Archivverweisen.`,
       crumbs: [root, index, magazineCrumb], schema: (config) => [periodicalSchema(magazine, config)],
-      intro: (config) => `<p>${magazine.videos.length} Videos zu ${escapeHtml(magazine.name)}. Wählen Sie einen Jahrgang oder eine Ausgabe.</p>${years(config)}${unknownLink(config)}`,
+      intro: (config) => `<p>${videoCount(magazine.videos.length)} zu ${escapeHtml(magazine.name)}. Wählen Sie einen Jahrgang oder eine Ausgabe.</p>${years(config)}${unknownLink(config)}`,
       render: (entries, config) => groupedEntries(entries, model, config),
     });
     for (const year of magazine.years) {
@@ -469,53 +410,31 @@ ${unresolved.length ? `<section><h2>Weitere Blätterabende</h2><p>Bei diesen Vid
 function seriesVideos(videos, title, config, game, introduction = "") {
   const entries = new Map(game?.series.entries.map((entry) => [entry.videoId, entry]) ?? []);
   const runs = new Map(game?.series.runs.map((run) => [run.id, run]) ?? []);
-  function context(video) {
-    const entry = entries.get(video.id);
-    return `${escapeHtml(entry.phase.label)} · ${escapeHtml(runs.get(entry.runId).label)}`;
-  }
-  const menu = `<details class="episode-menu" open><summary>☰ Videos ${game ? "zu diesem Spiel" : "zu dieser Ausgabe"} (${videos.length})</summary>
-<nav aria-label="Videos ${game ? "zum Spiel" : "zur Ausgabe"}" tabindex="0"><ol>${videos.map((video, index) => `<li><a data-video-link href="#video-${video.id}">${index + 1}/${videos.length}: ${escapeHtml(video.title)}</a>
-<p class="meta">${video.durationSeconds !== null ? `<span aria-label="Laufzeit">${durationLabel(video.durationSeconds)}</span>` : "Laufzeit unbekannt"} · ${video.publishedAt ? `<time datetime="${video.publishedAt}">${new Intl.DateTimeFormat("de-DE", { dateStyle: "medium", timeZone: "Europe/Berlin" }).format(new Date(video.publishedAt))}</time>` : "Datum unbekannt"}${game ? `<br>${context(video)}` : ""}</p></li>`).join("")}</ol></nav></details>`;
-  const panels = `<div class="video-panels">${videos.map((video, index) => `<article id="video-${video.id}" data-video-panel${video.publishedAt ? ' data-dated="true"' : ""} data-player-url="${video.embedUrl}" data-poster="${escapeHtml(playerPoster(video))}" tabindex="-1">
+  const menu = episodeList(videos, game);
+  const panels = `<div class="video-panels">${videos.map((video, index) => `<article id="video-${video.id}" data-video-panel${video.publishedAt ? ' data-dated="true"' : ""} data-player-url="${video.embedUrl}" data-video-url="${escapeHtml(video.url)}" data-poster="${escapeHtml(playerPoster(video))}" tabindex="-1">
 <h2>Video ${index + 1}/${videos.length}: ${escapeHtml(video.title)}</h2>
 ${metadata([
   ["Veröffentlicht", videoDate(video)],
   ...(video.durationSeconds !== null ? [["Länge", durationLabel(video.durationSeconds)]] : []),
   ...(game ? [["Abschnitt", escapeHtml(entries.get(video.id).phase.label)], ["Reihe", escapeHtml(runs.get(entries.get(video.id).runId).label)]] : []),
 ])}
+<hr>
 ${sectionLinks(video, config)}
 ${game ? `<p>Spiel: <a href="${config.href(game.route)}">${escapeHtml(game.name)}</a>${game.playlists.filter((playlist) => video.playlists.some((source) => source.id === playlist.id)).map((playlist) => ` · ${externalLink(playlist.url, playlist.title)}`).join("")}</p>` : ""}
-<p><span data-player-activate>${externalLink(video.embedUrl, "YouTube-Player hier aktivieren", "issue-player")}</span> · ${externalLink(video.url, "Video auf YouTube ansehen")}</p>
+<noscript><p>${externalLink(video.url, "Video auf YouTube ansehen")}</p></noscript>
 ${video.chapters.length ? `<section class="video-chapters"><h3>Kapitel und Zeitmarken</h3><p class="meta" data-chapter-hint>Ohne aktivierte Player-Steuerung öffnen die Links das Video auf YouTube.</p><ol>${video.chapters.map((chapter) => `<li data-chapter-seconds="${chapter.seconds}">${externalLink(chapter.url, `${durationLabel(chapter.seconds)} · ${chapter.label}`)}</li>`).join("")}</ol></section>` : ""}
 ${video.mentionedChannels.length ? `<section class="mentioned-channels"><h3>Erwähnte Kanäle / Partner</h3><p class="meta">YouTube-Kanäle aus der Videobeschreibung. Eine Erwähnung bedeutet nicht, dass eine bezahlte Zusammenarbeit besteht.</p><ul>${video.mentionedChannels.map((channel) => `<li>${externalLink(channel.url, channel.label)}</li>`).join("")}</ul></section>` : ""}
 <section><h3>Videobeschreibung</h3><div class="description">${video.description ? descriptionHtml(video.description) : "<p>Für dieses Video ist keine Beschreibung vorhanden.</p>"}</div></section>
 ${video.magazines.length > 1 ? magazineDetails(video, config) : ""}
 <nav aria-label="Videoteile">${index > 0 ? `<a href="#video-${videos[index - 1].id}">← Vorheriger Teil</a>` : ""}
 ${index + 1 < videos.length ? `<a href="#video-${videos[index + 1].id}">Nächster Teil →</a>` : ""}</nav></article>`).join("")}</div>`;
-  const privacy = `<aside id="datenschutzhinweis"><h2>YouTube-Einbindung</h2><p>Das Vorschaubild kommt direkt von YouTube. Nach Ihrer ersten Aktivierung wird der Player in diesem Browser auch auf weiteren Seiten direkt geladen, ohne automatisch abzuspielen. Unter dem Player können Sie die Aktivierung zurücksetzen.
-<a href="${config.href("datenschutz/")}">Datenschutz und Hinweise lesen</a>.</p></aside>`;
   return `<section data-video-series data-title="${escapeHtml(title)}" class="detail-layout">
 <div class="detail-main">
 <h1 class="detail-heading" title="${escapeHtml(title)}">${escapeHtml(title)}</h1>
-<div class="detail-player">${player(videos[0])}<div class="player-controls meta" data-player-controls hidden>
-${game ? '<label><input type="checkbox" data-auto-next disabled> Nächste Folge automatisch</label>' : ""}
-<button type="button" data-player-play hidden>Video manuell starten</button>
-</div></div>
-<div class="detail-information">${introduction}<p><a href="#video-${videos[0].id}">Mit Video 1/${videos.length} beginnen</a></p>${game ? gameSeriesGuide(game, videos) : ""}${panels}${privacy}</div>
+${videoWidget(videos[0])}
+<div class="detail-information">${introduction}<hr>${panels}</div>
 </div>${menu}
 </section>`;
-}
-
-function gameSeriesGuide(game, videos) {
-  const positions = new Map(videos.map((video, index) => [video.id, index + 1]));
-  const links = (ids) => ids.map((id) => `<a href="#video-${id}">Video ${positions.get(id)}/${videos.length}</a>`).join(" · ");
-  return `<details class="series-guide"><summary>Abschnitte und Reihen (${game.series.phases.length} ${game.series.phases.length === 1 ? "Abschnitt" : "Abschnitte"}, ${game.series.runs.length} ${game.series.runs.length === 1 ? "Reihe" : "Reihen"})</summary>
-<p>Direkt zu Intro, Spielverlauf oder Fazit: Hier finden Sie die Videos nach Abschnitten. Die vollständige Videoliste beginnt mit dem ältesten Video.</p>
-<section><h2>Abschnitte der Spielereihe</h2><ul>${game.series.phases.map((phase) => `<li><strong>${escapeHtml(phase.label)}</strong>: ${links(phase.videos)}</li>`).join("")}</ul></section>
-<section><h2>Videoreihen und Durchläufe</h2>
-<p>Entdecken Sie die verschiedenen Formate und Durchläufe zu diesem Spiel.</p>
-<ul>${game.series.runs.map((run) => `<li><strong>${escapeHtml(run.label)}</strong>: ${links(run.videos)}</li>`).join("")}</ul></section>
-</details>`;
 }
 
 function gameSchema(game, config) {
@@ -525,6 +444,16 @@ function gameSchema(game, config) {
     ...(game.platforms?.length ? { gamePlatform: game.platforms } : {}),
     ...(game.aliases?.length ? { alternateName: game.aliases } : {}),
   };
+}
+
+function gameReleaseSource(url) {
+  const hostname = new URL(url).hostname;
+  const label = hostname.endsWith(".wikipedia.org") ? "Wikipedia" : {
+    "web.archive.org": "Internet Archive",
+    "www.c64-wiki.com": "C64-Wiki",
+    "www.mobygames.com": "MobyGames",
+  }[hostname] ?? hostname;
+  return externalLink(url, label);
 }
 
 function renderGamePages(model, siteConfig, add) {
@@ -546,7 +475,12 @@ function renderGamePages(model, siteConfig, add) {
       next: page < pageCount ? paginatedRoute(index.route, page + 1) : null,
       body: `<h1>Spiele${page > 1 ? ` – Seite ${page}` : ""}</h1><p>${model.games.length} Retrospiele, alphabetisch geordnet. Entdecken Sie Spielverläufe, Unboxings und Gespräche rund um die Spiele.</p>
 ${pagination(index.route, page, pageCount, config)}
-<ul>${games.map((game) => `<li><a href="${config.href(game.route)}">${escapeHtml(game.name)}</a>${game.platforms.length ? ` (${escapeHtml(game.platforms.join(", "))})` : ""} · ${game.videos.length} Videos</li>`).join("")}</ul>
+<div class="game-catalog">${catalogGrid(games.map((game) => ({
+        ...game, facts: [
+          game.platforms.join(", "), `Erscheinungsjahr: ${game.releaseYear ?? "unbekannt"}`,
+          videoCount(game.videos.length), catalogDuration(game.videos, model),
+        ].filter(Boolean),
+      })), config)}</div>
 ${pagination(index.route, page, pageCount, config)}`,
     }, videos);
   }
@@ -556,19 +490,20 @@ ${pagination(index.route, page, pageCount, config)}`,
     const unknown = videos.filter((video) => video.publishedAt === null);
     add({
       route: game.route, title: `${game.name} – Spielinformationen und Videos`, interactive: true,
-      description: `${game.name}${game.platforms.length ? ` (${game.platforms.join(", ")})` : ""}: ${videos.length} Videos von Pretty Old Pixel mit vollständigen Beschreibungen, chronologisch von der ersten bis zur neuesten Veröffentlichung.`,
+      description: `${game.name}${game.platforms.length ? ` (${game.platforms.join(", ")})` : ""}: ${videoCount(videos.length)} von Pretty Old Pixel mit vollständigen Beschreibungen, chronologisch von der ersten bis zur neuesten Veröffentlichung.`,
       crumbs: [root, index, { route: game.route, name: game.name }],
       schema: [{ ...collectionSchema(videos, config, game.route, game.route), about: { "@id": `${config.href(game.route)}#game` } },
         gameSchema(game, config), ...videos.map((video) => videoSchema(video, config, game.route))],
-      body: `${seriesVideos(videos, game.name, config, game, `<p>${videos.length} Videos rund um ${escapeHtml(game.name)} auf Pretty Old Pixel.</p>
+      body: `${seriesVideos(videos, game.name, config, game, `<p>${videoCount(videos.length)} rund um ${escapeHtml(game.name)} auf Pretty Old Pixel.</p>
 ${metadata([
   ["Spieltitel", escapeHtml(game.name)],
   ...(game.platforms.length ? [["Plattform", escapeHtml(game.platforms.join(", "))]] : []),
+  ["Erscheinungsjahr", game.releaseYear !== null
+    ? `${game.releaseYear} (${gameReleaseSource(game.releaseYearSource)})` : "Unbekannt"],
   ...(game.aliases.length ? [["Weitere Titel", escapeHtml(game.aliases.join(", "))]] : []),
   ["Videos", videos.length],
 ])}
-<p>Die Videos beginnen mit der ältesten Veröffentlichung.</p>
-${unknown.length ? `<p>${unknown.length} Videos ohne bekanntes Veröffentlichungsdatum stehen gesondert am Ende der Liste.</p>` : ""}`)}
+${unknown.length ? `<p>${videoCount(unknown.length)} ohne bekanntes Veröffentlichungsdatum ${unknown.length === 1 ? "steht" : "stehen"} gesondert am Ende der Liste.</p>` : ""}`)}
 <section><h2>Playlists auf YouTube</h2><ul>${game.playlists.map((playlist) => `<li>${externalLink(playlist.url, playlist.title)}</li>`).join("")}</ul></section>
 <p><a href="${config.href(index.route)}">Weitere Spiele entdecken</a> · <a href="${config.href("news/")}">Neue Videos</a></p>`,
     }, videos);
@@ -604,7 +539,7 @@ function renderSectionPages(model, siteConfig, add) {
         previous: page > 1 ? paginatedRoute(section.route, page - 1) : null,
         next: page < count ? paginatedRoute(section.route, page + 1) : null,
         body: `<h1>${escapeHtml(section.name)}${page > 1 ? ` – Seite ${page}` : ""}</h1>
-<p>${escapeHtml(section.description)}</p><p>${section.entries.length} Videos. ${section.id === "retrospektiven"
+<p>${escapeHtml(section.description)}</p><p>${videoCount(section.entries.length)}. ${section.id === "retrospektiven"
   ? "Wählen Sie ein Thema und entdecken Sie die Geschichte der Spiele Folge für Folge."
   : "Entdecken Sie die Beiträge, beginnend mit den neuesten Videos."}</p>
 ${pagination(section.route, page, count, config)}${listing}${pagination(section.route, page, count, config)}`,

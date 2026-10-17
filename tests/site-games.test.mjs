@@ -4,7 +4,8 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
 import { generateSite, validateSite } from "../src/generate-site.mjs";
-import { gameDefinitions } from "../src/games.mjs";
+import { gameDefinitions } from "../src/data-games.mjs";
+import gameReleaseYears from "../src/data-game-release-years.json" with { type: "json" };
 import { createSiteConfig } from "../src/site-config.mjs";
 import { normalizeSources } from "../src/site-data.mjs";
 import { renderSite } from "../src/site-render.mjs";
@@ -13,7 +14,8 @@ const channel = { id: "UC-games", title: "Pretty Old Pixel" };
 const videoId = (index) => `g${String(index).padStart(10, "0")}`;
 const playlistId = "PLZW5k3rtbudqSHgAFraosQMdGOpK08alM";
 const definition = (overrides = {}) => ({
-  id: "cadaver", name: "Cadaver", playlistIds: [playlistId], videoIds: [], platforms: [], aliases: [], ...overrides,
+  id: "cadaver", name: "Cadaver", playlistIds: [playlistId], videoIds: [], platforms: [], aliases: [],
+  release: { year: 1990, source: "https://en.wikipedia.org/wiki/Cadaver_(video_game)" }, ...overrides,
 });
 const member = (index, position = index + 1) => ({ videoId: videoId(index), position, availability: "listed" });
 
@@ -42,6 +44,102 @@ function render(input = fixture(), definitions = [definition()]) {
 }
 
 const graph = (html) => JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/u)[1])["@graph"];
+
+test("zeigt Spiele als Kachelliste mit escaped Titeln, Plattformen und Videozahlen", () => {
+  const { pages } = render(fixture(2), [definition({ name: "Cadaver & <Demo>", platforms: ["<Amiga>"] })]);
+  const html = pages.get("spiele/index.html").html;
+  assert.ok(html.includes('<div class="game-catalog"><ul class="catalog-grid">'));
+  const grid = html.match(/<ul class="catalog-grid">[\s\S]*?<\/ul>/u)[0];
+  assert.ok(grid.includes('<li><h2><a href="cadaver/">Cadaver &amp; &lt;Demo&gt;</a></h2>'));
+  assert.ok(grid.includes('<p class="meta">&lt;Amiga&gt;</p><p class="meta">Erscheinungsjahr: 1990</p><p class="meta">2 Videos</p><p class="meta">Gesamtlaufzeit unbekannt</p>'));
+  assert.ok(!grid.includes("<Demo>"));
+});
+
+test("zeigt das gepflegte Erscheinungsjahr statt Uploadjahr oder Zahlen aus Beschreibungen", () => {
+  const input = fixture(2);
+  for (const video of input.videos.videos) video.description = "Releasedatum: 1991\nVeröffentlicht: 2000";
+  const { model, pages } = render(input);
+  assert.equal(model.games[0].releaseYear, 1990);
+  assert.equal(model.games[0].releaseYearSource, definition().release.source);
+  assert.ok(pages.get("spiele/index.html").html.includes("Erscheinungsjahr: 1990"));
+  const detail = pages.get("spiele/cadaver/index.html").html;
+  assert.ok(detail.includes("<dt>Erscheinungsjahr</dt><dd>1990 ("));
+  assert.ok(detail.includes(`href="${definition().release.source}" rel="external"`));
+  assert.ok(detail.includes('>Wikipedia <span aria-hidden="true">↗</span>'));
+  const unknown = render(input, [definition({ release: null })]);
+  assert.ok(unknown.pages.get("spiele/index.html").html.includes("Erscheinungsjahr: unbekannt"));
+  assert.ok(unknown.model.warnings.some((warning) => warning.includes("Erscheinungsjahr fehlt")));
+});
+
+test("verwendet die Einzahl für ein Spielvideo ohne Veröffentlichungsdatum", () => {
+  const input = fixture(2);
+  input.videos.videos[0].publishedAt = null;
+  const { pages } = render(input);
+  assert.ok(pages.get("spiele/index.html").html.includes('<p class="meta">2 Videos</p>'));
+  const detail = pages.get("spiele/cadaver/index.html").html;
+  assert.ok(detail.includes("<p>2 Videos rund um Cadaver"));
+  assert.ok(detail.includes("1 Video ohne bekanntes Veröffentlichungsdatum steht gesondert"));
+  assert.ok(!/\b1 Videos\b/u.test(detail));
+});
+
+test("benennt die recherchierte Quelle auf der Spieleseite nach ihrem Anbieter", () => {
+  for (const [source, label] of [
+    ["https://de.wikipedia.org/wiki/Cadaver", "Wikipedia"],
+    ["https://www.c64-wiki.com/wiki/The_Goonies", "C64-Wiki"],
+    ["https://www.mobygames.com/game/1/", "MobyGames"],
+    ["https://web.archive.org/web/20250101000000/https://www.mobygames.com/game/1/", "Internet Archive"],
+    ["https://example.com/game?x=1&y=2", "example.com"],
+  ]) {
+    const { pages } = render(fixture(2), [definition({ release: { year: 1990, source } })]);
+    const html = pages.get("spiele/cadaver/index.html").html;
+    const field = html.match(/<dt>Erscheinungsjahr<\/dt><dd>(.*?)<\/dd>/u)[1];
+    assert.ok(field.includes(`href="${source.replaceAll("&", "&amp;")}" rel="external"`));
+    assert.ok(field.includes(`>${label} <span aria-hidden="true">↗</span>`));
+    assert.ok(field.startsWith("1990 ("));
+  }
+});
+
+test("weist ungültige Erscheinungsjahre und unbrauchbare Quellen zurück", () => {
+  for (const release of [
+    { year: "1990", source: "https://example.com/" },
+    { year: 1086, source: "https://example.com/" },
+    { year: 1990.5, source: "https://example.com/" },
+    { year: 1990, source: "javascript:alert(1)" },
+    { year: 1990 }, 1990,
+  ]) assert.throws(() => render(fixture(), [definition({ release })]));
+});
+
+test("pflegt zu jeder Spielidentität ein Erscheinungsjahr mit Quellenbeleg", () => {
+  assert.deepEqual(Object.keys(gameReleaseYears).sort(), gameDefinitions.map((game) => game.id).sort());
+  for (const game of gameDefinitions) {
+    assert.ok(Number.isInteger(game.release.year) && game.release.year >= 1950 && game.release.year <= 2200, game.id);
+    const source = new URL(game.release.source);
+    assert.ok(["https:", "http:"].includes(source.protocol), game.id);
+    assert.equal(source.username, "", game.id);
+    assert.equal(source.password, "", game.id);
+  }
+});
+
+test("summiert Spiel-Laufzeiten über 24 Stunden und kennzeichnet fehlende Werte", () => {
+  for (const [durations, expected] of [
+    [[3661, 90000], "Gesamtlaufzeit: 26:01 h"],
+    [[3661, null], "Bekannte Laufzeit: 1:01 h (1 von 2 Videos)"],
+    [[null, null], "Gesamtlaufzeit unbekannt"],
+    [[0, 0], "Gesamtlaufzeit: 0:00 h"],
+    [[14, 15], "Gesamtlaufzeit: 0:00 h"],
+    [[15, 15], "Gesamtlaufzeit: 0:01 h"],
+    [[1799, 1771], "Gesamtlaufzeit: 1:00 h"],
+    [[7200, 780], "Gesamtlaufzeit: 2:13 h"],
+  ]) {
+    const input = fixture(3);
+    input.videos.videos.forEach((video, index) => { video.durationSeconds = durations[index] ?? null; });
+    input.videos.videos[2].durationSeconds = 99999;
+    input.playlists.playlists[0].videos = [member(0), member(0), member(1)];
+    const { pages } = render(input);
+    const grid = pages.get("spiele/index.html").html.match(/<ul class="catalog-grid">[\s\S]*?<\/ul>/u)[0];
+    assert.ok(grid.includes(`<p class="meta">2 Videos</p><p class="meta">${expected}</p>`), expected);
+  }
+});
 
 test("erfordert bestätigte Spieleidentitäten statt Format- oder Titelheuristiken", () => {
   const input = fixture();
@@ -118,7 +216,7 @@ test("sortiert numerisch nach Veröffentlichung und kennzeichnet undatierte Vide
   assert.ok(html.indexOf(`id="video-${videoId(0)}"`) < html.indexOf(`id="video-${videoId(3)}"`));
 });
 
-test("rendert eine vollständige Spieleseite mit Metadaten, Player und Beschreibungen auch über 50 Videos", () => {
+test("rendert eine vollständige Spieleseite mit Metadaten, Player und Beschreibungen auch über 60 Videos", () => {
   const input = fixture(65);
   input.videos.videos[0].durationSeconds = 3661;
   const { pages, config, budgets } = render(input, [definition({ platforms: ["Amiga"], aliases: ["Cadaver (Amiga)"] })]);
@@ -165,7 +263,7 @@ test("rendert eine vollständige Spieleseite mit Metadaten, Player und Beschreib
 
 test("paginiert den Spieleindex, aber nicht Spieleseiten", () => {
   const input = fixture(2);
-  const definitions = Array.from({ length: 51 }, (_, index) => {
+  const definitions = Array.from({ length: 61 }, (_, index) => {
     const id = `game-${String(index).padStart(2, "0")}`;
     const playlist = `PL-${id}`;
     input.playlists.playlists.push({ id: playlist, title: id, videos: [member(0), member(1)] });
@@ -173,8 +271,15 @@ test("paginiert den Spieleindex, aber nicht Spieleseiten", () => {
   });
   const { pages } = render(input, definitions);
   assert.ok(pages.has("spiele/seite/2/index.html"));
-  assert.equal((pages.get("spiele/index.html").html.match(/ · 2 Videos<\/li>/gu) ?? []).length, 50);
-  assert.equal((pages.get("spiele/seite/2/index.html").html.match(/ · 2 Videos<\/li>/gu) ?? []).length, 1);
+  assert.equal((pages.get("spiele/index.html").html.match(/<li><h2><a /gu) ?? []).length, 60);
+  assert.equal((pages.get("spiele/seite/2/index.html").html.match(/<li><h2><a /gu) ?? []).length, 1);
+  for (const route of ["spiele/index.html", "spiele/seite/2/index.html"]) {
+    const grid = pages.get(route).html.match(/<ul class="catalog-grid">[\s\S]*?<\/ul>/u)[0];
+    assert.equal((grid.match(/Erscheinungsjahr: 1990/gu) ?? []).length, route.includes("seite/2") ? 1 : 60);
+  }
+  assert.ok(!pages.has("spiele/seite/3/index.html"));
+  const { pages: exact } = render(input, definitions.slice(0, 60));
+  assert.ok(!exact.has("spiele/seite/2/index.html"));
 });
 
 test("behält Spiel- und Ausgabenkontexte bei Mehrfachzuordnungen korrekt bei", () => {
@@ -212,7 +317,7 @@ test("hält Routen und HTML bei geänderter Quellreihenfolge und Abrufzeiten sta
   assert.deepEqual([...first.pages], [...second.pages]);
 });
 
-test("zeigt Phasen und Reihen als echte Abschnittslinks, ohne die chronologische Gesamtliste umzubauen", () => {
+test("behält Phasen- und Reihenmetadaten ohne zusätzliche Übersicht und ohne Änderung der Folgenliste", () => {
   const input = fixture(6);
   [
     "Cadaver [re.play - #1] Intro und Unboxing",
@@ -230,11 +335,12 @@ test("zeigt Phasen und Reihen als echte Abschnittslinks, ohne die chronologische
   assert.deepEqual(game.series.runs.map((run) => run.videos),
     [[videoId(0), videoId(1), videoId(2), videoId(3)], [videoId(4)], [videoId(5)]]);
   const html = pages.get("spiele/cadaver/index.html").html;
-  assert.ok(html.includes('class="series-guide"'));
-  for (const phase of game.series.phases) assert.ok(html.includes(`<strong>${phase.label}</strong>`));
+  assert.ok(!html.includes('class="series-guide"'));
+  assert.ok(!html.includes("Abschnitte und Reihen"));
+  for (const phase of game.series.phases) assert.ok(html.includes(`<dt>Abschnitt</dt><dd>${phase.label}</dd>`));
   assert.ok(!html.includes("Interview / Gespräch"));
-  const guide = html.slice(html.indexOf('<details class="series-guide">'), html.indexOf('<div class="video-panels">'));
-  for (const id of game.videos) assert.ok(guide.includes(`href="#video-${id}"`));
+  const menu = html.match(/<details class="episode-menu"[\s\S]*?<\/details>/u)[0];
+  for (const id of game.videos) assert.ok(menu.includes(`href="#video-${id}"`));
   assert.match(html, /id="video-g0000000002"[\s\S]*?href="#video-g0000000003">Nächster Teil/u);
   assert.deepEqual(graph(html).find((item) => item["@type"] === "CollectionPage").mainEntity.itemListElement.map((item) => item.position),
     [1, 2, 3, 4, 5, 6]);
@@ -292,7 +398,7 @@ test("aktualisiert Spieleseiten offline und entfernt sie beim Unterschreiten der
   assert.equal(after["spiele/cadaver/index.html"].lastModified, "2026-01-02T00:00:00.000Z");
   assert.equal(after["spiele/cadaver/index.html"].contentPublishedAt, before["spiele/cadaver/index.html"].contentPublishedAt);
   assert.deepEqual(after["datenschutz/index.html"], before["datenschutz/index.html"]);
-  assert.ok((await readFile(file, "utf8")).includes("<strong>Intro / Unboxing</strong>"));
+  assert.ok((await readFile(file, "utf8")).includes("<dt>Abschnitt</dt><dd>Intro / Unboxing</dd>"));
   input.videos.videos[0].description = "Aktualisierte Beschreibung";
   await save();
   await generateSite(options);

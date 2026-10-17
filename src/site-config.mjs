@@ -25,7 +25,7 @@ export function createSiteConfig(baseUrl = productionUrl) {
     name: "Pretty Old Pixel",
     baseUrl: url.href,
     basePath,
-    pageSize: 50,
+    pageSize: 60,
     href,
     absolute: (route = "") => {
       checkRoute(route);

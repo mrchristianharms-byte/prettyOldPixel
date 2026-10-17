@@ -33,6 +33,7 @@ function sources(count = 3) {
 test("berücksichtigt den GitHub-Projektpfad und erstellt stabile Slugs", () => {
   const config = createSiteConfig();
   assert.equal(config.baseUrl, productionUrl);
+  assert.equal(config.pageSize, 60);
   assert.equal(config.href("news/"), "news/");
   assert.equal(config.absolute("videos/abc/"), `${productionUrl}videos/abc/`);
   assert.equal(createSiteConfig("http://localhost:8000/test").href(), "./");

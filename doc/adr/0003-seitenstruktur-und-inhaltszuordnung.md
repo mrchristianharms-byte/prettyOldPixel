@@ -136,9 +136,9 @@ derselben Detailseite; es gibt keine separate Videoseite.
 Kapitelsteuerung und fortlaufende Wiedergabe sind ebenfalls dort beschrieben.
 
 Paginierung ist keine zusätzliche thematische Unterstruktur. Allgemeine Listen
-mit mehr als 50 Einträgen werden entsprechend ADR 0002 über echte Links aufgeteilt.
+mit mehr als 60 Einträgen werden entsprechend ADR 0002 über echte Links aufgeteilt.
 Spieleseiten und einzelne Ausgabenseiten zeigen dagegen die vollständige Folgenliste,
-auch bei mehr als 50 Videos. Blätterabend wird nach Zeitschrift und Jahrgang
+auch bei mehr als 60 Videos. Blätterabend wird nach Zeitschrift und Jahrgang
 aufgeteilt; nur bei weiterhin zu großen Teilübersichten ist zusätzliche
 Paginierung nötig.
 Ein Video ist ein Abschnitt auf einer vorhandenen Entitätsseite und darf in
@@ -180,8 +180,9 @@ Es wird nicht dem Aufnahmejahr zugeordnet. Videos ohne erkannte Zeitschrift
 stehen in einer Gruppe „Zeitschrift ungeklärt“ in der Blätterabend-Übersicht.
 Unbekannte Angaben bleiben auch in den Metadaten unbekannt.
 
-**Umgesetzt:** Zeitschriftenindex, Zeitschriften-, Jahrgangs- und eindeutig
-belegte Ausgabenseiten mit bis zu 50 Einträgen pro Seite. News, Videokatalog und
+**Umgesetzt:** Zeitschriftenindex, Zeitschriften- und Jahrgangsübersichten mit
+bis zu 60 Einträgen pro Seite sowie eindeutig belegte Ausgabenseiten mit
+vollständigen Folgenlisten. News und
 Themenlinks führen zu den vorhandenen Zielen. Reguläre Hefte werden über Jahr
 und Monate bzw. Heftnummer identifiziert; Sonderhefte über einen eindeutigen
 Archivtreffer bzw. Jahr und Sonderheftnummer. Ein Jahr allein oder eine
@@ -220,7 +221,7 @@ Sammelplaylists können mehrere Spiele enthalten. Erforderlich sind eine
 bestätigte Zuordnung der Playlist zu einem Spiel und die Mitgliedschaften der
 Videos. Mehrere Playlists dürfen demselben Spiel zugeordnet werden.
 Die Implementierung pflegt diese Identitäten ausdrücklich in
-[`src/games.mjs`](../../src/games.mjs): 144 geprüfte Einzelspiel-Identitäten
+[`src/data-games.mjs`](../../src/data-games.mjs): 144 geprüfte Einzelspiel-Identitäten
 einschließlich der nicht mit re.play betitelten 1942-Playlist. Auch die
 Railroad-Tycoon-Deluxe-Playlist aus re.connect ist nach Mitgliederprüfung diesem
 Spiel zugeordnet; die allgemeine Formatvorstellung ist explizit ausgeschlossen.
@@ -228,6 +229,14 @@ Bekannte Quellschreibweisen und Zusatzbeiträge werden dort ebenfalls gepflegt.
 Neue unbestätigte re.play-/re.connect-Playlists werden als Build-Hinweis gemeldet.
 Sie erzeugen keine automatisch erratene Spieleseite. Die Spielidentität und
 ihr Slug ändern sich nicht durch einen geänderten Cache-Playlist-Titel.
+Ein fest recherchiertes Erscheinungsjahr samt Quellen-URL wird pro Identität
+in [`src/data-game-release-years.json`](../../src/data-game-release-years.json) gepflegt.
+Maßgeblich ist die früheste Veröffentlichung auf der festgelegten Plattform,
+ohne Plattformbindung die Erstveröffentlichung; eigenständige Gold-/Deluxe-
+Ausgaben behalten ihr eigenes Jahr. Der Spieleindex zeigt das Jahr neben den
+übrigen Kachelmetadaten, die Spieleseite verlinkt den Beleg. Videouploads und
+Jahreszahlen aus Beschreibungstexten überschreiben diese gepflegten Angaben
+nicht. Fehlende Angaben bleiben sichtbar unbekannt und werden gemeldet.
 Die vorhandenen Mitgliedschaften werden über
 `playlists[].videos[].videoId` mit `videos[].id` im Video-Cache verknüpft.
 Playlist-Titel und -Beschreibung liefern Kontext; vollständige Video-Metadaten
@@ -253,9 +262,9 @@ dafür werden Playlist-Kontext und eindeutige Titelmerkmale verwendet.
 Später gestartete Durchläufe bleiben als eigene Gruppe erkennbar, damit mehrfach
 vorhandene Folgenummern nicht vermischt werden.
 
-**Umgesetzt:** Die Spieleseite hat eine zusätzliche statische Übersicht
-„Abschnitte und Reihen“ mit echten Links auf die vorhandenen Video-Fragmente.
-Abschnitte und Quellreihen stehen auch bei jeder Folge und ihrer Beschreibung.
+**Umgesetzt:** Abschnitte und Quellreihen stehen bei jeder Folge und ihrer
+Beschreibung. Die zusätzliche Übersicht „Abschnitte und Reihen“ entfällt,
+um die Videoauswahl nicht durch eine zweite Navigation zu verkomplizieren.
 Es entstehen weder neue Videoseiten noch leere Phasen. Die Erkennung steht in
 [`src/site-game-series.mjs`](../../src/site-game-series.mjs).
 
@@ -319,7 +328,7 @@ re.ware-Beitrag ungeprüft als Hardware zu behandeln.
 
 **Umgesetzt:** 14 bestätigte Beiträge aus den Hardware-/re.ware-Playlists und
 geprüften einzelnen Hardwaretiteln. Die Zuordnung steht explizit in
-[`src/sections.mjs`](../../src/sections.mjs). Der reine Verpackungsbeitrag
+[`src/data-sections.mjs`](../../src/data-sections.mjs). Der reine Verpackungsbeitrag
 `bwVnfQJ-WEw` bleibt ausgeschlossen; der gemischte Beitrag `XDvGVislnJg`
 ist wegen der ausdrücklich beschriebenen Hardware-Reinigung enthalten und
 sichtbar als gemischtes Thema gekennzeichnet.
@@ -345,7 +354,7 @@ ist anhand seiner Beschreibung auch ohne Interview-Playlist zugeordnet.
 Bestehende Spielzuordnungen werden unverändert verlinkt.
 
 Alle drei Bereiche sind statische `CollectionPage`-/`ItemList`-Übersichten
-mit höchstens 50 Einträgen pro Seite, Breadcrumbs und relativen internen URLs.
+mit höchstens 60 Einträgen pro Seite, Breadcrumbs und relativen internen URLs.
 Hardware und Gespräche sind nach Veröffentlichung absteigend sortiert,
 undatierte Videos zuletzt. Retrospektiven bleiben thematisch und nach Folge
 gruppiert. Nur nicht leere Bereiche erscheinen in Navigation und Startseite;
@@ -601,7 +610,7 @@ ADR 0002; ein unveränderter Build darf diese nicht austauschen.
   Build-Zeiten; unbelegte Sitemap-Änderungsdaten werden ausgelassen.
 - Fehlende Beschreibungen und optionale Metadaten verhindern keinen Build.
 - Build und Scraper funktionieren unabhängig; ein Build ruft keine Quellen ab.
-- Vollständige Spiel-Folgenlisten funktionieren auch bei mehr als 50 Videos.
+- Vollständige Spiel-Folgenlisten funktionieren auch bei mehr als 60 Videos.
 - Die Datenschutzseite ist im Footer erreichbar; Browser-Caching wird anhand
   der tatsächlichen Hosting-Header statt nur HTML-Zeitangaben geprüft.
 

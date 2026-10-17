@@ -42,6 +42,16 @@ function issueFixture() {
 
 const issuePage = (pages) => [...pages].find(([file]) => file.includes("/ausgaben/"))[1].html;
 
+test("entfernt Startseite nur aus der Hauptnavigation und behält Markenlink und Brotkrümel", () => {
+  const { pages, config } = render(issueFixture());
+  for (const { html, route } of pages.values()) {
+    const header = html.match(/<header[\s\S]*?<\/header>/u)[0];
+    assert.ok(!header.includes(">Startseite</a>"));
+    assert.ok(header.includes(`<a class="brand" href="${config.forPage(route).href()}">Pretty Old Pixel</a>`));
+  }
+  assert.ok(pages.get("zeitschriften/pc-games/index.html").html.includes('href="../../">Startseite</a>'));
+});
+
 async function setup(t, input = fixture()) {
   const directory = await mkdtemp(path.join(tmpdir(), "pretty-pixel-build-"));
   t.after(() => rm(directory, { recursive: true, force: true }));
@@ -91,6 +101,38 @@ test("rendert News vollständig ohne Laufzeit-JavaScript und setzt VideoObject-M
   assert.equal(graph.at(-1)["@type"], "BreadcrumbList");
   assert.equal((video.match(/<script/gu) ?? []).length, 2);
   assert.ok(!video.includes("dateModified"));
+});
+
+test("zeigt kompakte Videodaten in Berliner Winter- und Sommerzeit mit unverändertem ISO-Datum", () => {
+  const input = issueFixture();
+  const cases = [
+    ["2016-11-23T17:42:00.000Z", "23.11.2016, 18:42", "23.11.2016"],
+    ["2017-07-01T22:30:00.000Z", "02.07.2017, 00:30", "02.07.2017"],
+  ];
+  input.videos.videos.forEach((video, index) => {
+    video.publishedAt = cases[index][0];
+    video.durationSeconds = 929;
+  });
+  const { pages } = render(input);
+  const news = pages.get("news/index.html").html;
+  const detail = issuePage(pages);
+  const menu = detail.match(/<details class="episode-menu"[\s\S]*?<\/details>/u)[0];
+  for (const [iso, label, date] of cases) {
+    const time = `<time datetime="${iso}">${label}</time>`;
+    assert.ok(news.includes(`${time} · 15:29`));
+    assert.ok(detail.includes(time));
+    assert.ok(menu.includes(`<time datetime="${iso}">${date}</time>`));
+    assert.ok(detail.includes(`"uploadDate":"${iso}"`));
+  }
+  let dates = 0;
+  for (const [file, { html }] of pages) {
+    for (const [, iso, label] of html.matchAll(/<time datetime="([^"]+)">([^<]+)<\/time>/gu)) {
+      dates += 1;
+      assert.ok(Number.isFinite(Date.parse(iso)), file);
+      assert.ok(!/Europe\/Berlin|\b(?:UTC|MEZ|MESZ|GMT|CET|CEST)\b|[+-]\d{2}:?\d{2}|\dZ\b|Uhr/u.test(label), `${file}: ${label}`);
+    }
+  }
+  assert.ok(dates > 0);
 });
 
 test("zeigt auf der Startseite korrekte Statistik statt neuer Videos und zählt Heftausgaben nur einmal", () => {
@@ -200,12 +242,14 @@ test("lädt vor Aktivierung keinen YouTube-Player und dokumentiert den aktuellen
   assert.ok(!/<iframe[^>]*\ssrc="/u.test(html));
   assert.ok(html.includes('srcdoc="'));
   assert.ok(html.includes('name="issue-player"'));
-  assert.ok(html.includes('target="issue-player"'));
+  assert.ok(html.includes('name="issue-player"'));
   assert.ok(html.includes('data-player-reset hidden'));
-  assert.ok(html.includes('data-player-activate'));
+  assert.ok(html.includes('data-video-widget'));
   assert.ok(html.includes('data-player-notice role="status" hidden'));
   assert.ok(html.includes('data-player-url="https://www.youtube-nocookie.com/embed/b0000000000"'));
-  assert.ok(html.includes('Vorschaubild von YouTube · Player erst nach Aktivierung. <a href="#datenschutzhinweis">Datenschutzhinweise</a>'));
+  assert.ok(html.includes('Vorschaubild von YouTube · Player erst nach Aktivierung.'));
+  assert.ok(!html.includes('href="#datenschutzhinweis"'));
+  assert.ok(html.match(/<footer[\s\S]*?<\/footer>/u)[0].includes(">YouTube-Einbindung und Datenschutz</a>"));
   assert.equal((html.match(/<iframe /gu) ?? []).length, 1);
   assert.equal((html.match(/data-video-panel /gu) ?? []).length, 2);
   assert.ok(html.includes("keine Beschreibung vorhanden"));

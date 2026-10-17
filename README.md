@@ -62,4 +62,5 @@ Website: https://mrchristianharms-byte.github.io/prettyOldPixel/
 ## Weiterführende Dokumentation
 
 [Funktionen, Datenformate und weitere Befehle](doc/README.md) ·
+[Neue Videos, Titel und fehlende Metadaten](doc/README.md#recherchierte-daten-pflegen) ·
 [Architekturentscheidungen](doc/adr/)
