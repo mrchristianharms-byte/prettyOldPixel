@@ -1,0 +1,730 @@
+{
+  "source": "https://reetroz.com/catalog",
+  "fetchedAt": "2026-10-16T22:47:42.377Z",
+  "magazines": [
+    {
+      "name": "3DO Club News",
+      "slug": "3do-club-news",
+      "aliases": [
+        "3DO Club News"
+      ],
+      "url": "https://reetroz.com/magazines/3do-club-news"
+    },
+    {
+      "name": "@Gamer",
+      "slug": "atgamer",
+      "aliases": [
+        "@Gamer"
+      ],
+      "url": "https://reetroz.com/magazines/atgamer"
+    },
+    {
+      "name": "Activisions",
+      "slug": "activisions",
+      "aliases": [
+        "Activisions"
+      ],
+      "url": "https://reetroz.com/magazines/activisions"
+    },
+    {
+      "name": "Arcade Express / Electronic Games Hotline",
+      "slug": "arcade-express",
+      "aliases": [
+        "Arcade Express",
+        "Electronic Games Hotline"
+      ],
+      "url": "https://reetroz.com/magazines/arcade-express"
+    },
+    {
+      "name": "Atari Age",
+      "slug": "atari-age",
+      "aliases": [
+        "Atari Age"
+      ],
+      "url": "https://reetroz.com/magazines/atari-age"
+    },
+    {
+      "name": "Blip",
+      "slug": "blip",
+      "aliases": [
+        "Blip"
+      ],
+      "url": "https://reetroz.com/magazines/blip"
+    },
+    {
+      "name": "CD-ROM Today",
+      "slug": "cd-rom-today",
+      "aliases": [
+        "CD-ROM Today"
+      ],
+      "url": "https://reetroz.com/magazines/cd-rom-today"
+    },
+    {
+      "name": "Casual Connect",
+      "slug": "casual-connect",
+      "aliases": [
+        "Casual Connect"
+      ],
+      "url": "https://reetroz.com/magazines/casual-connect"
+    },
+    {
+      "name": "Code Vault",
+      "slug": "code-vault",
+      "aliases": [
+        "Code Vault"
+      ],
+      "url": "https://reetroz.com/magazines/code-vault"
+    },
+    {
+      "name": "Computer Entertainer",
+      "slug": "computer-entertainer",
+      "aliases": [
+        "Computer Entertainer"
+      ],
+      "url": "https://reetroz.com/magazines/computer-entertainer"
+    },
+    {
+      "name": "Computer Game Entertainment",
+      "slug": "computer-game-entertainment",
+      "aliases": [
+        "Computer Game Entertainment"
+      ],
+      "url": "https://reetroz.com/magazines/computer-game-entertainment"
+    },
+    {
+      "name": "Computer Game Review",
+      "slug": "computer-game-review",
+      "aliases": [
+        "Computer Game Review"
+      ],
+      "url": "https://reetroz.com/magazines/computer-game-review"
+    },
+    {
+      "name": "Computer Games Strategy Plus",
+      "slug": "computer-games-strategy-plus",
+      "aliases": [
+        "Computer Games Strategy Plus"
+      ],
+      "url": "https://reetroz.com/magazines/computer-games-strategy-plus"
+    },
+    {
+      "name": "Computer Gaming World",
+      "slug": "cgw",
+      "aliases": [
+        "Computer Gaming World"
+      ],
+      "url": "https://reetroz.com/magazines/cgw"
+    },
+    {
+      "name": "Computer Player",
+      "slug": "computer-player",
+      "aliases": [
+        "Computer Player"
+      ],
+      "url": "https://reetroz.com/magazines/computer-player"
+    },
+    {
+      "name": "Develop",
+      "slug": "develop",
+      "aliases": [
+        "Develop"
+      ],
+      "url": "https://reetroz.com/magazines/develop"
+    },
+    {
+      "name": "DieHard GameFan",
+      "slug": "diehard-gamefan",
+      "aliases": [
+        "DieHard GameFan"
+      ],
+      "url": "https://reetroz.com/magazines/diehard-gamefan"
+    },
+    {
+      "name": "Digital Diner",
+      "slug": "digital-diner",
+      "aliases": [
+        "Digital Diner"
+      ],
+      "url": "https://reetroz.com/magazines/digital-diner"
+    },
+    {
+      "name": "E3 Show Daily",
+      "slug": "e3-show-daily",
+      "aliases": [
+        "E3 Show Daily"
+      ],
+      "url": "https://reetroz.com/magazines/e3-show-daily"
+    },
+    {
+      "name": "EGM2 / Expert Gamer / GameNOW",
+      "slug": "egm2",
+      "aliases": [
+        "EGM2",
+        "Expert Gamer",
+        "GameNOW"
+      ],
+      "url": "https://reetroz.com/magazines/egm2"
+    },
+    {
+      "name": "Edge",
+      "slug": "edge",
+      "aliases": [
+        "Edge"
+      ],
+      "url": "https://reetroz.com/magazines/edge"
+    },
+    {
+      "name": "Electronic Fun with Computers & Games",
+      "slug": "electronic-fun-with-computers-and-games",
+      "aliases": [
+        "Electronic Fun with Computers & Games"
+      ],
+      "url": "https://reetroz.com/magazines/electronic-fun-with-computers-and-games"
+    },
+    {
+      "name": "Electronic Games",
+      "slug": "electronic-games",
+      "aliases": [
+        "Electronic Games"
+      ],
+      "url": "https://reetroz.com/magazines/electronic-games"
+    },
+    {
+      "name": "Electronic Gaming Monthly",
+      "slug": "electronic-gaming-monthly",
+      "aliases": [
+        "Electronic Gaming Monthly"
+      ],
+      "url": "https://reetroz.com/magazines/electronic-gaming-monthly"
+    },
+    {
+      "name": "Electronic Gaming Retail News",
+      "slug": "electronic-gaming-retail-news",
+      "aliases": [
+        "Electronic Gaming Retail News"
+      ],
+      "url": "https://reetroz.com/magazines/electronic-gaming-retail-news"
+    },
+    {
+      "name": "Future Play",
+      "slug": "future-play",
+      "aliases": [
+        "Future Play"
+      ],
+      "url": "https://reetroz.com/magazines/future-play"
+    },
+    {
+      "name": "GMR",
+      "slug": "gmr",
+      "aliases": [
+        "GMR"
+      ],
+      "url": "https://reetroz.com/magazines/gmr"
+    },
+    {
+      "name": "Game Developer",
+      "slug": "game-developer",
+      "aliases": [
+        "Game Developer"
+      ],
+      "url": "https://reetroz.com/magazines/game-developer"
+    },
+    {
+      "name": "Game Informer",
+      "slug": "game-informer",
+      "aliases": [
+        "Game Informer"
+      ],
+      "url": "https://reetroz.com/magazines/game-informer"
+    },
+    {
+      "name": "Game Intelligence Magazine",
+      "slug": "game-intelligence-magazine",
+      "aliases": [
+        "Game Intelligence Magazine"
+      ],
+      "url": "https://reetroz.com/magazines/game-intelligence-magazine"
+    },
+    {
+      "name": "Game On! USA",
+      "slug": "game-on-usa",
+      "aliases": [
+        "Game On! USA"
+      ],
+      "url": "https://reetroz.com/magazines/game-on-usa"
+    },
+    {
+      "name": "Game Players",
+      "slug": "game-players",
+      "aliases": [
+        "Game Players"
+      ],
+      "url": "https://reetroz.com/magazines/game-players"
+    },
+    {
+      "name": "Game-specific promotional magazines, assorted",
+      "slug": "game-specific-promotional-magazines-assorted",
+      "aliases": [
+        "Game-specific promotional magazines, assorted"
+      ],
+      "url": "https://reetroz.com/magazines/game-specific-promotional-magazines-assorted"
+    },
+    {
+      "name": "GamePro",
+      "slug": "gamepro",
+      "aliases": [
+        "GamePro"
+      ],
+      "url": "https://reetroz.com/magazines/gamepro"
+    },
+    {
+      "name": "GameSport",
+      "slug": "gamesport",
+      "aliases": [
+        "GameSport"
+      ],
+      "url": "https://reetroz.com/magazines/gamesport"
+    },
+    {
+      "name": "GameWeek / IE Magazine",
+      "slug": "gameweek-iemagazine",
+      "aliases": [
+        "GameWeek",
+        "IE Magazine"
+      ],
+      "url": "https://reetroz.com/magazines/gameweek-iemagazine"
+    },
+    {
+      "name": "Games Business",
+      "slug": "games-business",
+      "aliases": [
+        "Games Business"
+      ],
+      "url": "https://reetroz.com/magazines/games-business"
+    },
+    {
+      "name": "Girl Gamer",
+      "slug": "girl-gamer",
+      "aliases": [
+        "Girl Gamer"
+      ],
+      "url": "https://reetroz.com/magazines/girl-gamer"
+    },
+    {
+      "name": "Hardcore Gamer",
+      "slug": "hardcore-gamer",
+      "aliases": [
+        "Hardcore Gamer"
+      ],
+      "url": "https://reetroz.com/magazines/hardcore-gamer"
+    },
+    {
+      "name": "Hyper",
+      "slug": "hyper",
+      "aliases": [
+        "Hyper"
+      ],
+      "url": "https://reetroz.com/magazines/hyper"
+    },
+    {
+      "name": "IGN magazines",
+      "slug": "ign-magazines",
+      "aliases": [
+        "IGN magazines"
+      ],
+      "url": "https://reetroz.com/magazines/ign-magazines"
+    },
+    {
+      "name": "Imagine Town Magazine / Game Candy",
+      "slug": "imagine-town",
+      "aliases": [
+        "Imagine Town Magazine",
+        "Game Candy"
+      ],
+      "url": "https://reetroz.com/magazines/imagine-town"
+    },
+    {
+      "name": "Incite Video Gaming / Incite PC Gaming",
+      "slug": "incite",
+      "aliases": [
+        "Incite Video Gaming",
+        "Incite PC Gaming"
+      ],
+      "url": "https://reetroz.com/magazines/incite"
+    },
+    {
+      "name": "InterAction / Sierra News Magazine",
+      "slug": "interaction",
+      "aliases": [
+        "InterAction",
+        "Sierra News Magazine"
+      ],
+      "url": "https://reetroz.com/magazines/interaction"
+    },
+    {
+      "name": "Internet Underground",
+      "slug": "internet-underground",
+      "aliases": [
+        "Internet Underground"
+      ],
+      "url": "https://reetroz.com/magazines/internet-underground"
+    },
+    {
+      "name": "Lifestyle magazines, assorted",
+      "slug": "lifestyle-magazines-assorted",
+      "aliases": [
+        "Lifestyle magazines, assorted"
+      ],
+      "url": "https://reetroz.com/magazines/lifestyle-magazines-assorted"
+    },
+    {
+      "name": "MCV",
+      "slug": "mcv",
+      "aliases": [
+        "MCV"
+      ],
+      "url": "https://reetroz.com/magazines/mcv"
+    },
+    {
+      "name": "Mean Machines Sega",
+      "slug": "mean-machines-sega",
+      "aliases": [
+        "Mean Machines Sega"
+      ],
+      "url": "https://reetroz.com/magazines/mean-machines-sega"
+    },
+    {
+      "name": "Mega",
+      "slug": "mega",
+      "aliases": [
+        "Mega"
+      ],
+      "url": "https://reetroz.com/magazines/mega"
+    },
+    {
+      "name": "MegaTech",
+      "slug": "megatech",
+      "aliases": [
+        "MegaTech"
+      ],
+      "url": "https://reetroz.com/magazines/megatech"
+    },
+    {
+      "name": "MultiMedia Merchandising",
+      "slug": "multimedia-merchandising",
+      "aliases": [
+        "MultiMedia Merchandising"
+      ],
+      "url": "https://reetroz.com/magazines/multimedia-merchandising"
+    },
+    {
+      "name": "Multimedia World",
+      "slug": "multimedia-world",
+      "aliases": [
+        "Multimedia World"
+      ],
+      "url": "https://reetroz.com/magazines/multimedia-world"
+    },
+    {
+      "name": "NGamer (US)",
+      "slug": "ngamer-us",
+      "aliases": [
+        "NGamer (US)"
+      ],
+      "url": "https://reetroz.com/magazines/ngamer-us"
+    },
+    {
+      "name": "Neopets The Official Magazine",
+      "slug": "neopets-magazine",
+      "aliases": [
+        "Neopets The Official Magazine"
+      ],
+      "url": "https://reetroz.com/magazines/neopets-magazine"
+    },
+    {
+      "name": "New Earth",
+      "slug": "new-earth",
+      "aliases": [
+        "New Earth"
+      ],
+      "url": "https://reetroz.com/magazines/new-earth"
+    },
+    {
+      "name": "NewMedia",
+      "slug": "newmedia",
+      "aliases": [
+        "NewMedia"
+      ],
+      "url": "https://reetroz.com/magazines/newmedia"
+    },
+    {
+      "name": "Next Generation / NextGen",
+      "slug": "next-generation",
+      "aliases": [
+        "Next Generation",
+        "NextGen"
+      ],
+      "url": "https://reetroz.com/magazines/next-generation"
+    },
+    {
+      "name": "Nintendo Power",
+      "slug": "nintendo-power",
+      "aliases": [
+        "Nintendo Power"
+      ],
+      "url": "https://reetroz.com/magazines/nintendo-power"
+    },
+    {
+      "name": "Nintendo newsletters",
+      "slug": "nintendo-newsletters",
+      "aliases": [
+        "Nintendo newsletters"
+      ],
+      "url": "https://reetroz.com/magazines/nintendo-newsletters"
+    },
+    {
+      "name": "Odyssey Adventure",
+      "slug": "odyssey-adventure",
+      "aliases": [
+        "Odyssey Adventure"
+      ],
+      "url": "https://reetroz.com/magazines/odyssey-adventure"
+    },
+    {
+      "name": "Official Sega Dreamcast Magazine (US)",
+      "slug": "official-dreamcast-magazine-us",
+      "aliases": [
+        "Official Sega Dreamcast Magazine (US)"
+      ],
+      "url": "https://reetroz.com/magazines/official-dreamcast-magazine-us"
+    },
+    {
+      "name": "Official U.S. PlayStation Magazine",
+      "slug": "official-us-playstation-magazine",
+      "aliases": [
+        "Official U.S. PlayStation Magazine"
+      ],
+      "url": "https://reetroz.com/magazines/official-us-playstation-magazine"
+    },
+    {
+      "name": "Official Xbox Magazine",
+      "slug": "official-xbox-magazine",
+      "aliases": [
+        "Official Xbox Magazine"
+      ],
+      "url": "https://reetroz.com/magazines/official-xbox-magazine"
+    },
+    {
+      "name": "P.S.X.",
+      "slug": "psx",
+      "aliases": [
+        "P.S.X."
+      ],
+      "url": "https://reetroz.com/magazines/psx"
+    },
+    {
+      "name": "PC Gamer (US)",
+      "slug": "pc-gamer-us",
+      "aliases": [
+        "PC Gamer (US)"
+      ],
+      "url": "https://reetroz.com/magazines/pc-gamer-us"
+    },
+    {
+      "name": "PC Games / Electronic Entertainment",
+      "slug": "pc-games",
+      "aliases": [
+        "PC Games",
+        "Electronic Entertainment"
+      ],
+      "url": "https://reetroz.com/magazines/pc-games"
+    },
+    {
+      "name": "PS Max",
+      "slug": "ps-max",
+      "aliases": [
+        "PS Max"
+      ],
+      "url": "https://reetroz.com/magazines/ps-max"
+    },
+    {
+      "name": "PSExtreme / Dimension PS-X / PSE2",
+      "slug": "psextreme",
+      "aliases": [
+        "PSExtreme",
+        "Dimension PS-X",
+        "PSE2"
+      ],
+      "url": "https://reetroz.com/magazines/psextreme"
+    },
+    {
+      "name": "PSM",
+      "slug": "psm",
+      "aliases": [
+        "PSM"
+      ],
+      "url": "https://reetroz.com/magazines/psm"
+    },
+    {
+      "name": "Play (US)",
+      "slug": "play-us",
+      "aliases": [
+        "Play (US)"
+      ],
+      "url": "https://reetroz.com/magazines/play-us"
+    },
+    {
+      "name": "PlayStation: The Official Magazine",
+      "slug": "playstation-the-official-magazine",
+      "aliases": [
+        "PlayStation: The Official Magazine"
+      ],
+      "url": "https://reetroz.com/magazines/playstation-the-official-magazine"
+    },
+    {
+      "name": "Pocket Games",
+      "slug": "pocket-games",
+      "aliases": [
+        "Pocket Games"
+      ],
+      "url": "https://reetroz.com/magazines/pocket-games"
+    },
+    {
+      "name": "Q64",
+      "slug": "q64",
+      "aliases": [
+        "Q64"
+      ],
+      "url": "https://reetroz.com/magazines/q64"
+    },
+    {
+      "name": "SOE Worlds: The Official Magazine",
+      "slug": "soe-worlds",
+      "aliases": [
+        "SOE Worlds: The Official Magazine"
+      ],
+      "url": "https://reetroz.com/magazines/soe-worlds"
+    },
+    {
+      "name": "Sega Visions",
+      "slug": "sega-visions",
+      "aliases": [
+        "Sega Visions"
+      ],
+      "url": "https://reetroz.com/magazines/sega-visions"
+    },
+    {
+      "name": "Super Play",
+      "slug": "super-play",
+      "aliases": [
+        "Super Play"
+      ],
+      "url": "https://reetroz.com/magazines/super-play"
+    },
+    {
+      "name": "Surge",
+      "slug": "surge",
+      "aliases": [
+        "Surge"
+      ],
+      "url": "https://reetroz.com/magazines/surge"
+    },
+    {
+      "name": "The Cursor: Game Developer Life",
+      "slug": "the-cursor",
+      "aliases": [
+        "The Cursor: Game Developer Life"
+      ],
+      "url": "https://reetroz.com/magazines/the-cursor"
+    },
+    {
+      "name": "The Journal of Computer Game Design",
+      "slug": "journal-of-computer-game-design",
+      "aliases": [
+        "The Journal of Computer Game Design"
+      ],
+      "url": "https://reetroz.com/magazines/journal-of-computer-game-design"
+    },
+    {
+      "name": "The Logical Gamer",
+      "slug": "the-logical-gamer",
+      "aliases": [
+        "The Logical Gamer"
+      ],
+      "url": "https://reetroz.com/magazines/the-logical-gamer"
+    },
+    {
+      "name": "Tips & Tricks",
+      "slug": "tips-and-tricks",
+      "aliases": [
+        "Tips & Tricks"
+      ],
+      "url": "https://reetroz.com/magazines/tips-and-tricks"
+    },
+    {
+      "name": "Total!",
+      "slug": "total",
+      "aliases": [
+        "Total!"
+      ],
+      "url": "https://reetroz.com/magazines/total"
+    },
+    {
+      "name": "Video Games",
+      "slug": "video-games-magazine",
+      "aliases": [
+        "Video Games"
+      ],
+      "url": "https://reetroz.com/magazines/video-games-magazine"
+    },
+    {
+      "name": "VideoGames & Computer Entertainment / VideoGames: The Ultimate Gaming Magazine",
+      "slug": "videogames-computer-entertainment",
+      "aliases": [
+        "VideoGames & Computer Entertainment",
+        "VideoGames: The Ultimate Gaming Magazine"
+      ],
+      "url": "https://reetroz.com/magazines/videogames-computer-entertainment"
+    },
+    {
+      "name": "Videogame Advisor",
+      "slug": "videogame-advisor",
+      "aliases": [
+        "Videogame Advisor"
+      ],
+      "url": "https://reetroz.com/magazines/videogame-advisor"
+    },
+    {
+      "name": "Videogaming & Computergaming Illustrated",
+      "slug": "videogaming-illustrated",
+      "aliases": [
+        "Videogaming & Computergaming Illustrated"
+      ],
+      "url": "https://reetroz.com/magazines/videogaming-illustrated"
+    },
+    {
+      "name": "Vidiot",
+      "slug": "vidiot",
+      "aliases": [
+        "Vidiot"
+      ],
+      "url": "https://reetroz.com/magazines/vidiot"
+    },
+    {
+      "name": "Walmart GameCenter",
+      "slug": "walmart-gamecenter",
+      "aliases": [
+        "Walmart GameCenter"
+      ],
+      "url": "https://reetroz.com/magazines/walmart-gamecenter"
+    },
+    {
+      "name": "Xbox Nation",
+      "slug": "xbox-nation",
+      "aliases": [
+        "Xbox Nation"
+      ],
+      "url": "https://reetroz.com/magazines/xbox-nation"
+    }
+  ]
+}

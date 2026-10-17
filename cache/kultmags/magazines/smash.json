@@ -1,0 +1,64 @@
+{
+  "name": "Smash",
+  "url": "https://www.kultmags.com/mags.php?folder=U21hc2g%3D",
+  "fetchedAt": "2026-10-16T22:46:40.364Z",
+  "sections": [
+    {
+      "name": null,
+      "url": "https://www.kultmags.com/mags.php?folder=U21hc2g%3D"
+    }
+  ],
+  "issues": [
+    {
+      "title": "Smash 1989-02",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "year": 1989,
+      "numbers": [
+        2
+      ],
+      "words": [
+        "smash"
+      ],
+      "pageUrl": "https://www.kultmags.com/mags.php?folder=U21hc2g%3D",
+      "downloadUrl": "https://www.kultmags.com/Smash/Smash%201989-02.rar",
+      "readerUrl": null,
+      "coverUrl": "https://www.kultmags.com/Smash/Smash%201989-02.rar.jpg"
+    },
+    {
+      "title": "Smash 1989-03",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "year": 1989,
+      "numbers": [
+        3
+      ],
+      "words": [
+        "smash"
+      ],
+      "pageUrl": "https://www.kultmags.com/mags.php?folder=U21hc2g%3D",
+      "downloadUrl": "https://www.kultmags.com/Smash/Smash%201989-03.rar",
+      "readerUrl": null,
+      "coverUrl": "https://www.kultmags.com/Smash/Smash%201989-03.rar.jpg"
+    },
+    {
+      "title": "Smash 1989-04",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "year": 1989,
+      "numbers": [
+        4
+      ],
+      "words": [
+        "smash"
+      ],
+      "pageUrl": "https://www.kultmags.com/mags.php?folder=U21hc2g%3D",
+      "downloadUrl": "https://www.kultmags.com/Smash/Smash%201989-04.rar",
+      "readerUrl": null,
+      "coverUrl": "https://www.kultmags.com/Smash/Smash%201989-04.rar.jpg"
+    }
+  ]
+}

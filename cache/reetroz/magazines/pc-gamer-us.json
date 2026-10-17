@@ -1,0 +1,3309 @@
+{
+  "name": "PC Gamer (US)",
+  "url": "https://reetroz.com/magazines/pc-gamer-us",
+  "fetchedAt": "2026-10-16T22:47:42.377Z",
+  "sections": [
+    {
+      "name": null,
+      "url": "https://reetroz.com/magazines/pc-gamer-us"
+    }
+  ],
+  "issues": [
+    {
+      "title": "PC Gamer (US) #1 (May/June 1994)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "1",
+      "date": "May/June 1994",
+      "year": 1994,
+      "numbers": [
+        5,
+        6
+      ],
+      "pages": 124,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-1-6",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-1-6",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-1-6.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #2 (July 1994)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "2",
+      "date": "July 1994",
+      "year": 1994,
+      "numbers": [
+        7
+      ],
+      "pages": 124,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-2-6",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-2-6",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-2-6.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #3 (August 1994)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "3",
+      "date": "August 1994",
+      "year": 1994,
+      "numbers": [
+        8
+      ],
+      "pages": 110,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-3-4",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-3-4",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-3-4.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #4 (September 1994)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "4",
+      "date": "September 1994",
+      "year": 1994,
+      "numbers": [
+        9
+      ],
+      "pages": 128,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-4-5",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-4-5",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-4-5.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #5 (October 1994)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "5",
+      "date": "October 1994",
+      "year": 1994,
+      "numbers": [
+        10
+      ],
+      "pages": 124,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-5-5",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-5-5",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-5-5.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #6 (November 1994)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "6",
+      "date": "November 1994",
+      "year": 1994,
+      "numbers": [
+        11
+      ],
+      "pages": 156,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-6-6",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-6-6",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-6-6.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #7 (December 1994)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "7",
+      "date": "December 1994",
+      "year": 1994,
+      "numbers": [
+        12
+      ],
+      "pages": 204,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-7-5",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-7-5",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-7-5.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #1 (January 1995)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "1",
+      "date": "January 1995",
+      "year": 1995,
+      "numbers": [
+        1
+      ],
+      "pages": 190,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-1-7",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-1-7",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-1-7.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #2 (February 1995)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "2",
+      "date": "February 1995",
+      "year": 1995,
+      "numbers": [
+        2
+      ],
+      "pages": 158,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-2-7",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-2-7",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-2-7.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #3 (March 1995)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "3",
+      "date": "March 1995",
+      "year": 1995,
+      "numbers": [
+        3
+      ],
+      "pages": 156,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-3-5",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-3-5",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-3-5.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #4 (April 1995)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "4",
+      "date": "April 1995",
+      "year": 1995,
+      "numbers": [
+        4
+      ],
+      "pages": 150,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-4-6",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-4-6",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-4-6.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #5 (May 1995)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "5",
+      "date": "May 1995",
+      "year": 1995,
+      "numbers": [
+        5
+      ],
+      "pages": 174,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-5-6",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-5-6",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-5-6.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #6 (June 1995)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "6",
+      "date": "June 1995",
+      "year": 1995,
+      "numbers": [
+        6
+      ],
+      "pages": 172,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-6-7",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-6-7",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-6-7.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #7 (July 1995)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "7",
+      "date": "July 1995",
+      "year": 1995,
+      "numbers": [
+        7
+      ],
+      "pages": 164,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-7-6",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-7-6",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-7-6.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #8 (August 1995)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "8",
+      "date": "August 1995",
+      "year": 1995,
+      "numbers": [
+        8
+      ],
+      "pages": 148,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-8-7",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-8-7",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-8-7.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #9 (September 1995)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "9",
+      "date": "September 1995",
+      "year": 1995,
+      "numbers": [
+        9
+      ],
+      "pages": 164,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-9-6",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-9-6",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-9-6.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #10 (October 1995)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "10",
+      "date": "October 1995",
+      "year": 1995,
+      "numbers": [
+        10
+      ],
+      "pages": 172,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-10-6",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-10-6",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-10-6.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #11 (November 1995)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "11",
+      "date": "November 1995",
+      "year": 1995,
+      "numbers": [
+        11
+      ],
+      "pages": 244,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-11-7",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-11-7",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-11-7.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #12 (December 1995)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "12",
+      "date": "December 1995",
+      "year": 1995,
+      "numbers": [
+        12
+      ],
+      "pages": 334,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-12-7",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-12-7",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-12-7.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #1 (January 1996)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "1",
+      "date": "January 1996",
+      "year": 1996,
+      "numbers": [
+        1
+      ],
+      "pages": 270,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-1-8",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-1-8",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-1-8.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #2 (February 1996)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "2",
+      "date": "February 1996",
+      "year": 1996,
+      "numbers": [
+        2
+      ],
+      "pages": 209,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-2-8",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-2-8",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-2-8.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #3 (March 1996)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "3",
+      "date": "March 1996",
+      "year": 1996,
+      "numbers": [
+        3
+      ],
+      "pages": 190,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-3-6",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-3-6",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-3-6.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #4 (April 1996)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "4",
+      "date": "April 1996",
+      "year": 1996,
+      "numbers": [
+        4
+      ],
+      "pages": 190,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-4-7",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-4-7",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-4-7.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #5 (May 1996)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "5",
+      "date": "May 1996",
+      "year": 1996,
+      "numbers": [
+        5
+      ],
+      "pages": 190,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-5-7",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-5-7",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-5-7.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #6 (June 1996)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "6",
+      "date": "June 1996",
+      "year": 1996,
+      "numbers": [
+        6
+      ],
+      "pages": 198,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-6-8",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-6-8",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-6-8.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #7 (July 1996)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "7",
+      "date": "July 1996",
+      "year": 1996,
+      "numbers": [
+        7
+      ],
+      "pages": 166,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-7-7",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-7-7",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-7-7.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #8 (August 1996)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "8",
+      "date": "August 1996",
+      "year": 1996,
+      "numbers": [
+        8
+      ],
+      "pages": 174,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-8-8",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-8-8",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-8-8.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #9 (September 1996)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "9",
+      "date": "September 1996",
+      "year": 1996,
+      "numbers": [
+        9
+      ],
+      "pages": 200,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-9-7",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-9-7",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-9-7.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #10 (October 1996)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "10",
+      "date": "October 1996",
+      "year": 1996,
+      "numbers": [
+        10
+      ],
+      "pages": 258,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-10-7",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-10-7",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-10-7.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #11 (November 1996)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "11",
+      "date": "November 1996",
+      "year": 1996,
+      "numbers": [
+        11
+      ],
+      "pages": 349,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-11-8",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-11-8",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-11-8.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #12 (December 1996)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "12",
+      "date": "December 1996",
+      "year": 1996,
+      "numbers": [
+        12
+      ],
+      "pages": 455,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-12-8",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-12-8",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-12-8.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #1 (January 1997)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "1",
+      "date": "January 1997",
+      "year": 1997,
+      "numbers": [
+        1
+      ],
+      "pages": 318,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-1-9",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-1-9",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-1-9.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #2 (February 1997)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "2",
+      "date": "February 1997",
+      "year": 1997,
+      "numbers": [
+        2
+      ],
+      "pages": 254,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-2-9",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-2-9",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-2-9.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #3 (March 1997)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "3",
+      "date": "March 1997",
+      "year": 1997,
+      "numbers": [
+        3
+      ],
+      "pages": 240,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-3-7",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-3-7",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-3-7.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #4 (April 1997)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "4",
+      "date": "April 1997",
+      "year": 1997,
+      "numbers": [
+        4
+      ],
+      "pages": 228,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-4-8",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-4-8",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-4-8.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #5 (May 1997)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "5",
+      "date": "May 1997",
+      "year": 1997,
+      "numbers": [
+        5
+      ],
+      "pages": 226,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-5-8",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-5-8",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-5-8.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #6 (June 1997)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "6",
+      "date": "June 1997",
+      "year": 1997,
+      "numbers": [
+        6
+      ],
+      "pages": 222,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-6-9",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-6-9",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-6-9.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #7 (July 1997)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "7",
+      "date": "July 1997",
+      "year": 1997,
+      "numbers": [
+        7
+      ],
+      "pages": 292,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-7-8",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-7-8",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-7-8.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #8 (August 1997)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "8",
+      "date": "August 1997",
+      "year": 1997,
+      "numbers": [
+        8
+      ],
+      "pages": 226,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-8-9",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-8-9",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-8-9.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #9 (September 1997)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "9",
+      "date": "September 1997",
+      "year": 1997,
+      "numbers": [
+        9
+      ],
+      "pages": 298,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-9-8",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-9-8",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-9-8.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #12 (December 1997)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "12",
+      "date": "December 1997",
+      "year": 1997,
+      "numbers": [
+        12
+      ],
+      "pages": 469,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-12-9",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-12-9",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-12-9.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #1 (January 1998)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "1",
+      "date": "January 1998",
+      "year": 1998,
+      "numbers": [
+        1
+      ],
+      "pages": 393,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-1-10",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-1-10",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-1-10.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #2 (February 1998)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "2",
+      "date": "February 1998",
+      "year": 1998,
+      "numbers": [
+        2
+      ],
+      "pages": 281,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-2-10",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-2-10",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-2-10.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #3 (March 1998)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "3",
+      "date": "March 1998",
+      "year": 1998,
+      "numbers": [
+        3
+      ],
+      "pages": 246,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-3-8",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-3-8",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-3-8.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #4 (April 1998)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "4",
+      "date": "April 1998",
+      "year": 1998,
+      "numbers": [
+        4
+      ],
+      "pages": 260,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-4-9",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-4-9",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-4-9.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #5 (May 1998)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "5",
+      "date": "May 1998",
+      "year": 1998,
+      "numbers": [
+        5
+      ],
+      "pages": 246,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-5-9",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-5-9",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-5-9.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #6 (June 1998)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "6",
+      "date": "June 1998",
+      "year": 1998,
+      "numbers": [
+        6
+      ],
+      "pages": 252,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-6-10",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-6-10",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-6-10.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #7 (July 1998)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "7",
+      "date": "July 1998",
+      "year": 1998,
+      "numbers": [
+        7
+      ],
+      "pages": 268,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-7-9",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-7-9",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-7-9.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #8 (August 1998)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "8",
+      "date": "August 1998",
+      "year": 1998,
+      "numbers": [
+        8
+      ],
+      "pages": 260,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-8-10",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-8-10",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-8-10.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #9 (September 1998)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "9",
+      "date": "September 1998",
+      "year": 1998,
+      "numbers": [
+        9
+      ],
+      "pages": 312,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-9-9",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-9-9",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-9-9.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #10 (October 1998)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "10",
+      "date": "October 1998",
+      "year": 1998,
+      "numbers": [
+        10
+      ],
+      "pages": 377,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-10-8",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-10-8",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-10-8.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #12 (December 1998)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "12",
+      "date": "December 1998",
+      "year": 1998,
+      "numbers": [
+        12
+      ],
+      "pages": 452,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-12-10",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-12-10",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-12-10.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #1 (January 1999)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "1",
+      "date": "January 1999",
+      "year": 1999,
+      "numbers": [
+        1
+      ],
+      "pages": 372,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-1-11",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-1-11",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-1-11.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #2 (February 1999)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "2",
+      "date": "February 1999",
+      "year": 1999,
+      "numbers": [
+        2
+      ],
+      "pages": 288,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-2-11",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-2-11",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-2-11.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #3 (March 1999)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "3",
+      "date": "March 1999",
+      "year": 1999,
+      "numbers": [
+        3
+      ],
+      "pages": 224,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-3-9",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-3-9",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-3-9.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #4 (April 1999)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "4",
+      "date": "April 1999",
+      "year": 1999,
+      "numbers": [
+        4
+      ],
+      "pages": 236,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-4-10",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-4-10",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-4-10.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #5 (May 1999)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "5",
+      "date": "May 1999",
+      "year": 1999,
+      "numbers": [
+        5
+      ],
+      "pages": 230,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-5-10",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-5-10",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-5-10.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #6 (June 1999)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "6",
+      "date": "June 1999",
+      "year": 1999,
+      "numbers": [
+        6
+      ],
+      "pages": 216,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-6-11",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-6-11",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-6-11.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #7 (July 1999)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "7",
+      "date": "July 1999",
+      "year": 1999,
+      "numbers": [
+        7
+      ],
+      "pages": 200,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-7-10",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-7-10",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-7-10.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #8 (August 1999)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "8",
+      "date": "August 1999",
+      "year": 1999,
+      "numbers": [
+        8
+      ],
+      "pages": 198,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-8-11",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-8-11",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-8-11.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #9 (September 1999)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "9",
+      "date": "September 1999",
+      "year": 1999,
+      "numbers": [
+        9
+      ],
+      "pages": 218,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-9-10",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-9-10",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-9-10.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #10 (October 1999)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "10",
+      "date": "October 1999",
+      "year": 1999,
+      "numbers": [
+        10
+      ],
+      "pages": 290,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-10-9",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-10-9",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-10-9.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #11 (November 1999)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "11",
+      "date": "November 1999",
+      "year": 1999,
+      "numbers": [
+        11
+      ],
+      "pages": 300,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-11-9",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-11-9",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-11-9.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #12 (December 1999)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "12",
+      "date": "December 1999",
+      "year": 1999,
+      "numbers": [
+        12
+      ],
+      "pages": 276,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-12-11",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-12-11",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-12-11.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #1 (2000)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "1",
+      "date": "2000",
+      "year": 2000,
+      "numbers": [],
+      "pages": 100,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-1-12",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-1-12",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-1-12.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #1 (January 2000)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "1",
+      "date": "January 2000",
+      "year": 2000,
+      "numbers": [
+        1
+      ],
+      "pages": 276,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-1-13",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-1-13",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-1-13.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #2 (February 2000)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "2",
+      "date": "February 2000",
+      "year": 2000,
+      "numbers": [
+        2
+      ],
+      "pages": 210,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-2-12",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-2-12",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-2-12.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #3 (March 2000)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "3",
+      "date": "March 2000",
+      "year": 2000,
+      "numbers": [
+        3
+      ],
+      "pages": 195,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-3-10",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-3-10",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-3-10.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #4 (April 2000)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "4",
+      "date": "April 2000",
+      "year": 2000,
+      "numbers": [
+        4
+      ],
+      "pages": 185,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-4-11",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-4-11",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-4-11.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #5 (May 2000)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "5",
+      "date": "May 2000",
+      "year": 2000,
+      "numbers": [
+        5
+      ],
+      "pages": 166,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-5-11",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-5-11",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-5-11.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #6 (June 2000)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "6",
+      "date": "June 2000",
+      "year": 2000,
+      "numbers": [
+        6
+      ],
+      "pages": 168,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-6-12",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-6-12",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-6-12.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #7 (July 2000)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "7",
+      "date": "July 2000",
+      "year": 2000,
+      "numbers": [
+        7
+      ],
+      "pages": 166,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-7-11",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-7-11",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-7-11.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #8 (August 2000)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "8",
+      "date": "August 2000",
+      "year": 2000,
+      "numbers": [
+        8
+      ],
+      "pages": 176,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-8-12",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-8-12",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-8-12.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #9 (September 2000)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "9",
+      "date": "September 2000",
+      "year": 2000,
+      "numbers": [
+        9
+      ],
+      "pages": 188,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-9-11",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-9-11",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-9-11.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #10 (October 2000)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "10",
+      "date": "October 2000",
+      "year": 2000,
+      "numbers": [
+        10
+      ],
+      "pages": 214,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-10-10",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-10-10",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-10-10.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #11 (November 2000)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "11",
+      "date": "November 2000",
+      "year": 2000,
+      "numbers": [
+        11
+      ],
+      "pages": 244,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-11-10",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-11-10",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-11-10.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #12 (December 2000)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "12",
+      "date": "December 2000",
+      "year": 2000,
+      "numbers": [
+        12
+      ],
+      "pages": 266,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-12-12",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-12-12",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-12-12.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #1 (January 2001)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "1",
+      "date": "January 2001",
+      "year": 2001,
+      "numbers": [
+        1
+      ],
+      "pages": 220,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-1-14",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-1-14",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-1-14.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #2 (February 2001)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "2",
+      "date": "February 2001",
+      "year": 2001,
+      "numbers": [
+        2
+      ],
+      "pages": 154,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-2-13",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-2-13",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-2-13.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #3 (March 2001)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "3",
+      "date": "March 2001",
+      "year": 2001,
+      "numbers": [
+        3
+      ],
+      "pages": 134,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-3-11",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-3-11",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-3-11.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #4 (April 2001)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "4",
+      "date": "April 2001",
+      "year": 2001,
+      "numbers": [
+        4
+      ],
+      "pages": 132,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-4-12",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-4-12",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-4-12.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #5 (May 2001)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "5",
+      "date": "May 2001",
+      "year": 2001,
+      "numbers": [
+        5
+      ],
+      "pages": 124,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-5-12",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-5-12",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-5-12.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #6 (June 2001)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "6",
+      "date": "June 2001",
+      "year": 2001,
+      "numbers": [
+        6
+      ],
+      "pages": 126,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-6-13",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-6-13",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-6-13.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #7 (July 2001)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "7",
+      "date": "July 2001",
+      "year": 2001,
+      "numbers": [
+        7
+      ],
+      "pages": 120,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-7-12",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-7-12",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-7-12.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #8 (August 2001)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "8",
+      "date": "August 2001",
+      "year": 2001,
+      "numbers": [
+        8
+      ],
+      "pages": 106,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-8-13",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-8-13",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-8-13.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #9 (September 2001)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "9",
+      "date": "September 2001",
+      "year": 2001,
+      "numbers": [
+        9
+      ],
+      "pages": 138,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-9",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-9",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-9.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #10 (October 2001)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "10",
+      "date": "October 2001",
+      "year": 2001,
+      "numbers": [
+        10
+      ],
+      "pages": 156,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-10",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-10",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-10.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #12 (December 2001)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "12",
+      "date": "December 2001",
+      "year": 2001,
+      "numbers": [
+        12
+      ],
+      "pages": 168,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-12",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-12",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-12.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #1 (January 2002)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "1",
+      "date": "January 2002",
+      "year": 2002,
+      "numbers": [
+        1
+      ],
+      "pages": 112,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-1",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-1",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-1.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #2 (February 2002)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "2",
+      "date": "February 2002",
+      "year": 2002,
+      "numbers": [
+        2
+      ],
+      "pages": 108,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-2",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-2",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-2.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #3 (March 2002)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "3",
+      "date": "March 2002",
+      "year": 2002,
+      "numbers": [
+        3
+      ],
+      "pages": 108,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-3",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-3",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-3.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #4 (April 2002)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "4",
+      "date": "April 2002",
+      "year": 2002,
+      "numbers": [
+        4
+      ],
+      "pages": 116,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-4",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-4",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-4.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #5 (May 2002)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "5",
+      "date": "May 2002",
+      "year": 2002,
+      "numbers": [
+        5
+      ],
+      "pages": 108,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-5",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-5",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-5.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #6 (June 2002)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "6",
+      "date": "June 2002",
+      "year": 2002,
+      "numbers": [
+        6
+      ],
+      "pages": 110,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-6",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-6",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-6.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #7 (July 2002)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "7",
+      "date": "July 2002",
+      "year": 2002,
+      "numbers": [
+        7
+      ],
+      "pages": 108,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-7",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-7",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-7.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #8 (August 2002)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "8",
+      "date": "August 2002",
+      "year": 2002,
+      "numbers": [
+        8
+      ],
+      "pages": 102,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-8",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-8",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-8.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #9 (September 2002)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "9",
+      "date": "September 2002",
+      "year": 2002,
+      "numbers": [
+        9
+      ],
+      "pages": 124,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-9-2",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-9-2",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-9-2.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #10 (October 2002)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "10",
+      "date": "October 2002",
+      "year": 2002,
+      "numbers": [
+        10
+      ],
+      "pages": 158,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-10-2",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-10-2",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-10-2.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #11 (November 2002)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "11",
+      "date": "November 2002",
+      "year": 2002,
+      "numbers": [
+        11
+      ],
+      "pages": 180,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-11",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-11",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-11.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #12 (December 2002)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "12",
+      "date": "December 2002",
+      "year": 2002,
+      "numbers": [
+        12
+      ],
+      "pages": 172,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-12-2",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-12-2",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-12-2.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #13 (Holiday 2002)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "13",
+      "date": "Holiday 2002",
+      "year": 2002,
+      "numbers": [],
+      "pages": 164,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-13",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-13",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-13.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #6 (June 2003)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "6",
+      "date": "June 2003",
+      "year": 2003,
+      "numbers": [
+        6
+      ],
+      "pages": 130,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-6-2",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-6-2",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-6-2.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #8 (August 2003)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "8",
+      "date": "August 2003",
+      "year": 2003,
+      "numbers": [
+        8
+      ],
+      "pages": 113,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-8-2",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-8-2",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-8-2.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #11 (November 2003)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "11",
+      "date": "November 2003",
+      "year": 2003,
+      "numbers": [
+        11
+      ],
+      "pages": 182,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-11-2",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-11-2",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-11-2.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #1 (January 2004)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "1",
+      "date": "January 2004",
+      "year": 2004,
+      "numbers": [
+        1
+      ],
+      "pages": 151,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-1-2",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-1-2",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-1-2.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #2 (February 2004)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "2",
+      "date": "February 2004",
+      "year": 2004,
+      "numbers": [
+        2
+      ],
+      "pages": 117,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-2-2",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-2-2",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-2-2.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #3 (March 2004)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "3",
+      "date": "March 2004",
+      "year": 2004,
+      "numbers": [
+        3
+      ],
+      "pages": 108,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-3-2",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-3-2",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-3-2.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #4 (April 2004)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "4",
+      "date": "April 2004",
+      "year": 2004,
+      "numbers": [
+        4
+      ],
+      "pages": 120,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-4-2",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-4-2",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-4-2.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #5 (May 2004)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "5",
+      "date": "May 2004",
+      "year": 2004,
+      "numbers": [
+        5
+      ],
+      "pages": 108,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-5-2",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-5-2",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-5-2.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #6 (June 2004)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "6",
+      "date": "June 2004",
+      "year": 2004,
+      "numbers": [
+        6
+      ],
+      "pages": 121,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-6-3",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-6-3",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-6-3.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #7 (July 2004)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "7",
+      "date": "July 2004",
+      "year": 2004,
+      "numbers": [
+        7
+      ],
+      "pages": 116,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-7-2",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-7-2",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-7-2.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #8 (August 2004)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "8",
+      "date": "August 2004",
+      "year": 2004,
+      "numbers": [
+        8
+      ],
+      "pages": 100,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-8-3",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-8-3",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-8-3.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #9 (September 2004)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "9",
+      "date": "September 2004",
+      "year": 2004,
+      "numbers": [
+        9
+      ],
+      "pages": 118,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-9-3",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-9-3",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-9-3.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #10 (October 2004)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "10",
+      "date": "October 2004",
+      "year": 2004,
+      "numbers": [
+        10
+      ],
+      "pages": 139,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-10-3",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-10-3",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-10-3.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #11 (November 2004)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "11",
+      "date": "November 2004",
+      "year": 2004,
+      "numbers": [
+        11
+      ],
+      "pages": 153,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-11-3",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-11-3",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-11-3.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #12 (December 2004)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "12",
+      "date": "December 2004",
+      "year": 2004,
+      "numbers": [
+        12
+      ],
+      "pages": 157,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-12-3",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-12-3",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-12-3.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #13 (Holiday 2004)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "13",
+      "date": "Holiday 2004",
+      "year": 2004,
+      "numbers": [],
+      "pages": 145,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-13-2",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-13-2",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-13-2.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #4 (April 2005)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "4",
+      "date": "April 2005",
+      "year": 2005,
+      "numbers": [
+        4
+      ],
+      "pages": 108,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-4-3",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-4-3",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-4-3.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #8 (August 2005)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "8",
+      "date": "August 2005",
+      "year": 2005,
+      "numbers": [
+        8
+      ],
+      "pages": 100,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-8-4",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-8-4",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-8-4.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #11 (November 2005)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "11",
+      "date": "November 2005",
+      "year": 2005,
+      "numbers": [
+        11
+      ],
+      "pages": 116,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-11-4",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-11-4",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-11-4.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #12 (December 2005)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "12",
+      "date": "December 2005",
+      "year": 2005,
+      "numbers": [
+        12
+      ],
+      "pages": 140,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-12-4",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-12-4",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-12-4.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #13 (Holiday 2005)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "13",
+      "date": "Holiday 2005",
+      "year": 2005,
+      "numbers": [],
+      "pages": 148,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-13-3",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-13-3",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-13-3.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #1 (January 2006)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "1",
+      "date": "January 2006",
+      "year": 2006,
+      "numbers": [
+        1
+      ],
+      "pages": 120,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-1-3",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-1-3",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-1-3.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #2 (February 2006)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "2",
+      "date": "February 2006",
+      "year": 2006,
+      "numbers": [
+        2
+      ],
+      "pages": 100,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-2-3",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-2-3",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-2-3.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #3 (March 2006)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "3",
+      "date": "March 2006",
+      "year": 2006,
+      "numbers": [
+        3
+      ],
+      "pages": 112,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-3-12",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-3-12",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-3-12.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #4 (April 2006)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "4",
+      "date": "April 2006",
+      "year": 2006,
+      "numbers": [
+        4
+      ],
+      "pages": 112,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-4-13",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-4-13",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-4-13.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #5 (May 2006)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "5",
+      "date": "May 2006",
+      "year": 2006,
+      "numbers": [
+        5
+      ],
+      "pages": 112,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-5-3",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-5-3",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-5-3.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #6 (June 2006)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "6",
+      "date": "June 2006",
+      "year": 2006,
+      "numbers": [
+        6
+      ],
+      "pages": 116,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-6-4",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-6-4",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-6-4.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #7 (July 2006)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "7",
+      "date": "July 2006",
+      "year": 2006,
+      "numbers": [
+        7
+      ],
+      "pages": 108,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-7-3",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-7-3",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-7-3.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #8 (August 2006)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "8",
+      "date": "August 2006",
+      "year": 2006,
+      "numbers": [
+        8
+      ],
+      "pages": 102,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-8-5",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-8-5",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-8-5.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #9 (September 2006)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "9",
+      "date": "September 2006",
+      "year": 2006,
+      "numbers": [
+        9
+      ],
+      "pages": 110,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-9-4",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-9-4",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-9-4.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #10 (October 2006)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "10",
+      "date": "October 2006",
+      "year": 2006,
+      "numbers": [
+        10
+      ],
+      "pages": 120,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-10-4",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-10-4",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-10-4.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #11 (November 2006)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "11",
+      "date": "November 2006",
+      "year": 2006,
+      "numbers": [
+        11
+      ],
+      "pages": 134,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-11-5",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-11-5",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-11-5.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #12 (December 2006)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "12",
+      "date": "December 2006",
+      "year": 2006,
+      "numbers": [
+        12
+      ],
+      "pages": 140,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-12-5",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-12-5",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-12-5.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #13 (Holiday 2006)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "13",
+      "date": "Holiday 2006",
+      "year": 2006,
+      "numbers": [],
+      "pages": 160,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-13-4",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-13-4",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-13-4.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #1 (January 2007)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "1",
+      "date": "January 2007",
+      "year": 2007,
+      "numbers": [
+        1
+      ],
+      "pages": 110,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-1-4",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-1-4",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-1-4.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #2 (February 2007)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "2",
+      "date": "February 2007",
+      "year": 2007,
+      "numbers": [
+        2
+      ],
+      "pages": 104,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-2-4",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-2-4",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-2-4.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #3 (March 2007)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "3",
+      "date": "March 2007",
+      "year": 2007,
+      "numbers": [
+        3
+      ],
+      "pages": 104,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-3-3",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-3-3",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-3-3.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #4 (April 2007)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "4",
+      "date": "April 2007",
+      "year": 2007,
+      "numbers": [
+        4
+      ],
+      "pages": 108,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-4-4",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-4-4",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-4-4.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #5 (May 2007)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "5",
+      "date": "May 2007",
+      "year": 2007,
+      "numbers": [
+        5
+      ],
+      "pages": 100,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-5-4",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-5-4",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-5-4.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #6 (June 2007)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "6",
+      "date": "June 2007",
+      "year": 2007,
+      "numbers": [
+        6
+      ],
+      "pages": 100,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-6-5",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-6-5",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-6-5.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #7 (July 2007)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "7",
+      "date": "July 2007",
+      "year": 2007,
+      "numbers": [
+        7
+      ],
+      "pages": 108,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-7-4",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-7-4",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-7-4.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #8 (August 2007)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "8",
+      "date": "August 2007",
+      "year": 2007,
+      "numbers": [
+        8
+      ],
+      "pages": 111,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-8-6",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-8-6",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-8-6.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #9 (September 2007)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "9",
+      "date": "September 2007",
+      "year": 2007,
+      "numbers": [
+        9
+      ],
+      "pages": 122,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-9-5",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-9-5",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-9-5.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #10 (October 2007)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "10",
+      "date": "October 2007",
+      "year": 2007,
+      "numbers": [
+        10
+      ],
+      "pages": 111,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-10-5",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-10-5",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-10-5.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #11 (November 2007)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "11",
+      "date": "November 2007",
+      "year": 2007,
+      "numbers": [
+        11
+      ],
+      "pages": 144,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-11-6",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-11-6",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-11-6.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #12 (December 2007)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "12",
+      "date": "December 2007",
+      "year": 2007,
+      "numbers": [
+        12
+      ],
+      "pages": 138,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-12-6",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-12-6",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-12-6.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #14 (Holiday 2007)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "14",
+      "date": "Holiday 2007",
+      "year": 2007,
+      "numbers": [],
+      "pages": 164,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-14",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-14",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-14.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #1 (January 2008)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "1",
+      "date": "January 2008",
+      "year": 2008,
+      "numbers": [
+        1
+      ],
+      "pages": 132,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-1-5",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-1-5",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-1-5.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #2 (February 2008)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "2",
+      "date": "February 2008",
+      "year": 2008,
+      "numbers": [
+        2
+      ],
+      "pages": 112,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-2-5",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-2-5",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-2-5.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #172 (March 2008)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "172",
+      "date": "March 2008",
+      "year": 2008,
+      "numbers": [
+        3
+      ],
+      "pages": 118,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-172",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-172",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-172.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #173 (April 2008)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "173",
+      "date": "April 2008",
+      "year": 2008,
+      "numbers": [
+        4
+      ],
+      "pages": 100,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-173",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-173",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-173.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #174 (May 2008)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "174",
+      "date": "May 2008",
+      "year": 2008,
+      "numbers": [
+        5
+      ],
+      "pages": 100,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-174",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-174",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-174.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #175 (June 2008)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "175",
+      "date": "June 2008",
+      "year": 2008,
+      "numbers": [
+        6
+      ],
+      "pages": 100,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-175",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-175",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-175.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #176 (July 2008)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "176",
+      "date": "July 2008",
+      "year": 2008,
+      "numbers": [
+        7
+      ],
+      "pages": 100,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-176",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-176",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-176.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #177 (August 2008)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "177",
+      "date": "August 2008",
+      "year": 2008,
+      "numbers": [
+        8
+      ],
+      "pages": 108,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-177",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-177",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-177.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #179 (October 2008)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "179",
+      "date": "October 2008",
+      "year": 2008,
+      "numbers": [
+        10
+      ],
+      "pages": 100,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-179",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-179",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-179.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #180 (November 2008)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "180",
+      "date": "November 2008",
+      "year": 2008,
+      "numbers": [
+        11
+      ],
+      "pages": 114,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-180",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-180",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-180.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #181 (December 2008)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "181",
+      "date": "December 2008",
+      "year": 2008,
+      "numbers": [
+        12
+      ],
+      "pages": 100,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-181",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-181",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-181.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #182 (Holiday 2008)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "182",
+      "date": "Holiday 2008",
+      "year": 2008,
+      "numbers": [],
+      "pages": 100,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-182",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-182",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-182.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #183 (January 2009)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "183",
+      "date": "January 2009",
+      "year": 2009,
+      "numbers": [
+        1
+      ],
+      "pages": 100,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-183",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-183",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-183.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #184 (February 2009)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "184",
+      "date": "February 2009",
+      "year": 2009,
+      "numbers": [
+        2
+      ],
+      "pages": 100,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-184",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-184",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-184.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #185 (March 2009)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "185",
+      "date": "March 2009",
+      "year": 2009,
+      "numbers": [
+        3
+      ],
+      "pages": 100,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-185",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-185",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-185.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #187 (May 2009)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "187",
+      "date": "May 2009",
+      "year": 2009,
+      "numbers": [
+        5
+      ],
+      "pages": 100,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-187",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-187",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-187.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #188 (June 2009)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "188",
+      "date": "June 2009",
+      "year": 2009,
+      "numbers": [
+        6
+      ],
+      "pages": 100,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-188",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-188",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-188.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #189 (July 2009)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "189",
+      "date": "July 2009",
+      "year": 2009,
+      "numbers": [
+        7
+      ],
+      "pages": 100,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-189",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-189",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-189.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #190 (August 2009)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "190",
+      "date": "August 2009",
+      "year": 2009,
+      "numbers": [
+        8
+      ],
+      "pages": 100,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-190",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-190",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-190.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #194 (December 2009)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "194",
+      "date": "December 2009",
+      "year": 2009,
+      "numbers": [
+        12
+      ],
+      "pages": 100,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-194",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-194",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-194.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #195 (Holiday 2009)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "195",
+      "date": "Holiday 2009",
+      "year": 2009,
+      "numbers": [],
+      "pages": 100,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-195",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-195",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-195.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #196 (January 2010)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "196",
+      "date": "January 2010",
+      "year": 2010,
+      "numbers": [
+        1
+      ],
+      "pages": 116,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-196",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-196",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-196.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #197 (February 2010)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "197",
+      "date": "February 2010",
+      "year": 2010,
+      "numbers": [
+        2
+      ],
+      "pages": 100,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-197",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-197",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-197.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #198 (March 2010)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "198",
+      "date": "March 2010",
+      "year": 2010,
+      "numbers": [
+        3
+      ],
+      "pages": 100,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-198",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-198",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-198.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #199 (April 2010)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "199",
+      "date": "April 2010",
+      "year": 2010,
+      "numbers": [
+        4
+      ],
+      "pages": 100,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-199",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-199",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-199.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #200 (May 2010)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "200",
+      "date": "May 2010",
+      "year": 2010,
+      "numbers": [
+        5
+      ],
+      "pages": 100,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-200",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-200",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-200.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #201 (June 2010)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "201",
+      "date": "June 2010",
+      "year": 2010,
+      "numbers": [
+        6
+      ],
+      "pages": 100,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-201",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-201",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-201.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #202 (July 2010)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "202",
+      "date": "July 2010",
+      "year": 2010,
+      "numbers": [
+        7
+      ],
+      "pages": 102,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-202",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-202",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-202.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #203 (August 2010)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "203",
+      "date": "August 2010",
+      "year": 2010,
+      "numbers": [
+        8
+      ],
+      "pages": 100,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-203",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-203",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-203.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #204 (September 2010)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "204",
+      "date": "September 2010",
+      "year": 2010,
+      "numbers": [
+        9
+      ],
+      "pages": 100,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-204",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-204",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-204.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #205 (October 2010)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "205",
+      "date": "October 2010",
+      "year": 2010,
+      "numbers": [
+        10
+      ],
+      "pages": 100,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-205",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-205",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-205.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #206 (November 2010)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "206",
+      "date": "November 2010",
+      "year": 2010,
+      "numbers": [
+        11
+      ],
+      "pages": 106,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-206",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-206",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-206.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #207 (December 2010)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "207",
+      "date": "December 2010",
+      "year": 2010,
+      "numbers": [
+        12
+      ],
+      "pages": 100,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-207",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-207",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-207.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #208 (Holiday 2010)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "208",
+      "date": "Holiday 2010",
+      "year": 2010,
+      "numbers": [],
+      "pages": 100,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-208",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-208",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-208.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #210 (February 2011)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "210",
+      "date": "February 2011",
+      "year": 2011,
+      "numbers": [
+        2
+      ],
+      "pages": 100,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-210",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-210",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-210.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #211 (March 2011)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "211",
+      "date": "March 2011",
+      "year": 2011,
+      "numbers": [
+        3
+      ],
+      "pages": 104,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-211",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-211",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-211.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #213 (May 2011)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "213",
+      "date": "May 2011",
+      "year": 2011,
+      "numbers": [
+        5
+      ],
+      "pages": 100,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-213",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-213",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-213.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #214 (June 2011)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "214",
+      "date": "June 2011",
+      "year": 2011,
+      "numbers": [
+        6
+      ],
+      "pages": 100,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-214",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-214",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-214.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #216 (August 2011)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "216",
+      "date": "August 2011",
+      "year": 2011,
+      "numbers": [
+        8
+      ],
+      "pages": 100,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-216",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-216",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-216.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #217 (September 2011)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "217",
+      "date": "September 2011",
+      "year": 2011,
+      "numbers": [
+        9
+      ],
+      "pages": 100,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-217",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-217",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-217.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #218 (October 2011)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "218",
+      "date": "October 2011",
+      "year": 2011,
+      "numbers": [
+        10
+      ],
+      "pages": 100,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-218",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-218",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-218.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #219 (November 2011)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "219",
+      "date": "November 2011",
+      "year": 2011,
+      "numbers": [
+        11
+      ],
+      "pages": 100,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-219",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-219",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-219.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #220 (December 2011)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "220",
+      "date": "December 2011",
+      "year": 2011,
+      "numbers": [
+        12
+      ],
+      "pages": 100,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-220",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-220",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-220.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #221 (Holiday 2011)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "221",
+      "date": "Holiday 2011",
+      "year": 2011,
+      "numbers": [],
+      "pages": 124,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-221",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-221",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-221.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #222 (January 2012)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "222",
+      "date": "January 2012",
+      "year": 2012,
+      "numbers": [
+        1
+      ],
+      "pages": 102,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-222",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-222",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-222.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #223 (February 2012)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "223",
+      "date": "February 2012",
+      "year": 2012,
+      "numbers": [
+        2
+      ],
+      "pages": 100,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-223",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-223",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-223.jpg"
+    },
+    {
+      "title": "PC Gamer (US) #224 (March 2012)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "224",
+      "date": "March 2012",
+      "year": 2012,
+      "numbers": [
+        3
+      ],
+      "pages": 100,
+      "pageUrl": "https://reetroz.com/issue/pc-gamer-us-224",
+      "readerUrl": "https://reetroz.com/issue/pc-gamer-us-224",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-224.jpg"
+    }
+  ]
+}

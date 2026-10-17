@@ -1,0 +1,462 @@
+{
+  "source": "https://www.kultmags.com/mags.php",
+  "fetchedAt": "2026-10-16T22:46:40.364Z",
+  "magazines": [
+    {
+      "name": "64 Power",
+      "url": "https://www.kultmags.com/mags.php?folder=NjQgUG93ZXI%3D"
+    },
+    {
+      "name": "64 Strategien",
+      "url": "https://www.kultmags.com/mags.php?folder=NjQgU3RyYXRlZ2llbg%3D%3D"
+    },
+    {
+      "name": "101 Nintendo64",
+      "url": "https://www.kultmags.com/mags.php?folder=MTAxIE5pbnRlbmRvNjQ%3D"
+    },
+    {
+      "name": "360 Live",
+      "url": "https://www.kultmags.com/mags.php?folder=MzYwIExpdmU%3D"
+    },
+    {
+      "name": "Advance",
+      "url": "https://www.kultmags.com/mags.php?folder=QWR2YW5jZQ%3D%3D"
+    },
+    {
+      "name": "Amiga DOS",
+      "url": "https://www.kultmags.com/mags.php?folder=QW1pZ2EgRE9T"
+    },
+    {
+      "name": "Amiga Fever",
+      "url": "https://www.kultmags.com/mags.php?folder=QW1pZ2EgRmV2ZXI%3D"
+    },
+    {
+      "name": "Amiga Games",
+      "url": "https://www.kultmags.com/mags.php?folder=QW1pZ2EgR2FtZXM%3D"
+    },
+    {
+      "name": "Amiga Games CD-ROM",
+      "url": "https://www.kultmags.com/mags.php?folder=QW1pZ2EgR2FtZXMgQ0QtUk9N"
+    },
+    {
+      "name": "Amiga Joker",
+      "url": "https://www.kultmags.com/mags.php?folder=QW1pZ2EgSm9rZXI%3D"
+    },
+    {
+      "name": "Amiga Magazin",
+      "url": "https://www.kultmags.com/mags.php?folder=QW1pZ2EgTWFnYXppbg%3D%3D"
+    },
+    {
+      "name": "Amiga Play",
+      "url": "https://www.kultmags.com/mags.php?folder=QW1pZ2EgUGxheQ%3D%3D"
+    },
+    {
+      "name": "Amiga Spiele Disc",
+      "url": "https://www.kultmags.com/mags.php?folder=QW1pZ2EgU3BpZWxlIERpc2M%3D"
+    },
+    {
+      "name": "ASM",
+      "url": "https://www.kultmags.com/mags.php?folder=QVNN"
+    },
+    {
+      "name": "Atari Magazin",
+      "url": "https://www.kultmags.com/mags.php?folder=QXRhcmkgTWFnYXppbg%3D%3D"
+    },
+    {
+      "name": "Best of Sierra",
+      "url": "https://www.kultmags.com/mags.php?folder=QmVzdCBvZiBTaWVycmE%3D"
+    },
+    {
+      "name": "Bestseller Games",
+      "url": "https://www.kultmags.com/mags.php?folder=QmVzdHNlbGxlciBHYW1lcw%3D%3D"
+    },
+    {
+      "name": "big.N",
+      "url": "https://www.kultmags.com/mags.php?folder=YmlnLk4%3D"
+    },
+    {
+      "name": "Blood Games",
+      "url": "https://www.kultmags.com/mags.php?folder=Qmxvb2QgR2FtZXM%3D"
+    },
+    {
+      "name": "CD-ROM PLAY",
+      "url": "https://www.kultmags.com/mags.php?folder=Q0QtUk9NIFBMQVk%3D"
+    },
+    {
+      "name": "CD Direkt",
+      "url": "https://www.kultmags.com/mags.php?folder=Q0QgRGlyZWt0"
+    },
+    {
+      "name": "CD Direkt Austria",
+      "url": "https://www.kultmags.com/mags.php?folder=Q0QgRGlyZWt0IEF1c3RyaWE%3D"
+    },
+    {
+      "name": "CD Info",
+      "url": "https://www.kultmags.com/mags.php?folder=Q0QgSW5mbw%3D%3D"
+    },
+    {
+      "name": "CD plus Extra",
+      "url": "https://www.kultmags.com/mags.php?folder=Q0QgcGx1cyBFeHRyYQ%3D%3D"
+    },
+    {
+      "name": "CD Rom Top",
+      "url": "https://www.kultmags.com/mags.php?folder=Q0QgUm9tIFRvcA%3D%3D"
+    },
+    {
+      "name": "Commodore Welt",
+      "url": "https://www.kultmags.com/mags.php?folder=Q29tbW9kb3JlIFdlbHQ%3D"
+    },
+    {
+      "name": "Compute mit",
+      "url": "https://www.kultmags.com/mags.php?folder=Q29tcHV0ZSBtaXQ%3D"
+    },
+    {
+      "name": "CPC Magazin",
+      "url": "https://www.kultmags.com/mags.php?folder=Q1BDIE1hZ2F6aW4%3D"
+    },
+    {
+      "name": "CPC Schneider Magazin",
+      "url": "https://www.kultmags.com/mags.php?folder=Q1BDIFNjaG5laWRlciBNYWdhemlu"
+    },
+    {
+      "name": "CPU",
+      "url": "https://www.kultmags.com/mags.php?folder=Q1BV"
+    },
+    {
+      "name": "Cube - Das Nintendo Gamecube Magazin",
+      "url": "https://www.kultmags.com/mags.php?folder=Q3ViZSAtIERhcyBOaW50ZW5kbyBHYW1lY3ViZSBNYWdhemlu"
+    },
+    {
+      "name": "Cube Magazin",
+      "url": "https://www.kultmags.com/mags.php?folder=Q3ViZSBNYWdhemlu"
+    },
+    {
+      "name": "Das offizielle Playstation Magazin",
+      "url": "https://www.kultmags.com/mags.php?folder=RGFzIG9mZml6aWVsbGUgUGxheXN0YXRpb24gTWFnYXppbg%3D%3D"
+    },
+    {
+      "name": "Dos-Trend",
+      "url": "https://www.kultmags.com/mags.php?folder=RG9zLVRyZW5k"
+    },
+    {
+      "name": "DOS Extra",
+      "url": "https://www.kultmags.com/mags.php?folder=RE9TIEV4dHJh"
+    },
+    {
+      "name": "DOS International",
+      "url": "https://www.kultmags.com/mags.php?folder=RE9TIEludGVybmF0aW9uYWw%3D"
+    },
+    {
+      "name": "Dreamcast Magazin",
+      "url": "https://www.kultmags.com/mags.php?folder=RHJlYW1jYXN0IE1hZ2F6aW4%3D"
+    },
+    {
+      "name": "Fast Geschenkt",
+      "url": "https://www.kultmags.com/mags.php?folder=RmFzdCBHZXNjaGVua3Q%3D"
+    },
+    {
+      "name": "Fun Generation",
+      "url": "https://www.kultmags.com/mags.php?folder=RnVuIEdlbmVyYXRpb24%3D"
+    },
+    {
+      "name": "Fun Online",
+      "url": "https://www.kultmags.com/mags.php?folder=RnVuIE9ubGluZQ%3D%3D"
+    },
+    {
+      "name": "Fun Online - Supergames",
+      "url": "https://www.kultmags.com/mags.php?folder=RnVuIE9ubGluZSAtIFN1cGVyZ2FtZXM%3D"
+    },
+    {
+      "name": "Fun Vision",
+      "url": "https://www.kultmags.com/mags.php?folder=RnVuIFZpc2lvbg%3D%3D"
+    },
+    {
+      "name": "Gamble!",
+      "url": "https://www.kultmags.com/mags.php?folder=R2FtYmxlIQ%3D%3D"
+    },
+    {
+      "name": "Game Express",
+      "url": "https://www.kultmags.com/mags.php?folder=R2FtZSBFeHByZXNz"
+    },
+    {
+      "name": "Game On!",
+      "url": "https://www.kultmags.com/mags.php?folder=R2FtZSBPbiE%3D"
+    },
+    {
+      "name": "GamePro",
+      "url": "https://www.kultmags.com/mags.php?folder=R2FtZVBybw%3D%3D"
+    },
+    {
+      "name": "Gamers",
+      "url": "https://www.kultmags.com/mags.php?folder=R2FtZXJz"
+    },
+    {
+      "name": "Games Aktuell",
+      "url": "https://www.kultmags.com/mags.php?folder=R2FtZXMgQWt0dWVsbA%3D%3D"
+    },
+    {
+      "name": "Games and More",
+      "url": "https://www.kultmags.com/mags.php?folder=R2FtZXMgYW5kIE1vcmU%3D"
+    },
+    {
+      "name": "gamesTM",
+      "url": "https://www.kultmags.com/mags.php?folder=Z2FtZXNUTQ%3D%3D"
+    },
+    {
+      "name": "Games World",
+      "url": "https://www.kultmags.com/mags.php?folder=R2FtZXMgV29ybGQ%3D"
+    },
+    {
+      "name": "Genie Data",
+      "url": "https://www.kultmags.com/mags.php?folder=R2VuaWUgRGF0YQ%3D%3D"
+    },
+    {
+      "name": "Happy Computer",
+      "url": "https://www.kultmags.com/mags.php?folder=SGFwcHkgQ29tcHV0ZXI%3D"
+    },
+    {
+      "name": "Highscreen Highlights",
+      "url": "https://www.kultmags.com/mags.php?folder=SGlnaHNjcmVlbiBIaWdobGlnaHRz"
+    },
+    {
+      "name": "Homecomputer",
+      "url": "https://www.kultmags.com/mags.php?folder=SG9tZWNvbXB1dGVy"
+    },
+    {
+      "name": "Joystick",
+      "url": "https://www.kultmags.com/mags.php?folder=Sm95c3RpY2s%3D"
+    },
+    {
+      "name": "Konsolen Szene",
+      "url": "https://www.kultmags.com/mags.php?folder=S29uc29sZW4gU3plbmU%3D"
+    },
+    {
+      "name": "Last Resort",
+      "url": "https://www.kultmags.com/mags.php?folder=TGFzdCBSZXNvcnQ%3D"
+    },
+    {
+      "name": "MAN!AC",
+      "url": "https://www.kultmags.com/mags.php?folder=TUFOIUFD"
+    },
+    {
+      "name": "Megablast",
+      "url": "https://www.kultmags.com/mags.php?folder=TWVnYWJsYXN0"
+    },
+    {
+      "name": "Mega Fun",
+      "url": "https://www.kultmags.com/mags.php?folder=TWVnYSBGdW4%3D"
+    },
+    {
+      "name": "Mega Fun (1992)",
+      "url": "https://www.kultmags.com/mags.php?folder=TWVnYSBGdW4gKDE5OTIp"
+    },
+    {
+      "name": "Mega Seller CD",
+      "url": "https://www.kultmags.com/mags.php?folder=TWVnYSBTZWxsZXIgQ0Q%3D"
+    },
+    {
+      "name": "N",
+      "url": "https://www.kultmags.com/mags.php?folder=Tg%3D%3D"
+    },
+    {
+      "name": "N-Zone",
+      "url": "https://www.kultmags.com/mags.php?folder=Ti1ab25l"
+    },
+    {
+      "name": "N64 Magazin",
+      "url": "https://www.kultmags.com/mags.php?folder=TjY0IE1hZ2F6aW4%3D"
+    },
+    {
+      "name": "Next Level",
+      "url": "https://www.kultmags.com/mags.php?folder=TmV4dCBMZXZlbA%3D%3D"
+    },
+    {
+      "name": "N Games",
+      "url": "https://www.kultmags.com/mags.php?folder=TiBHYW1lcw%3D%3D"
+    },
+    {
+      "name": "OPM",
+      "url": "https://www.kultmags.com/mags.php?folder=T1BN"
+    },
+    {
+      "name": "PC-Action",
+      "url": "https://www.kultmags.com/mags.php?folder=UEMtQWN0aW9u"
+    },
+    {
+      "name": "PC-Games",
+      "url": "https://www.kultmags.com/mags.php?folder=UEMtR2FtZXM%3D"
+    },
+    {
+      "name": "PC-Games CD-ROM",
+      "url": "https://www.kultmags.com/mags.php?folder=UEMtR2FtZXMgQ0QtUk9N"
+    },
+    {
+      "name": "PC-Player",
+      "url": "https://www.kultmags.com/mags.php?folder=UEMtUGxheWVy"
+    },
+    {
+      "name": "PC-Spiele Disc",
+      "url": "https://www.kultmags.com/mags.php?folder=UEMtU3BpZWxlIERpc2M%3D"
+    },
+    {
+      "name": "PCC Magazin",
+      "url": "https://www.kultmags.com/mags.php?folder=UENDIE1hZ2F6aW4%3D"
+    },
+    {
+      "name": "PC Highscore",
+      "url": "https://www.kultmags.com/mags.php?folder=UEMgSGlnaHNjb3Jl"
+    },
+    {
+      "name": "PC Info",
+      "url": "https://www.kultmags.com/mags.php?folder=UEMgSW5mbw%3D%3D"
+    },
+    {
+      "name": "PC Joker",
+      "url": "https://www.kultmags.com/mags.php?folder=UEMgSm9rZXI%3D"
+    },
+    {
+      "name": "PC News",
+      "url": "https://www.kultmags.com/mags.php?folder=UEMgTmV3cw%3D%3D"
+    },
+    {
+      "name": "PC Power",
+      "url": "https://www.kultmags.com/mags.php?folder=UEMgUG93ZXI%3D"
+    },
+    {
+      "name": "PC Pur",
+      "url": "https://www.kultmags.com/mags.php?folder=UEMgUHVy"
+    },
+    {
+      "name": "PC Spiel",
+      "url": "https://www.kultmags.com/mags.php?folder=UEMgU3BpZWw%3D"
+    },
+    {
+      "name": "PC Spiele-Lösungen Spezial",
+      "url": "https://www.kultmags.com/mags.php?folder=UEMgU3BpZWxlLUzDtnN1bmdlbiBTcGV6aWFs"
+    },
+    {
+      "name": "PC Strategien",
+      "url": "https://www.kultmags.com/mags.php?folder=UEMgU3RyYXRlZ2llbg%3D%3D"
+    },
+    {
+      "name": "PC Xtreme",
+      "url": "https://www.kultmags.com/mags.php?folder=UEMgWHRyZW1l"
+    },
+    {
+      "name": "Players",
+      "url": "https://www.kultmags.com/mags.php?folder=UGxheWVycw%3D%3D"
+    },
+    {
+      "name": "Play Games",
+      "url": "https://www.kultmags.com/mags.php?folder=UGxheSBHYW1lcw%3D%3D"
+    },
+    {
+      "name": "Playstation - Das Fun-Magazin",
+      "url": "https://www.kultmags.com/mags.php?folder=UGxheXN0YXRpb24gLSBEYXMgRnVuLU1hZ2F6aW4%3D"
+    },
+    {
+      "name": "Playstation 2 - Das offizielle Magazin",
+      "url": "https://www.kultmags.com/mags.php?folder=UGxheXN0YXRpb24gMiAtIERhcyBvZmZpemllbGxlIE1hZ2F6aW4%3D"
+    },
+    {
+      "name": "Playstation Games",
+      "url": "https://www.kultmags.com/mags.php?folder=UGxheXN0YXRpb24gR2FtZXM%3D"
+    },
+    {
+      "name": "play the Playstation",
+      "url": "https://www.kultmags.com/mags.php?folder=cGxheSB0aGUgUGxheXN0YXRpb24%3D"
+    },
+    {
+      "name": "Play Time",
+      "url": "https://www.kultmags.com/mags.php?folder=UGxheSBUaW1l"
+    },
+    {
+      "name": "Play Zone",
+      "url": "https://www.kultmags.com/mags.php?folder=UGxheSBab25l"
+    },
+    {
+      "name": "Pocket Power Color",
+      "url": "https://www.kultmags.com/mags.php?folder=UG9ja2V0IFBvd2VyIENvbG9y"
+    },
+    {
+      "name": "Power Play",
+      "url": "https://www.kultmags.com/mags.php?folder=UG93ZXIgUGxheQ%3D%3D"
+    },
+    {
+      "name": "PowerStation",
+      "url": "https://www.kultmags.com/mags.php?folder=UG93ZXJTdGF0aW9u"
+    },
+    {
+      "name": "PS2 Jahrbuch",
+      "url": "https://www.kultmags.com/mags.php?folder=UFMyIEphaHJidWNo"
+    },
+    {
+      "name": "Schneider Computer Partner",
+      "url": "https://www.kultmags.com/mags.php?folder=U2NobmVpZGVyIENvbXB1dGVyIFBhcnRuZXI%3D"
+    },
+    {
+      "name": "Schneider Magazin",
+      "url": "https://www.kultmags.com/mags.php?folder=U2NobmVpZGVyIE1hZ2F6aW4%3D"
+    },
+    {
+      "name": "Sega Magazin",
+      "url": "https://www.kultmags.com/mags.php?folder=U2VnYSBNYWdhemlu"
+    },
+    {
+      "name": "Sega Pro",
+      "url": "https://www.kultmags.com/mags.php?folder=U2VnYSBQcm8%3D"
+    },
+    {
+      "name": "Smash",
+      "url": "https://www.kultmags.com/mags.php?folder=U21hc2g%3D"
+    },
+    {
+      "name": "ST-Computer",
+      "url": "https://www.kultmags.com/mags.php?folder=U1QtQ29tcHV0ZXI%3D"
+    },
+    {
+      "name": "ST-Magazin",
+      "url": "https://www.kultmags.com/mags.php?folder=U1QtTWFnYXppbg%3D%3D"
+    },
+    {
+      "name": "Station Master",
+      "url": "https://www.kultmags.com/mags.php?folder=U3RhdGlvbiBNYXN0ZXI%3D"
+    },
+    {
+      "name": "Super Pro",
+      "url": "https://www.kultmags.com/mags.php?folder=U3VwZXIgUHJv"
+    },
+    {
+      "name": "Total!",
+      "url": "https://www.kultmags.com/mags.php?folder=VG90YWwh"
+    },
+    {
+      "name": "Video Games",
+      "url": "https://www.kultmags.com/mags.php?folder=VmlkZW8gR2FtZXM%3D"
+    },
+    {
+      "name": "Video Games Aktuell",
+      "url": "https://www.kultmags.com/mags.php?folder=VmlkZW8gR2FtZXMgQWt0dWVsbA%3D%3D"
+    },
+    {
+      "name": "Vollversion",
+      "url": "https://www.kultmags.com/mags.php?folder=Vm9sbHZlcnNpb24%3D"
+    },
+    {
+      "name": "Xbox - Das offizielle Xbox-Magazin",
+      "url": "https://www.kultmags.com/mags.php?folder=WGJveCAtIERhcyBvZmZpemllbGxlIFhib3gtTWFnYXppbg%3D%3D"
+    },
+    {
+      "name": "Xbox Games",
+      "url": "https://www.kultmags.com/mags.php?folder=WGJveCBHYW1lcw%3D%3D"
+    },
+    {
+      "name": "Xbox Zone",
+      "url": "https://www.kultmags.com/mags.php?folder=WGJveCBab25l"
+    },
+    {
+      "name": "Österreichischer Computer Markt",
+      "url": "https://www.kultmags.com/mags.php?folder=w5ZzdGVycmVpY2hpc2NoZXIgQ29tcHV0ZXIgTWFya3Q%3D"
+    }
+  ]
+}

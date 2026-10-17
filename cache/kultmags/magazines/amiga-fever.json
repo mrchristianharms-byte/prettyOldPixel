@@ -1,0 +1,49 @@
+{
+  "name": "Amiga Fever",
+  "url": "https://www.kultmags.com/mags.php?folder=QW1pZ2EgRmV2ZXI%3D",
+  "fetchedAt": "2026-10-16T22:46:40.364Z",
+  "sections": [
+    {
+      "name": null,
+      "url": "https://www.kultmags.com/mags.php?folder=QW1pZ2EgRmV2ZXI%3D"
+    }
+  ],
+  "issues": [
+    {
+      "title": "Amiga Fever - 1998-12",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "year": 1998,
+      "numbers": [
+        12
+      ],
+      "words": [
+        "amiga",
+        "fever"
+      ],
+      "pageUrl": "https://www.kultmags.com/mags.php?folder=QW1pZ2EgRmV2ZXI%3D",
+      "downloadUrl": "https://www.kultmags.com/Amiga%20Fever/Amiga%20Fever%20-%201998-12.rar",
+      "readerUrl": null,
+      "coverUrl": "https://www.kultmags.com/Amiga%20Fever/Amiga%20Fever%20-%201998-12.rar.jpg"
+    },
+    {
+      "title": "Amiga Fever - 1999-02",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "year": 1999,
+      "numbers": [
+        2
+      ],
+      "words": [
+        "amiga",
+        "fever"
+      ],
+      "pageUrl": "https://www.kultmags.com/mags.php?folder=QW1pZ2EgRmV2ZXI%3D",
+      "downloadUrl": "https://www.kultmags.com/Amiga%20Fever/Amiga%20Fever%20-%201999-02.rar",
+      "readerUrl": null,
+      "coverUrl": "https://www.kultmags.com/Amiga%20Fever/Amiga%20Fever%20-%201999-02.rar.jpg"
+    }
+  ]
+}

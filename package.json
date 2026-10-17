@@ -1,0 +1,16 @@
+{
+  "name": "pretty-old-pixel",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node src/build.mjs",
+    "fetch:youtube": "node src/fetch-youtube-videos.mjs",
+    "fetch:videos": "node src/fetch-youtube-videos.mjs https://www.youtube.com/@PrettyOldPixel",
+    "fetch:playlists": "node src/fetch-youtube-playlists.mjs",
+    "fetch:all": "node src/fetch-youtube.mjs",
+    "extract:blaetterabend": "node src/extract-blaetterabend.mjs",
+    "extract:blaetterabend:refresh": "node src/extract-blaetterabend.mjs --refresh-archives",
+    "test": "node --test \"tests/**/*.test.mjs\""
+  }
+}

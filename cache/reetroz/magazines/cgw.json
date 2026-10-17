@@ -1,0 +1,4590 @@
+{
+  "name": "Computer Gaming World",
+  "url": "https://reetroz.com/magazines/cgw",
+  "fetchedAt": "2026-10-16T22:47:42.377Z",
+  "sections": [
+    {
+      "name": null,
+      "url": "https://reetroz.com/magazines/cgw"
+    }
+  ],
+  "issues": [
+    {
+      "title": "Computer Gaming World #1.1 (Nov-Dec 1981)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "1.1",
+      "date": "Nov-Dec 1981",
+      "year": 1981,
+      "numbers": [
+        11,
+        12
+      ],
+      "pages": 40,
+      "pageUrl": "https://reetroz.com/issue/cgw-1-1",
+      "readerUrl": "https://reetroz.com/issue/cgw-1-1",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-1-1.jpg"
+    },
+    {
+      "title": "Computer Gaming World #2.1 (Jan-Feb 1982)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "2.1",
+      "date": "Jan-Feb 1982",
+      "year": 1982,
+      "numbers": [
+        1,
+        2
+      ],
+      "pages": 40,
+      "pageUrl": "https://reetroz.com/issue/cgw-2-1",
+      "readerUrl": "https://reetroz.com/issue/cgw-2-1",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-2-1.jpg"
+    },
+    {
+      "title": "Computer Gaming World #2.2 (Mar-Apr 1982)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "2.2",
+      "date": "Mar-Apr 1982",
+      "year": 1982,
+      "numbers": [
+        3,
+        4
+      ],
+      "pages": 44,
+      "pageUrl": "https://reetroz.com/issue/cgw-2-2",
+      "readerUrl": "https://reetroz.com/issue/cgw-2-2",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-2-2.jpg"
+    },
+    {
+      "title": "Computer Gaming World #2.3 (May-Jun 1982)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "2.3",
+      "date": "May-Jun 1982",
+      "year": 1982,
+      "numbers": [
+        5,
+        6
+      ],
+      "pages": 44,
+      "pageUrl": "https://reetroz.com/issue/cgw-2-3",
+      "readerUrl": "https://reetroz.com/issue/cgw-2-3",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-2-3.jpg"
+    },
+    {
+      "title": "Computer Gaming World #2.4 (Jul-Aug 1982)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "2.4",
+      "date": "Jul-Aug 1982",
+      "year": 1982,
+      "numbers": [
+        7,
+        8
+      ],
+      "pages": 44,
+      "pageUrl": "https://reetroz.com/issue/cgw-2-4",
+      "readerUrl": "https://reetroz.com/issue/cgw-2-4",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-2-4.jpg"
+    },
+    {
+      "title": "Computer Gaming World #2.5 (Sep-Oct 1982)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "2.5",
+      "date": "Sep-Oct 1982",
+      "year": 1982,
+      "numbers": [
+        9,
+        10
+      ],
+      "pages": 52,
+      "pageUrl": "https://reetroz.com/issue/cgw-2-5",
+      "readerUrl": "https://reetroz.com/issue/cgw-2-5",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-2-5.jpg"
+    },
+    {
+      "title": "Computer Gaming World #2.6 (Nov-Dec 1982)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "2.6",
+      "date": "Nov-Dec 1982",
+      "year": 1982,
+      "numbers": [
+        11,
+        12
+      ],
+      "pages": 52,
+      "pageUrl": "https://reetroz.com/issue/cgw-2-6",
+      "readerUrl": "https://reetroz.com/issue/cgw-2-6",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-2-6.jpg"
+    },
+    {
+      "title": "Computer Gaming World #3.1 (Jan-Feb 1983)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "3.1",
+      "date": "Jan-Feb 1983",
+      "year": 1983,
+      "numbers": [
+        1,
+        2
+      ],
+      "pages": 52,
+      "pageUrl": "https://reetroz.com/issue/cgw-3-1",
+      "readerUrl": "https://reetroz.com/issue/cgw-3-1",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-3-1.jpg"
+    },
+    {
+      "title": "Computer Gaming World #3.2 (Mar-Apr 1983)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "3.2",
+      "date": "Mar-Apr 1983",
+      "year": 1983,
+      "numbers": [
+        3,
+        4
+      ],
+      "pages": 52,
+      "pageUrl": "https://reetroz.com/issue/cgw-3-2",
+      "readerUrl": "https://reetroz.com/issue/cgw-3-2",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-3-2.jpg"
+    },
+    {
+      "title": "Computer Gaming World #3.3 (May-Jun 1983)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "3.3",
+      "date": "May-Jun 1983",
+      "year": 1983,
+      "numbers": [
+        5,
+        6
+      ],
+      "pages": 52,
+      "pageUrl": "https://reetroz.com/issue/cgw-3-3",
+      "readerUrl": "https://reetroz.com/issue/cgw-3-3",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-3-3.jpg"
+    },
+    {
+      "title": "Computer Gaming World #3.4 (Jul-Aug 1983)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "3.4",
+      "date": "Jul-Aug 1983",
+      "year": 1983,
+      "numbers": [
+        7,
+        8
+      ],
+      "pages": 56,
+      "pageUrl": "https://reetroz.com/issue/cgw-3-4",
+      "readerUrl": "https://reetroz.com/issue/cgw-3-4",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-3-4.jpg"
+    },
+    {
+      "title": "Computer Gaming World #3.5 (Oct 1983)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "3.5",
+      "date": "Oct 1983",
+      "year": 1983,
+      "numbers": [
+        10
+      ],
+      "pages": 56,
+      "pageUrl": "https://reetroz.com/issue/cgw-3-5",
+      "readerUrl": "https://reetroz.com/issue/cgw-3-5",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-3-5.jpg"
+    },
+    {
+      "title": "Computer Gaming World #3.6 (Dec 1983)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "3.6",
+      "date": "Dec 1983",
+      "year": 1983,
+      "numbers": [
+        12
+      ],
+      "pages": 56,
+      "pageUrl": "https://reetroz.com/issue/cgw-3-6",
+      "readerUrl": "https://reetroz.com/issue/cgw-3-6",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-3-6.jpg"
+    },
+    {
+      "title": "Computer Gaming World #4.1 (Feb 1984)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "4.1",
+      "date": "Feb 1984",
+      "year": 1984,
+      "numbers": [
+        2
+      ],
+      "pages": 52,
+      "pageUrl": "https://reetroz.com/issue/cgw-4-1",
+      "readerUrl": "https://reetroz.com/issue/cgw-4-1",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-4-1.jpg"
+    },
+    {
+      "title": "Computer Gaming World #4.2 (Apr 1984)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "4.2",
+      "date": "Apr 1984",
+      "year": 1984,
+      "numbers": [
+        4
+      ],
+      "pages": 52,
+      "pageUrl": "https://reetroz.com/issue/cgw-4-2",
+      "readerUrl": "https://reetroz.com/issue/cgw-4-2",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-4-2.jpg"
+    },
+    {
+      "title": "Computer Gaming World #4.3 (Jun 1984)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "4.3",
+      "date": "Jun 1984",
+      "year": 1984,
+      "numbers": [
+        6
+      ],
+      "pages": 48,
+      "pageUrl": "https://reetroz.com/issue/cgw-4-3",
+      "readerUrl": "https://reetroz.com/issue/cgw-4-3",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-4-3.jpg"
+    },
+    {
+      "title": "Computer Gaming World #4.4 (Aug 1984)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "4.4",
+      "date": "Aug 1984",
+      "year": 1984,
+      "numbers": [
+        8
+      ],
+      "pages": 48,
+      "pageUrl": "https://reetroz.com/issue/cgw-4-4",
+      "readerUrl": "https://reetroz.com/issue/cgw-4-4",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-4-4.jpg"
+    },
+    {
+      "title": "Computer Gaming World #4.5 (Oct 1984)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "4.5",
+      "date": "Oct 1984",
+      "year": 1984,
+      "numbers": [
+        10
+      ],
+      "pages": 48,
+      "pageUrl": "https://reetroz.com/issue/cgw-4-5",
+      "readerUrl": "https://reetroz.com/issue/cgw-4-5",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-4-5.jpg"
+    },
+    {
+      "title": "Computer Gaming World #4.6 (Dec 1984)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "4.6",
+      "date": "Dec 1984",
+      "year": 1984,
+      "numbers": [
+        12
+      ],
+      "pages": 48,
+      "pageUrl": "https://reetroz.com/issue/cgw-4-6",
+      "readerUrl": "https://reetroz.com/issue/cgw-4-6",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-4-6.jpg"
+    },
+    {
+      "title": "Computer Gaming World #5.1 (Jan 1985)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "5.1",
+      "date": "Jan 1985",
+      "year": 1985,
+      "numbers": [
+        1
+      ],
+      "pages": 48,
+      "pageUrl": "https://reetroz.com/issue/cgw-5-1",
+      "readerUrl": "https://reetroz.com/issue/cgw-5-1",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-5-1.jpg"
+    },
+    {
+      "title": "Computer Gaming World #5.2 (Apr-May 1985)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "5.2",
+      "date": "Apr-May 1985",
+      "year": 1985,
+      "numbers": [
+        4,
+        5
+      ],
+      "pages": 48,
+      "pageUrl": "https://reetroz.com/issue/cgw-5-2",
+      "readerUrl": "https://reetroz.com/issue/cgw-5-2",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-5-2.jpg"
+    },
+    {
+      "title": "Computer Gaming World #5.3 (Jun-Jul 1985)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "5.3",
+      "date": "Jun-Jul 1985",
+      "year": 1985,
+      "numbers": [
+        6,
+        7
+      ],
+      "pages": 48,
+      "pageUrl": "https://reetroz.com/issue/cgw-5-3",
+      "readerUrl": "https://reetroz.com/issue/cgw-5-3",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-5-3.jpg"
+    },
+    {
+      "title": "Computer Gaming World #5.4 (Sep-Oct 1985)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "5.4",
+      "date": "Sep-Oct 1985",
+      "year": 1985,
+      "numbers": [
+        9,
+        10
+      ],
+      "pages": 50,
+      "pageUrl": "https://reetroz.com/issue/cgw-5-4",
+      "readerUrl": "https://reetroz.com/issue/cgw-5-4",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-5-4.jpg"
+    },
+    {
+      "title": "Computer Gaming World #5.5 (Nov-Dec 1985)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "5.5",
+      "date": "Nov-Dec 1985",
+      "year": 1985,
+      "numbers": [
+        11,
+        12
+      ],
+      "pages": 66,
+      "pageUrl": "https://reetroz.com/issue/cgw-5-5",
+      "readerUrl": "https://reetroz.com/issue/cgw-5-5",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-5-5.jpg"
+    },
+    {
+      "title": "Computer Gaming World #25 (Jan-Feb 1986)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "25",
+      "date": "Jan-Feb 1986",
+      "year": 1986,
+      "numbers": [
+        1,
+        2
+      ],
+      "pages": 50,
+      "pageUrl": "https://reetroz.com/issue/cgw-25",
+      "readerUrl": "https://reetroz.com/issue/cgw-25",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-25.jpg"
+    },
+    {
+      "title": "Computer Gaming World #26 (Mar 1986)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "26",
+      "date": "Mar 1986",
+      "year": 1986,
+      "numbers": [
+        3
+      ],
+      "pages": 50,
+      "pageUrl": "https://reetroz.com/issue/cgw-26",
+      "readerUrl": "https://reetroz.com/issue/cgw-26",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-26.jpg"
+    },
+    {
+      "title": "Computer Gaming World #27 (Apr 1986)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "27",
+      "date": "Apr 1986",
+      "year": 1986,
+      "numbers": [
+        4
+      ],
+      "pages": 50,
+      "pageUrl": "https://reetroz.com/issue/cgw-27",
+      "readerUrl": "https://reetroz.com/issue/cgw-27",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-27.jpg"
+    },
+    {
+      "title": "Computer Gaming World #28 (May 1986)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "28",
+      "date": "May 1986",
+      "year": 1986,
+      "numbers": [
+        5
+      ],
+      "pages": 50,
+      "pageUrl": "https://reetroz.com/issue/cgw-28",
+      "readerUrl": "https://reetroz.com/issue/cgw-28",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-28.jpg"
+    },
+    {
+      "title": "Computer Gaming World #29 (Jun-Jul 1986)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "29",
+      "date": "Jun-Jul 1986",
+      "year": 1986,
+      "numbers": [
+        6,
+        7
+      ],
+      "pages": 50,
+      "pageUrl": "https://reetroz.com/issue/cgw-29",
+      "readerUrl": "https://reetroz.com/issue/cgw-29",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-29.jpg"
+    },
+    {
+      "title": "Computer Gaming World #30 (Aug 1986)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "30",
+      "date": "Aug 1986",
+      "year": 1986,
+      "numbers": [
+        8
+      ],
+      "pages": 50,
+      "pageUrl": "https://reetroz.com/issue/cgw-30",
+      "readerUrl": "https://reetroz.com/issue/cgw-30",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-30.jpg"
+    },
+    {
+      "title": "Computer Gaming World #31 (Sep-Oct 1986)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "31",
+      "date": "Sep-Oct 1986",
+      "year": 1986,
+      "numbers": [
+        9,
+        10
+      ],
+      "pages": 50,
+      "pageUrl": "https://reetroz.com/issue/cgw-31",
+      "readerUrl": "https://reetroz.com/issue/cgw-31",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-31.jpg"
+    },
+    {
+      "title": "Computer Gaming World #32 (Nov 1986)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "32",
+      "date": "Nov 1986",
+      "year": 1986,
+      "numbers": [
+        11
+      ],
+      "pages": 58,
+      "pageUrl": "https://reetroz.com/issue/cgw-32",
+      "readerUrl": "https://reetroz.com/issue/cgw-32",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-32.jpg"
+    },
+    {
+      "title": "Computer Gaming World #33 (Dec 1986)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "33",
+      "date": "Dec 1986",
+      "year": 1986,
+      "numbers": [
+        12
+      ],
+      "pages": 58,
+      "pageUrl": "https://reetroz.com/issue/cgw-33",
+      "readerUrl": "https://reetroz.com/issue/cgw-33",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-33.jpg"
+    },
+    {
+      "title": "Computer Gaming World #34 (Jan-Feb 1987)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "34",
+      "date": "Jan-Feb 1987",
+      "year": 1987,
+      "numbers": [
+        1,
+        2
+      ],
+      "pages": 74,
+      "pageUrl": "https://reetroz.com/issue/cgw-34",
+      "readerUrl": "https://reetroz.com/issue/cgw-34",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-34.jpg"
+    },
+    {
+      "title": "Computer Gaming World #35 (Mar 1987)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "35",
+      "date": "Mar 1987",
+      "year": 1987,
+      "numbers": [
+        3
+      ],
+      "pages": 66,
+      "pageUrl": "https://reetroz.com/issue/cgw-35",
+      "readerUrl": "https://reetroz.com/issue/cgw-35",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-35.jpg"
+    },
+    {
+      "title": "Computer Gaming World #36 (Apr 1987)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "36",
+      "date": "Apr 1987",
+      "year": 1987,
+      "numbers": [
+        4
+      ],
+      "pages": 58,
+      "pageUrl": "https://reetroz.com/issue/cgw-36",
+      "readerUrl": "https://reetroz.com/issue/cgw-36",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-36.jpg"
+    },
+    {
+      "title": "Computer Gaming World #37 (May 1987)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "37",
+      "date": "May 1987",
+      "year": 1987,
+      "numbers": [
+        5
+      ],
+      "pages": 58,
+      "pageUrl": "https://reetroz.com/issue/cgw-37",
+      "readerUrl": "https://reetroz.com/issue/cgw-37",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-37.jpg"
+    },
+    {
+      "title": "Computer Gaming World #38 (Jun-Jul 1987)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "38",
+      "date": "Jun-Jul 1987",
+      "year": 1987,
+      "numbers": [
+        6,
+        7
+      ],
+      "pages": 58,
+      "pageUrl": "https://reetroz.com/issue/cgw-38",
+      "readerUrl": "https://reetroz.com/issue/cgw-38",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-38.jpg"
+    },
+    {
+      "title": "Computer Gaming World #39 (Aug-Sep 1987)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "39",
+      "date": "Aug-Sep 1987",
+      "year": 1987,
+      "numbers": [
+        8,
+        9
+      ],
+      "pages": 58,
+      "pageUrl": "https://reetroz.com/issue/cgw-39",
+      "readerUrl": "https://reetroz.com/issue/cgw-39",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-39.jpg"
+    },
+    {
+      "title": "Computer Gaming World #40 (Oct 1987)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "40",
+      "date": "Oct 1987",
+      "year": 1987,
+      "numbers": [
+        10
+      ],
+      "pages": 66,
+      "pageUrl": "https://reetroz.com/issue/cgw-40",
+      "readerUrl": "https://reetroz.com/issue/cgw-40",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-40.jpg"
+    },
+    {
+      "title": "Computer Gaming World #41 (Nov 1987)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "41",
+      "date": "Nov 1987",
+      "year": 1987,
+      "numbers": [
+        11
+      ],
+      "pages": 66,
+      "pageUrl": "https://reetroz.com/issue/cgw-41",
+      "readerUrl": "https://reetroz.com/issue/cgw-41",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-41.jpg"
+    },
+    {
+      "title": "Computer Gaming World #42 (Dec 1987)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "42",
+      "date": "Dec 1987",
+      "year": 1987,
+      "numbers": [
+        12
+      ],
+      "pages": 66,
+      "pageUrl": "https://reetroz.com/issue/cgw-42",
+      "readerUrl": "https://reetroz.com/issue/cgw-42",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-42.jpg"
+    },
+    {
+      "title": "Computer Gaming World #43 (Jan 1988)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "43",
+      "date": "Jan 1988",
+      "year": 1988,
+      "numbers": [
+        1
+      ],
+      "pages": 58,
+      "pageUrl": "https://reetroz.com/issue/cgw-43",
+      "readerUrl": "https://reetroz.com/issue/cgw-43",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-43.jpg"
+    },
+    {
+      "title": "Computer Gaming World #44 (Feb 1988)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "44",
+      "date": "Feb 1988",
+      "year": 1988,
+      "numbers": [
+        2
+      ],
+      "pages": 58,
+      "pageUrl": "https://reetroz.com/issue/cgw-44",
+      "readerUrl": "https://reetroz.com/issue/cgw-44",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-44.jpg"
+    },
+    {
+      "title": "Computer Gaming World #45 (Mar 1988)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "45",
+      "date": "Mar 1988",
+      "year": 1988,
+      "numbers": [
+        3
+      ],
+      "pages": 58,
+      "pageUrl": "https://reetroz.com/issue/cgw-45",
+      "readerUrl": "https://reetroz.com/issue/cgw-45",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-45.jpg"
+    },
+    {
+      "title": "Computer Gaming World #46 (Apr 1988)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "46",
+      "date": "Apr 1988",
+      "year": 1988,
+      "numbers": [
+        4
+      ],
+      "pages": 58,
+      "pageUrl": "https://reetroz.com/issue/cgw-46",
+      "readerUrl": "https://reetroz.com/issue/cgw-46",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-46.jpg"
+    },
+    {
+      "title": "Computer Gaming World #47 (May 1988)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "47",
+      "date": "May 1988",
+      "year": 1988,
+      "numbers": [
+        5
+      ],
+      "pages": 58,
+      "pageUrl": "https://reetroz.com/issue/cgw-47",
+      "readerUrl": "https://reetroz.com/issue/cgw-47",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-47.jpg"
+    },
+    {
+      "title": "Computer Gaming World #48 (Jun 1988)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "48",
+      "date": "Jun 1988",
+      "year": 1988,
+      "numbers": [
+        6
+      ],
+      "pages": 58,
+      "pageUrl": "https://reetroz.com/issue/cgw-48",
+      "readerUrl": "https://reetroz.com/issue/cgw-48",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-48.jpg"
+    },
+    {
+      "title": "Computer Gaming World #49 (Jul 1988)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "49",
+      "date": "Jul 1988",
+      "year": 1988,
+      "numbers": [
+        7
+      ],
+      "pages": 58,
+      "pageUrl": "https://reetroz.com/issue/cgw-49",
+      "readerUrl": "https://reetroz.com/issue/cgw-49",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-49.jpg"
+    },
+    {
+      "title": "Computer Gaming World #50 (Aug 1988)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "50",
+      "date": "Aug 1988",
+      "year": 1988,
+      "numbers": [
+        8
+      ],
+      "pages": 58,
+      "pageUrl": "https://reetroz.com/issue/cgw-50",
+      "readerUrl": "https://reetroz.com/issue/cgw-50",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-50.jpg"
+    },
+    {
+      "title": "Computer Gaming World #51 (Sep 1988)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "51",
+      "date": "Sep 1988",
+      "year": 1988,
+      "numbers": [
+        9
+      ],
+      "pages": 58,
+      "pageUrl": "https://reetroz.com/issue/cgw-51",
+      "readerUrl": "https://reetroz.com/issue/cgw-51",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-51.jpg"
+    },
+    {
+      "title": "Computer Gaming World #52 (Oct 1988)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "52",
+      "date": "Oct 1988",
+      "year": 1988,
+      "numbers": [
+        10
+      ],
+      "pages": 66,
+      "pageUrl": "https://reetroz.com/issue/cgw-52",
+      "readerUrl": "https://reetroz.com/issue/cgw-52",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-52.jpg"
+    },
+    {
+      "title": "Computer Gaming World #53 (Nov 1988)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "53",
+      "date": "Nov 1988",
+      "year": 1988,
+      "numbers": [
+        11
+      ],
+      "pages": 66,
+      "pageUrl": "https://reetroz.com/issue/cgw-53",
+      "readerUrl": "https://reetroz.com/issue/cgw-53",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-53.jpg"
+    },
+    {
+      "title": "Computer Gaming World #54 (Dec 1988)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "54",
+      "date": "Dec 1988",
+      "year": 1988,
+      "numbers": [
+        12
+      ],
+      "pages": 74,
+      "pageUrl": "https://reetroz.com/issue/cgw-54",
+      "readerUrl": "https://reetroz.com/issue/cgw-54",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-54.jpg"
+    },
+    {
+      "title": "Computer Gaming World #55 (Jan 1989)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "55",
+      "date": "Jan 1989",
+      "year": 1989,
+      "numbers": [
+        1
+      ],
+      "pages": 74,
+      "pageUrl": "https://reetroz.com/issue/cgw-55",
+      "readerUrl": "https://reetroz.com/issue/cgw-55",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-55.jpg"
+    },
+    {
+      "title": "Computer Gaming World #56 (Feb 1989)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "56",
+      "date": "Feb 1989",
+      "year": 1989,
+      "numbers": [
+        2
+      ],
+      "pages": 66,
+      "pageUrl": "https://reetroz.com/issue/cgw-56",
+      "readerUrl": "https://reetroz.com/issue/cgw-56",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-56.jpg"
+    },
+    {
+      "title": "Computer Gaming World #57 (Mar 1989)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "57",
+      "date": "Mar 1989",
+      "year": 1989,
+      "numbers": [
+        3
+      ],
+      "pages": 58,
+      "pageUrl": "https://reetroz.com/issue/cgw-57",
+      "readerUrl": "https://reetroz.com/issue/cgw-57",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-57.jpg"
+    },
+    {
+      "title": "Computer Gaming World #58 (Apr 1989)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "58",
+      "date": "Apr 1989",
+      "year": 1989,
+      "numbers": [
+        4
+      ],
+      "pages": 66,
+      "pageUrl": "https://reetroz.com/issue/cgw-58",
+      "readerUrl": "https://reetroz.com/issue/cgw-58",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-58.jpg"
+    },
+    {
+      "title": "Computer Gaming World #59 (May 1989)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "59",
+      "date": "May 1989",
+      "year": 1989,
+      "numbers": [
+        5
+      ],
+      "pages": 58,
+      "pageUrl": "https://reetroz.com/issue/cgw-59",
+      "readerUrl": "https://reetroz.com/issue/cgw-59",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-59.jpg"
+    },
+    {
+      "title": "Computer Gaming World #60 (Jun 1989)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "60",
+      "date": "Jun 1989",
+      "year": 1989,
+      "numbers": [
+        6
+      ],
+      "pages": 58,
+      "pageUrl": "https://reetroz.com/issue/cgw-60",
+      "readerUrl": "https://reetroz.com/issue/cgw-60",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-60.jpg"
+    },
+    {
+      "title": "Computer Gaming World #61 (Jul 1989)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "61",
+      "date": "Jul 1989",
+      "year": 1989,
+      "numbers": [
+        7
+      ],
+      "pages": 50,
+      "pageUrl": "https://reetroz.com/issue/cgw-61",
+      "readerUrl": "https://reetroz.com/issue/cgw-61",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-61.jpg"
+    },
+    {
+      "title": "Computer Gaming World #62 (Aug 1989)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "62",
+      "date": "Aug 1989",
+      "year": 1989,
+      "numbers": [
+        8
+      ],
+      "pages": 50,
+      "pageUrl": "https://reetroz.com/issue/cgw-62",
+      "readerUrl": "https://reetroz.com/issue/cgw-62",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-62.jpg"
+    },
+    {
+      "title": "Computer Gaming World #63 (Sep 1989)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "63",
+      "date": "Sep 1989",
+      "year": 1989,
+      "numbers": [
+        9
+      ],
+      "pages": 50,
+      "pageUrl": "https://reetroz.com/issue/cgw-63",
+      "readerUrl": "https://reetroz.com/issue/cgw-63",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-63.jpg"
+    },
+    {
+      "title": "Computer Gaming World #64 (Oct 1989)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "64",
+      "date": "Oct 1989",
+      "year": 1989,
+      "numbers": [
+        10
+      ],
+      "pages": 74,
+      "pageUrl": "https://reetroz.com/issue/cgw-64",
+      "readerUrl": "https://reetroz.com/issue/cgw-64",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-64.jpg"
+    },
+    {
+      "title": "Computer Gaming World #65 (Nov 1989)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "65",
+      "date": "Nov 1989",
+      "year": 1989,
+      "numbers": [
+        11
+      ],
+      "pages": 98,
+      "pageUrl": "https://reetroz.com/issue/cgw-65",
+      "readerUrl": "https://reetroz.com/issue/cgw-65",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-65.jpg"
+    },
+    {
+      "title": "Computer Gaming World #66 (Dec 1989)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "66",
+      "date": "Dec 1989",
+      "year": 1989,
+      "numbers": [
+        12
+      ],
+      "pages": 106,
+      "pageUrl": "https://reetroz.com/issue/cgw-66",
+      "readerUrl": "https://reetroz.com/issue/cgw-66",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-66.jpg"
+    },
+    {
+      "title": "Computer Gaming World #67 (Jan 1990)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "67",
+      "date": "Jan 1990",
+      "year": 1990,
+      "numbers": [
+        1
+      ],
+      "pages": 90,
+      "pageUrl": "https://reetroz.com/issue/cgw-67",
+      "readerUrl": "https://reetroz.com/issue/cgw-67",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-67.jpg"
+    },
+    {
+      "title": "Computer Gaming World #68 (Feb 1990)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "68",
+      "date": "Feb 1990",
+      "year": 1990,
+      "numbers": [
+        2
+      ],
+      "pages": 74,
+      "pageUrl": "https://reetroz.com/issue/cgw-68",
+      "readerUrl": "https://reetroz.com/issue/cgw-68",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-68.jpg"
+    },
+    {
+      "title": "Computer Gaming World #69 (Mar 1990)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "69",
+      "date": "Mar 1990",
+      "year": 1990,
+      "numbers": [
+        3
+      ],
+      "pages": 66,
+      "pageUrl": "https://reetroz.com/issue/cgw-69",
+      "readerUrl": "https://reetroz.com/issue/cgw-69",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-69.jpg"
+    },
+    {
+      "title": "Computer Gaming World #70 (Apr 1990)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "70",
+      "date": "Apr 1990",
+      "year": 1990,
+      "numbers": [
+        4
+      ],
+      "pages": 66,
+      "pageUrl": "https://reetroz.com/issue/cgw-70",
+      "readerUrl": "https://reetroz.com/issue/cgw-70",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-70.jpg"
+    },
+    {
+      "title": "Computer Gaming World #71 (May 1990)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "71",
+      "date": "May 1990",
+      "year": 1990,
+      "numbers": [
+        5
+      ],
+      "pages": 66,
+      "pageUrl": "https://reetroz.com/issue/cgw-71",
+      "readerUrl": "https://reetroz.com/issue/cgw-71",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-71.jpg"
+    },
+    {
+      "title": "Computer Gaming World #72 (Jun 1990)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "72",
+      "date": "Jun 1990",
+      "year": 1990,
+      "numbers": [
+        6
+      ],
+      "pages": 82,
+      "pageUrl": "https://reetroz.com/issue/cgw-72",
+      "readerUrl": "https://reetroz.com/issue/cgw-72",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-72.jpg"
+    },
+    {
+      "title": "Computer Gaming World #73 (Jul-Aug 1990)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "73",
+      "date": "Jul-Aug 1990",
+      "year": 1990,
+      "numbers": [
+        7,
+        8
+      ],
+      "pages": 66,
+      "pageUrl": "https://reetroz.com/issue/cgw-73",
+      "readerUrl": "https://reetroz.com/issue/cgw-73",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-73.jpg"
+    },
+    {
+      "title": "Computer Gaming World #74 (Sep 1990)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "74",
+      "date": "Sep 1990",
+      "year": 1990,
+      "numbers": [
+        9
+      ],
+      "pages": 82,
+      "pageUrl": "https://reetroz.com/issue/cgw-74",
+      "readerUrl": "https://reetroz.com/issue/cgw-74",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-74.jpg"
+    },
+    {
+      "title": "Computer Gaming World #75 (Oct 1990)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "75",
+      "date": "Oct 1990",
+      "year": 1990,
+      "numbers": [
+        10
+      ],
+      "pages": 82,
+      "pageUrl": "https://reetroz.com/issue/cgw-75",
+      "readerUrl": "https://reetroz.com/issue/cgw-75",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-75.jpg"
+    },
+    {
+      "title": "Computer Gaming World #76 (Nov 1990)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "76",
+      "date": "Nov 1990",
+      "year": 1990,
+      "numbers": [
+        11
+      ],
+      "pages": 114,
+      "pageUrl": "https://reetroz.com/issue/cgw-76",
+      "readerUrl": "https://reetroz.com/issue/cgw-76",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-76.jpg"
+    },
+    {
+      "title": "Computer Gaming World #77 (Dec 1990)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "77",
+      "date": "Dec 1990",
+      "year": 1990,
+      "numbers": [
+        12
+      ],
+      "pages": 130,
+      "pageUrl": "https://reetroz.com/issue/cgw-77",
+      "readerUrl": "https://reetroz.com/issue/cgw-77",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-77.jpg"
+    },
+    {
+      "title": "Computer Gaming World #78 (Jan 1991)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "78",
+      "date": "Jan 1991",
+      "year": 1991,
+      "numbers": [
+        1
+      ],
+      "pages": 98,
+      "pageUrl": "https://reetroz.com/issue/cgw-78",
+      "readerUrl": "https://reetroz.com/issue/cgw-78",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-78.jpg"
+    },
+    {
+      "title": "Computer Gaming World #79 (Feb 1991)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "79",
+      "date": "Feb 1991",
+      "year": 1991,
+      "numbers": [
+        2
+      ],
+      "pages": 98,
+      "pageUrl": "https://reetroz.com/issue/cgw-79",
+      "readerUrl": "https://reetroz.com/issue/cgw-79",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-79.jpg"
+    },
+    {
+      "title": "Computer Gaming World #80 (Mar 1991)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "80",
+      "date": "Mar 1991",
+      "year": 1991,
+      "numbers": [
+        3
+      ],
+      "pages": 66,
+      "pageUrl": "https://reetroz.com/issue/cgw-80",
+      "readerUrl": "https://reetroz.com/issue/cgw-80",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-80.jpg"
+    },
+    {
+      "title": "Computer Gaming World #81 (Apr 1991)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "81",
+      "date": "Apr 1991",
+      "year": 1991,
+      "numbers": [
+        4
+      ],
+      "pages": 82,
+      "pageUrl": "https://reetroz.com/issue/cgw-81",
+      "readerUrl": "https://reetroz.com/issue/cgw-81",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-81.jpg"
+    },
+    {
+      "title": "Computer Gaming World #82 (May 1991)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "82",
+      "date": "May 1991",
+      "year": 1991,
+      "numbers": [
+        5
+      ],
+      "pages": 82,
+      "pageUrl": "https://reetroz.com/issue/cgw-82",
+      "readerUrl": "https://reetroz.com/issue/cgw-82",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-82.jpg"
+    },
+    {
+      "title": "Computer Gaming World #83 (Jun 1991)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "83",
+      "date": "Jun 1991",
+      "year": 1991,
+      "numbers": [
+        6
+      ],
+      "pages": 98,
+      "pageUrl": "https://reetroz.com/issue/cgw-83",
+      "readerUrl": "https://reetroz.com/issue/cgw-83",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-83.jpg"
+    },
+    {
+      "title": "Computer Gaming World #84 (Jul 1991)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "84",
+      "date": "Jul 1991",
+      "year": 1991,
+      "numbers": [
+        7
+      ],
+      "pages": 82,
+      "pageUrl": "https://reetroz.com/issue/cgw-84",
+      "readerUrl": "https://reetroz.com/issue/cgw-84",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-84.jpg"
+    },
+    {
+      "title": "Computer Gaming World #85 (Aug 1991)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "85",
+      "date": "Aug 1991",
+      "year": 1991,
+      "numbers": [
+        8
+      ],
+      "pages": 98,
+      "pageUrl": "https://reetroz.com/issue/cgw-85",
+      "readerUrl": "https://reetroz.com/issue/cgw-85",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-85.jpg"
+    },
+    {
+      "title": "Computer Gaming World #86 (Sep 1991)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "86",
+      "date": "Sep 1991",
+      "year": 1991,
+      "numbers": [
+        9
+      ],
+      "pages": 130,
+      "pageUrl": "https://reetroz.com/issue/cgw-86",
+      "readerUrl": "https://reetroz.com/issue/cgw-86",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-86.jpg"
+    },
+    {
+      "title": "Computer Gaming World #87 (Oct 1991)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "87",
+      "date": "Oct 1991",
+      "year": 1991,
+      "numbers": [
+        10
+      ],
+      "pages": 114,
+      "pageUrl": "https://reetroz.com/issue/cgw-87",
+      "readerUrl": "https://reetroz.com/issue/cgw-87",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-87.jpg"
+    },
+    {
+      "title": "Computer Gaming World #88 (Nov 1991)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "88",
+      "date": "Nov 1991",
+      "year": 1991,
+      "numbers": [
+        11
+      ],
+      "pages": 162,
+      "pageUrl": "https://reetroz.com/issue/cgw-88",
+      "readerUrl": "https://reetroz.com/issue/cgw-88",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-88.jpg"
+    },
+    {
+      "title": "Computer Gaming World #89 (Dec 1991)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "89",
+      "date": "Dec 1991",
+      "year": 1991,
+      "numbers": [
+        12
+      ],
+      "pages": 150,
+      "pageUrl": "https://reetroz.com/issue/cgw-89",
+      "readerUrl": "https://reetroz.com/issue/cgw-89",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-89.jpg"
+    },
+    {
+      "title": "Computer Gaming World #90 (Jan 1992)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "90",
+      "date": "Jan 1992",
+      "year": 1992,
+      "numbers": [
+        1
+      ],
+      "pages": 130,
+      "pageUrl": "https://reetroz.com/issue/cgw-90",
+      "readerUrl": "https://reetroz.com/issue/cgw-90",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-90.jpg"
+    },
+    {
+      "title": "Computer Gaming World #91 (Feb 1992)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "91",
+      "date": "Feb 1992",
+      "year": 1992,
+      "numbers": [
+        2
+      ],
+      "pages": 114,
+      "pageUrl": "https://reetroz.com/issue/cgw-91",
+      "readerUrl": "https://reetroz.com/issue/cgw-91",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-91.jpg"
+    },
+    {
+      "title": "Computer Gaming World #92 (Mar 1992)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "92",
+      "date": "Mar 1992",
+      "year": 1992,
+      "numbers": [
+        3
+      ],
+      "pages": 98,
+      "pageUrl": "https://reetroz.com/issue/cgw-92",
+      "readerUrl": "https://reetroz.com/issue/cgw-92",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-92.jpg"
+    },
+    {
+      "title": "Computer Gaming World #93 (Apr 1992)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "93",
+      "date": "Apr 1992",
+      "year": 1992,
+      "numbers": [
+        4
+      ],
+      "pages": 98,
+      "pageUrl": "https://reetroz.com/issue/cgw-93",
+      "readerUrl": "https://reetroz.com/issue/cgw-93",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-93.jpg"
+    },
+    {
+      "title": "Computer Gaming World #94 (May 1992)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "94",
+      "date": "May 1992",
+      "year": 1992,
+      "numbers": [
+        5
+      ],
+      "pages": 114,
+      "pageUrl": "https://reetroz.com/issue/cgw-94",
+      "readerUrl": "https://reetroz.com/issue/cgw-94",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-94.jpg"
+    },
+    {
+      "title": "Computer Gaming World #95 (Jun 1992)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "95",
+      "date": "Jun 1992",
+      "year": 1992,
+      "numbers": [
+        6
+      ],
+      "pages": 130,
+      "pageUrl": "https://reetroz.com/issue/cgw-95",
+      "readerUrl": "https://reetroz.com/issue/cgw-95",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-95.jpg"
+    },
+    {
+      "title": "Computer Gaming World #96 (Jul 1992)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "96",
+      "date": "Jul 1992",
+      "year": 1992,
+      "numbers": [
+        7
+      ],
+      "pages": 130,
+      "pageUrl": "https://reetroz.com/issue/cgw-96",
+      "readerUrl": "https://reetroz.com/issue/cgw-96",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-96.jpg"
+    },
+    {
+      "title": "Computer Gaming World #97 (Aug 1992)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "97",
+      "date": "Aug 1992",
+      "year": 1992,
+      "numbers": [
+        8
+      ],
+      "pages": 138,
+      "pageUrl": "https://reetroz.com/issue/cgw-97",
+      "readerUrl": "https://reetroz.com/issue/cgw-97",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-97.jpg"
+    },
+    {
+      "title": "Computer Gaming World #98 (Sep 1992)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "98",
+      "date": "Sep 1992",
+      "year": 1992,
+      "numbers": [
+        9
+      ],
+      "pages": 130,
+      "pageUrl": "https://reetroz.com/issue/cgw-98",
+      "readerUrl": "https://reetroz.com/issue/cgw-98",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-98.jpg"
+    },
+    {
+      "title": "Computer Gaming World #99 (Oct 1992)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "99",
+      "date": "Oct 1992",
+      "year": 1992,
+      "numbers": [
+        10
+      ],
+      "pages": 162,
+      "pageUrl": "https://reetroz.com/issue/cgw-99",
+      "readerUrl": "https://reetroz.com/issue/cgw-99",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-99.jpg"
+    },
+    {
+      "title": "Computer Gaming World #100 (Nov 1992)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "100",
+      "date": "Nov 1992",
+      "year": 1992,
+      "numbers": [
+        11
+      ],
+      "pages": 196,
+      "pageUrl": "https://reetroz.com/issue/cgw-100",
+      "readerUrl": "https://reetroz.com/issue/cgw-100",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-100.jpg"
+    },
+    {
+      "title": "Computer Gaming World #101 (Dec 1992)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "101",
+      "date": "Dec 1992",
+      "year": 1992,
+      "numbers": [
+        12
+      ],
+      "pages": 212,
+      "pageUrl": "https://reetroz.com/issue/cgw-101",
+      "readerUrl": "https://reetroz.com/issue/cgw-101",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-101.jpg"
+    },
+    {
+      "title": "Computer Gaming World #102 (Jan 1993)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "102",
+      "date": "Jan 1993",
+      "year": 1993,
+      "numbers": [
+        1
+      ],
+      "pages": 196,
+      "pageUrl": "https://reetroz.com/issue/cgw-102",
+      "readerUrl": "https://reetroz.com/issue/cgw-102",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-102.jpg"
+    },
+    {
+      "title": "Computer Gaming World #103 (Feb 1993)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "103",
+      "date": "Feb 1993",
+      "year": 1993,
+      "numbers": [
+        2
+      ],
+      "pages": 164,
+      "pageUrl": "https://reetroz.com/issue/cgw-103",
+      "readerUrl": "https://reetroz.com/issue/cgw-103",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-103.jpg"
+    },
+    {
+      "title": "Computer Gaming World #104 (Mar 1993)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "104",
+      "date": "Mar 1993",
+      "year": 1993,
+      "numbers": [
+        3
+      ],
+      "pages": 148,
+      "pageUrl": "https://reetroz.com/issue/cgw-104",
+      "readerUrl": "https://reetroz.com/issue/cgw-104",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-104.jpg"
+    },
+    {
+      "title": "Computer Gaming World #105 (Apr 1993)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "105",
+      "date": "Apr 1993",
+      "year": 1993,
+      "numbers": [
+        4
+      ],
+      "pages": 180,
+      "pageUrl": "https://reetroz.com/issue/cgw-105",
+      "readerUrl": "https://reetroz.com/issue/cgw-105",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-105.jpg"
+    },
+    {
+      "title": "Computer Gaming World #106 (May 1993)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "106",
+      "date": "May 1993",
+      "year": 1993,
+      "numbers": [
+        5
+      ],
+      "pages": 148,
+      "pageUrl": "https://reetroz.com/issue/cgw-106",
+      "readerUrl": "https://reetroz.com/issue/cgw-106",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-106.jpg"
+    },
+    {
+      "title": "Computer Gaming World #107 (Jun 1993)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "107",
+      "date": "Jun 1993",
+      "year": 1993,
+      "numbers": [
+        6
+      ],
+      "pages": 164,
+      "pageUrl": "https://reetroz.com/issue/cgw-107",
+      "readerUrl": "https://reetroz.com/issue/cgw-107",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-107.jpg"
+    },
+    {
+      "title": "Computer Gaming World #108 (Jul 1993)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "108",
+      "date": "Jul 1993",
+      "year": 1993,
+      "numbers": [
+        7
+      ],
+      "pages": 164,
+      "pageUrl": "https://reetroz.com/issue/cgw-108",
+      "readerUrl": "https://reetroz.com/issue/cgw-108",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-108.jpg"
+    },
+    {
+      "title": "Computer Gaming World #109 (Aug 1993)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "109",
+      "date": "Aug 1993",
+      "year": 1993,
+      "numbers": [
+        8
+      ],
+      "pages": 148,
+      "pageUrl": "https://reetroz.com/issue/cgw-109",
+      "readerUrl": "https://reetroz.com/issue/cgw-109",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-109.jpg"
+    },
+    {
+      "title": "Computer Gaming World #110 (Sep 1993)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "110",
+      "date": "Sep 1993",
+      "year": 1993,
+      "numbers": [
+        9
+      ],
+      "pages": 148,
+      "pageUrl": "https://reetroz.com/issue/cgw-110",
+      "readerUrl": "https://reetroz.com/issue/cgw-110",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-110.jpg"
+    },
+    {
+      "title": "Computer Gaming World #111 (Oct 1993)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "111",
+      "date": "Oct 1993",
+      "year": 1993,
+      "numbers": [
+        10
+      ],
+      "pages": 180,
+      "pageUrl": "https://reetroz.com/issue/cgw-111",
+      "readerUrl": "https://reetroz.com/issue/cgw-111",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-111.jpg"
+    },
+    {
+      "title": "Computer Gaming World #112 (Nov 1993)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "112",
+      "date": "Nov 1993",
+      "year": 1993,
+      "numbers": [
+        11
+      ],
+      "pages": 228,
+      "pageUrl": "https://reetroz.com/issue/cgw-112",
+      "readerUrl": "https://reetroz.com/issue/cgw-112",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-112.jpg"
+    },
+    {
+      "title": "Computer Gaming World #113 (Dec 1993)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "113",
+      "date": "Dec 1993",
+      "year": 1993,
+      "numbers": [
+        12
+      ],
+      "pages": 276,
+      "pageUrl": "https://reetroz.com/issue/cgw-113",
+      "readerUrl": "https://reetroz.com/issue/cgw-113",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-113.jpg"
+    },
+    {
+      "title": "Computer Gaming World #114 (Jan 1994)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "114",
+      "date": "Jan 1994",
+      "year": 1994,
+      "numbers": [
+        1
+      ],
+      "pages": 244,
+      "pageUrl": "https://reetroz.com/issue/cgw-114",
+      "readerUrl": "https://reetroz.com/issue/cgw-114",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-114.jpg"
+    },
+    {
+      "title": "Computer Gaming World #115 (Feb 1994)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "115",
+      "date": "Feb 1994",
+      "year": 1994,
+      "numbers": [
+        2
+      ],
+      "pages": 228,
+      "pageUrl": "https://reetroz.com/issue/cgw-115",
+      "readerUrl": "https://reetroz.com/issue/cgw-115",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-115.jpg"
+    },
+    {
+      "title": "Computer Gaming World #116 (Mar 1994)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "116",
+      "date": "Mar 1994",
+      "year": 1994,
+      "numbers": [
+        3
+      ],
+      "pages": 188,
+      "pageUrl": "https://reetroz.com/issue/cgw-116",
+      "readerUrl": "https://reetroz.com/issue/cgw-116",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-116.jpg"
+    },
+    {
+      "title": "Computer Gaming World #117 (Apr 1994)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "117",
+      "date": "Apr 1994",
+      "year": 1994,
+      "numbers": [
+        4
+      ],
+      "pages": 188,
+      "pageUrl": "https://reetroz.com/issue/cgw-117",
+      "readerUrl": "https://reetroz.com/issue/cgw-117",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-117.jpg"
+    },
+    {
+      "title": "Computer Gaming World #118 (May 1994)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "118",
+      "date": "May 1994",
+      "year": 1994,
+      "numbers": [
+        5
+      ],
+      "pages": 188,
+      "pageUrl": "https://reetroz.com/issue/cgw-118",
+      "readerUrl": "https://reetroz.com/issue/cgw-118",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-118.jpg"
+    },
+    {
+      "title": "Computer Gaming World #119 (Jun 1994)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "119",
+      "date": "Jun 1994",
+      "year": 1994,
+      "numbers": [
+        6
+      ],
+      "pages": 180,
+      "pageUrl": "https://reetroz.com/issue/cgw-119",
+      "readerUrl": "https://reetroz.com/issue/cgw-119",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-119.jpg"
+    },
+    {
+      "title": "Computer Gaming World #120 (Jul 1994)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "120",
+      "date": "Jul 1994",
+      "year": 1994,
+      "numbers": [
+        7
+      ],
+      "pages": 170,
+      "pageUrl": "https://reetroz.com/issue/cgw-120",
+      "readerUrl": "https://reetroz.com/issue/cgw-120",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-120.jpg"
+    },
+    {
+      "title": "Computer Gaming World #121 (Aug 1994)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "121",
+      "date": "Aug 1994",
+      "year": 1994,
+      "numbers": [
+        8
+      ],
+      "pages": 166,
+      "pageUrl": "https://reetroz.com/issue/cgw-121",
+      "readerUrl": "https://reetroz.com/issue/cgw-121",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-121.jpg"
+    },
+    {
+      "title": "Computer Gaming World #122 (Sep 1994)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "122",
+      "date": "Sep 1994",
+      "year": 1994,
+      "numbers": [
+        9
+      ],
+      "pages": 182,
+      "pageUrl": "https://reetroz.com/issue/cgw-122",
+      "readerUrl": "https://reetroz.com/issue/cgw-122",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-122.jpg"
+    },
+    {
+      "title": "Computer Gaming World #123 (Oct 1994)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "123",
+      "date": "Oct 1994",
+      "year": 1994,
+      "numbers": [
+        10
+      ],
+      "pages": 220,
+      "pageUrl": "https://reetroz.com/issue/cgw-123",
+      "readerUrl": "https://reetroz.com/issue/cgw-123",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-123.jpg"
+    },
+    {
+      "title": "Computer Gaming World #124 (Nov 1994)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "124",
+      "date": "Nov 1994",
+      "year": 1994,
+      "numbers": [
+        11
+      ],
+      "pages": 292,
+      "pageUrl": "https://reetroz.com/issue/cgw-124",
+      "readerUrl": "https://reetroz.com/issue/cgw-124",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-124.jpg"
+    },
+    {
+      "title": "Computer Gaming World #125 (Dec 1994)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "125",
+      "date": "Dec 1994",
+      "year": 1994,
+      "numbers": [
+        12
+      ],
+      "pages": 356,
+      "pageUrl": "https://reetroz.com/issue/cgw-125",
+      "readerUrl": "https://reetroz.com/issue/cgw-125",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-125.jpg"
+    },
+    {
+      "title": "Computer Gaming World #126 (Jan 1995)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "126",
+      "date": "Jan 1995",
+      "year": 1995,
+      "numbers": [
+        1
+      ],
+      "pages": 276,
+      "pageUrl": "https://reetroz.com/issue/cgw-126",
+      "readerUrl": "https://reetroz.com/issue/cgw-126",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-126.jpg"
+    },
+    {
+      "title": "Computer Gaming World #127 (Feb 1995)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "127",
+      "date": "Feb 1995",
+      "year": 1995,
+      "numbers": [
+        2
+      ],
+      "pages": 228,
+      "pageUrl": "https://reetroz.com/issue/cgw-127",
+      "readerUrl": "https://reetroz.com/issue/cgw-127",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-127.jpg"
+    },
+    {
+      "title": "Computer Gaming World #128 (Mar 1995)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "128",
+      "date": "Mar 1995",
+      "year": 1995,
+      "numbers": [
+        3
+      ],
+      "pages": 204,
+      "pageUrl": "https://reetroz.com/issue/cgw-128",
+      "readerUrl": "https://reetroz.com/issue/cgw-128",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-128.jpg"
+    },
+    {
+      "title": "Computer Gaming World #129 (Apr 1995)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "129",
+      "date": "Apr 1995",
+      "year": 1995,
+      "numbers": [
+        4
+      ],
+      "pages": 212,
+      "pageUrl": "https://reetroz.com/issue/cgw-129",
+      "readerUrl": "https://reetroz.com/issue/cgw-129",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-129.jpg"
+    },
+    {
+      "title": "Computer Gaming World #130 (May 1995)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "130",
+      "date": "May 1995",
+      "year": 1995,
+      "numbers": [
+        5
+      ],
+      "pages": 196,
+      "pageUrl": "https://reetroz.com/issue/cgw-130",
+      "readerUrl": "https://reetroz.com/issue/cgw-130",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-130.jpg"
+    },
+    {
+      "title": "Computer Gaming World #131 (Jun 1995)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "131",
+      "date": "Jun 1995",
+      "year": 1995,
+      "numbers": [
+        6
+      ],
+      "pages": 212,
+      "pageUrl": "https://reetroz.com/issue/cgw-131",
+      "readerUrl": "https://reetroz.com/issue/cgw-131",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-131.jpg"
+    },
+    {
+      "title": "Computer Gaming World #132 (Jul 1995)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "132",
+      "date": "Jul 1995",
+      "year": 1995,
+      "numbers": [
+        7
+      ],
+      "pages": 214,
+      "pageUrl": "https://reetroz.com/issue/cgw-132",
+      "readerUrl": "https://reetroz.com/issue/cgw-132",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-132.jpg"
+    },
+    {
+      "title": "Computer Gaming World #133 (Aug 1995)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "133",
+      "date": "Aug 1995",
+      "year": 1995,
+      "numbers": [
+        8
+      ],
+      "pages": 210,
+      "pageUrl": "https://reetroz.com/issue/cgw-133",
+      "readerUrl": "https://reetroz.com/issue/cgw-133",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-133.jpg"
+    },
+    {
+      "title": "Computer Gaming World #134 (Sep 1995)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "134",
+      "date": "Sep 1995",
+      "year": 1995,
+      "numbers": [
+        9
+      ],
+      "pages": 278,
+      "pageUrl": "https://reetroz.com/issue/cgw-134",
+      "readerUrl": "https://reetroz.com/issue/cgw-134",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-134.jpg"
+    },
+    {
+      "title": "Computer Gaming World #135 (Oct 1995)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "135",
+      "date": "Oct 1995",
+      "year": 1995,
+      "numbers": [
+        10
+      ],
+      "pages": 320,
+      "pageUrl": "https://reetroz.com/issue/cgw-135",
+      "readerUrl": "https://reetroz.com/issue/cgw-135",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-135.jpg"
+    },
+    {
+      "title": "Computer Gaming World #136 (Nov 1995)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "136",
+      "date": "Nov 1995",
+      "year": 1995,
+      "numbers": [
+        11
+      ],
+      "pages": 424,
+      "pageUrl": "https://reetroz.com/issue/cgw-136",
+      "readerUrl": "https://reetroz.com/issue/cgw-136",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-136.jpg"
+    },
+    {
+      "title": "Computer Gaming World #137 (Dec 1995)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "137",
+      "date": "Dec 1995",
+      "year": 1995,
+      "numbers": [
+        12
+      ],
+      "pages": 442,
+      "pageUrl": "https://reetroz.com/issue/cgw-137",
+      "readerUrl": "https://reetroz.com/issue/cgw-137",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-137.jpg"
+    },
+    {
+      "title": "Computer Gaming World #138 (Jan 1996)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "138",
+      "date": "Jan 1996",
+      "year": 1996,
+      "numbers": [
+        1
+      ],
+      "pages": 378,
+      "pageUrl": "https://reetroz.com/issue/cgw-138",
+      "readerUrl": "https://reetroz.com/issue/cgw-138",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-138.jpg"
+    },
+    {
+      "title": "Computer Gaming World #139 (Feb 1996)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "139",
+      "date": "Feb 1996",
+      "year": 1996,
+      "numbers": [
+        2
+      ],
+      "pages": 270,
+      "pageUrl": "https://reetroz.com/issue/cgw-139",
+      "readerUrl": "https://reetroz.com/issue/cgw-139",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-139.jpg"
+    },
+    {
+      "title": "Computer Gaming World #140 (Mar 1996)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "140",
+      "date": "Mar 1996",
+      "year": 1996,
+      "numbers": [
+        3
+      ],
+      "pages": 252,
+      "pageUrl": "https://reetroz.com/issue/cgw-140",
+      "readerUrl": "https://reetroz.com/issue/cgw-140",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-140.jpg"
+    },
+    {
+      "title": "Computer Gaming World #141 (Apr 1996)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "141",
+      "date": "Apr 1996",
+      "year": 1996,
+      "numbers": [
+        4
+      ],
+      "pages": 230,
+      "pageUrl": "https://reetroz.com/issue/cgw-141",
+      "readerUrl": "https://reetroz.com/issue/cgw-141",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-141.jpg"
+    },
+    {
+      "title": "Computer Gaming World #142 (May 1996)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "142",
+      "date": "May 1996",
+      "year": 1996,
+      "numbers": [
+        5
+      ],
+      "pages": 252,
+      "pageUrl": "https://reetroz.com/issue/cgw-142",
+      "readerUrl": "https://reetroz.com/issue/cgw-142",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-142.jpg"
+    },
+    {
+      "title": "Computer Gaming World #143 (Jun 1996)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "143",
+      "date": "Jun 1996",
+      "year": 1996,
+      "numbers": [
+        6
+      ],
+      "pages": 218,
+      "pageUrl": "https://reetroz.com/issue/cgw-143",
+      "readerUrl": "https://reetroz.com/issue/cgw-143",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-143.jpg"
+    },
+    {
+      "title": "Computer Gaming World #144 (Jul 1996)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "144",
+      "date": "Jul 1996",
+      "year": 1996,
+      "numbers": [
+        7
+      ],
+      "pages": 212,
+      "pageUrl": "https://reetroz.com/issue/cgw-144",
+      "readerUrl": "https://reetroz.com/issue/cgw-144",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-144.jpg"
+    },
+    {
+      "title": "Computer Gaming World #145 (Aug 1996)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "145",
+      "date": "Aug 1996",
+      "year": 1996,
+      "numbers": [
+        8
+      ],
+      "pages": 226,
+      "pageUrl": "https://reetroz.com/issue/cgw-145",
+      "readerUrl": "https://reetroz.com/issue/cgw-145",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-145.jpg"
+    },
+    {
+      "title": "Computer Gaming World #146 (Sep 1996)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "146",
+      "date": "Sep 1996",
+      "year": 1996,
+      "numbers": [
+        9
+      ],
+      "pages": 244,
+      "pageUrl": "https://reetroz.com/issue/cgw-146",
+      "readerUrl": "https://reetroz.com/issue/cgw-146",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-146.jpg"
+    },
+    {
+      "title": "Computer Gaming World #147 (Oct 1996)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "147",
+      "date": "Oct 1996",
+      "year": 1996,
+      "numbers": [
+        10
+      ],
+      "pages": 324,
+      "pageUrl": "https://reetroz.com/issue/cgw-147",
+      "readerUrl": "https://reetroz.com/issue/cgw-147",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-147.jpg"
+    },
+    {
+      "title": "Computer Gaming World #148 (Nov 1996)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "148",
+      "date": "Nov 1996",
+      "year": 1996,
+      "numbers": [
+        11
+      ],
+      "pages": 378,
+      "pageUrl": "https://reetroz.com/issue/cgw-148",
+      "readerUrl": "https://reetroz.com/issue/cgw-148",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-148.jpg"
+    },
+    {
+      "title": "Computer Gaming World #149 (Dec 1996)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "149",
+      "date": "Dec 1996",
+      "year": 1996,
+      "numbers": [
+        12
+      ],
+      "pages": 434,
+      "pageUrl": "https://reetroz.com/issue/cgw-149",
+      "readerUrl": "https://reetroz.com/issue/cgw-149",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-149.jpg"
+    },
+    {
+      "title": "Computer Gaming World #150 (Jan 1997)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "150",
+      "date": "Jan 1997",
+      "year": 1997,
+      "numbers": [
+        1
+      ],
+      "pages": 362,
+      "pageUrl": "https://reetroz.com/issue/cgw-150",
+      "readerUrl": "https://reetroz.com/issue/cgw-150",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-150.jpg"
+    },
+    {
+      "title": "Computer Gaming World #151 (Feb 1997)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "151",
+      "date": "Feb 1997",
+      "year": 1997,
+      "numbers": [
+        2
+      ],
+      "pages": 258,
+      "pageUrl": "https://reetroz.com/issue/cgw-151",
+      "readerUrl": "https://reetroz.com/issue/cgw-151",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-151.jpg"
+    },
+    {
+      "title": "Computer Gaming World #152 (Mar 1997)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "152",
+      "date": "Mar 1997",
+      "year": 1997,
+      "numbers": [
+        3
+      ],
+      "pages": 258,
+      "pageUrl": "https://reetroz.com/issue/cgw-152",
+      "readerUrl": "https://reetroz.com/issue/cgw-152",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-152.jpg"
+    },
+    {
+      "title": "Computer Gaming World #153 (Apr 1997)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "153",
+      "date": "Apr 1997",
+      "year": 1997,
+      "numbers": [
+        4
+      ],
+      "pages": 242,
+      "pageUrl": "https://reetroz.com/issue/cgw-153",
+      "readerUrl": "https://reetroz.com/issue/cgw-153",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-153.jpg"
+    },
+    {
+      "title": "Computer Gaming World #154 (May 1997)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "154",
+      "date": "May 1997",
+      "year": 1997,
+      "numbers": [
+        5
+      ],
+      "pages": 258,
+      "pageUrl": "https://reetroz.com/issue/cgw-154",
+      "readerUrl": "https://reetroz.com/issue/cgw-154",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-154.jpg"
+    },
+    {
+      "title": "Computer Gaming World #155 (Jun 1997)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "155",
+      "date": "Jun 1997",
+      "year": 1997,
+      "numbers": [
+        6
+      ],
+      "pages": 242,
+      "pageUrl": "https://reetroz.com/issue/cgw-155",
+      "readerUrl": "https://reetroz.com/issue/cgw-155",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-155.jpg"
+    },
+    {
+      "title": "Computer Gaming World #156 (Jul 1997)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "156",
+      "date": "Jul 1997",
+      "year": 1997,
+      "numbers": [
+        7
+      ],
+      "pages": 286,
+      "pageUrl": "https://reetroz.com/issue/cgw-156",
+      "readerUrl": "https://reetroz.com/issue/cgw-156",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-156.jpg"
+    },
+    {
+      "title": "Computer Gaming World #157 (Aug 1997)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "157",
+      "date": "Aug 1997",
+      "year": 1997,
+      "numbers": [
+        8
+      ],
+      "pages": 266,
+      "pageUrl": "https://reetroz.com/issue/cgw-157",
+      "readerUrl": "https://reetroz.com/issue/cgw-157",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-157.jpg"
+    },
+    {
+      "title": "Computer Gaming World #158 (Sep 1997)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "158",
+      "date": "Sep 1997",
+      "year": 1997,
+      "numbers": [
+        9
+      ],
+      "pages": 306,
+      "pageUrl": "https://reetroz.com/issue/cgw-158",
+      "readerUrl": "https://reetroz.com/issue/cgw-158",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-158.jpg"
+    },
+    {
+      "title": "Computer Gaming World #159 (Oct 1997)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "159",
+      "date": "Oct 1997",
+      "year": 1997,
+      "numbers": [
+        10
+      ],
+      "pages": 362,
+      "pageUrl": "https://reetroz.com/issue/cgw-159",
+      "readerUrl": "https://reetroz.com/issue/cgw-159",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-159.jpg"
+    },
+    {
+      "title": "Computer Gaming World #160 (Nov 1997)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "160",
+      "date": "Nov 1997",
+      "year": 1997,
+      "numbers": [
+        11
+      ],
+      "pages": 454,
+      "pageUrl": "https://reetroz.com/issue/cgw-160",
+      "readerUrl": "https://reetroz.com/issue/cgw-160",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-160.jpg"
+    },
+    {
+      "title": "Computer Gaming World #161 (Dec 1997)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "161",
+      "date": "Dec 1997",
+      "year": 1997,
+      "numbers": [
+        12
+      ],
+      "pages": 506,
+      "pageUrl": "https://reetroz.com/issue/cgw-161",
+      "readerUrl": "https://reetroz.com/issue/cgw-161",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-161.jpg"
+    },
+    {
+      "title": "Computer Gaming World #162 (Jan 1998)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "162",
+      "date": "Jan 1998",
+      "year": 1998,
+      "numbers": [
+        1
+      ],
+      "pages": 380,
+      "pageUrl": "https://reetroz.com/issue/cgw-162",
+      "readerUrl": "https://reetroz.com/issue/cgw-162",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-162.jpg"
+    },
+    {
+      "title": "Computer Gaming World #163 (Feb 1998)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "163",
+      "date": "Feb 1998",
+      "year": 1998,
+      "numbers": [
+        2
+      ],
+      "pages": 274,
+      "pageUrl": "https://reetroz.com/issue/cgw-163",
+      "readerUrl": "https://reetroz.com/issue/cgw-163",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-163.jpg"
+    },
+    {
+      "title": "Computer Gaming World #164 (Mar 1998)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "164",
+      "date": "Mar 1998",
+      "year": 1998,
+      "numbers": [
+        3
+      ],
+      "pages": 272,
+      "pageUrl": "https://reetroz.com/issue/cgw-164",
+      "readerUrl": "https://reetroz.com/issue/cgw-164",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-164.jpg"
+    },
+    {
+      "title": "Computer Gaming World #165 (Apr 1998)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "165",
+      "date": "Apr 1998",
+      "year": 1998,
+      "numbers": [
+        4
+      ],
+      "pages": 246,
+      "pageUrl": "https://reetroz.com/issue/cgw-165",
+      "readerUrl": "https://reetroz.com/issue/cgw-165",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-165.jpg"
+    },
+    {
+      "title": "Computer Gaming World #166 (May 1998)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "166",
+      "date": "May 1998",
+      "year": 1998,
+      "numbers": [
+        5
+      ],
+      "pages": 246,
+      "pageUrl": "https://reetroz.com/issue/cgw-166",
+      "readerUrl": "https://reetroz.com/issue/cgw-166",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-166.jpg"
+    },
+    {
+      "title": "Computer Gaming World #167 (Jun 1998)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "167",
+      "date": "Jun 1998",
+      "year": 1998,
+      "numbers": [
+        6
+      ],
+      "pages": 292,
+      "pageUrl": "https://reetroz.com/issue/cgw-167",
+      "readerUrl": "https://reetroz.com/issue/cgw-167",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-167.jpg"
+    },
+    {
+      "title": "Computer Gaming World #168 (Jul 1998)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "168",
+      "date": "Jul 1998",
+      "year": 1998,
+      "numbers": [
+        7
+      ],
+      "pages": 232,
+      "pageUrl": "https://reetroz.com/issue/cgw-168",
+      "readerUrl": "https://reetroz.com/issue/cgw-168",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-168.jpg"
+    },
+    {
+      "title": "Computer Gaming World #169 (Aug 1998)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "169",
+      "date": "Aug 1998",
+      "year": 1998,
+      "numbers": [
+        8
+      ],
+      "pages": 272,
+      "pageUrl": "https://reetroz.com/issue/cgw-169",
+      "readerUrl": "https://reetroz.com/issue/cgw-169",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-169.jpg"
+    },
+    {
+      "title": "Computer Gaming World #170 (Sep 1998)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "170",
+      "date": "Sep 1998",
+      "year": 1998,
+      "numbers": [
+        9
+      ],
+      "pages": 304,
+      "pageUrl": "https://reetroz.com/issue/cgw-170",
+      "readerUrl": "https://reetroz.com/issue/cgw-170",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-170.jpg"
+    },
+    {
+      "title": "Computer Gaming World #171 (Oct 1998)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "171",
+      "date": "Oct 1998",
+      "year": 1998,
+      "numbers": [
+        10
+      ],
+      "pages": 330,
+      "pageUrl": "https://reetroz.com/issue/cgw-171",
+      "readerUrl": "https://reetroz.com/issue/cgw-171",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-171.jpg"
+    },
+    {
+      "title": "Computer Gaming World #172 (Nov 1998)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "172",
+      "date": "Nov 1998",
+      "year": 1998,
+      "numbers": [
+        11
+      ],
+      "pages": 396,
+      "pageUrl": "https://reetroz.com/issue/cgw-172",
+      "readerUrl": "https://reetroz.com/issue/cgw-172",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-172.jpg"
+    },
+    {
+      "title": "Computer Gaming World #173 (Dec 1998)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "173",
+      "date": "Dec 1998",
+      "year": 1998,
+      "numbers": [
+        12
+      ],
+      "pages": 454,
+      "pageUrl": "https://reetroz.com/issue/cgw-173",
+      "readerUrl": "https://reetroz.com/issue/cgw-173",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-173.jpg"
+    },
+    {
+      "title": "Computer Gaming World #174 (Jan 1999)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "174",
+      "date": "Jan 1999",
+      "year": 1999,
+      "numbers": [
+        1
+      ],
+      "pages": 392,
+      "pageUrl": "https://reetroz.com/issue/cgw-174",
+      "readerUrl": "https://reetroz.com/issue/cgw-174",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-174.jpg"
+    },
+    {
+      "title": "Computer Gaming World #175 (Feb 1999)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "175",
+      "date": "Feb 1999",
+      "year": 1999,
+      "numbers": [
+        2
+      ],
+      "pages": 280,
+      "pageUrl": "https://reetroz.com/issue/cgw-175",
+      "readerUrl": "https://reetroz.com/issue/cgw-175",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-175.jpg"
+    },
+    {
+      "title": "Computer Gaming World #176 (Mar 1999)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "176",
+      "date": "Mar 1999",
+      "year": 1999,
+      "numbers": [
+        3
+      ],
+      "pages": 228,
+      "pageUrl": "https://reetroz.com/issue/cgw-176",
+      "readerUrl": "https://reetroz.com/issue/cgw-176",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-176.jpg"
+    },
+    {
+      "title": "Computer Gaming World #177 (Apr 1999)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "177",
+      "date": "Apr 1999",
+      "year": 1999,
+      "numbers": [
+        4
+      ],
+      "pages": 248,
+      "pageUrl": "https://reetroz.com/issue/cgw-177",
+      "readerUrl": "https://reetroz.com/issue/cgw-177",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-177.jpg"
+    },
+    {
+      "title": "Computer Gaming World #178 (May 1999)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "178",
+      "date": "May 1999",
+      "year": 1999,
+      "numbers": [
+        5
+      ],
+      "pages": 208,
+      "pageUrl": "https://reetroz.com/issue/cgw-178",
+      "readerUrl": "https://reetroz.com/issue/cgw-178",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-178.jpg"
+    },
+    {
+      "title": "Computer Gaming World #179 (Jun 1999)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "179",
+      "date": "Jun 1999",
+      "year": 1999,
+      "numbers": [
+        6
+      ],
+      "pages": 210,
+      "pageUrl": "https://reetroz.com/issue/cgw-179",
+      "readerUrl": "https://reetroz.com/issue/cgw-179",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-179.jpg"
+    },
+    {
+      "title": "Computer Gaming World #180 (Jul 1999)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "180",
+      "date": "Jul 1999",
+      "year": 1999,
+      "numbers": [
+        7
+      ],
+      "pages": 198,
+      "pageUrl": "https://reetroz.com/issue/cgw-180",
+      "readerUrl": "https://reetroz.com/issue/cgw-180",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-180.jpg"
+    },
+    {
+      "title": "Computer Gaming World #181 (Aug 1999)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "181",
+      "date": "Aug 1999",
+      "year": 1999,
+      "numbers": [
+        8
+      ],
+      "pages": 180,
+      "pageUrl": "https://reetroz.com/issue/cgw-181",
+      "readerUrl": "https://reetroz.com/issue/cgw-181",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-181.jpg"
+    },
+    {
+      "title": "Computer Gaming World #182 (Sep 1999)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "182",
+      "date": "Sep 1999",
+      "year": 1999,
+      "numbers": [
+        9
+      ],
+      "pages": 186,
+      "pageUrl": "https://reetroz.com/issue/cgw-182",
+      "readerUrl": "https://reetroz.com/issue/cgw-182",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-182.jpg"
+    },
+    {
+      "title": "Computer Gaming World #183 (Oct 1999)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "183",
+      "date": "Oct 1999",
+      "year": 1999,
+      "numbers": [
+        10
+      ],
+      "pages": 250,
+      "pageUrl": "https://reetroz.com/issue/cgw-183",
+      "readerUrl": "https://reetroz.com/issue/cgw-183",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-183.jpg"
+    },
+    {
+      "title": "Computer Gaming World #184 (Nov 1999)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "184",
+      "date": "Nov 1999",
+      "year": 1999,
+      "numbers": [
+        11
+      ],
+      "pages": 248,
+      "pageUrl": "https://reetroz.com/issue/cgw-184",
+      "readerUrl": "https://reetroz.com/issue/cgw-184",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-184.jpg"
+    },
+    {
+      "title": "Computer Gaming World #185 (Dec 1999)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "185",
+      "date": "Dec 1999",
+      "year": 1999,
+      "numbers": [
+        12
+      ],
+      "pages": 238,
+      "pageUrl": "https://reetroz.com/issue/cgw-185",
+      "readerUrl": "https://reetroz.com/issue/cgw-185",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-185.jpg"
+    },
+    {
+      "title": "Computer Gaming World #186 (Jan 2000)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "186",
+      "date": "Jan 2000",
+      "year": 2000,
+      "numbers": [
+        1
+      ],
+      "pages": 222,
+      "pageUrl": "https://reetroz.com/issue/cgw-186",
+      "readerUrl": "https://reetroz.com/issue/cgw-186",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-186.jpg"
+    },
+    {
+      "title": "Computer Gaming World #187 (Feb 2000)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "187",
+      "date": "Feb 2000",
+      "year": 2000,
+      "numbers": [
+        2
+      ],
+      "pages": 188,
+      "pageUrl": "https://reetroz.com/issue/cgw-187",
+      "readerUrl": "https://reetroz.com/issue/cgw-187",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-187.jpg"
+    },
+    {
+      "title": "Computer Gaming World #188 (Mar 2000)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "188",
+      "date": "Mar 2000",
+      "year": 2000,
+      "numbers": [
+        3
+      ],
+      "pages": 182,
+      "pageUrl": "https://reetroz.com/issue/cgw-188",
+      "readerUrl": "https://reetroz.com/issue/cgw-188",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-188.jpg"
+    },
+    {
+      "title": "Computer Gaming World #189 (Apr 2000)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "189",
+      "date": "Apr 2000",
+      "year": 2000,
+      "numbers": [
+        4
+      ],
+      "pages": 144,
+      "pageUrl": "https://reetroz.com/issue/cgw-189",
+      "readerUrl": "https://reetroz.com/issue/cgw-189",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-189.jpg"
+    },
+    {
+      "title": "Computer Gaming World #190 (May 2000)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "190",
+      "date": "May 2000",
+      "year": 2000,
+      "numbers": [
+        5
+      ],
+      "pages": 150,
+      "pageUrl": "https://reetroz.com/issue/cgw-190",
+      "readerUrl": "https://reetroz.com/issue/cgw-190",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-190.jpg"
+    },
+    {
+      "title": "Computer Gaming World #191 (Jun 2000)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "191",
+      "date": "Jun 2000",
+      "year": 2000,
+      "numbers": [
+        6
+      ],
+      "pages": 160,
+      "pageUrl": "https://reetroz.com/issue/cgw-191",
+      "readerUrl": "https://reetroz.com/issue/cgw-191",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-191.jpg"
+    },
+    {
+      "title": "Computer Gaming World #192 (Jul 2000)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "192",
+      "date": "Jul 2000",
+      "year": 2000,
+      "numbers": [
+        7
+      ],
+      "pages": 142,
+      "pageUrl": "https://reetroz.com/issue/cgw-192",
+      "readerUrl": "https://reetroz.com/issue/cgw-192",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-192.jpg"
+    },
+    {
+      "title": "Computer Gaming World #193 (Aug 2000)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "193",
+      "date": "Aug 2000",
+      "year": 2000,
+      "numbers": [
+        8
+      ],
+      "pages": 148,
+      "pageUrl": "https://reetroz.com/issue/cgw-193",
+      "readerUrl": "https://reetroz.com/issue/cgw-193",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-193.jpg"
+    },
+    {
+      "title": "Computer Gaming World #194 (Sep 2000)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "194",
+      "date": "Sep 2000",
+      "year": 2000,
+      "numbers": [
+        9
+      ],
+      "pages": 158,
+      "pageUrl": "https://reetroz.com/issue/cgw-194",
+      "readerUrl": "https://reetroz.com/issue/cgw-194",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-194.jpg"
+    },
+    {
+      "title": "Computer Gaming World #195 (Oct 2000)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "195",
+      "date": "Oct 2000",
+      "year": 2000,
+      "numbers": [
+        10
+      ],
+      "pages": 176,
+      "pageUrl": "https://reetroz.com/issue/cgw-195",
+      "readerUrl": "https://reetroz.com/issue/cgw-195",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-195.jpg"
+    },
+    {
+      "title": "Computer Gaming World #196 (Nov 2000)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "196",
+      "date": "Nov 2000",
+      "year": 2000,
+      "numbers": [
+        11
+      ],
+      "pages": 208,
+      "pageUrl": "https://reetroz.com/issue/cgw-196",
+      "readerUrl": "https://reetroz.com/issue/cgw-196",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-196.jpg"
+    },
+    {
+      "title": "Computer Gaming World #197 (Dec 2000)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "197",
+      "date": "Dec 2000",
+      "year": 2000,
+      "numbers": [
+        12
+      ],
+      "pages": 200,
+      "pageUrl": "https://reetroz.com/issue/cgw-197",
+      "readerUrl": "https://reetroz.com/issue/cgw-197",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-197.jpg"
+    },
+    {
+      "title": "Computer Gaming World #198 (Jan 2001)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "198",
+      "date": "Jan 2001",
+      "year": 2001,
+      "numbers": [
+        1
+      ],
+      "pages": 198,
+      "pageUrl": "https://reetroz.com/issue/cgw-198",
+      "readerUrl": "https://reetroz.com/issue/cgw-198",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-198.jpg"
+    },
+    {
+      "title": "Computer Gaming World #199 (Feb 2001)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "199",
+      "date": "Feb 2001",
+      "year": 2001,
+      "numbers": [
+        2
+      ],
+      "pages": 144,
+      "pageUrl": "https://reetroz.com/issue/cgw-199",
+      "readerUrl": "https://reetroz.com/issue/cgw-199",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-199.jpg"
+    },
+    {
+      "title": "Computer Gaming World #200 (Mar 2001)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "200",
+      "date": "Mar 2001",
+      "year": 2001,
+      "numbers": [
+        3
+      ],
+      "pages": 150,
+      "pageUrl": "https://reetroz.com/issue/cgw-200",
+      "readerUrl": "https://reetroz.com/issue/cgw-200",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-200.jpg"
+    },
+    {
+      "title": "Computer Gaming World #201 (Apr 2001)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "201",
+      "date": "Apr 2001",
+      "year": 2001,
+      "numbers": [
+        4
+      ],
+      "pages": 144,
+      "pageUrl": "https://reetroz.com/issue/cgw-201",
+      "readerUrl": "https://reetroz.com/issue/cgw-201",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-201.jpg"
+    },
+    {
+      "title": "Computer Gaming World #202 (May 2001)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "202",
+      "date": "May 2001",
+      "year": 2001,
+      "numbers": [
+        5
+      ],
+      "pages": 134,
+      "pageUrl": "https://reetroz.com/issue/cgw-202",
+      "readerUrl": "https://reetroz.com/issue/cgw-202",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-202.jpg"
+    },
+    {
+      "title": "Computer Gaming World #203 (Jun 2001)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "203",
+      "date": "Jun 2001",
+      "year": 2001,
+      "numbers": [
+        6
+      ],
+      "pages": 142,
+      "pageUrl": "https://reetroz.com/issue/cgw-203",
+      "readerUrl": "https://reetroz.com/issue/cgw-203",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-203.jpg"
+    },
+    {
+      "title": "Computer Gaming World #204 (Jul 2001)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "204",
+      "date": "Jul 2001",
+      "year": 2001,
+      "numbers": [
+        7
+      ],
+      "pages": 136,
+      "pageUrl": "https://reetroz.com/issue/cgw-204",
+      "readerUrl": "https://reetroz.com/issue/cgw-204",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-204.jpg"
+    },
+    {
+      "title": "Computer Gaming World #205 (Aug 2001)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "205",
+      "date": "Aug 2001",
+      "year": 2001,
+      "numbers": [
+        8
+      ],
+      "pages": 120,
+      "pageUrl": "https://reetroz.com/issue/cgw-205",
+      "readerUrl": "https://reetroz.com/issue/cgw-205",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-205.jpg"
+    },
+    {
+      "title": "Computer Gaming World #206 (Sep 2001)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "206",
+      "date": "Sep 2001",
+      "year": 2001,
+      "numbers": [
+        9
+      ],
+      "pages": 140,
+      "pageUrl": "https://reetroz.com/issue/cgw-206",
+      "readerUrl": "https://reetroz.com/issue/cgw-206",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-206.jpg"
+    },
+    {
+      "title": "Computer Gaming World #207 (Oct 2001)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "207",
+      "date": "Oct 2001",
+      "year": 2001,
+      "numbers": [
+        10
+      ],
+      "pages": 148,
+      "pageUrl": "https://reetroz.com/issue/cgw-207",
+      "readerUrl": "https://reetroz.com/issue/cgw-207",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-207.jpg"
+    },
+    {
+      "title": "Computer Gaming World #208 (Nov 2001)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "208",
+      "date": "Nov 2001",
+      "year": 2001,
+      "numbers": [
+        11
+      ],
+      "pages": 168,
+      "pageUrl": "https://reetroz.com/issue/cgw-208",
+      "readerUrl": "https://reetroz.com/issue/cgw-208",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-208.jpg"
+    },
+    {
+      "title": "Computer Gaming World #209 (Dec 2001)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "209",
+      "date": "Dec 2001",
+      "year": 2001,
+      "numbers": [
+        12
+      ],
+      "pages": 176,
+      "pageUrl": "https://reetroz.com/issue/cgw-209",
+      "readerUrl": "https://reetroz.com/issue/cgw-209",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-209.jpg"
+    },
+    {
+      "title": "Computer Gaming World #210 (Jan 2002)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "210",
+      "date": "Jan 2002",
+      "year": 2002,
+      "numbers": [
+        1
+      ],
+      "pages": 156,
+      "pageUrl": "https://reetroz.com/issue/cgw-210",
+      "readerUrl": "https://reetroz.com/issue/cgw-210",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-210.jpg"
+    },
+    {
+      "title": "Computer Gaming World #211 (Feb 2002)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "211",
+      "date": "Feb 2002",
+      "year": 2002,
+      "numbers": [
+        2
+      ],
+      "pages": 142,
+      "pageUrl": "https://reetroz.com/issue/cgw-211",
+      "readerUrl": "https://reetroz.com/issue/cgw-211",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-211.jpg"
+    },
+    {
+      "title": "Computer Gaming World #212 (Mar 2002)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "212",
+      "date": "Mar 2002",
+      "year": 2002,
+      "numbers": [
+        3
+      ],
+      "pages": 130,
+      "pageUrl": "https://reetroz.com/issue/cgw-212",
+      "readerUrl": "https://reetroz.com/issue/cgw-212",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-212.jpg"
+    },
+    {
+      "title": "Computer Gaming World #213 (Apr 2002)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "213",
+      "date": "Apr 2002",
+      "year": 2002,
+      "numbers": [
+        4
+      ],
+      "pages": 142,
+      "pageUrl": "https://reetroz.com/issue/cgw-213",
+      "readerUrl": "https://reetroz.com/issue/cgw-213",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-213.jpg"
+    },
+    {
+      "title": "Computer Gaming World #214 (May 2002)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "214",
+      "date": "May 2002",
+      "year": 2002,
+      "numbers": [
+        5
+      ],
+      "pages": 130,
+      "pageUrl": "https://reetroz.com/issue/cgw-214",
+      "readerUrl": "https://reetroz.com/issue/cgw-214",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-214.jpg"
+    },
+    {
+      "title": "Computer Gaming World #215 (Jun 2002)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "215",
+      "date": "Jun 2002",
+      "year": 2002,
+      "numbers": [
+        6
+      ],
+      "pages": 128,
+      "pageUrl": "https://reetroz.com/issue/cgw-215",
+      "readerUrl": "https://reetroz.com/issue/cgw-215",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-215.jpg"
+    },
+    {
+      "title": "Computer Gaming World #216 (Jul 2002)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "216",
+      "date": "Jul 2002",
+      "year": 2002,
+      "numbers": [
+        7
+      ],
+      "pages": 118,
+      "pageUrl": "https://reetroz.com/issue/cgw-216",
+      "readerUrl": "https://reetroz.com/issue/cgw-216",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-216.jpg"
+    },
+    {
+      "title": "Computer Gaming World #217 (Aug 2002)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "217",
+      "date": "Aug 2002",
+      "year": 2002,
+      "numbers": [
+        8
+      ],
+      "pages": 126,
+      "pageUrl": "https://reetroz.com/issue/cgw-217",
+      "readerUrl": "https://reetroz.com/issue/cgw-217",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-217.jpg"
+    },
+    {
+      "title": "Computer Gaming World #218 (Sep 2002)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "218",
+      "date": "Sep 2002",
+      "year": 2002,
+      "numbers": [
+        9
+      ],
+      "pages": 130,
+      "pageUrl": "https://reetroz.com/issue/cgw-218",
+      "readerUrl": "https://reetroz.com/issue/cgw-218",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-218.jpg"
+    },
+    {
+      "title": "Computer Gaming World #219 (Oct 2002)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "219",
+      "date": "Oct 2002",
+      "year": 2002,
+      "numbers": [
+        10
+      ],
+      "pages": 150,
+      "pageUrl": "https://reetroz.com/issue/cgw-219",
+      "readerUrl": "https://reetroz.com/issue/cgw-219",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-219.jpg"
+    },
+    {
+      "title": "Computer Gaming World #220 (Nov 2002)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "220",
+      "date": "Nov 2002",
+      "year": 2002,
+      "numbers": [
+        11
+      ],
+      "pages": 166,
+      "pageUrl": "https://reetroz.com/issue/cgw-220",
+      "readerUrl": "https://reetroz.com/issue/cgw-220",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-220.jpg"
+    },
+    {
+      "title": "Computer Gaming World #221 (Dec 2002)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "221",
+      "date": "Dec 2002",
+      "year": 2002,
+      "numbers": [
+        12
+      ],
+      "pages": 174,
+      "pageUrl": "https://reetroz.com/issue/cgw-221",
+      "readerUrl": "https://reetroz.com/issue/cgw-221",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-221.jpg"
+    },
+    {
+      "title": "Computer Gaming World #222 (Jan 2003)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "222",
+      "date": "Jan 2003",
+      "year": 2003,
+      "numbers": [
+        1
+      ],
+      "pages": 162,
+      "pageUrl": "https://reetroz.com/issue/cgw-222",
+      "readerUrl": "https://reetroz.com/issue/cgw-222",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-222.jpg"
+    },
+    {
+      "title": "Computer Gaming World #223 (Feb 2003)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "223",
+      "date": "Feb 2003",
+      "year": 2003,
+      "numbers": [
+        2
+      ],
+      "pages": 134,
+      "pageUrl": "https://reetroz.com/issue/cgw-223",
+      "readerUrl": "https://reetroz.com/issue/cgw-223",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-223.jpg"
+    },
+    {
+      "title": "Computer Gaming World #224 (Mar 2003)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "224",
+      "date": "Mar 2003",
+      "year": 2003,
+      "numbers": [
+        3
+      ],
+      "pages": 142,
+      "pageUrl": "https://reetroz.com/issue/cgw-224",
+      "readerUrl": "https://reetroz.com/issue/cgw-224",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-224.jpg"
+    },
+    {
+      "title": "Computer Gaming World #225 (Apr 2003)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "225",
+      "date": "Apr 2003",
+      "year": 2003,
+      "numbers": [
+        4
+      ],
+      "pages": 150,
+      "pageUrl": "https://reetroz.com/issue/cgw-225",
+      "readerUrl": "https://reetroz.com/issue/cgw-225",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-225.jpg"
+    },
+    {
+      "title": "Computer Gaming World #226 (May 2003)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "226",
+      "date": "May 2003",
+      "year": 2003,
+      "numbers": [
+        5
+      ],
+      "pages": 130,
+      "pageUrl": "https://reetroz.com/issue/cgw-226",
+      "readerUrl": "https://reetroz.com/issue/cgw-226",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-226.jpg"
+    },
+    {
+      "title": "Computer Gaming World #227 (Jun 2003)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "227",
+      "date": "Jun 2003",
+      "year": 2003,
+      "numbers": [
+        6
+      ],
+      "pages": 138,
+      "pageUrl": "https://reetroz.com/issue/cgw-227",
+      "readerUrl": "https://reetroz.com/issue/cgw-227",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-227.jpg"
+    },
+    {
+      "title": "Computer Gaming World #228 (Jul 2003)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "228",
+      "date": "Jul 2003",
+      "year": 2003,
+      "numbers": [
+        7
+      ],
+      "pages": 122,
+      "pageUrl": "https://reetroz.com/issue/cgw-228",
+      "readerUrl": "https://reetroz.com/issue/cgw-228",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-228.jpg"
+    },
+    {
+      "title": "Computer Gaming World #229 (Aug 2003)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "229",
+      "date": "Aug 2003",
+      "year": 2003,
+      "numbers": [
+        8
+      ],
+      "pages": 120,
+      "pageUrl": "https://reetroz.com/issue/cgw-229",
+      "readerUrl": "https://reetroz.com/issue/cgw-229",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-229.jpg"
+    },
+    {
+      "title": "Computer Gaming World #230 (Sep 2003)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "230",
+      "date": "Sep 2003",
+      "year": 2003,
+      "numbers": [
+        9
+      ],
+      "pages": 142,
+      "pageUrl": "https://reetroz.com/issue/cgw-230",
+      "readerUrl": "https://reetroz.com/issue/cgw-230",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-230.jpg"
+    },
+    {
+      "title": "Computer Gaming World #231 (Oct 2003)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "231",
+      "date": "Oct 2003",
+      "year": 2003,
+      "numbers": [
+        10
+      ],
+      "pages": 154,
+      "pageUrl": "https://reetroz.com/issue/cgw-231",
+      "readerUrl": "https://reetroz.com/issue/cgw-231",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-231.jpg"
+    },
+    {
+      "title": "Computer Gaming World #232 (Nov 2003)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "232",
+      "date": "Nov 2003",
+      "year": 2003,
+      "numbers": [
+        11
+      ],
+      "pages": 186,
+      "pageUrl": "https://reetroz.com/issue/cgw-232",
+      "readerUrl": "https://reetroz.com/issue/cgw-232",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-232.jpg"
+    },
+    {
+      "title": "Computer Gaming World #233 (Dec 2003)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "233",
+      "date": "Dec 2003",
+      "year": 2003,
+      "numbers": [
+        12
+      ],
+      "pages": 214,
+      "pageUrl": "https://reetroz.com/issue/cgw-233",
+      "readerUrl": "https://reetroz.com/issue/cgw-233",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-233.jpg"
+    },
+    {
+      "title": "Computer Gaming World #234 (Jan 2004)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "234",
+      "date": "Jan 2004",
+      "year": 2004,
+      "numbers": [
+        1
+      ],
+      "pages": 170,
+      "pageUrl": "https://reetroz.com/issue/cgw-234",
+      "readerUrl": "https://reetroz.com/issue/cgw-234",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-234.jpg"
+    },
+    {
+      "title": "Computer Gaming World #235 (Feb 2004)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "235",
+      "date": "Feb 2004",
+      "year": 2004,
+      "numbers": [
+        2
+      ],
+      "pages": 128,
+      "pageUrl": "https://reetroz.com/issue/cgw-235",
+      "readerUrl": "https://reetroz.com/issue/cgw-235",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-235.jpg"
+    },
+    {
+      "title": "Computer Gaming World #236 (Mar 2004)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "236",
+      "date": "Mar 2004",
+      "year": 2004,
+      "numbers": [
+        3
+      ],
+      "pages": 128,
+      "pageUrl": "https://reetroz.com/issue/cgw-236",
+      "readerUrl": "https://reetroz.com/issue/cgw-236",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-236.jpg"
+    },
+    {
+      "title": "Computer Gaming World #237 (Apr 2004)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "237",
+      "date": "Apr 2004",
+      "year": 2004,
+      "numbers": [
+        4
+      ],
+      "pages": 128,
+      "pageUrl": "https://reetroz.com/issue/cgw-237",
+      "readerUrl": "https://reetroz.com/issue/cgw-237",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-237.jpg"
+    },
+    {
+      "title": "Computer Gaming World #238 (May 2004)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "238",
+      "date": "May 2004",
+      "year": 2004,
+      "numbers": [
+        5
+      ],
+      "pages": 136,
+      "pageUrl": "https://reetroz.com/issue/cgw-238",
+      "readerUrl": "https://reetroz.com/issue/cgw-238",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-238.jpg"
+    },
+    {
+      "title": "Computer Gaming World #239 (Jun 2004)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "239",
+      "date": "Jun 2004",
+      "year": 2004,
+      "numbers": [
+        6
+      ],
+      "pages": 128,
+      "pageUrl": "https://reetroz.com/issue/cgw-239",
+      "readerUrl": "https://reetroz.com/issue/cgw-239",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-239.jpg"
+    },
+    {
+      "title": "Computer Gaming World #240 (Jul 2004)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "240",
+      "date": "Jul 2004",
+      "year": 2004,
+      "numbers": [
+        7
+      ],
+      "pages": 116,
+      "pageUrl": "https://reetroz.com/issue/cgw-240",
+      "readerUrl": "https://reetroz.com/issue/cgw-240",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-240.jpg"
+    },
+    {
+      "title": "Computer Gaming World #241 (Aug 2004)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "241",
+      "date": "Aug 2004",
+      "year": 2004,
+      "numbers": [
+        8
+      ],
+      "pages": 118,
+      "pageUrl": "https://reetroz.com/issue/cgw-241",
+      "readerUrl": "https://reetroz.com/issue/cgw-241",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-241.jpg"
+    },
+    {
+      "title": "Computer Gaming World #242 (Sep 2004)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "242",
+      "date": "Sep 2004",
+      "year": 2004,
+      "numbers": [
+        9
+      ],
+      "pages": 122,
+      "pageUrl": "https://reetroz.com/issue/cgw-242",
+      "readerUrl": "https://reetroz.com/issue/cgw-242",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-242.jpg"
+    },
+    {
+      "title": "Computer Gaming World #243 (Oct 2004)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "243",
+      "date": "Oct 2004",
+      "year": 2004,
+      "numbers": [
+        10
+      ],
+      "pages": 136,
+      "pageUrl": "https://reetroz.com/issue/cgw-243",
+      "readerUrl": "https://reetroz.com/issue/cgw-243",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-243.jpg"
+    },
+    {
+      "title": "Computer Gaming World #244 (Nov 2004)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "244",
+      "date": "Nov 2004",
+      "year": 2004,
+      "numbers": [
+        11
+      ],
+      "pages": 124,
+      "pageUrl": "https://reetroz.com/issue/cgw-244",
+      "readerUrl": "https://reetroz.com/issue/cgw-244",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-244.jpg"
+    },
+    {
+      "title": "Computer Gaming World #245 (Dec 2004)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "245",
+      "date": "Dec 2004",
+      "year": 2004,
+      "numbers": [
+        12
+      ],
+      "pages": 140,
+      "pageUrl": "https://reetroz.com/issue/cgw-245",
+      "readerUrl": "https://reetroz.com/issue/cgw-245",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-245.jpg"
+    },
+    {
+      "title": "Computer Gaming World #246 (Holiday 2004)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "246",
+      "date": "Holiday 2004",
+      "year": 2004,
+      "numbers": [],
+      "pages": 134,
+      "pageUrl": "https://reetroz.com/issue/cgw-246",
+      "readerUrl": "https://reetroz.com/issue/cgw-246",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-246.jpg"
+    },
+    {
+      "title": "Computer Gaming World #247 (Jan 2005)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "247",
+      "date": "Jan 2005",
+      "year": 2005,
+      "numbers": [
+        1
+      ],
+      "pages": 134,
+      "pageUrl": "https://reetroz.com/issue/cgw-247",
+      "readerUrl": "https://reetroz.com/issue/cgw-247",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-247.jpg"
+    },
+    {
+      "title": "Computer Gaming World #248 (Feb 2005)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "248",
+      "date": "Feb 2005",
+      "year": 2005,
+      "numbers": [
+        2
+      ],
+      "pages": 120,
+      "pageUrl": "https://reetroz.com/issue/cgw-248",
+      "readerUrl": "https://reetroz.com/issue/cgw-248",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-248.jpg"
+    },
+    {
+      "title": "Computer Gaming World #249 (Mar 2005)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "249",
+      "date": "Mar 2005",
+      "year": 2005,
+      "numbers": [
+        3
+      ],
+      "pages": 110,
+      "pageUrl": "https://reetroz.com/issue/cgw-249",
+      "readerUrl": "https://reetroz.com/issue/cgw-249",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-249.jpg"
+    },
+    {
+      "title": "Computer Gaming World #250 (Apr 2005)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "250",
+      "date": "Apr 2005",
+      "year": 2005,
+      "numbers": [
+        4
+      ],
+      "pages": 128,
+      "pageUrl": "https://reetroz.com/issue/cgw-250",
+      "readerUrl": "https://reetroz.com/issue/cgw-250",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-250.jpg"
+    },
+    {
+      "title": "Computer Gaming World #251 (May 2005)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "251",
+      "date": "May 2005",
+      "year": 2005,
+      "numbers": [
+        5
+      ],
+      "pages": 116,
+      "pageUrl": "https://reetroz.com/issue/cgw-251",
+      "readerUrl": "https://reetroz.com/issue/cgw-251",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-251.jpg"
+    },
+    {
+      "title": "Computer Gaming World #252 (Jun 2005)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "252",
+      "date": "Jun 2005",
+      "year": 2005,
+      "numbers": [
+        6
+      ],
+      "pages": 116,
+      "pageUrl": "https://reetroz.com/issue/cgw-252",
+      "readerUrl": "https://reetroz.com/issue/cgw-252",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-252.jpg"
+    },
+    {
+      "title": "Computer Gaming World #253 (Jul/Aug 2005)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "253",
+      "date": "Jul/Aug 2005",
+      "year": 2005,
+      "numbers": [
+        7,
+        8
+      ],
+      "pages": 112,
+      "pageUrl": "https://reetroz.com/issue/cgw-253",
+      "readerUrl": "https://reetroz.com/issue/cgw-253",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-253.jpg"
+    },
+    {
+      "title": "Computer Gaming World #254 (Sep 2005)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "254",
+      "date": "Sep 2005",
+      "year": 2005,
+      "numbers": [
+        9
+      ],
+      "pages": 92,
+      "pageUrl": "https://reetroz.com/issue/cgw-254",
+      "readerUrl": "https://reetroz.com/issue/cgw-254",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-254.jpg"
+    },
+    {
+      "title": "Computer Gaming World #255 (Oct 2005)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "255",
+      "date": "Oct 2005",
+      "year": 2005,
+      "numbers": [
+        10
+      ],
+      "pages": 100,
+      "pageUrl": "https://reetroz.com/issue/cgw-255",
+      "readerUrl": "https://reetroz.com/issue/cgw-255",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-255.jpg"
+    },
+    {
+      "title": "Computer Gaming World #256 (Nov 2005)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "256",
+      "date": "Nov 2005",
+      "year": 2005,
+      "numbers": [
+        11
+      ],
+      "pages": 128,
+      "pageUrl": "https://reetroz.com/issue/cgw-256",
+      "readerUrl": "https://reetroz.com/issue/cgw-256",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-256.jpg"
+    },
+    {
+      "title": "Computer Gaming World #257 (Dec 2005)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "257",
+      "date": "Dec 2005",
+      "year": 2005,
+      "numbers": [
+        12
+      ],
+      "pages": 134,
+      "pageUrl": "https://reetroz.com/issue/cgw-257",
+      "readerUrl": "https://reetroz.com/issue/cgw-257",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-257.jpg"
+    },
+    {
+      "title": "Computer Gaming World #258 (Jan 2006)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "258",
+      "date": "Jan 2006",
+      "year": 2006,
+      "numbers": [
+        1
+      ],
+      "pages": 124,
+      "pageUrl": "https://reetroz.com/issue/cgw-258",
+      "readerUrl": "https://reetroz.com/issue/cgw-258",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-258.jpg"
+    },
+    {
+      "title": "Computer Gaming World #259 (Feb 2006)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "259",
+      "date": "Feb 2006",
+      "year": 2006,
+      "numbers": [
+        2
+      ],
+      "pages": 100,
+      "pageUrl": "https://reetroz.com/issue/cgw-259",
+      "readerUrl": "https://reetroz.com/issue/cgw-259",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-259.jpg"
+    },
+    {
+      "title": "Computer Gaming World #260 (Mar 2006)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "260",
+      "date": "Mar 2006",
+      "year": 2006,
+      "numbers": [
+        3
+      ],
+      "pages": 108,
+      "pageUrl": "https://reetroz.com/issue/cgw-260",
+      "readerUrl": "https://reetroz.com/issue/cgw-260",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-260.jpg"
+    },
+    {
+      "title": "Computer Gaming World #261 (Apr 2006)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "261",
+      "date": "Apr 2006",
+      "year": 2006,
+      "numbers": [
+        4
+      ],
+      "pages": 100,
+      "pageUrl": "https://reetroz.com/issue/cgw-261",
+      "readerUrl": "https://reetroz.com/issue/cgw-261",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-261.jpg"
+    },
+    {
+      "title": "Computer Gaming World #262 (May 2006)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "262",
+      "date": "May 2006",
+      "year": 2006,
+      "numbers": [
+        5
+      ],
+      "pages": 104,
+      "pageUrl": "https://reetroz.com/issue/cgw-262",
+      "readerUrl": "https://reetroz.com/issue/cgw-262",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-262.jpg"
+    },
+    {
+      "title": "Computer Gaming World #263 (Jun 2006)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "263",
+      "date": "Jun 2006",
+      "year": 2006,
+      "numbers": [
+        6
+      ],
+      "pages": 120,
+      "pageUrl": "https://reetroz.com/issue/cgw-263",
+      "readerUrl": "https://reetroz.com/issue/cgw-263",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-263.jpg"
+    },
+    {
+      "title": "Computer Gaming World #264 (Jul 2006)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "264",
+      "date": "Jul 2006",
+      "year": 2006,
+      "numbers": [
+        7
+      ],
+      "pages": 108,
+      "pageUrl": "https://reetroz.com/issue/cgw-264",
+      "readerUrl": "https://reetroz.com/issue/cgw-264",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-264.jpg"
+    },
+    {
+      "title": "Computer Gaming World #265 (Aug 2006)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "265",
+      "date": "Aug 2006",
+      "year": 2006,
+      "numbers": [
+        8
+      ],
+      "pages": 108,
+      "pageUrl": "https://reetroz.com/issue/cgw-265",
+      "readerUrl": "https://reetroz.com/issue/cgw-265",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-265.jpg"
+    },
+    {
+      "title": "Computer Gaming World #266 (Sep 2006)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "266",
+      "date": "Sep 2006",
+      "year": 2006,
+      "numbers": [
+        9
+      ],
+      "pages": 114,
+      "pageUrl": "https://reetroz.com/issue/cgw-266",
+      "readerUrl": "https://reetroz.com/issue/cgw-266",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-266.jpg"
+    },
+    {
+      "title": "Computer Gaming World #267 (Oct 2006)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "267",
+      "date": "Oct 2006",
+      "year": 2006,
+      "numbers": [
+        10
+      ],
+      "pages": 112,
+      "pageUrl": "https://reetroz.com/issue/cgw-267",
+      "readerUrl": "https://reetroz.com/issue/cgw-267",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-267.jpg"
+    },
+    {
+      "title": "Computer Gaming World #268 (Nov 2006)",
+      "section": null,
+      "special": false,
+      "supplement": false,
+      "issueNumber": "268",
+      "date": "Nov 2006",
+      "year": 2006,
+      "numbers": [
+        11
+      ],
+      "pages": 136,
+      "pageUrl": "https://reetroz.com/issue/cgw-268",
+      "readerUrl": "https://reetroz.com/issue/cgw-268",
+      "downloadUrl": null,
+      "coverUrl": "https://assets.reetroz.com/covers/cgw-268.jpg"
+    }
+  ]
+}
