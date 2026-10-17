@@ -1,7 +1,7 @@
 # Pretty Old Pixel
 
 Statische Website für GitHub Pages. Die Quelldateien und der Websitegenerator liegen
-in `src/`; `npm run generate:site` erzeugt die veröffentlichbaren Dateien in `public/`.
+in `src/`; `npm run generate:site` erzeugt die veröffentlichbaren Dateien in `docs/`.
 
 ## Lokal bauen
 
@@ -31,15 +31,19 @@ Projektpfad. Auch Canonicals, `og:url`, Paginierung und interne JSON-LD-URLs
 einschließlich `@id` sind seitenrelativ. Nur die Sitemap enthält vollständige
 Seiten-URLs; ihre `Sitemap:`-Referenz in `robots.txt` bleibt ebenfalls absolut.
 Externe YouTube-/Archivlinks und Schema.org-Bezeichner bleiben unverändert.
-Die generierten Dateien unter `public/` sind Build-Artefakte und gehören nicht
+Die generierten Dateien unter `docs/` sind Build-Artefakte und gehören nicht
 in neue Commits; GitHub Actions erzeugt und prüft sie vor dem Deployment.
+`docs/` ist ausschließlich für die generierte Website reserviert und wird beim
+Build vollständig ersetzt. Die Projektdokumentation bleibt unter `doc/`.
+Eine vorhandene Ausgabe unter `public/` kann einmalig nach `docs/` verschoben
+werden, damit das Build-Manifest und unveränderte Dateizeitpunkte erhalten bleiben.
 
 ### Erste Seiten und lokale Vorschau
 
 Umgesetzt sind Startseite, News mit den 20 neuesten veröffentlichten Videos,
 Videokatalog mit maximal 50 Einträgen je Seite,
 Zeitschriftenindex mit Zeitschriften-, Jahrgangs- und Ausgabenseiten,
-Spieleindex und Spieleseiten,
+Spieleindex und Spieleseiten, Hardware, Retrospektiven sowie Interviews und Gespräche,
 Datenschutz, Sitemap, Robots-Datei und 404-Seite. Alle Inhalte stehen direkt im
 HTML. Nur Spiel-/Ausgabenseiten laden ein kleines lokales JavaScript für die Auswahl
 von Video und Beschreibung; ohne JavaScript sind alle Beschreibungen sichtbar.
@@ -57,7 +61,7 @@ Für eine lokale Vorschau ohne Projekt-Unterpfad:
 
 ```sh
 npm run generate:site -- --base-url http://localhost:8000/
-python3 -m http.server 8000 --bind 127.0.0.1 --directory public
+python3 -m http.server 8000 --bind 127.0.0.1 --directory docs
 ```
 
 Dann http://localhost:8000/ öffnen. Der HTML-/Asset-Baum funktioniert unverändert
@@ -78,8 +82,48 @@ Playlist werden zusätzlich chronologisch vom ältesten zum neuesten sortiert;
 Quellpositionen und Mehrfacheinträge bleiben separat erhalten. Fehlende oder
 nicht verfügbare Mitglieder werden gemeldet und nicht als Videos erfunden.
 Playlist-Titel allein bestätigen noch kein Spiel. Die geprüften Spielezuordnungen
-stehen in `src/games.mjs`. Weitere Themenbereiche folgen in den nächsten
-Schritten; es gibt keine Links auf noch nicht erzeugte Bereichsseiten.
+stehen in `src/games.mjs`, die bestätigten Zuordnungen für weitere Bereiche
+in `src/sections.mjs`. Es gibt keine Links auf noch nicht erzeugte Bereichsseiten.
+
+### Hardware, Retrospektiven und Gespräche
+
+- `/hardware/` enthält derzeit 14 geprüfte Hardwarebeiträge, neueste zuerst:
+  Gerätevorstellungen, Restaurationsprojekte, PC-Grundlagen und Bastelstreams.
+  Es gibt keine Unterseiten nach Gerät, Hersteller oder Jahr.
+- `/retrospektiven/` enthält die Format-Einleitung und zwölf Beiträge zur
+  Geschichte der Flugsimulationen, gruppiert nach Thema und geprüfter
+  Folgenreihenfolge. Die zwei Originaltitel mit `#11` bleiben unverändert;
+  die Reihenfolge ergibt sich aus der bestätigten Themenreihe, nicht aus
+  einer bloßen Titelsortierung. Es gibt keine eigenen Themenunterseiten.
+- `/interviews/` enthält acht bestätigte Interviews/Gespräche mit sichtbaren
+  Personen- und Themenangaben, neueste zuerst. Bekannte Spielzuordnungen
+  werden wiederverwendet, nicht aus zufälligen Erwähnungen im Text erfunden.
+  Dazu gehört auch das Interview mit Andreas und Oliver über die C64-Version
+  von Eye of the Beholder, das nicht in der Interview-Playlist enthalten ist.
+- `src/sections.mjs` hält explizite Video-IDs, Themen, bei Gesprächen Personen
+  und bei Retrospektiven die Reihenfolge. Titel, Beschreibungen und bestätigte
+  Playlist-Mitgliedschaften wurden hierfür geprüft. Änderungen der
+  Playlist-Mitgliedschaft allein erzeugen keine ungeprüften Zuordnungen.
+  Neue Titel-/Playlist-Kandidaten werden beim Build als Prüfhinweis gemeldet.
+  Fehlen bestätigte Beiträge im öffentlichen Cache, werden sie ausgelassen
+  und bei vorhandenem Quellplaylist-Kontext ausdrücklich gemeldet.
+- Der reine Verpackungsbeitrag `bwVnfQJ-WEw` ist ausdrücklich von Hardware
+  ausgeschlossen. Der gemischte Beitrag `XDvGVislnJg` behandelt laut
+  Beschreibung Hardware-Reinigung und trägt einen entsprechenden Hinweis.
+  re.list, re.collect und Community-Formate bleiben im Gesamtkatalog.
+- Bereiche haben höchstens 50 Einträge pro Übersichtsseite. Fehlende
+  Beschreibungen sind zulässig; unbekannte Daten stehen bei Hardware und
+  Interviews am Ende. Zukünftige oder fehlende Videos werden nicht publiziert.
+  Leere Bereiche erzeugen weder Seiten noch Navigationslinks.
+- Startseite, Hauptnavigation, News, Katalog und zugehörige Detailseiten
+  verlinken die vorhandenen Bereiche. Die erweiterten Navigationslinks
+  umbrechen auf schmalen Displays. Videolinks führen zu vorhandenen
+  Spiel-/Ausgabeabschnitten oder extern zu YouTube; keine zusätzlichen
+  Videoseiten, Player, Vorschaubilder oder Laufzeitscripte.
+- Auch diese Seiten werden rein offline erzeugt und folgen den relativen
+  URL-, Sitemap-, Größenbudget- und Änderungsdatum-Regeln des übrigen Builds.
+  Kapitelsteuerung, Partnerlisten und automatische Folgenfortsetzung bleiben
+  spätere Schritte.
 
 ### Spiele und bestätigte Playlist-Zuordnungen
 
@@ -224,7 +268,7 @@ Schritten; es gibt keine Links auf noch nicht erzeugte Bereichsseiten.
   entfernte Seiten bleiben nicht liegen. Identische Dateien werden einschließlich
   Dateizeit übernommen. Bei ungültigen Quellen bleibt die bestehende Website
   unberührt.
-- `public/build-manifest.json` enthält je Seite Inhalts-Fingerabdruck und
+- `docs/build-manifest.json` enthält je Seite Inhalts-Fingerabdruck und
   `contentPublishedAt` aus den zugehörigen Video-Veröffentlichungen sowie
   `lastModified` für die zuletzt beim Erzeugen festgestellte Änderung am HTML.
   Die Sitemap gibt diesen Wert als standardkonformes `<lastmod>` mit
@@ -465,5 +509,5 @@ Architecture Decision Records liegen in `doc/adr/`:
 ## GitHub Pages veröffentlichen
 
 Der Workflow in `.github/workflows/pages.yml` baut die Website bei Pushes auf
-den Branch `main` und veröffentlicht `public/` über GitHub Pages. Aktiviere im
+den Branch `main` und veröffentlicht `docs/` über GitHub Pages. Aktiviere im
 Repository unter **Settings → Pages** die Bereitstellung über **GitHub Actions**.

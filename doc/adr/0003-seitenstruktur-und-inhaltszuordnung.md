@@ -81,8 +81,8 @@ keine Mitgliedschaft. Maßgeblich sind die tatsächlich abgefragten
 Mitgliederlisten im Playlist-Cache.
 
 Datenerfassung, bestätigte Spielezuordnung, Spieleseiten sowie konservative
-Abschnitts-/Reihenerkennung sind umgesetzt. Zusätzliche Kategorieübersichten
-und Player-Komfortfunktionen folgen separat.
+Abschnitts-/Reihenerkennung sowie Hardware-, Retrospektiven- und
+Interviewübersichten sind umgesetzt. Player-Komfortfunktionen folgen separat.
 
 ## Entscheidung
 
@@ -307,6 +307,13 @@ führen Videolinks vorerst direkt zu YouTube.
 Verpackungsaufbereitung oder gemischte Themen werden geprüft, statt jeden
 re.ware-Beitrag ungeprüft als Hardware zu behandeln.
 
+**Umgesetzt:** 14 bestätigte Beiträge aus den Hardware-/re.ware-Playlists und
+geprüften einzelnen Hardwaretiteln. Die Zuordnung steht explizit in
+[`src/sections.mjs`](../../src/sections.mjs). Der reine Verpackungsbeitrag
+`bwVnfQJ-WEw` bleibt ausgeschlossen; der gemischte Beitrag `XDvGVislnJg`
+ist wegen der ausdrücklich beschriebenen Hardware-Reinigung enthalten und
+sichtbar als gemischtes Thema gekennzeichnet.
+
 ### 5. Zusätzliche ausgewählte Bereiche
 
 **Retrospektiven:** `/retrospektiven/` bündelt die re.trospektive-Beiträge.
@@ -318,6 +325,30 @@ sind vorerst nicht erforderlich.
 Gespräche mit erkennbaren Personen- und Themenangaben. Die Titelsuche nach
 „Interview“ oder „Talk“ ist ein Kandidatenfilter, keine ausreichende endgültige
 Klassifikation. Zugehörige Spiele werden verlinkt, sofern eindeutig bekannt.
+
+**Umgesetzt:** Die Retrospektivenübersicht enthält die Formateinleitung und
+zwölf Flugsimulationsfolgen. Themen und Reihenfolge sind explizit geprüft;
+doppelte Originalnummern wie `#11` bleiben im Titel und bestimmen die Reihenfolge
+nicht allein. Acht Interviews/Gespräche besitzen bestätigte Personen- und
+Themenangaben. Das C64-Eye-of-the-Beholder-Interview mit Andreas und Oliver
+ist anhand seiner Beschreibung auch ohne Interview-Playlist zugeordnet.
+Bestehende Spielzuordnungen werden unverändert verlinkt.
+
+Alle drei Bereiche sind statische `CollectionPage`-/`ItemList`-Übersichten
+mit höchstens 50 Einträgen pro Seite, Breadcrumbs und relativen internen URLs.
+Hardware und Gespräche sind nach Veröffentlichung absteigend sortiert,
+undatierte Videos zuletzt. Retrospektiven bleiben thematisch und nach Folge
+gruppiert. Nur nicht leere Bereiche erscheinen in Navigation und Startseite;
+News, Katalog und betroffene Spiel-/Ausgabenseiten zeigen Bereichslinks.
+Ohne eigene Entitätsseite führen Videoverweise direkt zu YouTube.
+Es entstehen keine neuen Video-, Geräte- oder Themenunterseiten und keine
+zusätzlichen Player oder Laufzeitscripte. Scraper bleiben vom Build getrennt.
+
+Neue Playlist-Mitglieder oder passende Titelwörter werden lediglich als
+Prüfkandidaten gemeldet. Sie werden weder automatisch klassifiziert noch
+aufgrund zufälliger Erwähnungen einem Spiel zugeordnet. Reine
+Verpackungsthemen bleiben ebenso wie andere nicht ausgewählte Formate im
+Gesamtkatalog erreichbar.
 
 re.list, re.collect, Community-Veranstaltungen und weitere Formate werden
 zunächst nicht zu Hauptbereichen. Ihre Videos bleiben im Gesamtkatalog
@@ -589,4 +620,5 @@ Diese ADR dokumentiert die geplante Seitenstruktur und die getroffenen
 Kategorieentscheidungen. Video- und Playlist-Erfassung, News, Gesamtkatalog und
 die Zeitschriftenstruktur bis zu Ausgabenseiten sowie bestätigte Spieleidentitäten
 und Spieleseiten mit Abschnitts-/Reihenübersicht sind umgesetzt.
-Player-Komfortfunktionen und weitere Kategorieübersichten folgen separat.
+Hardware-, Retrospektiven- und Interviewübersichten sind ebenfalls umgesetzt.
+Player-Komfortfunktionen und abschließende Veröffentlichungsprüfungen folgen separat.

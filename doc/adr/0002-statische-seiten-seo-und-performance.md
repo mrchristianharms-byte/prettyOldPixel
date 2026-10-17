@@ -14,7 +14,7 @@ ausgelieferten HTML lesen können, ohne JavaScript auszuführen. Besucher sollen
 auch bei langsamen Verbindungen schnell navigieren können.
 
 Bereits vorhanden sind ein Node.js-Build-Script, JSON-Caches für Videos und
-Zeitschriftenarchive sowie die Veröffentlichung des Verzeichnisses `public/`
+Zeitschriftenarchive sowie die Veröffentlichung des Verzeichnisses `docs/`
 über GitHub Pages. Das ursprüngliche Build-Script erzeugte lediglich eine Startseite.
 Ein strukturierter Spielekatalog wurde auf dieser Grundlage ergänzt.
 
@@ -58,7 +58,7 @@ Der Ablauf bleibt:
 1. Quellen separat abrufen und die lokalen Caches aktualisieren.
 2. Videos, erkannte Zeitschriften und Ausgaben sowie später bestätigte
    Spielezuordnungen aus den lokalen Daten zusammenführen.
-3. Daraus vollständige HTML-Dateien und lokale Assets in `public/` erzeugen.
+3. Daraus vollständige HTML-Dateien und lokale Assets in `docs/` erzeugen.
 4. Interne Links, Metadaten, strukturierte Daten und Größenbudgets prüfen.
 5. Nur das geprüfte Build-Ergebnis auf GitHub Pages veröffentlichen.
 
@@ -74,7 +74,7 @@ Die von den Scraper-Scripts zuvor lokal gespeicherten YouTube-Metadaten und
 Beschreibungen sind Bestandteil der statischen Daten. Der Build übernimmt sie
 in HTML und strukturierte Daten; der Browser muss sie nicht bei YouTube abrufen.
 Medien sind davon getrennt: YouTube-Bilder und -Videos werden weder vom Scraper
-noch vom Build heruntergeladen, gespiegelt oder in `public/` kopiert. Gespeichert
+noch vom Build heruntergeladen, gespiegelt oder in `docs/` kopiert. Gespeichert
 werden dürfen ihre URLs und die Video-IDs für die direkte Einbindung.
 
 ### 2. Stabile, crawlbare Seitenstruktur
@@ -192,7 +192,7 @@ und Build einfach.
 - Bei der Umsetzung wird eine konkrete Patchversion fixiert, keine bewegliche
   `latest`- oder CDN-Referenz.
 - Die benötigte minifizierte CSS-Datei wird samt MIT-Lizenz und Versionsangabe
-  lokal im Projekt abgelegt und beim Build nach `public/assets/` kopiert.
+  lokal im Projekt abgelegt und beim Build nach `docs/assets/` kopiert.
 - Wenige projektspezifische Regeln ergänzen Pico. Ungenutzte Varianten werden
   nicht zusätzlich ausgeliefert.
 - Systemschriften statt Webfonts; kein Font-Download.

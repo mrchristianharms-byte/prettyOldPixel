@@ -336,7 +336,7 @@ test("aktualisiert betroffene Seiten bei neuen Heften und Links, entfernt alte A
   const directory = await mkdtemp(path.join(tmpdir(), "pixel-magazines-"));
   t.after(() => rm(directory, { recursive: true, force: true }));
   const cacheDirectory = path.join(directory, "cache");
-  const outputDirectory = path.join(directory, "public");
+  const outputDirectory = path.join(directory, "docs");
   await mkdir(cacheDirectory);
   const input = variedFixture();
   async function save() {

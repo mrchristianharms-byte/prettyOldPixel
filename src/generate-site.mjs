@@ -91,8 +91,8 @@ export function validateSite(pages, assets, config) {
 }
 
 function checkOutputPath(output, cache) {
-  if (path.basename(output) !== "public") {
-    throw new Error(`Unsicheres Ausgabeverzeichnis: ${output}; der Ausgabeordner muss public heißen.`);
+  if (path.basename(output) !== "docs") {
+    throw new Error(`Unsicheres Ausgabeverzeichnis: ${output}; der Ausgabeordner muss docs heißen.`);
   }
   const protectedPaths = [projectRoot, path.resolve(cache), path.parse(output).root];
   for (const protectedPath of protectedPaths) {
@@ -109,7 +109,7 @@ function checkOutputPath(output, cache) {
 
 export async function generateSite({
   cacheDirectory = path.join(projectRoot, "cache"),
-  outputDirectory = path.join(projectRoot, "public"),
+  outputDirectory = path.join(projectRoot, "docs"),
   baseUrl,
   now = Date.now(),
   logger = console,

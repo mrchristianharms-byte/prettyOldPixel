@@ -45,7 +45,7 @@ async function setup(t, input = fixture()) {
   const directory = await mkdtemp(path.join(tmpdir(), "pretty-pixel-build-"));
   t.after(() => rm(directory, { recursive: true, force: true }));
   const cacheDirectory = path.join(directory, "cache");
-  const outputDirectory = path.join(directory, "public");
+  const outputDirectory = path.join(directory, "docs");
   await mkdir(cacheDirectory);
   async function save(data) {
     await Promise.all(Object.entries({
@@ -301,7 +301,7 @@ test("setzt Sitemap-lastmod nur bei Inhaltsänderungen und erhält Zeitpunkte au
   assert.equal(updated.pages["datenschutz/index.html"].lastModified, first.pages["datenschutz/index.html"].lastModified);
   assert.ok((await readFile(sitemapPath, "utf8")).includes(`<lastmod>${new Date(laterTime).toISOString()}</lastmod>`));
 
-  const restoredOutput = path.join(path.dirname(options.outputDirectory), "ci", "public");
+  const restoredOutput = path.join(path.dirname(options.outputDirectory), "ci", "docs");
   await mkdir(restoredOutput, { recursive: true });
   await writeFile(path.join(restoredOutput, "build-manifest.json"), JSON.stringify(updated));
   await generateSite({ ...options, outputDirectory: restoredOutput, now: laterTime + 86400000 });
@@ -376,4 +376,7 @@ test("unterstützt lokale Vorschau-Basis und verweigert das Überschreiben von Q
   assert.ok(html.includes('rel="canonical" href="./"'));
   assert.ok(!html.includes("http://localhost:4173/"));
   await assert.rejects(generateSite({ ...options, outputDirectory: options.cacheDirectory }), /Unsicheres Ausgabeverzeichnis/u);
+  const legacyOutput = path.join(path.dirname(options.outputDirectory), "public");
+  await assert.rejects(generateSite({ ...options, outputDirectory: legacyOutput }), /Ausgabeordner muss docs heißen/u);
+  await assert.rejects(stat(legacyOutput), { code: "ENOENT" });
 });

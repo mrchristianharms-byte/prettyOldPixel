@@ -65,10 +65,14 @@ function magazineLinks(magazine, config) {
     ? ` · ${magazine.issue.route ? `<a href="${config.href(magazine.issue.route)}">${escapeHtml(magazine.issue.label)}</a>` : escapeHtml(magazine.issue.label)}` : ""}`;
 }
 
+function sectionLinks(video, config) {
+  return video.sections.length ? `<p class="topics">Bereiche: ${video.sections.map((section) => `<a href="${config.href(section.route)}">${escapeHtml(section.name)}</a>`).join(" · ")}</p>` : "";
+}
+
 function topics(video, config) {
   const games = video.games.length ? `<p class="topics">Spiele: ${video.games.map((game) => `<a href="${config.href(game.route)}">${escapeHtml(game.name)}</a>`).join(" · ")}</p>` : "";
-  if (!video.blaetterabend) return games;
-  return `${games}<p class="topics"><a href="${config.href("zeitschriften/")}">Blätterabend / Zeitschriften</a>: ${video.magazines.length
+  if (!video.blaetterabend) return `${games}${sectionLinks(video, config)}`;
+  return `${games}${sectionLinks(video, config)}<p class="topics"><a href="${config.href("zeitschriften/")}">Blätterabend / Zeitschriften</a>: ${video.magazines.length
     ? video.magazines.map((magazine) => magazineLinks(magazine, config)).join(" · ")
     : "Zeitschrift ungeklärt"}</p>`;
 }
@@ -84,14 +88,18 @@ function videoLink(video, config, label = video.title, issueRoute) {
     ? externalLink(href, label) : `<a href="${href}">${escapeHtml(label)}</a>`;
 }
 
-function videoList(videos, config) {
+function videoList(videos, config, entries = new Map(), headingLevel = 2) {
   if (!videos.length) return "<p>Noch keine Videos mit bekanntem Veröffentlichungsdatum.</p>";
-  return `<ol class="video-list">${videos.map((video) => `<li><article>
-<h2>${videoLink(video, config)}</h2>
+  return `<ol class="video-list">${videos.map((video) => {
+    const entry = entries.get(video.id);
+    return `<li><article>
+<h${headingLevel}>${videoLink(video, config)}</h${headingLevel}>
 <p class="meta">${videoDate(video)}${video.durationSeconds !== null ? ` · ${durationLabel(video.durationSeconds)}` : ""}</p>
+${entry ? `<p class="meta">${entry.people.length ? `Im Gespräch: ${escapeHtml(entry.people.join(", "))} · ` : ""}Thema: ${escapeHtml(entry.topic)}</p>${entry.note ? `<p class="meta">${escapeHtml(entry.note)}</p>` : ""}` : ""}
 ${topics(video, config)}
 ${video.description ? `<p>${escapeHtml(excerpt(video.description, 220))}</p>` : ""}
-</article></li>`).join("\n")}</ol>`;
+</article></li>`;
+  }).join("\n")}</ol>`;
 }
 
 function latestPublication(videos) {
@@ -119,7 +127,7 @@ function breadcrumbsMarkup(crumbs, config) {
     : `<a href="${config.href(crumb.route)}">${escapeHtml(crumb.name)}</a>`}</li>`).join("")}</ol></nav>`;
 }
 
-function layout({ route, title, description, body, schema, crumbs, image, noindex = false, previous, next, interactive = false }, config, cssHref, hasMagazines, jsHref, hasGames) {
+function layout({ route, title, description, body, schema, crumbs, image, noindex = false, previous, next, interactive = false }, config, cssHref, hasMagazines, jsHref, hasGames, sections) {
   const canonical = config.href(route);
   const fullTitle = `${title} | ${config.name}`;
   const breadcrumbSchema = {
@@ -129,8 +137,8 @@ function layout({ route, title, description, body, schema, crumbs, image, noinde
       "@type": "ListItem", position: index + 1, name: crumb.name, item: config.href(crumb.route),
     })),
   };
-  const navigation = [["", "Startseite"], ["news/", "News"], ...(hasMagazines ? [["zeitschriften/", "Zeitschriften"]] : []), ...(hasGames ? [["spiele/", "Spiele"]] : []), ["videos/", "Alle Videos"]];
-  const selected = ["videos/", "zeitschriften/", "spiele/"].find((prefix) => route.startsWith(prefix)) ?? route;
+  const navigation = [["", "Startseite"], ["news/", "News"], ...(hasMagazines ? [["zeitschriften/", "Zeitschriften"]] : []), ...(hasGames ? [["spiele/", "Spiele"]] : []), ...sections.map((section) => [section.route, section.name]), ["videos/", "Alle Videos"]];
+  const selected = navigation.map(([target]) => target).find((prefix) => prefix && route.startsWith(prefix)) ?? route;
   return `<!doctype html>
 <html lang="de">
 <head>
@@ -425,6 +433,7 @@ ${metadata([
   ...(video.durationSeconds !== null ? [["Länge", durationLabel(video.durationSeconds)]] : []),
   ...(game ? [["Abschnitt", escapeHtml(entries.get(video.id).phase.label)], ["Reihe", escapeHtml(runs.get(entries.get(video.id).runId).label)]] : []),
 ])}
+${sectionLinks(video, config)}
 ${game ? `<p>Spiel: <a href="${config.href(game.route)}">${escapeHtml(game.name)}</a>${game.playlists.filter((playlist) => video.playlists.some((source) => source.id === playlist.id)).map((playlist) => ` · ${externalLink(playlist.url, playlist.title)}`).join("")}</p>` : ""}
 <p>${externalLink(video.embedUrl, "YouTube-Player hier aktivieren", "issue-player")} · ${externalLink(video.url, "Video auf YouTube ansehen")}</p>
 <section><h3>Videobeschreibung</h3><div class="description">${video.description ? descriptionHtml(video.description) : "<p>Für dieses Video ist keine Beschreibung vorhanden.</p>"}</div></section>
@@ -512,6 +521,45 @@ ${unknown.length ? `<p>Datum unbekannt: ${unknown.length} Videos stehen gesonder
   }
 }
 
+function renderSectionPages(model, siteConfig, add) {
+  for (const section of model.sections) {
+    const count = Math.ceil(section.entries.length / siteConfig.pageSize);
+    for (let page = 1; page <= count; page += 1) {
+      const route = paginatedRoute(section.route, page);
+      const config = siteConfig.forPage(route);
+      const entries = section.entries.slice((page - 1) * config.pageSize, page * config.pageSize);
+      const videos = entries.map((entry) => model.videoById.get(entry.videoId));
+      const byVideo = new Map(entries.map((entry) => [entry.videoId, entry]));
+      let listing;
+      if (section.id === "retrospektiven") {
+        const groups = new Map();
+        for (const entry of entries) {
+          if (!groups.has(entry.topic)) groups.set(entry.topic, []);
+          groups.get(entry.topic).push(model.videoById.get(entry.videoId));
+        }
+        listing = [...groups].map(([topic, videos]) => `<section><h2>${escapeHtml(topic)}</h2>${videoList(videos, config, byVideo, 3)}</section>`).join("");
+      } else {
+        listing = videoList(videos, config, byVideo);
+      }
+      add({
+        route, title: `${section.name}${page > 1 ? ` – Seite ${page}` : ""}`,
+        description: `${section.description} Seite ${page} von ${count}.`,
+        crumbs: [{ route: "", name: "Startseite" }, { route: section.route, name: section.name },
+          ...(page > 1 ? [{ route, name: `Seite ${page}` }] : [])],
+        schema: collectionSchema(videos, config, route),
+        previous: page > 1 ? paginatedRoute(section.route, page - 1) : null,
+        next: page < count ? paginatedRoute(section.route, page + 1) : null,
+        body: `<h1>${escapeHtml(section.name)}${page > 1 ? ` – Seite ${page}` : ""}</h1>
+<p>${escapeHtml(section.description)}</p><p>${section.entries.length} bestätigte Beiträge. ${section.id === "retrospektiven"
+  ? "Nach Thema und geprüfter Folgenreihenfolge gruppiert; Originaltitel und ihre Folgenummern bleiben unverändert."
+  : "Neueste Veröffentlichungen zuerst; Videos mit unbekanntem Datum stehen am Ende."}
+Die Zuordnung wurde anhand der lokal gespeicherten Titel, Beschreibungen und Playlists geprüft. Videolinks führen zu vorhandenen Spiel-/Ausgabenseiten, sonst direkt zu YouTube.</p>
+${pagination(section.route, page, count, config)}${listing}${pagination(section.route, page, count, config)}`,
+      }, videos);
+    }
+  }
+}
+
 export function renderSite(model, config, cssHref, jsHref = "assets/video-series.js") {
   const pages = new Map();
   const hasMagazines = model.magazines.length > 0 || model.unresolvedMagazines.length > 0;
@@ -519,7 +567,7 @@ export function renderSite(model, config, cssHref, jsHref = "assets/video-series
     const file = options.file ?? `${options.route}index.html`;
     if (pages.has(file)) throw new Error(`Kollidierender Ausgabepfad: ${file}`);
     pages.set(file, {
-      html: layout(options, config.forPage(options.route), cssHref, hasMagazines, jsHref, model.games.length > 0),
+      html: layout(options, config.forPage(options.route), cssHref, hasMagazines, jsHref, model.games.length > 0, model.sections),
       route: options.route, indexable: !options.noindex,
       contentPublishedAt: latestPublication(videos),
     });
@@ -535,7 +583,8 @@ export function renderSite(model, config, cssHref, jsHref = "assets/video-series
 <section aria-labelledby="bereiche"><h2 id="bereiche">Die Themen</h2>
 ${hasMagazines ? `<p><a href="${config.href("zeitschriften/")}">Blätterabend: Zeitschriften, Jahrgänge und Ausgaben entdecken</a></p>` : ""}
 ${model.games.length ? `<p><a href="${config.href("spiele/")}">Spiele: ${model.games.length} Spielereihen entdecken</a></p>` : ""}
-<p>Hardware, Retrospektiven sowie Interviews und Gespräche werden schrittweise als eigene Bereiche erschlossen. Alle veröffentlichten Videos sind über den Gesamtkatalog erreichbar.</p></section>
+${model.sections.map((section) => `<p><a href="${config.href(section.route)}">${escapeHtml(section.name)}</a> · ${section.entries.length} bestätigte Beiträge</p>`).join("")}
+<p>Alle veröffentlichten Videos sind über den Gesamtkatalog erreichbar. Bereichszuordnungen werden nur nach fachlicher Prüfung ergänzt.</p></section>
 <section aria-labelledby="neu"><h2 id="neu">Neu auf dem Kanal</h2>
 ${videoList(model.news.slice(0, 5), config)}
 <p><a href="${config.href("news/")}">Weitere neue Videos ansehen</a></p></section>`,
@@ -551,6 +600,7 @@ ${videoList(model.news.slice(0, 5), config)}
 
   renderMagazinePages(model, config, add);
   renderGamePages(model, config, add);
+  renderSectionPages(model, config, add);
 
   const pageCount = Math.ceil(model.videos.length / config.pageSize);
   for (let page = 1; page <= pageCount; page += 1) {

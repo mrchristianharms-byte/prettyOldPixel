@@ -250,7 +250,7 @@ test("aktualisiert Spieleseiten offline und entfernt sie beim Unterschreiten der
   const directory = await mkdtemp(path.join(tmpdir(), "pretty-pixel-games-"));
   t.after(() => rm(directory, { recursive: true, force: true }));
   const cacheDirectory = path.join(directory, "cache");
-  const outputDirectory = path.join(directory, "public");
+  const outputDirectory = path.join(directory, "docs");
   await mkdir(cacheDirectory);
   const input = fixture();
   async function save() {

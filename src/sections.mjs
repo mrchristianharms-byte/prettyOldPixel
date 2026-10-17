@@ -1,0 +1,55 @@
+// Geprüfte Titel, Beschreibungen und Playlist-Mitgliedschaften; neue Treffer benötigen eine eigene Prüfung.
+export const sectionDefinitions = [
+  {
+    id: "hardware", name: "Hardware",
+    description: "Retro-Hardware, Restaurationsprojekte und Computergrundlagen von Pretty Old Pixel.",
+    playlistIds: ["PLZW5k3rtbudpYvBYzcMjUkG6ekcZB5yZB", "PLZW5k3rtbudofBuRooZLI_UGpUAkdzFDm"],
+    excludedVideoIds: ["bwVnfQJ-WEw"],
+    videos: [
+      { id: "UMUCVO8kbCo", topic: "Kryoflux: USB-Floppy-Disk-Controller" },
+      { id: "HGr6ykSrhYk", topic: "1541 Ultimate 2: Floppy-Emulator für C64/C128" },
+      { id: "4CQN2ol4SgQ", topic: "NES Advantage: Nintendo-Controller" },
+      { id: "pe1hjxQpW60", topic: "Roland MT-32 und SC-55: Soundsynthese" },
+      { id: "2ITRFLHFtH4", topic: "MS-DOS-PC restaurieren, Teil 1" },
+      { id: "qOOlEO1ShJA", topic: "MS-DOS-PC restaurieren, Teil 2" },
+      { id: "XDvGVislnJg", topic: "Hardware und Spieleverpackungen reinigen und reparieren", note: "Gemischter Beitrag: behandelt ausdrücklich auch die Reinigung von Hardware." },
+      { id: "MAaf4h2gqrY", topic: "PC-Grundlagen: Power On Self Test" },
+      { id: "m6qIJLYZyk4", topic: "PC-Grundlagen: Betriebssystem laden" },
+      { id: "HneOBahuhe0", topic: "Audio-Switch selbst bauen" },
+      { id: "1AnGFuUJMtI", topic: "Hardware-Bastelstream" },
+      { id: "ZyXgK0T0S6Q", topic: "Hardwareprojekte, Teil 1" },
+      { id: "-IkYIJ65E_E", topic: "Hardwareprojekte, Teil 2" },
+      { id: "r9hoQq5Pzfw", topic: "Neue Hardware: Test-Folge" },
+    ],
+  },
+  {
+    id: "retrospektiven", name: "Retrospektiven",
+    description: "re.trospektive: Rückblicke auf die Geschichte der Video- und Computerspiele, nach Themen und Folgen geordnet.",
+    playlistIds: ["PLZW5k3rtbudpDHb2W2T8EvJ_swSXp7At_"],
+    excludedVideoIds: [],
+    videos: [
+      { id: "K-Nn-zaNY8Y", topic: "Über re.trospektive", order: 0 },
+      ...[
+        "xEhlBFEM62k", "SScA60NIK2I", "OSYPUKHwkAc", "L2cfqZZPLSc",
+        "reYzejxTZDk", "3bIdBX9yoJA", "vZBLdIEngXY", "hyDog4_30GY",
+        "TITaSYtnM-M", "f24PQTYQdf8", "4KrDqSCgFNw", "LuWmntgoZEo",
+      ].map((id, index) => ({ id, topic: "Geschichte der Flugsimulationen", order: index + 1 })),
+    ],
+  },
+  {
+    id: "interviews", name: "Interviews und Gespräche",
+    description: "Gespräche mit Entwicklern, Grafikern und Retro-Akteuren über Computerspiele, Technik und ihre Geschichte.",
+    playlistIds: ["PLZW5k3rtbudo6N-5_hqEaNlkH2x2pQLrm"],
+    excludedVideoIds: [],
+    videos: [
+      { id: "S-7vf5iizyk", people: ["Tobias Richter"], topic: "Grafik und Entwicklung von Oil Imperium" },
+      { id: "LsbXFQlNu8s", people: ["Jan Beta"], topic: "Erste Computererfahrungen und Projekte" },
+      { id: "gUmzlk2XURg", people: ["Christoph Werner"], topic: "Grafik für Die Siedler, Battle Isle 2, Historyline und Patrizier 2" },
+      { id: "8x2WZIBiv-k", people: ["Joseph Hewitt IV"], topic: "Die frühen Jahre von Westwood und seine Spiele" },
+      { id: "T2yUoKycvGE", people: ["Steve Cartwright"], topic: "Entwicklung und Hintergründe von Hacker" },
+      { id: "GxvLokobWQc", people: ["Damon Slye"], topic: "Gespräch mit dem Gründer von Dynamix" },
+      { id: "fUpCbDADl4E", people: ["Neal Hallford"], topic: "Design von Planet's Edge: The Point of no Return" },
+      { id: "Loi_xWgYRM4", people: ["Andreas (Programmierung)", "Oliver (Grafik)"], topic: "Entwicklung von Eye of the Beholder für den C64" },
+    ],
+  },
+];

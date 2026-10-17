@@ -29,10 +29,10 @@ jobs:
       - name: Restore page modification history
         uses: actions/cache@v4
         with:
-          path: public/build-manifest.json
-          key: pages-manifest-${{ github.ref_name }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: docs/build-manifest.json
+          key: pages-manifest-docs-${{ github.ref_name }}-${{ github.run_id }}-${{ github.run_attempt }}
           restore-keys: |
-            pages-manifest-${{ github.ref_name }}-
+            pages-manifest-docs-${{ github.ref_name }}-
       - name: Generate static site
         run: npm run generate:site
       - name: Configure Pages
@@ -40,7 +40,7 @@ jobs:
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: public
+          path: docs
 
   deploy:
     environment:
