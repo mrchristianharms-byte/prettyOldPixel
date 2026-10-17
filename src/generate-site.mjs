@@ -92,11 +92,11 @@ function checkOutputPath(output, cache) {
   }
 }
 
-export async function buildSite({
+export async function generateSite({
   cacheDirectory = path.join(projectRoot, "cache"),
   outputDirectory = path.join(projectRoot, "public"),
   baseUrl,
-  now,
+  now = Date.now(),
   logger = console,
 } = {}) {
   const output = path.resolve(outputDirectory);
@@ -106,7 +106,28 @@ export async function buildSite({
   if (previousOutput && (!previousOutput.isDirectory() || previousOutput.isSymbolicLink())) {
     throw new Error(`Ausgabe muss ein echtes Verzeichnis sein: ${output}`);
   }
+  if (!Number.isFinite(now) || !Number.isFinite(new Date(now).getTime())) throw new Error("Ungültiger Build-Zeitpunkt.");
+  const changedAt = new Date(now).toISOString();
   const config = createSiteConfig(baseUrl);
+  const manifestFile = path.join(output, "build-manifest.json");
+  const manifestStat = await optionalStat(manifestFile);
+  let previousManifest;
+  if (manifestStat) {
+    if (!manifestStat.isFile() || manifestStat.isSymbolicLink()) throw new Error("Build-Manifest muss eine echte Datei sein.");
+    previousManifest = JSON.parse(await readFile(manifestFile, "utf8"));
+    if (![1, 2].includes(previousManifest?.version) || typeof previousManifest.baseUrl !== "string"
+      || !previousManifest.pages || typeof previousManifest.pages !== "object" || Array.isArray(previousManifest.pages)) {
+      throw new Error("Ungültiges Build-Manifest.");
+    }
+    for (const entry of Object.values(previousManifest.pages)) {
+      if (!entry || typeof entry.fingerprint !== "string" || !/^[a-f0-9]{64}$/u.test(entry.fingerprint)
+        || (entry.lastModified !== undefined && (typeof entry.lastModified !== "string"
+          || !Number.isFinite(Date.parse(entry.lastModified)) || new Date(entry.lastModified).toISOString() !== entry.lastModified))
+        || (previousManifest.version === 2 && entry.lastModified === undefined)) {
+        throw new Error("Ungültiger Seiten-Eintrag im Build-Manifest.");
+      }
+    }
+  }
   const model = await loadSiteData(cache, { now });
   for (const warning of model.warnings) logger.warn(`Build-Hinweis: ${warning}`);
 
@@ -126,18 +147,23 @@ export async function buildSite({
   const assets = new Map([[cssFile, css], [jsFile, seriesJs], ["assets/pico-LICENSE.txt", license], [".nojekyll", ""]]);
   const pages = renderSite(model, config, config.href(cssFile), config.href(jsFile));
   const budgets = validateSite(pages, assets, config);
-  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${[...pages.values()]
-    .filter((page) => page.indexable).map((page) => `<url><loc>${escapeHtml(config.absolute(page.route))}</loc></url>`).join("\n")}\n</urlset>\n`;
+  const manifest = {
+    version: 2, baseUrl: config.baseUrl,
+    pages: Object.fromEntries([...pages].map(([file, page]) => {
+      const fingerprint = hash(page.html);
+      const previous = previousManifest?.baseUrl === config.baseUrl ? previousManifest.pages[file] : null;
+      return [file, {
+        fingerprint, contentPublishedAt: page.contentPublishedAt,
+        lastModified: previous?.fingerprint === fingerprint && previous.lastModified ? previous.lastModified : changedAt,
+      }];
+    })),
+  };
+  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${[...pages]
+    .filter(([, page]) => page.indexable).map(([file, page]) => `<url><loc>${escapeHtml(config.absolute(page.route))}</loc><lastmod>${manifest.pages[file].lastModified}</lastmod></url>`).join("\n")}\n</urlset>\n`;
   assets.set("sitemap.xml", sitemap);
   assets.set("robots.txt", `User-agent: *\nAllow: /\nSitemap: ${config.absolute("sitemap.xml")}\n`);
 
   const content = new Map([...assets, ...[...pages].map(([file, page]) => [file, page.html])]);
-  const manifest = {
-    version: 1, baseUrl: config.baseUrl,
-    pages: Object.fromEntries([...pages].map(([file, page]) => [file, {
-      fingerprint: hash(page.html), contentPublishedAt: page.contentPublishedAt,
-    }])),
-  };
   content.set("build-manifest.json", `${JSON.stringify(manifest, null, 2)}\n`);
 
   await mkdir(path.dirname(output), { recursive: true });
@@ -183,11 +209,11 @@ export async function buildSite({
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
   const args = process.argv.slice(2);
   if (args.length && (args.length !== 2 || args[0] !== "--base-url")) {
-    console.error("Aufruf: node src/build.mjs [--base-url https://host/projekt/]");
+    console.error("Aufruf: node src/generate-site.mjs [--base-url https://host/projekt/]");
     process.exitCode = 1;
   } else {
     try {
-      await buildSite({ baseUrl: args[1] });
+      await generateSite({ baseUrl: args[1] });
     } catch (error) {
       console.error(`Website-Build fehlgeschlagen: ${error.message}`);
       process.exitCode = 1;

@@ -4,7 +4,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
 import { gzipSync } from "node:zlib";
-import { buildSite, validateSite } from "../src/build.mjs";
+import { generateSite, validateSite } from "../src/generate-site.mjs";
 import { createSiteConfig } from "../src/site-config.mjs";
 import { normalizeSources } from "../src/site-data.mjs";
 import { descriptionHtml, jsonLd, renderSite } from "../src/site-render.mjs";
@@ -178,7 +178,7 @@ test("baut offline mit Projektpfad, Sitemap und Inhalts-Manifest; übernimmt unv
   const originalFetch = globalThis.fetch;
   globalThis.fetch = () => { throw new Error("Netzwerk im Build verboten"); };
   t.after(() => { globalThis.fetch = originalFetch; });
-  const first = await buildSite(options);
+  const first = await generateSite(options);
   assert.equal(first.pages, 6);
   assert.equal(first.reused, 0);
   assert.ok(first.cssGzip <= 20 * 1024);
@@ -191,12 +191,12 @@ test("baut offline mit Projektpfad, Sitemap und Inhalts-Manifest; übernimmt unv
   const sitemap = await readFile(path.join(options.outputDirectory, "sitemap.xml"), "utf8");
   assert.ok(sitemap.includes("https://mrchristianharms-byte.github.io/prettyOldPixel/news/"));
   assert.ok(!sitemap.includes("404.html"));
-  assert.ok(!sitemap.includes("<lastmod>"));
+  assert.equal((sitemap.match(/<lastmod>/gu) ?? []).length, first.pages - 1);
   assert.match(await readFile(path.join(options.outputDirectory, "robots.txt"), "utf8"), /Sitemap: https:.*prettyOldPixel\/sitemap.xml/u);
   const homePath = path.join(options.outputDirectory, "index.html");
   const preservedTime = new Date("2020-01-01T00:00:00Z");
   await utimes(homePath, preservedTime, preservedTime);
-  const second = await buildSite(options);
+  const second = await generateSite(options);
   assert.equal(second.reused, second.files);
   assert.equal((await stat(homePath)).mtime.toISOString(), preservedTime.toISOString());
   const manifest = JSON.parse(await readFile(path.join(options.outputDirectory, "build-manifest.json"), "utf8"));
@@ -206,47 +206,111 @@ test("baut offline mit Projektpfad, Sitemap und Inhalts-Manifest; übernimmt unv
 test("ignoriert Abrufzeiten, aktualisiert nur betroffene Inhalte und entfernt veraltete Seiten", async (t) => {
   const input = fixture();
   const options = await setup(t, input);
-  await buildSite(options);
+  await generateSite(options);
   const newsPath = path.join(options.outputDirectory, "news/index.html");
   const before = await readFile(newsPath, "utf8");
   input.videos.fetchedAt = "2099-01-01T00:00:00Z";
   input.playlists.lastModified = "2099-01-01T00:00:00Z";
   input.magazines.generatedAt = "2099-01-01T00:00:00Z";
   await options.save(input);
-  const unchanged = await buildSite(options);
+  const unchanged = await generateSite(options);
   assert.equal(unchanged.reused, unchanged.files);
   input.videos.videos[0].description = "Korrektur an einem alten Video";
   await options.save(input);
-  const changed = await buildSite(options);
-  assert.equal(changed.files - changed.reused, 2); // Katalogseite und Manifest.
+  const changed = await generateSite(options);
+  assert.equal(changed.files - changed.reused, 3); // Katalogseite, Sitemap und Manifest.
   assert.equal(await readFile(newsPath, "utf8"), before);
   input.videos.videos.pop();
   const legacy = path.join(options.outputDirectory, "videos/b0000000052");
   await mkdir(legacy, { recursive: true });
   await writeFile(path.join(legacy, "index.html"), "Alte Videoseite");
   await options.save(input);
-  await buildSite(options);
+  await generateSite(options);
   await assert.rejects(stat(path.join(options.outputDirectory, "videos/b0000000052/index.html")), { code: "ENOENT" });
   assert.notEqual(await readFile(newsPath, "utf8"), before);
+});
+
+test("setzt Sitemap-lastmod nur bei Inhaltsänderungen und erhält Zeitpunkte aus dem CI-Manifest", async (t) => {
+  const input = fixture();
+  const options = await setup(t, input);
+  const firstTime = Date.parse("2021-01-01T12:00:00Z");
+  const laterTime = Date.parse("2021-02-01T12:00:00Z");
+  const manifestPath = path.join(options.outputDirectory, "build-manifest.json");
+  const sitemapPath = path.join(options.outputDirectory, "sitemap.xml");
+  const readManifest = async () => JSON.parse(await readFile(manifestPath, "utf8"));
+  await generateSite({ ...options, now: firstTime });
+  const first = await readManifest();
+  const firstSitemap = await readFile(sitemapPath, "utf8");
+  assert.equal(first.pages["news/index.html"].lastModified, new Date(firstTime).toISOString());
+  assert.equal(first.pages["datenschutz/index.html"].lastModified, new Date(firstTime).toISOString());
+  assert.ok(!firstSitemap.includes("404.html"));
+  for (const url of firstSitemap.matchAll(/<url><loc>([^<]+)<\/loc><lastmod>([^<]+)<\/lastmod><\/url>/gu)) {
+    assert.equal(url[2], new Date(firstTime).toISOString());
+  }
+  input.videos.fetchedAt = "2021-02-01T12:00:00Z";
+  await options.save(input);
+  const unchanged = await generateSite({ ...options, now: laterTime });
+  assert.equal(unchanged.reused, unchanged.files);
+  assert.equal(await readFile(sitemapPath, "utf8"), firstSitemap);
+
+  input.videos.videos[0].description = "Korrektur eines alten Videos";
+  await options.save(input);
+  await generateSite({ ...options, now: laterTime });
+  const updated = await readManifest();
+  assert.equal(updated.pages["videos/seite/2/index.html"].lastModified, new Date(laterTime).toISOString());
+  assert.equal(updated.pages["videos/seite/2/index.html"].contentPublishedAt, first.pages["videos/seite/2/index.html"].contentPublishedAt);
+  assert.equal(updated.pages["news/index.html"].lastModified, first.pages["news/index.html"].lastModified);
+  assert.equal(updated.pages["datenschutz/index.html"].lastModified, first.pages["datenschutz/index.html"].lastModified);
+  assert.ok((await readFile(sitemapPath, "utf8")).includes(`<lastmod>${new Date(laterTime).toISOString()}</lastmod>`));
+
+  const restoredOutput = path.join(path.dirname(options.outputDirectory), "ci", "public");
+  await mkdir(restoredOutput, { recursive: true });
+  await writeFile(path.join(restoredOutput, "build-manifest.json"), JSON.stringify(updated));
+  await generateSite({ ...options, outputDirectory: restoredOutput, now: laterTime + 86400000 });
+  assert.equal(await readFile(path.join(restoredOutput, "sitemap.xml"), "utf8"), await readFile(sitemapPath, "utf8"));
+
+  await generateSite({ ...options, now: laterTime + 86400000, baseUrl: "https://example.com/other/" });
+  assert.ok(Object.values((await readManifest()).pages).every((page) => page.lastModified === new Date(laterTime + 86400000).toISOString()));
+});
+
+test("migriert alte Manifeste und lehnt beschädigte Änderungsdaten vor dem Schreiben ab", async (t) => {
+  const options = await setup(t, fixture(1));
+  const manifestPath = path.join(options.outputDirectory, "build-manifest.json");
+  const now = Date.parse("2021-01-01T12:00:00Z");
+  await generateSite({ ...options, now });
+  const manifest = JSON.parse(await readFile(manifestPath, "utf8"));
+  manifest.version = 1;
+  for (const page of Object.values(manifest.pages)) delete page.lastModified;
+  await writeFile(manifestPath, JSON.stringify(manifest));
+  await generateSite({ ...options, now: now + 86400000 });
+  const migrated = JSON.parse(await readFile(manifestPath, "utf8"));
+  assert.equal(migrated.version, 2);
+  assert.ok(Object.values(migrated.pages).every((page) => page.lastModified === "2021-01-02T12:00:00.000Z"));
+  const previousSitemap = await readFile(path.join(options.outputDirectory, "sitemap.xml"), "utf8");
+  migrated.pages["news/index.html"].lastModified = "kein Datum";
+  await writeFile(manifestPath, JSON.stringify(migrated));
+  await assert.rejects(generateSite({ ...options, now }), /Ungültiger Seiten-Eintrag/u);
+  assert.equal(await readFile(path.join(options.outputDirectory, "sitemap.xml"), "utf8"), previousSitemap);
+  await assert.rejects(generateSite({ ...options, now: NaN }), /Ungültiger Build-Zeitpunkt/u);
 });
 
 test("erhält den letzten erfolgreichen Build bei ungültigen oder fehlenden Quelldaten", async (t) => {
   const input = fixture(1);
   const options = await setup(t, input);
-  await buildSite(options);
+  await generateSite(options);
   const previous = await readFile(path.join(options.outputDirectory, "index.html"), "utf8");
   input.playlists.complete = false;
   await options.save(input);
-  await assert.rejects(buildSite(options), /nicht vollständig/u);
+  await assert.rejects(generateSite(options), /nicht vollständig/u);
   assert.equal(await readFile(path.join(options.outputDirectory, "index.html"), "utf8"), previous);
   await rm(path.join(options.cacheDirectory, "youtube-videos.json"));
-  await assert.rejects(buildSite(options), /Quelldatei kann nicht gelesen werden/u);
+  await assert.rejects(generateSite(options), /Quelldatei kann nicht gelesen werden/u);
 });
 
 test("erkennt neue Themenlinks als Inhaltsänderung, ohne einen neuen Veröffentlichungszeitpunkt zu erfinden", async (t) => {
   const input = fixture(1);
   const options = await setup(t, input);
-  await buildSite(options);
+  await generateSite(options);
   const manifestFile = path.join(options.outputDirectory, "build-manifest.json");
   const first = JSON.parse(await readFile(manifestFile, "utf8")).pages["news/index.html"];
   input.magazines.videos = [{
@@ -257,7 +321,7 @@ test("erkennt neue Themenlinks als Inhaltsänderung, ohne einen neuen Veröffent
     }],
   }];
   await options.save(input);
-  await buildSite(options);
+  await generateSite(options);
   const second = JSON.parse(await readFile(manifestFile, "utf8")).pages["news/index.html"];
   assert.notEqual(first.fingerprint, second.fingerprint);
   assert.equal(first.contentPublishedAt, second.contentPublishedAt);
@@ -267,9 +331,9 @@ test("erkennt neue Themenlinks als Inhaltsänderung, ohne einen neuen Veröffent
 
 test("unterstützt lokale Vorschau-Basis und verweigert das Überschreiben von Quellen", async (t) => {
   const options = await setup(t, fixture(1));
-  await buildSite({ ...options, baseUrl: "http://localhost:4173/" });
+  await generateSite({ ...options, baseUrl: "http://localhost:4173/" });
   const html = await readFile(path.join(options.outputDirectory, "index.html"), "utf8");
   assert.ok(html.includes('href="/videos/"'));
   assert.ok(html.includes('href="http://localhost:4173/"'));
-  await assert.rejects(buildSite({ ...options, outputDirectory: options.cacheDirectory }), /Unsicheres Ausgabeverzeichnis/u);
+  await assert.rejects(generateSite({ ...options, outputDirectory: options.cacheDirectory }), /Unsicheres Ausgabeverzeichnis/u);
 });

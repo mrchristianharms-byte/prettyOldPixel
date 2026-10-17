@@ -3,14 +3,15 @@ import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
-import { createBlaetterabendList, parseBlaetterabendTitle } from "../src/extract-blaetterabend.mjs";
+import { generateBlaetterabendList, parseBlaetterabendTitle } from "../src/generate-blaetterabend.mjs";
+import { fetchArchives } from "../src/fetch-archives.mjs";
 import {
   findReetrozIssue,
   loadReetrozCatalog,
   parseCatalogPage,
   parseIssueDate,
   parseMagazinePage,
-} from "../src/reetroz.mjs";
+} from "../src/fetch-reetroz.mjs";
 
 const railLink = (name, slug) => `<a title="${name}" class="flex" href="/catalog?pub=${slug}"><span>${name}</span></a>`;
 const card = (slug, name, number, date, pages = 100) => `<li><a class="group block" href="/issue/${slug}"><div class="cover-3d">`
@@ -110,7 +111,7 @@ test("nutzt den Cache und lädt nur mit refresh neu", async () => {
   });
 });
 
-test("createBlaetterabendList nutzt reetroz nur für Zeitschriften ohne kultmags-Eintrag", async () => {
+test("generateBlaetterabendList nutzt reetroz nur für Zeitschriften ohne kultmags-Eintrag", async () => {
   await withCacheDir(async (directory) => {
     const sourceFile = path.join(directory, "videos.json");
     const targetFile = path.join(directory, "result.json");
@@ -128,12 +129,20 @@ test("createBlaetterabendList nutzt reetroz nur für Zeitschriften ohne kultmags
     const reetroz = createFetch();
 
     const logs = [];
-    await createBlaetterabendList({
+    await fetchArchives({
+      sourceFile, log: () => {},
+      kultmags: { ...quiet, cacheDir: path.join(directory, "kultmags"), fetchImpl: kultmagsFetch },
+      reetroz: { ...quiet, cacheDir: path.join(directory, "reetroz"), fetchImpl: reetroz.fetchImpl },
+    });
+
+    await assert.rejects(readFile(targetFile), { code: "ENOENT" });
+    const offlineFetch = () => { throw new Error("Generierung darf keine Internetdaten laden."); };
+    await generateBlaetterabendList({
       sourceFile,
       targetFile,
       log: (message) => logs.push(message),
-      kultmags: { ...quiet, cacheDir: path.join(directory, "kultmags"), fetchImpl: kultmagsFetch },
-      reetroz: { ...quiet, cacheDir: path.join(directory, "reetroz"), fetchImpl: reetroz.fetchImpl },
+      kultmags: { ...quiet, cacheDir: path.join(directory, "kultmags"), fetchImpl: offlineFetch, refresh: true },
+      reetroz: { ...quiet, cacheDir: path.join(directory, "reetroz"), fetchImpl: offlineFetch, refresh: true },
     });
 
     const result = JSON.parse(await readFile(targetFile, "utf8"));
@@ -151,5 +160,49 @@ test("createBlaetterabendList nutzt reetroz nur für Zeitschriften ohne kultmags
     const warnings = logs.filter((message) => message.includes("Keine Ausgabe"));
     assert.equal(warnings.length, 1);
     assert.match(warnings[0], /Archiv-Übersichtsseite verlinkt.*17\.07\.2022/);
+  });
+});
+
+test("liest reetroz offline unabhängig vom Cache-Alter und meldet fehlende Dateien", async () => {
+  await withCacheDir(async (cacheDir) => {
+    const first = createFetch();
+    await loadReetrozCatalog({ ...quiet, cacheDir, fetchImpl: first.fetchImpl, magazineNames: ["Computer Gaming World"] });
+    const options = {
+      ...quiet, cacheDir, cachedOnly: true, refresh: true, now: Date.parse("2099-01-01"),
+      magazineNames: ["Computer Gaming World"],
+      fetchImpl: () => { throw new Error("Unerlaubter Netzwerkzugriff"); },
+    };
+    assert.ok((await loadReetrozCatalog(options)).magazines.has("Computer Gaming World"));
+    await rm(path.join(cacheDir, "magazines", "cgw.json"));
+    await assert.rejects(loadReetrozCatalog(options), /reetroz-Cache fehlt:.*fetch:archives/u);
+    await rm(path.join(cacheDir, "index.json"));
+    await assert.rejects(loadReetrozCatalog(options), /reetroz-Cache fehlt:.*index.json/u);
+  });
+
+  test("behält Ausgabendetails 365 Tage und aktualisiert den Index weiterhin nach 30 Tagen", async () => {
+    await withCacheDir(async (cacheDir) => {
+      const start = Date.parse("2025-01-01T00:00:00Z");
+      const mock = createFetch();
+      const load = (days) => loadReetrozCatalog({
+        ...quiet, cacheDir, fetchImpl: mock.fetchImpl, magazineNames: ["Computer Gaming World"],
+        now: start + days * 86400000,
+      });
+      await load(0);
+      const file = path.join(cacheDir, "magazines", "cgw.json");
+      const before = await readFile(file, "utf8");
+      mock.requests.length = 0;
+      await load(29);
+      assert.deepEqual(mock.requests, []);
+      await load(30);
+      assert.deepEqual(mock.requests, ["/catalog"]);
+      mock.requests.length = 0;
+      await load(364);
+      assert.deepEqual(mock.requests, ["/catalog"]);
+      assert.equal(await readFile(file, "utf8"), before);
+      mock.requests.length = 0;
+      await load(365);
+      assert.deepEqual(mock.requests, ["/magazines/cgw"]);
+      assert.equal(JSON.parse(await readFile(file, "utf8")).fetchedAt, new Date(start + 365 * 86400000).toISOString());
+    });
   });
 });

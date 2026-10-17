@@ -4,10 +4,10 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
 import {
-  createBlaetterabendList,
+  generateBlaetterabendList,
   extractBlaetterabendVideos,
   parseBlaetterabendTitle,
-} from "../src/extract-blaetterabend.mjs";
+} from "../src/generate-blaetterabend.mjs";
 
 const summarize = (title) => {
   const { magazines, part } = parseBlaetterabendTitle(title);
@@ -85,7 +85,7 @@ test("schreibt die Ergebnisliste als JSON-Datei", async () => {
       channel: { handle: "PrettyOldPixel" },
       videos: [{ id: "a", title: "Blätterabend - ASM 9/93", publishedAt: "2021-01-26T00:00:00Z", durationSeconds: 60 }],
     }));
-    await createBlaetterabendList({ sourceFile, targetFile, log: () => {}, kultmags: false });
+    await generateBlaetterabendList({ sourceFile, targetFile, log: () => {}, kultmags: false });
 
     const result = JSON.parse(await readFile(targetFile, "utf8"));
     assert.equal(result.count, 1);

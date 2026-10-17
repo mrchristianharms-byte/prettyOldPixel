@@ -3,7 +3,7 @@ import { mkdtemp, mkdir, readFile, rm, stat, utimes, writeFile } from "node:fs/p
 import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
-import { buildSite, validateSite } from "../src/build.mjs";
+import { generateSite, validateSite } from "../src/generate-site.mjs";
 import { gameDefinitions } from "../src/games.mjs";
 import { createSiteConfig } from "../src/site-config.mjs";
 import { normalizeSources } from "../src/site-data.mjs";
@@ -228,21 +228,21 @@ test("aktualisiert Spieleseiten offline und entfernt sie beim Unterschreiten der
   }
   const options = { cacheDirectory, outputDirectory, logger: { warn() {}, log() {} } };
   await save();
-  const first = await buildSite(options);
+  const first = await generateSite(options);
   const file = path.join(outputDirectory, "spiele/cadaver/index.html");
   const fixedTime = new Date("2020-02-01T12:00:00Z");
   await utimes(file, fixedTime, fixedTime);
   const mtime = (await stat(file)).mtimeMs;
-  const second = await buildSite(options);
+  const second = await generateSite(options);
   assert.equal(second.reused, first.files);
   assert.equal((await stat(file)).mtimeMs, mtime);
   input.videos.videos[0].description = "Aktualisierte Beschreibung";
   await save();
-  await buildSite(options);
+  await generateSite(options);
   assert.ok((await readFile(file, "utf8")).includes("Aktualisierte Beschreibung"));
   input.playlists.playlists[0].videos = [member(0)];
   await save();
-  await buildSite(options);
+  await generateSite(options);
   await assert.rejects(stat(file), { code: "ENOENT" });
   assert.ok(!(await readFile(path.join(outputDirectory, "sitemap.xml"), "utf8")).includes("/spiele/cadaver/"));
 });

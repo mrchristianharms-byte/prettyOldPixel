@@ -1,7 +1,8 @@
 import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
 
-export const DEFAULT_MAX_AGE_DAYS = 30;
+export const DEFAULT_MAX_AGE_DAYS = 365;
+export const DEFAULT_INDEX_MAX_AGE_DAYS = 30;
 const REQUEST_DELAY_MS = 200;
 const MAX_RETRIES = 3;
 

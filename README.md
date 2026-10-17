@@ -1,15 +1,21 @@
 # Pretty Old Pixel
 
-Statische Website für GitHub Pages. Die Quelldateien und das Build-Script liegen
-in `src/`; `npm run build` erzeugt die veröffentlichbaren Dateien in `public/`.
+Statische Website für GitHub Pages. Die Quelldateien und der Websitegenerator liegen
+in `src/`; `npm run generate:site` erzeugt die veröffentlichbaren Dateien in `public/`.
 
 ## Lokal bauen
 
 Voraussetzung: Node.js 22 oder neuer.
 
 ```sh
-npm run build
+npm run generate:site
 ```
+
+Die Namenskonvention trennt Internetabrufe (`fetch-*` bzw. `fetch:*`) von
+lokaler Generierung (`generate-*` bzw. `generate:*`). Der Websitegenerator
+heißt `src/generate-site.mjs`, das npm-Ziel `generate:site`; das bisherige
+allgemeine `build`-Ziel entfällt. Gemeinsam genutzte `site-*`-Module sind
+Bausteine des Websitegenerators, keine separaten Abrufscripts.
 
 Der Build liest ausschließlich die vorhandenen lokalen JSON-Dateien unter
 `cache/` und benötigt keinen Netzwerkzugriff. Scraper werden nicht automatisch
@@ -38,12 +44,12 @@ Videoabschnitt einer vorhandenen Ausgabe bzw. eines Spiels, sonst direkt zu YouT
 Für eine lokale Vorschau ohne Projekt-Unterpfad:
 
 ```sh
-npm run build -- --base-url http://localhost:8000/
+npm run generate:site -- --base-url http://localhost:8000/
 python3 -m http.server 8000 --bind 127.0.0.1 --directory public
 ```
 
 Dann http://localhost:8000/ öffnen. Vor einem manuellen Produktions-Upload erneut
-`npm run build` ohne lokale Basis-URL ausführen. Ein direktes Öffnen der
+`npm run generate:site` ohne lokale Basis-URL ausführen. Ein direktes Öffnen der
 HTML-Dateien über `file://` bildet die absoluten Website-Pfade nicht korrekt ab.
 
 Die gemeinsame Datenaufbereitung verknüpft Playlist-Mitgliedschaften per Video-ID
@@ -161,13 +167,24 @@ Schritten; es gibt keine Links auf noch nicht erzeugte Bereichsseiten.
   Dateizeit übernommen. Bei ungültigen Quellen bleibt die bestehende Website
   unberührt.
 - `public/build-manifest.json` enthält je Seite Inhalts-Fingerabdruck und
-  `contentPublishedAt` aus den zugehörigen Video-Veröffentlichungen.
-  Das ist kein erfundener technischer Änderungszeitpunkt:
-  Sitemap-`lastmod` und JSON-LD-`dateModified` bleiben vorerst ausgelassen.
-  `fetchedAt`, `checkedAt` und Build-Zeit ändern die Seiten nicht.
+  `contentPublishedAt` aus den zugehörigen Video-Veröffentlichungen sowie
+  `lastModified` für die zuletzt beim Erzeugen festgestellte Änderung am HTML.
+  Die Sitemap gibt diesen Wert als standardkonformes `<lastmod>` mit
+  UTC-Datum und Uhrzeit aus. Nur ein geänderter Inhalts-Fingerabdruck setzt
+  einen neuen Zeitpunkt; identische Seiten behalten ihn. Neue Seiten, alte
+  Manifeste ohne Änderungsdatum und Builds ohne Vorhistorie erhalten den
+  Zeitpunkt der ersten Erzeugung mit dieser Datierung.
+  `fetchedAt` und `checkedAt` sind keine Änderungsgrundlage.
+  JSON-LD-`dateModified` bleibt vorerst ausgelassen.
+- GitHub Actions sichert das Manifest per branchbezogenem Actions-Cache und
+  stellt es vor dem nächsten Build wieder her. So bleiben Sitemap-Daten auch
+  bei frischen Checkouts stabil. Der Cache enthält nur die Änderungshistorie,
+  nicht das HTML. Bei einem Cache-Verlust wird eine neue Ausgangsdatierung
+  gesetzt; ein historischer Änderungszeitpunkt wird nicht geraten.
 - HTTP-`Last-Modified`, `ETag` und Kompression werden vom Hosting bestimmt, nicht
   durch HTML-Metadaten. Ihre Prüfung auf dem veröffentlichten GitHub Pages sowie
-  die Wiederverwendung vorheriger Ausgaben über CI-Läufe hinweg stehen noch aus.
+  die Wiederverwendung vollständiger HTML-Ausgaben über CI-Läufe hinweg stehen
+  noch aus; die Änderungsmetadaten werden bereits über den Actions-Cache erhalten.
 
 Vor einer öffentlichen Freigabe müssen die tatsächliche Medien-Einbindung und
 die Datenschutz-/Informationspflichten rechtlich geprüft werden. Die vorhandene
@@ -208,6 +225,13 @@ abgebrochener Lauf lädt beim nächsten Start nur noch fehlende Videos. Nach ein
 vollständigen Lauf nutzt das Script `lastModified` aus der Cache-Datei und lädt
 nur später veröffentlichte Videos. Geplante Livestreams und Premieren werden
 erst übernommen, wenn sie veröffentlicht sind.
+
+Bereits geladene YouTube-Videodetails werden ohne zeitlichen Ablauf
+wiederverwendet, also auch über ein Jahr hinaus. Ihr Alter allein löst keinen
+erneuten Detailabruf aus. Titel-/Beschreibungskorrekturen älterer Videos
+werden dadurch nicht automatisch nachgeladen. Die Upload-Liste wird weiterhin
+inkrementell auf neue Videos geprüft. Playlist-Mitgliedschaften werden wie
+bisher bei jedem Abruf überprüft; sie sind keine unveränderlichen Videodetails.
 
 ## YouTube-Playlists cachen
 
@@ -289,12 +313,32 @@ Aus der Video-Liste in `cache/youtube-videos.json` werden alle Videos mit
 aus dem Titel erkannt und in `cache/blaetterabend-videos.json` gespeichert.
 
 ```sh
-npm run extract:blaetterabend
+npm run fetch:archives
+npm run generate:blaetterabend
 ```
+
+`src/fetch-archives.mjs` aktualisiert ausschließlich die Archive-Caches für
+die im Video-Cache erkannten Zeitschriften. Kultmags wird zuerst geprüft;
+reetroz bleibt der Fallback für dort fehlende Zeitschriften. Mit
+`npm run fetch:archives:refresh` werden beide Quellen unabhängig vom Cache-Alter
+neu abgefragt. Das erzeugt noch keine neue Blätterabend-Datei.
+
+`src/generate-blaetterabend.mjs` liest anschließend ausschließlich lokale
+JSON-Dateien und lädt auch bei veralteten Caches nichts aus dem Internet.
+Fehlende benötigte Cache-Dateien führen zu einem Fehler mit Hinweis auf
+`fetch:archives`, nicht zu einem automatischen Abruf. Zum bisherigen kombinierten
+Refresh-Aufruf gehören jetzt zwei Schritte:
+
+```sh
+npm run fetch:archives:refresh
+npm run generate:blaetterabend
+```
+
+Danach erzeugt `npm run generate:site` die Website aus den aktuellen JSON-Daten.
 
 Titel ohne erkannte Zeitschrift oder Ausgabe werden beim Lauf aufgelistet. Neue
 Zeitschriften oder Schreibweisen werden in der Liste `MAGAZINES` in
-`src/extract-blaetterabend.mjs` ergänzt.
+`src/generate-blaetterabend.mjs` ergänzt.
 Die bestätigte Titelbezeichnung „Computer Gaming World – 15th Anniversary“
 wird als Ausgabe #148 (11/1996) erkannt; auf dem
 [Cover](https://assets.reetroz.com/covers/cgw-148.jpg) sind beide Angaben zu sehen.
@@ -305,7 +349,7 @@ Logmeldung weist dann gegebenenfalls auf die verlinkte Archiv-Übersichtsseite h
 
 Jede erkannte Zeitschrift bekommt ein Feld `kultmags` mit einem Link in das
 Archiv von [kultmags.com](https://www.kultmags.com/mags.php)
-(`src/kultmags.mjs`):
+(`src/fetch-kultmags.mjs`):
 
 - `match: "issue"`: Die passende Ausgabe wurde gefunden, mit `title`, `pageUrl`,
   `readerUrl` (Online-Reader, falls vorhanden), `downloadUrl` und `coverUrl`.
@@ -317,8 +361,10 @@ Archiv von [kultmags.com](https://www.kultmags.com/mags.php)
 - `null`: Die Zeitschrift gibt es auf kultmags.com nicht.
 
 Die Zeitschriftenliste und die Ausgabenlisten der benötigten Zeitschriften
-werden in `cache/kultmags/` gespeichert und 30 Tage wiederverwendet. Mit
-`npm run extract:blaetterabend:refresh` werden sie neu geladen (zusammen mit
+werden in `cache/kultmags/` gespeichert. Ausgabendetails werden regulär
+365 Tage wiederverwendet, der Zeitschriftenindex weiterhin 30 Tage, damit neue
+Zeitschriften gefunden werden können. Mit
+`npm run fetch:archives:refresh` werden sie neu geladen (zusammen mit
 dem reetroz-Cache). Ein vollständiger Abruf braucht etwa 140 Seitenaufrufe, mit
 200 ms Pause zwischen den Aufrufen.
 
@@ -326,7 +372,7 @@ dem reetroz-Cache). Ein vollständiger Abruf braucht etwa 140 Seitenaufrufe, mit
 
 kultmags.com enthält nur deutsche Zeitschriften. Für Zeitschriften, die dort
 fehlen (`kultmags: null`), wird im Archiv von
-[reetroz.com](https://reetroz.com/catalog) gesucht (`src/reetroz.mjs`), z. B.
+[reetroz.com](https://reetroz.com/catalog) gesucht (`src/fetch-reetroz.mjs`), z. B.
 Computer Gaming World, PC Gamer (US) und Computer Games Strategy Plus. Das
 Ergebnis steht im Feld `reetroz` im selben Format wie `kultmags`:
 
@@ -339,8 +385,15 @@ Ergebnis steht im Feld `reetroz` im selben Format wie `kultmags`:
 
 Der Katalog (`cache/reetroz/index.json`) und je eine Ausgabenliste pro
 benötigter Zeitschrift (`cache/reetroz/magazines/<slug>.json`) werden ebenfalls
-30 Tage gecacht. Ein vollständiger Abruf braucht nur 1 Seitenaufruf plus 1 pro
+getrennt gecacht: der Katalog 30 Tage, die Ausgabendetails 365 Tage.
+Ein vollständiger Abruf braucht nur 1 Seitenaufruf plus 1 pro
 Zeitschrift, weil eine Zeitschriftenseite alle Ausgaben enthält.
+
+Die einjährige Wiederverwendung ist eine lokale Cache-Regel, keine Garantie
+für die Erreichbarkeit externer Inhalte. Abgelaufene Archivdaten werden nicht
+automatisch gelöscht: Fetch-Scripts aktualisieren sie bei Bedarf, lokale
+Generatoren können vorhandene Caches unabhängig vom Alter weiterverwenden.
+Ein ausdrücklich angeforderter Refresh darf die Jahresfrist übergehen.
 
 ## Architekturentscheidungen
 

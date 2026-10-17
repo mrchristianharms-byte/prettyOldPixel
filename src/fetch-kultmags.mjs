@@ -2,6 +2,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   DEFAULT_MAX_AGE_DAYS,
+  DEFAULT_INDEX_MAX_AGE_DAYS,
   cacheFileName,
   createFetcher,
   decodeHtml,
@@ -78,9 +79,13 @@ export function parseIssueTitle(title, section) {
   };
 }
 
-async function loadIndex({ cacheDir, maxAgeDays, refresh, now, fetcher }) {
+async function loadIndex({ cacheDir, maxAgeDays, refresh, now, fetcher, cachedOnly }) {
   const file = path.join(cacheDir, "index.json");
   const cached = await readJson(file);
+  if (cachedOnly) {
+    if (!cached) throw new Error(`kultmags-Cache fehlt: ${file}. Zuerst npm run fetch:archives ausführen.`);
+    return cached;
+  }
   if (!refresh && isFresh(cached, maxAgeDays, now)) {
     return cached;
   }
@@ -94,9 +99,13 @@ async function loadIndex({ cacheDir, maxAgeDays, refresh, now, fetcher }) {
   return index;
 }
 
-async function loadMagazine(name, { cacheDir, maxAgeDays, refresh, now, fetcher }) {
+async function loadMagazine(name, { cacheDir, maxAgeDays, refresh, now, fetcher, cachedOnly }) {
   const file = path.join(cacheDir, "magazines", cacheFileName(name));
   const cached = await readJson(file);
+  if (cachedOnly) {
+    if (!cached) throw new Error(`kultmags-Cache fehlt: ${file}. Zuerst npm run fetch:archives ausführen.`);
+    return cached;
+  }
   if (!refresh && isFresh(cached, maxAgeDays, now)) {
     return cached;
   }
@@ -131,15 +140,17 @@ export async function loadKultmagsCatalog({
   magazineNames,
   cacheDir = defaultCacheDir,
   maxAgeDays = DEFAULT_MAX_AGE_DAYS,
+  indexMaxAgeDays = DEFAULT_INDEX_MAX_AGE_DAYS,
   refresh = false,
+  cachedOnly = false,
   fetchImpl = fetch,
   sleep = defaultSleep,
   log = console.log,
   now = Date.now(),
 }) {
   const fetcher = createFetcher({ fetchImpl, sleep, log, siteName: "kultmags.com" });
-  const options = { cacheDir, maxAgeDays, refresh, now, fetcher };
-  const index = await loadIndex(options);
+  const options = { cacheDir, maxAgeDays, refresh, now, fetcher, cachedOnly };
+  const index = await loadIndex({ ...options, maxAgeDays: indexMaxAgeDays });
   const byName = new Map(index.magazines.map((magazine) => [normalizeMagazineName(magazine.name), magazine]));
 
   const magazines = new Map();

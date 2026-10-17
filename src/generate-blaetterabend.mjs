@@ -1,8 +1,8 @@
 import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { findKultmagsIssue, loadKultmagsCatalog } from "./kultmags.mjs";
-import { findReetrozIssue, loadReetrozCatalog } from "./reetroz.mjs";
+import { findKultmagsIssue, loadKultmagsCatalog } from "./fetch-kultmags.mjs";
+import { findReetrozIssue, loadReetrozCatalog } from "./fetch-reetroz.mjs";
 
 const projectRoot = fileURLToPath(new URL("../", import.meta.url));
 const defaultSourceFile = path.join(projectRoot, "cache", "youtube-videos.json");
@@ -266,7 +266,7 @@ function logLinkStats(log, site, links) {
   log(`  ${site}: ${count("issue")} Ausgaben verlinkt, ${count("folder")} nur Übersichtsseite, ${count("none")} nicht im Archiv`);
 }
 
-export async function createBlaetterabendList({
+export async function generateBlaetterabendList({
   sourceFile = defaultSourceFile,
   targetFile = defaultTargetFile,
   log = console.log,
@@ -277,10 +277,10 @@ export async function createBlaetterabendList({
   const videos = extractBlaetterabendVideos(source.videos ?? []);
   if (kultmags) {
     const magazineNames = videos.flatMap((video) => video.magazines.map((magazine) => magazine.name));
-    addKultmagsLinks(videos, await loadKultmagsCatalog({ log, ...kultmags, magazineNames }));
+    addKultmagsLinks(videos, await loadKultmagsCatalog({ log, ...kultmags, magazineNames, cachedOnly: true }));
     if (reetroz) {
       const missingNames = videos.flatMap((video) => video.magazines.filter((magazine) => magazine.kultmags === null).map((magazine) => magazine.name));
-      addReetrozLinks(videos, await loadReetrozCatalog({ log, ...reetroz, magazineNames: missingNames }));
+      addReetrozLinks(videos, await loadReetrozCatalog({ log, ...reetroz, magazineNames: missingNames, cachedOnly: true }));
     }
   }
   const withoutMagazine = videos.filter((video) => video.magazines.length === 0);
@@ -315,9 +315,13 @@ export async function createBlaetterabendList({
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  const refresh = process.argv.includes("--refresh-archives");
-  createBlaetterabendList({ kultmags: { refresh }, reetroz: { refresh } }).catch((error) => {
-    console.error(error.message);
+  if (process.argv.length > 2) {
+    console.error("Aufruf: node src/generate-blaetterabend.mjs (nur lokale Caches). Archive vorher mit npm run fetch:archives aktualisieren.");
     process.exitCode = 1;
-  });
+  } else {
+    generateBlaetterabendList().catch((error) => {
+      console.error(error.message);
+      process.exitCode = 1;
+    });
+  }
 }

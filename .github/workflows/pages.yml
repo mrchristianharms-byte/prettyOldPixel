@@ -26,8 +26,15 @@ jobs:
           node-version: 22
       - name: Run tests
         run: npm test
-      - name: Build static site
-        run: npm run build
+      - name: Restore page modification history
+        uses: actions/cache@v4
+        with:
+          path: public/build-manifest.json
+          key: pages-manifest-${{ github.ref_name }}-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            pages-manifest-${{ github.ref_name }}-
+      - name: Generate static site
+        run: npm run generate:site
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload Pages artifact

@@ -4,7 +4,7 @@
 **Datum:** 2026-10-17
 **Entscheider:** Christian Harms
 **Kontext:** Veröffentlichung des Video-, Zeitschriften- und Spielekatalogs auf GitHub Pages.
-**Ausgangspunkt:** [`src/build.mjs`](../../src/build.mjs)
+**Ausgangspunkt:** [`src/generate-site.mjs`](../../src/generate-site.mjs)
 
 ## Kontext
 
@@ -62,7 +62,7 @@ Der Ablauf bleibt:
 4. Interne Links, Metadaten, strukturierte Daten und Größenbudgets prüfen.
 5. Nur das geprüfte Build-Ergebnis auf GitHub Pages veröffentlichen.
 
-`npm run build` benötigt keinen Netzwerkzugriff und startet keine Scraper.
+`npm run generate:site` benötigt keinen Netzwerkzugriff und startet keine Scraper.
 Quellaktualisierung und Build sind zwei unabhängig ausführbare Schritte.
 Fehlende technische Pflichtdaten (etwa Video-IDs), ungültige Quellstrukturen oder
 kollidierende Ausgabepfade führen zu einem klaren Build-Fehler statt zu

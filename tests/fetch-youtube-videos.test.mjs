@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
@@ -114,6 +114,8 @@ test("lädt alle Seiten ohne API-Key und danach nur neuere Videos", async () => 
       publishedAt: "2026-02-01T10:00:00-07:00",
     });
 
+    cache.fetchedAt = "2020-01-01T00:00:00Z";
+    await writeFile(cacheFile, JSON.stringify(cache));
     const second = createFetch({
       firstPage: playlistPage(["c", "b"], "page-2"),
       videos: { c: playerResponse("c", "2026-03-01T10:00:00-07:00") },

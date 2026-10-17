@@ -420,8 +420,9 @@ Ausgabenseiten mit eingebetteten Videoabschnitten ist implementiert. Der Build v
 Dateiinhalte, übernimmt identische Dateien mit ihrer Dateizeit und schreibt
 Fingerabdrücke sowie videoabhängige Inhaltszeitpunkte in ein Build-Manifest.
 Die HTML-Ausgabe wird derzeit vollständig berechnet; eine frühzeitige
-Abhängigkeitsauflösung sowie persistente Vorartefakte in CI bleiben ein späterer
-Optimierungsschritt. Zeitschriften- und bestätigte Spiele-Entitätsseiten
+Abhängigkeitsauflösung sowie persistente HTML-Vorartefakte in CI bleiben ein späterer
+Optimierungsschritt. Das Build-Manifest wird bereits über einen branchbezogenen
+Actions-Cache wiederhergestellt. Zeitschriften- und bestätigte Spiele-Entitätsseiten
 einschließlich ihrer Verlinkung sind inzwischen ergänzt; News verlinken
 weiterhin keine nicht erzeugten Ziele.
 
@@ -450,11 +451,9 @@ Datum, Uhrzeit und Zeitzone. Gespeichert wird eine normalisierte UTC-Zeit.
 Für die News zählen die angezeigten Videos. Globale Navigationslinks übertragen
 nicht den neuesten Kanalzeitpunkt auf jede Seite.
 
-Bei einer durch ein neues Video verursachten Aktualisierung dient dessen
-Veröffentlichungszeitpunkt als Grundlage für den seitenbezogenen
-`lastModified`-Wert; nicht der Zeitpunkt des Scraper-Laufs oder Builds.
-Ein erst später entdecktes altes Video darf die Seite nicht fälschlich auf den
-heutigen Tag datieren. Für identische Daten bleibt der Wert identisch.
+Der videoabhängige Wert heißt im Manifest `contentPublishedAt`.
+Ein erst später entdecktes altes Video erhält dadurch keinen erfundenen
+neuen Veröffentlichungszeitpunkt. Für identische Daten bleibt der Wert identisch.
 
 **Grenze der Aussagekraft:** Titelkorrekturen, neue Archivlinks, entfernte
 Videos oder Template-Änderungen können den Inhalt ändern, ohne dass sich der
@@ -463,13 +462,21 @@ neueste Video-Veröffentlichungszeitpunkt erhöht. Der Fingerabdruck muss solche
 Der videoabhängige Inhaltszeitpunkt ist daher nicht automatisch ein belegter
 technischer Änderungszeitpunkt der Seite.
 
-Sitemap-`lastmod` darf aus diesem Wert nur übernommen werden, wenn er die
-inhaltliche Aktualisierung tatsächlich belegt. Bei anders verursachten
-Änderungen ohne verlässlich belegten Änderungszeitpunkt wird `lastmod`
-weggelassen, statt eine falsche Aktualität zu behaupten. Gleiches gilt für
-`dateModified` in strukturierten Daten. HTTP-`Last-Modified` wird bei GitHub Pages
-vom Hosting bestimmt und lässt sich nicht durch HTML-Metadaten setzen.
-Seiten ohne datierte Video-Grundlage erhalten keinen erfundenen Zeitstempel.
+Für das gewünschte Sitemap-`lastmod` wird deshalb ein getrennter technischer
+Wert `lastModified` im Manifest geführt: der UTC-Zeitpunkt, an dem der Build
+erstmals den aktuellen HTML-Fingerabdruck erzeugt hat. Bei unverändertem
+Fingerabdruck bleibt der gespeicherte Zeitpunkt erhalten. Echte Änderungen
+an Beschreibungen, Links, Listen oder Templates setzen ihn neu, auch wenn
+kein neueres Video existiert. Dies ist ein Seitenänderungsdatum und kein
+behauptetes YouTube-Veröffentlichungsdatum.
+
+Beim ersten Build, bei der Migration alter Manifeste ohne diesen Wert oder
+bei verlorener Historie gilt der aktuelle Erzeugungszeitpunkt als Ausgangswert.
+Das Manifest wird zwischen CI-Läufen per Actions-Cache erhalten. Ohne
+wiederherstellbaren Cache kann keine ältere Änderungszeit rekonstruiert werden.
+Auch Seiten ohne datierte Videos erhalten so ein reales Erzeugungsdatum.
+JSON-LD-`dateModified` bleibt vorerst ausgelassen. HTTP-`Last-Modified` wird bei
+GitHub Pages vom Hosting bestimmt und lässt sich nicht durch HTML-Metadaten setzen.
 
 Browser-Caching und Inhaltsdatierung werden getrennt geprüft: Maßgeblich für
 die Wiederverwendung im Browser sind die realen GitHub-Pages-Response-Header.

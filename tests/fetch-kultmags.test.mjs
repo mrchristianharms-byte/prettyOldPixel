@@ -3,14 +3,14 @@ import { mkdtemp, readFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
-import { parseBlaetterabendTitle } from "../src/extract-blaetterabend.mjs";
+import { parseBlaetterabendTitle } from "../src/generate-blaetterabend.mjs";
 import {
   findKultmagsIssue,
   folderUrl,
   loadKultmagsCatalog,
   parseFolderPage,
   parseIssueTitle,
-} from "../src/kultmags.mjs";
+} from "../src/fetch-kultmags.mjs";
 
 const folderLink = (folder) => `<div class="folder-name"><a href="mags.php?folder=${encodeURIComponent(Buffer.from(folder).toString("base64"))}"><strong>${folder.split("/").pop()}</strong></a></div>`;
 const card = (title, file, reader = true) => `<article class="magazine-card"><div class="item-title"><strong><u>${title}</u></strong></div>`
@@ -125,5 +125,49 @@ test("nutzt den Cache und lädt nur mit refresh neu", async () => {
 
     await loadKultmagsCatalog({ ...options, fetchImpl: second.fetchImpl, magazineNames: ["Smash"], refresh: true });
     assert.deepEqual(second.requests, ["mags.php", "Smash"]);
+  });
+
+});
+
+test("liest im Offline-Modus auch veraltete Caches und meldet fehlende Dateien ohne Abruf", async () => {
+  await withCatalog(async ({ cacheDir, options }) => {
+    const offline = {
+      ...options, cachedOnly: true, refresh: true, now: Date.parse("2099-01-01"),
+      fetchImpl: () => { throw new Error("Unerlaubter Netzwerkzugriff"); },
+      magazineNames: ["Power Play"],
+    };
+    const file = path.join(cacheDir, "magazines", "power-play.json");
+    const before = await readFile(file, "utf8");
+    const catalog = await loadKultmagsCatalog(offline);
+    assert.ok(catalog.magazines.has("Power Play"));
+    assert.equal(await readFile(file, "utf8"), before);
+    await rm(file);
+    await assert.rejects(loadKultmagsCatalog(offline), /kultmags-Cache fehlt:.*fetch:archives/u);
+    await rm(path.join(cacheDir, "index.json"));
+    await assert.rejects(loadKultmagsCatalog(offline), /kultmags-Cache fehlt:.*index.json/u);
+  });
+
+  test("behält Ausgabendetails 365 Tage und aktualisiert den Index weiterhin nach 30 Tagen", async () => {
+    await withCatalog(async ({ cacheDir, options }) => {
+      const file = path.join(cacheDir, "magazines", "power-play.json");
+      const before = await readFile(file, "utf8");
+      const start = Date.parse(JSON.parse(before).fetchedAt);
+      const mock = createFetch();
+      const load = (days) => loadKultmagsCatalog({
+        ...options, fetchImpl: mock.fetchImpl, magazineNames: ["Power Play"], now: start + days * 86400000,
+      });
+      await load(29);
+      assert.deepEqual(mock.requests, []);
+      await load(30);
+      assert.deepEqual(mock.requests, ["mags.php"]);
+      mock.requests.length = 0;
+      await load(364);
+      assert.deepEqual(mock.requests, ["mags.php"]);
+      assert.equal(await readFile(file, "utf8"), before);
+      mock.requests.length = 0;
+      await load(365);
+      assert.deepEqual(mock.requests, ["Power Play", "Power Play/1988", "Power Play/Special"]);
+      assert.equal(JSON.parse(await readFile(file, "utf8")).fetchedAt, new Date(start + 365 * 86400000).toISOString());
+    });
   });
 });

@@ -3,7 +3,7 @@ import { mkdtemp, mkdir, readFile, rm, stat, writeFile } from "node:fs/promises"
 import path from "node:path";
 import { tmpdir } from "node:os";
 import test from "node:test";
-import { buildSite, validateSite } from "../src/build.mjs";
+import { generateSite, validateSite } from "../src/generate-site.mjs";
 import { createSiteConfig } from "../src/site-config.mjs";
 import { normalizeSources } from "../src/site-data.mjs";
 import { renderSite } from "../src/site-render.mjs";
@@ -246,14 +246,14 @@ test("aktualisiert betroffene Seiten bei neuen Heften und Links, entfernt alte A
   }
   const options = { cacheDirectory, outputDirectory, logger: { log() {}, warn() {} } };
   await save();
-  await buildSite(options);
+  await generateSite(options);
   const manifest = () => readFile(path.join(outputDirectory, "build-manifest.json"), "utf8").then(JSON.parse);
   const initial = await manifest();
   const untouched = "zeitschriften/amiga-joker/1991/index.html";
   const removedIssue = [...normalizeSources(input).magazines.find((item) => item.id === "pc-games").issues.values()].find((item) => item.months[0] === 12);
   input.magazines.videos[2].magazines = [mention(issue(1994, [2]))];
   await save();
-  await buildSite(options);
+  await generateSite(options);
   const changed = await manifest();
   assert.equal(initial.pages[untouched].fingerprint, changed.pages[untouched].fingerprint);
   assert.notEqual(initial.pages["zeitschriften/pc-games/index.html"].fingerprint, changed.pages["zeitschriften/pc-games/index.html"].fingerprint);
@@ -262,7 +262,7 @@ test("aktualisiert betroffene Seiten bei neuen Heften und Links, entfernt alte A
   const news = changed.pages["news/index.html"];
   input.magazines.videos[3].magazines[0].kultmags.downloadUrl = "https://www.kultmags.com/added.pdf";
   await save();
-  await buildSite(options);
+  await generateSite(options);
   const linked = await manifest();
   assert.equal(news.fingerprint, linked.pages["news/index.html"].fingerprint);
   assert.equal(news.contentPublishedAt, linked.pages["news/index.html"].contentPublishedAt);
@@ -270,10 +270,10 @@ test("aktualisiert betroffene Seiten bei neuen Heften und Links, entfernt alte A
   assert.ok((await readFile(path.join(outputDirectory, `${specialRoute}index.html`), "utf8")).includes("added.pdf"));
   input.magazines.videos[6].magazines.push(mention(issue(1987, [4]), "Neue Zeitschrift"));
   await save();
-  await buildSite(options);
+  await generateSite(options);
   const newMagazine = await manifest();
   assert.ok(newMagazine.pages["zeitschriften/neue-zeitschrift/1987/index.html"]);
   assert.ok((await readFile(path.join(outputDirectory, "news/index.html"), "utf8")).includes("/zeitschriften/neue-zeitschrift/"));
-  const repeat = await buildSite(options);
+  const repeat = await generateSite(options);
   assert.equal(repeat.files, repeat.reused);
 });
