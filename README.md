@@ -16,7 +16,7 @@ Alle Befehle im Projektverzeichnis ausführen.
 
 ```sh
 npm run generate:site
-python3 -m http.server 8000 --bind 127.0.0.1 --directory docs
+npx http-server docs -a 127.0.0.1 -p 8000
 ```
 
 Anschließend http://localhost:8000/ öffnen. Der Generator arbeitet offline

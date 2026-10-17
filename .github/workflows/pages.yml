@@ -33,6 +33,13 @@ jobs:
           key: pages-manifest-docs-${{ github.ref_name }}-${{ github.run_id }}-${{ github.run_attempt }}
           restore-keys: |
             pages-manifest-docs-${{ github.ref_name }}-
+      - name: Restore versioned CSS and JavaScript assets
+        uses: actions/cache@v4
+        with:
+          path: docs/assets
+          key: pages-assets-docs-${{ github.ref_name }}-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            pages-assets-docs-${{ github.ref_name }}-
       - name: Generate static site
         run: npm run generate:site
       - name: Configure Pages

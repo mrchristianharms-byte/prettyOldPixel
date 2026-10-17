@@ -119,7 +119,9 @@ test("sortiert numerisch nach Veröffentlichung und kennzeichnet undatierte Vide
 });
 
 test("rendert eine vollständige Spieleseite mit Metadaten, Player und Beschreibungen auch über 50 Videos", () => {
-  const { pages, config, budgets } = render(fixture(65), [definition({ platforms: ["Amiga"], aliases: ["Cadaver (Amiga)"] })]);
+  const input = fixture(65);
+  input.videos.videos[0].durationSeconds = 3661;
+  const { pages, config, budgets } = render(input, [definition({ platforms: ["Amiga"], aliases: ["Cadaver (Amiga)"] })]);
   const html = pages.get("spiele/cadaver/index.html").html;
   assert.equal((html.match(/data-video-panel /gu) ?? []).length, 65);
   assert.equal((html.match(/<iframe /gu) ?? []).length, 1);
@@ -128,11 +130,20 @@ test("rendert eine vollständige Spieleseite mit Metadaten, Player und Beschreib
   assert.ok(html.indexOf('class="detail-player"') < html.indexOf('class="episode-menu"'));
   assert.ok(html.indexOf('class="detail-player"') < html.indexOf('<dl class="detail-meta">'));
   assert.ok(html.includes("Video 65/65"));
+  const menu = html.match(/<details class="episode-menu"[\s\S]*?<\/details>/u)[0];
+  assert.ok(menu.includes(`data-video-link href="#video-${videoId(64)}">65/65: `));
+  assert.ok(!/data-video-link[^>]*>Video /u.test(menu));
+  assert.ok(menu.includes('<span aria-label="Laufzeit">1:01:01</span>'));
+  assert.ok(menu.includes("Laufzeit unbekannt"));
+  assert.ok(menu.includes('<time datetime="2020-01-01T00:00:00.000Z">01.01.2020</time>'));
+  assert.ok(menu.includes('tabindex="0"'));
   assert.ok(html.includes('<div><dt>Spieltitel</dt><dd>Cadaver</dd></div>'));
-  assert.ok(html.includes('<div><dt>Hauptplattform laut Quellplaylist</dt><dd>Amiga</dd></div>'));
+  assert.ok(html.includes('<div><dt>Plattform</dt><dd>Amiga</dd></div>'));
+  assert.ok(html.includes("Playlists auf YouTube"));
+  assert.ok(!/lokal gespeichert|Zuordnung.*geprüft|bestätigte Videos|Quellen der Spielzuordnung/u.test(html));
   assert.equal((html.match(/<dl class="detail-meta">/gu) ?? []).length, 66);
   assert.ok(html.includes("keine Beschreibung vorhanden"));
-  assert.ok(!html.includes(' hidden'));
+  assert.ok(!/<article\b[^>]*data-video-panel[^>]*\shidden(?:\s|>)/u.test(html));
   assert.ok(!html.includes("autoplay="));
   assert.ok(!pages.has("spiele/cadaver/seite/2/index.html"));
   assert.ok(![...pages.keys()].some((file) => /^videos\/[A-Za-z0-9_-]{11}\//u.test(file)));

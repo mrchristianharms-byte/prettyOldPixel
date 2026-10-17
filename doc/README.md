@@ -76,7 +76,8 @@ News und Themenübersichten führen zum
 Videoabschnitt einer vorhandenen Ausgabe bzw. eines Spiels, sonst direkt zu YouTube.
 
 Archivverweise auf Zeitschriftenseiten erscheinen als kleine Ordner-, Lese-
-und Downloadsymbole direkt unter den jeweiligen Videolinks. Die vollständige
+und Downloadsymbole neben den jeweiligen Videotiteln; auf schmalen Displays
+dürfen sie natürlich umbrechen. Die vollständige
 Beschriftung mit Anbieter und Hinweis auf die externe Website bleibt für
 Screenreader und als Tooltip erhalten. Auch die Archivübersicht einer Ausgabe
 verwendet diese Symbole; Lese-/Downloadlinks erscheinen nur bei bestätigten
@@ -216,7 +217,7 @@ keine externen Ressourcen oder Laufzeit-JavaScript.
   Titelmerkmalen und bestätigtem Playlist-Kontext. Eine Folgenummer `#0` oder
   `#1` allein ist kein Intro; „Abschluss Level 1“ ist kein Abschlussgespräch.
   Bei widersprüchlichem oder fehlendem Formatkontext bleibt der Beitrag als
-  „Weitere Beiträge / ungeklärt“ zugänglich. Erkennung und Quellbelege stehen
+  „Weitere Beiträge“ zugänglich. Erkennung und Quellbelege stehen
   im normalisierten Seitenmodell; es gibt keine neuen Online-Abfragen.
 - Quellreihen werden anhand der bestätigten Playlists und Titel-Formate
   unterschieden, etwa re.play, streamstag und re.connect beim selben Spiel.
@@ -263,7 +264,7 @@ automatische Folgenfortsetzung sind weiterhin getrennte spätere Ausbauschritte.
 ### Blätterabend nach Zeitschrift und Jahrgang
 
 - `/zeitschriften/` zeigt die erkannten Zeitschriften alphabetisch sowie eine
-  Gruppe „Zeitschrift ungeklärt“ für nicht sicher zugeordnete Blätterabend-Videos.
+  Gruppe „Weitere Blätterabende“ für nicht sicher zugeordnete Blätterabend-Videos.
 - `/zeitschriften/<slug>/` bündelt die Jahrgänge und Videos einer Zeitschrift.
   „Jahrgang unbekannt“ bleibt sichtbar; das Uploadjahr ersetzt kein Heftjahr.
 - `/zeitschriften/<slug>/<jahr>/` zeigt reguläre Ausgaben nach Monat bzw.
@@ -314,24 +315,46 @@ automatische Folgenfortsetzung sind weiterhin getrennte spätere Ausbauschritte.
 
 ### Medien, SEO und unveränderte Builds
 
+- Sichtbare Seitentexte beschreiben Themen, Videos und Bedienung für Besucher.
+  Interne Auswahlregeln, Cachezugriffe und Buildabläufe stehen nur in dieser
+  Dokumentation und den ADRs, nicht in den Einleitungen der Website.
 - Pico CSS **2.1.1** liegt einschließlich MIT-Lizenz unter `src/vendor/`.
   Der Build bündelt es mit `src/site.css` zu einer lokalen Datei mit
   Inhalts-Hash. Es werden keine Fonts, CDNs oder anderen externen Assets geladen.
-- Spiel-/Ausgabenseiten zeigen ein direkt von YouTube geladenes Vorschaubild. Erst ein
-  bewusster Klick aktiviert den Player von `youtube-nocookie.com`, auch ohne
-  eigenes JavaScript. Ein normaler YouTube-Link bleibt verfügbar.
+- Bereits erzeugte CSS- und JavaScript-Dateien mit passendem Inhalts-Hash
+  bleiben bei späteren Builds erhalten. GitHub Pages kann HTML noch zehn
+  Minuten zwischenspeichern; dessen ältere Asset-URLs dürfen nach einem
+  Deployment nicht ins Leere laufen. Neue Seiten laden nur die aktuelle
+  Version, und nur diese zählt zum jeweiligen Übertragungsbudget.
+  Historische Assets werden nicht automatisch bereinigt; pro geänderter
+  CSS-/JavaScript-Version wächst das Deployment um eine weitere Datei.
+- Spiel-/Ausgabenseiten zeigen zunächst ein direkt von YouTube geladenes
+  Vorschaubild. Ein bewusster Klick aktiviert den Player von
+  `youtube-nocookie.com`, auch ohne eigenes JavaScript.
+  Mit JavaScript wird die Aktivierung unter
+  `pretty-old-pixel:youtube-player-enabled` im Local Storage gespeichert.
+  Weitere Videos und Seitenbesuche laden dann direkt den Player, ohne Autoplay.
+  „YouTube-Aktivierung zurücksetzen“ unter dem Player löscht die Einstellung
+  und stellt das Vorschaubild wieder her. Gesperrter Browser-Speicher wird
+  sichtbar gemeldet; die manuelle Aktivierung bleibt nutzbar. Ohne JavaScript
+  wird nichts gespeichert. Ein normaler YouTube-Link bleibt verfügbar.
 - Auf der Spiel-/Ausgabenseite wechseln Videoauswahl, aktive Beschreibung und
   Browser-Titel ohne Seitenwechsel. Ein gemeinsamer Player verhindert parallele
-  Wiedergaben; bei einer anderen Auswahl wird zunächst nur das Vorschaubild
-  angezeigt. Direktlinks und Zurück/Vorwärts verwenden Video-Fragmente.
+  Wiedergaben; bei einer anderen Auswahl wird abhängig von der gemerkten
+  Aktivierung der Player oder das Vorschaubild geladen, niemals automatisch
+  abgespielt. Direktlinks und Zurück/Vorwärts verwenden Video-Fragmente.
   Mobil steht die Videoliste in einem nativen Burger-Menü. Auf Spieleseiten
   beginnt sie auf Desktop als rechte Seitenleiste auf Höhe des Seitentitels.
   Spiele und Ausgaben nutzen dasselbe Detailtemplate: kompakter einzeiliger
   Titel, unmittelbar darunter der Player, dann sämtliche Metadaten,
   Reiheninformationen und Beschreibungen. Lange Titel werden optisch mit
   Auslassung gekürzt, bleiben aber als vollständiger Text und Tooltip verfügbar.
-  Mobil steht das Menü unter dem Player, nicht vor dem Titel. Kompakte Kopf-
-  und Navigationsabstände sowie eine auf 60 Prozent der Viewporthöhe begrenzte
+  Mobil steht das Menü unter dem Player, nicht vor dem Titel.
+  Die schmalere Seitenleiste zeigt Nummer, Titel, Laufzeit und Datum in kleiner
+  Schrift. Ihre Liste ist unabhängig scrollbar, auch per Tastatur, ohne den
+  Hauptplayer mitzuscrollen. Auf Desktop bleibt das Menü beim Scrollen
+  erreichbar; mobil bleibt es aufklappbar mit begrenzter Listenhöhe.
+  Kompakte Kopf- und Navigationsabstände sowie eine auf 60 Prozent der Viewporthöhe begrenzte
   Playerhöhe halten das Video beim normalen Seitenaufruf im sichtbaren Bereich.
   Direkte Video-Fragmente wählen mit JavaScript den richtigen Beitrag und
   richten den sichtbaren Ausschnitt am Player aus, auch wenn der Browser
@@ -358,11 +381,13 @@ automatische Folgenfortsetzung sind weiterhin getrennte spätere Ausbauschritte.
   Zeitpunkt der ersten Erzeugung mit dieser Datierung.
   `fetchedAt` und `checkedAt` sind keine Änderungsgrundlage.
   JSON-LD-`dateModified` bleibt vorerst ausgelassen.
-- GitHub Actions sichert das Manifest per branchbezogenem Actions-Cache und
-  stellt es vor dem nächsten Build wieder her. So bleiben Sitemap-Daten auch
-  bei frischen Checkouts stabil. Der Cache enthält nur die Änderungshistorie,
-  nicht das HTML. Bei einem Cache-Verlust wird eine neue Ausgangsdatierung
-  gesetzt; ein historischer Änderungszeitpunkt wird nicht geraten.
+- GitHub Actions sichert das Manifest und `docs/assets/` per branchbezogenem
+  Actions-Cache und stellt beides vor dem nächsten Build wieder her.
+  So bleiben Sitemap-Daten und ältere Asset-Versionen auch bei frischen
+  Checkouts erhalten. HTML wird nicht gecacht. Bei einem Cache-Verlust wird
+  eine neue Ausgangsdatierung gesetzt; ältere Assets sind dann nur vorhanden,
+  wenn sie noch im lokalen Ausgabeordner liegen. Für lückenlose
+  Asset-Verfügbarkeit darf dieser Cache nicht gelöscht werden.
 - HTTP-`Last-Modified`, `ETag` und Kompression werden vom Hosting bestimmt, nicht
   durch HTML-Metadaten. Ihre Prüfung auf dem veröffentlichten GitHub Pages sowie
   die Wiederverwendung vollständiger HTML-Ausgaben über CI-Läufe hinweg stehen

@@ -42,6 +42,15 @@ function render(input = fixture(), sections = [definition()], options = {}) {
 }
 const graph = (html) => JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/u)[1])["@graph"];
 
+test("beschreibt Themen für Besucher ohne interne Prüf- oder Cachehinweise", () => {
+  for (const id of ["hardware", "retrospektiven", "interviews"]) {
+    const { pages } = render(fixture(), [definition(id)]);
+    const html = pages.get(`${id}/index.html`).html;
+    assert.ok(html.includes("4 Videos."));
+    assert.ok(!/Cache|lokal gespeichert|geprüft|bestätigte Beiträge|Videolinks führen|Zuordnung wurde/u.test(html));
+  }
+});
+
 test("ordnet nur geprüfte IDs zu und meldet neue Titel-/Playlist-Kandidaten", () => {
   const input = fixture();
   input.videos.videos[1].title = "re.ware - ungeprüft";

@@ -79,26 +79,206 @@ werden dürfen ihre URLs und die Video-IDs für die direkte Einbindung.
 
 ### 2. Stabile, crawlbare Seitenstruktur
 
-Vorgesehene Seitentypen:
+Die folgende Übersicht beschreibt den **implementierten Stand**, abgeglichen
+mit [`src/site-render.mjs`](../../src/site-render.mjs),
+[`src/site-data.mjs`](../../src/site-data.mjs),
+[`src/generate-blaetterabend.mjs`](../../src/generate-blaetterabend.mjs) und den
+gepflegten Spiele-/Bereichszuordnungen. Die ausführliche fachliche Begründung
+steht in [ADR 0003](0003-seitenstruktur-und-inhaltszuordnung.md).
 
-Die fachliche Gliederung, Jahrgangsseiten und Regeln für Spielereihen werden in
-[ADR 0003](0003-seitenstruktur-und-inhaltszuordnung.md) konkretisiert. Die folgende
-Tabelle beschreibt den technischen Rahmen, keine Pflicht zur sofortigen
-Erzeugung aller Seitentypen.
+#### Seitenbaum
+
+Die Pfade sind relativ zum öffentlichen Projektpfad. Die ASCII-Grafik zeigt
+Seitentypen, nicht jede tatsächlich vorhandene Seite:
+
+```text
+/
+|-- index.html                         Statistik und Themenkacheln
+|-- news/                              Neueste 20 Videos
+|-- zeitschriften/                     Alphabetischer Zeitschriftenindex
+|   |-- seite/<n>/                     Weitere Indexseiten, falls noetig
+|   `-- <zeitschrift>/
+|       |-- index.html                 Jahrgaenge und zugeordnete Videos
+|       |-- seite/<n>/                 Weitere Zeitschriftenseiten
+|       |-- <jahr>/
+|       |   |-- index.html             Ausgaben und Videos des Heftjahrs
+|       |   `-- seite/<n>/             Weitere Jahrgangsseiten
+|       `-- ausgaben/
+|           `-- <hefttitel-slug>/       Gemeinsamer Player und Videoteile
+|-- spiele/
+|   |-- index.html                     Alphabetischer Spieleindex
+|   |-- seite/<n>/                     Weitere Indexseiten
+|   `-- <spiel-slug>/                   Gemeinsamer Player und ganze Reihe
+|-- hardware/
+|   |-- index.html                     Gepruefte Hardwarebeitraege
+|   `-- seite/<n>/                     Weitere Bereichsseiten
+|-- retrospektiven/
+|   |-- index.html                     Themen und gepruefte Folgenordnung
+|   `-- seite/<n>/                     Weitere Bereichsseiten
+|-- interviews/
+|   |-- index.html                     Gespraeche mit Personen und Themen
+|   `-- seite/<n>/                     Weitere Bereichsseiten
+|-- datenschutz/
+|-- 404.html                           Fehlerseite, nicht indexierbar
+|-- sitemap.xml
+|-- robots.txt
+`-- assets/                            Lokales CSS, Videowechsel-JS, Lizenz
+```
+
+Alle dargestellten Verzeichnis-Seiten enthalten `index.html`.
+`seite/<n>/` beginnt bei Seite 2 und entsteht nur bei Bedarf. Leere
+Themenbereiche werden weder erzeugt noch in der Navigation angeboten.
+„Jahrgang unbekannt“ ist eine Gruppe innerhalb der Zeitschriftenübersicht,
+keine eigene Route. Ebenso bleiben ungeklärte Zeitschriften als Gruppe im
+Zeitschriftenindex, statt spekulative Detailseiten zu erhalten.
 
 | Pfad | Inhalt |
 |---|---|
-| `/` | Einstieg und Navigation zu den Katalogen |
-| `/zeitschriften/` | Alphabetischer Zeitschriftenindex |
-| `/zeitschriften/<slug>/` | Zeitschrift, Ausgaben und zugehörige Videos |
-| `/zeitschriften/<slug>/ausgaben/<ausgaben-id>/` | Eindeutig erkannte Ausgabe mit Videos und Archivlinks |
-| `/spiele/` | Alphabetischer Spieleindex, sobald Spieledaten vorliegen |
-| `/spiele/<slug>/` | Spiel mit zugeordneten Videos und Zeitschriftenausgaben |
+| `/` | Kanalstatistik, belegter Beginn der Videogeschichte und verlinkte Themenkacheln; keine Liste neuer Videos |
+| `/news/` | Kanalweit höchstens 20 neueste Videos, ohne Beschränkung auf bestimmte Themen |
+| `/zeitschriften/` | Magazine alphabetisch und gegebenenfalls die Gruppe „Weitere Blätterabende“ |
+| `/zeitschriften/<slug>/` | Bekannte Jahrgänge und alle zugeordneten Videos, einschließlich unbekannter Heftdaten |
+| `/zeitschriften/<slug>/<jahr>/` | Videos nach Erscheinungsjahr des Hefts, gruppiert nach Ausgabe und Sonderheft |
+| `/zeitschriften/<slug>/ausgaben/<hefttitel-slug>/` | Eindeutig identifizierte Ausgabe, Archivlinks und sämtliche zugehörigen Videoteile |
+| `/spiele/` | Alphabetischer Index der qualifizierten, bestätigten Spiele |
+| `/spiele/<slug>/` | Spielinformationen, vollständige chronologische Videoreihe und Abschnitts-/Reihenübersicht |
+| `/hardware/` | Geprüfte Hardwarebeiträge, neueste zuerst; keine Geräte-, Hersteller- oder Jahresunterseiten |
+| `/retrospektiven/` | Geprüfte Beiträge, nach Thema und expliziter Folgenreihenfolge; keine Themenunterseiten |
+| `/interviews/` | Geprüfte Gespräche mit Personen- und Themenangaben, neueste zuerst |
+| `/datenschutz/`, `/404.html` | Allgemeine Hinweise beziehungsweise nicht indexierbare Fehlerseite |
 
-Jeder Pfad wird als Verzeichnis mit `index.html` geschrieben. Slugs und IDs sind
-eindeutig und stabil; spätere Änderungen eines Anzeigenamens dürfen Links nicht
-unbemerkt brechen. Unbekannte Ausgaben bekommen keine spekulative Detailseite.
-Seiten ohne belastbaren Inhalt werden nicht vorsorglich angelegt.
+Es gibt weder `/videos/` mit einem Gesamtkatalog noch separate Seiten pro
+Video. Ein Videolink führt bevorzugt zu einer vorhandenen Ausgabe, sonst zu
+einer bestätigten Spieleseite, jeweils mit `#video-<id>`; fehlt beides,
+direkt zu YouTube. Innerhalb einer Ausgabe bleibt deren eigener Kontext
+erhalten. Bei mehreren möglichen Zielen ist die Wahl deterministisch.
+Spiel- und Ausgabenseiten verwenden dasselbe kompakte Playerlayout.
+Kapitel und erwähnte Kanäle stehen innerhalb des jeweiligen Videoabschnitts
+und erzeugen keine zusätzlichen Seiten.
+
+#### Gemeinsame Auswahlregeln
+
+- Grundlage sind die drei lokalen Dateien `youtube-videos.json`,
+  `youtube-playlists.json` und `blaetterabend-videos.json` unter `cache/`.
+  Beide YouTube-Caches müssen vollständig sein und alle Caches zum selben
+  Kanal gehören. Ungültige Pflichtdaten führen zum Build-Fehler.
+- Nur Videos aus dem öffentlichen Video-Cache werden dargestellt. Einträge
+  mit künftigem Veröffentlichungszeitpunkt werden ausgeschlossen.
+  Fehlende/ungültige Datumswerte werden gemeldet, nicht durch Abrufzeiten
+  ersetzt. In bestätigten Themen bleiben solche Videos zulässig; in den
+  datierten News nicht.
+- Playlist-Mitglieder zählen nur mit aufgelöstem Video und
+  `availability: "listed"`. Fehlende oder als nicht verfügbar markierte
+  Mitglieder werden gemeldet. Mehrfacheinträge zählen innerhalb einer
+  Spielereihe nur einmal.
+- Themenzuordnungen dürfen sich überschneiden. Ein Interview kann zugleich
+  bei einem Spiel erscheinen; Videozahlen verschiedener Bereiche sind nicht
+  addierbar. Ohne bestätigte Zuordnung entsteht keine Ersatzkategorie.
+- Datumsvergleiche verwenden echte Zeitpunkte einschließlich Zeitzonen.
+  Zeitgleiche Videos werden stabil nach Video-ID geordnet. Unbekannte Daten
+  stehen bei chronologischen Listen am Ende.
+
+#### Auswahl pro Kategorie
+
+**Startseite:** Kennzahlen stammen aus dem normalisierten öffentlichen
+Datenbestand, nicht aus einer zusätzlichen Videoliste. Spiele zählen nur
+qualifizierte Spieleseiten, Heftausgaben nur eindeutig identifizierte
+Ausgaben. Laufzeiten werden zu vollen Stunden abgerundet; fehlende Laufzeiten
+machen die Kennzahl ausdrücklich zur Teilsumme. Das älteste datierte Video
+belegt den Beginn der erfassten Videogeschichte, nicht das unbekannte
+Gründungsdatum. Themenkacheln verlinken nur vorhandene Bereiche.
+
+**News:** Auswahl der 20 neuesten unterschiedlichen Videos mit belastbarem
+`publishedAt`, absteigend sortiert. Alle Kanalformate sind zugelassen, auch
+ohne Themenzuordnung. Keine eigene Paginierung und kein Gesamtkatalog-Link.
+
+**Blätterabend / Zeitschriften:** Die vorgelagerte lokale Generierung nimmt
+zuerst Titel mit „Blätterabend“ beziehungsweise „Blaetterabend“ sowie
+explizit bestätigte Video-ID-Zuordnungen auf. Ein zweiter Durchlauf prüft
+übrige Titel auf einen bekannten Zeitschriftennamen und entweder unmittelbar
+folgende Ausgabenangaben oder das Format `[re.read]`. Eine bloße
+Namensüberschneidung wie „ACE“ in „Ace of Aces“ reicht nicht. Aktuell ist
+`6R6Go1LhCMI` ausdrücklich als Power Play 10/1990 bestätigt.
+
+Zeitschrift, Ausgabe und Teil werden aus dem Titel beziehungsweise dieser
+Bestätigung übernommen. Archivzuordnungen werden zuerst gegen kultmags
+geprüft; reetroz ist der Fallback für dort fehlende Zeitschriften, nicht
+für jedes fehlende Einzelheft. Der Websitegenerator verbraucht den
+Blätterabend-Cache, statt Titel erneut unabhängig zu klassifizieren.
+Ein fehlender Archivtreffer verhindert eine ansonsten eindeutige reguläre
+Ausgabenseite nicht.
+
+- Zeitschriftenseiten entstehen schon mit einem zugeordneten öffentlichen
+  Video. Jahrgangsseiten benötigen ein bekanntes Heftjahr; das Uploadjahr
+  ersetzt es nicht.
+- Reguläre Ausgaben benötigen Jahr und mindestens einen Monat oder eine
+  Heftnummer. Sonderhefte benötigen einen eindeutigen Archiv-Hefttreffer
+  oder Jahr plus Sonderheftnummer. Ein Jahr allein oder ein generisches
+  „Sonderheft“ reicht nicht.
+- Fehlende Angaben dürfen nur über denselben eindeutigen Archiv-Hefttreffer
+  ergänzt werden. Widersprüchliche Angaben verhindern die Ausgabenseite und
+  werden gemeldet; die Videos bleiben in der Übersicht.
+- Jahrgänge werden aufsteigend, reguläre Ausgaben nach Monat/Nummer vor
+  Sonderheften geordnet. Innerhalb einer Ausgabe werden bekannte Teilnummern
+  relativ zueinander sortiert; unnummerierte Videos behalten ihren
+  chronologischen Platz.
+
+**Spiele:** Nur explizite Identitäten aus
+[`src/games.mjs`](../../src/games.mjs) mit bestätigten Quellplaylist-IDs,
+optionalen bestätigten Zusatzvideos und Ausschlüssen. Playlist-Titel oder
+zufällige Titelnennungen allein erzeugen kein Spiel. Eine Seite braucht
+mindestens zwei unterschiedliche verfügbare Videos, die nicht als
+`re.minder` gekennzeichnet sind. Bestätigte `re.minder`-Beiträge ergänzen
+erst eine bereits qualifizierte Reihe, heben sie aber nicht über die
+Schwelle. Nachfolger und Plattformvarianten werden nicht automatisch
+zusammengelegt. Der Index ist alphabetisch, die vollständige Videoreihe
+chronologisch vom ältesten zum neuesten Video. Abschnitte wie Intro,
+Gameplay und Fazit strukturieren die Reihe zusätzlich, ändern aber weder
+deren Mitgliedschaft noch die Gesamtreihenfolge.
+
+**Hardware:** Nur geprüfte explizite Video-IDs aus
+[`src/sections.mjs`](../../src/sections.mjs). Hardware-/re.ware-Playlists
+und Titel mit `re.ware` oder „Hardware“ liefern lediglich Prüfkandidaten.
+Gerätevorstellungen, Restaurierung, Computergrundlagen und Bastelstreams
+sind nach Prüfung enthalten. Der reine Verpackungsbeitrag `bwVnfQJ-WEw`
+ist ausgeschlossen; `XDvGVislnJg` ist wegen ausdrücklich beschriebener
+Hardware-Reinigung mit Hinweis als gemischter Beitrag enthalten.
+Sortierung: Veröffentlichung absteigend, unbekannte Daten zuletzt.
+
+**Retrospektiven:** Ebenfalls ausschließlich explizit geprüfte Video-IDs
+aus `src/sections.mjs`. Playlist-Mitgliedschaft und `re.trospektive` im
+Titel melden nur neue Kandidaten. Aktuell enthalten sind die
+Formateinleitung und zwölf Beiträge zur Geschichte der Flugsimulationen.
+Die gepflegten Felder `topic` und `order` bestimmen Themen und
+Folgenreihenfolge. Doppelte Originalnummern wie `#11` bleiben unverändert
+und werden nicht als alleinige Sortiergrundlage verwendet.
+
+**Interviews und Gespräche:** Explizite IDs aus `src/sections.mjs`, jeweils
+mit bestätigten Personen und Thema. Interview-Playlist sowie die Titelwörter
+„Interview“ und „Talk“ liefern nur Prüfkandidaten, keine automatische
+Freigabe. Bestätigte Beiträge außerhalb der Playlist sind zulässig, etwa
+das Gespräch mit Andreas und Oliver zu Eye of the Beholder auf dem C64.
+Bestehende Spielezuordnungen werden wiederverwendet, nicht aus zufälligen
+Erwähnungen erfunden. Sortierung: Veröffentlichung absteigend, unbekannte
+Daten zuletzt.
+
+Für Hardware, Retrospektiven und Interviews genügt ein bestätigter
+öffentlicher Beitrag; die Zwei-Video-Schwelle gilt nur für Spiele.
+Nicht mehr vorhandene bestätigte IDs werden ausgelassen; bei vorhandenem
+Quellplaylist-Kontext wird dies ausdrücklich gemeldet. Neue Kandidaten
+erzeugen einen Prüfhinweis, keine automatische Zuordnung. re.list,
+re.collect, Community-Formate und sonstige ungeprüfte Inhalte erhalten
+keine eigene Hauptkategorie; ihre Daten bleiben im vollständigen Cache.
+
+#### Pfade und Paginierung
+
+Spielpfade verwenden die gepflegte Spielidentität. Ausgabepfade verwenden
+Zeitschriftenname und finalen Hefttitel als Slug, nicht die interne
+Hash-ID. Gleichlautende, aber unterschiedliche Hefte erhalten deterministische
+`-variante-<n>`-Zusätze. Titeländerungen können damit Ausgabepfade ändern;
+automatische Weiterleitungen für alte Pfade werden derzeit nicht erzeugt.
+Unbekannte Ausgaben bekommen keine spekulative Detailseite. Seiten ohne
+belastbaren Inhalt werden nicht vorsorglich angelegt.
 
 Eine zentrale Konfiguration enthält die öffentliche Basis-URL einschließlich
 eines eventuellen GitHub-Pages-Projektpfads. Interne Links, Assets, Paginierung,
@@ -199,6 +379,12 @@ und Build einfach.
 - Kein CSS-`@import` und keine externen URLs in `url(...)`.
 - Gemeinsam genutzte Assets erhalten Inhalts-Hashes im Dateinamen, damit
   Browser-Caches bei Änderungen zuverlässig aktualisiert werden.
+  Ältere versionierte CSS-/JavaScript-Dateien bleiben mit geprüftem
+  Inhalts-Hash im Ausgabeordner erhalten und werden über den branchbezogenen
+  Actions-Cache in folgende Deployments übernommen. So bleiben auch die
+  Asset-URLs zwischengespeicherter HTML-Seiten erreichbar. Neue Seiten
+  referenzieren nur die aktuelle Version; historische Dateien zählen nicht
+  zum Übertragungsbudget und werden nicht automatisch bereinigt.
 
 HTML-Caching verwendet die von GitHub Pages gelieferten HTTP-Validatoren
 (`Last-Modified` und/oder `ETag`, soweit vorhanden) und deren Cache-Regeln.
@@ -255,6 +441,10 @@ keine zusätzlichen Analytics- oder sonstigen Drittanbieterskripte auf der Websi
   Thumbnails und Links angezeigt. Auf Ausgabe-/Spieleseiten wird der Player
   vorzugsweise erst auf ausdrückliche Nutzeraktion geladen, damit seine
   Ressourcen den initialen Seitenaufbau nicht belasten.
+  Eine bewusst gewählte Aktivierung wird im Local Storage gemerkt: Bei
+  späteren Seitenaufrufen darf der Player direkt laden, aber nicht automatisch
+  abspielen. Die Einstellung lässt sich unter dem Player zurücksetzen.
+  Ohne JavaScript bleibt die Aktivierung pro Video nötig.
 - Ein normaler, als extern gekennzeichneter YouTube-Link bleibt unabhängig vom
   Player verfügbar. Die externe Einbindung wird für Besucher kenntlich gemacht;
   `youtube-nocookie.com` bedeutet nicht, dass keine Daten übertragen werden.
@@ -318,9 +508,10 @@ Die Seite erläutert konkret:
   und weitere technische Request-Daten an den Anbieter übertragen werden.
 - YouTube-Player und IFrame-API: Zeitpunkt der Aktivierung, externe Verbindungen
   und die Grenzen des erweiterten Datenschutzmodus.
-- Die Auswahl per URL-Fragment und die gegebenenfalls später eingeführte
-  abschaltbare Folgenfortsetzung innerhalb derselben Seite; derzeit kein
-  Sitzungsspeicher, kein eigenes Tracking und keine Analytics-Dienste.
+- Die Auswahl per URL-Fragment und die gemerkte Player-Aktivierung im
+  Local Storage einschließlich Zurücksetzen; kein Wiedergabeverlauf,
+  kein Sitzungsspeicher, kein eigenes Tracking und keine Analytics-Dienste.
+  Eine spätere abschaltbare Folgenfortsetzung bleibt davon getrennt.
 - Externe Links, deren Ziele erst beim Aufrufen besucht werden.
 
 Formulierungen müssen der tatsächlichen Umsetzung entsprechen. Erforderliche

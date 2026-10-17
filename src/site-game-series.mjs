@@ -5,7 +5,7 @@ export const gamePhases = [
   { id: "interview", label: "Interview / Gespräch" },
   { id: "reconsider", label: "re.consider – Nachbetrachtung" },
   { id: "reminder", label: "re.minder – Erinnerung" },
-  { id: "other", label: "Weitere Beiträge / ungeklärt" },
+  { id: "other", label: "Weitere Beiträge" },
 ];
 
 const formatPattern = /(?:\[\s*|^\s*)(re\.(?:play|connect|consider|minder|invented)|streamstag|spieleabend)\b(?:\s*[-–]?\s*#\s*\d+(?:[.,]\d+)?)?\s*\]?/iu;
@@ -68,7 +68,7 @@ export function structureGameSeries(videos, playlists, gameNames = []) {
     const format = context.format ?? "Weitere Beiträge";
     const sourceLabel = sources.map((source) => source.title).join(" / ");
     const baseRunLabel = sources.length === 1 && titleContext(sources[0].title).format === context.format
-      ? sourceLabel : `${format}${sources.length ? ` – ${sourceLabel}` : " – bestätigte Zusatzbeiträge"}`;
+      ? sourceLabel : `${format}${sources.length ? ` – ${sourceLabel}` : " – Zusatzbeiträge"}`;
     return {
       videoId: video.id, phase: { ...gamePhases.find((item) => item.id === phase.id), evidence: phase.evidence },
       format: context.format, sourceKey, sources: sources.map((source) => source.id),

@@ -1,4 +1,4 @@
-import { copyFile, lstat, mkdir, mkdtemp, readFile, rename, rm, stat, utimes, writeFile } from "node:fs/promises";
+import { copyFile, lstat, mkdir, mkdtemp, readFile, readdir, rename, rm, stat, utimes, writeFile } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import { gzipSync } from "node:zlib";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -180,6 +180,24 @@ export async function generateSite({
 
   const content = new Map([...assets, ...[...pages].map(([file, page]) => [file, page.html])]);
   content.set("build-manifest.json", `${JSON.stringify(manifest, null, 2)}\n`);
+
+  // Cached HTML can still reference earlier assets after a Pages deployment.
+  const previousAssets = path.join(output, "assets");
+  const assetsStat = await optionalStat(previousAssets);
+  if (assetsStat) {
+    if (!assetsStat.isDirectory() || assetsStat.isSymbolicLink()) throw new Error("Asset-Verzeichnis muss ein echtes Verzeichnis sein.");
+    for (const file of (await readdir(previousAssets)).sort()) {
+      const match = /^(?:site\.([a-f0-9]{12})\.css|video-series\.([a-f0-9]{12})\.js)$/u.exec(file);
+      if (!match) continue;
+      const source = path.join(previousAssets, file);
+      const sourceStat = await lstat(source);
+      if (!sourceStat.isFile() || sourceStat.isSymbolicLink()) throw new Error(`Versioniertes Asset muss eine echte Datei sein: ${file}`);
+      const value = await readFile(source);
+      if (hash(value).slice(0, 12) !== (match[1] ?? match[2])) throw new Error(`Inhalts-Hash des bisherigen Assets stimmt nicht: ${file}`);
+      // Retained versions are not loaded by new pages and do not count toward their budgets.
+      content.set(`assets/${file}`, value);
+    }
+  }
 
   await mkdir(path.dirname(output), { recursive: true });
   const staging = await mkdtemp(path.join(path.dirname(output), ".site-build-"));

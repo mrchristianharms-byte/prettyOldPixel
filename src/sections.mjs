@@ -12,7 +12,7 @@ export const sectionDefinitions = [
       { id: "pe1hjxQpW60", topic: "Roland MT-32 und SC-55: Soundsynthese" },
       { id: "2ITRFLHFtH4", topic: "MS-DOS-PC restaurieren, Teil 1" },
       { id: "qOOlEO1ShJA", topic: "MS-DOS-PC restaurieren, Teil 2" },
-      { id: "XDvGVislnJg", topic: "Hardware und Spieleverpackungen reinigen und reparieren", note: "Gemischter Beitrag: behandelt ausdrücklich auch die Reinigung von Hardware." },
+      { id: "XDvGVislnJg", topic: "Hardware und Spieleverpackungen reinigen und reparieren", note: "Tipps zur Reinigung von Hardware und Spieleverpackungen." },
       { id: "MAaf4h2gqrY", topic: "PC-Grundlagen: Power On Self Test" },
       { id: "m6qIJLYZyk4", topic: "PC-Grundlagen: Betriebssystem laden" },
       { id: "HneOBahuhe0", topic: "Audio-Switch selbst bauen" },

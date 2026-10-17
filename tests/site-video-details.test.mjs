@@ -132,7 +132,7 @@ test("rendert Kapitel und Kanäle in Spiel- und Ausgabepanels ohne neue Skripte 
     assert.ok(html.includes("1:30 · &lt;Gameplay&gt;"));
     assert.ok(html.includes(`watch?v=${id}&amp;t=90s" rel="external"`));
     assert.ok(html.includes("Erwähnte Kanäle / Partner"));
-    assert.ok(html.includes("keine Aussage über bezahlte Zusammenarbeit"));
+    assert.ok(html.includes("Eine Erwähnung bedeutet nicht, dass eine bezahlte Zusammenarbeit besteht."));
     assert.equal((html.match(/<iframe /gu) ?? []).length, 1);
     assert.equal((html.match(/<script/gu) ?? []).length, 2);
     assert.ok(!html.includes("iframe_api"));

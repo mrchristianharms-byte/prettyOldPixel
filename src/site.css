@@ -44,9 +44,14 @@ h3 { font-size: 1.2rem; }
 .year-list { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; padding: 0; }
 .year-list li { list-style: none; }
 .magazine-index li { margin-block: .6rem; }
-.issue-group { padding-block: 1rem; border-bottom: 1px solid var(--pico-muted-border-color); }
-.issue-videos li { margin-block: .8rem; }
-.issue-videos .meta { margin-block: .25rem; }
+.issue-group { padding-block: .5rem; border-bottom: 1px solid var(--pico-muted-border-color); }
+.issue-group h3 { margin-bottom: .35rem; font-size: 1.05rem; }
+.issue-videos { margin-bottom: .5rem; font-size: .9rem; }
+.issue-videos > li { margin-block: .4rem; }
+.issue-video-heading { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 .4rem; }
+.issue-video-heading > a { flex: 0 1 auto; }
+.issue-video-heading .archive-links { display: inline-flex; align-self: center; margin: 0; }
+.issue-videos .meta { margin-block: .1rem; font-size: .75rem; }
 .archive-links { display: flex; flex-wrap: wrap; gap: .3rem; padding: 0; margin-block: .25rem; }
 .archive-links > li { list-style: none; margin: 0; padding: 0; }
 .archive-icon { display: inline-flex; align-items: center; justify-content: center; gap: .15rem; min-width: 2rem; min-height: 2rem; padding: .2rem; font-size: .65rem; line-height: 1; text-decoration: none; }
@@ -54,10 +59,15 @@ h3 { font-size: 1.2rem; }
 .episode-menu { align-self: start; }
 .video-panels { min-width: 0; }
 .video-panels article { box-shadow: none; }
-.detail-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(15rem, 22rem); gap: 1.5rem; align-items: start; }
+.detail-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(13rem, 18rem); gap: 1rem; align-items: start; }
 .detail-main, .detail-player, .detail-information { min-width: 0; }
 .detail-heading { min-width: 0; margin: 0 0 .5rem; font-size: clamp(1rem, 2vw, 1.4rem); line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.detail-layout > .episode-menu { margin: 0; }
+.detail-layout > .episode-menu { position: sticky; top: .75rem; min-width: 0; margin: 0; font-size: .8rem; line-height: 1.4; }
+.episode-menu summary { margin-bottom: .4rem; }
+.episode-menu nav { display: block; max-height: calc(100svh - 12rem); overflow-y: auto; overscroll-behavior-y: contain; scrollbar-gutter: stable; padding: .2rem; }
+.episode-menu nav ol { display: block; margin: 0; padding: 0; }
+.episode-menu nav li { display: block; padding: .35rem .25rem; border-bottom: 1px solid var(--pico-muted-border-color); }
+.episode-menu nav a { display: block; margin: 0; padding: 0; }
 .detail-page .breadcrumbs { display: flex; flex-wrap: nowrap; width: 100%; min-width: 0; margin-bottom: .4rem; font-size: .8rem; }
 .detail-page .breadcrumbs li { display: flex; white-space: nowrap; }
 .detail-page .breadcrumbs li:last-child { flex: 1; min-width: 0; }
@@ -66,7 +76,7 @@ h3 { font-size: 1.2rem; }
 .detail-page .site-header nav li { padding-block: 0; }
 .series-guide { margin-block: 1.5rem; }
 .series-guide li { margin-block: .5rem; }
-.episode-menu .meta { margin-block: .2rem .8rem; }
+.episode-menu .meta { margin: .15rem 0 0; font-size: .7rem; line-height: 1.4; }
 [data-video-panel] { scroll-margin-top: 1rem; }
 [data-video-panel][hidden] { display: none; }
 [data-video-link][aria-current] { font-weight: 750; }
@@ -76,11 +86,13 @@ h3 { font-size: 1.2rem; }
   .detail-heading, .detail-player, .detail-information, .detail-layout > .episode-menu { width: 100%; }
   .detail-heading { order: 0; }
   .detail-player { order: 1; }
-  .detail-layout > .episode-menu { order: 2; margin-bottom: 1rem; }
+  .detail-layout > .episode-menu { position: static; order: 2; margin-bottom: .75rem; }
+  .episode-menu nav { max-height: 45svh; }
   .detail-information { order: 3; }
   .detail-layout { gap: 0; }
 }
 .video-player { display: block; width: 100%; aspect-ratio: 16 / 9; min-height: 0; max-height: min(60svh, calc(100svh - 12rem)); border: 0; background: #171a22; }
+.player-reset { width: auto; margin: 0; padding: 0; border: 0; border-radius: 0; background: none; color: var(--pico-primary); font: inherit; text-decoration: underline; }
 .description { max-width: 80ch; }
 .description p { white-space: pre-wrap; }
 .pagination { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .8rem; margin-block: 1.5rem; }

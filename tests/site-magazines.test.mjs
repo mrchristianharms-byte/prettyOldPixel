@@ -82,9 +82,9 @@ test("unterscheidet Sonderhefte und erstellt keine spekulativen Seiten aus Jahr 
   for (const index of [5, 6, 10]) {
     assert.ok(!model.videoById.get(videoId(index)).magazines[0].issue?.route);
   }
-  assert.ok(pages.get("zeitschriften/pc-games/1993/index.html").html.includes("Ausgabe nicht eindeutig"));
+  assert.ok(pages.get("zeitschriften/pc-games/1993/index.html").html.includes("<h3>PC Games 1993</h3>"));
   assert.ok(pages.get("zeitschriften/pc-games/index.html").html.includes("Jahrgang unbekannt"));
-  assert.ok(pages.get("zeitschriften/index.html").html.includes("Zeitschrift ungeklärt"));
+  assert.ok(pages.get("zeitschriften/index.html").html.includes("Weitere Blätterabende"));
 });
 
 test("erhält den chronologischen Platz unnummerierter Videos und sortiert bekannte Teile relativ zueinander", () => {
@@ -175,7 +175,7 @@ test("verlinkt News direkt auf die Ausgabe mit Video-Fragment statt separater Vi
   assert.ok(pages.get(`${other.route}index.html`).html.includes(`id="video-${videoId(9)}"`));
 });
 
-test("zeigt kompakte, beschriftete Archivsymbole direkt unter jedem Videolink", () => {
+test("zeigt kompakte, beschriftete Archivsymbole neben jedem Videotitel", () => {
   const input = fixture(2);
   const links = {
     ...archive("1992-11"),
@@ -186,7 +186,7 @@ test("zeigt kompakte, beschriftete Archivsymbole direkt unter jedem Videolink", 
   const entity = [...model.magazines[0].issues.values()][0];
   for (const route of ["zeitschriften/pc-games/", "zeitschriften/pc-games/1992/"]) {
     const html = pages.get(`${route}index.html`).html;
-    const entries = [...html.matchAll(/<li><a href="[^"]*#video-[^"]*">[\s\S]*?<\/ul>[\s\S]*?<\/li>/gu)];
+    const entries = [...html.matchAll(/<li><div class="issue-video-heading"><a href="[^"]*#video-[^"]*">[\s\S]*?<\/ul><\/div>[\s\S]*?<\/li>/gu)];
     assert.equal(entries.length, 2);
     for (const [entry] of entries) {
       assert.equal((entry.match(/class="archive-icon"/gu) ?? []).length, 3);
@@ -214,7 +214,7 @@ test("zeigt bei bloßem Archivordner keine Lese- oder Downloadsymbole", () => {
   const { pages } = render(input);
   const html = pages.get("zeitschriften/pc-games/index.html").html;
   assert.equal((html.match(/class="archive-icon"/gu) ?? []).length, 1);
-  assert.ok(html.includes("Übersichtsseite (kein eindeutiger Hefttreffer)"));
+  assert.ok(html.includes("Zeitschriftenübersicht"));
   assert.ok(!html.includes("not-confirmed.rar"));
   assert.ok(!html.includes("Heft lesen"));
 });
@@ -227,9 +227,9 @@ test("paginiert Übersichten mit 50 Videos, behält jedoch alle Videoteile auf e
     const first = pages.get(`${route}index.html`).html;
     const second = pages.get(`${route}seite/2/index.html`).html;
     const third = pages.get(`${route}seite/3/index.html`).html;
-    assert.equal((first.match(/<li><a href="[^"]*#video-m/gu) ?? []).length, 50);
-    assert.equal((second.match(/<li><a href="[^"]*#video-m/gu) ?? []).length, 50);
-    assert.equal((third.match(/<li><a href="[^"]*#video-m/gu) ?? []).length, 25);
+    assert.equal((first.match(/<li><div class="issue-video-heading"><a href="[^"]*#video-m/gu) ?? []).length, 50);
+    assert.equal((second.match(/<li><div class="issue-video-heading"><a href="[^"]*#video-m/gu) ?? []).length, 50);
+    assert.equal((third.match(/<li><div class="issue-video-heading"><a href="[^"]*#video-m/gu) ?? []).length, 25);
     assert.ok(second.includes('rel="canonical" href="./"'));
     assert.ok(second.includes('href="../../" rel="prev"'));
   }
@@ -246,7 +246,7 @@ test("paginiert große Zeitschriftenindizes und ungeklärte Blätterabend-Videos
   });
   const { pages } = render(input);
   assert.ok(pages.has("zeitschriften/seite/3/index.html"));
-  assert.ok(pages.get("zeitschriften/seite/2/index.html").html.includes("Zeitschrift ungeklärt"));
+  assert.ok(pages.get("zeitschriften/seite/2/index.html").html.includes("Weitere Blätterabende"));
   assert.equal(graph(pages.get("zeitschriften/seite/3/index.html").html)[0].mainEntity.itemListElement.length, 5);
 });
 

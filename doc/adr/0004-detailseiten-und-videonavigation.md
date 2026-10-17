@@ -24,6 +24,8 @@ umgesetzt. Spiele erhalten geprüfte Playlist-/Video-Zuordnungen, belegte
 Hauptplattformen und Quellschreibweisen aus dem gepflegten Spielekatalog.
 Abschnitts-/Reihenerkennung mit statischen Sprunglinks ist ebenfalls umgesetzt.
 Statische Kapitel-Zeitlinks und explizite Kanalverweise sind umgesetzt.
+Die Player-Aktivierung wird im Browser gemerkt und kann zurückgesetzt werden;
+das lädt weitere Player ohne Autoplay.
 API-Kapitelsteuerung und automatische Fortsetzung folgen separat.
 
 ## Entscheidung
@@ -38,15 +40,14 @@ API-Kapitelsteuerung und automatische Fortsetzung folgen separat.
 | `/zeitschriften/<slug>/<jahr>/` | Jahrgang, Ausgaben und zugeordnete Videos |
 | `/zeitschriften/<slug>/ausgaben/<hefttitel-slug>/` | Heftinformationen, Player und sämtliche Videoteile |
 | `/zeitschriften/<slug>/ausgaben/<hefttitel-slug>/#video-<youtube-id>` | Auswahl eines Videoteils auf derselben Ausgabenseite |
-| `/videos/` | Paginierter Katalog mit Links zu vorhandenen Videoabschnitten bzw. YouTube |
 
 Die Zwei-Video-Schwelle für Spiele bleibt bestehen. Unklare Ausgaben erzeugen
 keine spekulative Seite. Solange ein Video keine vorhandene sichere Detailseite
-hat, führt sein Link aus News, Katalog oder Zeitschriftenübersicht direkt zu
+hat, führt sein Link aus News oder Zeitschriftenübersicht direkt zu
 YouTube und ist extern gekennzeichnet. Das gilt auch für nicht bestätigte
 Spielzuordnungen und Spiele unterhalb der Zwei-Video-Schwelle.
 
-Bei mehreren Ausgaben verlinken News und Gesamtkatalog die nach Zeitschriften-Slug
+Bei mehreren Ausgaben verlinken News die nach Zeitschriften-Slug
 erste sichere Ausgabe. Innerhalb einer Zeitschriftenübersicht bleibt ihr
 jeweiliger Ausgabenkontext maßgeblich. Alle bestätigten Zuordnungen sind
 zusätzlich erreichbar. Eine Mehrfachzuordnung erzeugt keine Videoseite.
@@ -71,19 +72,27 @@ Ein lokales, inhaltsgehashtes Modul ergänzt auf Detailseiten:
 - Initiale Auswahl aus dem Fragment; ohne Video-Fragment erstes Video.
 - Ein- und Ausblenden der bereits statisch vorhandenen Beschreibungen.
 - Ein gemeinsamer Player über die Breite der linken Inhaltsspalte; ein Wechsel ersetzt den bisherigen
-  Frame-Inhalt durch ein Vorschaubild und stoppt eine laufende Wiedergabe.
+  Frame-Inhalt und stoppt eine laufende Wiedergabe. Je nach gespeicherter
+  Aktivierung lädt der neue Player oder ein Vorschaubild.
 - Markierung der aktiven Folge, Positionsanzeige und Aktualisierung des
   Browser-Titels. Zurück/Vorwärts berücksichtigt Fragmentwechsel.
-- Keine automatische Wiedergabe oder Player-Aktivierung durch Direktaufruf,
-  ungültiges Fragment oder bloße Auswahl eines anderen Videos.
+- Keine automatische Wiedergabe. Ohne zuvor gemerkte Aktivierung laden
+  Direktaufrufe, ungültige Fragmente oder eine andere Videoauswahl keinen Player.
 
 Ohne JavaScript bleiben sämtliche Beschreibungen sichtbar. Die Videoliste
 führt zu echten HTML-Abschnitten. Je Abschnitt stehen ein normaler YouTube-Link
 und ein expliziter Aktivierungslink für den gemeinsamen Player bereit.
 Der No-JavaScript-Fallback zeigt daher nicht einen leeren Platzhalter.
 
-Der Player lädt YouTube erst nach bewusster Aktivierung, bevorzugt über
-`youtube-nocookie.com`. Das sichtbare Vorschaubild kommt direkt von YouTube.
+Der Player lädt YouTube erstmals nach bewusster Aktivierung, bevorzugt über
+`youtube-nocookie.com`. Die Aktivierung wird mit JavaScript unter
+`pretty-old-pixel:youtube-player-enabled` im Local Storage gespeichert und
+gilt auch für folgende Seitenbesuche, bis sie über den Button unter dem Player
+oder durch Löschen der Browserdaten zurückgesetzt wird. Es wird kein
+Wiedergabeverlauf gespeichert und kein Autoplay eingeschaltet. Ein gesperrter
+Browser-Speicher wird sichtbar gemeldet; die Aktivierung bleibt manuell möglich.
+Ohne JavaScript bleibt die Freigabe auf den jeweiligen Player beschränkt.
+Das sichtbare Vorschaubild kommt direkt von YouTube.
 Es gibt keine lokale Medienkopie. Die lokale Steuerung bleibt insgesamt
 innerhalb von 5 KiB gzip.
 
@@ -139,6 +148,11 @@ mit Auslassung dargestellt, bleiben als vollständiger Text und Tooltip erhalten
 Der Player nutzt die Spaltenbreite mit reserviertem Seitenverhältnis und
 höchstens 60 Prozent der kleinen Viewporthöhe. Kopfbereich und Navigation
 haben reduzierte vertikale Abstände.
+Die schmalere rechte Spalte zeigt Nummer und Titel ohne Präfix „Video“,
+darunter Laufzeit und Veröffentlichungsdatum in kleiner Schrift. Das Menü
+bleibt auf Desktop erreichbar; seine Liste scrollt unabhängig mit begrenzter
+Höhe und ohne Scrollweitergabe an die Hauptseite. Sie ist per Tastatur
+fokussierbar. Mobil bleibt die Listenhöhe auf 45 Prozent des Viewports begrenzt.
 Unter 768 Pixeln steht das native `details`/`summary`-Menü mit Unicode-Burger
 und Text auf beiden Seitentypen unter dem Player und vor den Metadaten.
 Alle Links funktionieren auch ohne das Modul; Fokus und aktive Auswahl sind
@@ -240,7 +254,8 @@ HTTP-Caching und belegbare Änderungszeitpunkte bleiben getrennt gemäß ADR 000
 - Direktlink, Auswahl, Zurück/Vorwärts und Titel wechseln konsistent.
 - Ohne JavaScript sind alle Abschnitte und externen Fallbacks zugänglich.
 - Ein Wechsel stoppt die alte Wiedergabe, ohne neue Wiedergabe zu starten.
-- Player aktiviert erst nach Klick, nur erlaubte externe Medienressourcen.
+- Player aktiviert erst nach Klick oder zuvor gespeicherter Freigabe, nur
+  erlaubte externe Medienressourcen; Zurücksetzen wirkt auf folgende Besuche.
 - Mobile Menüliste, Desktopliste, Fokus und volle Playerbreite funktionieren.
 - Canonicals, Sitemap, JSON-LD und alle Fragmentziele sind valide.
 - Unveränderte Daten erzeugen identische Dateien und Inhaltszeitpunkte.

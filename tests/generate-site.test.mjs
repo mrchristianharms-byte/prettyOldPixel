@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
-import { mkdir, mkdtemp, readFile, readdir, rm, stat, utimes, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, readdir, rm, stat, symlink, utimes, writeFile } from "node:fs/promises";
+import { createHash } from "node:crypto";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
@@ -111,6 +112,7 @@ test("zeigt auf der Startseite korrekte Statistik statt neuer Videos und zählt 
   assert.ok(!home.includes("VideoObject"));
   assert.ok(!home.includes("ItemList"));
   assert.ok(!home.includes("iframe"));
+  assert.ok(!/Cache|lokal|bestätigt|fachlich geprüft/u.test(home));
   assert.ok(!home.includes('script type="module"'));
   validateSite(pages, assets, config);
 });
@@ -199,12 +201,16 @@ test("lädt vor Aktivierung keinen YouTube-Player und dokumentiert den aktuellen
   assert.ok(html.includes('srcdoc="'));
   assert.ok(html.includes('name="issue-player"'));
   assert.ok(html.includes('target="issue-player"'));
+  assert.ok(html.includes('data-player-reset hidden'));
+  assert.ok(html.includes('data-player-activate'));
+  assert.ok(html.includes('data-player-notice role="status" hidden'));
+  assert.ok(html.includes('data-player-url="https://www.youtube-nocookie.com/embed/b0000000000"'));
   assert.ok(html.includes('Vorschaubild von YouTube · Player erst nach Aktivierung. <a href="#datenschutzhinweis">Datenschutzhinweise</a>'));
   assert.equal((html.match(/<iframe /gu) ?? []).length, 1);
   assert.equal((html.match(/data-video-panel /gu) ?? []).length, 2);
   assert.ok(html.includes("keine Beschreibung vorhanden"));
   const privacy = pages.get("datenschutz/index.html").html;
-  for (const text of ["nicht kommerziell", "GitHub Pages", "i.ytimg.com", "youtube-nocookie.com", "keine YouTube-IFrame-API", "Session Storage"]) {
+  for (const text of ["nicht kommerziell", "GitHub Pages", "i.ytimg.com", "youtube-nocookie.com", "keine automatische Folgenfortsetzung", "Local Storage", "YouTube-Aktivierung zurücksetzen", "Session Storage"]) {
     assert.ok(privacy.includes(text), text);
   }
   for (const page of pages.values()) assert.ok(page.html.includes(`href="${createSiteConfig().href("datenschutz/", page.route)}"`));
@@ -222,7 +228,7 @@ test("stellt Zeitschriften mit Archiv-Match-Typ dar, ohne Cover-Hotlinks oder Ph
   const { pages, config, assets } = render(input);
   const html = pages.get("zeitschriften/computer-gaming-world/index.html").html;
   assert.ok(html.includes("Computer Gaming World"));
-  assert.ok(html.includes("kein eindeutiger Hefttreffer"));
+  assert.ok(html.includes("Zeitschriftenübersicht"));
   assert.ok(html.includes('"@type":"Periodical"'));
   assert.ok(!html.includes("cover.jpg"));
   validateSite(pages, assets, config);
@@ -326,6 +332,61 @@ test("ignoriert Abrufzeiten, aktualisiert nur betroffene Inhalte und entfernt ve
   assert.ok(!Object.keys(manifest.pages).some((file) => file.startsWith("videos/")));
   assert.ok(!(await readFile(path.join(options.outputDirectory, "sitemap.xml"), "utf8")).includes("/videos/"));
   assert.notEqual(await readFile(newsPath, "utf8"), before);
+});
+
+test("erhält versionierte Assets für gecachtes HTML über lokale und frische CI-Builds", async (t) => {
+  const options = await setup(t, fixture(1));
+  const first = await generateSite(options);
+  const assetsPath = path.join(options.outputDirectory, "assets");
+  const previousAssets = new Map([
+    ["site", "body{color:rebeccapurple}", "css"],
+    ["site", "body{color:navy}", "css"],
+    ["video-series", "console.log('previous version');", "js"],
+  ].map(([name, content, extension]) => [
+    `${name}.${createHash("sha256").update(content).digest("hex").slice(0, 12)}.${extension}`, content,
+  ]));
+  for (const [file, content] of previousAssets) await writeFile(path.join(assetsPath, file), content);
+  await writeFile(path.join(assetsPath, "obsolete.css"), "Not a generated asset");
+  for (let build = 0; build < 2; build += 1) {
+    const result = await generateSite(options);
+    assert.equal(result.files, first.files + previousAssets.size);
+    assert.equal(result.cssGzip, first.cssGzip);
+    assert.equal(result.jsGzip, first.jsGzip);
+    for (const [file, content] of previousAssets) assert.equal(await readFile(path.join(assetsPath, file), "utf8"), content);
+    await assert.rejects(stat(path.join(assetsPath, "obsolete.css")), { code: "ENOENT" });
+  }
+  const restoredOutput = path.join(path.dirname(options.outputDirectory), "ci", "docs");
+  await mkdir(path.join(restoredOutput, "assets"), { recursive: true });
+  for (const file of await readdir(assetsPath)) {
+    await writeFile(path.join(restoredOutput, "assets", file), await readFile(path.join(assetsPath, file)));
+  }
+  await generateSite({ ...options, outputDirectory: restoredOutput });
+  for (const [file, content] of previousAssets) {
+    assert.equal(await readFile(path.join(restoredOutput, "assets", file), "utf8"), content);
+  }
+  const html = await readFile(path.join(restoredOutput, "index.html"), "utf8");
+  assert.match(html, /<link rel="stylesheet" href="assets\/site\.[a-f0-9]{12}\.css">/u);
+  for (const file of previousAssets.keys()) assert.ok(!html.includes(file));
+});
+
+test("verweigert beschädigte oder verlinkte historische Assets und erhält den bisherigen Build", async (t) => {
+  const options = await setup(t, fixture(1));
+  await generateSite(options);
+  const htmlPath = path.join(options.outputDirectory, "index.html");
+  const previousHtml = await readFile(htmlPath, "utf8");
+  const assetPath = path.join(options.outputDirectory, "assets", "site.000000000000.css");
+  await writeFile(assetPath, "Mismatched content");
+  await assert.rejects(generateSite(options), /Inhalts-Hash des bisherigen Assets stimmt nicht/u);
+  assert.equal(await readFile(htmlPath, "utf8"), previousHtml);
+  await rm(assetPath);
+  await symlink(htmlPath, assetPath);
+  await assert.rejects(generateSite(options), /Versioniertes Asset muss eine echte Datei sein/u);
+  await rm(assetPath);
+  const assetsPath = path.join(options.outputDirectory, "assets");
+  await rm(assetsPath, { recursive: true });
+  await symlink(options.cacheDirectory, assetsPath);
+  await assert.rejects(generateSite(options), /Asset-Verzeichnis muss ein echtes Verzeichnis sein/u);
+  assert.equal(await readFile(htmlPath, "utf8"), previousHtml);
 });
 
 test("setzt Sitemap-lastmod nur bei Inhaltsänderungen und erhält Zeitpunkte aus dem CI-Manifest", async (t) => {
