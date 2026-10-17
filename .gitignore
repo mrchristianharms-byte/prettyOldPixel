@@ -3,7 +3,9 @@ node_modules/
 /public/*
 /docs/*
 /.site-build-*/
-/cache/youtube-transcripts/
-/cache/game-discussions/
+/cache/youtube-transcripts/*
+!/cache/youtube-transcripts/???????????.json
+/cache/game-discussions/*
+!/cache/game-discussions/???????????.json
 /.env
 !/.env.example

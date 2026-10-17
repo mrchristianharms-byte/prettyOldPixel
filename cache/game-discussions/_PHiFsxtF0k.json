@@ -1,0 +1,150 @@
+{
+  "version": 1,
+  "analysisVersion": "3",
+  "videoId": "_PHiFsxtF0k",
+  "transcriptHash": "df217c04b0c8c452e55a7c70cb0116ac66de5be2288157665e76649b21e5d1b4",
+  "catalogHash": "729b640bf67ad5dcd9b0cc8379f84868798998fe09a55ae80ae228a219f9006c",
+  "model": "qwen3:14b",
+  "endpoint": "http://127.0.0.1:11434/v1/chat/completions",
+  "generatedAt": "2026-10-17T22:45:21.339Z",
+  "status": "needs-review",
+  "discussions": [
+    {
+      "title": "Pirates Gold",
+      "gameId": null,
+      "startMs": 691959,
+      "endMs": 756680,
+      "firstSegmentId": 218,
+      "lastSegmentId": 247,
+      "confidence": "high",
+      "reviewed": false,
+      "endReason": "next-game",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 218,
+          "startMs": 691959,
+          "text": "Also heute ist erschienen eine neue"
+        }
+      ]
+    },
+    {
+      "title": "Win Commander 2",
+      "gameId": null,
+      "startMs": 806160,
+      "endMs": 863160,
+      "firstSegmentId": 274,
+      "lastSegmentId": 297,
+      "confidence": "high",
+      "reviewed": false,
+      "endReason": "next-game",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 274,
+          "startMs": 806160,
+          "text": "Win Commander 2 weitergespielt, aber"
+        }
+      ]
+    },
+    {
+      "title": "Eishockey Manager Amiga",
+      "gameId": null,
+      "startMs": 3290440,
+      "endMs": 3328319,
+      "firstSegmentId": 1290,
+      "lastSegmentId": 1302,
+      "confidence": "high",
+      "reviewed": false,
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 1290,
+          "startMs": 3290440,
+          "text": "Eishockey Manager Amiga"
+        }
+      ]
+    },
+    {
+      "title": "Alien Breed",
+      "gameId": null,
+      "startMs": 4213000,
+      "endMs": null,
+      "firstSegmentId": 1638,
+      "lastSegmentId": 1726,
+      "confidence": "high",
+      "reviewed": false,
+      "endReason": "window-end",
+      "issues": [
+        "end-outside-window"
+      ],
+      "evidence": [
+        {
+          "segmentId": 1638,
+          "startMs": 4213000,
+          "text": "Ah, Alien Breed, das kenne ich."
+        }
+      ]
+    },
+    {
+      "title": "Syndicate",
+      "gameId": null,
+      "startMs": 5023639,
+      "endMs": 5133960,
+      "firstSegmentId": 1991,
+      "lastSegmentId": 2036,
+      "confidence": "high",
+      "reviewed": false,
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 1995,
+          "startMs": 5033639,
+          "text": "für Syndicate geschrieben,"
+        }
+      ]
+    },
+    {
+      "title": "Tiny Little Slug",
+      "gameId": null,
+      "startMs": 5173119,
+      "endMs": null,
+      "firstSegmentId": 2050,
+      "lastSegmentId": 2113,
+      "confidence": "medium",
+      "reviewed": false,
+      "endReason": "window-end",
+      "issues": [
+        "end-outside-window"
+      ],
+      "evidence": [
+        {
+          "segmentId": 2051,
+          "startMs": 5176560,
+          "text": "Tiny Little Slack ist classic Amiga Game"
+        }
+      ]
+    },
+    {
+      "title": "Jurassic World Evolution",
+      "gameId": null,
+      "startMs": 5616719,
+      "endMs": 5675159,
+      "firstSegmentId": 2240,
+      "lastSegmentId": 2268,
+      "confidence": "high",
+      "reviewed": false,
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 2240,
+          "startMs": 5616719,
+          "text": "günstig war und es war halt super."
+        }
+      ]
+    }
+  ]
+}

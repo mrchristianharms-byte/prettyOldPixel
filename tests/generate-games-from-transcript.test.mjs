@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdtemp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdtemp, mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { tmpdir } from "node:os";
 import test from "node:test";
@@ -93,7 +93,7 @@ test("erweitert bei Ollama-Abschneiden Kontext und Ausgabe für Erkennung und Ko
       return Response.json({
         done: true, done_reason: truncated ? "length" : "stop",
         message: { content: JSON.stringify(truncated ? {} : verification
-          ? { decisions: [{ candidateIndex: 0, kind: "review", evidenceSegmentId: 3 }] }
+          ? { decisions: [{ candidateIndex: 0, kind: "review", evidenceSegmentId: 3, discussions: [candidate()] }] }
           : { discussions: [candidate()] }) },
       });
     },
@@ -160,11 +160,20 @@ test("nutzt OpenAI-kompatible JSON-Antworten mit Modell aus Konfiguration und le
     assert.equal(body.temperature, 0);
     assert.ok(!options.headers.authorization);
     if (body.messages[0].content.includes("Du prüfst")) {
+      assert.ok(body.messages[0].content.includes("Teile einen vermischten Vorschlag"));
+      assert.ok(body.messages[0].content.includes("coreFirstId/coreLastId"));
+      assert.ok(body.messages[0].content.includes("Namensbeleg"));
       return Response.json({ choices: [{ finish_reason: "stop", message: { content: JSON.stringify({
-        decisions: [{ candidateIndex: 0, kind: "review", evidenceSegmentId: 3 }],
+        decisions: [{ candidateIndex: 0, kind: "review", evidenceSegmentId: 3, discussions: [candidate()] }],
       }) } }] });
     }
     assert.ok(body.messages[0].content.includes("Quizantworten"));
+    assert.ok(body.messages[0].content.includes("mindestens 30 Sekunden"));
+    assert.ok(body.messages[0].content.includes("Zuschauerabstimmungen"));
+    assert.ok(body.messages[0].content.includes("Wing Commander II"));
+    assert.ok(body.messages[0].content.includes("Tiny Little Slug"));
+    assert.ok(body.messages[0].content.includes("Trespasser"));
+    assert.equal(JSON.parse(body.messages[1].content.split("\n")[0]).segments[0].durationMs, 12_000);
     return Response.json({ choices: [{ finish_reason: "stop", message: { content: JSON.stringify({ discussions: [candidate()] }) } }] });
   } });
   assert.equal(result[0].title, "Doom");
@@ -198,6 +207,105 @@ const answer = (value, finish_reason = "stop") => Response.json({
   choices: [{ finish_reason, message: { content: typeof value === "string" ? value : JSON.stringify(value) } }],
 });
 
+test("übernimmt geprüfte Titel und erweitert den Beginn in den überlappenden Kontext", async () => {
+  const source = prepareSegments({ status: "available", segments: [
+    "Ah, Jurassic World Evolution. Danke. Und",
+    "Dresspther,",
+    "damit bin ich langsam warm geworden.",
+    "günstig war und es war halt super.",
+    "Es war super schwer. Es hat geruckelt.",
+    "habe ich es dann noch mal gespielt",
+    "und es hatte irgendwie wirklich so ein Jurassic Park Feeling.",
+  ].map((text, index) => ({ startMs: index * 10_000, durationMs: 10_000, text })) });
+  const window = { index: 1, coreFirstId: 3, coreLastId: 6, segments: source };
+  const original = candidate({
+    title: "Jurassic World Evolution", firstSegmentId: 3, lastSegmentId: 6, evidenceSegmentId: 3,
+  });
+  const corrected = candidate({
+    title: "Trespasser", firstSegmentId: 1, lastSegmentId: 6, evidenceSegmentId: 1,
+  });
+  const result = await analyzeWindow(window, config, {
+    candidates: [original],
+    fetchImpl: async (_url, request) => {
+      const context = JSON.parse(JSON.parse(request.body).messages[1].content.split("\n")[0]);
+      assert.equal(context.segments[1].text, "Dresspther,");
+      assert.equal(context.coreFirstId, 3);
+      return answer({ decisions: [{
+        candidateIndex: 0, kind: "review", evidenceSegmentId: 1, discussions: [corrected],
+      }] });
+    },
+  });
+  assert.deepEqual(result, [{ ...corrected, windowIndex: 1 }]);
+  assert.equal(mergeDiscussions(result, source, [])[0].startMs, 10_000);
+});
+
+test("teilt geprüfte Themenwechsel auf, statt Syndicate unter Tiny Little Slug weiterzuführen", async () => {
+  const source = prepareSegments({ status: "available", segments: [
+    "Ein quasi Remake von Globule ist Tiny Little Slug.",
+    "Ist das jetzt ein neues Spiel?",
+    "Tiny Little Slack ist classic Amiga Game",
+    "müsste das doch bei Hall of Light sein",
+    "das sieht richtig gut aus.",
+    "Sindigkeit hat schöne Cyberpunk Stimmung",
+    "und die fängt mit dem unglaublich tollen Intro schon an",
+    "diesen Überzeugungsstrahler",
+    "die haben auch Waffen aufgehoben",
+    "und wenn du geschossen hast, haben die auch geschossen.",
+  ].map((text, index) => ({ startMs: index * 10_000, durationMs: 10_000, text })) });
+  const window = { index: 1, coreFirstId: 2, coreLastId: 8, segments: source };
+  const corrected = [
+    candidate({ title: "Tiny Little Slug", firstSegmentId: 0, lastSegmentId: 4,
+      evidenceSegmentId: 0, endReason: "next-game" }),
+    candidate({ title: "Syndicate", firstSegmentId: 5, lastSegmentId: 9, evidenceSegmentId: 5 }),
+  ];
+  const result = await analyzeWindow(window, config, {
+    candidates: [candidate({ title: "Tiny Little Slug", firstSegmentId: 2, lastSegmentId: 8,
+      evidenceSegmentId: 2, continuesAfter: true, endReason: "window-end" })],
+    fetchImpl: async () => answer({ decisions: [{
+      candidateIndex: 0, kind: "review", evidenceSegmentId: 5, discussions: corrected,
+    }] }),
+  });
+  const merged = mergeDiscussions(result, source, []);
+  assert.deepEqual(merged.map(({ title, startMs, endMs }) => ({ title, startMs, endMs })), [
+    { title: "Tiny Little Slug", startMs: 0, endMs: 50_000 },
+    { title: "Syndicate", startMs: 50_000, endMs: 100_000 },
+  ]);
+  assert.ok(merged.every((item) => item.issues.length === 0));
+});
+
+test("validiert korrigierte Abschnitte und verhindert ungeprüfte oder fremde Ersatztreffer", async () => {
+  const window = transcriptWindows(segments)[0];
+  for (const discussions of [
+    undefined, [], [candidate({ evidenceSegmentId: 99 })],
+    [candidate({ firstSegmentId: 8, lastSegmentId: 12, evidenceSegmentId: 8 })],
+    [candidate({ firstSegmentId: 18, lastSegmentId: 19, evidenceSegmentId: 18 })],
+    [candidate(), candidate()],
+  ]) {
+    await assert.rejects(analyzeWindow(window, config, {
+      candidates: [candidate()], sleep: async () => {}, log() {},
+      fetchImpl: async () => answer({ decisions: [{
+        candidateIndex: 0, kind: "review", evidenceSegmentId: 3, discussions,
+      }] }),
+    }), /Nach 3 Versuchen abgebrochen/u);
+  }
+  await assert.rejects(analyzeWindow(window, config, {
+    candidates: [candidate()], sleep: async () => {}, log() {},
+    fetchImpl: async () => answer({ decisions: [{
+      candidateIndex: 0, kind: "comparison", evidenceSegmentId: 3, discussions: [candidate()],
+    }] }),
+  }), /Nur review darf/u);
+  await assert.rejects(analyzeWindow(window, config, {
+    candidates: [candidate(), candidate({ firstSegmentId: 8, lastSegmentId: 12, evidenceSegmentId: 8 })],
+    sleep: async () => {}, log() {},
+    fetchImpl: async () => answer({ decisions: [
+      { candidateIndex: 0, kind: "review", evidenceSegmentId: 3,
+        discussions: [candidate({ lastSegmentId: 10 })] },
+      { candidateIndex: 1, kind: "review", evidenceSegmentId: 9,
+        discussions: [candidate({ firstSegmentId: 9, lastSegmentId: 15, evidenceSegmentId: 9 })] },
+    ] }),
+  }), /überlappende Segmentverweise/u);
+});
+
 test("wiederholt ungültige Abschnittskennzeichnungen mit konkretem Fehlerhinweis ohne Validierung aufzuweichen", async () => {
   const delays = [];
   const logs = [];
@@ -212,7 +320,7 @@ test("wiederholt ungültige Abschnittskennzeichnungen mit konkretem Fehlerhinwei
         assert.ok(body.messages.at(-1).content.includes("window-end erfordert continuesAfter true"));
         return answer({ discussions: [candidate()] });
       }
-      return answer({ decisions: [{ candidateIndex: 0, kind: "review", evidenceSegmentId: 3 }] });
+      return answer({ decisions: [{ candidateIndex: 0, kind: "review", evidenceSegmentId: 3, discussions: [candidate()] }] });
     },
   });
   assert.equal(requests.length, 3);
@@ -266,20 +374,22 @@ test("setzt nach fehlerhafter Kontextprüfung beim Prüfaufruf fort und erhält 
   const requests = [];
   const result = await generateGamesFromTranscript(videoId, {
     ...options, fetchImpl: async (_url, request) => {
+      assert.equal(await readFile(completedFile, "utf8"), before);
       const messages = JSON.parse(request.body).messages;
       requests.push(messages);
       return messages[0].content.includes("Du prüfst")
-        ? answer({ decisions: [{ candidateIndex: 0, kind: "review", evidenceSegmentId: 21 }] })
+        ? answer({ decisions: [{ candidateIndex: 0, kind: "review", evidenceSegmentId: 21,
+          discussions: [candidate({ firstSegmentId: 20, lastSegmentId: 23, evidenceSegmentId: 21 })] }] })
         : answer({ discussions: [] });
     },
   });
   assert.equal(requests.length, 2);
   assert.ok(requests[0][0].content.includes("Du prüfst"));
   assert.equal(result.discussions.length, 1);
-  assert.equal(await readFile(completedFile, "utf8"), before);
+  await assert.rejects(readFile(completedFile), { code: "ENOENT" });
 });
 
-test("setzt trotz geändertem Spielekatalog bei fehlenden Fenstern fort und erhält bestehende Dateien bytegenau", async (t) => {
+test("setzt trotz geändertem Spielekatalog fort und erhält Fenster bis zum erfolgreichen Abschluss bytegenau", async (t) => {
   const { directory, videoId } = await setup(t);
   const options = { cacheDirectory: directory, config, log() {} };
   await assert.rejects(generateGamesFromTranscript(videoId, {
@@ -300,26 +410,36 @@ test("setzt trotz geändertem Spielekatalog bei fehlenden Fenstern fort und erh�
   const logs = [];
   const result = await generateGamesFromTranscript(videoId, {
     ...options, log: (message) => logs.push(message),
-    analyzeWindowImpl: async (window) => { calls.push(window.index); return []; },
+    analyzeWindowImpl: async (window) => {
+      for (let index = 0; index < files.length; index += 1) {
+        assert.equal(await readFile(files[index], "utf8"), contents[index]);
+      }
+      calls.push(window.index);
+      return [];
+    },
   });
   assert.deepEqual(calls, [2]);
   assert.equal(result.status, "needs-review");
   assert.ok(logs.some((message) => message.includes("2/3 fertige Fenster")));
   assert.ok(logs.some((message) => message.includes("Spielekatalog geändert")));
   for (let index = 0; index < files.length; index += 1) {
-    assert.equal(await readFile(files[index], "utf8"), contents[index]);
+    await assert.rejects(readFile(files[index]), { code: "ENOENT" });
   }
 });
 
 test("prüft alle vorhandenen Fenster vor Modellaufrufen und überspringt auch spätere fertige Fenster", async (t) => {
   const { directory, videoId } = await setup(t);
   const options = { cacheDirectory: directory, config, log() {} };
-  await generateGamesFromTranscript(videoId, { ...options, analyzeWindowImpl: async () => [] });
+  await assert.rejects(generateGamesFromTranscript(videoId, {
+    ...options, analyzeWindowImpl: async (window) => {
+      if (window.index === 2) throw new Error("Unterbrechung");
+      return [];
+    },
+  }), /Unterbrechung/u);
   const target = path.join(directory, "game-discussions");
-  await rm(path.join(target, `${videoId}.json`));
   await rm(path.join(target, `${videoId}.window-0.json`));
   const file = path.join(target, `${videoId}.window-2.json`);
-  const content = await readFile(file, "utf8");
+  const content = await readFile(path.join(target, `${videoId}.window-1.json`), "utf8");
   await writeFile(file, JSON.stringify({ ...JSON.parse(content), model: "anderes-modell" }));
   await assert.rejects(generateGamesFromTranscript(videoId, {
     ...options, analyzeWindowImpl: () => assert.fail("Keine Modellaufrufe vor vollständiger Prüfung"),
@@ -327,10 +447,80 @@ test("prüft alle vorhandenen Fenster vor Modellaufrufen und überspringt auch s
   await writeFile(file, content);
   const calls = [];
   await generateGamesFromTranscript(videoId, {
-    ...options, analyzeWindowImpl: async (window) => { calls.push(window.index); return []; },
+    ...options, analyzeWindowImpl: async (window) => {
+      assert.equal(await readFile(file, "utf8"), content);
+      calls.push(window.index);
+      return [];
+    },
   });
   assert.deepEqual(calls, [0]);
-  assert.equal(await readFile(file, "utf8"), content);
+  await assert.rejects(readFile(file), { code: "ENOENT" });
+});
+
+test("löscht nach atomarem Abschluss nur eigene Fenster und behält Transkript sowie Gesamtanalyse", async (t) => {
+  const { directory, videoId, source } = await setup(t);
+  const transcriptBefore = await readFile(source, "utf8");
+  const target = path.join(directory, "game-discussions");
+  await mkdir(target);
+  const preserved = ["b0000000000.window-0.json", `${videoId}.notes.json`, `${videoId}.window-x.json`];
+  for (const name of preserved) await writeFile(path.join(target, name), "unverändert");
+  await writeFile(path.join(target, `${videoId}.window-99.json.tmp`), "alter Schreibzwischenstand");
+  const result = await generateGamesFromTranscript(videoId, {
+    cacheDirectory: directory, config, log() {},
+    fetchImpl: async () => answer({ discussions: [] }),
+  });
+  assert.deepEqual((await readdir(target)).sort(), [...preserved, `${videoId}.json`].sort());
+  assert.deepEqual(JSON.parse(await readFile(path.join(target, `${videoId}.json`), "utf8")), result);
+  assert.equal(await readFile(source, "utf8"), transcriptBefore);
+  for (const name of preserved) assert.equal(await readFile(path.join(target, name), "utf8"), "unverändert");
+
+  const finalSource = await readFile(path.join(target, `${videoId}.json`), "utf8");
+  await writeFile(path.join(target, `${videoId}.candidates-window-0.json`), "veralteter Zwischenstand");
+  await generateGamesFromTranscript(videoId, {
+    cacheDirectory: directory, config, log() {},
+    fetchImpl: () => assert.fail("Vorhandene Gesamtanalyse wird nicht erneut analysiert"),
+  });
+  assert.equal(await readFile(path.join(target, `${videoId}.json`), "utf8"), finalSource);
+  await assert.rejects(readFile(path.join(target, `${videoId}.candidates-window-0.json`)), { code: "ENOENT" });
+});
+
+test("behält alle Fenster, wenn das atomare Schreiben der Gesamtanalyse fehlschlägt", async (t) => {
+  const { directory, videoId } = await setup(t);
+  const target = path.join(directory, "game-discussions");
+  await mkdir(path.join(target, `${videoId}.json.tmp`), { recursive: true });
+  await assert.rejects(generateGamesFromTranscript(videoId, {
+    cacheDirectory: directory, config, log() {},
+    fetchImpl: async () => answer({ discussions: [] }),
+  }), { code: "EISDIR" });
+  for (const index of [0, 1, 2]) {
+    for (const suffix of ["window", "candidates-window"]) {
+      assert.ok(JSON.parse(await readFile(path.join(target, `${videoId}.${suffix}-${index}.json`), "utf8")));
+    }
+  }
+  await assert.rejects(readFile(path.join(target, `${videoId}.json`)), { code: "ENOENT" });
+  await assert.rejects(readFile(path.join(target, `${videoId}.json.lock`)), { code: "ENOENT" });
+});
+
+test("meldet Aufräumfehler ohne die fertige Analyse zu verändern und erlaubt einen erneuten Aufruf", async (t) => {
+  const { directory, videoId } = await setup(t);
+  const options = {
+    cacheDirectory: directory, config, log() {}, analyzeWindowImpl: async () => [],
+  };
+  await generateGamesFromTranscript(videoId, options);
+  const target = path.join(directory, "game-discussions");
+  const file = path.join(target, `${videoId}.json`);
+  const before = await readFile(file, "utf8");
+  const blocked = path.join(target, `${videoId}.window-0.json`);
+  await mkdir(blocked);
+  const retry = {
+    ...options, analyzeWindowImpl: () => assert.fail("Kein Modellaufruf beim Aufräumen"),
+  };
+  await assert.rejects(generateGamesFromTranscript(videoId, retry), (error) => error.path === blocked);
+  assert.equal(await readFile(file, "utf8"), before);
+  await assert.rejects(readFile(`${file}.lock`), { code: "ENOENT" });
+  await rm(blocked, { recursive: true });
+  await generateGamesFromTranscript(videoId, retry);
+  assert.equal(await readFile(file, "utf8"), before);
 });
 
 test("Abbruch beendet Modellaufrufe ohne Retry und räumt die Analysesperre auf", async (t) => {
@@ -411,6 +601,19 @@ test("führt überlappende Besprechungen zusammen, erhält spätere Wiederaufnah
   assert.equal(unfinished[0].endMs, null);
 });
 
+test("übernimmt ein im Nachbarfenster belegtes Ende auch bei identischem letztem Segment", () => {
+  const result = mergeDiscussions([
+    candidate({ firstSegmentId: 2, lastSegmentId: 18, windowIndex: 0,
+      continuesAfter: true, endReason: "window-end" }),
+    candidate({ firstSegmentId: 16, lastSegmentId: 18, evidenceSegmentId: 16, windowIndex: 1,
+      continuesBefore: true, continuesAfter: false, endReason: "topic-change" }),
+  ], segments);
+  assert.equal(result.length, 1);
+  assert.equal(result[0].endMs, 192_000);
+  assert.equal(result[0].endReason, "topic-change");
+  assert.deepEqual(result[0].issues, []);
+});
+
 async function setup(t) {
   const directory = await mkdtemp(path.join(tmpdir(), "pixel-discussions-"));
   t.after(() => rm(directory, { recursive: true, force: true }));
@@ -448,14 +651,45 @@ test("speichert separate Vorschläge, nutzt Zwischenstände und überschreibt we
 
 test("leitet Abschnittsenden aus Quellenzeiten ab und erfindet bei fehlender Dauer kein Ende", () => {
   const result = mergeDiscussions([
-    candidate({ firstSegmentId: 0, lastSegmentId: 1, evidenceSegmentId: 0, windowIndex: 0 }),
-    candidate({ title: "Anderes Spiel", firstSegmentId: 2, lastSegmentId: 3, evidenceSegmentId: 2, windowIndex: 0 }),
+    candidate({ firstSegmentId: 0, lastSegmentId: 3, evidenceSegmentId: 0, windowIndex: 0 }),
+    candidate({ title: "Anderes Spiel", firstSegmentId: 4, lastSegmentId: 7, evidenceSegmentId: 4, windowIndex: 0 }),
   ], segments);
-  assert.equal(result[0].endMs, segments[2].startMs);
+  assert.equal(result[0].endMs, segments[4].startMs);
   const missing = segments.map((segment) => ({ ...segment, durationMs: null }));
   const unknown = mergeDiscussions([candidate({ windowIndex: 0 })], missing);
   assert.equal(unknown[0].endMs, null);
   assert.ok(unknown[0].issues.includes("missing-end-duration"));
+});
+
+test("verwirft Besprechungen unter 30 Sekunden, behält exakt 30 Sekunden und erfindet fehlende Dauer nicht", () => {
+  for (const [durationMs, expected] of [[9999, 0], [10000, 1], [10001, 1], [null, 0]]) {
+    const source = segments.map((segment) => segment.id === 2 ? { ...segment, durationMs } : segment);
+    const result = mergeDiscussions([
+      candidate({ firstSegmentId: 0, lastSegmentId: 2, evidenceSegmentId: 1, windowIndex: 0 }),
+    ], source);
+    assert.equal(result.length, expected, String(durationMs));
+  }
+  const open = mergeDiscussions([
+    candidate({ firstSegmentId: 0, lastSegmentId: 1, evidenceSegmentId: 0, windowIndex: 0, continuesAfter: true }),
+  ], segments);
+  assert.equal(open.length, 0);
+});
+
+test("prüft Mindestdauer erst nach dem Zusammenführen zusammenhängender Fensterstücke", () => {
+  const result = mergeDiscussions([
+    candidate({ firstSegmentId: 0, lastSegmentId: 1, evidenceSegmentId: 0, windowIndex: 0,
+      continuesAfter: true, endReason: "window-end" }),
+    candidate({ firstSegmentId: 2, lastSegmentId: 3, evidenceSegmentId: 2, windowIndex: 1,
+      continuesBefore: true }),
+  ], segments);
+  assert.equal(result.length, 1);
+  assert.equal(result[0].startMs, 0);
+  assert.equal(result[0].endMs, 42_000);
+  const separate = mergeDiscussions([
+    candidate({ firstSegmentId: 0, lastSegmentId: 1, evidenceSegmentId: 0, windowIndex: 0 }),
+    candidate({ firstSegmentId: 2, lastSegmentId: 3, evidenceSegmentId: 2, windowIndex: 1 }),
+  ], segments);
+  assert.deepEqual(separate, []);
 });
 
 test("speichert nach einem Modellausfall keine scheinbar erfolgreiche leere Gesamtanalyse", async (t) => {

@@ -1234,8 +1234,9 @@ Nach einem Prozessabbruch kann eine Sperre liegen bleiben: erst prüfen,
 dass kein Abruf mehr läuft, dann diese konkrete Sperrdatei manuell entfernen.
 
 Der Befehl ist absichtlich weder Teil von `fetch:all` noch der
-Seitengenerierung oder GitHub-Pages-Pipeline. Die Transkripte bleiben lokale
-Arbeitsdaten und werden nicht als Website-Inhalt veröffentlicht.
+Seitengenerierung oder GitHub-Pages-Pipeline. Die fertigen Transkriptdateien
+werden in Git versioniert, aber nicht als Website-Inhalt veröffentlicht.
+Sperr- und temporäre Schreibdateien bleiben Git-ignoriert.
 
 ## Spielebesprechungen aus Transkripten
 
@@ -1259,15 +1260,48 @@ bricht es ausdrücklich ab.
 - Kernfenster umfassen höchstens drei Minuten bzw. ein begrenztes
   Textbudget. Bis zu 30 Sekunden Nachbarkontext pro Seite helfen bei
   Übergängen. Jedes Originalsegment liegt in genau einem Kernfenster.
+  Kerngrenzen sind keine Gesprächsgrenzen: Beide Modellaufrufe sollen
+  Einführungen und Abschlüsse im gesamten gelieferten Kontext suchen.
+  Fortsetzungsflags beziehen sich auf die äußeren Textfenstergrenzen,
+  nicht auf den Kern. Die Fensteraufteilung bleibt für vorhandene
+  Zwischenstände unverändert.
 - Das Modell erkennt Hauptbesprechungen, Einführungen und Themenwechsel
   im Kontext des chronologischen Zeitschriftenlesens. Vergleiche,
   Quizantworten, Werbung und Rückblicke auf eigene Aufnahmen sollen keine
   Spielebesprechung erzeugen.
 - Ein zweiter Modellaufruf prüft vorhandene Vorschläge unabhängig auf
   `review`, `quiz`, `personal-update`, `comparison` oder `uncertain`.
-  Nur als `review` eingestufte Vorschläge werden übernommen.
+  Nur als `review` eingestufte Vorschläge werden übernommen. Für diese
+  muss die Prüfung vollständige, gegebenenfalls korrigierte Abschnitte
+  liefern: Titel, Anfang, Ende, Namensbeleg und Fortsetzungsflags.
+  Vermischte Vorschläge dürfen in mehrere Besprechungen aufgeteilt werden;
+  jeder Teil muss den ursprünglichen Vorschlag und den Kernbereich berühren.
+  Alle korrigierten Abschnitte werden erneut auf gültige Segmentverweise
+  und gegenseitige Überschneidungen geprüft.
   Ein Fenster ohne Vorschläge benötigt diesen zweiten Aufruf nicht.
+- Der Namensbeleg muss das Hauptspiel tatsächlich nennen, gegebenenfalls
+  als eindeutig zuordenbare ASR-Variante. Ein bloßes „Ja“ oder ein Satz
+  ohne Spielnamen reicht nicht. Eindeutige Transkriptfehler dürfen mit
+  stützendem Kontext normalisiert werden (etwa Wing Commander II).
+  Eine verspätete Antwort auf eine frühere Frage darf nicht das danach
+  besprochene Spiel umbenennen (Jurassic World Evolution / Trespasser).
+  Rückkehr zu einem früheren Spiel wird als eigener Abschnitt behandelt
+  (Tiny Little Slug / Syndicate). Lange persönliche Aufnahmeberichte
+  bleiben unabhängig von ihrer Dauer ausgeschlossen.
 - Das Modell liefert Segmentverweise statt frei geschätzter Zeiten.
+  Erkennung und Kontextprüfung ignorieren schnelle Folgen von Spielnamen,
+  Ranglisten, Zuschauerabstimmungen und Auszählungen, auch mit kurzen
+  Kommentaren zu einzelnen Titeln. Die Gesamtlänge einer solchen Liste
+  zählt nicht als Besprechung eines Hauptspiels.
+  Vorschläge müssen mindestens 30 Sekunden zusammenhängend dasselbe
+  Hauptspiel behandeln. Diese Mindestdauer wird zusätzlich nach dem
+  Zusammenführen fensterübergreifender Abschnitte anhand der Quellzeiten
+  erzwungen (30 Sekunden eingeschlossen). Kürzere Fensterteilstücke dürfen
+  nur bei erkennbarer Fortsetzung erhalten bleiben. Fehlende Segmentdauer
+  wird nicht erfunden; ein offenes Ende hebt die Mindestdauer nicht auf.
+  Vorhandene Fenster bleiben zur Wiederaufnahme unverändert und werden nicht
+  erneut klassifiziert; der 30-Sekunden-Filter gilt auch für deren Vorschläge
+  beim neuen Zusammenführen. Bereits fertige Gesamtanalysen bleiben geschützt.
   Ungültige JSON-Ausgaben, unbekannte IDs, überlappende Abschnitte innerhalb
   eines Fensters und abgeschnittene Antworten werden höchstens dreimal
   angefragt, mit fünf bzw. zehn Sekunden Pause. Das Modell erhält bei
@@ -1285,6 +1319,8 @@ bricht es ausdrücklich ab.
 - Derselbe Spieltitel wird über Fenstergrenzen nur bei überlappenden
   Abschnitten oder ausdrücklich zusammenhängenden unmittelbaren
   Nachbarfenstern zusammengeführt. Spätere Wiederaufnahmen bleiben separat.
+  Belegt ein Nachbarfenster einen Abschluss am selben letzten Segment,
+  ersetzt dieser ein zuvor offenes Ende.
   Konflikte zwischen Fenstern bleiben zur Prüfung gekennzeichnet.
 - Ein exakter, normalisierter Vergleich mit bekannten Spielnamen und
   Aliasen kann eine `gameId` ergänzen. Bei unbekannten oder mehrdeutigen
@@ -1358,7 +1394,18 @@ unpassende Zwischenstände werden nicht überschrieben.
 Ein geänderter Spielekatalog verhindert die Fortsetzung nicht: Er wird nicht
 an das Modell übergeben und dient erst beim abschließenden Zusammenführen
 zur Zuordnung von Spiel-IDs. Diese Änderung wird ausdrücklich gemeldet.
-Vorhandene Fenster- und Vorschlagsdateien bleiben dabei bytegenau unverändert.
+Vorhandene Fenster- und Vorschlagsdateien bleiben bis zum erfolgreichen
+Abschluss bytegenau unverändert.
+
+Erst nachdem die Gesamtanalyse atomar gespeichert wurde, löscht das Skript
+die zu dieser Video-ID gehörenden `window-<nummer>.json`- und
+`candidates-window-<nummer>.json`-Dateien einschließlich ihrer `.tmp`-Reste.
+Bei Analyse- oder Schreibfehlern bleiben die Zwischenstände erhalten.
+Auch beim erneuten Aufruf mit einer passenden fertigen Gesamtanalyse
+werden verbliebene Fensterdateien ohne Modellaufruf aufgeräumt.
+Andere Video-IDs, Transkripte und Gesamtanalysen bleiben unberührt.
+Fehler beim Aufräumen werden ausdrücklich gemeldet; die bereits
+gespeicherte Gesamtanalyse bleibt erhalten.
 
 Nach ausgeschöpften Versuchen nennt die Fehlermeldung Fenster,
 Segmentbereich und Fehlerphase. Zur Wiederaufnahme denselben Befehl
@@ -1384,8 +1431,11 @@ zunächst manuell archivieren. Eine exklusive `.lock`-Datei verhindert
 gleichzeitige Verarbeitung derselben Video-ID; verwaiste Sperren nur nach
 Prüfung auf einen noch laufenden Prozess entfernen.
 
-Die Ergebnisse bleiben Git-ignorierte lokale Arbeitsdaten. Die Analyse
-ändert keine Spielzuordnungen und veröffentlicht selbst nichts.
+Nur Gesamtanalysen `cache/game-discussions/<video-id>.json` und fertige
+Transkripte `cache/youtube-transcripts/<video-id>.json` werden in Git
+versioniert. Fenster, Vorschläge, Sperren und temporäre Schreibdateien
+bleiben Git-ignoriert. Die Analyse ändert keine Spielzuordnungen und
+veröffentlicht selbst nichts.
 Beim nächsten Website-Build werden abgeschlossene Analysen zusammen mit
 dem passenden Transkript für Blätterabend-Ausgabenseiten eingelesen:
 Das Widget `src/widget/game-discussions.mjs` zeigt erkannte Spielnamen
@@ -1402,9 +1452,9 @@ Quellhash, Video-ID, Segmentverweise und Zeitgrenzen werden geprüft;
 beschädigte oder veraltete Analysen führen zu einem sichtbaren Buildfehler.
 Das Rohtranskript und Modell-Metadaten werden nicht ins HTML übernommen.
 Spielnamen und Zeitmarken werden dagegen als statische Seiteninhalte
-publiziert, wenn die lokalen Quelldateien beim Build vorhanden sind.
-Da die Quelldateien Git-ignoriert sind, stehen sie einem frischen
-GitHub-Actions-Build ohne gesonderte Bereitstellung nicht zur Verfügung.
+publiziert, wenn die Quelldateien beim Build vorhanden sind.
+Eingecheckte Gesamtanalysen und Transkripte stehen damit auch einem
+frischen GitHub-Actions-Build ohne Modellaufruf zur Verfügung.
 
 Nur Loopback-Endpunkte sind erlaubt; Weiterleitungen werden abgelehnt.
 Transkripte werden ausschließlich an das konfigurierte lokale Modell gesendet.

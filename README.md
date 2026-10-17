@@ -113,6 +113,10 @@ verfügbar sind. [Details und Cacheformat](doc/README.md#youtube-transkripte-ein
 `npm run generate:games-from-transcript -- <video-id>` erstellt daraus lokal
 Vorschläge für Spielebesprechungen mit Zeitbereichen. Es verwendet das in
 `.env` konfigurierte Ollama-Modell; Ergebnisse müssen geprüft werden.
+Nach erfolgreichem Speichern der Gesamtanalyse werden ihre temporären
+Fensterdateien gelöscht; bei einem Abbruch bleiben sie zur Wiederaufnahme
+erhalten. Fertige Transkripte und Gesamtanalysen werden in Git versioniert,
+Fensterzwischenstände, Sperren und temporäre Schreibdateien nicht.
 [Analyse und Grenzen](doc/README.md#spielebesprechungen-aus-transkripten).
 
 ## Tests
