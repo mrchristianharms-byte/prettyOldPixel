@@ -5,10 +5,18 @@
     "title": "Pretty Old Pixel",
     "url": "https://www.youtube.com/@PrettyOldPixel"
   },
-  "lastModified": "2026-10-16T10:00:21-07:00",
-  "fetchedAt": "2026-10-17T11:06:00.659Z",
+  "lastModified": "2026-10-17T10:00:32-07:00",
+  "fetchedAt": "2026-10-17T18:19:34.231Z",
   "complete": true,
   "videos": [
+    {
+      "id": "DNL_dv5Qjr0",
+      "title": "Spieleabendaufzeichnung - Mission Critical - Stream 5",
+      "description": "Live-Übertragung auf Twitch vom 04.09.2026 – sieh live unter https://www.twitch.tv/prettyoldpixel zu!",
+      "duration": "PT2H44M51S",
+      "durationSeconds": 9891,
+      "publishedAt": "2026-10-17T10:00:32-07:00"
+    },
     {
       "id": "wrVPWvnk2BI",
       "title": "Cadaver [re.play - #16] 4. Level - ein vergiftetes Erlebnis [German/Deutsch]",
