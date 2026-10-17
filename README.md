@@ -11,8 +11,168 @@ Voraussetzung: Node.js 22 oder neuer.
 npm run build
 ```
 
-Anschließend `public/index.html` im Browser öffnen oder einen beliebigen lokalen
-statischen HTTP-Server auf das Verzeichnis `public/` zeigen lassen.
+Der Build liest ausschließlich die vorhandenen lokalen JSON-Dateien unter
+`cache/` und benötigt keinen Netzwerkzugriff. Scraper werden nicht automatisch
+gestartet. Beide YouTube-Caches müssen vollständig sein und alle drei
+Quelldateien zum selben Kanal gehören; sonst bricht der Build mit einer
+Fehlermeldung ab und erhält die letzte erfolgreiche Ausgabe.
+
+Die Produktionsadresse lautet
+https://mrchristianharms-byte.github.io/prettyOldPixel/.
+Alle internen Links, Assets und Canonicals berücksichtigen `/prettyOldPixel/`.
+Die generierten Dateien unter `public/` sind Build-Artefakte und gehören nicht
+in neue Commits; GitHub Actions erzeugt und prüft sie vor dem Deployment.
+
+### Erste Seiten und lokale Vorschau
+
+Umgesetzt sind Startseite, News mit den 20 neuesten veröffentlichten Videos,
+Videokatalog mit maximal 50 Einträgen je Seite,
+Zeitschriftenindex mit Zeitschriften-, Jahrgangs- und Ausgabenseiten,
+Spieleindex und Spieleseiten,
+Datenschutz, Sitemap, Robots-Datei und 404-Seite. Alle Inhalte stehen direkt im
+HTML. Nur Spiel-/Ausgabenseiten laden ein kleines lokales JavaScript für die Auswahl
+von Video und Beschreibung; ohne JavaScript sind alle Beschreibungen sichtbar.
+**Es gibt keine separate Seite pro Video.** News und Katalog führen zum
+Videoabschnitt einer vorhandenen Ausgabe bzw. eines Spiels, sonst direkt zu YouTube.
+
+Für eine lokale Vorschau ohne Projekt-Unterpfad:
+
+```sh
+npm run build -- --base-url http://localhost:8000/
+python3 -m http.server 8000 --bind 127.0.0.1 --directory public
+```
+
+Dann http://localhost:8000/ öffnen. Vor einem manuellen Produktions-Upload erneut
+`npm run build` ohne lokale Basis-URL ausführen. Ein direktes Öffnen der
+HTML-Dateien über `file://` bildet die absoluten Website-Pfade nicht korrekt ab.
+
+Die gemeinsame Datenaufbereitung verknüpft Playlist-Mitgliedschaften per Video-ID
+und normalisiert Zeitschriften mit Ausgaben und Archivlinks. Videos einer
+Playlist werden zusätzlich chronologisch vom ältesten zum neuesten sortiert;
+Quellpositionen und Mehrfacheinträge bleiben separat erhalten. Fehlende oder
+nicht verfügbare Mitglieder werden gemeldet und nicht als Videos erfunden.
+Playlist-Titel allein bestätigen noch kein Spiel. Die geprüften Spielezuordnungen
+stehen in `src/games.mjs`. Weitere Themenbereiche folgen in den nächsten
+Schritten; es gibt keine Links auf noch nicht erzeugte Bereichsseiten.
+
+### Spiele und bestätigte Playlist-Zuordnungen
+
+- `/spiele/` zeigt qualifizierte Spiele alphabetisch, mit maximal 50 Spielen je
+  Übersichtsseite. `/spiele/<slug>/` enthält die Spielinformationen, sämtliche
+  Videos, Beschreibungen und einen gemeinsamen Player. Auch mehr als 50 Videos
+  eines Spiels bleiben auf dieser einen Seite.
+- `src/games.mjs` hält ausdrücklich geprüfte Spielidentitäten mit festen
+  Playlist-IDs, kanonischem Namen, bekannten Plattformen, Quellschreibweisen
+  und gegebenenfalls bestätigten zusätzlichen Video-IDs fest. Die Zuordnung
+  basiert auf Playlist- und Mitgliedstiteln, nicht allein dem Formatnamen.
+  Ähnliche Titel, Nachfolger und Plattformvarianten werden nicht automatisch
+  zusammengelegt. Der Slug hängt von der gepflegten Identität ab, nicht von
+  späteren Änderungen des gescrapten Playlist-Titels.
+- Der aktuelle Katalog enthält 144 geprüfte Spielidentitäten aus den
+  143 re.play-Playlists und der ebenfalls geprüften 1942-Playlist. Zusätzlich
+  ist die re.connect-Playlist zu Railroad Tycoon Deluxe demselben Spiel
+  zugeordnet; ihre allgemeine Formatvorstellung ist explizit ausgeschlossen.
+  Wizardry hat bisher nur ein Video und erhält daher noch keine Seite.
+- Eine Seite entsteht ab zwei unterschiedlichen verfügbaren Videos aus dem
+  öffentlichen Video-Cache. Nicht verfügbare Mitglieder, fehlende Videos und
+  doppelte Playlist-Einträge erfüllen die Schwelle nicht. Bestätigte
+  re.minder-Beiträge ergänzen eine qualifizierte Reihe, heben aber keine
+  Ein-Video-Reihe über diese Schwelle.
+- Neue Mitglieder bestätigter Playlists werden beim nächsten Offline-Build
+  übernommen; Entfernungen ebenfalls. Neue, noch nicht bestätigte re.play-/
+  re.connect-Playlists erzeugen einen Build-Hinweis statt einer geratenen
+  Spielezuordnung. Ihre Videos bleiben im Gesamtkatalog erreichbar.
+- Die vollständige Liste läuft chronologisch von alt nach neu, einschließlich
+  Zeitzonen und stabiler Video-ID bei Zeitgleichheit. Undatierte Videos stehen
+  gekennzeichnet am Ende. Playlistposition und originale Folgenummer im Titel
+  ändern diese Reihenfolge nicht.
+- Spieletitel, belegte Hauptplattform und Quellschreibweisen werden sichtbar
+  und als `VideoGame`-Metadaten ausgegeben. Entwickler, Publisher, Genre und
+  Erscheinungsjahr bleiben ohne Beleg offen; die Quellen sind verlinkt.
+- News, Gesamtkatalog, Startseite und Navigation führen zu vorhandenen
+  Spieleseiten bzw. ihren `#video-<id>`-Abschnitten. Die Spielezuordnung ist auch
+  neben einer Zeitschriftenzuordnung sichtbar. Ohne eigene Ausgabe hat ein
+  Video die alphabetisch nach Slug erste bestätigte Spieleseite als Ziel.
+- Phasenerkennung, Kapitelsteuerung, Partnerlisten und automatische
+  Folgenfortsetzung sind noch nicht implementiert.
+
+### Blätterabend nach Zeitschrift und Jahrgang
+
+- `/zeitschriften/` zeigt die erkannten Zeitschriften alphabetisch sowie eine
+  Gruppe „Zeitschrift ungeklärt“ für nicht sicher zugeordnete Blätterabend-Videos.
+- `/zeitschriften/<slug>/` bündelt die Jahrgänge und Videos einer Zeitschrift.
+  „Jahrgang unbekannt“ bleibt sichtbar; das Uploadjahr ersetzt kein Heftjahr.
+- `/zeitschriften/<slug>/<jahr>/` zeigt reguläre Ausgaben nach Monat bzw.
+  Heftnummer und Sonderhefte als getrennte Gruppe. Doppelausgaben bleiben ein
+  Heft; die Videos dazu stehen nach Teilnummer, anschließend Datum und ID.
+  Fehlt eine Teilnummer, bleibt dieses Video an seinem chronologischen Platz;
+  die bekannten Teilnummern werden relativ zueinander geordnet. Ein früheres
+  unnummeriertes Video wird nicht pauschal hinter „Teil 2“ verschoben.
+- `/zeitschriften/<slug>/ausgaben/<id>/` wird nur bei ausreichend eindeutigen
+  Heftdaten erzeugt. Die Seite enthält Heftangaben, Archivlinks, einen gemeinsamen
+  Player und alle Videobeschreibungen. Die Auswahl erfolgt per
+  `#video-<youtube-id>` auf derselben Seite. Nur Übersichten werden bei mehr
+  als 50 Einträgen paginiert, nicht die Videos einer einzelnen Ausgabe.
+- Ein Jahr allein oder ein generisches „Sonderheft 1996“ erzeugt ohne
+  eindeutigen Archivtreffer bzw. Sonderheftnummer keine spekulative Detailseite.
+  Diese Videos bleiben im passenden Jahrgang oder in der unbekannten Gruppe.
+- Fehlende Heftdaten dürfen aus anderen Einträgen mit **demselben eindeutigen
+  Archivtreffer** ergänzt werden. Ein Ordnerlink allein genügt nicht.
+  Widersprüchliche Angaben werden gemeldet und nicht zu einer Ausgabe vereinigt.
+- Ausgaben-IDs verwenden einen Hash der Heftidentität: bei regulären Heften
+  Jahr und Monate bzw. Nummer, bei Sonderheften einen eindeutigen Archivlink
+  bzw. Jahr und Sonderheftnummer. Eine reine Titel-/Beschriftungskorrektur ändert
+  die Identität nicht. Eine Korrektur bisher unbekannter Identitätsdaten kann
+  eine neue Zuordnung erzeugen; alte generierte Seiten werden entfernt.
+- News und Videokatalog verlinken Zeitschrift, Jahrgang und vorhandene
+  Ausgabenseite einschließlich Video-Fragment. Mehrfachzuordnungen bleiben
+  erhalten. Ausgaben-Breadcrumbs gehören zur gemeinsamen Seite; der aktive
+  Videoabschnitt zeigt `Video 2/3`. Aus News/Katalog ist die alphabetisch nach
+  Slug erste eindeutige Ausgabe das Ziel. Innerhalb der Zeitschriftenübersicht
+  führt der Link zur jeweiligen Ausgabe. Ohne sichere Ausgabenseite wird
+  eine vorhandene Spieleseite genutzt; ohne sicheres internes Ziel wird
+  direkt YouTube verlinkt.
+- Archivordner sind als solche beschriftet, direkte Heft-/Lese-/Downloadlinks
+  entsprechend ihrem Match-Typ. Cover werden nicht extern eingebunden.
+
+### Medien, SEO und unveränderte Builds
+
+- Pico CSS **2.1.1** liegt einschließlich MIT-Lizenz unter `src/vendor/`.
+  Der Build bündelt es mit `src/site.css` zu einer lokalen Datei mit
+  Inhalts-Hash. Es werden keine Fonts, CDNs oder anderen externen Assets geladen.
+- Spiel-/Ausgabenseiten zeigen ein direkt von YouTube geladenes Vorschaubild. Erst ein
+  bewusster Klick aktiviert den Player von `youtube-nocookie.com`, auch ohne
+  eigenes JavaScript. Ein normaler YouTube-Link bleibt verfügbar.
+- Auf der Spiel-/Ausgabenseite wechseln Videoauswahl, aktive Beschreibung und
+  Browser-Titel ohne Seitenwechsel. Ein gemeinsamer Player verhindert parallele
+  Wiedergaben; bei einer anderen Auswahl wird zunächst nur das Vorschaubild
+  angezeigt. Direktlinks und Zurück/Vorwärts verwenden Video-Fragmente.
+  Mobil steht die Videoliste in einem nativen Burger-Menü, auf Desktop daneben.
+- Beschreibungen, Titel und strukturierte Daten werden sicher escaped.
+  HTTP(S)-Links in Beschreibungen und Archivverweise sind extern gekennzeichnet.
+- News verwenden `publishedAt` einschließlich Zeitzone, nicht Abrufzeiten.
+  Fehlende Beschreibungen sind zulässig. Videos mit unbekanntem Datum bleiben im
+  Katalog; zukünftige Videos werden nicht veröffentlicht.
+- Der Build prüft alle internen Links und Fragmente, Canonicals, JSON-LD sowie
+  die Budgets von 20 KiB gzip CSS, 5 KiB gzip eigenem JavaScript und
+  50 KiB gzip HTML je Seite. Auch lange Reihen müssen diese Budgets einhalten.
+- Ein frisches, geprüftes Ausgabeverzeichnis ersetzt die vorherige Ausgabe;
+  entfernte Seiten bleiben nicht liegen. Identische Dateien werden einschließlich
+  Dateizeit übernommen. Bei ungültigen Quellen bleibt die bestehende Website
+  unberührt.
+- `public/build-manifest.json` enthält je Seite Inhalts-Fingerabdruck und
+  `contentPublishedAt` aus den zugehörigen Video-Veröffentlichungen.
+  Das ist kein erfundener technischer Änderungszeitpunkt:
+  Sitemap-`lastmod` und JSON-LD-`dateModified` bleiben vorerst ausgelassen.
+  `fetchedAt`, `checkedAt` und Build-Zeit ändern die Seiten nicht.
+- HTTP-`Last-Modified`, `ETag` und Kompression werden vom Hosting bestimmt, nicht
+  durch HTML-Metadaten. Ihre Prüfung auf dem veröffentlichten GitHub Pages sowie
+  die Wiederverwendung vorheriger Ausgaben über CI-Läufe hinweg stehen noch aus.
+
+Vor einer öffentlichen Freigabe müssen die tatsächliche Medien-Einbindung und
+die Datenschutz-/Informationspflichten rechtlich geprüft werden. Die vorhandene
+Datenschutzseite beschreibt die Umsetzung als privates, nicht kommerzielles
+Projekt ohne Anschrift, behauptet aber keine pauschale gesetzliche Ausnahme.
 
 ## Tests
 

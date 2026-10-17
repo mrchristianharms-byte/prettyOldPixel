@@ -15,8 +15,22 @@ auch bei langsamen Verbindungen schnell navigieren können.
 
 Bereits vorhanden sind ein Node.js-Build-Script, JSON-Caches für Videos und
 Zeitschriftenarchive sowie die Veröffentlichung des Verzeichnisses `public/`
-über GitHub Pages. Das aktuelle Build-Script erzeugt lediglich eine Startseite.
-Ein strukturierter Spielekatalog ist noch nicht vorhanden.
+über GitHub Pages. Das ursprüngliche Build-Script erzeugte lediglich eine Startseite.
+Ein strukturierter Spielekatalog wurde auf dieser Grundlage ergänzt.
+
+**Umsetzungsstand (Schritte 1 und 2):** Der Offline-Build erzeugt jetzt
+Startseite, News, paginierten Videokatalog, Datenschutzseite,
+Sitemap, Robots-Datei und 404. Gemeinsame Templates, lokale Pico-CSS-Version
+2.1.1 samt Lizenz, sichere Metadaten und Build-Budgets sind umgesetzt.
+Zeitschriftenindex, Zeitschriften-, Jahrgangs- und eindeutige Ausgabenseiten
+sind im dritten Schritt hinzugekommen; News und Videos verlinken diese Ziele.
+Bestätigte Spieleseiten und Spieleindex sind ebenfalls umgesetzt.
+Player-Komfortfunktionen wie Kapitelsteuerung und automatische Fortsetzung
+folgen separat.
+**Korrigierte Seitenstruktur:** Es gibt keine separate Seite pro Video.
+Player und Beschreibungen stehen auf der jeweiligen Ausgabe-/Spieleseite.
+Ein kleines lokales Modul wechselt dort die Auswahl per Video-Fragment;
+ohne JavaScript bleiben Beschreibungen und YouTube-Links nutzbar.
 
 Anforderungen:
 
@@ -76,7 +90,6 @@ Erzeugung aller Seitentypen.
 |---|---|
 | `/` | Einstieg und Navigation zu den Katalogen |
 | `/videos/` | Paginierte Videoliste |
-| `/videos/<youtube-id>/` | Video mit Beschreibung und zugehörigen Entitäten |
 | `/zeitschriften/` | Alphabetischer Zeitschriftenindex |
 | `/zeitschriften/<slug>/` | Zeitschrift, Ausgaben und zugehörige Videos |
 | `/zeitschriften/<slug>/ausgaben/<ausgaben-id>/` | Eindeutig erkannte Ausgabe mit Videos und Archivlinks |
@@ -96,7 +109,7 @@ Die Produktions-Basis-URL ist die öffentliche Projektseite dieses Repositorys:
 Der Unterpfad `/prettyOldPixel/` ist Bestandteil aller Produktionspfade.
 
 Allgemeine Kataloglisten zeigen höchstens 50 Einträge pro Seite.
-Die vollständige Folgenliste eines Spiels ist davon ausgenommen und darf
+Die vollständige Folgenliste eines Spiels bzw. einer einzelnen Ausgabe ist davon ausgenommen und darf
 mehr als 50 Videos enthalten; Größenbudgets bleiben zu prüfen.
 Blätterabend wird vorrangig nach Zeitschrift und Jahrgang gegliedert statt
 durch eine einzige lange Liste erschlossen. Überschreitet eine solche
@@ -104,8 +117,10 @@ Teilübersicht dennoch das Limit, bleibt Paginierung möglich.
 Jede Folgeseite hat eine eigene
 URL, einen passenden Seitentitel und eine selbstreferenzierende Canonical-URL.
 Seitennummern sowie vorherige und nächste Seite sind über normale Links erreichbar.
-Kein Infinite Scroll als einziger Zugang, keine Hash-Routen und keine nur per
-JavaScript erreichbaren Inhalte.
+Kein Infinite Scroll als einziger Zugang, keine clientseitigen Hash-Routen
+für Seitentypen und keine nur per JavaScript erreichbaren Inhalte.
+Echte Abschnittsfragmente `#video-<id>` wählen Videos innerhalb derselben
+statischen Detailseite; sie sind keine zusätzlichen indexierbaren Seiten.
 
 ### 3. Semantisches HTML und Metadaten
 
@@ -186,7 +201,10 @@ wird der Umfang reduziert oder die CSS-Entscheidung neu bewertet.
 
 ### 5. JavaScript nur als optionale Verbesserung
 
-Die Grundversion liefert **kein eigenes ausführbares JavaScript** aus. JSON-LD
+Übersichten liefern **kein eigenes ausführbares JavaScript** aus.
+Detailseiten nutzen ein kleines lokales Modul zum Wechsel zwischen statisch
+vorhandenen Videoabschnitten. Ohne das Modul bleiben alle Beschreibungen und
+Fallback-Links sichtbar. JSON-LD
 ist ein Datenblock und keine clientseitige Rendering-Logik. Ein eingebundener
 YouTube-Player lädt eigene Skripte im externen Frame; diese Ausnahme ist getrennt
 vom JavaScript der Website zu betrachten. Inhalte und Navigation bleiben ohne
@@ -221,7 +239,7 @@ keine zusätzlichen Analytics- oder sonstigen Drittanbieterskripte auf der Websi
   Die ausdrücklich abschaltbare Fortsetzung einer gestarteten Spielereihe ist
   in [ADR 0004](0004-detailseiten-und-videonavigation.md) geregelt.
   Auf Übersichtsseiten werden nur
-  Thumbnails und Links angezeigt. Auf Videodetailseiten wird der Player
+  Thumbnails und Links angezeigt. Auf Ausgabe-/Spieleseiten wird der Player
   vorzugsweise erst auf ausdrückliche Nutzeraktion geladen, damit seine
   Ressourcen den initialen Seitenaufbau nicht belasten.
 - Ein normaler, als extern gekennzeichneter YouTube-Link bleibt unabhängig vom
@@ -287,8 +305,9 @@ Die Seite erläutert konkret:
   und weitere technische Request-Daten an den Anbieter übertragen werden.
 - YouTube-Player und IFrame-API: Zeitpunkt der Aktivierung, externe Verbindungen
   und die Grenzen des erweiterten Datenschutzmodus.
-- Die lokale Sitzungsinformation für abschaltbare Folgenfortsetzung; kein
-  eigenes Tracking und keine zusätzlichen Analytics-Dienste.
+- Die Auswahl per URL-Fragment und die gegebenenfalls später eingeführte
+  abschaltbare Folgenfortsetzung innerhalb derselben Seite; derzeit kein
+  Sitzungsspeicher, kein eigenes Tracking und keine Analytics-Dienste.
 - Externe Links, deren Ziele erst beim Aufrufen besucht werden.
 
 Formulierungen müssen der tatsächlichen Umsetzung entsprechen. Erforderliche
@@ -358,8 +377,9 @@ Große Listen und lange Beschreibungen gehören zu den Testfällen.
 
 - Datenänderungen erfordern einen erneuten Build und eine Veröffentlichung.
 - Templates, HTML-Escaping, Pfade und Schema.org-Daten müssen gepflegt und getestet werden.
-- Die Quelle und Regeln für bestätigte Spielezuordnungen müssen bei der
-  Inhaltsaufbereitung konkretisiert werden; die Produktionsadresse ist festgelegt.
+- Bestätigte Spielezuordnungen stehen im gepflegten Katalog `src/games.mjs`;
+  neue unbestätigte Spiel-Playlists benötigen weiterhin eine inhaltliche Prüfung.
+  Die Produktionsadresse ist festgelegt.
 - Lokal gespeicherte Bilder erhöhen das Repository- und Deployment-Volumen;
   Nutzungsrechte müssen vor dem Übernehmen geklärt sein. YouTube-Medien werden
   nicht übernommen und erhöhen dieses Volumen nicht.
@@ -370,8 +390,10 @@ Große Listen und lange Beschreibungen gehören zu den Testfällen.
 - CSS-Updates erfolgen bewusst und versioniert statt automatisch über ein CDN.
 - Suchmaschinen entscheiden selbst über Indexierung und Darstellung.
 
-Diese ADR beschreibt die geplante Architektur. Sie implementiert weder die
-Katalogseiten noch Pico CSS; die bestehende Startseite bleibt zunächst unverändert.
+Die grundlegenden Katalogseiten und Pico CSS sind inzwischen implementiert;
+die übrigen Abschnitte beschreiben weiterhin auch die noch ausstehenden
+Ausbaustufen. Reale Hosting-Header, Transferbudgets und Lighthouse-Werte müssen
+zusätzlich am veröffentlichten Ergebnis geprüft werden.
 
 ## Referenzen
 

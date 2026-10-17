@@ -80,12 +80,12 @@ Diese können fremde oder thematisch andere Playlists betreffen und beweisen
 keine Mitgliedschaft. Maßgeblich sind die tatsächlich abgefragten
 Mitgliederlisten im Playlist-Cache.
 
-Die Datenerfassung ist damit umgesetzt. Offen bleiben die inhaltliche Zuordnung
-der Playlists zu kanonischen Spielen, die Phasenerkennung und die Seitengenerierung.
+Datenerfassung, bestätigte Spielezuordnung und Spieleseiten sind umgesetzt.
+Die Phasenerkennung und zusätzliche Kategorieübersichten folgen separat.
 
 ## Entscheidung
 
-### 1. Navigation und gemeinsame Videoseiten
+### 1. Navigation und gemeinsame Detailseiten
 
 Die Hauptnavigation enthält News und die fünf Inhaltsbereiche:
 
@@ -97,15 +97,15 @@ Die Hauptnavigation enthält News und die fünf Inhaltsbereiche:
 6. Interviews und Gespräche
 
 Die Startseite verlinkt diese Bereiche und hebt die News hervor. Zusätzlich bleiben die allgemeine
-Videoliste und eine stabile Detailseite je Video gemäß ADR 0002 erhalten.
-Videos ohne sichere Kategorie verschwinden dadurch nicht.
+Videoliste und stabile Detailseiten je Spiel bzw. Ausgabe erhalten.
+Videos werden innerhalb dieser Seiten über `#video-<id>` ausgewählt.
+Ohne sichere vorhandene Detailseite führen Videolinks direkt zu YouTube.
 
 | Pfad | Inhalt |
 |---|---|
 | `/` | Einstieg mit News-Verweis und den fünf Inhaltsbereichen |
 | `/news/` | Die 20 neuesten veröffentlichten Videos mit Links zu ihren Inhaltsbereichen |
 | `/videos/` | Paginierter Gesamtkatalog |
-| `/videos/<youtube-id>/` | Kanonische Videodetailseite |
 | `/zeitschriften/` | Blätterabend-Übersicht nach Zeitschrift |
 | `/zeitschriften/<slug>/` | Zeitschrift mit Jahrgängen und zugehörigen Videos |
 | `/zeitschriften/<slug>/<jahr>/` | Blätterabend-Videos eines Jahrgangs, nach Ausgabe |
@@ -120,17 +120,19 @@ Videos ohne sichere Kategorie verschwinden dadurch nicht.
 Detailansichten: Eindeutig identifizierte Ausgaben mit zugehörigen Videos erhalten
 eine eigene Informations- und Einstiegsseite. Jahrgangsseiten bleiben der
 übergeordnete Zugang. Unklare Ausgaben erzeugen keine spekulative Detailseite.
-Spielinformationen und Videoseiten verwenden gemeinsame Layout-Bausteine;
+Spiel-/Heftinformationen, Player und sämtliche Videobeschreibungen stehen auf
+derselben Detailseite; es gibt keine separate Videoseite.
 Kapitelsteuerung und fortlaufende Wiedergabe sind ebenfalls dort beschrieben.
 
 Paginierung ist keine zusätzliche thematische Unterstruktur. Allgemeine Listen
 mit mehr als 50 Einträgen werden entsprechend ADR 0002 über echte Links aufgeteilt.
-Spieleseiten und ihre Videoseiten zeigen dagegen die vollständige Folgenliste,
+Spieleseiten und einzelne Ausgabenseiten zeigen dagegen die vollständige Folgenliste,
 auch bei mehr als 50 Videos. Blätterabend wird nach Zeitschrift und Jahrgang
 aufgeteilt; nur bei weiterhin zu großen Teilübersichten ist zusätzliche
 Paginierung nötig.
-Ein Video hat genau eine kanonische Detailseite, darf aber in mehreren passenden
-Bereichen verlinkt werden.
+Ein Video ist ein Abschnitt auf einer vorhandenen Entitätsseite und darf in
+mehreren passenden Bereichen verlinkt werden. Canonical und Sitemap gehören
+zur Seite, nicht zu einzelnen Video-Fragmenten.
 
 ### 2. Blätterabend: Zeitschrift, Jahrgang, Ausgabe
 
@@ -146,11 +148,15 @@ Zeitschriften, Ausgaben, Teilen und Archivlinks.
   und erhalten eine eigene Gruppe innerhalb des Jahrgangs.
 - Mehrere Videos derselben Ausgabe stehen zusammen, zuerst nach bekanntem
   Teil, ansonsten nach Veröffentlichungsdatum und abschließend Video-ID.
+  Bei nur teilweise nummerierten Videos behalten die unnummerierten Videos
+  ihren chronologischen Platz; die nummerierten Videos werden relativ
+  zueinander nach Teil geordnet. So wird ein früherer unnummerierter Einstieg
+  nicht automatisch hinter „Teil 2“ einsortiert.
 - Archivlinks auf kultmags oder reetroz erscheinen an der passenden Ausgabe.
   Ein Übersichtslink wird nicht als Link auf ein eindeutig erkanntes Heft
   ausgegeben.
 - Ein Video mit mehreren Zeitschriften wird unter jeder zutreffenden
-  Zeitschrift verlinkt, ohne mehrere Videodetailseiten anzulegen.
+  Zeitschrift verlinkt, ohne separate Videodetailseiten anzulegen.
 
 **Jahrgang bedeutet das Erscheinungsjahr der Zeitschrift**, nicht das
 Veröffentlichungsjahr des YouTube-Videos. Ein 2026 veröffentlichtes Video zu
@@ -162,6 +168,17 @@ in einer sichtbaren Gruppe „Jahrgang unbekannt“ auf der Zeitschriftenseite.
 Es wird nicht dem Aufnahmejahr zugeordnet. Videos ohne erkannte Zeitschrift
 stehen in einer Gruppe „Zeitschrift ungeklärt“ in der Blätterabend-Übersicht.
 Unbekannte Angaben bleiben auch in den Metadaten unbekannt.
+
+**Umgesetzt:** Zeitschriftenindex, Zeitschriften-, Jahrgangs- und eindeutig
+belegte Ausgabenseiten mit bis zu 50 Einträgen pro Seite. News, Videokatalog und
+Kataloglinks führen zu den vorhandenen Zielen. Reguläre Hefte werden über Jahr
+und Monate bzw. Heftnummer identifiziert; Sonderhefte über einen eindeutigen
+Archivtreffer bzw. Jahr und Sonderheftnummer. Ein Jahr allein oder eine
+generische Sonderheftbezeichnung reicht nicht für eine Ausgabenseite.
+Fehlende Heftdaten dürfen aus weiteren Einträgen mit demselben eindeutigen
+Archivtreffer ergänzt werden; Ordnerlinks reichen dafür nicht aus.
+Widersprüche werden gemeldet. Titelkorrekturen ohne Identitätsänderung ändern
+die Ausgaben-ID nicht.
 
 ### 3. Spielereihen: ein konkreter Spieletitel als Entität
 
@@ -180,6 +197,15 @@ Eine Playlist allein reicht nicht als Spieleidentität: Format-, Themen- und
 Sammelplaylists können mehrere Spiele enthalten. Erforderlich sind eine
 bestätigte Zuordnung der Playlist zu einem Spiel und die Mitgliedschaften der
 Videos. Mehrere Playlists dürfen demselben Spiel zugeordnet werden.
+Die Implementierung pflegt diese Identitäten ausdrücklich in
+[`src/games.mjs`](../../src/games.mjs): 144 geprüfte Einzelspiel-Identitäten
+einschließlich der nicht mit re.play betitelten 1942-Playlist. Auch die
+Railroad-Tycoon-Deluxe-Playlist aus re.connect ist nach Mitgliederprüfung diesem
+Spiel zugeordnet; die allgemeine Formatvorstellung ist explizit ausgeschlossen.
+Bekannte Quellschreibweisen und Zusatzbeiträge werden dort ebenfalls gepflegt.
+Neue unbestätigte re.play-/re.connect-Playlists werden als Build-Hinweis gemeldet.
+Sie erzeugen keine automatisch erratene Spieleseite. Die Spielidentität und
+ihr Slug ändern sich nicht durch einen geänderten Cache-Playlist-Titel.
 Die vorhandenen Mitgliedschaften werden über
 `playlists[].videos[].videoId` mit `videos[].id` im Video-Cache verknüpft.
 Playlist-Titel und -Beschreibung liefern Kontext; vollständige Video-Metadaten
@@ -239,7 +265,8 @@ keine eigene Hauptkategorie.
 
 `/hardware/` zeigt Hardware-Videos in absteigender Veröffentlichungsreihenfolge.
 Es gibt zunächst keine Unterseiten nach Gerät, Hersteller oder Jahr.
-Notwendige Paginierung und gemeinsame Videodetailseiten bleiben möglich.
+Notwendige Paginierung bleibt möglich; ohne vorhandene Spiel-/Ausgabenseite
+führen Videolinks vorerst direkt zu YouTube.
 
 `re.ware` sowie eindeutige Hardwaretitel liefern Zuordnungskandidaten.
 Verpackungsaufbereitung oder gemischte Themen werden geprüft, statt jeden
@@ -343,8 +370,8 @@ Jahrgangsseiten sind Sammlungen von Ausgaben und Videos, keine erfundene einzeln
 sichtbaren Seiteninhalt. Hardware, Retrospektiven und Interviews erhalten
 ebenfalls aussagekräftige Übersichtsmetadaten.
 
-Es werden keine leeren Suchwortseiten und keine zusätzlichen Kopien derselben
-Videodetailseite pro Kategorie erzeugt. Gute technische Auffindbarkeit ist das
+Es werden keine leeren Suchwortseiten und keine zusätzlichen
+Videodetailseiten pro Video oder Kategorie erzeugt. Gute technische Auffindbarkeit ist das
 Ziel; Indexierung und Rankings können nicht garantiert werden.
 
 ### 8. News: die neuesten 20 Videos
@@ -364,7 +391,8 @@ eigene News-Paginierung; der Gesamtkatalog bleibt verlinkt.
   Top-20-Liste aufgenommen. Noch nicht veröffentlichte Videos werden ausgeschlossen.
 - Jeder Eintrag enthält Titel, sichtbares Veröffentlichungsdatum mit
   maschinenlesbarem `time datetime` und einen direkten Link auf
-  `/videos/<youtube-id>/`. Ein optionales Thumbnail folgt ADR 0002.
+  den Abschnitt `#video-<id>` einer vorhandenen Spiel-/Ausgabenseite bzw.
+  ohne sicheres Ziel direkt zu YouTube. Ein optionales Thumbnail folgt ADR 0002.
 - Blätterabend-Einträge verlinken die Zeitschriftenübersicht und, soweit
   vorhanden, die zugehörige Zeitschrift, den Jahrgang und die Ausgabenseite.
 - Spiele-Einträge verlinken die Spieleübersicht und die vorhandene Spieleseite.
@@ -372,7 +400,7 @@ eigene News-Paginierung; der Gesamtkatalog bleibt verlinkt.
   noch nicht erzeugte Spieleseiten ausgegeben.
 - Bei mehreren sicheren Zuordnungen werden die passenden Ziele verlinkt.
   Andere Formate verweisen auf ihren vorhandenen Bereich; ungeklärte Videos
-  bleiben über Videoseite und Gesamtkatalog erreichbar.
+  bleiben über den Gesamtkatalog und externe YouTube-Links erreichbar.
 
 Die News sind vollständig statisch und besitzen einen eigenen Titel,
 Beschreibung, Canonical-URL sowie `CollectionPage`/`ItemList`-Metadaten.
@@ -387,7 +415,15 @@ erzwingt weder einen Build noch eine Veröffentlichung.
 Der reine Abruf ist keine Inhaltsänderung:
 `fetchedAt`, `checkedAt`, Cache-Dateizeit und der lokale Änderungszeitpunkt
 einer Playlist dürfen keine Seiten künstlich als neu kennzeichnen.
-Die Website-Aufbereitung und der inkrementelle Build sind noch zu implementieren.
+Die grundlegende Website-Aufbereitung für Startseite, News, Videokatalog und
+Ausgabenseiten mit eingebetteten Videoabschnitten ist implementiert. Der Build vergleicht die tatsächlich erzeugten
+Dateiinhalte, übernimmt identische Dateien mit ihrer Dateizeit und schreibt
+Fingerabdrücke sowie videoabhängige Inhaltszeitpunkte in ein Build-Manifest.
+Die HTML-Ausgabe wird derzeit vollständig berechnet; eine frühzeitige
+Abhängigkeitsauflösung sowie persistente Vorartefakte in CI bleiben ein späterer
+Optimierungsschritt. Zeitschriften- und bestätigte Spiele-Entitätsseiten
+einschließlich ihrer Verlinkung sind inzwischen ergänzt; News verlinken
+weiterhin keine nicht erzeugten Ziele.
 
 Für jede Seite wird ein stabiler Fingerabdruck über ihre tatsächlich relevanten
 Daten und Links gebildet. Dazu gehören die angezeigten Video-IDs und Felder,
@@ -502,11 +538,13 @@ ADR 0002; ein unveränderter Build darf diese nicht austauschen.
   werden; Verweise in Beschreibungen ersetzen diesen Schritt nicht.
 - Spieleidentitäten, Aliasse und unklare Themen benötigen teilweise kuratierte
   Zuordnungen. Reine Titelheuristiken reichen nicht für jeden Fall.
-- Doppelte Zuordnungen sind gewollt, dürfen aber weder Videoseiten noch
-  Zählungen vervielfachen.
+- Doppelte Zuordnungen sind gewollt, dürfen aber weder separate Videoseiten
+  erzeugen noch Zählungen innerhalb einer Reihe vervielfachen.
 - Inhalte unterhalb der Spiele-Schwelle bleiben zunächst ausschließlich über
   andere passende Bereiche und den Gesamtkatalog erreichbar.
 
 Diese ADR dokumentiert die geplante Seitenstruktur und die getroffenen
-Kategorieentscheidungen. Video- und Playlist-Erfassung sind bereits umgesetzt;
-die fachliche Inhaltszuordnung und die neuen Katalogseiten noch nicht.
+Kategorieentscheidungen. Video- und Playlist-Erfassung, News, Gesamtkatalog und
+die Zeitschriftenstruktur bis zu Ausgabenseiten sowie bestätigte Spieleidentitäten
+und Spieleseiten sind umgesetzt. Phasenerkennung, Player-Komfortfunktionen
+und weitere Kategorieübersichten folgen separat.
