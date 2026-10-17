@@ -94,8 +94,8 @@ test("behandelt Kanal-IDs case-sensitiv und dedupliziert Handles ohne Beachtung 
   assert.equal(details("https://youtube.com/@Guest\nhttps://youtube.com/@GUEST").mentionedChannels.length, 1);
 });
 
-function rendered(description) {
-  const first = { id, title: "Ein Spiel #1", description, publishedAt: "2020-01-01T00:00:00Z", durationSeconds: 600 };
+function rendered(description, durationSeconds = 600) {
+  const first = { id, title: "Ein Spiel #1", description, publishedAt: "2020-01-01T00:00:00Z", durationSeconds };
   const second = { ...first, id: "b0000000000", title: "Ein Spiel #2", description: "" };
   const input = {
     videos: { channel, complete: true, videos: [first, second] },
@@ -131,6 +131,8 @@ test("rendert Kapitel und Kanäle in Spiel- und Ausgabepanels ohne neue Skripte 
     assert.ok(html.includes("Kapitel und Zeitmarken"));
     assert.ok(html.includes("1:30 · &lt;Gameplay&gt;"));
     assert.ok(html.includes(`watch?v=${id}&amp;t=90s" rel="external"`));
+    assert.ok(html.includes('data-chapter-seconds="90"'));
+    assert.ok(html.includes('data-chapter-hint'));
     assert.ok(html.includes("Erwähnte Kanäle / Partner"));
     assert.ok(html.includes("Eine Erwähnung bedeutet nicht, dass eine bezahlte Zusammenarbeit besteht."));
     assert.equal((html.match(/<iframe /gu) ?? []).length, 1);
@@ -139,6 +141,32 @@ test("rendert Kapitel und Kanäle in Spiel- und Ausgabepanels ohne neue Skripte 
   }
   assert.ok(!pages.get("news/index.html").html.includes("Kapitel und Zeitmarken"));
   assert.ok(![...pages.keys()].some((file) => file.startsWith("videos/")));
+});
+
+test("veröffentlicht Clip-Metadaten mit echten Zeitlinks, Grenzen und sichtbaren Beschriftungen", () => {
+  const { pages } = rendered("00:00 Intro\n01:30 <Gameplay>\n10:00 Ungültig");
+  for (const file of ["spiele/ein-spiel/index.html", "zeitschriften/power-play/ausgaben/power-play-10-1990/index.html"]) {
+    const html = pages.get(file).html;
+    const schema = JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/u)[1]);
+    const videos = schema["@graph"].filter((item) => item["@type"] === "VideoObject");
+    assert.deepEqual(videos[0].hasPart, [
+      { "@type": "Clip", name: "Intro", startOffset: 0, endOffset: 90, url: `./?t=0#video-${id}` },
+      { "@type": "Clip", name: "<Gameplay>", startOffset: 90, endOffset: 600, url: `./?t=90#video-${id}` },
+    ]);
+    assert.ok(videos[0].url.endsWith(`#video-${id}`));
+    if (videos[1]) assert.equal(videos[1].hasPart, undefined);
+    for (const clip of videos[0].hasPart) {
+      assert.ok(clip.endOffset > clip.startOffset && clip.endOffset <= 600);
+      assert.ok(html.includes(`data-chapter-seconds="${clip.startOffset}"`));
+    }
+    assert.equal(html.includes('data-auto-next disabled'), file.startsWith("spiele/"));
+    assert.ok(!html.includes('data-auto-next checked'));
+  }
+  const unknown = rendered("00:00 Intro\n01:30 Gameplay", null).pages.get("spiele/ein-spiel/index.html").html;
+  const schema = JSON.parse(unknown.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/u)[1]);
+  assert.equal(schema["@graph"].find((item) => item["@type"] === "VideoObject").hasPart.at(-1).endOffset, undefined);
+  const empty = rendered("").pages.get("spiele/ein-spiel/index.html").html;
+  assert.ok(!empty.includes('"hasPart"'));
 });
 
 test("lässt leere Kapitel- und Kanalsektionen weg und aktualisiert sie aus Beschreibungen", () => {

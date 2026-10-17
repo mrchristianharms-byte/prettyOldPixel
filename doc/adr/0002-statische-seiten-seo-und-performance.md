@@ -26,7 +26,8 @@ Zeitschriftenindex, Zeitschriften-, Jahrgangs- und eindeutige Ausgabenseiten
 sind im dritten Schritt hinzugekommen; News und Videos verlinken diese Ziele.
 Bestätigte Spieleseiten und Spieleindex sind ebenfalls umgesetzt.
 Statische Kapitel-Zeitlinks und erwähnte Kanäle sind ebenfalls umgesetzt.
-API-Kapitelsteuerung und automatische Fortsetzung folgen separat.
+API-Kapitelsteuerung, `Clip`-Metadaten und die abschaltbare Folgenfortsetzung
+auf Spieleseiten sind umgesetzt; die API lädt erst nach Player-Freigabe.
 **Korrigierte Seitenstruktur:** Es gibt keine separate Seite pro Video.
 Player und Beschreibungen stehen auf der jeweiligen Ausgabe-/Spieleseite.
 Ein kleines lokales Modul wechselt dort die Auswahl per Video-Fragment;
@@ -511,7 +512,8 @@ Die Seite erläutert konkret:
 - Die Auswahl per URL-Fragment und die gemerkte Player-Aktivierung im
   Local Storage einschließlich Zurücksetzen; kein Wiedergabeverlauf,
   kein Sitzungsspeicher, kein eigenes Tracking und keine Analytics-Dienste.
-  Eine spätere abschaltbare Folgenfortsetzung bleibt davon getrennt.
+  Die ausdrücklich eingeschaltete, nur seitenbezogene Folgenfortsetzung
+  bleibt davon getrennt und wird nicht gespeichert.
 - Externe Links, deren Ziele erst beim Aufrufen besucht werden.
 
 Formulierungen müssen der tatsächlichen Umsetzung entsprechen. Erforderliche

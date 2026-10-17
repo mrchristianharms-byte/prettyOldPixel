@@ -231,6 +231,16 @@ function videoSchema(video, config, route) {
     ...(video.description ? { description: video.description } : {}),
     ...(video.publishedAt ? { uploadDate: video.publishedAt } : {}),
     ...(video.duration ? { duration: video.duration } : {}),
+    ...(video.chapters.length ? {
+      hasPart: video.chapters.map((chapter, index) => {
+        const endOffset = video.chapters[index + 1]?.seconds ?? video.durationSeconds;
+        return {
+          "@type": "Clip", name: chapter.label, startOffset: chapter.seconds,
+          url: `${config.href(route)}?t=${chapter.seconds}#video-${video.id}`,
+          ...(endOffset !== null ? { endOffset } : {}),
+        };
+      }),
+    } : {}),
     ...(video.magazines.length || video.games.length ? {
       about: [
         ...video.magazines.map((magazine) => magazine.issue?.route
@@ -275,7 +285,7 @@ function playerPoster(video) {
 
 function player(video) {
   return `<section aria-label="Videoplayer">
-<iframe class="video-player" name="issue-player" title="${escapeHtml(`YouTube-Video: ${video.title}`)}" srcdoc="${escapeHtml(playerPoster(video))}" allow="encrypted-media; picture-in-picture; fullscreen" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+<iframe class="video-player" name="issue-player" title="${escapeHtml(`YouTube-Video: ${video.title}`)}" srcdoc="${escapeHtml(playerPoster(video))}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" referrerpolicy="strict-origin-when-cross-origin"></iframe>
 <p class="meta">Vorschaubild von YouTube · Player erst nach Aktivierung. <a href="#datenschutzhinweis">Datenschutzhinweise</a><span data-player-preference-note hidden> Die Aktivierung wird in diesem Browser gemerkt.</span> <button type="button" class="player-reset" data-player-reset hidden>YouTube-Aktivierung zurücksetzen</button></p>
 <p class="meta" data-player-notice role="status" hidden></p>
 </section>`;
@@ -294,7 +304,9 @@ ${externalLink("https://docs.github.com/en/site-policy/privacy-policies/github-g
 <h2>YouTube-Player</h2>
 <p>Der eingebettete Player wird erstmals geladen, wenn Sie „YouTube-Player aktivieren“ wählen. Er verwendet youtube-nocookie.com, den erweiterten Datenschutzmodus von YouTube. Das bedeutet nicht, dass keine Daten verarbeitet werden. Nach der Aktivierung kann YouTube/Google weitere Verbindungen aufbauen und Daten im Rahmen der Wiedergabe verarbeiten. Auf einen externen Player können Sie verzichten und stattdessen einen normalen YouTube-Link verwenden.</p>
 <p>Diese Website merkt sich die Aktivierung in diesem Browser im Local Storage. Danach wird der Player auch bei weiteren Videos und Seitenbesuchen direkt geladen, ohne automatisch abzuspielen. Die Einstellung bleibt bis zum Zurücksetzen oder Löschen der Browserdaten erhalten. Mit „YouTube-Aktivierung zurücksetzen“ unter dem Player können Sie sie jederzeit löschen und wieder zum Vorschaubild wechseln.</p>
-<p>Gespeichert wird nur die Aktivierung, kein Wiedergabeverlauf. Das ausgewählte Video bleibt in der Seitenadresse erhalten. Es gibt keine automatische Folgenfortsetzung. Ohne JavaScript wird die Aktivierung nicht gemerkt; Sie können den Player weiterhin einzeln aktivieren, alle Beschreibungen lesen und den YouTube-Links folgen.</p>
+<p>Nach der Aktivierung wird außerdem die offizielle YouTube-IFrame-API von www.youtube.com geladen. Sie ermöglicht Kapitelsprünge im Player und erkennt das Videoende. Dabei wird Ihre IP-Adresse auch an diesen Anbieter übermittelt. Wenn die Steuerung nicht verfügbar ist, bleiben die externen Kapitel-Links und der manuelle Player nutzbar.</p>
+<p>„Nächste Folge automatisch“ ist auf Spieleseiten zunächst aus. Wenn Sie die Option einschalten und ein Video starten, kann am Ende die nächste datierte Folge derselben Spielereihe beginnen. Sie können die Option jederzeit ausschalten. Am Reihenende oder vor Videos ohne Datum stoppt die Fortsetzung. Die Option gilt nur auf der aktuellen Seite und wird nicht gespeichert.</p>
+<p>Gespeichert wird nur die Player-Aktivierung, kein Wiedergabeverlauf. Das ausgewählte Video bleibt in der Seitenadresse erhalten. Ohne JavaScript wird die Aktivierung nicht gemerkt; Kapitel öffnen YouTube, und die Folgenfortsetzung ist nicht verfügbar. Sie können den Player weiterhin einzeln aktivieren, alle Beschreibungen lesen und den YouTube-Links folgen.</p>
 <p>${externalLink("https://policies.google.com/privacy?hl=de", "Datenschutzerklärung von Google")} · ${externalLink("https://www.youtube.com/t/terms", "Nutzungsbedingungen von YouTube")}</p>
 <h2>Externe Links und eigene Speicherung</h2>
 <p>Externe Links sind mit ↗ und einem zugänglichen Hinweis gekennzeichnet. Erst beim Aufrufen wird das jeweilige Ziel besucht; Vorschaubilder und bereits aktivierte Player sind davon ausgenommen. Diese Website setzt selbst keine Tracking-Cookies ein und verwendet keine Analytics-Dienste. Im Local Storage steht ausschließlich Ihre Player-Aktivierung; Session Storage wird nicht verwendet.</p>
@@ -464,7 +476,7 @@ function seriesVideos(videos, title, config, game, introduction = "") {
   const menu = `<details class="episode-menu" open><summary>☰ Videos ${game ? "zu diesem Spiel" : "zu dieser Ausgabe"} (${videos.length})</summary>
 <nav aria-label="Videos ${game ? "zum Spiel" : "zur Ausgabe"}" tabindex="0"><ol>${videos.map((video, index) => `<li><a data-video-link href="#video-${video.id}">${index + 1}/${videos.length}: ${escapeHtml(video.title)}</a>
 <p class="meta">${video.durationSeconds !== null ? `<span aria-label="Laufzeit">${durationLabel(video.durationSeconds)}</span>` : "Laufzeit unbekannt"} · ${video.publishedAt ? `<time datetime="${video.publishedAt}">${new Intl.DateTimeFormat("de-DE", { dateStyle: "medium", timeZone: "Europe/Berlin" }).format(new Date(video.publishedAt))}</time>` : "Datum unbekannt"}${game ? `<br>${context(video)}` : ""}</p></li>`).join("")}</ol></nav></details>`;
-  const panels = `<div class="video-panels">${videos.map((video, index) => `<article id="video-${video.id}" data-video-panel data-player-url="${video.embedUrl}" data-poster="${escapeHtml(playerPoster(video))}" tabindex="-1">
+  const panels = `<div class="video-panels">${videos.map((video, index) => `<article id="video-${video.id}" data-video-panel${video.publishedAt ? ' data-dated="true"' : ""} data-player-url="${video.embedUrl}" data-poster="${escapeHtml(playerPoster(video))}" tabindex="-1">
 <h2>Video ${index + 1}/${videos.length}: ${escapeHtml(video.title)}</h2>
 ${metadata([
   ["Veröffentlicht", videoDate(video)],
@@ -474,7 +486,7 @@ ${metadata([
 ${sectionLinks(video, config)}
 ${game ? `<p>Spiel: <a href="${config.href(game.route)}">${escapeHtml(game.name)}</a>${game.playlists.filter((playlist) => video.playlists.some((source) => source.id === playlist.id)).map((playlist) => ` · ${externalLink(playlist.url, playlist.title)}`).join("")}</p>` : ""}
 <p><span data-player-activate>${externalLink(video.embedUrl, "YouTube-Player hier aktivieren", "issue-player")}</span> · ${externalLink(video.url, "Video auf YouTube ansehen")}</p>
-${video.chapters.length ? `<section class="video-chapters"><h3>Kapitel und Zeitmarken</h3><p class="meta">Die Links öffnen das Video auf YouTube an der angegebenen Stelle.</p><ol>${video.chapters.map((chapter) => `<li>${externalLink(chapter.url, `${durationLabel(chapter.seconds)} · ${chapter.label}`)}</li>`).join("")}</ol></section>` : ""}
+${video.chapters.length ? `<section class="video-chapters"><h3>Kapitel und Zeitmarken</h3><p class="meta" data-chapter-hint>Ohne aktivierte Player-Steuerung öffnen die Links das Video auf YouTube.</p><ol>${video.chapters.map((chapter) => `<li data-chapter-seconds="${chapter.seconds}">${externalLink(chapter.url, `${durationLabel(chapter.seconds)} · ${chapter.label}`)}</li>`).join("")}</ol></section>` : ""}
 ${video.mentionedChannels.length ? `<section class="mentioned-channels"><h3>Erwähnte Kanäle / Partner</h3><p class="meta">YouTube-Kanäle aus der Videobeschreibung. Eine Erwähnung bedeutet nicht, dass eine bezahlte Zusammenarbeit besteht.</p><ul>${video.mentionedChannels.map((channel) => `<li>${externalLink(channel.url, channel.label)}</li>`).join("")}</ul></section>` : ""}
 <section><h3>Videobeschreibung</h3><div class="description">${video.description ? descriptionHtml(video.description) : "<p>Für dieses Video ist keine Beschreibung vorhanden.</p>"}</div></section>
 ${video.magazines.length > 1 ? magazineDetails(video, config) : ""}
@@ -485,7 +497,10 @@ ${index + 1 < videos.length ? `<a href="#video-${videos[index + 1].id}">Nächste
   return `<section data-video-series data-title="${escapeHtml(title)}" class="detail-layout">
 <div class="detail-main">
 <h1 class="detail-heading" title="${escapeHtml(title)}">${escapeHtml(title)}</h1>
-<div class="detail-player">${player(videos[0])}</div>
+<div class="detail-player">${player(videos[0])}<div class="player-controls meta" data-player-controls hidden>
+${game ? '<label><input type="checkbox" data-auto-next disabled> Nächste Folge automatisch</label>' : ""}
+<button type="button" data-player-play hidden>Video manuell starten</button>
+</div></div>
 <div class="detail-information">${introduction}<p><a href="#video-${videos[0].id}">Mit Video 1/${videos.length} beginnen</a></p>${game ? gameSeriesGuide(game, videos) : ""}${panels}${privacy}</div>
 </div>${menu}
 </section>`;

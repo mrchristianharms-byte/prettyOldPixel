@@ -167,7 +167,8 @@ keine externen Ressourcen oder Laufzeit-JavaScript.
 - Auch diese Seiten werden rein offline erzeugt und folgen den relativen
   URL-, Sitemap-, Größenbudget- und Änderungsdatum-Regeln des übrigen Builds.
   Kapitel-Zeitlinks und erwähnte Kanäle stehen auf den Spiel-/Ausgabenseiten.
-  API-Kapitelsteuerung und automatische Folgenfortsetzung bleiben spätere Schritte.
+  Nach Player-Freigabe ergänzt die offizielle YouTube-IFrame-API Kapitelsprünge
+  und eine optionale Folgenfortsetzung auf Spieleseiten.
 
 ### Spiele und bestätigte Playlist-Zuordnungen
 
@@ -227,9 +228,8 @@ keine externen Ressourcen oder Laufzeit-JavaScript.
   erben sie nicht. Sinkende Folgenummern, lange Pausen oder „Neustart“ erzeugen
   keinen geratenen neuen Durchlauf. Unbenannte Quellreihen erhalten keine
   erfundene Staffelnummer.
-- Nur belegte, nicht leere Abschnitte werden dargestellt. Alles funktioniert
-  ohne zusätzliches JavaScript und ohne weitere Unterseiten. API-Kapitelsteuerung
-  und automatische Folgenfortsetzung folgen separat.
+- Nur belegte, nicht leere Abschnitte werden dargestellt. Diese Übersicht
+  funktioniert ohne zusätzliches JavaScript und ohne weitere Unterseiten.
 
 ### Kapitel und erwähnte Kanäle
 
@@ -246,8 +246,20 @@ Kapitel und explizit erwähnten YouTube-Kanäle aus der Beschreibung.
   Marken ab der bekannten Videolänge werden ausgelassen. Doppelte Sekunden
   erscheinen nur einmal, vorhandene Kapitelbeschriftungen haben Vorrang.
 - Alle Kapitel bleiben echte, gekennzeichnete externe YouTube-Zeitlinks.
-  Sie öffnen das Video extern; der eingebettete Player bleibt unverändert.
-  Ohne JavaScript funktioniert dieselbe Darstellung und Navigation.
+  Bei bereitem, aktiviertem Player übernimmt `seekTo` den normalen Klick
+  während Wiedergabe/Pause. Ein noch nicht gestartetes Video wird mit
+  `cueVideoById({videoId, startSeconds})` nur an der Marke bereitgestellt,
+  nicht automatisch abgespielt. Gleiches gilt für eigene Kapitel-Direktlinks.
+  Ohne Freigabe, ohne JavaScript oder bei gesperrter API öffnet sich YouTube.
+  Strg-/Befehl-Klick bleibt ebenfalls ein normaler externer Link.
+- `VideoObject.hasPart` enthält dieselben Kapitel als Schema.org-`Clip` mit
+  Beschriftung, Sekundenoffset und eigenem Zeitlink
+  `./?t=<sekunden>#video-<id>` auf derselben Spiel-/Ausgabenseite. Nach Freigabe
+  springt der Player zu dieser validierten Marke, ohne Autoplay. Es entsteht
+  keine neue Seite; der Canonical bleibt ohne Query und Fragment.
+  Das Ende ist der Beginn
+  des nächsten Kapitels oder die bekannte Videolänge. Beim letzten Kapitel
+  ohne bekannte Dauer bleibt `endOffset` weg; es wird kein Ende erfunden.
 - „Erwähnte Kanäle / Partner“ enthält nur explizite HTTPS-Kanal-URLs auf
   YouTube (`/@handle`, `/channel/id`, `/c/name`, `/user/name`).
   Watch-, Playlist- und Shorts-Links sowie der eigene Kanal sind ausgeschlossen.
@@ -257,9 +269,23 @@ Kapitel und explizit erwähnten YouTube-Kanäle aus der Beschreibung.
 - Erwähnungen behaupten keine bezahlte Zusammenarbeit. Leere Abschnitte
   entfallen; die Originalbeschreibung bleibt unverändert sichtbar.
 
-Es gibt keine zusätzlichen Videoseiten, Sitemap-Adressen, IFrame-API-Aufrufe
-oder automatischen Wiedergabestarts. API-Sprünge im aktivierten Player und
-automatische Folgenfortsetzung sind weiterhin getrennte spätere Ausbauschritte.
+Es gibt keine zusätzlichen Videoseiten oder Sitemap-Adressen.
+Die offizielle IFrame-API von `https://www.youtube.com/iframe_api` lädt erst
+nach bewusster oder bereits gemerkter Player-Freigabe, einmal pro Dokument.
+Der Frame bleibt auf `youtube-nocookie.com`, mit `enablejsapi=1` und der
+tatsächlichen Browser-Origin. Fehler oder ausbleibende Antworten werden
+sichtbar gemeldet; externe Links und der manuelle Player bleiben verfügbar.
+
+„Nächste Folge automatisch“ steht ausschließlich auf Spieleseiten und ist bei
+jedem Seitenaufruf aus. Nach Einschalten und echtem `PLAYING`-Ereignis kann ein
+`ENDED`-Ereignis die nächste datierte Folge derselben Seite mit `loadVideoById`
+starten. Die gespeicherte Videolänge wird nicht als Endtimer verwendet.
+Am Reihenende oder vor undatierten Videos wird gestoppt, niemals zu einem
+anderen Spiel gewechselt. Manuelle Auswahl und Zurück/Vorwärts verwenden
+`cueVideoById` ohne Wiedergabestart. Automatische Wechsel aktualisieren
+URL-Fragment, Beschreibung, Position und Browser-Titel ohne Seitennavigation.
+Browserseitig blockierte Wiedergabe deaktiviert die Fortsetzung und bietet
+„Video manuell starten“. Die Option wird weder lokal noch pro Sitzung gespeichert.
 
 ### Blätterabend nach Zeitschrift und Jahrgang
 
@@ -342,7 +368,9 @@ automatische Folgenfortsetzung sind weiterhin getrennte spätere Ausbauschritte.
   Browser-Titel ohne Seitenwechsel. Ein gemeinsamer Player verhindert parallele
   Wiedergaben; bei einer anderen Auswahl wird abhängig von der gemerkten
   Aktivierung der Player oder das Vorschaubild geladen, niemals automatisch
-  abgespielt. Direktlinks und Zurück/Vorwärts verwenden Video-Fragmente.
+  abgespielt. Nur die ausdrücklich eingeschaltete Folgenfortsetzung darf
+  nach dem Videoende die nächste Folge starten. Direktlinks und Zurück/Vorwärts
+  verwenden Video-Fragmente.
   Mobil steht die Videoliste in einem nativen Burger-Menü. Auf Spieleseiten
   beginnt sie auf Desktop als rechte Seitenleiste auf Höhe des Seitentitels.
   Spiele und Ausgaben nutzen dasselbe Detailtemplate: kompakter einzeiliger
@@ -388,10 +416,44 @@ automatische Folgenfortsetzung sind weiterhin getrennte spätere Ausbauschritte.
   eine neue Ausgangsdatierung gesetzt; ältere Assets sind dann nur vorhanden,
   wenn sie noch im lokalen Ausgabeordner liegen. Für lückenlose
   Asset-Verfügbarkeit darf dieser Cache nicht gelöscht werden.
-- HTTP-`Last-Modified`, `ETag` und Kompression werden vom Hosting bestimmt, nicht
-  durch HTML-Metadaten. Ihre Prüfung auf dem veröffentlichten GitHub Pages sowie
-  die Wiederverwendung vollständiger HTML-Ausgaben über CI-Läufe hinweg stehen
-  noch aus; die Änderungsmetadaten werden bereits über den Actions-Cache erhalten.
+- HTTP-`Last-Modified`, `ETag`, Kompression und zehn Minuten HTML-Cachezeit
+  werden von GitHub Pages bestimmt, nicht durch HTML-Metadaten.
+  Die Wiederverwendung vollständiger HTML-Ausgaben über CI-Läufe hinweg
+  bleibt eine optionale spätere Optimierung.
+
+### Grenzen der Veröffentlichungsprüfung
+
+Automatisierte Tests prüfen Freigabe, API-Ladefehler/Timeouts, Kapitelsprünge,
+Opt-in/Opt-out, API-`ENDED`-Ereignisse, undatierte Folgen, Reihenende,
+Autoplay-Blockierung, Zurücksetzen und veraltete API-Rückmeldungen.
+Build-Prüfungen kontrollieren interne Links, JSON-LD und die unveränderten
+Budgets (20 KiB CSS, 5 KiB eigenes JavaScript, 50 KiB HTML, jeweils gzip).
+Browserprüfungen ergänzen Desktop/Mobil, Netzabrufe und den Ohne-JavaScript-Fallback.
+
+Lokaler Prüfstand vom 17.10.2026: 168 Tests unter Node.js 22 erfolgreich;
+435 HTML-Seiten. CSS 13.558, eigenes JavaScript 3.555 und größtes HTML
+15.727 Bytes gzip. Ein unveränderter Folgebuild übernimmt alle Dateien.
+Im Browser wurden Kapitelsprünge, eigene Zeitmarken-URLs, Fortsetzung,
+Autoplay-Blockierung und Zurücksetzen mit einer kontrollierten API geprüft;
+bei 320 Pixeln entsteht kein horizontaler Überlauf. Ohne JavaScript bleiben
+alle sieben Folgen der geprüften Spieleseite und ihre externen Kapitel-Links
+sichtbar. Der integrierte Prüf-Browser brach auch einen unabhängig eingebundenen
+echten YouTube-Iframe ab. Reale Medienwiedergabe bis zum Videoende ist deshalb
+dadurch nicht bestätigt; API-Ereignistests ersetzen diese Prüfung nicht.
+
+Eine technische Prüfung ist keine verbindliche Datenschutz- oder Rechtsfreigabe.
+Der Betreiber muss insbesondere erforderliche Betreiber-/Kontaktangaben,
+Einwilligung für externe YouTube-Medien einschließlich Vorschaubildern sowie
+die dauerhafte Player-Freigabe prüfen lassen. Die Datenschutzseite nennt
+Hosting, direkte Bildabrufe, Player/API, Local Storage, Zurücksetzen und
+die nur seitenbezogene Folgenfortsetzung.
+
+Am 17.10.2026 wurde eine Microsoft-Defender-Browser-Protection-Warnung
+„Phishing threat“ für die Zeitschriftenübersicht gemeldet. Diese Übersicht
+führt kein eigenes JavaScript aus und greift nicht auf Local Storage zu.
+Die Ursache der Microsoft-Einstufung ist damit nicht geklärt und die Warnung
+nicht aufgehoben. Für eine Neubewertung dient „Report that this site does not
+contain threats“ in der Warnungsseite; Schutzfunktionen nicht pauschal abschalten.
 
 Vor einer öffentlichen Freigabe müssen die tatsächliche Medien-Einbindung und
 die Datenschutz-/Informationspflichten rechtlich geprüft werden. Die vorhandene

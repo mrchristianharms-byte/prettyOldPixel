@@ -83,7 +83,8 @@ Mitgliederlisten im Playlist-Cache.
 Datenerfassung, bestätigte Spielezuordnung, Spieleseiten sowie konservative
 Abschnitts-/Reihenerkennung sowie Hardware-, Retrospektiven- und
 Interviewübersichten sind umgesetzt. Statische Kapitel-Zeitlinks und explizite
-Kanalverweise ergänzen die Videoabschnitte. API-Player-Komfortfunktionen folgen separat.
+Kanalverweise ergänzen die Videoabschnitte. API-Kapitelsprünge und optionale
+Folgenfortsetzung auf Spieleseiten ergänzen den aktivierten Player.
 
 ## Entscheidung
 
@@ -631,5 +632,7 @@ die Zeitschriftenstruktur bis zu Ausgabenseiten sowie bestätigte Spieleidentit�
 und Spieleseiten mit Abschnitts-/Reihenübersicht sind umgesetzt.
 Hardware-, Retrospektiven- und Interviewübersichten sind ebenfalls umgesetzt.
 Kapitel-Zeitlinks und erwähnte Kanäle sind in den Spiel-/Ausgabepanels umgesetzt.
-API-Kapitelsteuerung, automatische Fortsetzung und abschließende
-Veröffentlichungsprüfungen folgen separat.
+API-Kapitelsteuerung, `Clip`-Metadaten und die standardmäßig ausgeschaltete
+automatische Fortsetzung sind umgesetzt. Technische Veröffentlichungsprüfungen
+werden durch Tests und Live-Prüfungen ergänzt; eine rechtliche Freigabe und
+die Klärung gemeldeter Browser-Reputationswarnungen bleiben Betreiberaufgaben.

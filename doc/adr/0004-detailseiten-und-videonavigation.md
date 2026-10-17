@@ -26,7 +26,8 @@ Abschnitts-/Reihenerkennung mit statischen Sprunglinks ist ebenfalls umgesetzt.
 Statische Kapitel-Zeitlinks und explizite Kanalverweise sind umgesetzt.
 Die Player-Aktivierung wird im Browser gemerkt und kann zurückgesetzt werden;
 das lädt weitere Player ohne Autoplay.
-API-Kapitelsteuerung und automatische Fortsetzung folgen separat.
+API-Kapitelsteuerung, `Clip`-Metadaten und die standardmäßig ausgeschaltete
+automatische Fortsetzung auf Spieleseiten sind umgesetzt.
 
 ## Entscheidung
 
@@ -182,8 +183,8 @@ Video-Fragment innerhalb derselben Seite.
 ### 5. Kapitel und Partner
 
 **Umgesetzt:** Die Beschreibung wird offline in Kapitel und erwähnte Kanäle
-aufbereitet. Sichtbare Kapitel bleiben externe Zeitlinks, ohne zusätzliche
-Player-Skripte. Die API-basierte Steuerung des aktivierten Players ist noch offen.
+aufbereitet. Sichtbare Kapitel bleiben externe Zeitlinks. Im aktivierten,
+bereiten Player übernimmt die offizielle IFrame-API normale Kapitelauswahl.
 Zeitzeilen benötigen einen aufsteigenden Block mit mindestens zwei Einträgen
 ab Null oder eine direkte Kapitel-/Zeitmarkenüberschrift. Dies vermeidet
 Fehltreffer bei einzelnen Uhrzeiten. Bekannte Videolängen begrenzen die Marken,
@@ -196,11 +197,18 @@ YouTube-Zeitlinks zum betreffenden Video (`t=90`, `t=1m30s`, `start=90`).
 Der Build validiert Zeiten und bekannte Videolängen. Zahlen ohne Kontext,
 Aufnahme-Uhrzeiten und Links zu anderen Videos steuern nicht den aktiven Player.
 
-Ein Kapitel bleibt ein echter YouTube-Zeitlink. Nach Player-Aktivierung kann
-die offizielle IFrame-API den Sprung über `seekTo` übernehmen. Ohne JavaScript,
+Ein Kapitel bleibt ein echter YouTube-Zeitlink. Nach Player-Aktivierung
+übernimmt die offizielle IFrame-API den Sprung über `seekTo` während
+Wiedergabe/Pause. Ein noch nicht gestartetes Video oder ein Kapitel-Direktlink
+wird per `cueVideoById({videoId, startSeconds})` ohne Wiedergabestart
+bereitgestellt. Ohne JavaScript,
 bei gesperrter API oder nicht geladenem Player bleibt der externe Link nutzbar.
 Nur die offizielle YouTube-API ist nach Aktivierung als fremdes
 Steuerungsskript erlaubt; keine zusätzlichen Analytics- oder Drittanbieter-Skripte.
+Strg-/Befehl-Klick bleibt ein normaler externer Link. Die API lädt einmal pro
+Dokument erst nach Freigabe, mit zehn Sekunden Timeout für Laden und
+Player-Bereitschaft. Fehler werden sichtbar gemeldet; sie ersetzen Links nicht
+durch wirkungslose Schaltflächen.
 
 Explizite Kanal-URLs aus Beschreibungen können als „Erwähnte Kanäle / Partner“
 erscheinen. Exakte Hostprüfung, Deduplizierung, Ausschluss des eigenen Kanals
@@ -208,11 +216,12 @@ und Abgrenzung zu Watch-/Playlist-/Shorts-URLs sind erforderlich.
 Eine Erwähnung behauptet keine bezahlte Zusammenarbeit. Namen und Logos werden
 nicht erfunden oder extern nachgeladen.
 
-### 6. Automatische Folgenfortsetzung (späterer Ausbauschritt)
+### 6. Automatische Folgenfortsetzung
 
 Manuelle Vorher-/Nachher-Links bleiben immer verfügbar. Nach bewusstem
 Wiedergabestart darf innerhalb eines Spiels eine abschaltbare Option
-„Nächste Folge automatisch“ die Fortsetzung erlauben.
+„Nächste Folge automatisch“ die Fortsetzung erlauben. Sie ist bei jedem
+Seitenaufruf ausgeschaltet und bis zur API-Bereitschaft deaktiviert.
 
 Die offizielle API erkennt `YT.PlayerState.ENDED`; die gespeicherte Dauer
 ersetzt keine Enderkennung. Bei Ende wird auf derselben Spieleseite die nächste
@@ -223,8 +232,14 @@ bei blockiertem Autoplay bleibt ein manueller Startlink, keine Schleife.
 
 Ein normaler Direktaufruf startet nichts automatisch. Am Reihenende gibt es
 keinen ungefragten Sprung zu einem anderen Spiel oder einer fremden Playlist.
-Die derzeitige Implementierung hat weder API-Enderkennung noch Auto-Fortsetzung
-und verwendet keinen Local-/Session-Storage dafür.
+Die Implementierung verlangt `PLAYING` für das aktive Video vor `ENDED`
+und berücksichtigt nur die unmittelbar folgende datierte Folge.
+Undatierte Videos, Reihenende, Playerfehler und Autoplay-Sperren stoppen
+die Fortsetzung. Es gibt keinen Local-/Session-Storage dafür.
+Manuelle Auswahl oder Zurücknavigation lädt per `cueVideoById`, automatische
+Fortsetzung per `loadVideoById`. Der automatische Wechsel aktualisiert das
+Fragment mittels History-API ohne nativen Seitensprung. Ein blockierter
+Start bietet „Video manuell starten“ und deaktiviert die automatische Option.
 
 ### 7. SEO, Anschlussnavigation und Inhaltszeitpunkte
 
@@ -237,8 +252,14 @@ JSON-LD enthält die Entität (`VideoGame`, `Periodical`, `PublicationIssue`),
 eine passende `CollectionPage`/`ItemList`, `BreadcrumbList` und je vorhandenem
 Video ein `VideoObject` mit eigener Beschreibung, Datum, Dauer,
 YouTube-Thumbnail und `embedUrl` soweit bekannt. Seine `url` und `@id` zeigen
-auf den realen Videoabschnitt. Erkanntes `Clip`-Markup folgt erst mit validierter
-Kapitelaufbereitung. Fragmente garantieren keine eigenen Suchergebnisse oder
+auf den realen Videoabschnitt. `hasPart` enthält validierte Kapitel als `Clip`
+mit Name, `startOffset` und eigenem Zeitlink `./?t=<sekunden>#video-<id>` auf
+derselben Entitätsseite. Nach Freigabe springt der Player zu dieser
+validierten Marke ohne Autoplay; unbekannte oder ungültige Marken werden
+nicht angewendet. Der Canonical bleibt ohne Query und Fragment. `endOffset` ist
+der nächste Kapitelbeginn oder die bekannte Gesamtdauer; ohne bekannte letzte
+Grenze wird es weggelassen. Ohne Kapitel entsteht kein `hasPart`.
+Fragmente garantieren keine eigenen Suchergebnisse oder
 Video-Rich-Results.
 
 Weitere Ausgaben, Jahrgänge, Spiele und Bereichsübersichten werden als echte
@@ -254,8 +275,13 @@ HTTP-Caching und belegbare Änderungszeitpunkte bleiben getrennt gemäß ADR 000
 - Direktlink, Auswahl, Zurück/Vorwärts und Titel wechseln konsistent.
 - Ohne JavaScript sind alle Abschnitte und externen Fallbacks zugänglich.
 - Ein Wechsel stoppt die alte Wiedergabe, ohne neue Wiedergabe zu starten.
+  Ausnahme: ausdrücklich eingeschaltete Fortsetzung nach echtem Videoende.
 - Player aktiviert erst nach Klick oder zuvor gespeicherter Freigabe, nur
   erlaubte externe Medienressourcen; Zurücksetzen wirkt auf folgende Besuche.
+- API-Sperren, fehlende Bereitschaft und blockiertes Autoplay werden gemeldet.
+- Reale externe Kapitel-Links funktionieren ohne API und ohne JavaScript.
+- Opt-out, Reihenende, unbekannte Datumswerte und veraltete Player-Ereignisse
+  lösen keine unerwünschte Fortsetzung aus.
 - Mobile Menüliste, Desktopliste, Fokus und volle Playerbreite funktionieren.
 - Canonicals, Sitemap, JSON-LD und alle Fragmentziele sind valide.
 - Unveränderte Daten erzeugen identische Dateien und Inhaltszeitpunkte.

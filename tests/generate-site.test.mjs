@@ -210,7 +210,7 @@ test("lädt vor Aktivierung keinen YouTube-Player und dokumentiert den aktuellen
   assert.equal((html.match(/data-video-panel /gu) ?? []).length, 2);
   assert.ok(html.includes("keine Beschreibung vorhanden"));
   const privacy = pages.get("datenschutz/index.html").html;
-  for (const text of ["nicht kommerziell", "GitHub Pages", "i.ytimg.com", "youtube-nocookie.com", "keine automatische Folgenfortsetzung", "Local Storage", "YouTube-Aktivierung zurücksetzen", "Session Storage"]) {
+  for (const text of ["nicht kommerziell", "GitHub Pages", "i.ytimg.com", "youtube-nocookie.com", "offizielle YouTube-IFrame-API", "Nächste Folge automatisch", "Local Storage", "YouTube-Aktivierung zurücksetzen", "Session Storage"]) {
     assert.ok(privacy.includes(text), text);
   }
   for (const page of pages.values()) assert.ok(page.html.includes(`href="${createSiteConfig().href("datenschutz/", page.route)}"`));

@@ -93,6 +93,9 @@ h3 { font-size: 1.2rem; }
 }
 .video-player { display: block; width: 100%; aspect-ratio: 16 / 9; min-height: 0; max-height: min(60svh, calc(100svh - 12rem)); border: 0; background: #171a22; }
 .player-reset { width: auto; margin: 0; padding: 0; border: 0; border-radius: 0; background: none; color: var(--pico-primary); font: inherit; text-decoration: underline; }
+.player-controls { margin-block: .35rem .5rem; }
+.player-controls label { margin: 0; font-size: .8rem; }
+.player-controls button { width: auto; margin: .25rem 0; padding: .3rem .6rem; font-size: .8rem; }
 .description { max-width: 80ch; }
 .description p { white-space: pre-wrap; }
 .pagination { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .8rem; margin-block: 1.5rem; }
