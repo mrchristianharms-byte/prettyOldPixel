@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
@@ -73,6 +73,43 @@ test("parseFolderPage liest Unterordner und Ausgabenkarten", () => {
   assert.equal(folderUrl("Power Play"), "https://www.kultmags.com/mags.php?folder=UG93ZXIgUGxheQ%3D%3D");
 });
 
+test("extrahiert nur das Titelbild aus archive-title-image und löst relative URLs auf", () => {
+  const page = parseFolderPage(`<img src="img/banner.png"><div class='extra archive-title-image'>
+<img alt="" src='Amiga%20Joker/1990/title.png'></div>`);
+  assert.equal(page.logoUrl, "https://www.kultmags.com/Amiga%20Joker/1990/title.png");
+  assert.equal(parseFolderPage('<img src="img/banner.png">').logoUrl, null);
+  for (const src of ["https://example.org/logo.png", "javascript:alert(1)", "logo.svg"]) {
+    assert.throws(() => parseFolderPage(`<div class="archive-title-image"><img src="${src}"></div>`), /Logoadresse/u);
+  }
+});
+
+test("ergänzt alte frische Caches nur über die Titelseite und speichert das Logo lokal", async () => {
+  await withCatalog(async ({ options, cacheDir }) => {
+    const file = path.join(cacheDir, "magazines", "smash.json");
+    const original = JSON.parse(await readFile(file, "utf8"));
+    delete original.logo;
+    await writeFile(file, JSON.stringify(original));
+    const bytes = Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aX1cAAAAASUVORK5CYII=", "base64");
+    const requests = [];
+    const catalog = await loadKultmagsCatalog({
+      ...options, magazineNames: ["Smash"],
+      fetchImpl: async (url) => {
+        requests.push(url);
+        return url.endsWith("/title.png") ? new Response(bytes)
+          : new Response('<div class="archive-title-image"><img src="Smash/title.png"></div>');
+      },
+    });
+    assert.deepEqual(requests, [folderUrl("Smash"), "https://www.kultmags.com/Smash/title.png"]);
+    const updated = catalog.magazines.get("Smash");
+    assert.deepEqual(updated.issues, original.issues);
+    assert.equal(updated.fetchedAt, original.fetchedAt);
+    assert.equal(updated.logo.url, "https://www.kultmags.com/Smash/title.png");
+    assert.deepEqual(await readFile(path.join(cacheDir, "logos", updated.logo.file)), bytes);
+    await loadKultmagsCatalog({
+      ...options, magazineNames: ["Smash"], fetchImpl: () => assert.fail("Erneuter Abruf"),
+    });
+  });
+});
 test("parseIssueTitle erkennt Doppelausgaben, Beilagen und Sonderheftnummern", () => {
   assert.deepEqual(parseIssueTitle("Power Play 1988-06..07", "1988").numbers, [6, 7]);
   assert.equal(parseIssueTitle("PC-Games 1993-09 - Beilage", "1993").supplement, true);

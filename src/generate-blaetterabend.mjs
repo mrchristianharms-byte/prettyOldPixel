@@ -3,6 +3,8 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { findKultmagsIssue, loadKultmagsCatalog } from "./fetch-kultmags.mjs";
 import { findReetrozIssue, loadReetrozCatalog } from "./fetch-reetroz.mjs";
+import { addPcgamesdatabaseLinks, loadPcgamesdatabaseCatalog } from "./fetch-pcgamesdatabase.mjs";
+import { addAmrLinks, loadAmrCatalog } from "./fetch-amr.mjs";
 
 const projectRoot = fileURLToPath(new URL("../", import.meta.url));
 const defaultSourceFile = path.join(projectRoot, "cache", "youtube-videos.json");
@@ -294,9 +296,17 @@ export async function generateBlaetterabendList({
   log = console.log,
   kultmags = {},
   reetroz = {},
+  pcgamesdatabase = {},
+  amr = {},
 } = {}) {
   const source = JSON.parse(await readFile(sourceFile, "utf8"));
   const videos = extractBlaetterabendVideos(source.videos ?? []);
+  if (amr) addAmrLinks(videos, await loadAmrCatalog({ log, ...amr, cachedOnly: true, optional: true }));
+  if (pcgamesdatabase) {
+    addPcgamesdatabaseLinks(videos, await loadPcgamesdatabaseCatalog({
+      log, ...pcgamesdatabase, cachedOnly: true, optional: true,
+    }));
+  }
   if (kultmags) {
     const magazineNames = videos.flatMap((video) => video.magazines.map((magazine) => magazine.name));
     addKultmagsLinks(videos, await loadKultmagsCatalog({ log, ...kultmags, magazineNames, cachedOnly: true }));
@@ -320,6 +330,11 @@ export async function generateBlaetterabendList({
   log(`${videos.length} Blätterabend-Videos gespeichert: ${targetFile}`);
   log(`  Davon ${videos.filter((video) => !BLAETTERABEND_PATTERN.test(video.title)).length} weitere Zeitschriftenvideos aus dem zweiten Titeldurchlauf.`);
   const magazines = videos.flatMap((video) => video.magazines);
+  if (amr) logLinkStats(log, "AMR (Amiga Action)", magazines.filter((magazine) => "amr" in magazine).map((magazine) => magazine.amr?.match ?? "none"));
+  if (pcgamesdatabase) {
+    logLinkStats(log, "pcgamesdatabase.de (GameStar)", magazines.filter((magazine) => "pcgamesdatabase" in magazine)
+      .map((magazine) => magazine.pcgamesdatabase?.match ?? "none"));
+  }
   if (kultmags) {
     logLinkStats(log, "kultmags.com", magazines.map((magazine) => magazine.kultmags?.match ?? "none"));
     if (reetroz) {
@@ -331,7 +346,7 @@ export async function generateBlaetterabendList({
   }
   for (const video of withoutIssue) {
     const hasArchiveOverview = video.magazines.some((magazine) =>
-      magazine.kultmags?.match === "folder" || magazine.reetroz?.match === "folder");
+      magazine.kultmags?.match === "folder" || magazine.reetroz?.match === "folder" || magazine.pcgamesdatabase?.match === "folder" || magazine.amr?.match === "folder");
     log(`  Keine Ausgabe im Videotitel erkannt${hasArchiveOverview ? " (Archiv-Übersichtsseite verlinkt)" : ""}: ${video.title}`);
   }
   return result;

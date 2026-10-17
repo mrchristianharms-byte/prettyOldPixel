@@ -268,6 +268,17 @@ for (const series of document.querySelectorAll("[data-video-series]")) {
     manualPlay.hidden = true;
   });
 
+  function revealActiveEntry() {
+    if (!menu.open) return;
+    const link = links.find((item) => item.hash === `#${active.id}`);
+    const list = menu.querySelector("nav");
+    if (!link || !list) return;
+    const entry = link.closest("li").getBoundingClientRect();
+    const viewport = list.getBoundingClientRect();
+    if (entry.top < viewport.top) list.scrollTop += entry.top - viewport.top;
+    else if (entry.bottom > viewport.bottom) list.scrollTop += entry.bottom - viewport.bottom;
+  }
+
   function select(focus = false, autoplay = false) {
     const panel = panels.find((item) => `#${item.id}` === location.hash) ?? panels[0];
     if (panel === active) return;
@@ -295,6 +306,8 @@ for (const series of document.querySelectorAll("[data-video-series]")) {
     player.title = `YouTube-Video: ${panel.querySelector("h2").textContent}`;
     document.title = `${series.dataset.title} – ${panel.querySelector("h2").textContent} | Pretty Old Pixel`;
     if (narrow.matches) menu.open = false;
+    revealActiveEntry();
+    requestAnimationFrame(revealActiveEntry);
     // Native fragment scrolling can run after the module during initial navigation.
     panel.style.scrollMarginTop = `${panel.getBoundingClientRect().top - player.getBoundingClientRect().top}px`;
     if (focus) {
@@ -304,11 +317,19 @@ for (const series of document.querySelectorAll("[data-video-series]")) {
   }
 
   menu.open = !narrow.matches;
-  narrow.addEventListener("change", () => { menu.open = !narrow.matches; });
+  narrow.addEventListener("change", () => {
+    menu.open = !narrow.matches;
+    revealActiveEntry();
+    requestAnimationFrame(revealActiveEntry);
+  });
+  menu.addEventListener("toggle", revealActiveEntry);
   select();
   connectPoster();
   if (location.hash === `#${active.id}`) {
-    const showPlayer = () => requestAnimationFrame(() => player.scrollIntoView({ block: "start" }));
+    const showPlayer = () => requestAnimationFrame(() => {
+      player.scrollIntoView({ block: "start" });
+      revealActiveEntry();
+    });
     if (document.readyState === "complete") showPlayer();
     else addEventListener("load", showPlayer, { once: true });
   }

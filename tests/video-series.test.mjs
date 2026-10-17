@@ -35,7 +35,7 @@ function click(element, modifiers = {}) {
   return event;
 }
 
-function setup({ values = new Map(), storage, hash = "", search = "", videoIds = ["first", "second", "third"], undated = [], apiFails = false, playerReady = true } = {}) {
+function setup({ values = new Map(), storage, hash = "", search = "", videoIds = ["first", "second", "third"], undated = [], apiFails = false, playerReady = true, timestampSeconds = "90" } = {}) {
   const posterLink = new Element();
   const reset = new Element();
   const notice = new Element();
@@ -88,13 +88,25 @@ function setup({ values = new Map(), storage, hash = "", search = "", videoIds =
     const chapterLink = new Element();
     chapterLinks.push(chapterLink);
     const chapter = new Element();
-    chapter.dataset.chapterSeconds = "90";
+    chapter.dataset.chapterSeconds = timestampSeconds;
     chapter.querySelector = () => chapterLink;
     panel.querySelectorAll = () => [chapter];
     panel.querySelector = () => ({ textContent: id });
     return panel;
   });
   const links = panels.map((panel) => Object.assign(new Element(), { hash: `#${panel.id}` }));
+  const list = new Element();
+  list.scrollTop = 0;
+  list.getBoundingClientRect = () => ({ top: 100, bottom: 300 });
+  menu.querySelector = () => list;
+  links.forEach((link, index) => {
+    link.closest = () => ({
+      getBoundingClientRect: () => ({
+        top: 100 + index * 60 - list.scrollTop,
+        bottom: 160 + index * 60 - list.scrollTop,
+      }),
+    });
+  });
   slot.player.srcdoc = panels[0].dataset.poster;
   const series = {
     dataset: { title: "Spiel" },
@@ -168,7 +180,7 @@ function setup({ values = new Map(), storage, hash = "", search = "", videoIds =
     get player() { return slot.player; },
     get api() { return instances.at(-1); },
     posterLink, reset, notice, preferenceNote, previewNote, values, panels, warnings,
-    autoNext, manualPlay, controls, externalVideo, hint, chapterLinks, requests, calls, instances, location, links, window,
+    autoNext, manualPlay, controls, externalVideo, hint, chapterLinks, requests, calls, instances, location, links, window, menu, list,
     expire: () => { for (const callback of [...timers.values()]) callback(); },
     select: (index, eventName = "hashchange") => {
       location.hash = `#${panels[index].id}`;
@@ -177,6 +189,25 @@ function setup({ values = new Map(), storage, hash = "", search = "", videoIds =
     activate: async () => { click(posterLink); await flush(); },
   };
 }
+
+test("markiert Hash-Einstiege und hält aktive Folgen in langen Listen sichtbar", () => {
+  const videoIds = Array.from({ length: 60 }, (_, index) => `part-${index}`);
+  const state = setup({ videoIds, hash: "#video-part-49" });
+  assert.equal(state.links[49].attributes.get("aria-current"), "true");
+  assert.equal(state.list.scrollTop, 2800);
+  assert.equal(state.panels[49].hidden, false);
+  assert.equal(state.requests.length, 0);
+  state.select(0);
+  assert.equal(state.list.scrollTop, 0);
+  assert.equal(state.links[49].attributes.get("aria-current"), undefined);
+  assert.equal(state.links[0].attributes.get("aria-current"), "true");
+  state.select(59, "popstate");
+  assert.equal(state.list.scrollTop, 3400);
+  state.list.scrollTop = 0;
+  state.menu.open = true;
+  state.menu.dispatchEvent(new Event("toggle"));
+  assert.equal(state.list.scrollTop, 3400);
+});
 
 test("lädt ohne Aktivierung keine API und nur Vorschaubilder, auch bei Fragmentwechseln", () => {
   const state = setup();
@@ -326,6 +357,18 @@ test("ein Kapitelsprung im noch nicht gestarteten Player cue't nur und startet n
   assert.equal(state.calls[0][1].videoId, "first");
   assert.equal(state.calls[0][1].startSeconds, 90);
   assert.ok(!state.calls.some(([method]) => method === "play" || method === "load"));
+});
+
+test("Spielebesprechungs-Sprungmarken nutzen die gemeinsame Zeitmarkensteuerung ohne zusätzliche Freigabe", async () => {
+  const state = setup({ timestampSeconds: "12" });
+  assert.equal(click(state.chapterLinks[0]).defaultPrevented, false);
+  assert.equal(state.values.size, 0);
+  await state.activate();
+  state.api.emit("onStateChange", 1);
+  assert.equal(click(state.chapterLinks[0]).defaultPrevented, true);
+  assert.deepEqual(state.calls, [["seek", 12, true]]);
+  assert.equal(state.location.search, "?t=12");
+  assert.equal(click(state.chapterLinks[0], { ctrlKey: true }).defaultPrevented, false);
 });
 
 test("eigene Clip-URLs springen nur zu validierten Marken des gewählten Videos, ohne Autoplay", async () => {

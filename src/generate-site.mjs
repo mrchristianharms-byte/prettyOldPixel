@@ -159,7 +159,7 @@ export async function generateSite({
   }
   const cssFile = `assets/site.${hash(css).slice(0, 12)}.css`;
   const jsFile = `assets/video-series.${hash(seriesJs).slice(0, 12)}.js`;
-  const assets = new Map([[cssFile, css], [jsFile, seriesJs], ["assets/pico-LICENSE.txt", license], [".nojekyll", ""]]);
+  const assets = new Map([[cssFile, css], [jsFile, seriesJs], ["assets/pico-LICENSE.txt", license], [".nojekyll", ""], ...model.magazineLogoAssets]);
   const pages = renderSite(model, config, cssFile, jsFile);
   const budgets = validateSite(pages, assets, config);
   const manifest = {

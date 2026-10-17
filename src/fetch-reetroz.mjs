@@ -132,6 +132,8 @@ export async function loadReetrozCatalog({
   const options = { cacheDir, maxAgeDays, refresh, now, fetcher, cachedOnly };
   const index = await loadIndex({ ...options, maxAgeDays: indexMaxAgeDays });
   const byName = new Map(index.magazines.flatMap((entry) => entry.aliases.map((alias) => [normalizeMagazineName(alias), entry])));
+  const pcGamerUs = byName.get(normalizeMagazineName("PC Gamer (US)"));
+  if (pcGamerUs) byName.set(normalizeMagazineName("PC Gamer"), pcGamerUs);
 
   const magazines = new Map();
   for (const name of new Set(magazineNames)) {

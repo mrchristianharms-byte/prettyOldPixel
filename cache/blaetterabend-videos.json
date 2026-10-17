@@ -6,7 +6,7 @@
     "title": "Pretty Old Pixel",
     "url": "https://www.youtube.com/@PrettyOldPixel"
   },
-  "generatedAt": "2026-10-17T14:42:09.801Z",
+  "generatedAt": "2026-10-17T21:18:35.308Z",
   "count": 247,
   "videos": [
     {
@@ -183,6 +183,15 @@
             ],
             "year": 1999,
             "special": false
+          },
+          "pcgamesdatabase": {
+            "match": "issue",
+            "matchedBy": "month",
+            "title": "GameStar 1999-12",
+            "pageUrl": "https://www.pcgamesdatabase.de/gamestar.php?mag=gamestar&vol=12/1999#gamestar",
+            "readerUrl": null,
+            "downloadUrl": null,
+            "coverUrl": null
           },
           "kultmags": null,
           "reetroz": null
@@ -424,6 +433,15 @@
             ],
             "year": 1999,
             "special": false
+          },
+          "pcgamesdatabase": {
+            "match": "issue",
+            "matchedBy": "month",
+            "title": "GameStar 1999-12",
+            "pageUrl": "https://www.pcgamesdatabase.de/gamestar.php?mag=gamestar&vol=12/1999#gamestar",
+            "readerUrl": null,
+            "downloadUrl": null,
+            "coverUrl": null
           },
           "kultmags": null,
           "reetroz": null
@@ -715,6 +733,15 @@
             "year": 1991,
             "special": false
           },
+          "amr": {
+            "match": "issue",
+            "matchedBy": "number",
+            "title": "Amiga Action #25 10/1991",
+            "pageUrl": "https://amr.abime.net/issue_98",
+            "readerUrl": null,
+            "downloadUrl": null,
+            "coverUrl": null
+          },
           "kultmags": null,
           "reetroz": null
         }
@@ -739,6 +766,15 @@
             "year": 1999,
             "special": false
           },
+          "pcgamesdatabase": {
+            "match": "issue",
+            "matchedBy": "month",
+            "title": "GameStar 1999-06",
+            "pageUrl": "https://www.pcgamesdatabase.de/gamestar.php?mag=gamestar&vol=06/1999#gamestar",
+            "readerUrl": null,
+            "downloadUrl": null,
+            "coverUrl": null
+          },
           "kultmags": null,
           "reetroz": null
         },
@@ -752,6 +788,15 @@
             ],
             "year": 1991,
             "special": false
+          },
+          "amr": {
+            "match": "issue",
+            "matchedBy": "number",
+            "title": "Amiga Action #25 10/1991",
+            "pageUrl": "https://amr.abime.net/issue_98",
+            "readerUrl": null,
+            "downloadUrl": null,
+            "coverUrl": null
           },
           "kultmags": null,
           "reetroz": null
@@ -777,6 +822,15 @@
             "year": 1999,
             "special": false
           },
+          "pcgamesdatabase": {
+            "match": "issue",
+            "matchedBy": "month",
+            "title": "GameStar 1999-06",
+            "pageUrl": "https://www.pcgamesdatabase.de/gamestar.php?mag=gamestar&vol=06/1999#gamestar",
+            "readerUrl": null,
+            "downloadUrl": null,
+            "coverUrl": null
+          },
           "kultmags": null,
           "reetroz": null
         }
@@ -800,6 +854,15 @@
             ],
             "year": 1999,
             "special": false
+          },
+          "pcgamesdatabase": {
+            "match": "issue",
+            "matchedBy": "month",
+            "title": "GameStar 1999-06",
+            "pageUrl": "https://www.pcgamesdatabase.de/gamestar.php?mag=gamestar&vol=06/1999#gamestar",
+            "readerUrl": null,
+            "downloadUrl": null,
+            "coverUrl": null
           },
           "kultmags": null,
           "reetroz": null
@@ -1324,7 +1387,15 @@
             "special": false
           },
           "kultmags": null,
-          "reetroz": null
+          "reetroz": {
+            "match": "issue",
+            "matchedBy": "month",
+            "title": "PC Gamer (US) #1 (May/June 1994)",
+            "pageUrl": "https://reetroz.com/issue/pc-gamer-us-1-6",
+            "readerUrl": "https://reetroz.com/issue/pc-gamer-us-1-6",
+            "downloadUrl": null,
+            "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-1-6.jpg"
+          }
         }
       ],
       "part": 2
@@ -1925,6 +1996,15 @@
             ],
             "year": 1997,
             "special": false
+          },
+          "pcgamesdatabase": {
+            "match": "issue",
+            "matchedBy": "month",
+            "title": "GameStar 1997-11",
+            "pageUrl": "https://www.pcgamesdatabase.de/gamestar.php?mag=gamestar&vol=11/1997#gamestar",
+            "readerUrl": null,
+            "downloadUrl": null,
+            "coverUrl": null
           },
           "kultmags": null,
           "reetroz": null
@@ -2549,6 +2629,15 @@
             "year": 1997,
             "special": false
           },
+          "pcgamesdatabase": {
+            "match": "issue",
+            "matchedBy": "month",
+            "title": "GameStar 1997-10",
+            "pageUrl": "https://www.pcgamesdatabase.de/gamestar.php?mag=gamestar&vol=10/1997#gamestar",
+            "readerUrl": null,
+            "downloadUrl": null,
+            "coverUrl": null
+          },
           "kultmags": null,
           "reetroz": null
         }
@@ -2603,6 +2692,15 @@
             ],
             "year": 1997,
             "special": false
+          },
+          "pcgamesdatabase": {
+            "match": "issue",
+            "matchedBy": "month",
+            "title": "GameStar 1997-10",
+            "pageUrl": "https://www.pcgamesdatabase.de/gamestar.php?mag=gamestar&vol=10/1997#gamestar",
+            "readerUrl": null,
+            "downloadUrl": null,
+            "coverUrl": null
           },
           "kultmags": null,
           "reetroz": null
@@ -2847,6 +2945,15 @@
             ],
             "year": 2000,
             "special": false
+          },
+          "pcgamesdatabase": {
+            "match": "issue",
+            "matchedBy": "month",
+            "title": "GameStar 2000-01",
+            "pageUrl": "https://www.pcgamesdatabase.de/gamestar.php?mag=gamestar&vol=01/2000#gamestar",
+            "readerUrl": null,
+            "downloadUrl": null,
+            "coverUrl": null
           },
           "kultmags": null,
           "reetroz": null

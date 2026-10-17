@@ -7,6 +7,8 @@ import { generateSite, validateSite } from "../src/generate-site.mjs";
 import { createSiteConfig } from "../src/site-config.mjs";
 import { normalizeSources } from "../src/site-data.mjs";
 import { renderSite } from "../src/site-render.mjs";
+import { loadSiteData } from "../src/site-data.mjs";
+import { cacheKultmagsLogo } from "../src/kultmags-logos.mjs";
 
 const channel = { id: "UC-magazines", title: "Pretty Old Pixel" };
 const videoId = (index) => `m${String(index).padStart(10, "0")}`;
@@ -59,17 +61,174 @@ function render(input = variedFixture(), pageSize = createSiteConfig().pageSize)
 
 const graph = (html) => JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/u)[1])["@graph"];
 
+test("übernimmt Kultmags-Logos offline als lokale Bildassets nur auf Zeitschriftenseiten", async (t) => {
+  const root = await mkdtemp(path.join(tmpdir(), "pixel-logos-"));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const cacheDirectory = path.join(root, "cache");
+  const cacheDir = path.join(cacheDirectory, "kultmags");
+  await mkdir(path.join(cacheDir, "magazines"), { recursive: true });
+  const bytes = Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aX1cAAAAASUVORK5CYII=", "base64");
+  const logo = await cacheKultmagsLogo("https://www.kultmags.com/PC-Games/title.png", cacheDir, {
+    fetchResponse: async (_url, options) => {
+      assert.equal(options.redirect, "error");
+      return new Response(bytes);
+    },
+  });
+  const source = fixture(1);
+  for (const [name, data] of [
+    ["youtube-videos", source.videos], ["youtube-playlists", source.playlists], ["blaetterabend-videos", source.magazines],
+  ]) await writeFile(path.join(cacheDirectory, `${name}.json`), JSON.stringify(data));
+  await writeFile(path.join(cacheDir, "index.json"), JSON.stringify({ magazines: [{ name: "PC-Games" }] }));
+  await writeFile(path.join(cacheDir, "magazines", "pc-games.json"), JSON.stringify({
+    name: "PC-Games", url: "https://www.kultmags.com/mags.php?folder=UEMtR2FtZXM%3D", logo,
+  }));
+  const outputDirectory = path.join(root, "docs");
+  const result = await generateSite({ cacheDirectory, outputDirectory, logger: { log() {}, warn() {} } });
+  assert.ok(result.pages > 0);
+  const detail = await readFile(path.join(outputDirectory, "zeitschriften/pc-games/index.html"), "utf8");
+  assert.ok(detail.includes(`src="../../assets/magazine-logos/${logo.file}"`));
+  assert.ok(detail.includes('alt="PC Games – Zeitschriftenlogo"'));
+  assert.ok(detail.includes("Logoquelle: kultmags.com"));
+  assert.ok(!detail.includes('<img src="https://www.kultmags.com'));
+  assert.deepEqual(await readFile(path.join(outputDirectory, "assets/magazine-logos", logo.file)), bytes);
+  const model = await loadSiteData(cacheDirectory);
+  const pages = renderSite(model, createSiteConfig(), "assets/test.css");
+  for (const [file, page] of pages) {
+    if (file === "zeitschriften/pc-games/index.html") continue;
+    assert.ok(!page.html.includes('class="magazine-logo"'), file);
+  }
+  await writeFile(path.join(cacheDir, "logos", logo.file), "beschädigt");
+  await assert.rejects(loadSiteData(cacheDirectory), /Bildformat|Logo-Inhalt/u);
+});
+
+test("lehnt nicht-bildliche und übergroße Kultmags-Logoantworten ab", async (t) => {
+  const cacheDir = await mkdtemp(path.join(tmpdir(), "pixel-invalid-logo-"));
+  t.after(() => rm(cacheDir, { recursive: true, force: true }));
+  for (const bytes of [Buffer.from("<html>Fehler</html>"), Buffer.alloc(2 * 1024 * 1024 + 1)]) {
+    await assert.rejects(cacheKultmagsLogo("https://www.kultmags.com/title.png", cacheDir, {
+      fetchResponse: async () => new Response(bytes),
+    }), /Bildformat|2 MiB/u);
+  }
+});
+
 test("zeigt Zeitschriften als Kachelliste mit Titel, Videos und Jahrgängen", () => {
   const { pages } = render();
   const html = pages.get("zeitschriften/index.html").html;
   const grid = html.match(/<ul class="catalog-grid">[\s\S]*?<\/ul>/u)[0];
   assert.equal((grid.match(/<li><h2><a /gu) ?? []).length, 3);
-  assert.ok(grid.includes('href="amiga-joker/">Amiga Joker</a></h2><p class="meta">1 Video</p><p class="meta">Gesamtlaufzeit: 0:02 h</p><p class="meta">1 Jahrgang</p>'));
+  assert.ok(grid.includes('href="amiga-joker/">Amiga Joker</a></h2><p class="meta">1 Jahrgang</p><p class="meta">1 Video</p><p class="meta">Gesamtlaufzeit: 0:02 h</p>'));
   assert.ok(grid.includes('<p class="meta">2 Jahrgänge</p>'));
   const detail = pages.get("zeitschriften/amiga-joker/index.html").html;
   assert.ok(detail.includes("<p>1 Video zu Amiga Joker."));
-  assert.ok(detail.includes(">1991</a> (1 Video)"));
+  assert.ok(!detail.includes('class="year-list"'));
+  assert.ok(!pages.has("zeitschriften/amiga-joker/1991/index.html"));
+  assert.ok(pages.get("zeitschriften/pc-games/index.html").html.includes('class="year-list"'));
+  for (const page of pages.values()) {
+    assert.ok(!/href="[^"]*amiga-joker\/1991\//u.test(page.html));
+  }
   assert.ok(grid.indexOf(">Amiga Joker</a>") < grid.indexOf(">PC Games</a>"));
+});
+
+test("entfernt frühere Jahrgangsseiten beim Wechsel zu nur einem Jahrgang", async (t) => {
+  const directory = await mkdtemp(path.join(tmpdir(), "pixel-single-year-"));
+  t.after(() => rm(directory, { recursive: true, force: true }));
+  const cacheDirectory = path.join(directory, "cache");
+  const outputDirectory = path.join(directory, "docs");
+  await mkdir(cacheDirectory);
+  const input = fixture(2);
+  input.magazines.videos[1].magazines[0].issue = issue(1993, [1]);
+  async function build() {
+    for (const [name, data] of [["youtube-videos", input.videos], ["youtube-playlists", input.playlists], ["blaetterabend-videos", input.magazines]]) {
+      await writeFile(path.join(cacheDirectory, `${name}.json`), JSON.stringify(data));
+    }
+    await generateSite({ cacheDirectory, outputDirectory, logger: { log() {}, warn() {} } });
+  }
+  await build();
+  for (const year of [1992, 1993]) {
+    assert.ok(await stat(path.join(outputDirectory, `zeitschriften/pc-games/${year}/index.html`)));
+  }
+  input.magazines.videos[1].magazines[0].issue = issue(1992, [12]);
+  await build();
+  for (const year of [1992, 1993]) {
+    await assert.rejects(stat(path.join(outputDirectory, `zeitschriften/pc-games/${year}/index.html`)), { code: "ENOENT" });
+  }
+  const sitemap = await readFile(path.join(outputDirectory, "sitemap.xml"), "utf8");
+  assert.ok(!/zeitschriften\/pc-games\/199[23]\//u.test(sitemap));
+});
+
+test("verlinkt unbekannte Ausgaben mehrerer Zeitschriften auf eine gemeinsame Videodetailseite", () => {
+  const input = fixture(1);
+  input.magazines.videos[0].magazines = ["ASM", "PC Player", "PC Power"].map((name) => ({
+    ...mention(null, name),
+    kultmags: { match: "magazine", pageUrl: "https://www.kultmags.com/mags.php?folder=test" },
+  }));
+  const { model, pages, config } = render(input);
+  const video = model.videoById.get(videoId(0));
+  const route = `zeitschriften/videos/${video.id}/`;
+  assert.equal(video.detailRoute, route);
+  assert.equal([...pages.keys()].filter((file) => file.startsWith("zeitschriften/videos/")).length, 1);
+  for (const source of ["zeitschriften/asm/", "zeitschriften/pc-player/", "zeitschriften/pc-power/", "news/"]) {
+    const html = pages.get(`${source}index.html`).html;
+    const target = `${config.href(route, source)}#video-${video.id}`;
+    assert.ok(html.includes(`href="${target}">${video.title}</a>`));
+    assert.ok(html.includes(`class="video-entry-thumbnail" href="${target}"`));
+  }
+  const detail = pages.get(`${route}index.html`).html;
+  assert.ok(detail.includes(`id="video-${video.id}"`));
+  assert.ok(detail.includes('class="detail-player"'));
+  assert.ok(detail.includes("<h3>Videobeschreibung</h3>"));
+  assert.ok(detail.includes("Die genaue Heftausgabe ist unbekannt"));
+  assert.ok(detail.includes("kultmags: Zeitschriftenübersicht"));
+  for (const name of ["ASM", "PC Player", "PC Power"]) assert.ok(detail.includes(`<h4>${name}</h4>`));
+  const schema = graph(detail).find((item) => item["@type"] === "VideoObject");
+  assert.equal(schema.sameAs, video.url);
+  assert.ok(schema.about.every((item) => item["@type"] === "Periodical"));
+  assert.ok(!detail.includes('"@type":"PublicationIssue"'));
+});
+
+test("erhält unbekannte und uneindeutige Heftdaten auf Videodetailseiten ohne erfundene Ausgabe", () => {
+  for (const data of [null, issue(1993, [], { label: "1993" })]) {
+    const input = fixture(1);
+    input.magazines.videos[0].magazines = [mention(data)];
+    const { model, pages } = render(input);
+    const video = model.videoById.get(videoId(0));
+    assert.equal(model.magazines[0].issues.size, 0);
+    const html = pages.get(`${video.detailRoute}index.html`).html;
+    assert.ok(html.includes("<h4>PC Games"));
+    assert.ok(html.includes("Die genaue Heftausgabe ist unbekannt."));
+    assert.ok(!html.includes('"@type":"PublicationIssue"'));
+  }
+});
+
+test("zeigt Archivlinks als dritte Metadatenspalte unter dem Player mit sichtbaren Texten statt separater Sektion", () => {
+  const { pages } = render();
+  const html = [...pages].find(([file, page]) => file.includes("/ausgaben/") && page.html.includes("PC Games 11/1992"))[1].html;
+  const fields = html.match(/<dl class="detail-meta">([\s\S]*?)<\/dl>/u)[1];
+  assert.deepEqual([...fields.matchAll(/<dt>(.*?)<\/dt>/gu)].map((match) => match[1]),
+    ["Zeitschrift", "Ausgabe", "Archivlinks"]);
+  assert.ok(fields.includes("Kein passender Archivlink vorhanden."));
+  assert.ok(!html.includes("<h2>Archivlinks</h2>"));
+  const input = fixture(1);
+  input.magazines.videos[0].magazines[0].kultmags = archive("1992-11");
+  const linked = [...render(input).pages].find(([file]) => file.includes("/ausgaben/"))[1].html;
+  assert.ok(linked.includes('<span>kultmags: Heft lesen</span>'));
+  assert.ok(linked.indexOf('class="detail-player"') < linked.indexOf("<dt>Archivlinks</dt>"));
+});
+
+test("behält Heftjahr, Nummer und Monate intern, ohne sie als zusätzliche Metadatenspalten zu zeigen", () => {
+  const input = fixture(1);
+  input.magazines.videos[0].magazines[0].issue = issue(1997, [10], { number: 1, label: "1/1997" });
+  const { model, pages } = render(input);
+  const entity = [...model.magazines[0].issues.values()][0];
+  assert.equal(entity.year, 1997);
+  assert.equal(entity.number, 1);
+  assert.deepEqual(entity.months, [10]);
+  assert.ok(!pages.has("zeitschriften/pc-games/1997/index.html"));
+  assert.equal(model.videoById.get(videoId(0)).magazines[0].yearRoute, null);
+  const html = pages.get(`${entity.route}index.html`).html;
+  for (const label of ["Erscheinungsjahr", "Heftnummer", "Monat(e)"]) {
+    assert.ok(!html.includes(`<dt>${label}</dt>`));
+  }
 });
 
 test("summiert Laufzeiten je Zeitschrift unabhängig von der Heftzuordnung und markiert Teilsummen", () => {
@@ -85,7 +244,7 @@ test("summiert Laufzeiten je Zeitschrift unabhängig von der Heftzuordnung und m
   const { pages } = render(input);
   const grid = pages.get("zeitschriften/index.html").html.match(/<ul class="catalog-grid">[\s\S]*?<\/ul>/u)[0];
   assert.ok(grid.includes('>Amiga Joker</a></h2><p class="meta">2 Videos</p><p class="meta">Gesamtlaufzeit: 1:01 h</p></li>'));
-  assert.ok(grid.includes('>PC Games</a></h2><p class="meta">3 Videos</p><p class="meta">Bekannte Laufzeit: 1:01 h (2 von 3 Videos)</p><p class="meta">1 Jahrgang</p>'));
+  assert.ok(grid.includes('>PC Games</a></h2><p class="meta">1 Jahrgang</p><p class="meta">3 Videos</p><p class="meta">Bekannte Laufzeit: 1:01 h (2 von 3 Videos)</p>'));
   assert.ok(grid.includes('>Unbekannte Laufzeit</a></h2><p class="meta">1 Video</p><p class="meta">Gesamtlaufzeit unbekannt</p></li>'));
   assert.ok(!grid.includes("0 Jahrgänge"));
 });
@@ -100,6 +259,21 @@ test("lässt die Jahrgangsanzahl bei ACE mit bekannter Heftnummer ohne Heftjahr 
   assert.ok(grid.includes('>ACE</a></h2><p class="meta">1 Video</p><p class="meta">Gesamtlaufzeit: 0:02 h</p></li>'));
   assert.ok(!grid.includes("Jahrgang"));
   assert.ok(pages.get("zeitschriften/ace/index.html").html.includes("#49"));
+  const entity = [...model.magazines[0].issues.values()][0];
+  assert.equal(entity.year, null);
+  assert.equal(entity.label, "#49");
+  assert.equal(entity.route, "zeitschriften/ace/ausgaben/ace-49/");
+  const overview = pages.get("zeitschriften/ace/index.html").html;
+  assert.ok(overview.includes('href="ausgaben/ace-49/">ACE #49</a>'));
+  assert.ok(overview.includes(`href="ausgaben/ace-49/#video-${videoId(0)}"`));
+  assert.ok(overview.includes(`class="video-entry-thumbnail" href="ausgaben/ace-49/#video-${videoId(0)}"`));
+  const detail = pages.get(`${entity.route}index.html`).html;
+  assert.ok(detail.includes(`id="video-${videoId(0)}"`));
+  assert.ok(detail.includes("Kein passender Archivlink vorhanden."));
+  const schema = graph(detail).find((item) => item["@type"] === "PublicationIssue");
+  assert.equal(schema.issueNumber, 49);
+  assert.ok(!("temporalCoverage" in schema));
+  assert.ok(!detail.includes("ACE #49 null"));
 });
 
 test("paginiert den Zeitschriftenindex erst ab der 61. Kachel", () => {
@@ -191,7 +365,9 @@ test("ergänzt fehlende Heftdaten nur aus identischem eindeutigem Archivtreffer"
   input.magazines.videos[12].magazines[0].reetroz = { match: "folder", pageUrl: "https://reetroz.com/magazines/cgw" };
   const unresolved = normalizeSources(input).videoById.get(videoId(12)).magazines[0];
   assert.equal(unresolved.issue.year, null);
-  assert.equal(unresolved.issue.route, null);
+  assert.equal(unresolved.issue.label, "#148");
+  assert.ok(unresolved.issue.route);
+  assert.notEqual(unresolved.issue.route, entity.route);
 });
 
 test("meldet widersprüchliche Archivdaten statt unterschiedliche Hefte zu verschmelzen", () => {
@@ -264,11 +440,15 @@ test("zeigt Archivsymbole einmal in Klammern neben dem Ausgabentitel statt an Vi
   for (const entry of input.magazines.videos) entry.magazines[0].kultmags = links;
   const { model, pages } = render(input);
   const entity = [...model.magazines[0].issues.values()][0];
-  for (const route of ["zeitschriften/pc-games/", "zeitschriften/pc-games/1992/"]) {
+  for (const route of ["zeitschriften/pc-games/"]) {
     const html = pages.get(`${route}index.html`).html;
-    const entries = [...html.matchAll(/<li><div class="issue-video-heading"><a href="[^"]*#video-[^"]*">[\s\S]*?<\/div>[\s\S]*?<\/li>/gu)];
+    const entries = [...html.matchAll(/<li><article>[\s\S]*?<\/article><\/li>/gu)];
     assert.equal(entries.length, 2);
     for (const [entry] of entries) {
+      const href = entry.match(/<h4><a href="([^"]+)"/u)[1];
+      assert.ok(entry.includes(`class="video-entry-thumbnail" href="${href}"`));
+      assert.ok(entry.includes('loading="lazy"'));
+      assert.ok(entry.includes('class="video-entry-content"'));
       assert.ok(!entry.includes('class="archive-icon"'));
       assert.ok(!entry.includes('class="archive-links"'));
     }
@@ -289,7 +469,7 @@ test("zeigt Archivsymbole einmal in Klammern neben dem Ausgabentitel statt an Vi
     assert.equal((html.match(/class="archive-links"/gu) ?? []).length, 1);
   }
   const detail = pages.get(`${entity.route}index.html`).html;
-  assert.equal((detail.match(/class="archive-icon"/gu) ?? []).length, 3);
+  assert.equal((detail.match(/class="archive-icon archive-icon-labelled"/gu) ?? []).length, 3);
 });
 
 test("zeigt bei bloßem Archivordner keine Lese- oder Downloadsymbole", () => {
@@ -307,16 +487,18 @@ test("zeigt bei bloßem Archivordner keine Lese- oder Downloadsymbole", () => {
 });
 
 test("paginiert Übersichten mit 60 Videos, behält jedoch alle Videoteile auf einer Ausgabenseite", () => {
-  const { model, pages, config } = render(fixture(125));
+  const input = fixture(126);
+  input.magazines.videos[125].magazines[0].issue = issue(1993, [1]);
+  const { model, pages, config } = render(input);
   const magazine = model.magazines[0];
   const entity = [...magazine.issues.values()][0];
   for (const route of [magazine.route, `${magazine.route}1992/`]) {
     const first = pages.get(`${route}index.html`).html;
     const second = pages.get(`${route}seite/2/index.html`).html;
     const third = pages.get(`${route}seite/3/index.html`).html;
-    assert.equal((first.match(/<li><div class="issue-video-heading"><a href="[^"]*#video-m/gu) ?? []).length, 60);
-    assert.equal((second.match(/<li><div class="issue-video-heading"><a href="[^"]*#video-m/gu) ?? []).length, 60);
-    assert.equal((third.match(/<li><div class="issue-video-heading"><a href="[^"]*#video-m/gu) ?? []).length, 5);
+    assert.equal((first.match(/<li><article>/gu) ?? []).length, 60);
+    assert.equal((second.match(/<li><article>/gu) ?? []).length, 60);
+    assert.equal((third.match(/<li><article>/gu) ?? []).length, route === magazine.route ? 6 : 5);
     assert.ok(second.includes('rel="canonical" href="./"'));
     assert.ok(second.includes('href="../../" rel="prev"'));
   }
@@ -443,7 +625,7 @@ test("aktualisiert betroffene Seiten bei neuen Heften und Links, entfernt alte A
   await writeFile(legacyFile, "Veralteter technischer Ausgabepfad");
   const manifest = () => readFile(path.join(outputDirectory, "build-manifest.json"), "utf8").then(JSON.parse);
   const initial = await manifest();
-  const untouched = "zeitschriften/amiga-joker/1991/index.html";
+  const untouched = "zeitschriften/amiga-joker/index.html";
   const removedIssue = [...normalizeSources(input).magazines.find((item) => item.id === "pc-games").issues.values()].find((item) => item.months[0] === 12);
   input.magazines.videos[2].magazines = [mention(issue(1994, [2]))];
   await save();
@@ -467,7 +649,8 @@ test("aktualisiert betroffene Seiten bei neuen Heften und Links, entfernt alte A
   await save();
   await generateSite(options);
   const newMagazine = await manifest();
-  assert.ok(newMagazine.pages["zeitschriften/neue-zeitschrift/1987/index.html"]);
+  assert.ok(newMagazine.pages["zeitschriften/neue-zeitschrift/index.html"]);
+  assert.ok(!newMagazine.pages["zeitschriften/neue-zeitschrift/1987/index.html"]);
   assert.ok((await readFile(path.join(outputDirectory, "news/index.html"), "utf8")).includes("/zeitschriften/neue-zeitschrift/"));
   const repeat = await generateSite(options);
   assert.equal(repeat.files, repeat.reused);

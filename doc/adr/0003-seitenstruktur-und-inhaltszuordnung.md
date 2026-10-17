@@ -90,7 +90,7 @@ Folgenfortsetzung auf Spieleseiten ergänzen den aktivierten Player.
 
 ### 1. Navigation und gemeinsame Detailseiten
 
-Die Hauptnavigation enthält News und die fünf Inhaltsbereiche:
+Die Hauptnavigation enthält News und die sieben Inhaltsbereiche:
 
 1. News
 2. Blätterabend / Zeitschriften
@@ -98,13 +98,26 @@ Die Hauptnavigation enthält News und die fünf Inhaltsbereiche:
 4. Hardware
 5. Retrospektiven
 6. Interviews und Gespräche
+7. re.consider
+8. Sonstiges
+
+`/reconsider/` sammelt automatisch Videos mit der Bezeichnung `re.consider`
+im Titel. Die Einzelvideo-Spielvorstellungen verwenden das News-Eintragslayout
+mit Seitennavigation; sie benötigen keine eigene Spieleseite und fallen
+nicht unter Sonstiges. Bestehende weitere Zuordnungen bleiben erhalten.
 
 Die Startseite verlinkt diese Bereiche und hebt die News hervor. Stabile
 Detailseiten je Spiel bzw. Ausgabe bleiben erhalten. Ein kanalweiter Gesamtkatalog
 wird nicht mehr erzeugt: `/videos/` samt Folgeseiten, Navigation und Verweisen
 entfällt. Alte Ausgaben werden beim Build aus Dateien, Sitemap und Manifest entfernt.
-Der vollständige Video-Cache bleibt die Datenbasis; nicht zugeordnete ältere Videos
-erhalten keine Ersatzseite. Die begrenzte News-Übersicht bleibt bestehen.
+Der vollständige Video-Cache bleibt die Datenbasis. Seit der ergänzenden
+Nutzerentscheidung vom 2026-10-17 zeigt `/sonstiges/` automatisch alle Videos
+ohne veröffentlichte Spielzuordnung, Blätterabend-/Zeitschriftenzuordnung
+oder bestätigten Themenbereich. News und bloße Playlist-Mitgliedschaften
+schließen ein Video nicht aus. Neue Zuordnungen entfernen es automatisch
+aus Sonstiges. Die Darstellung entspricht den News-Videoeinträgen, ist jedoch
+mit 60 Einträgen pro Seite paginiert und enthält auch unbekannte
+Veröffentlichungsdaten am Ende. Die begrenzte News-Übersicht bleibt bestehen.
 Die Startseite zeigt statt neuer Videos ein responsives Statistikraster mit
 Video-, Zeitschriften-, Heft-, Spiele- und Playlistzahlen sowie bekannten
 Videostunden. Der älteste öffentliche Upload belegt den Beginn der erfassten
@@ -221,8 +234,16 @@ Sammelplaylists können mehrere Spiele enthalten. Erforderlich sind eine
 bestätigte Zuordnung der Playlist zu einem Spiel und die Mitgliedschaften der
 Videos. Mehrere Playlists dürfen demselben Spiel zugeordnet werden.
 Die Implementierung pflegt diese Identitäten ausdrücklich in
-[`src/data-games.mjs`](../../src/data-games.mjs): 144 geprüfte Einzelspiel-Identitäten
-einschließlich der nicht mit re.play betitelten 1942-Playlist. Auch die
+[`src/data-games.mjs`](../../src/data-games.mjs): 147 geprüfte Einzelspiel-Identitäten
+einschließlich der nicht mit re.play betitelten 1942-Playlist und der manuell
+bestätigten Patrizier-Reihe sowie Airships: Conquer the Skies und Hyperspace
+Delivery Service. Nur diese beiden re.invented-Spielreihen werden nach
+Nutzerentscheidung manuell über vier bzw. sechs Video-IDs aufgenommen;
+die gemischte re.invented-Playlist wird keinem einzelnen Spiel zugeordnet.
+Eine Spieldefinition darf ohne Quellplaylist
+auskommen, wenn ihre Videos explizit über `videoIds` bestätigt sind.
+Die Zwei-Video-Schwelle bleibt unverändert; Titelähnlichkeit erzeugt keine
+automatische Zuordnung. Auch die
 Railroad-Tycoon-Deluxe-Playlist aus re.connect ist nach Mitgliederprüfung diesem
 Spiel zugeordnet; die allgemeine Formatvorstellung ist explizit ausgeschlossen.
 Bekannte Quellschreibweisen und Zusatzbeiträge werden dort ebenfalls gepflegt.

@@ -5,7 +5,7 @@ export const sectionDefinitions = [
     id: "hardware", name: "Hardware",
     description: "Retro-Hardware, Restaurationsprojekte und Computergrundlagen von Pretty Old Pixel.",
     playlistIds: ["PLZW5k3rtbudpYvBYzcMjUkG6ekcZB5yZB", "PLZW5k3rtbudofBuRooZLI_UGpUAkdzFDm"],
-    excludedVideoIds: ["bwVnfQJ-WEw"],
+    excludedVideoIds: [],
     videos: [
       { id: "UMUCVO8kbCo", topic: "Kryoflux: USB-Floppy-Disk-Controller" },
       { id: "HGr6ykSrhYk", topic: "1541 Ultimate 2: Floppy-Emulator für C64/C128" },
@@ -14,6 +14,7 @@ export const sectionDefinitions = [
       { id: "2ITRFLHFtH4", topic: "MS-DOS-PC restaurieren, Teil 1" },
       { id: "qOOlEO1ShJA", topic: "MS-DOS-PC restaurieren, Teil 2" },
       { id: "XDvGVislnJg", topic: "Hardware und Spieleverpackungen reinigen und reparieren", note: "Tipps zur Reinigung von Hardware und Spieleverpackungen." },
+      { id: "bwVnfQJ-WEw", topic: "Spieleverpackungen aufwerten" },
       { id: "MAaf4h2gqrY", topic: "PC-Grundlagen: Power On Self Test" },
       { id: "m6qIJLYZyk4", topic: "PC-Grundlagen: Betriebssystem laden" },
       { id: "HneOBahuhe0", topic: "Audio-Switch selbst bauen" },
@@ -35,6 +36,12 @@ export const sectionDefinitions = [
         "reYzejxTZDk", "3bIdBX9yoJA", "vZBLdIEngXY", "hyDog4_30GY",
         "TITaSYtnM-M", "f24PQTYQdf8", "4KrDqSCgFNw", "LuWmntgoZEo",
       ].map((id, index) => ({ id, topic: "Geschichte der Flugsimulationen", order: index + 1 })),
+      ...[
+        "4s7lDupOgWg", "TAsByu_hCwo", "E23VT0epyHo",
+        "hJdFOecpQvE", "HoLJ5JRh1Jw", "19oYQ-fUt70",
+      ].map((id, index) => ({
+        id, topic: "Immersion in Videospielen", order: index + 1, people: ["Mata Haggis-Burridge"],
+      })),
     ],
   },
   {

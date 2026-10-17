@@ -19,6 +19,8 @@ Dateipfade im Text beziehen sich auf dessen Wurzel.
 - [Tests](#tests)
 - [YouTube-Videos](#youtube-videos-cachen)
 - [YouTube-Playlists](#youtube-playlists-cachen)
+- [YouTube-Transkripte](#youtube-transkripte-einmalig-cachen)
+- [Spielebesprechungen aus Transkripten](#spielebesprechungen-aus-transkripten)
 - [Blätterabend-Aufbereitung und Archive](#blätterabend-videos-auswerten)
 - [Architekturentscheidungen](#architekturentscheidungen)
 - [GitHub Pages](#github-pages-veröffentlichen)
@@ -72,12 +74,23 @@ Spieleindex und Spieleseiten, Hardware, Retrospektiven sowie Interviews und Gesp
 Datenschutz, Sitemap, Robots-Datei und 404-Seite. Alle Inhalte stehen direkt im
 HTML. Nur Spiel-/Ausgabenseiten laden ein kleines lokales JavaScript für die Auswahl
 von Video und Beschreibung; ohne JavaScript sind alle Beschreibungen sichtbar.
-**Es gibt weder einen Gesamtkatalog unter `/videos/` noch separate Videoseiten.**
+Es gibt keinen Gesamtkatalog unter `/videos/`. Blätterabend-Videos ohne
+eindeutige Ausgabenseite oder Spieleseite erhalten eine Detailseite unter
+`/zeitschriften/videos/<video-id>/`, mit demselben Player und denselben
+Videoinformationen wie Ausgabenseiten, ohne erfundene Heftdaten.
+Videos unter „Sonstiges“ erhalten entsprechend eine eigene Seite unter
+`/sonstiges/<video-id>/`. Titel und Vorschaubilder in Sonstiges und News
+verlinken auf diese Seiten; später bestätigte Spiel- oder Themenzuordnungen
+ersetzen die Sonstiges-Zuordnung, und ihre bisherigen Detailseiten entfallen.
 Videos erscheinen auf thematischen Seiten sowie in der begrenzten News-Übersicht.
 Nicht zugeordnete ältere Videos bleiben nur im vollständigen JSON-Cache erhalten.
 Beim Build werden alte Katalogseiten einschließlich Sitemap-/Manifest-Einträgen entfernt.
 News und Themenübersichten führen zum
-Videoabschnitt einer vorhandenen Ausgabe bzw. eines Spiels, sonst direkt zu YouTube.
+Videoabschnitt einer vorhandenen Ausgabe bzw. eines Spiels, bei Blätterabenden
+ersatzweise zur Videodetailseite. Auch Hardware, projects (Retrospektiven),
+Interviews, re.consider und Sonstiges verlinken immer intern: Ohne Spiel-
+oder Ausgabeseite wird eine Videodetailseite unter dem ersten zugeordneten
+Themenbereich erzeugt und bei Mehrfachzuordnungen gemeinsam verwendet.
 
 Archivverweise auf Zeitschriftenseiten erscheinen als kleine Ordner-, Lese-
 und Downloadsymbole in Klammern neben dem jeweiligen Zeitschriften-/Ausgabentitel,
@@ -144,11 +157,36 @@ keine externen Ressourcen oder Laufzeit-JavaScript.
   Folgenreihenfolge. Die zwei Originaltitel mit `#11` bleiben unverändert;
   die Reihenfolge ergibt sich aus der bestätigten Themenreihe, nicht aus
   einer bloßen Titelsortierung. Es gibt keine eigenen Themenunterseiten.
+  Die sechs englischsprachigen Beiträge mit Mata Haggis-Burridge sind
+  manuell dem Thema „Immersion in Videospielen“ zugeordnet, in der
+  Reihenfolge Part 1/6 bis Part 6/6, und entfallen aus Sonstiges.
+  Zusätzlich ordnet die Titelregel `^\s*Themenblock\s+Vietnam\b`
+  (ohne Beachtung der Groß-/Kleinschreibung) passende Videos automatisch
+  dem Thema „Themenblock Vietnam“ zu, aktuell zwei Beiträge. Diese Gruppe
+  folgt den manuell gepflegten Themen; ihre Videos stehen chronologisch,
+  unbekannte Veröffentlichungsdaten zuletzt. Explizite Zuordnungen und
+  Ausschlüsse haben Vorrang. Neue passende Videos werden ohne manuelle
+  Video-ID-Liste aufgenommen und entfallen aus Sonstiges.
 - `/interviews/` enthält acht bestätigte Interviews/Gespräche mit sichtbaren
   Personen- und Themenangaben, neueste zuerst. Bekannte Spielzuordnungen
   werden wiederverwendet, nicht aus zufälligen Erwähnungen im Text erfunden.
   Dazu gehört auch das Interview mit Andreas und Oliver über die C64-Version
   von Eye of the Beholder, das nicht in der Interview-Playlist enthalten ist.
+- `/sonstiges/` enthält automatisch alle öffentlichen Videos ohne Zuordnung
+  zu einem veröffentlichten Spiel, Blätterabend/Zeitschriften oder einem der
+  bestätigten Themenbereiche. Die Liste verwendet dieselben Videoeinträge
+  wie News, neueste zuerst, unbekannte Veröffentlichungsdaten am Ende,
+  mit höchstens 60 Videos pro Seite. News und bloße Playlist-Mitgliedschaften
+  zählen nicht als thematische Zuordnung. Sobald ein Video anderweitig
+  einsortiert wird, entfällt es automatisch aus Sonstiges.
+- `/reconsider/` enthält automatisch alle öffentlichen Videos mit der
+  eigenständigen Bezeichnung `re.consider` im Titel, unabhängig von
+  Groß-/Kleinschreibung. Die Reihe stellt einzelne Spiele mit einem Video
+  pro Spiel vor. Die Seite verwendet dieselben Videoeinträge wie News,
+  neueste zuerst, mit höchstens 60 Videos pro Seite und unbekannten Daten
+  am Ende. Diese Videos entfallen aus Sonstiges; vorhandene weitere
+  Zuordnungen bleiben erhalten. Die Zwei-Video-Schwelle für Spieleseiten
+  wird dadurch nicht verändert.
 - `src/data-sections.mjs` hält explizite Video-IDs, Themen, bei Gesprächen Personen
   und bei Retrospektiven die Reihenfolge. Titel, Beschreibungen und bestätigte
   Playlist-Mitgliedschaften wurden hierfür geprüft. Änderungen der
@@ -156,8 +194,8 @@ keine externen Ressourcen oder Laufzeit-JavaScript.
   Neue Titel-/Playlist-Kandidaten werden beim Build als Prüfhinweis gemeldet.
   Fehlen bestätigte Beiträge im öffentlichen Cache, werden sie ausgelassen
   und bei vorhandenem Quellplaylist-Kontext ausdrücklich gemeldet.
-- Der reine Verpackungsbeitrag `bwVnfQJ-WEw` ist ausdrücklich von Hardware
-  ausgeschlossen. Der gemischte Beitrag `XDvGVislnJg` behandelt laut
+- Der Verpackungsbeitrag `bwVnfQJ-WEw` ist manuell re.ware (Hardware)
+  zugeordnet und erscheint nicht unter Sonstiges. Der gemischte Beitrag `XDvGVislnJg` behandelt laut
   Beschreibung Hardware-Reinigung und trägt einen entsprechenden Hinweis.
   re.list, re.collect und Community-Formate erhalten ohne bestätigte Zuordnung keine Themenübersicht.
 - Bereiche haben höchstens 60 Einträge pro Übersichtsseite. Fehlende
@@ -167,8 +205,11 @@ keine externen Ressourcen oder Laufzeit-JavaScript.
 - Startseite, Hauptnavigation, News und zugehörige Detailseiten
   verlinken die vorhandenen Bereiche. Die erweiterten Navigationslinks
   umbrechen auf schmalen Displays. Videolinks führen zu vorhandenen
-  Spiel-/Ausgabeabschnitten oder extern zu YouTube; keine zusätzlichen
-  Videoseiten, Player, Vorschaubilder oder Laufzeitscripte.
+  Spiel-/Ausgabeabschnitten, bei Sonstiges zu eigenen Videodetailseiten
+  sowie bei allen anderen Themen ersatzweise zu eigenen Videodetailseiten.
+  Die Sonstiges-Detailseiten verwenden den gemeinsamen Player und das
+  vorhandene Laufzeitskript; die Listen bleiben ohne Player. Vorschaubilder verwenden das
+  gemeinsame Videoeintrags-Widget und werden direkt von YouTube geladen.
 - Auch diese Seiten werden rein offline erzeugt und folgen den relativen
   URL-, Sitemap-, Größenbudget- und Änderungsdatum-Regeln des übrigen Builds.
   Kapitel-Zeitlinks und erwähnte Kanäle stehen auf den Spiel-/Ausgabenseiten.
@@ -200,12 +241,16 @@ nicht automatisch erzeugte Caches:
    `src/data-games.mjs` aufnehmen. Bekannte Ausschlüsse bleiben bestehen.
 3. Bei einem **neuen Spieltitel** eine eigene bestätigte Spielidentität in
    `src/data-games.mjs` anlegen: kanonischer Name, gegebenenfalls Plattform,
-   Quellplaylist und belegte Aliasse/Zusatzvideos. Ähnliche Namen, Nachfolger,
+   Quellplaylist oder explizit geprüfte `videoIds` sowie belegte Aliasse.
+   Eine Playlist ist bei einer vollständig manuell bestätigten Videoreihe
+   nicht erforderlich; die Zwei-Video-Schwelle gilt weiterhin. Ähnliche Namen, Nachfolger,
    Plattformversionen und Neuauflagen nicht ungeprüft zusammenlegen.
    Der Slug aus Name und Plattform ist zugleich der Schlüssel in
    `src/data-game-release-years.json`; bestehende IDs nicht beiläufig ändern.
    Eine Spieleseite entsteht erst ab zwei unterschiedlichen verfügbaren
-   Nicht-`re.minder`-Videos.
+   Nicht-`re.minder`-Videos. Ausnahme: genau ein verfügbares Video aus einer
+   bestätigten Spielplaylist, dessen Veröffentlichung höchstens zwei
+   Kalendermonate zurückliegt.
 4. Für neue **Hardware-, Retrospektiven- oder Gesprächsbeiträge** die konkrete
    Video-ID in `src/data-sections.mjs` nach Prüfung ergänzen. Thema und bei
    Gesprächen die Personen belegen; bei Retrospektiven zusätzlich die
@@ -269,16 +314,34 @@ erfordert zugleich aktualisierte Imports und Dokumentationsverweise.
   keine automatische Grundlage. Fehlende Jahre werden beim Build gemeldet
   und sichtbar als unbekannt angezeigt; ungültige Jahre oder Quellen brechen
   den Build ab. Neue Spielidentitäten benötigen ebenfalls einen Quellenbeleg.
-- Der aktuelle Katalog enthält 144 geprüfte Spielidentitäten aus den
-  143 re.play-Playlists und der ebenfalls geprüften 1942-Playlist. Zusätzlich
+- Der aktuelle Katalog enthält 147 geprüfte Spielidentitäten aus den
+  143 re.play-Playlists, der ebenfalls geprüften 1942-Playlist und der
+  manuell bestätigten Patrizier-Reihe mit 16 Videos einschließlich re.minder sowie Airships: Conquer
+  the Skies (vier Videos) und Hyperspace Delivery Service (sechs Videos)
+  ohne eigene Quellplaylist. Die beiden re.invented-Spiele verwenden explizite
+  `videoIds`, nicht die gesamte gemischte Formatplaylist. Die konkrete
+  Aufnahmeplattform bleibt mangels Beleg offen; Erscheinungsjahre sind
+  mit den Steam-Veröffentlichungen belegt. Andere re.invented-Titel bleiben
+  vorerst in Sonstiges. Zusätzlich
   ist die re.connect-Playlist zu Railroad Tycoon Deluxe demselben Spiel
   zugeordnet; ihre allgemeine Formatvorstellung ist explizit ausgeschlossen.
   Wizardry hat bisher nur ein Video und erhält daher noch keine Seite.
+  Fehlende Playlist-Mitgliedschaften werden nicht aus dem Titel geraten:
+  Acht geprüfte re.play-Folgen sind explizit über `videoIds` ergänzt
+  (Wing Commander II, Raptor, Heretic, They Stole a Million, Christoph Kolumbus,
+  Die Siedler, System Shock und Super Mario Bros. 2).
 - Eine Seite entsteht ab zwei unterschiedlichen verfügbaren Videos aus dem
   öffentlichen Video-Cache. Nicht verfügbare Mitglieder, fehlende Videos und
   doppelte Playlist-Einträge erfüllen die Schwelle nicht. Bestätigte
   re.minder-Beiträge ergänzen eine qualifizierte Reihe, heben aber keine
   Ein-Video-Reihe über diese Schwelle.
+  Ausnahme für neue Reihen: Genau ein verfügbares Nicht-re.minder-Video
+  aus einer bestätigten Spielplaylist genügt, wenn sein bekanntes
+  Veröffentlichungsdatum höchstens zwei Kalendermonate vor dem Build liegt
+  (UTC, Grenzzeitpunkt eingeschlossen; fehlende Monatstage werden auf das
+  Monatsende begrenzt). Die Ausnahme gilt nicht für reine manuelle
+  Einzelzuordnungen. Ohne zweites Video entfällt die Spieleseite nach
+  Ablauf der Frist beim nächsten Build wieder.
 - Neue Mitglieder bestätigter Playlists werden beim nächsten Offline-Build
   übernommen; Entfernungen ebenfalls. Neue, noch nicht bestätigte re.play-/
   re.connect-Playlists erzeugen einen Build-Hinweis statt einer geratenen
@@ -315,10 +378,20 @@ erfordert zugleich aktualisierte Imports und Dokumentationsverweise.
 - Nur belegte, nicht leere Abschnitte werden dargestellt. Diese Übersicht
   funktioniert ohne zusätzliches JavaScript und ohne weitere Unterseiten.
 
+Katalogkacheln auf Spiele- und Zeitschriftenübersichten halten ihren Titel
+oben und richten die folgenden Fakten gemeinsam am unteren Kachelrand aus.
+Die Kachelhöhe wird innerhalb jeder Rasterzeile angeglichen; der Abstand
+zwischen Titel und Fakten nimmt die verbleibende Höhe auf.
+
 ### Kapitel und erwähnte Kanäle
 
 Spiel- und Ausgabeseiten zeigen im jeweiligen Videoabschnitt die erkannten
 Kapitel und explizit erwähnten YouTube-Kanäle aus der Beschreibung.
+Erkannte Kapitelzeilen samt zugehöriger Kapitelüberschrift und gültige
+Zeitlinks zum eigenen Video werden in der sichtbaren Videobeschreibung
+nicht erneut ausgegeben. Begleittexte, ungültige Zeitangaben und Links
+zu anderen Videos bleiben erhalten; die Originalbeschreibung im Cache
+und in den strukturierten Daten bleibt unverändert.
 `src/site-video-details.mjs` bereitet diese Daten rein offline auf:
 
 - Kapitelzeilen verwenden `MM:SS` oder `HH:MM:SS` mit Beschriftung. Ein
@@ -353,7 +426,7 @@ Kapitel und explizit erwähnten YouTube-Kanäle aus der Beschreibung.
 - Erwähnungen behaupten keine bezahlte Zusammenarbeit. Leere Abschnitte
   entfallen; die Originalbeschreibung bleibt unverändert sichtbar.
 
-Es gibt keine zusätzlichen Videoseiten oder Sitemap-Adressen.
+Kapitel erzeugen keine zusätzlichen Seiten oder Sitemap-Adressen.
 Die offizielle IFrame-API von `https://www.youtube.com/iframe_api` lädt erst
 nach bewusster oder bereits gemerkter Player-Freigabe, einmal pro Dokument.
 Der Frame bleibt auf `youtube-nocookie.com`, mit `enablejsapi=1` und der
@@ -363,14 +436,47 @@ sichtbar gemeldet; externe Links und der manuelle Player bleiben verfügbar.
 Wiederverwendbare HTML-Komponenten liegen als ES-Module unter `src/widget/`;
 `src/site-render.mjs` importiert sie direkt:
 
+Die verpflichtende zentrale Wiederverwendung und Zuständigkeitsgrenzen
+beschreibt [ADR 0005](adr/0005-wiederverwendbare-widgets-und-komponenten.md).
+
 - `video.mjs`: `videoWidget` mit Player, Vorschau und Bedienelementen sowie
   `playerPoster` für die Vorschau beim Folgenwechsel.
 - `episode-list.mjs`: `episodeList` als unabhängig scrollbar dargestellte
   Folgenliste mit Fragmentlinks, Laufzeiten, Datum und Spielkontext.
+  Der aktive Eintrag ist markiert und wird bei Hash-Einstieg, Folgenwechsel
+  und Öffnen der Liste innerhalb ihres Scrollbereichs sichtbar gehalten,
+  ohne dafür die gesamte Seite zu verschieben.
+  Zugehörige YouTube-Playlists stehen direkt darunter in der rechten
+  Seitenspalte als reine Links ohne Überschrift oder Aufzählungszeichen.
 - `catalog-grid.mjs`: gemeinsame Spiele-/Zeitschriftenkacheln.
+  Bei Zeitschriften mit nur einem bekannten Jahrgang entfallen Jahresfilter
+  und separate Jahrgangsseite; Heftjahre und Jahrgangsanzahl bleiben erhalten.
 - `metadata.mjs`: gemeinsame semantische Metadatenliste.
+- `pagination.mjs`: vorherige/nächste Übersichtsseite, aktuelle Seitenzahl
+  und aufklappbare Liste aller Seiten.
+- `game-discussions.mjs`: erkannte Spielebesprechungen mit Zeitmarken und
+  Hinweis auf ungeprüfte Vorschläge auf Blätterabend-Ausgabenseiten.
+- `magazine-logo.mjs`: lokal gespeichertes Zeitschriftenlogo mit
+  Quellenlink zu Kultmags auf der jeweiligen Zeitschriftenseite.
+
+- `navigation.mjs`: gemeinsame Hauptnavigation mit relativen Links und
+  Markierung des aktiven Bereichs auch auf Unterseiten. Der Renderer
+  übergibt die vorhandenen Bereiche in ihrer festgelegten Reihenfolge.
+  Die Navigationsnamen lauten „Blätterabend“ für Zeitschriften, „re.play“
+  für Spiele und „projects“ für Retrospektiven; die bestehenden URLs bleiben erhalten.
+  Die älteren Formate folgen nach einem sichtbaren, für Screenreader
+  ausgeblendeten `|` in der Reihenfolge „re.ware“ (Hardware), „projects“,
+  „Interviews“, „Sonstiges“. „re.consider“ bleibt vor dieser Gruppe.
+- `archive-links.mjs`: Archivordner-, Lese- und Downloadlinks als Inline-Gruppe
+  oder Liste, einschließlich Hinweis bei fehlendem Archiv.
+- `video-panel.mjs`: Videoinformationen mit Metadaten, Kapiteln, erwähnten
+  Kanälen, Beschreibung, Zeitschriftenverweisen und Teilnavigation.
+  Der Renderer übergibt Position, Nachbarvideos und Spielabschnitt/Reihe;
+  Auswahl, Reihenfolge und Gruppierung bleiben dort. `descriptionHtml`
+  bleibt aus Kompatibilitätsgründen auch aus `site-render.mjs` exportiert.
 - `video-entry.mjs`: `videoListEntry` für jeden einzelnen Beitrag in News,
-  Hardware, Retrospektiven und Interviews; `videoList` setzt daraus die Liste
+  Hardware, Retrospektiven, Interviews und Sonstiges sowie für Videos in
+  Zeitschriften- und Jahrgangslisten; `videoList` setzt daraus die Liste
   zusammen. Überschriftenebene, Personen, Thema, Hinweise und Themenverweise
   bleiben je nach Seitenkontext erhalten. Die Gruppierung von Retrospektiven
   und die Auswahl/Sortierung der Videos liegen weiterhin im Seitengenerator.
@@ -380,6 +486,10 @@ Wiederverwendbare HTML-Komponenten liegen als ES-Module unter `src/widget/`;
   verlinken dasselbe interne Videoziel bzw. YouTube. Die Vorschaubilder kommen
   direkt von YouTube (`i.ytimg.com`), mit reservierter Bildfläche, Lazy Loading
   und asynchronem Decoding; die Datenschutzseite beschreibt diesen Abruf.
+  Zeitschriftenlisten übergeben zusätzlich den jeweiligen Ausgabenkontext
+  und gegebenenfalls die Teilnummer als Titelpräfix. Titel und Thumbnail
+  führen dadurch auch bei mehreren Zeitschriftenzuordnungen zur passenden
+  Ausgabe. Ausgabenüberschriften und deren Archivlinks bleiben separat.
 
 HTML-Escaping und externe Links liegen gemeinsam in `src/site-html.mjs`,
 Datums-/Laufzeitformatierung in `src/site-format.mjs`. Widgets importieren
@@ -787,9 +897,10 @@ npm run generate:blaetterabend
 ```
 
 `src/fetch-archives.mjs` aktualisiert ausschließlich die Archive-Caches für
-die im Video-Cache erkannten Zeitschriften. Kultmags wird zuerst geprüft;
-reetroz bleibt der Fallback für dort fehlende Zeitschriften. Mit
-`npm run fetch:archives:refresh` werden beide Quellen unabhängig vom Cache-Alter
+die im Video-Cache erkannten Zeitschriften. GameStar erhält zusätzlich
+Heftlinks von PC Games Database, Amiga Action von AMR einschließlich Logo. Kultmags wird für die übrige Archivsuche
+zuerst geprüft; reetroz bleibt der Fallback für dort fehlende Zeitschriften. Mit
+`npm run fetch:archives:refresh` werden die Quellen unabhängig vom Cache-Alter
 neu abgefragt. Das erzeugt noch keine neue Blätterabend-Datei.
 
 `src/generate-blaetterabend.mjs` liest anschließend ausschließlich lokale
@@ -811,14 +922,31 @@ Zeitschriften oder Schreibweisen werden in der Liste `MAGAZINES` in
 Die bestätigte Titelbezeichnung „Computer Gaming World – 15th Anniversary“
 wird als Ausgabe #148 (11/1996) erkannt; auf dem
 [Cover](https://assets.reetroz.com/covers/cgw-148.jpg) sind beide Angaben zu sehen.
-Fehlt eine eindeutige Ausgabenangabe, bleibt die Ausgabe unbekannt. Die
-Logmeldung weist dann gegebenenfalls auf die verlinkte Archiv-Übersichtsseite hin.
+Fehlt eine eindeutige Ausgabenangabe, bleibt die Ausgabe unbekannt. Eine
+bekannte Heftnummer allein (etwa ACE Nr. 49) genügt bei fehlendem Heftdatum
+für eine eigene Detailseite. Übersichtstitel, Videotitel und Thumbnail
+verlinken dann intern auf diese Seite, auch ohne Archivlink. Das Jahr bleibt
+unbekannt; es wird kein Jahrgang und kein Erscheinungsdatum erfunden.
+Solche nummerierten Ausgaben werden ohne eindeutigen gemeinsamen Archivtreffer
+nicht mit datierten Ausgaben zusammengelegt.
+
+Bei unbekannter Ausgabe weist die Logmeldung gegebenenfalls auf die
+verlinkte Archiv-Übersichtsseite hin.
 Explizit bestätigte Heftzuordnungen stehen nach Video-ID in
 `CONFIRMED_MAGAZINE_TITLES`: `6R6Go1LhCMI` („Nach Zuschauerabstimmung“)
 ist vom Nutzer als Power Play 10/1990 bestätigt. Der Originaltitel bleibt
 unverändert; die Zuordnung gilt nicht für andere gleichlautende Titel.
 
 ### Links auf kultmags.com
+
+Auf Heft-Detailseiten stehen die Archivlinks direkt unter dem Player
+als dritte Metadatenspalte nach Zeitschrift und Ausgabe.
+Erscheinungsjahr, Heftnummer und Monate bleiben für Zuordnung und
+Jahrgangsnavigation intern erhalten, werden hier aber nicht als
+zusätzliche Metadatenspalten angezeigt. Die Symbole behalten
+ihre zugänglichen Beschriftungen und werden hier zusätzlich durch sichtbare
+Texte für Archivordner, Lesen und Download ergänzt. Eine separate
+Archivlinks-Sektion entfällt; Übersichtslisten bleiben bei kompakten Symbolen.
 
 Jede erkannte Zeitschrift bekommt ein Feld `kultmags` mit einem Link in das
 Archiv von [kultmags.com](https://www.kultmags.com/mags.php)
@@ -841,7 +969,127 @@ Zeitschriften gefunden werden können. Mit
 dem reetroz-Cache). Ein vollständiger Abruf braucht etwa 140 Seitenaufrufe, mit
 200 ms Pause zwischen den Aufrufen.
 
+### Zeitschriftenlogos von Kultmags
+
+`npm run fetch:archives` liest auf der jeweiligen Magazinübersicht das
+`img` innerhalb von `.archive-title-image`. Relative Bildadressen werden
+gegen `https://www.kultmags.com/` aufgelöst. Nur PNG, JPEG, GIF und WebP
+vom HTTPS-Host `www.kultmags.com` werden übernommen, ohne Weiterleitungen
+und mit maximal 2 MiB pro Bild. Die Bildsignatur wird geprüft.
+
+Das Magazin-JSON erhält `logo: { url, file }`, bei fehlendem Titelbild
+`logo: null`. Die Bilddateien liegen in `cache/kultmags/logos/` mit
+SHA-256-Inhaltsnamen. Bei älteren, noch frischen Archiv-Caches wird nur
+die Magazinübersicht für das Logo nachgeladen; die vorhandenen
+Ausgabenlisten und ihr ursprüngliches Abrufdatum bleiben erhalten.
+Weitere Läufe verwenden den Cache; ein Archiv-Refresh prüft auch Logos neu.
+
+`npm run generate:site` übernimmt diese Dateien rein offline nach
+`docs/assets/magazine-logos/`. Die jeweilige Zeitschriftenseite zeigt
+das Logo responsiv unter der Überschrift, mit Alternativtext und
+Quellenlink zur Magazinübersicht auf Kultmags. Jahrgangs- und Ausgabenseiten
+bleiben unverändert. Ohne Logo wird kein leerer Bildbereich ausgegeben.
+Beim Seitenaufruf wird kein Bild vom Archivserver nachgeladen.
+Vorhandene, beschädigte oder fehlende referenzierte Bilddateien werden
+als Buildfehler gemeldet. Der Logo-Cache ist wie der übrige Archivcache
+nicht Git-ignoriert und muss für einen GitHub-Pages-Build mit bereitstehen.
+
+### GameStar bei PC Games Database
+
+```sh
+npm run fetch:gamestar
+npm run fetch:gamestar -- --refresh
+npm run generate:site
+```
+
+`src/fetch-pcgamesdatabase.mjs` lädt ausschließlich die öffentliche
+[GameStar-Archivübersicht](https://www.pcgamesdatabase.de/gamestar.php).
+Sie enthält bereits die direkten Heftlinks; einzelne Heftseiten werden
+nicht zusätzlich abgerufen. Nur tatsächliche Links auf
+`gamestar.php?mag=gamestar&vol=MM/YYYY` desselben Hosts werden übernommen.
+Unverlinkte Datumsangaben und doppelte Verweise werden nicht als neue
+Ausgaben gespeichert. Ein nicht mehr erkennbares Seitenformat führt
+zu einem Fehler, ohne einen vorhandenen Cache zu überschreiben.
+
+Der Cache verwendet das Kultmags-Magazinformat:
+`cache/pcgamesdatabase/index.json` und
+`cache/pcgamesdatabase/magazines/gamestar.json` mit `name`, `url`,
+`fetchedAt`, `sections` und `issues`. Ausgaben enthalten Jahr,
+Monat in `numbers`, Titel und `pageUrl`; `readerUrl`, `downloadUrl` und
+`coverUrl` bleiben mangels belegter Ziele `null`. Standardmäßig gilt
+eine Cache-Laufzeit von 365 Tagen. `--refresh` erzwingt einen Neuabruf.
+Zusätzlich lädt der Fetcher das fest konfigurierte
+[GameStar-Logo](https://www.pcgamesdatabase.de/images/gamestar.jpg)
+in `cache/pcgamesdatabase/logos/`. Frische ältere Caches werden nur um
+das Logo ergänzt, ohne die Heftübersicht neu abzurufen. Die Zeitschriftenseite
+zeigt das Bild als lokales Asset mit „Logoquelle: PC Games Database“.
+Format, Größe und Inhalt werden wie bei den übrigen Magazinlogos geprüft.
+Auch `fetch:archives` berücksichtigt diese Quelle, wenn GameStar im
+Video-Cache vorkommt.
+
+Die lokale Blätterabend-Generierung ergänzt bei vorhandenem Cache das
+Feld `pcgamesdatabase` im gleichen Linkformat wie `kultmags`.
+Nur Jahr und genau ein bekannter Monat erlauben einen Hefttreffer;
+Sonderhefte, unklare Datumsangaben oder fehlende Ausgaben führen zur
+Archivübersicht. Heftnummern werden nicht mit Kalendermonaten verwechselt.
+Die Quelle ergänzt vorhandene Kultmags-/reetroz-Verweise, statt sie zu ersetzen.
+
+Der Website-Build liest diesen Cache zusätzlich direkt ein: Nach
+`fetch:gamestar` ist deshalb keine erneute Blätterabend-Generierung nötig.
+Die Links erscheinen in Zeitschriften-/Jahrgangslisten und in der dritten
+Metadatenspalte auf Heftseiten als „PC Games Database: Ausgabe“.
+Der Build bleibt offline und verwendet auch veraltete Daten unverändert.
+Ohne diesen optionalen Cache bleiben bestehende Archivlinks erhalten;
+ein beschädigter vorhandener Cache wird als Fehler gemeldet.
+Der neue Cache ist für den GitHub-Pages-Build ebenfalls mit bereitzustellen.
+
+### Amiga Action bei Amiga Magazine Rack (AMR)
+
+```sh
+npm run fetch:amiga-action
+npm run fetch:amiga-action -- --refresh
+npm run generate:site
+```
+
+`src/fetch-amr.mjs` liest ausschließlich die
+[Amiga-Action-Übersicht](https://amr.abime.net/issues_1) sowie das
+[Magazinlogo](https://amr.abime.net/logos/amiga_action_logos.png).
+Heftseiten werden nicht einzeln abgerufen. Die Jahrgangstabelle gibt
+Jahr und Monat durch die Spalten Jan bis Dec vor, der Linktext nennt
+die fortlaufende Heftnummer. Die zusätzliche Xmas-Spalte bleibt als
+Sonderausgabe ohne erfundenen Kalendermonat gespeichert.
+
+Der Cache liegt in `cache/amr/index.json` und
+`cache/amr/magazines/amiga-action.json` im Kultmags-Magazinformat.
+Ausgaben enthalten zusätzlich `issueNumber`. `pageUrl` verweist auf
+die belegte `https://amr.abime.net/issue_<id>`-Heftseite; Reader- und
+Downloadlinks werden nicht erfunden und bleiben `null`.
+Der Cache gilt 365 Tage, `--refresh` erzwingt einen neuen Abruf.
+Auch `fetch:archives` berücksichtigt AMR bei Amiga-Action-Videos.
+
+Heftnummern oder Jahr und Monat dürfen einen eindeutigen Treffer ergeben.
+Widersprüchliche Nummern-/Datumsangaben führen nur zur Übersicht,
+genau wie fehlende Angaben oder mehrdeutige Treffer.
+Die Blätterabend-Datei erhält bei vorhandenem AMR-Cache ein zusätzliches
+Feld `amr`, vorhandene Archivverweise bleiben erhalten.
+Der Site-Build liest den optionalen AMR-Cache direkt und vollständig offline,
+ohne eine erneute Blätterabend-Generierung zu verlangen.
+Archivlinks erscheinen in den Listen und Heft-Metadaten als „AMR: Ausgabe“.
+
+Das Logo wird unter `cache/amr/logos/` gespeichert, mit derselben
+Größen-, Format- und Inhaltsprüfung wie Kultmags-Logos.
+Beim Build wird es als lokales Asset übernommen und auf der
+Amiga-Action-Zeitschriftenseite mit „Logoquelle: AMR“ angezeigt.
+Es wird nicht beim Seitenaufruf von AMR geladen.
+Fehlende referenzierte oder beschädigte Bilder führen zu einem Buildfehler.
+Der AMR-Cache ist nicht Git-ignoriert und muss für GitHub Pages mit bereitstehen.
+
 ### Links auf reetroz.com (internationale Zeitschriften)
+
+Die Projektbezeichnung `PC Gamer` wird ausdrücklich dem Archiveintrag
+`PC Gamer (US)` zugeordnet, auch bei bereits vorhandenen Index-Caches.
+`PC Gamer US` bleibt ebenfalls gültig. `PC Gamer UK` ist eine getrennte
+Ausgabe und wird nicht auf das US-Archiv umgeleitet.
 
 kultmags.com enthält nur deutsche Zeitschriften. Für Zeitschriften, die dort
 fehlen (`kultmags: null`), wird im Archiv von
@@ -868,6 +1116,327 @@ automatisch gelöscht: Fetch-Scripts aktualisieren sie bei Bedarf, lokale
 Generatoren können vorhandene Caches unabhängig vom Alter weiterverwenden.
 Ein ausdrücklich angeforderter Refresh darf die Jahresfrist übergehen.
 
+## YouTube-Transkripte einmalig cachen
+
+```sh
+yt-dlp --version
+npm run fetch:transcripts
+```
+
+Das separate Script `src/fetch-youtube-transcripts.mjs` benötigt zusätzlich
+ein aktuelles [yt-dlp](https://github.com/yt-dlp/yt-dlp#installation) im `PATH`.
+Es ist kein npm-Paket und wird nicht automatisch installiert.
+Es verwendet die bereits vorhandenen drei Quellcaches und dieselben
+Zuordnungen wie die Website. Nur öffentliche, nicht zukünftige Videos mit
+Blätterabend- oder Zeitschriftenzuordnung werden ausgewählt, auch wenn die
+genaue Heftausgabe unbekannt ist. Mehrfachzuordnungen erzeugen keinen
+doppelten Abruf.
+
+### Methode und Grenzen
+
+Die offizielle [YouTube Captions API](https://developers.google.com/youtube/v3/docs/captions/download)
+benötigt OAuth und Bearbeitungsrechte am Video; ein öffentlicher Videolink
+allein genügt nicht. Für dieses Projekt ist ausdrücklich der öffentliche
+Abruf ohne Anmeldung gewählt:
+
+1. yt-dlp ermittelt ausschließlich Videometadaten und verfügbare
+   Untertitelspuren (`--skip-download --dump-single-json`).
+2. Bevorzugt werden manuelle deutsche, automatische deutsche, manuelle
+   englische und automatische englische Untertitel, danach andere Sprachen.
+   Unter gleichrangigen Sprachen wird eine als `-orig` markierte Spur bevorzugt.
+   Automatische Spuren können von YouTube übersetzt sein; Sprache und
+   Kennzeichnung als automatische Untertitel werden gespeichert.
+3. Genau eine Spur wird im JSON3-Format direkt vom HTTPS-Endpunkt
+   `youtube.com/api/timedtext` geladen und in zeitmarkierte Textsegmente
+   umgewandelt. Andere Hosts, Pfade und Weiterleitungen werden abgelehnt.
+
+Es gibt keinen Audio-/Videodownload, keine eigene Spracherkennung,
+keine Cookies oder Anmeldung und keinen Drittanbieter-Transkriptdienst.
+Lokale yt-dlp-Konfigurationen werden ignoriert, der yt-dlp-Dateicache
+ist deaktiviert. Zwischen aufeinanderfolgenden neuen Videoabrufen liegen
+15 Sekunden Pause; zwischen Metadatenabruf und Untertitelanfrage zusätzlich
+drei Sekunden. Cachetreffer benötigen keine Pause.
+Untertitel können fehlen; YouTube kann öffentliche Abrufe auch blockieren
+oder begrenzen. Das Script umgeht keine Zugangssperren. HTTP-Fehler,
+Bot-Abfragen, Extraktorfehler und ungültige oder leere Antworten sind
+technische Fehler, nicht der Nachweis fehlender Untertitel.
+
+### Dauerhafter Cache
+
+Pro Video entsteht `cache/youtube-transcripts/<video-id>.json`:
+
+Die Ausgabe nennt zunächst die Videoanzahl und das Cacheverzeichnis.
+Jedes Video wird mit `[Position/Gesamt · Prozent]`, ID und Titel angezeigt.
+Für neue Abrufe folgt die YouTube-Adresse; Ergebnisse enthalten Sprache,
+manuelle/automatische Untertitel und Segmentanzahl. Übersprungene
+Cacheeinträge erzeugen keine Einzelmeldung. Die Abschlussübersicht
+zählt neue Transkripte, fehlende Untertitel, Cachetreffer und Fehler.
+Die Prozentanzeige beschreibt die Position im Durchlauf, nicht den
+Downloadfortschritt eines einzelnen Videos.
+
+```json
+{
+  "status": "available",
+  "language": "de",
+  "automatic": true,
+  "segments": [
+    { "startMs": 1250, "durationMs": 3000, "text": "Beispieltext" }
+  ],
+  "version": 1,
+  "videoId": "a0000000000",
+  "checkedAt": "2026-10-17T19:00:00.000Z",
+  "source": "youtube-public-captions"
+}
+```
+
+Zeitmarken und Dauern sind Millisekunden ab Videobeginn. Fehlt eine Dauer
+in der Quelle, bleibt `durationMs` ausdrücklich `null`. Textteile eines
+JSON3-Ereignisses werden zusammengefügt; überlappende bzw. rollierende
+Untertitel bleiben als Quellsegmente erhalten und werden nicht spekulativ
+dedupliziert. Originale JSON3-Antworten und kurzlebige signierte Abruf-URLs
+werden nicht im Cache gespeichert.
+
+Sind keine öffentlichen Untertitel vorhanden, wird stattdessen
+`status: "unavailable"` mit `reason: "no-public-captions"` gespeichert.
+**Beide Zustände gelten dauerhaft:** Es gibt kein Ablaufdatum, keine
+Last-Modified-Abfrage und keinen Refresh-Schalter. Weitere Läufe lesen
+für diese IDs nur den lokalen Cache und stellen keine yt-dlp- oder
+Untertitelanfrage. Auch später bei YouTube ergänzte Untertitel werden
+deshalb nicht nachgeladen.
+
+Technische Fehler werden pro Video sichtbar protokolliert, erzeugen keinen
+Erfolgseintrag und führen nach dem Durchlauf zu einem Fehler-Exitcode.
+Vorübergehende HTTP-Serverfehler (500, 502, 503, 504) beim Untertitelabruf
+werden höchstens zweimal nach fünf bzw. zehn Sekunden wiederholt.
+Andere Fehler werden nicht automatisch wiederholt.
+
+**Bei HTTP 429 („Too Many Requests“) stoppt der gesamte Lauf sofort**
+mit Fehler-Exitcode, auch wenn yt-dlp das Rate-Limit meldet. Es gibt weder
+einen Retry noch einen Abruf des nächsten Videos; Sperrdateien werden
+normal aufgeräumt. Die Zwischenbilanz heißt dann „Abgebrochen“.
+Ein vorhandener `Retry-After`-Header wird ausgegeben: vor einem manuellen
+Neustart mindestens diese Wartezeit beachten. Ohne solche Angabe lässt
+sich keine zuverlässige Sperrdauer nennen; nicht sofort wieder starten.
+429 bezeichnet eine Anfragedrosselung, beweist aber weder eine dauerhafte
+Sperre noch, dass alle Videos gleichermaßen betroffen sind. Größere
+Abstände reduzieren die Anfragerate, garantieren aber keine Freigabe.
+Bereits gespeicherte Ergebnisse bleiben unverändert und werden beim
+späteren Neustart ohne Netzwerkanfrage übersprungen.
+
+Fehlgeschlagene und noch nicht bearbeitete Videos können beim nächsten
+Lauf erneut versucht werden.
+Ein beschädigter vorhandener Cache wird gemeldet, nicht durch einen
+erneuten Abruf ersetzt. Dateien werden atomar geschrieben; eine exklusive
+`<video-id>.lock`-Datei verhindert gleichzeitige Abrufe derselben ID.
+Nach einem Prozessabbruch kann eine Sperre liegen bleiben: erst prüfen,
+dass kein Abruf mehr läuft, dann diese konkrete Sperrdatei manuell entfernen.
+
+Der Befehl ist absichtlich weder Teil von `fetch:all` noch der
+Seitengenerierung oder GitHub-Pages-Pipeline. Die Transkripte bleiben lokale
+Arbeitsdaten und werden nicht als Website-Inhalt veröffentlicht.
+
+## Spielebesprechungen aus Transkripten
+
+```sh
+npm run generate:games-from-transcript -- _PHiFsxtF0k
+```
+
+`src/generate-games-from-transcript.mjs` analysiert bewusst jeweils ein
+bereits lokal gespeichertes Transkript. Es benötigt Node.js 22, eine lokale
+`.env` und einen laufenden OpenAI-kompatiblen Modellserver, aktuell Ollama
+mit `qwen3:14b`. Es lädt `.env` selbst; bereits gesetzte Prozessvariablen
+haben Vorrang. Ohne verfügbare Untertitel oder bei ungültiger Konfiguration
+bricht es ausdrücklich ab.
+
+### Verarbeitung und Modellaufgabe
+
+- Stabile Segment-IDs entsprechen den nullbasierten Positionen im
+  Originaltranskript. Texte werden nur bezüglich Leerraum normalisiert.
+  Wiederholungen werden nicht pauschal entfernt, damit keine tatsächliche
+  Gesprächswiederholung verloren geht.
+- Kernfenster umfassen höchstens drei Minuten bzw. ein begrenztes
+  Textbudget. Bis zu 30 Sekunden Nachbarkontext pro Seite helfen bei
+  Übergängen. Jedes Originalsegment liegt in genau einem Kernfenster.
+- Das Modell erkennt Hauptbesprechungen, Einführungen und Themenwechsel
+  im Kontext des chronologischen Zeitschriftenlesens. Vergleiche,
+  Quizantworten, Werbung und Rückblicke auf eigene Aufnahmen sollen keine
+  Spielebesprechung erzeugen.
+- Ein zweiter Modellaufruf prüft vorhandene Vorschläge unabhängig auf
+  `review`, `quiz`, `personal-update`, `comparison` oder `uncertain`.
+  Nur als `review` eingestufte Vorschläge werden übernommen.
+  Ein Fenster ohne Vorschläge benötigt diesen zweiten Aufruf nicht.
+- Das Modell liefert Segmentverweise statt frei geschätzter Zeiten.
+  Ungültige JSON-Ausgaben, unbekannte IDs, überlappende Abschnitte innerhalb
+  eines Fensters und abgeschnittene Antworten werden höchstens dreimal
+  angefragt, mit fünf bzw. zehn Sekunden Pause. Das Modell erhält bei
+  ungültigen Antworten den konkreten Validierungsfehler und muss die
+  Antwort vollständig neu erzeugen. Es gibt keine stillen Ersatzwerte
+  und keine scheinbar erfolgreich leere Analyse nach einem Fehler.
+  Erkennung und Kontextprüfung besitzen jeweils dieses Versuchslimit.
+  Dasselbe gilt für Zeitüberschreitungen, Verbindungsfehler und HTTP
+  408/429/500/502/503/504 des lokalen Modellservers. Andere HTTP-Fehler
+  (etwa falsche Konfiguration oder fehlendes Modell) brechen sofort ab.
+  Bei `finish_reason: length` wird stattdessen das Ausgabelimit für den
+  nächsten Versuch erhöht: 4096, 8192, höchstens 16384 Tokens. Der vollständige
+  Originaltext bleibt erhalten, abgeschnittene JSON-Teile werden nie übernommen.
+  Fehlende oder anders unvollständige Antworten werden davon unterschieden.
+- Derselbe Spieltitel wird über Fenstergrenzen nur bei überlappenden
+  Abschnitten oder ausdrücklich zusammenhängenden unmittelbaren
+  Nachbarfenstern zusammengeführt. Spätere Wiederaufnahmen bleiben separat.
+  Konflikte zwischen Fenstern bleiben zur Prüfung gekennzeichnet.
+- Ein exakter, normalisierter Vergleich mit bekannten Spielnamen und
+  Aliasen kann eine `gameId` ergänzen. Bei unbekannten oder mehrdeutigen
+  Titeln bleibt sie `null`; es gibt keine automatische unscharfe Zuordnung.
+
+Startzeiten stammen aus dem ersten Segment. Endzeiten stammen aus Start
+plus Dauer des letzten Segments und werden gegebenenfalls am nächsten
+Besprechungsbeginn begrenzt. Bei fehlender Dauer, offenem Fortgang oder
+widersprüchlichen Grenzen bleibt `endMs` ausdrücklich `null`.
+Die Modellgrenzen bleiben Schätzungen auf Untertitelgenauigkeit, keine
+framegenauen Schnitte.
+
+### Optional: größeres Ollama-Kontextfenster
+
+`max_tokens` begrenzt nur die **Ausgabe**, nicht das Kontextfenster.
+Für Ollama lässt sich das echte Kontextfenster explizit in `.env` setzen:
+
+```dotenv
+OLLAMA_NUM_CTX=32768
+```
+
+Alternativ nur für einen Lauf:
+
+```sh
+OLLAMA_NUM_CTX=32768 npm run generate:games-from-transcript -- _PHiFsxtF0k
+```
+
+Damit verwendet das Skript für Modellaufrufe Ollamas lokale native
+`/api/chat`-API statt `/v1/chat/completions`, mit `options.num_ctx` und
+`options.num_predict`. Voraussetzung ist eine lokale `OPENAI_BASE_URL`
+mit Pfad `/v1`; Modell und API-Key bleiben wie konfiguriert.
+Nach einer am Ausgabelimit abgeschnittenen Antwort werden sowohl Kontext
+als auch Ausgabe für den nächsten Versuch verdoppelt, der Kontext bis
+höchstens 131072 Tokens. Gültige Startwerte sind 4096–131072.
+Die Anpassung wird im Retry-Log angezeigt und gilt für Erkennung und
+Kontextprüfung getrennt. Ein größeres Fenster benötigt mehr RAM/VRAM und
+muss vom Modell unterstützt werden; es garantiert keine gültige Antwort.
+Ohne Parameter bleibt die OpenAI-kompatible API erhalten.
+Vorhandene fertige Fenster werden weiterhin unverändert wiederverwendet;
+Fenstergrenzen, Segment-IDs und Modellidentität ändern sich dadurch nicht.
+Nach wie vor höchstens drei Versuche je Phase, anschließend expliziter Fehler.
+
+### Ergebnis und Wiederaufnahme
+
+Die separate Ergebnisdatei lautet
+`cache/game-discussions/<video-id>.json`. Sie enthält:
+
+- Quell- und Kataloghash, Modellname, Analyseversion und Erstellungszeit.
+- `status: "needs-review"` und die Liste `discussions`.
+- Je Abschnitt Titel, optionale `gameId`, `startMs`, `endMs`,
+  erste/letzte Segment-ID, `confidence`, `endReason` und `issues`.
+- Eine belegende Originaltextstelle mit Segment-ID und Zeitmarke.
+- `reviewed: false`; die Modell-Konfidenz ist kein kalibrierter
+  Zuverlässigkeitswert.
+
+Fensterergebnisse werden als `<video-id>.window-<nummer>.json` lokal
+zwischengespeichert. Nach einem Fehler werden beim nächsten Aufruf passende
+Zwischenstände wiederverwendet. Fortschrittsmeldungen zeigen Fenster,
+Segmentbereich, Modell und Vorschlagsanzahl.
+
+Zusätzlich werden gültige Erkennungsvorschläge bereits **vor** der
+Kontextprüfung als `<video-id>.candidates-window-<nummer>.json`
+gespeichert. Scheitert nur die Kontextprüfung, setzt ein Neustart direkt
+bei dieser Prüfung fort. Diese Dateien sind keine fertigen Analysen und
+werden nicht auf der Website angezeigt. Vorhandene Fensterdateien aus
+Analyseversion 3 bleiben kompatibel. Vor dem ersten Modellaufruf werden
+alle vorhandenen Fenster geprüft und gezählt; nur fehlende Fenster werden
+analysiert, auch bei Lücken zwischen fertigen Fenstern. Quelle, Modell,
+Endpunkt und Analyseversion müssen weiterhin passen, beschädigte oder
+unpassende Zwischenstände werden nicht überschrieben.
+Ein geänderter Spielekatalog verhindert die Fortsetzung nicht: Er wird nicht
+an das Modell übergeben und dient erst beim abschließenden Zusammenführen
+zur Zuordnung von Spiel-IDs. Diese Änderung wird ausdrücklich gemeldet.
+Vorhandene Fenster- und Vorschlagsdateien bleiben dabei bytegenau unverändert.
+
+Nach ausgeschöpften Versuchen nennt die Fehlermeldung Fenster,
+Segmentbereich und Fehlerphase. Zur Wiederaufnahme denselben Befehl
+erneut ausführen:
+
+```bash
+npm run generate:games-from-transcript -- _PHiFsxtF0k
+```
+
+Erfolgreiche Fenster werden dabei ohne Modellaufruf wiederverwendet.
+Strg+C und SIGTERM brechen laufende Modellanfragen bzw. Retry-Pausen ab
+und räumen die Analysesperre auf. Bei hartem Prozessabbruch (z. B.
+SIGKILL/Stromausfall) kann `<video-id>.json.lock` liegen bleiben.
+Das Script meldet den konkreten Pfad: erst sicherstellen, dass kein
+Analyseprozess mehr läuft, dann nur diese verwaiste Sperre manuell
+entfernen. Sperren werden nicht automatisch gelöscht oder übernommen.
+
+Vorhandene Gesamtanalysen werden nicht erneut angefragt oder überschrieben,
+auch nicht nach manueller Prüfung. Passen Quelle, Spielekatalog, Modell oder
+Analyseversion nicht mehr, erscheint ein Fehler statt automatischem Ersetzen.
+Für eine bewusst neue Analyse vorhandene Ergebnisse und Zwischenstände
+zunächst manuell archivieren. Eine exklusive `.lock`-Datei verhindert
+gleichzeitige Verarbeitung derselben Video-ID; verwaiste Sperren nur nach
+Prüfung auf einen noch laufenden Prozess entfernen.
+
+Die Ergebnisse bleiben Git-ignorierte lokale Arbeitsdaten. Die Analyse
+ändert keine Spielzuordnungen und veröffentlicht selbst nichts.
+Beim nächsten Website-Build werden abgeschlossene Analysen zusammen mit
+dem passenden Transkript für Blätterabend-Ausgabenseiten eingelesen:
+Das Widget `src/widget/game-discussions.mjs` zeigt erkannte Spielnamen
+und Zeitmarken im jeweiligen Videobereich. Ungeprüfte Vorschläge werden
+als automatisch erkannt und möglicherweise ungenau gekennzeichnet.
+Ein aktiver, bereiter Player springt über die bestehende Kapitelsteuerung
+zur Stelle; ohne Aktivierung, ohne JavaScript oder bei fehlender Steuerung
+führt der Link zu YouTube mit Zeitmarke. Ein nur vorbereiteter Player
+merkt die Startstelle vor, ohne automatisch abzuspielen.
+
+Nur `<video-id>.json` wird verwendet, nicht die Fenster-Zwischenstände.
+Ohne abgeschlossene Analyse bleibt der Abschnitt unsichtbar.
+Quellhash, Video-ID, Segmentverweise und Zeitgrenzen werden geprüft;
+beschädigte oder veraltete Analysen führen zu einem sichtbaren Buildfehler.
+Das Rohtranskript und Modell-Metadaten werden nicht ins HTML übernommen.
+Spielnamen und Zeitmarken werden dagegen als statische Seiteninhalte
+publiziert, wenn die lokalen Quelldateien beim Build vorhanden sind.
+Da die Quelldateien Git-ignoriert sind, stehen sie einem frischen
+GitHub-Actions-Build ohne gesonderte Bereitstellung nicht zur Verfügung.
+
+Nur Loopback-Endpunkte sind erlaubt; Weiterleitungen werden abgelehnt.
+Transkripte werden ausschließlich an das konfigurierte lokale Modell gesendet.
+
+### Qualität und Grenzen
+
+Der erste lokale Versuch mit einem Quizabschnitt lieferte einen falschen
+Spieletreffer. Mit der zusätzlichen Kontextprüfung wurde dieser konkrete
+Treffer verworfen. Das ist ein Funktionstest, kein Nachweis einer allgemeinen
+Erkennungsquote. Automatische Transkripte können Titel stark verfälschen;
+Fenstergrenzen können Zusammenhang verlieren und beide Modellaufrufe können
+denselben Fehler machen. Vor Übernahme müssen Treffer und ausgelassene
+Besprechungen anhand einer manuell markierten Stichprobe geprüft werden.
+Das geplante Präzisionsziel von 90 Prozent ist noch nicht nachgewiesen.
+
+## Lokale Sprachmodell-Konfiguration
+
+Die lokale `.env` enthält die OpenAI-kompatible Konfiguration für die
+Transkriptanalyse mit Ollama:
+
+```dotenv
+OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+OPENAI_MODEL=qwen3:14b
+OPENAI_API_KEY=
+```
+
+`.env` ist Git-ignoriert; `.env.example` dokumentiert die Variablen ohne
+Zugangsdaten. Lokales Ollama benötigt keinen API-Key. Der Endpunkt ist
+OpenAI-kompatibel, nicht eine OpenAPI-Spezifikation.
+Node.js 22 kann die Datei ohne zusätzliche Abhängigkeit mit
+`node --env-file=.env ...` laden. Das Analysescript lädt sie bereits selbst.
+Bestehende Fetch- und Website-Buildscripts verwenden sie nicht und
+übertragen keine Transkripte.
+
 ## Architekturentscheidungen
 
 Architecture Decision Records liegen in `doc/adr/`:
@@ -876,6 +1445,7 @@ Architecture Decision Records liegen in `doc/adr/`:
 - [ADR 0002: Statische Seiten mit minimalem JavaScript, SEO und kurzen Ladezeiten](adr/0002-statische-seiten-seo-und-performance.md)
 - [ADR 0003: Seitenstruktur und Zuordnung von Videos zu Inhaltsbereichen](adr/0003-seitenstruktur-und-inhaltszuordnung.md)
 - [ADR 0004: Detailseiten, Videonavigation und fortlaufende Wiedergabe](adr/0004-detailseiten-und-videonavigation.md)
+- [ADR 0005: Wiederverwendbare Widgets und Komponenten](adr/0005-wiederverwendbare-widgets-und-komponenten.md)
 
 ## GitHub Pages veröffentlichen
 

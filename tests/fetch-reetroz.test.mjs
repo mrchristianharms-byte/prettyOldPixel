@@ -95,6 +95,25 @@ test("verlinkt Ausgaben über Heftnummer oder Monat und fällt sonst auf die Zei
   });
 });
 
+test("ordnet PC Gamer auch mit bestehendem Index der US-Ausgabe zu, niemals PC Gamer UK", async () => {
+  await withCacheDir(async (cacheDir) => {
+    const first = createFetch();
+    await loadReetrozCatalog({
+      ...quiet, cacheDir, fetchImpl: first.fetchImpl, magazineNames: ["PC Gamer US"],
+    });
+    const catalog = await loadReetrozCatalog({
+      ...quiet, cacheDir, cachedOnly: true,
+      fetchImpl: () => assert.fail("Bestehender Cache muss genügen"),
+      magazineNames: ["PC Gamer", "PC Gamer US", "PC Gamer UK"],
+    });
+    assert.deepEqual(catalog.magazines.get("PC Gamer"), catalog.magazines.get("PC Gamer US"));
+    assert.equal(catalog.magazines.has("PC Gamer UK"), false);
+    const link = findReetrozIssue(catalog, "PC Gamer", issueOf("PC Gamer 9/94", "PC Gamer"));
+    assert.equal(link.match, "issue");
+    assert.equal(link.pageUrl, "https://reetroz.com/issue/pc-gamer-us-4");
+  });
+});
+
 test("nutzt den Cache und lädt nur mit refresh neu", async () => {
   await withCacheDir(async (cacheDir) => {
     const first = createFetch();

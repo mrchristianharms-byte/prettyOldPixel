@@ -7,6 +7,10 @@ import { gameDefinitions } from "./data-games.mjs";
 import { structureGameSeries } from "./site-game-series.mjs";
 import { sectionDefinitions } from "./data-sections.mjs";
 import { extractVideoDetails } from "./site-video-details.mjs";
+import { loadGameDiscussions } from "./site-game-discussions.mjs";
+import { attachMagazineLogo, loadMagazineLogos } from "./kultmags-logos.mjs";
+import { addAmrLinks, loadAmrCatalog } from "./fetch-amr.mjs";
+import { addPcgamesdatabaseLinks, loadPcgamesdatabaseCatalog } from "./fetch-pcgamesdatabase.mjs";
 
 function requireValue(condition, message) {
   if (!condition) throw new Error(message);
@@ -60,7 +64,7 @@ export function newestFirst(a, b) {
 
 function archiveIdentity(archives) {
   const archive = archives.find((item) => item.match === "issue"
-    && (item.readerUrl || item.downloadUrl || (item.provider === "reetroz" && item.pageUrl)));
+    && (item.readerUrl || item.downloadUrl || (["reetroz", "pcgamesdatabase", "amr"].includes(item.provider) && item.pageUrl)));
   return archive ? `${archive.provider}:${archive.readerUrl ?? archive.downloadUrl ?? archive.pageUrl}` : null;
 }
 
@@ -107,7 +111,8 @@ function finalizeMagazines(magazineById, videoById, warnings) {
         if (conflict) warnings.push(`${magazine.name}/${videoId}: Widersprüchliche Heftdaten zum Archivtreffer; keine Ausgabenseite.`);
         const identifiable = !conflict && (issue.special
           ? Boolean(archiveKey || (issue.year !== null && issue.number !== null))
-          : Boolean(issue.year !== null && (issue.months.length || issue.number !== null)));
+          : Boolean((issue.year !== null && (issue.months.length || issue.number !== null))
+            || (issue.year === null && issue.months.length === 0 && issue.number !== null)));
         if (identifiable) {
           const identity = issue.special
             ? { special: true, ...(archiveKey ? { archive: archiveKey } : { year: issue.year, number: issue.number }) }
@@ -143,7 +148,7 @@ function finalizeMagazines(magazineById, videoById, warnings) {
           .map((archive) => archive.title.trim()).sort((a, b) => a.localeCompare(b, "de"))[0];
         issue.label = title ? `${label} – ${title}` : label;
       } else {
-        issue.label = `${issue.number !== null ? `#${issue.number} ` : ""}${issue.months.length ? `${issue.months.join("+")}/` : ""}${issue.year}`.trim();
+        issue.label = `${issue.number !== null ? `#${issue.number} ` : ""}${issue.months.length ? `${issue.months.join("+")}/` : ""}${issue.year ?? ""}`.trim();
       }
       const part = (id) => videoById.get(id).magazines.find((item) => item.id === magazine.id).part;
       const chronologicalVideos = [...issue.videos].sort((a, b) => chronological(videoById.get(a), videoById.get(b)));
@@ -187,12 +192,21 @@ function finalizeMagazines(magazineById, videoById, warnings) {
     magazine.years = [...new Set(entries.map((entry) => entry.mention.issue?.year).filter((year) => year !== null && year !== undefined))]
       .sort((a, b) => a - b)
       .map((year) => ({ year, route: `${magazine.route}${year}/`, entries: entries.filter((entry) => entry.mention.issue?.year === year) }));
+    if (magazine.years.length <= 1) {
+      for (const entry of entries) entry.mention.yearRoute = null;
+    }
     magazine.issues = new Map([...magazine.issues].sort(([, a], [, b]) =>
       (a.year ?? Infinity) - (b.year ?? Infinity) || issueOrder(a, b)));
   }
 }
 
-function normalizeGames(definitions, playlists, videoById, warnings) {
+function normalizeGames(definitions, playlists, videoById, warnings, now) {
+  const recentCutoff = new Date(now);
+  const day = recentCutoff.getUTCDate();
+  recentCutoff.setUTCDate(1);
+  recentCutoff.setUTCMonth(recentCutoff.getUTCMonth() - 2);
+  const lastDay = new Date(Date.UTC(recentCutoff.getUTCFullYear(), recentCutoff.getUTCMonth() + 1, 0)).getUTCDate();
+  recentCutoff.setUTCDate(Math.min(day, lastDay));
   requireValue(Array.isArray(definitions), "Spiele: Zuordnungsliste fehlt.");
   const playlistById = new Map(playlists.map((playlist) => [playlist.id, playlist]));
   const gameIds = new Set();
@@ -224,7 +238,8 @@ function normalizeGames(definitions, playlists, videoById, warnings) {
     requireValue(Array.isArray(excluded) && excluded.every((value) => typeof value === "string" && /^[A-Za-z0-9_-]{11}$/u.test(value)),
       `${name}: Ungültige ausgeschlossene Video-ID.`);
     requireValue(!definition.videoIds.some((videoId) => excluded.includes(videoId)), `${name}: Widersprüchliche Videozuordnung.`);
-    requireValue(definition.playlistIds.length > 0, `${name}: Bestätigte Quellplaylist fehlt.`);
+    requireValue(definition.playlistIds.length > 0 || definition.videoIds.length > 0,
+      `${name}: Bestätigte Quellplaylist oder Videozuordnung fehlt.`);
     const sources = definition.playlistIds.flatMap((playlistId) => {
       requireValue(!assignedPlaylists.has(playlistId), `Playlist ${playlistId} ist mehreren Spielen zugeordnet.`);
       assignedPlaylists.add(playlistId);
@@ -239,8 +254,11 @@ function normalizeGames(definitions, playlists, videoById, warnings) {
     }
     for (const videoId of excluded) members.delete(videoId);
     const isReminder = (video) => /\bre\.minder\b/iu.test(video.title);
-    if ([...members].filter((videoId) => !isReminder(videoById.get(videoId))).length < 2) continue;
     const videos = [...members].map((videoId) => videoById.get(videoId)).sort(chronological);
+    const recentSingle = videos.length === 1 && !isReminder(videos[0])
+      && videos[0].publishedTime !== null && videos[0].publishedTime >= recentCutoff.getTime()
+      && sources.some((playlist) => playlist.videos.some((video) => video.id === videos[0].id));
+    if (videos.filter((video) => !isReminder(video)).length < 2 && !recentSingle) continue;
     if (release === null) warnings.push(`${name}: Erscheinungsjahr fehlt; wird als unbekannt angezeigt.`);
     const game = {
       id, name, route: `spiele/${id}/`, platforms: [...definition.platforms].sort(), aliases: [...definition.aliases].sort(),
@@ -300,6 +318,18 @@ function normalizeSections(definitions, videoById, playlists, warnings) {
         videoId: video.id, topic: assignment.topic, people: [...(assignment.people ?? [])],
         order: assignment.order ?? null, note: assignment.note ?? "",
       });
+    }
+    if (id === "retrospektiven") {
+      const vietnam = [...videoById.values()].filter((video) => /^\s*Themenblock\s+Vietnam\b/iu.test(video.title)
+        && !assignedIds.has(video.id) && !excludedVideoIds.includes(video.id)).sort(chronological);
+      const firstOrder = Math.max(-1, ...entries.map((entry) => entry.order)) + 1;
+      for (const [index, video] of vietnam.entries()) {
+        assignedIds.add(video.id);
+        entries.push({
+          videoId: video.id, topic: "Themenblock Vietnam", people: [],
+          order: firstOrder + index, note: "",
+        });
+      }
     }
     const candidatePattern = {
       hardware: /\bre\.ware\b|\bHardware\b/iu,
@@ -455,7 +485,7 @@ export function normalizeSources({ videos: videoCache, playlists: playlistCache,
         issue = { year: data.year, number: data.number, months: [...new Set(data.months)].sort((a, b) => a - b), special: data.special, label };
       }
       const archives = [];
-      for (const provider of ["kultmags", "reetroz"]) {
+      for (const provider of ["kultmags", "reetroz", "pcgamesdatabase", "amr"]) {
         const archive = mention[provider];
         if (archive === null || archive === undefined) continue;
         object(archive, `${name}: ${provider}`);
@@ -474,15 +504,47 @@ export function normalizeSources({ videos: videoCache, playlists: playlistCache,
     }
   }
   finalizeMagazines(magazineById, videoById, warnings);
-  const games = normalizeGames(definitions, playlists, videoById, warnings);
+  const games = normalizeGames(definitions, playlists, videoById, warnings, now);
   const sections = normalizeSections(sectionAssignments, videoById, playlists, warnings);
   for (const video of videos) {
+    video.detailRoute = video.blaetterabend && !video.magazines.some((magazine) => magazine.issue?.route) && !video.games.length
+      ? `zeitschriften/videos/${video.id}/` : null;
     video.magazines.sort((a, b) => a.id.localeCompare(b.id, "en"));
     video.playlists.sort((a, b) => a.id.localeCompare(b.id, "en"));
     video.games.sort((a, b) => a.id.localeCompare(b.id, "en"));
     video.sections.sort((a, b) => a.id.localeCompare(b.id, "en"));
   }
   videos.sort(newestFirst);
+  const reconsiderVideos = videos.filter((video) => /\bre\.consider\b/iu.test(video.title));
+  if (reconsiderVideos.length) {
+    const section = {
+      id: "reconsider", name: "re.consider", route: "reconsider/",
+      description: "re.consider: Einzelne Spiele im Rückblick, mit einem Video pro Spiel.",
+      entries: reconsiderVideos.map((video) => ({ videoId: video.id })),
+    };
+    sections.push(section);
+    for (const video of reconsiderVideos) {
+      video.sections.push({ id: section.id, name: section.name, route: section.route });
+    }
+  }
+  const otherVideos = videos.filter((video) => !video.blaetterabend && !video.games.length && !video.sections.length);
+  if (otherVideos.length) {
+    const section = {
+      id: "sonstiges", name: "Sonstiges", route: "sonstiges/",
+      description: "Weitere Videos von Pretty Old Pixel außerhalb der Spiele, Zeitschriften und übrigen Themenbereiche.",
+      entries: otherVideos.map((video) => ({ videoId: video.id })),
+    };
+    sections.push(section);
+    for (const video of otherVideos) {
+      video.detailRoute = `${section.route}${video.id}/`;
+      video.sections.push({ id: section.id, name: section.name, route: section.route });
+    }
+  }
+  for (const video of videos) {
+    if (!video.detailRoute && !video.games.length && !video.magazines.some((magazine) => magazine.issue?.route)) {
+      video.detailRoute = `${video.sections[0].route}${video.id}/`;
+    }
+  }
   return {
     channel: { id: videoCache.channel.id, title: text(videoCache.channel.title, "channel.title") },
     videos, videoById, playlists, games, sections,
@@ -504,5 +566,19 @@ export async function loadSiteData(cacheDirectory, options) {
       }
     }),
   );
-  return normalizeSources({ videos, playlists, magazines }, options);
+  const gameStar = await loadPcgamesdatabaseCatalog({
+    cacheDir: path.join(cacheDirectory, "pcgamesdatabase"), cachedOnly: true, optional: true,
+  });
+  if (Array.isArray(magazines.videos)) addPcgamesdatabaseLinks(magazines.videos, gameStar);
+  const amr = await loadAmrCatalog({ cacheDir: path.join(cacheDirectory, "amr"), cachedOnly: true, optional: true });
+  if (Array.isArray(magazines.videos)) addAmrLinks(magazines.videos, amr);
+  const model = normalizeSources({ videos, playlists, magazines }, options);
+  await loadMagazineLogos(model, cacheDirectory);
+  const gameStarMagazine = model.magazines.find((magazine) => magazine.name === "GameStar");
+  if (gameStar && gameStarMagazine) {
+    await attachMagazineLogo(model, gameStarMagazine, gameStar, path.join(cacheDirectory, "pcgamesdatabase"), "PC Games Database");
+  }
+  const amigaAction = model.magazines.find((magazine) => magazine.name === "Amiga Action");
+  if (amr && amigaAction) await attachMagazineLogo(model, amigaAction, amr, path.join(cacheDirectory, "amr"), "AMR");
+  return loadGameDiscussions(model, cacheDirectory);
 }

@@ -1,0 +1,1465 @@
+{
+  "name": "Amiga Action",
+  "url": "https://amr.abime.net/issues_1",
+  "fetchedAt": "2026-10-17T21:01:09.857Z",
+  "logo": {
+    "url": "https://amr.abime.net/logos/amiga_action_logos.png",
+    "file": "6ab37749f5b5e185b7aa3a8592e207682c78c88a03b7ed999c742ff4c955062e.png"
+  },
+  "sections": [
+    {
+      "name": "1989",
+      "url": "https://amr.abime.net/issues_1"
+    },
+    {
+      "name": "1990",
+      "url": "https://amr.abime.net/issues_1"
+    },
+    {
+      "name": "1991",
+      "url": "https://amr.abime.net/issues_1"
+    },
+    {
+      "name": "1992",
+      "url": "https://amr.abime.net/issues_1"
+    },
+    {
+      "name": "1993",
+      "url": "https://amr.abime.net/issues_1"
+    },
+    {
+      "name": "1994",
+      "url": "https://amr.abime.net/issues_1"
+    },
+    {
+      "name": "1995",
+      "url": "https://amr.abime.net/issues_1"
+    },
+    {
+      "name": "1996",
+      "url": "https://amr.abime.net/issues_1"
+    }
+  ],
+  "issues": [
+    {
+      "title": "Amiga Action #1 10/1989",
+      "section": "1989",
+      "year": 1989,
+      "numbers": [
+        10
+      ],
+      "issueNumber": 1,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_74",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #2 11/1989",
+      "section": "1989",
+      "year": 1989,
+      "numbers": [
+        11
+      ],
+      "issueNumber": 2,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_75",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #3 12/1989",
+      "section": "1989",
+      "year": 1989,
+      "numbers": [
+        12
+      ],
+      "issueNumber": 3,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_76",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #4 01/1990",
+      "section": "1990",
+      "year": 1990,
+      "numbers": [
+        1
+      ],
+      "issueNumber": 4,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_77",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #5 02/1990",
+      "section": "1990",
+      "year": 1990,
+      "numbers": [
+        2
+      ],
+      "issueNumber": 5,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_78",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #6 03/1990",
+      "section": "1990",
+      "year": 1990,
+      "numbers": [
+        3
+      ],
+      "issueNumber": 6,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_79",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #7 04/1990",
+      "section": "1990",
+      "year": 1990,
+      "numbers": [
+        4
+      ],
+      "issueNumber": 7,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_80",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #8 05/1990",
+      "section": "1990",
+      "year": 1990,
+      "numbers": [
+        5
+      ],
+      "issueNumber": 8,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_81",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #9 06/1990",
+      "section": "1990",
+      "year": 1990,
+      "numbers": [
+        6
+      ],
+      "issueNumber": 9,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_82",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #10 07/1990",
+      "section": "1990",
+      "year": 1990,
+      "numbers": [
+        7
+      ],
+      "issueNumber": 10,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_83",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #11 08/1990",
+      "section": "1990",
+      "year": 1990,
+      "numbers": [
+        8
+      ],
+      "issueNumber": 11,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_84",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #12 09/1990",
+      "section": "1990",
+      "year": 1990,
+      "numbers": [
+        9
+      ],
+      "issueNumber": 12,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_85",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #13 10/1990",
+      "section": "1990",
+      "year": 1990,
+      "numbers": [
+        10
+      ],
+      "issueNumber": 13,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_86",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #14 11/1990",
+      "section": "1990",
+      "year": 1990,
+      "numbers": [
+        11
+      ],
+      "issueNumber": 14,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_87",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #15 12/1990",
+      "section": "1990",
+      "year": 1990,
+      "numbers": [
+        12
+      ],
+      "issueNumber": 15,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_88",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #16 01/1991",
+      "section": "1991",
+      "year": 1991,
+      "numbers": [
+        1
+      ],
+      "issueNumber": 16,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_89",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #17 02/1991",
+      "section": "1991",
+      "year": 1991,
+      "numbers": [
+        2
+      ],
+      "issueNumber": 17,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_90",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #18 03/1991",
+      "section": "1991",
+      "year": 1991,
+      "numbers": [
+        3
+      ],
+      "issueNumber": 18,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_91",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #19 04/1991",
+      "section": "1991",
+      "year": 1991,
+      "numbers": [
+        4
+      ],
+      "issueNumber": 19,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_92",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #20 05/1991",
+      "section": "1991",
+      "year": 1991,
+      "numbers": [
+        5
+      ],
+      "issueNumber": 20,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_93",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #21 06/1991",
+      "section": "1991",
+      "year": 1991,
+      "numbers": [
+        6
+      ],
+      "issueNumber": 21,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_94",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #22 07/1991",
+      "section": "1991",
+      "year": 1991,
+      "numbers": [
+        7
+      ],
+      "issueNumber": 22,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_95",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #23 08/1991",
+      "section": "1991",
+      "year": 1991,
+      "numbers": [
+        8
+      ],
+      "issueNumber": 23,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_96",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #24 09/1991",
+      "section": "1991",
+      "year": 1991,
+      "numbers": [
+        9
+      ],
+      "issueNumber": 24,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_97",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #25 10/1991",
+      "section": "1991",
+      "year": 1991,
+      "numbers": [
+        10
+      ],
+      "issueNumber": 25,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_98",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #26 11/1991",
+      "section": "1991",
+      "year": 1991,
+      "numbers": [
+        11
+      ],
+      "issueNumber": 26,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_99",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #27 12/1991",
+      "section": "1991",
+      "year": 1991,
+      "numbers": [
+        12
+      ],
+      "issueNumber": 27,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_100",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #28 01/1992",
+      "section": "1992",
+      "year": 1992,
+      "numbers": [
+        1
+      ],
+      "issueNumber": 28,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_101",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #29 02/1992",
+      "section": "1992",
+      "year": 1992,
+      "numbers": [
+        2
+      ],
+      "issueNumber": 29,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_102",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #30 03/1992",
+      "section": "1992",
+      "year": 1992,
+      "numbers": [
+        3
+      ],
+      "issueNumber": 30,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_103",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #31 04/1992",
+      "section": "1992",
+      "year": 1992,
+      "numbers": [
+        4
+      ],
+      "issueNumber": 31,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_104",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #32 05/1992",
+      "section": "1992",
+      "year": 1992,
+      "numbers": [
+        5
+      ],
+      "issueNumber": 32,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_105",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #33 06/1992",
+      "section": "1992",
+      "year": 1992,
+      "numbers": [
+        6
+      ],
+      "issueNumber": 33,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_106",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #34 07/1992",
+      "section": "1992",
+      "year": 1992,
+      "numbers": [
+        7
+      ],
+      "issueNumber": 34,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_107",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #35 08/1992",
+      "section": "1992",
+      "year": 1992,
+      "numbers": [
+        8
+      ],
+      "issueNumber": 35,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_108",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #36 09/1992",
+      "section": "1992",
+      "year": 1992,
+      "numbers": [
+        9
+      ],
+      "issueNumber": 36,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_109",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #37 10/1992",
+      "section": "1992",
+      "year": 1992,
+      "numbers": [
+        10
+      ],
+      "issueNumber": 37,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_110",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #38 11/1992",
+      "section": "1992",
+      "year": 1992,
+      "numbers": [
+        11
+      ],
+      "issueNumber": 38,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_111",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #39 12/1992",
+      "section": "1992",
+      "year": 1992,
+      "numbers": [
+        12
+      ],
+      "issueNumber": 39,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_112",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #40 01/1993",
+      "section": "1993",
+      "year": 1993,
+      "numbers": [
+        1
+      ],
+      "issueNumber": 40,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_113",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #41 02/1993",
+      "section": "1993",
+      "year": 1993,
+      "numbers": [
+        2
+      ],
+      "issueNumber": 41,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_114",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #42 03/1993",
+      "section": "1993",
+      "year": 1993,
+      "numbers": [
+        3
+      ],
+      "issueNumber": 42,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_115",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #43 04/1993",
+      "section": "1993",
+      "year": 1993,
+      "numbers": [
+        4
+      ],
+      "issueNumber": 43,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_116",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #44 05/1993",
+      "section": "1993",
+      "year": 1993,
+      "numbers": [
+        5
+      ],
+      "issueNumber": 44,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_117",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #45 06/1993",
+      "section": "1993",
+      "year": 1993,
+      "numbers": [
+        6
+      ],
+      "issueNumber": 45,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_118",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #46 07/1993",
+      "section": "1993",
+      "year": 1993,
+      "numbers": [
+        7
+      ],
+      "issueNumber": 46,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_119",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #47 08/1993",
+      "section": "1993",
+      "year": 1993,
+      "numbers": [
+        8
+      ],
+      "issueNumber": 47,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_120",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #48 09/1993",
+      "section": "1993",
+      "year": 1993,
+      "numbers": [
+        9
+      ],
+      "issueNumber": 48,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_121",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #49 10/1993",
+      "section": "1993",
+      "year": 1993,
+      "numbers": [
+        10
+      ],
+      "issueNumber": 49,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_122",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #50 11/1993",
+      "section": "1993",
+      "year": 1993,
+      "numbers": [
+        11
+      ],
+      "issueNumber": 50,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_123",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #51 12/1993",
+      "section": "1993",
+      "year": 1993,
+      "numbers": [
+        12
+      ],
+      "issueNumber": 51,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_124",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #52 Xmas/1993",
+      "section": "1993",
+      "year": 1993,
+      "numbers": [],
+      "issueNumber": 52,
+      "special": true,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_125",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #53 01/1994",
+      "section": "1994",
+      "year": 1994,
+      "numbers": [
+        1
+      ],
+      "issueNumber": 53,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_126",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #54 02/1994",
+      "section": "1994",
+      "year": 1994,
+      "numbers": [
+        2
+      ],
+      "issueNumber": 54,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_127",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #55 03/1994",
+      "section": "1994",
+      "year": 1994,
+      "numbers": [
+        3
+      ],
+      "issueNumber": 55,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_128",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #56 04/1994",
+      "section": "1994",
+      "year": 1994,
+      "numbers": [
+        4
+      ],
+      "issueNumber": 56,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_129",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #57 05/1994",
+      "section": "1994",
+      "year": 1994,
+      "numbers": [
+        5
+      ],
+      "issueNumber": 57,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_130",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #58 06/1994",
+      "section": "1994",
+      "year": 1994,
+      "numbers": [
+        6
+      ],
+      "issueNumber": 58,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_131",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #59 07/1994",
+      "section": "1994",
+      "year": 1994,
+      "numbers": [
+        7
+      ],
+      "issueNumber": 59,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_132",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #60 08/1994",
+      "section": "1994",
+      "year": 1994,
+      "numbers": [
+        8
+      ],
+      "issueNumber": 60,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_133",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #61 09/1994",
+      "section": "1994",
+      "year": 1994,
+      "numbers": [
+        9
+      ],
+      "issueNumber": 61,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_134",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #62 10/1994",
+      "section": "1994",
+      "year": 1994,
+      "numbers": [
+        10
+      ],
+      "issueNumber": 62,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_135",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #63 11/1994",
+      "section": "1994",
+      "year": 1994,
+      "numbers": [
+        11
+      ],
+      "issueNumber": 63,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_136",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #64 12/1994",
+      "section": "1994",
+      "year": 1994,
+      "numbers": [
+        12
+      ],
+      "issueNumber": 64,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_137",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #65 Xmas/1994",
+      "section": "1994",
+      "year": 1994,
+      "numbers": [],
+      "issueNumber": 65,
+      "special": true,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_138",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #66 01/1995",
+      "section": "1995",
+      "year": 1995,
+      "numbers": [
+        1
+      ],
+      "issueNumber": 66,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_139",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #67 02/1995",
+      "section": "1995",
+      "year": 1995,
+      "numbers": [
+        2
+      ],
+      "issueNumber": 67,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_140",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #68 03/1995",
+      "section": "1995",
+      "year": 1995,
+      "numbers": [
+        3
+      ],
+      "issueNumber": 68,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_141",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #69 04/1995",
+      "section": "1995",
+      "year": 1995,
+      "numbers": [
+        4
+      ],
+      "issueNumber": 69,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_142",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #70 05/1995",
+      "section": "1995",
+      "year": 1995,
+      "numbers": [
+        5
+      ],
+      "issueNumber": 70,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_143",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #71 06/1995",
+      "section": "1995",
+      "year": 1995,
+      "numbers": [
+        6
+      ],
+      "issueNumber": 71,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_144",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #72 07/1995",
+      "section": "1995",
+      "year": 1995,
+      "numbers": [
+        7
+      ],
+      "issueNumber": 72,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_145",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #73 08/1995",
+      "section": "1995",
+      "year": 1995,
+      "numbers": [
+        8
+      ],
+      "issueNumber": 73,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_146",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #74 09/1995",
+      "section": "1995",
+      "year": 1995,
+      "numbers": [
+        9
+      ],
+      "issueNumber": 74,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_147",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #75 10/1995",
+      "section": "1995",
+      "year": 1995,
+      "numbers": [
+        10
+      ],
+      "issueNumber": 75,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_148",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #76 11/1995",
+      "section": "1995",
+      "year": 1995,
+      "numbers": [
+        11
+      ],
+      "issueNumber": 76,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_149",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #77 12/1995",
+      "section": "1995",
+      "year": 1995,
+      "numbers": [
+        12
+      ],
+      "issueNumber": 77,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_150",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #78 01/1996",
+      "section": "1996",
+      "year": 1996,
+      "numbers": [
+        1
+      ],
+      "issueNumber": 78,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_151",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #79 02/1996",
+      "section": "1996",
+      "year": 1996,
+      "numbers": [
+        2
+      ],
+      "issueNumber": 79,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_152",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #80 03/1996",
+      "section": "1996",
+      "year": 1996,
+      "numbers": [
+        3
+      ],
+      "issueNumber": 80,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_153",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #81 04/1996",
+      "section": "1996",
+      "year": 1996,
+      "numbers": [
+        4
+      ],
+      "issueNumber": 81,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_154",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #82 05/1996",
+      "section": "1996",
+      "year": 1996,
+      "numbers": [
+        5
+      ],
+      "issueNumber": 82,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_155",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #83 06/1996",
+      "section": "1996",
+      "year": 1996,
+      "numbers": [
+        6
+      ],
+      "issueNumber": 83,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_156",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #84 07/1996",
+      "section": "1996",
+      "year": 1996,
+      "numbers": [
+        7
+      ],
+      "issueNumber": 84,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_680",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #85 08/1996",
+      "section": "1996",
+      "year": 1996,
+      "numbers": [
+        8
+      ],
+      "issueNumber": 85,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_681",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #86 09/1996",
+      "section": "1996",
+      "year": 1996,
+      "numbers": [
+        9
+      ],
+      "issueNumber": 86,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_682",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #87 10/1996",
+      "section": "1996",
+      "year": 1996,
+      "numbers": [
+        10
+      ],
+      "issueNumber": 87,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_683",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #88 11/1996",
+      "section": "1996",
+      "year": 1996,
+      "numbers": [
+        11
+      ],
+      "issueNumber": 88,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_684",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    },
+    {
+      "title": "Amiga Action #89 12/1996",
+      "section": "1996",
+      "year": 1996,
+      "numbers": [
+        12
+      ],
+      "issueNumber": 89,
+      "special": false,
+      "supplement": false,
+      "words": [],
+      "pageUrl": "https://amr.abime.net/issue_685",
+      "readerUrl": null,
+      "downloadUrl": null,
+      "coverUrl": null
+    }
+  ]
+}

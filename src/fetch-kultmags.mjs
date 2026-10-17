@@ -1,5 +1,6 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { cacheKultmagsLogo, kultmagsLogoUrl } from "./kultmags-logos.mjs";
 import {
   DEFAULT_MAX_AGE_DAYS,
   DEFAULT_INDEX_MAX_AGE_DAYS,
@@ -38,6 +39,9 @@ function absoluteUrl(href) {
 }
 
 export function parseFolderPage(html) {
+  const imageContainer = /<div\b[^>]*\bclass\s*=\s*["'][^"']*\barchive-title-image\b[^"']*["'][^>]*>([\s\S]*?)<\/div>/iu.exec(html)?.[1];
+  const imageSource = imageContainer && /<img\b[^>]*\bsrc\s*=\s*["']([^"']+)["']/iu.exec(imageContainer)?.[1];
+  const logoUrl = imageSource ? kultmagsLogoUrl(decodeHtml(imageSource)).href : null;
   const folders = [...new Set(
     [...html.matchAll(/class="folder-name"><a href="mags\.php\?folder=([^"&]+)"/g)].map((match) => decodeFolder(match[1])),
   )];
@@ -47,7 +51,7 @@ export function parseFolderPage(html) {
     readerUrl: absoluteUrl(/<a href="(https:\/\/reader\.kultmags\.com\/[^"]+)"/.exec(card)?.[1]),
     coverUrl: absoluteUrl(/<img class="mag-cover" src="([^"]+)"/.exec(card)?.[1]),
   }));
-  return { folders, cards };
+  return { folders, cards, logoUrl };
 }
 
 function significantWords(text) {
@@ -106,11 +110,17 @@ async function loadMagazine(name, { cacheDir, maxAgeDays, refresh, now, fetcher,
     if (!cached) throw new Error(`kultmags-Cache fehlt: ${file}. Zuerst npm run fetch:archives ausführen.`);
     return cached;
   }
-  if (!refresh && isFresh(cached, maxAgeDays, now)) {
+  if (!refresh && isFresh(cached, maxAgeDays, now) && cached.logo !== undefined) {
     return cached;
   }
 
   const top = parseFolderPage(await fetcher.fetchPage(folderUrl(name)));
+  const logo = await cacheKultmagsLogo(top.logoUrl, cacheDir, fetcher);
+  if (!refresh && isFresh(cached, maxAgeDays, now)) {
+    const updated = { ...cached, logo };
+    await writeJson(file, updated);
+    return updated;
+  }
   const sections = [{ name: null, folder: name, cards: top.cards }];
   for (const folder of top.folders) {
     const { cards } = parseFolderPage(await fetcher.fetchPage(folderUrl(folder)));
@@ -119,6 +129,7 @@ async function loadMagazine(name, { cacheDir, maxAgeDays, refresh, now, fetcher,
 
   const magazine = {
     name,
+    logo,
     url: folderUrl(name),
     fetchedAt: new Date(now).toISOString(),
     sections: sections

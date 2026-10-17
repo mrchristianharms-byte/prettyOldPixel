@@ -42,6 +42,15 @@ function issueFixture() {
 
 const issuePage = (pages) => [...pages].find(([file]) => file.includes("/ausgaben/"))[1].html;
 
+test("zeigt auf der Startseite den Markennamen nur im Kopf statt als zusätzliche Überschrift", () => {
+  const { pages } = render();
+  const html = pages.get("index.html").html;
+  assert.ok(html.includes('<a class="brand" href="./">Pretty Old Pixel</a>'));
+  assert.ok(!html.includes("<h1>Pretty Old Pixel</h1>"));
+  assert.ok(html.includes('<h1 class="visually-hidden">Pretty Old Pixel</h1>'));
+  assert.ok(html.includes('<p class="lead">Retrospiele entdecken'));
+});
+
 test("entfernt Startseite nur aus der Hauptnavigation und behält Markenlink und Brotkrümel", () => {
   const { pages, config } = render(issueFixture());
   for (const { html, route } of pages.values()) {
@@ -72,11 +81,11 @@ async function setup(t, input = fixture()) {
   };
 }
 
-test("erzeugt News und Themenlinks ohne Gesamtkatalog oder separate Videoseiten", () => {
+test("erzeugt News mit Sonstiges-Detailseiten ohne Gesamtkatalog", () => {
   const { pages, config, assets } = render();
-  assert.equal(pages.size, 4);
+  assert.equal(pages.size, 58);
   assert.ok(![...pages.keys()].some((file) => file.startsWith("videos/")));
-  assert.ok(pages.get("news/index.html").html.includes('href="https://www.youtube.com/watch?v=b0000000052" rel="external"'));
+  assert.ok(pages.get("news/index.html").html.includes('href="../sonstiges/b0000000052/#video-b0000000052"'));
   for (const page of pages.values()) {
     assert.ok(!page.html.includes("Alle Videos"));
     assert.ok(!/href="[^"]*videos\//u.test(page.html));
@@ -316,7 +325,7 @@ test("baut offline mit Projektpfad, Sitemap und Inhalts-Manifest; übernimmt unv
   globalThis.fetch = () => { throw new Error("Netzwerk im Build verboten"); };
   t.after(() => { globalThis.fetch = originalFetch; });
   const first = await generateSite(options);
-  assert.equal(first.pages, 4);
+  assert.equal(first.pages, 58);
   assert.equal(first.reused, 0);
   assert.ok(first.cssGzip <= 20 * 1024);
   assert.ok(first.jsGzip <= 5 * 1024);
@@ -352,6 +361,8 @@ test("ignoriert Abrufzeiten, aktualisiert nur betroffene Inhalte und entfernt ve
   await generateSite(options);
   const newsPath = path.join(options.outputDirectory, "news/index.html");
   const before = await readFile(newsPath, "utf8");
+  const otherPath = path.join(options.outputDirectory, "sonstiges/index.html");
+  const otherBefore = await readFile(otherPath, "utf8");
   input.videos.fetchedAt = "2099-01-01T00:00:00Z";
   input.playlists.lastModified = "2099-01-01T00:00:00Z";
   input.magazines.generatedAt = "2099-01-01T00:00:00Z";
@@ -361,7 +372,8 @@ test("ignoriert Abrufzeiten, aktualisiert nur betroffene Inhalte und entfernt ve
   input.videos.videos[0].description = "Korrektur an einem alten Video";
   await options.save(input);
   const changed = await generateSite(options);
-  assert.equal(changed.reused, changed.files);
+  assert.ok(changed.reused < changed.files);
+  assert.notEqual(await readFile(otherPath, "utf8"), otherBefore);
   assert.equal(await readFile(newsPath, "utf8"), before);
   input.videos.videos.pop();
   for (const route of ["videos", "videos/seite/2", "videos/b0000000052"]) {

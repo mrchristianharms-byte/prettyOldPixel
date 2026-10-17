@@ -7,14 +7,19 @@ applyTo: "src/site-*.mjs,src/widget/**/*.mjs,src/site.css,tests/site-*.test.mjs,
 
 - Wiederverwendbare HTML-Widgets unter `src/widget/` als ES-Module definieren
   und im Seitengenerator importieren, nicht dort erneut implementieren.
-  `video.mjs`, `episode-list.mjs`, `catalog-grid.mjs`, `metadata.mjs` und `video-entry.mjs`
+  `video.mjs`, `episode-list.mjs`, `catalog-grid.mjs`, `metadata.mjs`, `video-entry.mjs`,
+  `pagination.mjs`, `archive-links.mjs`, `video-panel.mjs`, `navigation.mjs`
+  `game-discussions.mjs` und `magazine-logo.mjs`
   sind die gemeinsamen Komponenten. Escaping/Links aus `src/site-html.mjs`
   und Datums-/Laufzeitformatierung aus `src/site-format.mjs` wiederverwenden.
   Interne Video- und Themenlinks aus `src/site-video-links.mjs` wiederverwenden.
   Widgets duerfen nicht den Renderer importieren; keine zyklischen Abhaengigkeiten.
-  News, Hardware, Retrospektiven und Interviews setzen pro Beitrag
+  News, Hardware, Retrospektiven, Interviews, Sonstiges sowie Zeitschriften-
+  und Jahrgangslisten setzen pro Beitrag
   `videoListEntry` ein. Seitenspezifische Auswahl, Reihenfolge und Gruppierung
   bleiben im Renderer; Eintragsmarkup nicht je Seitentyp duplizieren.
+  In Zeitschriftenlisten Ausgabenkontext und Teilnummer an das Widget
+  uebergeben; Titel und Thumbnail muessen zur jeweiligen Ausgabe fuehren.
   Im Eintrags-Widget den Titel ueber die volle Breite darstellen. Darunter
   eine kleine verlinkte 16:9-Vorschau links und Datum, Kategorie und Beschreibung
   rechts daneben mit linksbuendiger Textausrichtung darstellen.

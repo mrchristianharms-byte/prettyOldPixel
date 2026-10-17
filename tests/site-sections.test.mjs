@@ -8,6 +8,7 @@ import { normalizeSources, loadSiteData } from "../src/site-data.mjs";
 import { createSiteConfig } from "../src/site-config.mjs";
 import { renderSite } from "../src/site-render.mjs";
 import { generateSite, validateSite } from "../src/generate-site.mjs";
+import { videoListEntry } from "../src/widget/video-entry.mjs";
 
 const channel = { id: "UC-sections", title: "Pretty Old Pixel" };
 const videoId = (index) => `s${String(index).padStart(10, "0")}`;
@@ -43,6 +44,161 @@ function render(input = fixture(), sections = [definition()], options = {}) {
 }
 const graph = (html) => JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/u)[1])["@graph"];
 
+test("verlinkt Sonstiges und News intern auf eigene Videodetailseiten mit gemeinsamem Player", () => {
+  const input = fixture(2);
+  input.videos.videos[0].description = "Vollständige Beschreibung zum Video.";
+  const { model, pages, config } = render(input, []);
+  for (const video of model.videos) {
+    const route = `sonstiges/${video.id}/`;
+    assert.equal(video.detailRoute, route);
+    for (const listing of ["sonstiges/", "news/"]) {
+      const html = pages.get(`${listing}index.html`).html;
+      const href = `${config.href(route, listing)}#video-${video.id}`;
+      assert.ok(html.includes(`href="${href}">${video.title}</a>`));
+      assert.ok(html.includes(`class="video-entry-thumbnail" href="${href}"`));
+      assert.ok(!html.includes('class="detail-player"'));
+    }
+    const html = pages.get(`${route}index.html`).html;
+    assert.ok(html.includes(`id="video-${video.id}"`));
+    assert.ok(html.includes('class="detail-player"'));
+    assert.ok(html.includes("<h3>Videobeschreibung</h3>"));
+    assert.ok(html.includes('aria-label="Videos auf dieser Seite"'));
+    assert.ok(!html.includes("Heftausgabe"));
+    const schema = graph(html);
+    assert.equal(schema.find((item) => item["@type"] === "VideoObject").sameAs, video.url);
+    assert.deepEqual(schema.find((item) => item["@type"] === "BreadcrumbList").itemListElement.map((item) => item.name),
+      ["Startseite", "Sonstiges", video.title]);
+  }
+  assert.ok(pages.get(`sonstiges/${videoId(0)}/index.html`).html.includes(input.videos.videos[0].description));
+  const assigned = render(input, [definition("hardware", 1)]);
+  assert.equal(assigned.model.videoById.get(videoId(0)).detailRoute, `hardware/${videoId(0)}/`);
+  assert.ok(!assigned.pages.has(`sonstiges/${videoId(0)}/index.html`));
+});
+
+test("ordnet Themenblock Vietnam per Titelregel chronologisch und ohne manuelle IDs zu", () => {
+  const input = fixture(6);
+  input.videos.videos[0].title = "Themenblock Vietnam - Teil 1";
+  input.videos.videos[1].title = "  THEMENBLOCK   VIETNAM - Teil 2";
+  input.videos.videos[2].title = "Themenblock Vietnam - Neuer Beitrag";
+  input.videos.videos[3].title = "Themenblock Vietnamesisch";
+  input.videos.videos[4].title = "Spiel über Vietnam";
+  input.videos.videos[5].title = "Themenblock Vietnam - ausgeschlossen";
+  const section = definition("retrospektiven", 0);
+  section.excludedVideoIds = [videoId(5)];
+  const { model, pages } = render(input, [section]);
+  const entries = model.sections.find((section) => section.id === "retrospektiven").entries;
+  assert.deepEqual(entries.map((entry) => entry.videoId), [videoId(0), videoId(1), videoId(2)]);
+  assert.ok(entries.every((entry) => entry.topic === "Themenblock Vietnam"));
+  const html = pages.get("retrospektiven/index.html").html;
+  assert.ok(html.includes("<h2>Themenblock Vietnam</h2>"));
+  assert.equal((html.match(/<li><article>/gu) ?? []).length, 3);
+  assert.ok(!model.warnings.some((warning) => warning.includes("Neuer Kandidat")));
+  for (const index of [0, 1, 2]) {
+    assert.ok(!model.videoById.get(videoId(index)).sections.some((section) => section.id === "sonstiges"));
+  }
+  input.videos.videos.reverse();
+  assert.deepEqual([...render(input, [section]).pages], [...pages]);
+  const manual = { ...section, videos: [{ id: videoId(0), topic: "Geprüfter Kontext", order: 0 }] };
+  const assigned = render(input, [manual]).model.sections.find((section) => section.id === "retrospektiven").entries;
+  assert.equal(assigned.filter((entry) => entry.videoId === videoId(0)).length, 1);
+  assert.equal(assigned.find((entry) => entry.videoId === videoId(0)).topic, "Geprüfter Kontext");
+});
+
+test("Sonstiges erfasst nur thematisch unzugeordnete Videos unabhängig von News und Playlists", () => {
+  const input = fixture(7);
+  input.videos.videos[6].publishedAt = null;
+  input.magazines.videos = [
+    { id: videoId(1), magazines: [{ name: "Demo", issue: null }] },
+    { id: videoId(2), magazines: [] },
+  ];
+  input.playlists.playlists = [
+    { id: "PL-game", title: "Demo-Spiel", videos: [3, 4].map((index) => ({
+      videoId: videoId(index), position: index, availability: "listed",
+    })) },
+    { id: "PL-other", title: "Andere Playlist", videos: [
+      { videoId: videoId(5), position: 1, availability: "listed" },
+    ] },
+  ];
+  const model = normalizeSources(input, {
+    sections: [definition("hardware", 1)],
+    games: [{ id: "demo-spiel", name: "Demo-Spiel", playlistIds: ["PL-game"], videoIds: [], platforms: [], aliases: [] }],
+  });
+  const other = model.sections.find((section) => section.id === "sonstiges");
+  assert.deepEqual(other.entries.map((entry) => entry.videoId), [videoId(5), videoId(6)]);
+  assert.ok(model.news.some((video) => video.id === videoId(5)));
+  assert.deepEqual(model.videoById.get(videoId(5)).sections, [
+    { id: "sonstiges", name: "Sonstiges", route: "sonstiges/" },
+  ]);
+  const reassigned = normalizeSources(input, {
+    games: [], sections: [definition("hardware", 7)],
+  });
+  assert.ok(!reassigned.sections.some((section) => section.id === "sonstiges"));
+});
+
+test("Sonstiges nutzt News-Einträge, paginiert alle Videos und erscheint in Navigation und Themenübersicht", () => {
+  const input = fixture(61);
+  input.videos.videos[0].publishedAt = null;
+  const { model, pages, config } = render(input, []);
+  const first = pages.get("sonstiges/index.html").html;
+  const second = pages.get("sonstiges/seite/2/index.html").html;
+  assert.equal(model.sections[0].entries.length, 61);
+  assert.equal((first.match(/<li><article>/gu) ?? []).length, 60);
+  assert.equal((second.match(/<li><article>/gu) ?? []).length, 1);
+  assert.equal(graph(first)[0].mainEntity.itemListElement.length, 60);
+  assert.ok(second.includes("Veröffentlichungsdatum unbekannt"));
+  assert.ok(first.includes('href="./" aria-current="page">Sonstiges</a>'));
+  assert.ok(pages.get("index.html").html.includes('href="sonstiges/">Sonstiges</a>'));
+  assert.ok(pages.get("news/index.html").html.includes('href="../sonstiges/">Sonstiges</a>'));
+  assert.ok(!first.includes("Thema:"));
+  assert.ok(!first.includes("<iframe"));
+  assert.ok(!first.includes('type="module"'));
+  const news = pages.get("news/index.html").html;
+  const newest = model.videos[0];
+  assert.ok(first.includes(videoListEntry(newest, config.forPage("sonstiges/"))));
+  assert.ok(news.includes(videoListEntry(newest, config.forPage("news/"))));
+});
+
+test("Sonstiges bleibt bei geänderter Quellreihenfolge deterministisch und entfällt ohne Restvideos", () => {
+  const input = fixture();
+  const first = render(input, []).pages;
+  input.videos.videos.reverse();
+  assert.deepEqual([...render(input, []).pages], [...first]);
+  assert.ok(!render(fixture(), [definition()]).pages.has("sonstiges/index.html"));
+});
+
+test("re.consider ordnet Formatvideos automatisch zu und verwendet paginierte News-Einträge", () => {
+  const input = fixture(63);
+  input.videos.videos.forEach((video, index) => {
+    video.title = `Spiel ${index} [${index === 1 ? "RE.CONSIDER" : "re.consider"}]`;
+  });
+  input.videos.videos[0].publishedAt = null;
+  input.videos.videos[61].title = "Spiel re.considered";
+  input.videos.videos[62].title = "Anderes Spiel";
+  const { model, pages, config } = render(input, [definition("hardware", 2)]);
+  const section = model.sections.find((section) => section.id === "reconsider");
+  assert.equal(section.entries.length, 61);
+  assert.equal(section.entries.at(-1).videoId, videoId(0));
+  assert.ok(model.videoById.get(videoId(1)).sections.some((section) => section.id === "hardware"));
+  assert.ok(model.videoById.get(videoId(1)).sections.some((section) => section.id === "reconsider"));
+  assert.deepEqual(model.sections.find((section) => section.id === "sonstiges").entries.map((entry) => entry.videoId),
+    [videoId(62), videoId(61)]);
+  const first = pages.get("reconsider/index.html").html;
+  const second = pages.get("reconsider/seite/2/index.html").html;
+  assert.equal((first.match(/<li><article>/gu) ?? []).length, 60);
+  assert.equal((second.match(/<li><article>/gu) ?? []).length, 1);
+  assert.ok(second.includes("Veröffentlichungsdatum unbekannt"));
+  assert.ok(first.includes(videoListEntry(model.videoById.get(videoId(60)), config.forPage("reconsider/"))));
+  assert.ok(first.includes('href="./" aria-current="page">re.consider</a>'));
+  assert.ok(pages.get("index.html").html.includes('href="reconsider/">re.consider</a>'));
+  assert.ok(!first.includes("Thema:"));
+  assert.ok(!first.includes('type="module"'));
+  assert.ok(!first.includes("<iframe"));
+  assert.ok(!render(fixture(), []).pages.has("reconsider/index.html"));
+  const original = [...pages];
+  input.videos.videos.reverse();
+  assert.deepEqual([...render(input, [definition("hardware", 2)]).pages], original);
+});
+
 test("beschreibt Themen für Besucher ohne interne Prüf- oder Cachehinweise", () => {
   for (const id of ["hardware", "retrospektiven", "interviews"]) {
     const { pages } = render(fixture(), [definition(id)]);
@@ -66,8 +222,8 @@ test("ordnet nur geprüfte IDs zu und meldet neue Titel-/Playlist-Kandidaten", (
   const before = structuredClone(input);
   const { model } = render(input, [section]);
   assert.deepEqual(model.sections[0].entries.map((entry) => entry.videoId), [videoId(0)]);
-  assert.equal(model.videoById.get(videoId(1)).sections.length, 0);
-  assert.equal(model.videoById.get(videoId(2)).sections.length, 0);
+  assert.deepEqual(model.videoById.get(videoId(1)).sections.map((section) => section.id), ["sonstiges"]);
+  assert.deepEqual(model.videoById.get(videoId(2)).sections.map((section) => section.id), ["sonstiges"]);
   assert.equal(model.warnings.filter((warning) => warning.includes("Neuer Kandidat")).length, 2);
   assert.ok(!model.warnings.some((warning) => warning.includes(`hardware/${videoId(2)}`)));
   assert.deepEqual(input, before);
@@ -101,14 +257,14 @@ test("gruppiert Retrospektiven nach Thema und geprüfter Reihenfolge statt Origi
   const html = pages.get("retrospektiven/index.html").html;
   assert.ok(html.indexOf("<h2>Einleitung</h2>") < html.indexOf("<h2>Geschichte</h2>"));
   const items = graph(html)[0].mainEntity.itemListElement;
-  assert.deepEqual(items.map((item) => item.url.split("v=")[1]), [videoId(3), videoId(0), videoId(1), videoId(2)]);
+  assert.deepEqual(items.map((item) => item.url.split("#video-")[1]), [videoId(3), videoId(0), videoId(1), videoId(2)]);
   assert.equal((html.match(/<h3>/gu) ?? []).length, 4);
   assert.ok(html.includes("#11] erster Beitrag"));
   assert.ok(html.includes("#11] zweiter Beitrag"));
   assert.ok(![...pages.keys()].some((file) => file.startsWith("retrospektiven/geschichte/")));
 });
 
-test("verlinkt Bereiche, Personen und bestätigte Spielkontexte ohne neue Videoseiten oder Player", () => {
+test("verlinkt Bereiche intern auf Spiele oder eigene Detailseiten und hält Listen ohne Player", () => {
   const input = fixture();
   input.playlists.playlists = [{
     id: "PL-game", title: "Ein Spiel", videos: input.videos.videos.slice(0, 2).map((video, index) => ({
@@ -125,7 +281,7 @@ test("verlinkt Bereiche, Personen und bestätigte Spielkontexte ohne neue Videos
   validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""]]), config);
   const html = pages.get("interviews/index.html").html;
   assert.ok(html.includes('href="../spiele/ein-spiel/#video-s0000000000"'));
-  assert.ok(html.includes('href="https://www.youtube.com/watch?v=s0000000003" rel="external"'));
+  assert.ok(html.includes('href="s0000000003/#video-s0000000003"'));
   assert.ok(html.includes("Im Gespräch: Person 0"));
   assert.ok(html.includes("Thema: Thema 0"));
   assert.ok(!html.includes("<iframe"));
@@ -144,10 +300,10 @@ test("hält Themen auch bei überlappenden Folgenpositionen in HTML und JSON-LD 
   assert.deepEqual(model.sections[0].entries.map((entry) => entry.videoId),
     [videoId(0), videoId(2), videoId(1), videoId(3)]);
   const html = pages.get("retrospektiven/index.html").html;
-  assert.deepEqual(graph(html)[0].mainEntity.itemListElement.map((item) => item.url.split("v=")[1]),
+  assert.deepEqual(graph(html)[0].mainEntity.itemListElement.map((item) => item.url.split("#video-")[1]),
     [videoId(0), videoId(2), videoId(1), videoId(3)]);
-  assert.ok(html.indexOf(`href="https://www.youtube.com/watch?v=${videoId(2)}"`)
-    < html.indexOf(`href="https://www.youtube.com/watch?v=${videoId(1)}"`));
+  assert.ok(html.indexOf(`href="${videoId(2)}/#video-${videoId(2)}"`)
+    < html.indexOf(`href="${videoId(1)}/#video-${videoId(1)}"`));
 });
 
 test("paginiert Bereiche und bewahrt relative Links sowie aktive Hauptnavigation", () => {
@@ -159,7 +315,11 @@ test("paginiert Bereiche und bewahrt relative Links sowie aktive Hauptnavigation
     assert.equal(graph(second)[0].mainEntity.itemListElement.length, 1);
     assert.ok(second.includes('rel="canonical" href="./"'));
     assert.ok(second.includes('href="../../" rel="prev"'));
-    assert.ok(second.includes(`href="../../" aria-current="page">${sectionDefinitions.find((section) => section.id === id).name}</a>`));
+    assert.ok(second.includes(`href="../../" aria-current="page">${{ hardware: "re.ware", interviews: "Interviews", retrospektiven: "projects" }[id] ?? sectionDefinitions.find((section) => section.id === id).name}</a>`));
+    if (id === "interviews") {
+      assert.ok(second.includes("<h1>Interviews und Gespräche – Seite 2</h1>"));
+      assert.ok(!second.match(/<nav aria-label="Hauptnavigation">[\s\S]*?<\/nav>/u)[0].includes("Interviews und Gespräche"));
+    }
     assert.ok(!pages.has(`${id}/geraete/index.html`));
   }
 });
@@ -181,7 +341,7 @@ test("erzeugt keine leeren Bereiche und lässt fehlende oder zukünftige Beiträ
   const { model, pages } = render(input, [definition("hardware", 3)]);
   assert.equal(model.sections[0].entries.length, 1);
   const empty = render(fixture(), [{ ...definition(), videos: [] }]);
-  assert.equal(empty.model.sections.length, 0);
+  assert.deepEqual(empty.model.sections.map((section) => section.id), ["sonstiges"]);
   assert.ok(!empty.pages.has("hardware/index.html"));
   assert.ok(!empty.pages.get("index.html").html.includes('href="hardware/"'));
   assert.ok(!pages.has("interviews/index.html"));
@@ -221,11 +381,43 @@ test("prüft ungültige Zuordnungen, doppelte IDs und fehlende Personen oder Rei
 test("prüft die echten kuratierten Zuordnungen und die doppelte Originalnummer der Flugsimulationen", async () => {
   const cache = path.resolve(import.meta.dirname, "../cache");
   const model = await loadSiteData(cache);
-  assert.deepEqual(model.sections.map((section) => [section.id, section.entries.length]),
-    [["hardware", 14], ["retrospektiven", 13], ["interviews", 8]]);
-  assert.ok(!model.sections[0].entries.some((entry) => entry.videoId === "bwVnfQJ-WEw"));
+  assert.deepEqual(model.sections.filter((section) => ["hardware", "retrospektiven", "interviews"].includes(section.id)).map((section) => [section.id, section.entries.length]),
+    [["hardware", 15], ["retrospektiven", 21], ["interviews", 8]]);
+  const other = model.sections.find((section) => section.id === "sonstiges");
+  assert.ok(other.entries.length > 0);
+  assert.deepEqual(other.entries.map((entry) => entry.videoId),
+    model.videos.filter((video) => !video.blaetterabend && !video.games.length
+      && video.sections.every((section) => section.id === "sonstiges")).map((video) => video.id));
+  assert.ok(model.sections[0].entries.some((entry) => entry.videoId === "bwVnfQJ-WEw"));
+  assert.ok(!other.entries.some((entry) => entry.videoId === "bwVnfQJ-WEw"));
+  assert.equal(model.videoById.get("bwVnfQJ-WEw").detailRoute, "hardware/bwVnfQJ-WEw/");
   assert.ok(model.sections[0].entries.find((entry) => entry.videoId === "XDvGVislnJg").note);
-  assert.deepEqual(model.sections[1].entries.slice(-2).map((entry) => entry.videoId), ["4KrDqSCgFNw", "LuWmntgoZEo"]);
+  assert.deepEqual(model.sections[1].entries.filter((entry) => entry.topic === "Geschichte der Flugsimulationen").slice(-2).map((entry) => entry.videoId), ["4KrDqSCgFNw", "LuWmntgoZEo"]);
+  assert.deepEqual(model.sections[1].entries.filter((entry) => entry.topic === "Themenblock Vietnam").map((entry) => entry.videoId),
+    ["HZ9tBbNtLJU", "MnJECZ7NWMQ"]);
+  const immersionIds = ["4s7lDupOgWg", "TAsByu_hCwo", "E23VT0epyHo", "hJdFOecpQvE", "HoLJ5JRh1Jw", "19oYQ-fUt70"];
+  assert.deepEqual(model.sections[1].entries.filter((entry) => entry.topic === "Immersion in Videospielen").map((entry) => entry.videoId),
+    immersionIds);
+  for (const id of immersionIds) {
+    assert.ok(!other.entries.some((entry) => entry.videoId === id));
+    assert.ok(model.videoById.get(id).sections.some((section) => section.id === "retrospektiven"));
+  }
+  const config = createSiteConfig();
+  const html = renderSite(model, config, "assets/test.css").get("retrospektiven/index.html").html;
+  const navigation = html.match(/<nav aria-label="Hauptnavigation">[\s\S]*?<\/nav>/u)[0];
+  assert.ok(navigation.includes('>Blätterabend</a>'));
+  assert.ok(navigation.includes('>re.play</a>'));
+  assert.ok(navigation.includes('aria-current="page">projects</a>'));
+  assert.deepEqual([...navigation.matchAll(/<a [^>]*>([^<]+)<\/a>/gu)].map((match) => match[1]),
+    ["News", "Blätterabend", "re.play", "re.consider", "re.ware", "projects", "Interviews", "Sonstiges"]);
+  assert.equal((navigation.match(/class="navigation-separator" aria-hidden="true">\|/gu) ?? []).length, 1);
+  assert.ok(navigation.indexOf(">re.consider</a>") < navigation.indexOf('class="navigation-separator"'));
+  assert.ok(navigation.indexOf('class="navigation-separator"') < navigation.indexOf(">re.ware</a>"));
+  assert.ok(!/>Zeitschriften<\/a>|>Spiele<\/a>|>Retrospektiven<\/a>/u.test(navigation));
+  assert.ok(html.includes("<h2>Immersion in Videospielen</h2>"));
+  for (let index = 1; index < immersionIds.length; index += 1) {
+    assert.ok(html.indexOf(`#video-${immersionIds[index - 1]}`) < html.indexOf(`#video-${immersionIds[index]}`));
+  }
   assert.ok(model.videoById.get("S-7vf5iizyk").games.length);
   assert.ok(model.videoById.get("S-7vf5iizyk").sections.some((section) => section.id === "interviews"));
 });

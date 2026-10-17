@@ -12,7 +12,7 @@ export function sectionLinks(video, config) {
 }
 
 export function videoHref(video, config, issueRoute) {
-  const route = issueRoute ?? video.magazines.find((magazine) => magazine.issue?.route)?.issue.route ?? video.games[0]?.route;
+  const route = issueRoute ?? video.magazines.find((magazine) => magazine.issue?.route)?.issue.route ?? video.games[0]?.route ?? video.detailRoute;
   return route ? `${config.href(route)}#video-${video.id}` : video.url;
 }
 

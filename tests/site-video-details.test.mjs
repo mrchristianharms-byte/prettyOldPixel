@@ -14,6 +14,27 @@ const video = (description, durationSeconds = 7200) => ({
 });
 const details = (description, duration) => extractVideoDetails(video(description, duration), channel);
 
+test("entfernt nur tatsächlich erkannte Kapitelzeilen samt Überschrift und erhält den übrigen Text", () => {
+  const source = "Einleitung\n\nKapitel:\n00:00 Intro\n01:30 Spiel\n02:00 Außerhalb\n\nKontakt und Hinweise";
+  const result = details(source, 120);
+  assert.equal(result.descriptionWithoutChapters, "Einleitung\n\n02:00 Außerhalb\n\nKontakt und Hinweise");
+  for (const text of ["20:00 Aufnahmebeginn\n21:00 Twitch", "Kapitel:\n00:00 Intro\n00:00 Doppelt", "Kapitel:\n99:00 Außerhalb"]) {
+    assert.equal(details(text, 120).descriptionWithoutChapters, text);
+  }
+});
+
+test("entfernt gültige eigene Zeitlinks einschließlich Duplikaten, nicht deren Begleittext oder fremde und ungültige Links", () => {
+  const own = `https://www.youtube.com/watch?v=${id}&t=90`;
+  const other = "https://www.youtube.com/watch?v=b0000000000&t=90";
+  const invalid = `https://www.youtube.com/watch?v=${id}&t=7200`;
+  const result = details(`Hinweis: ${own}\n${own}\n${other}\n${invalid}\nhttps://youtube.com/@Guest`);
+  assert.ok(!result.descriptionWithoutChapters.includes(own));
+  for (const text of ["Hinweis:", other, invalid, "https://youtube.com/@Guest"]) {
+    assert.ok(result.descriptionWithoutChapters.includes(text));
+  }
+  assert.equal(result.chapters.length, 1);
+});
+
 test("liest aufsteigende Kapitelblöcke mit Nullbeginn, Stunden und Trennzeichen", () => {
   const result = details("Einleitungstext\n\n00:00:00 - Intro\n00:01:30 Gameplay\n01:02:03 | Schluss\n\nWeitere Angaben");
   assert.deepEqual(result.chapters.map(({ seconds, label }) => [seconds, label]), [
@@ -136,6 +157,9 @@ test("rendert Kapitel und Kanäle in Spiel- und Ausgabepanels ohne neue Skripte 
     assert.equal((html.match(/class="episode-menu"/gu) ?? []).length, 1);
     assert.ok(html.includes("Kapitel und Zeitmarken"));
     assert.ok(html.includes("1:30 · &lt;Gameplay&gt;"));
+    const description = html.match(/<div class="description">([\s\S]*?)<\/div>/u)[1];
+    assert.ok(!description.includes("Intro") && !description.includes("Gameplay"));
+    assert.ok(description.includes("https://youtube.com/@Guest"));
     assert.ok(html.includes(`watch?v=${id}&amp;t=90s" rel="external"`));
     assert.ok(html.includes('data-chapter-seconds="90"'));
     assert.ok(html.includes('data-chapter-hint'));

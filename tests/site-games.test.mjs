@@ -7,7 +7,7 @@ import { generateSite, validateSite } from "../src/generate-site.mjs";
 import { gameDefinitions } from "../src/data-games.mjs";
 import gameReleaseYears from "../src/data-game-release-years.json" with { type: "json" };
 import { createSiteConfig } from "../src/site-config.mjs";
-import { normalizeSources } from "../src/site-data.mjs";
+import { normalizeSources, loadSiteData } from "../src/site-data.mjs";
 import { renderSite } from "../src/site-render.mjs";
 
 const channel = { id: "UC-games", title: "Pretty Old Pixel" };
@@ -44,6 +44,85 @@ function render(input = fixture(), definitions = [definition()]) {
 }
 
 const graph = (html) => JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/u)[1])["@graph"];
+
+test("veröffentlicht manuell bestätigte Spielreihen ohne Playlist, aber nicht ohne Zuordnung oder unterhalb der Schwelle", () => {
+  const input = fixture();
+  input.playlists.playlists = [];
+  const manual = definition({ playlistIds: [], videoIds: [videoId(0), videoId(1)] });
+  const { model, pages } = render(input, [manual]);
+  assert.deepEqual(model.games[0].videos, [videoId(0), videoId(1)]);
+  assert.equal(model.games[0].playlists.length, 0);
+  const html = pages.get("spiele/cadaver/index.html").html;
+  assert.ok(html.includes("data-video-series"));
+  assert.ok(!html.includes("Playlists auf YouTube"));
+  assert.equal(model.videoById.get(videoId(0)).games[0].id, "cadaver");
+  assert.ok(!model.sections.find((section) => section.id === "sonstiges").entries.some((entry) => entry.videoId === videoId(0)));
+  assert.equal(render(input, [{ ...manual, videoIds: [videoId(0)] }]).model.games.length, 0);
+  assert.throws(() => render(input, [{ ...manual, videoIds: [] }]), /Quellplaylist oder Videozuordnung fehlt/u);
+});
+
+test("ergänzt fehlende re.play-Zuordnungen und die vollständige Patrizier-Reihe im echten Katalog", async () => {
+  const model = await loadSiteData(path.resolve(import.meta.dirname, "../cache"), { now: Date.parse("2026-10-18T00:00:00Z") });
+  const assignments = {
+    "Ni3U6-W8lxw": "wing-commander-ii",
+    "MWP0qizqt3M": "raptor-call-of-the-shadows-ms-dos",
+    "iQkncspXiNM": "heretic-shadow-of-the-serpent-riders",
+    "3IzIuwz-VWw": "they-stole-a-million-c64",
+    "gWdsp_hujXs": "christoph-kolumbus-ms-dos",
+    "52HT5sCdy-8": "die-siedler-ms-dos",
+    "NsVj5ma3isI": "system-shock-ms-dos",
+    "LPQ3nL7ltHU": "super-mario-bros-2-nes",
+  };
+  for (const [id, game] of Object.entries(assignments)) {
+    assert.ok(model.videoById.get(id).games.some((item) => item.id === game), id);
+    assert.ok(!model.videoById.get(id).sections.some((item) => item.id === "sonstiges"), id);
+  }
+  const patrician = model.games.find((game) => game.id === "der-patrizier");
+  assert.equal(patrician.videos.length, 16);
+  assert.equal(patrician.releaseYear, 1992);
+  assert.equal(patrician.series.entries.length, 16);
+  assert.ok(patrician.videos.includes("rvL8B_qulwU"));
+  assert.equal(patrician.series.entries.find((entry) => entry.videoId === "rvL8B_qulwU").phase.id, "reminder");
+  for (const id of patrician.videos) {
+    assert.ok(model.videoById.get(id).title.startsWith(id === "rvL8B_qulwU" ? "Der Patrizier [re.minder]" : "Der Patrizier [re.play"));
+    assert.ok(!model.videoById.get(id).sections.some((section) => section.id === "sonstiges"));
+  }
+  const wizardry = model.games.find((game) => game.videos.includes("eXRHHZ8l_Jc"));
+  assert.equal(wizardry.name, "Wizardry: Proving Grounds of the Mad Overlord");
+  assert.deepEqual(wizardry.videos, ["eXRHHZ8l_Jc"]);
+  assert.ok(!model.videoById.get("eXRHHZ8l_Jc").sections.some((section) => section.id === "sonstiges"));
+  for (const id of ["s0xuUVyfrp4", "iovuFSPzkH8"]) {
+    assert.ok(model.videoById.get(id).sections.some((section) => section.id === "sonstiges"));
+  }
+});
+
+test("ordnet ausschließlich die ausgewählten re.invented-Reihen manuell ihren Spielen zu", async () => {
+  const model = await loadSiteData(path.resolve(import.meta.dirname, "../cache"));
+  const selected = [
+    ["airships-conquer-the-skies", ["L5dl6cyoJOg", "_TMntZnoA2s", "FejpeWADb6Q", "s12md_R_AKY"], 2018],
+    ["hyperspace-delivery-service", ["iHwHp1yIbqc", "MBY8HVQyLEQ", "5IKiUnbudhM", "UbJ2Wat9hjQ", "CyYkUIRGx68", "cNv2GumJLXs"], 2019],
+  ];
+  const config = createSiteConfig();
+  const pages = renderSite(model, config, "assets/test.css");
+  for (const [id, ids, year] of selected) {
+    const game = model.games.find((item) => item.id === id);
+    assert.deepEqual([...game.videos].sort(), [...ids].sort());
+    assert.equal(game.releaseYear, year);
+    assert.equal(game.playlists.length, 0);
+    const html = pages.get(`${game.route}index.html`).html;
+    assert.equal((html.match(/data-video-panel /gu) ?? []).length, ids.length);
+    for (const videoId of ids) {
+      const video = model.videoById.get(videoId);
+      assert.ok(video.games.some((item) => item.id === id));
+      assert.ok(!video.sections.some((item) => item.id === "sonstiges"));
+    }
+  }
+  for (const id of ["9Rp1vcl4JSU", "8nqOWnfl-Cw", "UR0MMFM9BnI", "SBBxuufkNfA", "KRker5bSpN4", "iFP4nrtIz78", "zw18FXkucu0"]) {
+    assert.equal(model.videoById.get(id).games.length, 0);
+    assert.ok(model.videoById.get(id).sections.some((item) => item.id === "sonstiges"));
+  }
+  assert.ok(!model.videoById.get("9E8t2UkeTGI").games.length);
+});
 
 test("zeigt Spiele als Kachelliste mit escaped Titeln, Plattformen und Videozahlen", () => {
   const { pages } = render(fixture(2), [definition({ name: "Cadaver & <Demo>", platforms: ["<Amiga>"] })]);
@@ -149,7 +228,7 @@ test("erfordert bestätigte Spieleidentitäten statt Format- oder Titelheuristik
   assert.ok(model.videos.every((video) => video.games.length === 0));
   assert.ok(model.warnings.some((warning) => warning.includes("Spielzuordnung nicht bestätigt")));
   assert.equal(render(input).pages.has("spiele/index.html"), false);
-  assert.ok(render(input).pages.get("news/index.html").html.includes('href="https://www.youtube.com/watch?v=g0000000002" rel="external"'));
+  assert.ok(render(input).pages.get("news/index.html").html.includes('href="../sonstiges/g0000000002/#video-g0000000002"'));
 });
 
 test("vereinigt bestätigte Playlists und zählt nur unterschiedliche öffentliche Videos", () => {
@@ -164,6 +243,39 @@ test("vereinigt bestätigte Playlists und zählt nur unterschiedliche öffentlic
   assert.equal(model.games[0].playlists.length, 2);
   assert.equal(model.videoById.get(videoId(0)).games.length, 1);
   assert.equal(model.videoById.get(videoId(1)).games.length, 0);
+});
+
+test("nimmt aktuelle Ein-Video-Spiele nur aus bestätigten Playlists bis einschließlich zwei Kalendermonate auf", () => {
+  const now = Date.parse("2026-10-18T12:00:00Z");
+  const normalize = (input, definitions = [definition()]) => normalizeSources(input, { now, games: definitions, sections: [] });
+  for (const [publishedAt, expected] of [
+    ["2026-10-18T12:00:00Z", 1],
+    ["2026-08-18T12:00:00Z", 1],
+    ["2026-08-18T11:59:59Z", 0],
+    ["2026-10-18T12:00:01Z", 0],
+    [null, 0],
+  ]) {
+    const input = fixture(2);
+    input.playlists.playlists[0].videos = [member(0)];
+    input.videos.videos[0].publishedAt = publishedAt;
+    assert.equal(normalize(input).games.length, expected, String(publishedAt));
+  }
+  const input = fixture(1);
+  input.videos.videos[0].publishedAt = "2026-10-01T00:00:00Z";
+  assert.equal(normalize(input, [definition({ playlistIds: [], videoIds: [videoId(0)] })]).games.length, 0);
+  input.playlists.playlists[0].videos = [];
+  assert.equal(normalize(input, [definition({ videoIds: [videoId(0)] })]).games.length, 0);
+  input.playlists.playlists[0].videos = [member(0), member(0)];
+  assert.equal(normalize(input).games.length, 1);
+  input.videos.videos[0].title = "Cadaver [re.minder]";
+  assert.equal(normalize(input).games.length, 0);
+  input.videos.videos[0].title = "Cadaver [re.play]";
+  for (const [publishedAt, expected] of [["2026-02-28T12:00:00Z", 1], ["2026-02-28T11:59:59Z", 0]]) {
+    input.videos.videos[0].publishedAt = publishedAt;
+    assert.equal(normalizeSources(input, {
+      now: Date.parse("2026-04-30T12:00:00Z"), games: [definition()], sections: [],
+    }).games.length, expected);
+  }
 });
 
 test("re.minder hebt eine Reihe nicht über die Schwelle und ergänzt qualifizierte Spiele", () => {
@@ -237,7 +349,14 @@ test("rendert eine vollständige Spieleseite mit Metadaten, Player und Beschreib
   assert.ok(menu.includes('tabindex="0"'));
   assert.ok(html.includes('<div><dt>Spieltitel</dt><dd>Cadaver</dd></div>'));
   assert.ok(html.includes('<div><dt>Plattform</dt><dd>Amiga</dd></div>'));
-  assert.ok(html.includes("Playlists auf YouTube"));
+  const playlists = menu.match(/<div class="episode-playlists">([\s\S]*?)<\/div>/u)[1];
+  assert.ok(!html.includes("Playlists auf YouTube"));
+  assert.ok(menu.indexOf('class="episode-playlists"') > menu.indexOf("</nav>"));
+  assert.ok(!/<(?:h2|ul|li)\b/u.test(playlists));
+  assert.ok(playlists.startsWith("<a "));
+  assert.ok(menu.includes(`href="https://www.youtube.com/playlist?list=${playlistId}"`));
+  assert.ok(!html.includes("Weitere Spiele entdecken"));
+  assert.ok(!html.includes(">Neue Videos</a>"));
   assert.ok(!/lokal gespeichert|Zuordnung.*geprüft|bestätigte Videos|Quellen der Spielzuordnung/u.test(html));
   assert.equal((html.match(/<dl class="detail-meta">/gu) ?? []).length, 66);
   assert.ok(html.includes("keine Beschreibung vorhanden"));

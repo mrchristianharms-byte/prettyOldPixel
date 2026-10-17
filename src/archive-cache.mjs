@@ -48,15 +48,20 @@ export function cacheFileName(name) {
 // Serializes requests with a polite delay and retries rate limits and server errors.
 export function createFetcher({ fetchImpl, sleep, log, siteName }) {
   let requests = 0;
-  const fetchPage = async (url) => {
+  const fetchResponse = async (url, options = {}) => {
     for (let attempt = 0; ; attempt += 1) {
       if (requests > 0) {
         await sleep(REQUEST_DELAY_MS);
       }
       requests += 1;
-      const response = await fetchImpl(url, { headers: { "user-agent": "prettyoldpixel-blaetterabend/1.0" } });
+      let response;
+      try {
+        response = await fetchImpl(url, { headers: { "user-agent": "prettyoldpixel-blaetterabend/1.0" }, ...options });
+      } catch (error) {
+        throw new Error(`${siteName}-Anfrage fehlgeschlagen: ${url}: ${error.cause?.code ?? error.message}`, { cause: error });
+      }
       if (response.ok) {
-        return response.text();
+        return response;
       }
       if (attempt >= MAX_RETRIES || (response.status !== 429 && response.status < 500)) {
         throw new Error(`${siteName}-Anfrage fehlgeschlagen (${response.status}): ${url}`);
@@ -65,7 +70,11 @@ export function createFetcher({ fetchImpl, sleep, log, siteName }) {
       await sleep(1000 * 2 ** attempt);
     }
   };
-  return { fetchPage, requestCount: () => requests };
+  return {
+    fetchPage: async (url) => (await fetchResponse(url)).text(),
+    fetchResponse,
+    requestCount: () => requests,
+  };
 }
 
 export const defaultSleep = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds));

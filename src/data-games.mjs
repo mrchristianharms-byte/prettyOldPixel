@@ -151,6 +151,14 @@ const playlists = [
 ];
 
 const supplements = {
+  "wing-commander-ii": ["Ni3U6-W8lxw"],
+  "raptor-call-of-the-shadows-ms-dos": ["MWP0qizqt3M"],
+  "heretic-shadow-of-the-serpent-riders": ["iQkncspXiNM"],
+  "they-stole-a-million-c64": ["3IzIuwz-VWw"],
+  "christoph-kolumbus-ms-dos": ["gWdsp_hujXs"],
+  "die-siedler-ms-dos": ["52HT5sCdy-8"],
+  "system-shock-ms-dos": ["NsVj5ma3isI"],
+  "super-mario-bros-2-nes": ["LPQ3nL7ltHU"],
   "paradroid-c64": ["3n3JFgqq9wk"],
   "murder-on-the-mississippi-c64": ["b7y9eGTSopk"],
   pirates: ["ORD6RVtO1rE"],
@@ -176,7 +184,7 @@ const aliases = {
   "f15-strike-eagle-ii": ["F-15 Strike Eagle II"],
 };
 
-export const gameDefinitions = playlists.map(([playlistId, name, platform]) => {
+export const gameDefinitions = [...playlists.map(([playlistId, name, platform]) => {
   const id = slugify(`${name}${platform ? ` ${platform}` : ""}`);
   return {
     id, name, aliases: aliases[id] ?? [], platforms: platform ? [platform] : [],
@@ -186,4 +194,30 @@ export const gameDefinitions = playlists.map(([playlistId, name, platform]) => {
     // Die Formatvorstellung in dieser ansonsten spielbezogenen Playlist gehört nicht zum Spiel.
     excludedVideoIds: id === "sid-meier-s-railroad-tycoon-deluxe-ms-dos" ? ["0As7rZo2hro"] : [],
   };
-});
+}), {
+  id: "der-patrizier", name: "Der Patrizier", aliases: [],
+  platforms: ["Amiga", "Atari ST", "MS-DOS"],
+  release: gameReleaseYears["der-patrizier"],
+  playlistIds: [],
+  videoIds: [
+    "XExOJTdRwO0", "7brTX6VaNAU", "PTF6XVb_kpc", "nLUAQAASLRU",
+    "41pjbb_0ZjY", "eH3YWSM_vu4", "pWOd60KLVgo", "wLEfrJQHMCI",
+    "UbQwmkQmHp4", "-I6QQj-n_-I", "mH6gyAALJVg", "HZwNPhC4fCU",
+    "dt9YsJoCJ98", "zGJqT5hCpfU", "ii4XthrSsHE", "rvL8B_qulwU",
+  ],
+}, {
+  id: "airships-conquer-the-skies", name: "Airships: Conquer the Skies",
+  aliases: ["Airships - Conquer the Skies"], platforms: [],
+  release: gameReleaseYears["airships-conquer-the-skies"],
+  playlistIds: [],
+  videoIds: ["L5dl6cyoJOg", "_TMntZnoA2s", "FejpeWADb6Q", "s12md_R_AKY"],
+}, {
+  id: "hyperspace-delivery-service", name: "Hyperspace Delivery Service",
+  aliases: [], platforms: [],
+  release: gameReleaseYears["hyperspace-delivery-service"],
+  playlistIds: [],
+  videoIds: [
+    "iHwHp1yIbqc", "MBY8HVQyLEQ", "5IKiUnbudhM",
+    "UbJ2Wat9hjQ", "CyYkUIRGx68", "cNv2GumJLXs",
+  ],
+}];

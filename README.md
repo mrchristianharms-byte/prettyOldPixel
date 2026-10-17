@@ -6,12 +6,17 @@ Retrospiele, alte Computerzeitschriften, Hardware, Retrospektiven und Gespräche
 
 Die Startseite zeigt Kanalstatistiken und Themenbereiche. Spiel- und
 Zeitschriftenausgabeseiten bündeln passende Videos, Beschreibungen, Kapitel
-und Archivlinks. Die News zeigen die 20 neuesten Videos; einen Gesamtkatalog
-oder separate Videoseiten gibt es nicht.
+und Archivlinks. Die News zeigen die 20 neuesten Videos. Blätterabende ohne
+eindeutig bekannte Ausgabe sowie Themenvideos ohne Spiel-/Ausgabeseite
+erhalten eine eigene Videodetailseite. Alle Listen verwenden dasselbe
+Video-Widget mit internen Detailverweisen; einen
+Gesamtkatalog aller Videos gibt es nicht.
 
 ## Schnellstart
 
-Voraussetzung: **Node.js 22 oder neuer**. Keine zusätzlichen npm-Abhängigkeiten.
+Voraussetzung: **Node.js 22 oder neuer mit npm**. Keine zusätzlichen npm-Abhängigkeiten
+für Build und automatisierte Tests; optionale Abruf- und Analyseschritte
+benötigen die unten aufgeführten externen Werkzeuge.
 Alle Befehle im Projektverzeichnis ausführen.
 
 ```sh
@@ -20,14 +25,77 @@ npx http-server docs -a 127.0.0.1 -p 8000
 ```
 
 Anschließend http://localhost:8000/ öffnen. Der Generator arbeitet offline
-mit den vorhandenen JSON-Caches. Python 3 wird nur für diesen Vorschau-Server
-benötigt; alternativ einen anderen lokalen HTTP-Server verwenden.
+mit den vorhandenen JSON-Caches. `npx http-server` lädt bei Bedarf das externe
+npm-Paket `http-server` aus der npm-Registry; es ist nur ein Vorschauwerkzeug
+und keine Projektabhängigkeit. Alternativ mit vorhandenem Python 3:
+`python3 -m http.server 8000 --bind 127.0.0.1 --directory docs`.
+Python wird für die Node.js-Skripte nicht benötigt.
+
+## Externe Abhängigkeiten nach Arbeitsschritt
+
+Die fehlenden `dependencies`/`devDependencies` sind beabsichtigt: Die Skripte
+importieren nur Node.js-Standardmodule und lokale Projektmodule. HTTP-Abrufe
+verwenden Nodes eingebautes `fetch`; Tests verwenden `node:test` und
+`node:assert`. Eine Installation per `npm install` ist dafür nicht nötig.
+Externe Programme, Modellserver und deren Modelle werden nicht von npm verwaltet.
+
+| Schritt | Programme / Dienste zusätzlich zu Node.js und npm | Netzwerk und lokale Daten |
+|---|---|---|
+| `generate:site` | Keine | Offline; benötigt die vorhandenen Video-, Playlist- und Blätterabend-Caches. Vorhandene Archivcaches, Logos und abgeschlossene Transkriptanalysen werden lokal eingelesen. Pico CSS 2.1.1 einschließlich Lizenz liegt bereits unter `src/vendor/`; kein CDN-Abruf beim Build. |
+| `generate:blaetterabend` | Keine | Offline; liest Video- und vorhandene Archivcaches, ohne fehlende Archive nachzuladen. |
+| `fetch:youtube`, `fetch:videos`, `fetch:playlists`, `fetch:all` | Keine; insbesondere kein `yt-dlp` oder Browser | HTTPS zu YouTube für öffentliche Video-/Playlistdaten. Kein YouTube-API-Key; vorhandene Caches werden verwendet. `fetch:all` umfasst nur Videos und Playlists, nicht Archive oder Transkripte. |
+| `fetch:archives`, `fetch:archives:refresh` | Keine; kein Browser/Scraper-Paket | Video-Cache und HTTPS zu Kultmags, reetroz sowie bei passenden Zeitschriften PC Games Database und AMR; einschließlich lokal gespeicherter Logos. |
+| `fetch:gamestar` | Keine | HTTPS zu `www.pcgamesdatabase.de` für GameStar-Ausgaben und Logo. |
+| `fetch:amiga-action` | Keine | HTTPS zu `amr.abime.net` für Amiga-Action-Ausgaben und Logo. |
+| `fetch:transcripts` | Aktuelles `yt-dlp` als ausführbares Programm im `PATH` | Lokale Katalogdaten zur Videoauswahl; YouTube-Metadaten über `yt-dlp`, Untertitel anschließend per Node-HTTP-Abruf. Kein Audio-/Videodownload. |
+| `generate:games-from-transcript` | Laufender lokaler OpenAI-kompatibler Modellserver, derzeit Ollama mit `qwen3:14b` | Bereits gecachtes Transkript und lokale Modellgewichte; Analyse ausschließlich über einen Loopback-Endpunkt. Internet nur für die vorherige Installation bzw. den Modelldownload nötig. |
+| `npm test` | Keine: weder Playwright/Browser noch `yt-dlp` oder Ollama | Offline; Testantworten ersetzen HTTP-, Downloader- und LLM-Aufrufe. Einige Katalogtests lesen zusätzlich die im Repository vorhandenen Caches. |
+
+### Transkript-Downloader installieren
+
+`yt-dlp` ist eine **System-/CLI-Abhängigkeit**, kein npm-Paket. Zum Beispiel
+unter macOS mit bereits installiertem Homebrew:
+
+```sh
+brew install yt-dlp
+yt-dlp --version
+npm run fetch:transcripts
+```
+
+Andere Plattformen und die je nach Installationsart benötigte Laufzeit
+beschreibt die [yt-dlp-Installationsanleitung](https://github.com/yt-dlp/yt-dlp#installation).
+Auch zusätzliche YouTube-Anforderungen, etwa an eine unterstützte
+JavaScript-Laufzeit, richten sich nach der verwendeten yt-dlp-Version;
+das Projekt installiert oder konfiguriert diese nicht selbst.
+
+### Ollama und Modell vorbereiten
+
+[Ollama](https://ollama.com/) separat installieren, starten und das konfigurierte
+Modell einmalig herunterladen. Beispiel für die bisher verwendete Konfiguration:
+
+```sh
+ollama serve
+# In einem zweiten Terminal:
+ollama pull qwen3:14b
+```
+
+```dotenv
+OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+OPENAI_MODEL=qwen3:14b
+```
+
+Optional vergrößert `OLLAMA_NUM_CTX=32768` das Ollama-Kontextfenster über
+die native lokale API; bei abgeschnittenen Antworten erhöht das Skript
+für den nächsten Versuch Kontext- und Ausgabelimit.
+[Konfiguration und Grenzen](doc/README.md#optional-größeres-ollama-kontextfenster).
 
 ## Daten aktualisieren
 
 ```sh
 npm run fetch:all              # Öffentliche YouTube-Videos und Playlists laden
 npm run fetch:archives         # Benötigte Zeitschriftenarchive aktualisieren
+npm run fetch:gamestar         # Optional nur GameStar bei PC Games Database aktualisieren
+npm run fetch:amiga-action     # Optional nur Amiga Action und Logo bei AMR aktualisieren
 npm run generate:blaetterabend # Zeitschriften und Ausgaben lokal zuordnen
 npm run generate:site          # Website aus den lokalen Daten erzeugen
 ```
@@ -36,11 +104,28 @@ Internetabrufe (`fetch:*`) und lokale Generierung (`generate:*`) sind getrennt.
 YouTube-Abrufe benötigen keinen API-Key und verwenden vorhandene Caches.
 Zum Bauen der Website sind keine erneuten Internetabrufe nötig.
 
+Optional: `npm run fetch:transcripts` speichert öffentliche Untertitel mit
+Zeitmarken ausschließlich für Blätterabend-/Zeitschriftenvideos dauerhaft
+lokal. Dafür muss `yt-dlp` installiert sein. Erfolgreich geprüfte Videos
+werden nie automatisch erneut angefragt, auch wenn keine Untertitel
+verfügbar sind. [Details und Cacheformat](doc/README.md#youtube-transkripte-einmalig-cachen).
+
+`npm run generate:games-from-transcript -- <video-id>` erstellt daraus lokal
+Vorschläge für Spielebesprechungen mit Zeitbereichen. Es verwendet das in
+`.env` konfigurierte Ollama-Modell; Ergebnisse müssen geprüft werden.
+[Analyse und Grenzen](doc/README.md#spielebesprechungen-aus-transkripten).
+
 ## Tests
 
 ```sh
 npm test
 ```
+
+Die GitHub-Pages-Pipeline verwendet Node.js 22 und führt nur `npm test` sowie
+`npm run generate:site` aus. Sie installiert keine npm-Pakete, Downloader,
+Browser oder Modelle und ruft keine Fetch- oder LLM-Schritte auf.
+Checkout, Actions-Cache und Pages-Deployment benötigen unabhängig davon
+die GitHub-Dienste.
 
 ## Projektstruktur
 

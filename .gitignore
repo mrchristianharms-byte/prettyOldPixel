@@ -3,3 +3,7 @@ node_modules/
 /public/*
 /docs/*
 /.site-build-*/
+/cache/youtube-transcripts/
+/cache/game-discussions/
+/.env
+!/.env.example

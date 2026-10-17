@@ -8,8 +8,8 @@ export function escapeHtml(value) {
 
 const externalMark = '<span aria-hidden="true">↗</span><span class="visually-hidden"> (externe Website)</span>';
 
-export function externalLink(url, label, target = "", icon = "") {
+export function externalLink(url, label, target = "", icon = "", { visibleLabel = false } = {}) {
   const safe = httpUrl(url);
   if (!safe) throw new Error(`Ungültiger externer Link: ${url}`);
-  return `<a href="${escapeHtml(safe)}" rel="external"${target ? ` target="${escapeHtml(target)}"` : ""}${icon ? ` class="archive-icon" title="${escapeHtml(label)} (externe Website)"` : ""}>${icon ? `${icon}<span class="visually-hidden">${escapeHtml(label)}</span>` : escapeHtml(label)} ${externalMark}</a>`;
+  return `<a href="${escapeHtml(safe)}" rel="external"${target ? ` target="${escapeHtml(target)}"` : ""}${icon ? ` class="archive-icon${visibleLabel ? " archive-icon-labelled" : ""}" title="${escapeHtml(label)} (externe Website)"` : ""}>${icon ? `${icon}<span${visibleLabel ? "" : ' class="visually-hidden"'}>${escapeHtml(label)}</span>` : escapeHtml(label)} ${externalMark}</a>`;
 }

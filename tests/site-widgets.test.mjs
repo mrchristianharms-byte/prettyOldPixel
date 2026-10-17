@@ -5,6 +5,10 @@ import { episodeList } from "../src/widget/episode-list.mjs";
 import { catalogGrid } from "../src/widget/catalog-grid.mjs";
 import { metadata } from "../src/widget/metadata.mjs";
 import { videoList, videoListEntry } from "../src/widget/video-entry.mjs";
+import { pagination } from "../src/widget/pagination.mjs";
+import { archiveLinks } from "../src/widget/archive-links.mjs";
+import { videoPanel } from "../src/widget/video-panel.mjs";
+import { navigation } from "../src/widget/navigation.mjs";
 import { normalizeSources } from "../src/site-data.mjs";
 import { createSiteConfig } from "../src/site-config.mjs";
 import { renderSite } from "../src/site-render.mjs";
@@ -17,6 +21,101 @@ const video = {
   durationSeconds: 929, publishedAt: "2016-11-23T17:42:00.000Z",
   description: "", games: [], magazines: [], sections: [], blaetterabend: false,
 };
+
+test("Hauptnavigation erhält Reihenfolge, relative Links, sichere Namen und aktive Bereiche auf Unterseiten", () => {
+  const entries = [["news/", "News"], ["spiele/", "Spiele & <Demo>"], ["sonstiges/", "Sonstiges"]];
+  for (const route of ["", "news/", "spiele/demo/", "sonstiges/seite/2/", "datenschutz/"]) {
+    const config = createSiteConfig().forPage(route);
+    const html = navigation(entries, route, config);
+    assert.ok(html.startsWith('<nav aria-label="Hauptnavigation"><ul>'));
+    assert.equal((html.match(/<li>/gu) ?? []).length, entries.length);
+    assert.ok(html.includes("Spiele &amp; &lt;Demo&gt;"));
+    for (const [target] of entries) {
+      const active = route.startsWith(target);
+      assert.ok(html.includes(`href="${config.href(target)}"${active ? ' aria-current="page"' : ""}>`));
+    }
+    assert.equal((html.match(/aria-current="page"/gu) ?? []).length,
+      entries.some(([target]) => route.startsWith(target)) ? 1 : 0);
+    assert.ok(html.indexOf(">News</a>") < html.indexOf(">Spiele &amp;"));
+  }
+});
+
+test("alle generierten Seiten verwenden das Hauptnavigations-Widget mit den vorhandenen Bereichen", () => {
+  const channel = { id: "UC-navigation", title: "Pretty Old Pixel" };
+  const model = normalizeSources({
+    videos: { channel, complete: true, videos: [video] },
+    playlists: { channel, complete: true, playlists: [] },
+    magazines: { channel, videos: [] },
+  }, { games: [], sections: [] });
+  const config = createSiteConfig();
+  const entries = [["news/", "News"], ...model.sections.map((section) => [section.route, section.name, true])];
+  for (const { html, route } of renderSite(model, config, "assets/site.css").values()) {
+    assert.ok(html.includes(navigation(entries, route, config.forPage(route))), route);
+    assert.equal((html.match(/aria-label="Hauptnavigation"/gu) ?? []).length, 1);
+  }
+});
+
+test("Seitennavigation behandelt einzelne, erste, mittlere und letzte Seiten mit relativen Links", () => {
+  assert.equal(pagination("spiele/", 1, 1, createSiteConfig().forPage("spiele/")), "");
+  for (const page of [1, 2, 3]) {
+    const route = page === 1 ? "spiele/" : `spiele/seite/${page}/`;
+    const config = createSiteConfig().forPage(route);
+    const html = pagination("spiele/", page, 3, config);
+    assert.equal(html.includes('rel="prev"'), page > 1);
+    assert.equal(html.includes('rel="next"'), page < 3);
+    assert.ok(html.includes(`Seite ${page} von 3`));
+    assert.ok(html.includes(`href="${config.href(route)}" aria-current="page">Seite ${page}</a>`));
+    assert.equal((html.match(/<li>/gu) ?? []).length, 3);
+  }
+});
+
+test("Archivlinks behalten Listen-, Inline- und Leerzustand sowie ausgabenspezifische Ziele", () => {
+  const archive = {
+    provider: "kultmags", match: "issue", pageUrl: "https://example.org/archive/",
+    readerUrl: "https://example.org/read/", downloadUrl: "https://example.org/download/",
+  };
+  assert.equal(archiveLinks([]), "<p>Kein passender Archivlink vorhanden.</p>");
+  const html = archiveLinks([archive]);
+  assert.ok(html.startsWith('<ul class="archive-links"'));
+  for (const label of ["Archivordner zur Ausgabe", "Heft lesen", "Heft herunterladen"]) {
+    assert.ok(html.includes(label));
+  }
+  assert.equal((html.match(/rel="external"/gu) ?? []).length, 3);
+  const labelled = archiveLinks([archive], false, { visibleLabel: true });
+  assert.ok(labelled.includes('<span>kultmags: Heft lesen</span>'));
+  assert.ok(labelled.includes('class="archive-icon archive-icon-labelled"'));
+  assert.ok(html.includes('<span class="visually-hidden">kultmags: Heft lesen</span>'));
+  assert.ok(archiveLinks([archive], true).startsWith('<span class="archive-links" aria-label="Archivlinks">('));
+  const overview = archiveLinks([{ ...archive, match: "magazine" }]);
+  assert.ok(overview.includes("Zeitschriftenübersicht"));
+  assert.ok(!overview.includes(archive.readerUrl));
+  assert.ok(!overview.includes(archive.downloadUrl));
+});
+
+test("Videoinformationen behalten Kapitel, Partner, Beschreibung und benachbarte Teile", () => {
+  const config = createSiteConfig().forPage("spiele/demo/");
+  const html = videoPanel({
+    ...video, description: "Text <Demo>\n\nhttps://example.org/",
+    chapters: [{ seconds: 60, label: "Start & Demo", url: `${video.url}&t=60` }],
+    mentionedChannels: [{ label: "Gast & Demo", url: "https://www.youtube.com/@demo" }],
+  }, config, { index: 1, total: 3, previous: { id: "previous" }, next: { id: "next" } });
+  assert.ok(html.includes('data-video-panel data-dated="true"'));
+  assert.ok(html.includes("Video 2/3: Spiel &amp; &lt;Demo&gt;"));
+  assert.ok(html.includes('data-chapter-seconds="60"'));
+  assert.ok(html.includes("1:00 · Start &amp; Demo"));
+  assert.ok(html.includes("Gast &amp; Demo"));
+  assert.ok(html.includes("<p>Text &lt;Demo&gt;</p>"));
+  assert.ok(html.includes('href="#video-previous"'));
+  assert.ok(html.includes('href="#video-next"'));
+  assert.ok(html.includes("<noscript>"));
+  const empty = videoPanel({
+    ...video, publishedAt: null, durationSeconds: null, chapters: [], mentionedChannels: [],
+  }, config, { index: 0, total: 1 });
+  assert.ok(empty.includes("Für dieses Video ist keine Beschreibung vorhanden."));
+  for (const absent of ["data-dated", "data-chapter-seconds", "mentioned-channels", "Vorheriger Teil", "Nächster Teil"]) {
+    assert.ok(!empty.includes(absent));
+  }
+});
 
 test("Video-Widget enthält genau einen Player und alle gemeinsamen Bedienelemente", () => {
   const html = videoWidget(video);
@@ -45,7 +144,7 @@ test("Folgenlisten-Widget zeigt Heftvideos in übergebener Reihenfolge mit kompa
 });
 
 test("Folgenlisten-Widget ergänzt Spielabschnitt und Reihe ohne zweite Navigation", () => {
-  const game = { series: {
+  const game = { playlists: [], series: {
     entries: [{ videoId: video.id, phase: { label: "Intro & <Unboxing>" }, runId: "first" }],
     runs: [{ id: "first", label: "re.play & <Demo>" }],
   } };
@@ -107,10 +206,26 @@ test("Listen-Eintrag kombiniert sichere Titel, kompakte Metadaten und redaktione
     assert.equal(videoList([video], config), `<ol class="video-list">${videoListEntry(video, config)}</ol>`);
   });
 
-  test("News, Hardware, Retrospektiven und Interviews verwenden dasselbe Eintrags-Widget", () => {
+  test("Listen-Eintrag verlinkt Titel und Thumbnail im ausdrücklich übergebenen Ausgabenkontext", () => {
+    const config = createSiteConfig().forPage("zeitschriften/zweites/");
+    const html = videoListEntry({
+      ...video, magazines: [{ issue: { route: "zeitschriften/erstes/ausgaben/1/" } }],
+    }, config, undefined, 4, {
+      label: "Teil 2: Spiel & <Demo>", issueRoute: "zeitschriften/zweites/ausgaben/2/",
+    });
+    const href = "ausgaben/2/#video-a0000000000";
+    assert.ok(html.includes(`<h4><a href="${href}">Teil 2: Spiel &amp; &lt;Demo&gt;</a></h4>`));
+    assert.ok(html.includes(`class="video-entry-thumbnail" href="${href}" aria-label="Teil 2: Spiel &amp; &lt;Demo&gt;"`));
+    assert.ok(!html.includes("erstes/ausgaben"));
+  });
+
+  test("News und alle Themenbereiche verwenden dasselbe Eintrags-Widget und interne Detailziele", () => {
     const channel = { id: "UC-widget", title: "Pretty Old Pixel" };
     const input = {
-      videos: { channel, complete: true, videos: [video] },
+      videos: { channel, complete: true, videos: [
+        { ...video, title: `${video.title} [re.consider]` },
+        { ...video, id: "other000001", title: "Weiterer Beitrag" },
+      ] },
       playlists: { channel, complete: true, playlists: [] },
       magazines: { channel, videos: [] },
     };
@@ -121,12 +236,17 @@ test("Listen-Eintrag kombiniert sichere Titel, kompakte Metadaten und redaktione
     const model = normalizeSources(input, { games: [], sections });
     const config = createSiteConfig();
     const pages = renderSite(model, config, "assets/site.css");
-    for (const id of ["news", "hardware", "retrospektiven", "interviews"]) {
+    for (const id of ["news", "hardware", "retrospektiven", "interviews", "reconsider", "sonstiges"]) {
       const section = model.sections.find((entry) => entry.id === id);
       const entry = section?.entries[0];
-      const expected = videoListEntry(model.videos[0], config.forPage(`${id}/`), entry, id === "retrospektiven" ? 3 : 2);
+      const selected = entry ? model.videoById.get(entry.videoId) : model.news[0];
+      const expected = videoListEntry(selected, config.forPage(`${id}/`), entry?.topic !== undefined ? entry : undefined, id === "retrospektiven" ? 3 : 2);
       const html = pages.get(`${id}/index.html`).html;
-      assert.ok(html.includes(`<ol class="video-list">${expected}</ol>`), id);
-      assert.equal((html.match(/<li><article>/gu) ?? []).length, 1, id);
+      assert.ok(html.includes(expected), id);
+      const detail = pages.get(`${selected.detailRoute}index.html`).html;
+      assert.ok(detail.includes(`id="video-${selected.id}"`));
+      assert.ok(!expected.includes('rel="external"'));
+      assert.ok(expected.includes(`#video-${selected.id}`));
+      assert.equal((html.match(/<li><article>/gu) ?? []).length, id === "news" ? 2 : 1, id);
     }
   });

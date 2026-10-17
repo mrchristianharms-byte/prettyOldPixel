@@ -8,10 +8,14 @@
     "fetch:youtube": "node src/fetch-youtube-videos.mjs",
     "fetch:videos": "node src/fetch-youtube-videos.mjs https://www.youtube.com/@PrettyOldPixel",
     "fetch:playlists": "node src/fetch-youtube-playlists.mjs",
+    "fetch:transcripts": "node src/fetch-youtube-transcripts.mjs",
     "fetch:all": "node src/fetch-youtube.mjs",
     "fetch:archives": "node src/fetch-archives.mjs",
+    "fetch:gamestar": "node src/fetch-pcgamesdatabase.mjs",
+    "fetch:amiga-action": "node src/fetch-amr.mjs",
     "fetch:archives:refresh": "node src/fetch-archives.mjs --refresh",
     "generate:blaetterabend": "node src/generate-blaetterabend.mjs",
+    "generate:games-from-transcript": "node src/generate-games-from-transcript.mjs",
     "test": "node --test \"tests/**/*.test.mjs\""
   }
 }
