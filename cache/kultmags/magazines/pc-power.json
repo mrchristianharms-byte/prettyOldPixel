@@ -503,5 +503,9 @@
       "readerUrl": null,
       "coverUrl": "https://www.kultmags.com/PC%20Power/1998/PC%20Power%20-%201998-02.rar.jpg"
     }
-  ]
+  ],
+  "logo": {
+    "url": "https://www.kultmags.com/PC%20Power/title.png",
+    "file": "838fed9cfe788e53551e55f5fa76e0ba9044a362977b43f79621e208cf208196.png"
+  }
 }

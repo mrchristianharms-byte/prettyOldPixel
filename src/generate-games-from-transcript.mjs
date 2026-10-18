@@ -14,7 +14,35 @@ const OVERLAP_MS = 30_000;
 const MAX_WINDOW_CHARACTERS = 14_000;
 const defaultSleep = (milliseconds, { signal } = {}) => delay(milliseconds, undefined, { signal });
 
-const discussionRules = `Prüfe Titel, Einführung und Themenende anhand des gesamten Textfensters,
+const boundaryRules = `Abschnitte müssen chronologisch und nicht überlappend sein.
+confidence ist "high", "medium" oder "low"; endReason ist "next-game",
+"topic-change", "window-end" oder "uncertain".
+endReason window-end erfordert continuesAfter true. Wenn die Besprechung am
+äußeren Textfensterende noch läuft: endReason "window-end", continuesAfter true.
+Wenn im gelieferten Text ein klarer Abschluss oder Themenwechsel steht:
+continuesAfter false und endReason "topic-change" oder "next-game",
+auch wenn keine weitere Besprechung folgt. Niemals "window-end" mit false.
+Beispiel: "Damit ist der Test zu Ende, weiter zu den Leserbriefen" beendet
+die Besprechung, auch wenn dieser Satz die letzte Zeile des Fensters ist.`;
+
+const discussionRules = `title darf ausschließlich der belegte Name eines konkreten Computerspiels
+sein, niemals ein Sprechername, eine Anrede, ein Kanal, Hersteller,
+Computermodell oder eine bloße Plattform-/Versionsbezeichnung.
+Prüfe die Rolle einer Namensnennung im Satz: Angesprochene Personen und
+Chatbegrüßungen benennen kein Hauptspiel. Beispiel: "Heute habe ich eine
+Folge Wintergames veröffentlicht ... NES Version und Selma ...":
+Selma ist hier eine angesprochene Person, nicht der Spieltitel.
+"Schneider CPC Version", "DOS Version" und "Atari 2600 Version" bezeichnen
+Portierungen, keine eigenständigen Spiele. Suche den zugehörigen Spieltitel
+im gelieferten Kontext; ersetze ihn niemals durch den Namen der Plattform.
+Ist der Spieltitel im Textfenster nicht belegbar, liefere keinen Abschnitt
+mit erfundenem Titel oder Plattformnamen als Ersatz. In der Kontextprüfung
+ist ein nicht eindeutig auflösbarer Vorschlag uncertain.
+Ein bekannter Spieltitel allein macht den Abschnitt noch nicht zu review:
+Rückblicke auf eine veröffentlichte Winter-Games-Folge und Abstimmungen
+über die nächste Portierungsfolge bleiben personal-update bzw. comparison,
+auch wenn Versionen ausführlich verglichen werden.
+Prüfe Titel, Einführung und Themenende anhand des gesamten Textfensters,
 einschließlich des überlappenden Nachbarkontexts. coreFirstId/coreLastId
 bestimmen nur die Zuständigkeit des Fensters, niemals Gesprächsgrenzen.
 Ein Abschnitt darf vor dem Kern beginnen und nach dem Kern enden.
@@ -74,16 +102,11 @@ continuesBefore/continuesAfter sind nur true, wenn die Besprechung bereits
 vor dem Textfenster beginnt bzw. erkennbar darüber hinaus weitergeht.
 Liefere ausschließlich ein JSON-Objekt mit diesem Format:
 {"discussions":[{"title":"Spielname","firstSegmentId":1,"lastSegmentId":10,
-"evidenceSegmentId":2,"confidence":"high|medium|low",
-"endReason":"next-game|topic-change|window-end|uncertain",
+"evidenceSegmentId":2,"confidence":"high",
+"endReason":"topic-change",
 "continuesBefore":false,"continuesAfter":false}]}
-Keine Treffer: {"discussions":[]}. Abschnitte müssen chronologisch und
-nicht überlappend sein. endReason window-end setzt continuesAfter true voraus.
-Wenn im gelieferten Text nach der Besprechung ein klarer Abschluss oder
-Themenwechsel steht, ist continuesAfter false und endReason topic-change
-oder next-game. Das gilt auch dann, wenn keine weitere Besprechung folgt.
-Beispiel: "Damit ist der Test zu Ende, weiter zu den Leserbriefen" beendet
-die Besprechung, auch wenn dieser Satz die letzte Zeile des Fensters ist.`;
+Keine Treffer: {"discussions":[]}.
+${boundaryRules}`;
 
 function requireValue(condition, message) {
   if (!condition) throw new Error(message);
@@ -179,7 +202,7 @@ export function validateDiscussions(data, window) {
     requireValue(typeof item.continuesBefore === "boolean" && typeof item.continuesAfter === "boolean",
       `LLM-Antwort: Ungültige Abschnittskennzeichnung: continuesBefore=${JSON.stringify(item.continuesBefore)}, continuesAfter=${JSON.stringify(item.continuesAfter)}; beide müssen JSON-Booleans sein.`);
     requireValue(item.endReason !== "window-end" || item.continuesAfter,
-      "LLM-Antwort: Ungültige Abschnittskennzeichnung: endReason window-end erfordert continuesAfter true.");
+      `LLM-Antwort: Ungültige Abschnittskennzeichnung: endReason window-end erfordert continuesAfter true. Abschnitt ${JSON.stringify(item.title)} (${item.firstSegmentId}–${item.lastSegmentId}), continuesAfter=${item.continuesAfter}.`);
     last = item.lastSegmentId;
   }
   return data.discussions.filter((item) => item.lastSegmentId >= window.coreFirstId && item.firstSegmentId <= window.coreLastId)
@@ -187,16 +210,19 @@ export function validateDiscussions(data, window) {
 }
 
 async function modelJson(messages, config, validate, { fetchImpl, sleep, log, signal, stage }) {
-  let feedback;
+  const feedback = new Set();
   let maxTokens = 4096;
   let contextTokens = config.contextTokens;
   for (let attempt = 0; attempt < 3; attempt += 1) {
     signal?.throwIfAborted();
+    let responseText;
+    const diagnostic = { attempt: attempt + 1, maxTokens, ...(contextTokens === undefined ? {} : { contextTokens }) };
     try {
-      const requestMessages = feedback ? [...messages, {
+      const requestMessages = feedback.size ? [...messages, {
         role: "user",
-        content: `Der vorherige Versuch konnte nicht validiert werden: ${feedback}\nErzeuge die Antwort vollständig neu anhand des Originaltexts. Halte das vorgegebene JSON-Schema exakt ein. Erfinde keine Ersatzwerte und lasse belegte Besprechungen nicht nur zur Fehlervermeidung weg.\n/no_think`,
+        content: `Bisherige Validierungsfehler dieser Phase:\n${[...feedback].join("\n")}\nBehebe alle genannten Fehler gleichzeitig. Erzeuge die Antwort vollständig neu anhand des Originaltexts. Halte das vorgegebene JSON-Schema exakt ein. Erfinde keine Ersatzwerte und lasse belegte Besprechungen nicht nur zur Fehlervermeidung weg.\n/no_think`,
       }] : messages;
+      diagnostic.inputCharacters = requestMessages.reduce((sum, message) => sum + message.content.length, 0);
       const response = await fetchImpl(config.ollamaEndpoint ?? config.endpoint, {
         method: "POST", redirect: "error", signal: signal
           ? AbortSignal.any([signal, AbortSignal.timeout(600_000)]) : AbortSignal.timeout(600_000),
@@ -219,6 +245,10 @@ async function modelJson(messages, config, validate, { fetchImpl, sleep, log, si
       const choice = config.ollamaEndpoint
         ? { finish_reason: data?.done ? data.done_reason : undefined, message: data?.message }
         : data?.choices?.[0];
+      responseText = choice?.message?.content;
+      diagnostic.finishReason = choice?.finish_reason ?? null;
+      diagnostic.promptTokens = (config.ollamaEndpoint ? data?.prompt_eval_count : data?.usage?.prompt_tokens) ?? null;
+      diagnostic.completionTokens = (config.ollamaEndpoint ? data?.eval_count : data?.usage?.completion_tokens) ?? null;
       if (choice?.finish_reason === "length") {
         throw Object.assign(new Error("LLM-Antwort wurde am Ausgabelimit abgeschnitten."), { truncated: true });
       }
@@ -227,6 +257,11 @@ async function modelJson(messages, config, validate, { fetchImpl, sleep, log, si
       return validate(JSON.parse(choice.message.content));
     } catch (error) {
       if (signal?.aborted) throw signal.reason;
+      log(`  ${stage}: Fehlerdiagnose ${JSON.stringify({ ...diagnostic, error: error.message,
+        responseCharacters: typeof responseText === "string" ? responseText.length : null })}`);
+      if (typeof responseText === "string") {
+        log(`  ${stage}: Verworfene Modellantwort ${JSON.stringify(responseText.slice(0, 6000))}${responseText.length > 6000 ? " [Logausgabe nach 6000 Zeichen gekürzt]" : ""}`);
+      }
       const invalidResponse = error instanceof SyntaxError || /^LLM-(?:Antwort|Prüfung):?/u.test(error.message);
       const transient = [408, 429, 500, 502, 503, 504].includes(error.status)
         || error.name === "TimeoutError" || (error instanceof TypeError && error.message === "fetch failed");
@@ -239,7 +274,7 @@ async function modelJson(messages, config, validate, { fetchImpl, sleep, log, si
         if (contextTokens !== undefined) contextTokens = Math.min(contextTokens * 2, 131072);
         adjustment = ` Ausgabelimit: ${maxTokens} Tokens${contextTokens === undefined ? "" : `; Ollama-Kontext: ${contextTokens} Tokens`}.`;
       }
-      feedback = invalidResponse && !error.truncated ? error.message : undefined;
+      if (invalidResponse && !error.truncated) feedback.add(error.message);
       const delay = 5000 * 2 ** attempt;
       log(`  ${stage}: ${error.message}${adjustment} Neuer Versuch ${attempt + 2}/3 in ${delay / 1000} Sekunden.`);
       await sleep(delay, { signal });
@@ -271,6 +306,9 @@ eines konkreten Spiels beim Lesen der Zeitschrift zeigt.
 Quizfragen (auch ausführlich diskutierte Antworten), Rätsel, Auswahlmöglichkeiten
 wie "In welchem Spiel ... A, B oder C?" sind quiz, keine Besprechung des genannten Spiels.
 Berichte über eigene Aufnahmen, Streams oder zuletzt gespielte Spiele sind personal-update.
+Beispiel: "Ich spiele Outer Worlds, bin kurz vor Abschluss der Hauptmission,
+noch überlevelt und muss Fraktionsmissionen erledigen" ist personal-update,
+auch wenn längere Zeit Spielmechanik und eigene Erfahrungen diskutiert werden.
 Beiläufige Titel, Aufzählungen und Vergleiche sind comparison.
 Schnelle Folgen vieler Spielnamen, Ranglisten, Zuschauerabstimmungen und
 Auszählungen sind comparison, auch mit kurzen Kommentaren zu einzelnen Spielen.
@@ -281,6 +319,7 @@ Erkennbar über Fenstergrenzen fortgesetzte Teilstücke dürfen kürzer sein;
 die Mindestdauer wird nach dem Zusammenführen geprüft.
 Nur ein klar belegtes Hauptthema mit inhaltlicher Besprechung ist review.
 ${discussionRules}
+${boundaryRules}
 Prüfe nicht nur die Kategorie: Korrigiere auch falsche Titel, Belegstellen,
 Anfang, Ende und Fortsetzungsflags. Teile einen vermischten Vorschlag in
 mehrere Besprechungen auf, wenn verschiedene Hauptspiele behandelt werden.
@@ -290,12 +329,17 @@ werden. Erhalte separate Wiederaufnahmen nach einem Themenwechsel.
 Für review liefere in discussions die vollständigen korrigierten Abschnitte
 im selben Format wie die Erkennung (auch wenn keine Korrektur nötig ist).
 Für alle anderen Kategorien entfällt discussions oder ist leer.
+Entscheide zuerst die Kategorie. Bei personal-update, quiz, comparison oder
+uncertain kopiere keine Abschnitte aus dem Vorschlag in die Entscheidung.
+Gültiges Beispiel für eine Ablehnung:
+{"decisions":[{"candidateIndex":0,"kind":"personal-update","evidenceSegmentId":1}]}
+Das folgende Schema mit discussions gilt nur für kind review:
 Im Zweifel uncertain. Jeder Vorschlag benötigt genau eine Entscheidung.
 Antworte nur als JSON:
-{"decisions":[{"candidateIndex":0,"kind":"review|quiz|personal-update|comparison|uncertain",
+{"decisions":[{"candidateIndex":0,"kind":"review",
 "evidenceSegmentId":1,"discussions":[{"title":"Spielname",
 "firstSegmentId":1,"lastSegmentId":10,"evidenceSegmentId":2,
-"confidence":"high|medium|low","endReason":"next-game|topic-change|window-end|uncertain",
+"confidence":"high","endReason":"topic-change",
 "continuesBefore":false,"continuesAfter":false}]}]}
 evidenceSegmentId muss eine gelieferte Segment-ID sein, die deine Einstufung belegt.` },
     { role: "user", content: `${JSON.stringify({ ...context, candidates })}\n/no_think` },

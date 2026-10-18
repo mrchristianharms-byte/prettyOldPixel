@@ -9,3 +9,5 @@ node_modules/
 !/cache/game-discussions/???????????.json
 /.env
 !/.env.example
+/cache/gdb.sql
+/cache/gdb.sqlite*

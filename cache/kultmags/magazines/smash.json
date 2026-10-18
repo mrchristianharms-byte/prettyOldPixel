@@ -60,5 +60,9 @@
       "readerUrl": null,
       "coverUrl": "https://www.kultmags.com/Smash/Smash%201989-04.rar.jpg"
     }
-  ]
+  ],
+  "logo": {
+    "url": "https://www.kultmags.com/Smash/title.png",
+    "file": "ef86f68ceaeadfbf62d4230dd9d04ec7a2f2f50014cb59def6b5fabd69492843.png"
+  }
 }

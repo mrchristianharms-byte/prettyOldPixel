@@ -111,5 +111,9 @@
       "readerUrl": null,
       "coverUrl": "https://www.kultmags.com/PC%20Xtreme/PC%20Xtreme%20-%201997-04.rar.jpg"
     }
-  ]
+  ],
+  "logo": {
+    "url": "https://www.kultmags.com/PC%20Xtreme/title.png",
+    "file": "602ba27b158eb4a1962af7c3552fbf8f9d41fd0cb6bec7150511f52b7b3a5732.png"
+  }
 }

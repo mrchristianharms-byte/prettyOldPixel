@@ -1999,5 +1999,9 @@
       "readerUrl": "https://reader.kultmags.com/ASM%20-%20Special%2028%20-%20PC%20Shareware%20Spiele-Hits",
       "coverUrl": "https://www.kultmags.com/ASM/Special/ASM%20-%20Special%2028%20-%20PC%20Shareware%20Spiele-Hits.rar.jpg"
     }
-  ]
+  ],
+  "logo": {
+    "url": "https://www.kultmags.com/ASM/title.png",
+    "file": "1ede268f7bb20aee2c6a26370736410c7c5c8caec8fa028fcfb70508419d0af2.png"
+  }
 }

@@ -1,0 +1,441 @@
+{
+  "version": 1,
+  "analysisVersion": "3",
+  "videoId": "_Lf38M5wWAw",
+  "transcriptHash": "f51a961de24922aace942304db9d641625d9fcae4c528d1be5b63d58886a6731",
+  "catalogHash": "729b640bf67ad5dcd9b0cc8379f84868798998fe09a55ae80ae228a219f9006c",
+  "model": "qwen3:14b",
+  "endpoint": "http://127.0.0.1:11434/v1/chat/completions",
+  "generatedAt": "2026-10-18T11:06:08.340Z",
+  "status": "needs-review",
+  "discussions": [
+    {
+      "title": "Selma",
+      "gameId": null,
+      "startMs": 498479,
+      "endMs": 605279,
+      "firstSegmentId": 103,
+      "lastSegmentId": 155,
+      "confidence": "medium",
+      "reviewed": false,
+      "endReason": "next-game",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 103,
+          "startMs": 498479,
+          "text": "NES Version und Selma"
+        }
+      ]
+    },
+    {
+      "title": "Schneider CPC Version",
+      "gameId": null,
+      "startMs": 689120,
+      "endMs": 745279,
+      "firstSegmentId": 198,
+      "lastSegmentId": 226,
+      "confidence": "medium",
+      "reviewed": false,
+      "endReason": "next-game",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 213,
+          "startMs": 716040,
+          "text": "Die Schneider CPC Version."
+        }
+      ]
+    },
+    {
+      "title": "Wintergames",
+      "gameId": "winter-games",
+      "startMs": 819040,
+      "endMs": 862639,
+      "firstSegmentId": 265,
+      "lastSegmentId": 280,
+      "confidence": "high",
+      "reviewed": false,
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 265,
+          "startMs": 819040,
+          "text": "So. Und zwar ist hier die Besonderheit,"
+        }
+      ]
+    },
+    {
+      "title": "Outer Worlds",
+      "gameId": null,
+      "startMs": 1243960,
+      "endMs": null,
+      "firstSegmentId": 463,
+      "lastSegmentId": 494,
+      "confidence": "high",
+      "reviewed": false,
+      "endReason": "window-end",
+      "issues": [
+        "end-outside-window"
+      ],
+      "evidence": [
+        {
+          "segmentId": 463,
+          "startMs": 1243960,
+          "text": "Ja, bitte. Und zwar spiele ich ja Outer"
+        }
+      ]
+    },
+    {
+      "title": "Reunion",
+      "gameId": null,
+      "startMs": 1547679,
+      "endMs": 1596600,
+      "firstSegmentId": 602,
+      "lastSegmentId": 625,
+      "confidence": "high",
+      "reviewed": false,
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 602,
+          "startMs": 1547679,
+          "text": "Was war Reunion? Reunion war so eine Art"
+        }
+      ]
+    },
+    {
+      "title": "System Shock",
+      "gameId": "system-shock-ms-dos",
+      "startMs": 1954519,
+      "endMs": 2015440,
+      "firstSegmentId": 780,
+      "lastSegmentId": 803,
+      "confidence": "high",
+      "reviewed": false,
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 781,
+          "startMs": 1957440,
+          "text": "System Shock"
+        }
+      ]
+    },
+    {
+      "title": "Elite 3",
+      "gameId": null,
+      "startMs": 3415200,
+      "endMs": 3507880,
+      "firstSegmentId": 1403,
+      "lastSegmentId": 1443,
+      "confidence": "high",
+      "reviewed": false,
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 1403,
+          "startMs": 3415200,
+          "text": "3 Gametech hat angekündigt, dass"
+        }
+      ]
+    },
+    {
+      "title": "Siedler",
+      "gameId": null,
+      "startMs": 3989200,
+      "endMs": null,
+      "firstSegmentId": 1655,
+      "lastSegmentId": 1698,
+      "confidence": "high",
+      "reviewed": false,
+      "endReason": "window-end",
+      "issues": [
+        "end-outside-window"
+      ],
+      "evidence": [
+        {
+          "segmentId": 1661,
+          "startMs": 4002839,
+          "text": "Also, ich freue mich auf alle drei"
+        }
+      ]
+    },
+    {
+      "title": "Hell",
+      "gameId": null,
+      "startMs": 4397920,
+      "endMs": 4468840,
+      "firstSegmentId": 1828,
+      "lastSegmentId": 1854,
+      "confidence": "medium",
+      "reviewed": false,
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 1828,
+          "startMs": 4397920,
+          "text": "Die Moral dieser Geschichte könnte sein,"
+        }
+      ]
+    },
+    {
+      "title": "Rise of the Robots",
+      "gameId": null,
+      "startMs": 4583280,
+      "endMs": 4674400,
+      "firstSegmentId": 1898,
+      "lastSegmentId": 1935,
+      "confidence": "medium",
+      "reviewed": false,
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 1931,
+          "startMs": 4660639,
+          "text": "hiermit widersprochen. Rise of the"
+        }
+      ]
+    },
+    {
+      "title": "Magic Carpet",
+      "gameId": "magic-carpet-ms-dos",
+      "startMs": 4801679,
+      "endMs": null,
+      "firstSegmentId": 1997,
+      "lastSegmentId": 2018,
+      "confidence": "high",
+      "reviewed": false,
+      "endReason": "window-end",
+      "issues": [
+        "end-outside-window"
+      ],
+      "evidence": [
+        {
+          "segmentId": 1997,
+          "startMs": 4801679,
+          "text": "Immer noch toll Spiel. Ich habe, ich"
+        }
+      ]
+    },
+    {
+      "title": "Magic Carpet",
+      "gameId": "magic-carpet-ms-dos",
+      "startMs": 4853639,
+      "endMs": 4912080,
+      "firstSegmentId": 2019,
+      "lastSegmentId": 2044,
+      "confidence": "high",
+      "reviewed": false,
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 2025,
+          "startMs": 4865960,
+          "text": "Man hört diese Bienen und so. Es ist"
+        }
+      ]
+    },
+    {
+      "title": "Novastorm",
+      "gameId": null,
+      "startMs": 5134960,
+      "endMs": 5245400,
+      "firstSegmentId": 2138,
+      "lastSegmentId": 2183,
+      "confidence": "medium",
+      "reviewed": false,
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 2138,
+          "startMs": 5134960,
+          "text": "Novastorm hat fast alles, was ein gutes"
+        }
+      ]
+    },
+    {
+      "title": "Colonization",
+      "gameId": null,
+      "startMs": 5610920,
+      "endMs": 5643920,
+      "firstSegmentId": 2342,
+      "lastSegmentId": 2357,
+      "confidence": "high",
+      "reviewed": false,
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 2342,
+          "startMs": 5610920,
+          "text": "Was planen Sie nach Colonization? Im"
+        }
+      ]
+    },
+    {
+      "title": "Quarantine",
+      "gameId": null,
+      "startMs": 5920639,
+      "endMs": null,
+      "firstSegmentId": 2493,
+      "lastSegmentId": 2520,
+      "confidence": "high",
+      "reviewed": false,
+      "endReason": "window-end",
+      "issues": [
+        "end-outside-window"
+      ],
+      "evidence": [
+        {
+          "segmentId": 2493,
+          "startMs": 5920639,
+          "text": "Kennst du Quarantine?"
+        }
+      ]
+    },
+    {
+      "title": "US Navy Fighters",
+      "gameId": null,
+      "startMs": 6331159,
+      "endMs": null,
+      "firstSegmentId": 2663,
+      "lastSegmentId": 2712,
+      "confidence": "high",
+      "reviewed": false,
+      "endReason": "uncertain",
+      "issues": [
+        "conflicting-window-boundaries"
+      ],
+      "evidence": [
+        {
+          "segmentId": 2663,
+          "startMs": 6331159,
+          "text": "ist es ja noch Electronic Arts US Navy"
+        }
+      ]
+    },
+    {
+      "title": "Little Big Adventure",
+      "gameId": null,
+      "startMs": 6472840,
+      "endMs": 6562320,
+      "firstSegmentId": 2734,
+      "lastSegmentId": 2769,
+      "confidence": "medium",
+      "reviewed": false,
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 2734,
+          "startMs": 6472840,
+          "text": "Erinnerungen zusammenzusammeln an Little"
+        }
+      ]
+    },
+    {
+      "title": "Syndicate",
+      "gameId": null,
+      "startMs": 6562320,
+      "endMs": 6698800,
+      "firstSegmentId": 2770,
+      "lastSegmentId": 2831,
+      "confidence": "high",
+      "reviewed": false,
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 2812,
+          "startMs": 6643159,
+          "text": "Da steht Kreuzung aus Syndicate und"
+        }
+      ]
+    },
+    {
+      "title": "Dragon Law",
+      "gameId": null,
+      "startMs": 6823920,
+      "endMs": 6975840,
+      "firstSegmentId": 2891,
+      "lastSegmentId": 2958,
+      "confidence": "high",
+      "reviewed": false,
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 2891,
+          "startMs": 6823920,
+          "text": "Dragon Law."
+        }
+      ]
+    },
+    {
+      "title": "Rone",
+      "gameId": null,
+      "startMs": 6985239,
+      "endMs": 7120440,
+      "firstSegmentId": 2964,
+      "lastSegmentId": 3019,
+      "confidence": "high",
+      "reviewed": false,
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 2964,
+          "startMs": 6985239,
+          "text": "Rone ist ja mit Operation Overlord Day"
+        }
+      ]
+    },
+    {
+      "title": "Dawn Patrol",
+      "gameId": null,
+      "startMs": 7251800,
+      "endMs": 7289639,
+      "firstSegmentId": 3082,
+      "lastSegmentId": 3094,
+      "confidence": "high",
+      "reviewed": false,
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 3082,
+          "startMs": 7251800,
+          "text": "unterschiedliche Einsätze. Das stimmt"
+        }
+      ]
+    },
+    {
+      "title": "Captain Blatt",
+      "gameId": null,
+      "startMs": 7990280,
+      "endMs": 8121079,
+      "firstSegmentId": 3399,
+      "lastSegmentId": 3463,
+      "confidence": "low",
+      "reviewed": false,
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 3403,
+          "startMs": 7997599,
+          "text": "SuperG sagt Super Grau sagt Captain"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "battle-isle-2-ms-dos": { "mobyid": 3420, "reviewedAt": "2026-10-18", "note": "Battle Isle 2200 ist der nordamerikanische Titel von Battle Isle 2; direkte ID und DOS-Releases geprüft." },
+  "burntime-ms-dos": { "mobyid": 6166, "reviewedAt": "2026-10-18", "note": "Originalspiel mit direkter ID und DOS-Releases; Firmennamen und Wiederveröffentlichungen bleiben getrennt." },
+  "civilization-ms-dos": { "mobyid": 585, "reviewedAt": "2026-10-18", "note": "Sid Meier's Civilization, Originalspiel statt Reihe oder CivNet; direkte ID und DOS-Releases geprüft." },
+  "die-siedler-ii-veni-vidi-vici-ms-dos": { "mobyid": 598, "reviewedAt": "2026-10-18", "note": "Grundspiel Veni, Vidi, Vici mit direkter ID und DOS-Releases; keine Gleichsetzung mit Gold, Mission CD oder Remake." },
+  "doom-ms-dos": { "mobyid": 1068, "reviewedAt": "2026-10-18", "note": "Doom-Original mit direkter ID und DOS-Releases; spätere Veröffentlichungen nicht als Erstveröffentlichung verwenden." },
+  "jagged-alliance-ms-dos": { "mobyid": 1038, "reviewedAt": "2026-10-18", "note": "Erstes Einzelspiel statt Reihe; direkte ID und DOS-Releases geprüft." },
+  "master-of-magic-ms-dos": { "mobyid": 200, "reviewedAt": "2026-10-18", "note": "Originalspiel von SimTex statt Remake; direkte ID und DOS-Releases geprüft." },
+  "paradroid-c64": { "mobyid": 9272, "reviewedAt": "2026-10-18", "note": "C64-Original statt Paradroid 90; direkte ID und Commodore-64-Releases geprüft. Genre bleibt die eigene Klassifikation von MobyGames." },
+  "wing-commander-ms-dos": { "mobyid": 3, "reviewedAt": "2026-10-18", "note": "Erstes Spiel für DOS; direkte ID 3 statt gleichnamigem Kandidaten 63394. Deluxe-ID 4027 wird nicht übernommen." }
+}

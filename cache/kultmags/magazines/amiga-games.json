@@ -950,5 +950,9 @@
       "readerUrl": null,
       "coverUrl": "https://www.kultmags.com/Amiga%20Games/Sonderhefte/Amiga%20Games%20-%20Sonderheft%201994-02.rar.jpg"
     }
-  ]
+  ],
+  "logo": {
+    "url": "https://www.kultmags.com/Amiga%20Games/title.png",
+    "file": "b84ff655f81d6694a23f46e46f7d75ba249a18aa4cbd6a37bcf71a3696d9457a.png"
+  }
 }

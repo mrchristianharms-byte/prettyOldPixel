@@ -72,8 +72,8 @@ test("erhöht bei abgeschnittener OpenAI-Antwort das Ausgabelimit ohne Originals
   assert.deepEqual(result, []);
   assert.deepEqual(requests.map((body) => body.max_tokens), [4096, 8192, 16384]);
   assert.ok(requests.every((body) => JSON.stringify(body.messages) === JSON.stringify(requests[0].messages)));
-  assert.ok(logs[0].includes("8192 Tokens"));
-  assert.ok(logs[1].includes("16384 Tokens"));
+  assert.ok(logs.some((message) => message.includes("8192 Tokens")));
+  assert.ok(logs.some((message) => message.includes("16384 Tokens")));
 });
 
 test("erweitert bei Ollama-Abschneiden Kontext und Ausgabe für Erkennung und Kontextprüfung", async () => {
@@ -207,6 +207,45 @@ const answer = (value, finish_reason = "stop") => Response.json({
   choices: [{ finish_reason, message: { content: typeof value === "string" ? value : JSON.stringify(value) } }],
 });
 
+test("erklärt beiden Modellphasen den Unterschied zwischen Spieltiteln, Sprechern und Portierungen", async () => {
+  for (const { title, text, kind } of [
+    { title: "Selma", kind: "personal-update", text: [
+      "Heute habe ich eine Folge Wintergames veröffentlicht",
+      "und zwar eine Konsolenversion.",
+      "Wir sprechen über die NES Version und Selma",
+      "keine Titelmusik.",
+      "Es ist die schlechteste Version, die ich bisher hatte.",
+    ] },
+    { title: "Schneider CPC Version", kind: "comparison", text: [
+      "lassen wir die Zuschauer abstimmen,",
+      "welche Portierungsfolge ich als nächstes mache.",
+      "Die Schneider CPC Version ist, glaube ich, bestimmt ganz gut.",
+      "Die sieht sogar sehr gut aus.",
+      "Schneider CPC habt ihr euch entschieden. Mache ich total gerne.",
+    ] },
+  ]) {
+    const source = prepareSegments({ status: "available", segments: text.map((text, index) => ({
+      text, startMs: index * 10_000, durationMs: 10_000,
+    })) });
+    const window = { index: 0, coreFirstId: 0, coreLastId: 4, segments: source };
+    let calls = 0;
+    const result = await analyzeWindow(window, config, {
+      fetchImpl: async (_url, request) => {
+        const prompt = JSON.parse(request.body).messages[0].content;
+        assert.ok(prompt.includes("niemals ein Sprechername"));
+        assert.ok(prompt.includes('"Schneider CPC Version"'));
+        assert.ok(prompt.includes("Selma ist hier eine angesprochene Person"));
+        assert.ok(prompt.includes("im Textfenster nicht belegbar"));
+        return ++calls === 1
+          ? answer({ discussions: [candidate({ title, firstSegmentId: 0, lastSegmentId: 4, evidenceSegmentId: 2 })] })
+          : answer({ decisions: [{ candidateIndex: 0, kind, evidenceSegmentId: 0 }] });
+      },
+    });
+    assert.equal(calls, 2);
+    assert.deepEqual(result, []);
+  }
+});
+
 test("übernimmt geprüfte Titel und erweitert den Beginn in den überlappenden Kontext", async () => {
   const source = prepareSegments({ status: "available", segments: [
     "Ah, Jurassic World Evolution. Danke. Und",
@@ -326,7 +365,79 @@ test("wiederholt ungültige Abschnittskennzeichnungen mit konkretem Fehlerhinwei
   assert.equal(requests.length, 3);
   assert.equal(result[0].title, "Doom");
   assert.deepEqual(delays, [5000]);
-  assert.ok(logs[0].includes("Neuer Versuch 2/3"));
+  assert.ok(logs.some((message) => message.includes("Neuer Versuch 2/3")));
+});
+
+test("prüft persönliche Outer-Worlds-Berichte und behebt wechselnde Schemafehler mit vollständigem Feedback", async () => {
+  const source = prepareSegments({ status: "available", segments: [
+    { startMs: 1243980, durationMs: 1760, text: "Ja, bitte. Und zwar spiele ich ja Outer" },
+    { startMs: 1245740, durationMs: 2820, text: "Worlds und ich bin eigentlich" },
+    { startMs: 1248560, durationMs: 2200, text: "kurz vor Abschluss der Hauptmission" },
+    { startMs: 1302000, durationMs: 2700, text: "habe und dann weitergehe. Das Gute ist" },
+    { startMs: 1304700, durationMs: 1300, text: "aber, dass ich mich nicht mehr um Loot" },
+    { startMs: 1306000, durationMs: 2500, text: "oder so kümmern muss" },
+  ] });
+  const window = { index: 8, coreFirstId: 0, coreLastId: 3, segments: source };
+  const proposal = candidate({ title: "Outer Worlds", firstSegmentId: 0, lastSegmentId: 3,
+    evidenceSegmentId: 0, endReason: "window-end", continuesAfter: true });
+  const requests = [];
+  const logs = [];
+  const result = await analyzeWindow(window, config, {
+    candidates: [proposal], log: (message) => logs.push(message), sleep: async () => {},
+    fetchImpl: async (_url, request) => {
+      const body = JSON.parse(request.body);
+      requests.push(body);
+      assert.ok(body.messages[0].content.includes("endReason window-end erfordert continuesAfter true"));
+      assert.ok(body.messages[0].content.includes("Ich spiele Outer Worlds"));
+      assert.ok(body.messages[0].content.includes("kopiere keine Abschnitte"));
+      if (requests.length === 1) return answer({ decisions: [{
+        candidateIndex: 0, kind: "personal-update", evidenceSegmentId: 0, discussions: [proposal],
+      }] });
+      if (requests.length === 2) return answer({ decisions: [{
+        candidateIndex: 0, kind: "review", evidenceSegmentId: 0,
+        discussions: [{ ...proposal, continuesAfter: false }],
+      }] });
+      const feedback = body.messages.at(-1).content;
+      assert.ok(feedback.includes("Nur review darf"));
+      assert.ok(feedback.includes("window-end erfordert continuesAfter true"));
+      return answer({ decisions: [{ candidateIndex: 0, kind: "personal-update", evidenceSegmentId: 0 }] });
+    },
+  });
+  assert.deepEqual(result, []);
+  assert.equal(requests.length, 3);
+  assert.equal(logs.filter((message) => message.includes("Verworfene Modellantwort")).length, 2);
+});
+
+test("protokolliert verworfene Antworten samt Tokenstatistik und Endgrund auch beim letzten Versuch begrenzt", async () => {
+  for (const native of [false, true]) {
+    const logs = [];
+    const configured = native ? llmConfiguration({
+      OPENAI_BASE_URL: "http://localhost:11434/v1", OPENAI_MODEL: "qwen3:14b",
+      OLLAMA_NUM_CTX: "32768", OPENAI_API_KEY: "secret-test-key",
+    }) : { ...config, apiKey: "secret-test-key" };
+    const content = `${"x".repeat(7000)}\ninvalid-json`;
+    await assert.rejects(analyzeWindow(transcriptWindows(segments)[0], configured, {
+      log: (message) => logs.push(message), sleep: async () => {},
+      fetchImpl: async () => Response.json(native ? {
+        done: true, done_reason: "stop", prompt_eval_count: 2500, eval_count: 900,
+        message: { content },
+      } : {
+        choices: [{ finish_reason: "stop", message: { content } }],
+        usage: { prompt_tokens: 2500, completion_tokens: 900 },
+      }),
+    }), /Nach 3 Versuchen/u);
+    const diagnostics = logs.filter((message) => message.includes("Fehlerdiagnose"))
+      .map((message) => JSON.parse(message.split("Fehlerdiagnose ")[1]));
+    assert.deepEqual(diagnostics.map((item) => item.attempt), [1, 2, 3]);
+    assert.ok(diagnostics.every((item) => item.finishReason === "stop" && item.promptTokens === 2500
+      && item.completionTokens === 900 && item.responseCharacters === content.length
+      && item.inputCharacters > 0 && item.maxTokens === 4096));
+    if (native) assert.ok(diagnostics.every((item) => item.contextTokens === 32768));
+    const responses = logs.filter((message) => message.includes("Verworfene Modellantwort"));
+    assert.equal(responses.length, 3);
+    assert.ok(responses.every((message) => message.includes("nach 6000 Zeichen gekürzt") && message.length < 6200));
+    assert.ok(logs.every((message) => !message.includes("secret-test-key")));
+  }
 });
 
 test("wiederholt JSON-, Teilantwort- und vorübergehende Verbindungsfehler begrenzt; HTTP 400 nicht", async () => {

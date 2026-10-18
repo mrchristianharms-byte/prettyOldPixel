@@ -45,5 +45,9 @@
       "readerUrl": null,
       "coverUrl": "https://www.kultmags.com/Amiga%20Fever/Amiga%20Fever%20-%201999-02.rar.jpg"
     }
-  ]
+  ],
+  "logo": {
+    "url": "https://www.kultmags.com/Amiga%20Fever/title.png",
+    "file": "fb5a6d5f274ccbcbb7f8bdc516cfc30d65adbadbddfd63ecf8724aa231003086.png"
+  }
 }

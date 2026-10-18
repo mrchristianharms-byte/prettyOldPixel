@@ -4,6 +4,7 @@ import { createHash } from "node:crypto";
 import { slugify } from "./site-config.mjs";
 import { secondsToIsoDuration } from "./fetch-youtube-videos.mjs";
 import { gameDefinitions } from "./data-games.mjs";
+import { loadReadyGameMetadata } from "./game-metadata-ready.mjs";
 import { structureGameSeries } from "./site-game-series.mjs";
 import { sectionDefinitions } from "./data-sections.mjs";
 import { extractVideoDetails } from "./site-video-details.mjs";
@@ -573,6 +574,23 @@ export async function loadSiteData(cacheDirectory, options) {
   const amr = await loadAmrCatalog({ cacheDir: path.join(cacheDirectory, "amr"), cachedOnly: true, optional: true });
   if (Array.isArray(magazines.videos)) addAmrLinks(magazines.videos, amr);
   const model = normalizeSources({ videos, playlists, magazines }, options);
+  let metadata;
+  try {
+    metadata = await loadReadyGameMetadata({ cacheDir: path.join(cacheDirectory, "game-metadata") });
+  } catch (error) {
+    if (error.code !== "ENOENT") throw error;
+    model.warnings.push("Konsolidierter Spielemetadaten-Cache fehlt; prepare:game-metadata ausführen.");
+  }
+  for (const game of model.games) {
+    game.metadata = metadata ? metadata.get(game.id)
+      : { status: "blocked", reason: "metadata-cache-missing", data: null };
+    game.releaseYear = game.metadata.data?.releaseYear ?? null;
+    game.releaseYearSource = game.releaseYear === null ? null : game.metadata.data.evidence.sourceUrl;
+    const warning = `${game.name}: Erscheinungsjahr fehlt; wird als unbekannt angezeigt.`;
+    if (game.releaseYear === null && !model.warnings.includes(warning)) model.warnings.push(warning);
+  }
+  model.warnings = model.warnings.filter((warning) => !model.games.some((game) =>
+    game.releaseYear !== null && warning === `${game.name}: Erscheinungsjahr fehlt; wird als unbekannt angezeigt.`));
   await loadMagazineLogos(model, cacheDirectory);
   const gameStarMagazine = model.magazines.find((magazine) => magazine.name === "GameStar");
   if (gameStar && gameStarMagazine) {

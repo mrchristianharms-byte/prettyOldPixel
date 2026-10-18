@@ -1272,5 +1272,9 @@
       "readerUrl": "https://reader.kultmags.com/Amiga%20Joker%201996-10..11",
       "coverUrl": "https://www.kultmags.com/Amiga%20Joker/1996/Amiga%20Joker%201996-10..11.rar.jpg"
     }
-  ]
+  ],
+  "logo": {
+    "url": "https://www.kultmags.com/Amiga%20Joker/title.png",
+    "file": "c239d2139df4c662124f627fda7e8d8c25c64f93c3569292d378cd22eda9b1ff.png"
+  }
 }

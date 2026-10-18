@@ -2232,5 +2232,9 @@
       "readerUrl": null,
       "coverUrl": "https://www.kultmags.com/PC-Player/Sonderhefte/PC-Player%20-%20Special%20-%202001-02.rar.jpg"
     }
-  ]
+  ],
+  "logo": {
+    "url": "https://www.kultmags.com/PC-Player/title.png",
+    "file": "7772db8e5d1dbfa9ebf5db4d9acc8f317ca52d2f1d891f741143af1c7ef16359.png"
+  }
 }

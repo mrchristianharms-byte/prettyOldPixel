@@ -3398,5 +3398,9 @@
       "readerUrl": null,
       "coverUrl": "https://www.kultmags.com/PC-Games/Sonderhefte/PC-Games%20-%20Sonderheft%202004-01.rar.jpg"
     }
-  ]
+  ],
+  "logo": {
+    "url": "https://www.kultmags.com/PC-Games/title.png",
+    "file": "0ffe348bcc7f70ef623c91c227ae2d173308ffb781b61d5ae41471cf472dbbe1.png"
+  }
 }

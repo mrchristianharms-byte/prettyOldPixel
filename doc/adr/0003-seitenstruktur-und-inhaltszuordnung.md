@@ -250,14 +250,14 @@ Bekannte Quellschreibweisen und Zusatzbeiträge werden dort ebenfalls gepflegt.
 Neue unbestätigte re.play-/re.connect-Playlists werden als Build-Hinweis gemeldet.
 Sie erzeugen keine automatisch erratene Spieleseite. Die Spielidentität und
 ihr Slug ändern sich nicht durch einen geänderten Cache-Playlist-Titel.
-Ein fest recherchiertes Erscheinungsjahr samt Quellen-URL wird pro Identität
-in [`src/data-game-release-years.json`](../../src/data-game-release-years.json) gepflegt.
-Maßgeblich ist die früheste Veröffentlichung auf der festgelegten Plattform,
-ohne Plattformbindung die Erstveröffentlichung; eigenständige Gold-/Deluxe-
-Ausgaben behalten ihr eigenes Jahr. Der Spieleindex zeigt das Jahr neben den
-übrigen Kachelmetadaten, die Spieleseite verlinkt den Beleg. Videouploads und
-Jahreszahlen aus Beschreibungstexten überschreiben diese gepflegten Angaben
-nicht. Fehlende Angaben bleiben sichtbar unbekannt und werden gemeldet.
+Spielmetadaten einschließlich Jahresangaben stammen gemäß
+[ADR 0006](0006-spielemetadaten-aus-wikidata-und-lokalem-cache.md) ausschließlich
+aus dem lokalen MobyGames-Dump, aufbereitet in `cache/game-metadata/ready.json`.
+Nur bei genau einer ausgewählten Plattform und vollständig datierten
+Veröffentlichungen wird deren frühestes Jahr als pauschales Jahr angegeben.
+Die Spieleseite zeigt zusätzlich plattformgebundene Veröffentlichungen und
+Quellenlinks. Videouploads und Jahreszahlen aus Beschreibungstexten sind keine
+Ersatzquelle. Fehlende Angaben bleiben sichtbar unbekannt und werden gemeldet.
 Die vorhandenen Mitgliedschaften werden über
 `playlists[].videos[].videoId` mit `videos[].id` im Video-Cache verknüpft.
 Playlist-Titel und -Beschreibung liefern Kontext; vollständige Video-Metadaten

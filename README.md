@@ -33,10 +33,12 @@ Python wird für die Node.js-Skripte nicht benötigt.
 
 ## Externe Abhängigkeiten nach Arbeitsschritt
 
-Die fehlenden `dependencies`/`devDependencies` sind beabsichtigt: Die Skripte
-importieren nur Node.js-Standardmodule und lokale Projektmodule. HTTP-Abrufe
-verwenden Nodes eingebautes `fetch`; Tests verwenden `node:test` und
-`node:assert`. Eine Installation per `npm install` ist dafür nicht nötig.
+Website-Build, API-Abrufe und Standardtests verwenden nur Node.js-Standardmodule
+und lokale Projektmodule. HTTP-Abrufe verwenden Nodes eingebautes `fetch`;
+Tests verwenden `node:test` und `node:assert`. Eine Installation per
+`npm install` ist dafür nicht nötig.
+Spielemetadaten stammen ausschließlich aus dem bereits lokal exportierten
+MobyGames-Dump; dafür werden weder Browser noch zusätzliche Pakete benötigt.
 Externe Programme, Modellserver und deren Modelle werden nicht von npm verwaltet.
 
 | Schritt | Programme / Dienste zusätzlich zu Node.js und npm | Netzwerk und lokale Daten |
@@ -47,9 +49,29 @@ Externe Programme, Modellserver und deren Modelle werden nicht von npm verwaltet
 | `fetch:archives`, `fetch:archives:refresh` | Keine; kein Browser/Scraper-Paket | Video-Cache und HTTPS zu Kultmags, reetroz sowie bei passenden Zeitschriften PC Games Database und AMR; einschließlich lokal gespeicherter Logos. |
 | `fetch:gamestar` | Keine | HTTPS zu `www.pcgamesdatabase.de` für GameStar-Ausgaben und Logo. |
 | `fetch:amiga-action` | Keine | HTTPS zu `amr.abime.net` für Amiga-Action-Ausgaben und Logo. |
+| `review:games` | Keine | Offline-Prüfübersicht aus dem fertigen Dump-Cache: nutzbare/gesperrte Spiele, Plattformumfang und Kandidaten. |
+| `import:game-dump -- --input cache/gdb.sql` | Node mit eingebautem `node:sqlite` (ab 22.13 ohne Startflag) | Lokaler MariaDB-Dump wird ohne SQL-Ausführung temporär konvertiert; nur Katalogtreffer als JSON/HTML exportiert. `--delete-input` löscht die Eingabe erst nach geprüften Exporten. Dump und SQLite-Dateien nicht einchecken. |
+| `verify:game-dump` | Keine | Validiert offline Katalogabdeckung, Titel/Aliasse, IDs und Veröffentlichungen des lokalen Dump-Reports. Schreibt `local-dump/verification.json`; keine anderen Referenzquellen. |
+| `prepare:game-metadata` | Keine | Erzeugt offline `cache/game-metadata/ready.json` (Version 3) aus Dump, Prüfentscheidungen und Plattformregel: bekannte Plattform erhalten, sonst DOS → Amiga → C64; nur eindeutige Kandidaten. 119 Spiele nutzbar, 28 gesperrt. Alle Daten einschließlich Jahresangaben kommen aus dem Dump. |
 | `fetch:transcripts` | Aktuelles `yt-dlp` als ausführbares Programm im `PATH` | Lokale Katalogdaten zur Videoauswahl; YouTube-Metadaten über `yt-dlp`, Untertitel anschließend per Node-HTTP-Abruf. Kein Audio-/Videodownload. |
 | `generate:games-from-transcript` | Laufender lokaler OpenAI-kompatibler Modellserver, derzeit Ollama mit `qwen3:14b` | Bereits gecachtes Transkript und lokale Modellgewichte; Analyse ausschließlich über einen Loopback-Endpunkt. Internet nur für die vorherige Installation bzw. den Modelldownload nötig. |
 | `npm test` | Keine: weder Playwright/Browser noch `yt-dlp` oder Ollama | Offline; Testantworten ersetzen HTTP-, Downloader- und LLM-Aufrufe. Einige Katalogtests lesen zusätzlich die im Repository vorhandenen Caches. |
+
+### Spielemetadaten aus dem lokalen Dump
+
+```sh
+npm run verify:game-dump
+npm run prepare:game-metadata
+npm run review:games
+npm run generate:site
+```
+
+Der Website-Build liest ausschließlich den fertigen Cache. Fehlende oder
+mehrdeutige Zuordnungen bleiben unverifiziert, ohne Ersatz aus anderen Quellen.
+Ein pauschales Erscheinungsjahr wird nur bei genau einer ausgewählten Plattform
+und vollständig datierten Veröffentlichungen angegeben. Der ursprüngliche
+SQL-Dump wurde nach dem geprüften Export gelöscht.
+[Umsetzungsstand und Grenzen](doc/game-metadata-implementation.md).
 
 ### Transkript-Downloader installieren
 

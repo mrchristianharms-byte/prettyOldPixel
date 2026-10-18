@@ -395,14 +395,75 @@ function gameSchema(game, config) {
   };
 }
 
-function gameReleaseSource(url) {
+function gameReleaseSource(url, iconOnly = false) {
   const hostname = new URL(url).hostname;
-  const label = hostname.endsWith(".wikipedia.org") ? "Wikipedia" : {
-    "web.archive.org": "Internet Archive",
-    "www.c64-wiki.com": "C64-Wiki",
-    "www.mobygames.com": "MobyGames",
-  }[hostname] ?? hostname;
-  return externalLink(url, label);
+  const label = hostname === "www.mobygames.com" ? "MobyGames" : hostname;
+  return iconOnly
+    ? `<a href="${escapeHtml(new URL(url).href)}" rel="external" title="${escapeHtml(label)}" aria-label="${escapeHtml(label)} (externe Website)"><span aria-hidden="true">↗</span></a>`
+    : externalLink(url, label);
+}
+
+function renderGameMetadata(game) {
+  const record = game.metadata;
+  const data = record?.status === "ready" ? record.data : null;
+  const { evidence, scope, genres = [], releases = [] } = data ?? {};
+  const groups = new Map();
+  for (const release of releases) {
+    const key = JSON.stringify([release.platform, release.year, release.developer,
+      release.publisher, release.publisherLabel]);
+    if (!groups.has(key)) groups.set(key, { ...release, countries: new Set() });
+    const countries = release.countries?.split(",").map((country) => country.trim()).filter(Boolean) ?? [];
+    for (const country of countries) {
+      groups.get(key).countries.add(country);
+    }
+  }
+  const fields = ["platform", "year", "developer", "publisher", "publisherLabel"];
+  const groupedReleases = [...groups.values()];
+  const displayedReleases = groupedReleases.filter((release) => !groupedReleases.some((other) =>
+    other !== release
+    && fields.every((field) => release[field] === null || release[field] === undefined
+      || release[field] === "" || release[field] === other[field])
+    && fields.some((field) => !release[field] && Boolean(other[field]))
+    && [...release.countries].every((country) => other.countries.has(country))))
+    .sort((a, b) => (a.year ?? Infinity) - (b.year ?? Infinity)
+      || fields.filter((field) => Boolean(b[field])).length - fields.filter((field) => Boolean(a[field])).length
+      || JSON.stringify(fields.map((field) => a[field])).localeCompare(JSON.stringify(fields.map((field) => b[field])), "de"));
+  const missing = (value) => value ? escapeHtml(String(value)) : "Keine Angabe";
+  const primary = displayedReleases[0];
+  const additional = displayedReleases.slice(1);
+  const countries = (release) => release.countries.size
+    ? escapeHtml([...release.countries].sort((a, b) => a.localeCompare(b, "de")).join(", ")) : "Keine Angabe";
+  const platforms = game.platforms.length ? game.platforms : scope?.platforms ?? [];
+  const sources = [...new Set([
+    ...(game.releaseYearSource ? [gameReleaseSource(game.releaseYearSource, true)] : []),
+    ...(evidence ? [gameReleaseSource(evidence.sourceUrl, true)] : []),
+  ])];
+  const yearLines = [];
+  if (game.releaseYear !== null) yearLines.push(
+    `${game.releaseYear} ${gameReleaseSource(game.releaseYearSource, true)}`);
+  if (primary) {
+    const releaseText = `${missing(primary.year)} · ${missing(primary.platform)} · ${countries(primary)}`;
+    if (primary.year === game.releaseYear && yearLines.length) {
+      yearLines[0] = `${releaseText} ${sources.join(" ")}`;
+    } else yearLines.push(`${releaseText} ${gameReleaseSource(evidence.sourceUrl, true)}`);
+  }
+  return `<section aria-label="Zusätzliche Spielinformationen"><h2>Spielinformationen</h2>
+${metadata([
+    ...(platforms.length ? [["Plattform", escapeHtml(platforms.join(", "))]] : []),
+    ...(data ? [
+      ["Genre", genres.length ? escapeHtml(genres.join(", ")) : "Keine Angabe"],
+      ["Entwickler", missing(primary?.developer)],
+      ["Publisher", `${missing(primary?.publisher)}${primary?.publisherLabel ? ` (${escapeHtml(primary.publisherLabel)})` : ""}`],
+    ] : []),
+    ["Erscheinungsjahr", yearLines.length ? yearLines.join("<br>") : "Unbekannt"],
+    ...(game.aliases.length ? [["Weitere Titel", escapeHtml(game.aliases.join(", "))]] : []),
+  ])}
+${!data ? "<p>Für dieses Spiel liegen noch keine eindeutig zugeordneten zusätzlichen Metadaten vor.</p>" : ""}
+${additional.length ? `<details><summary>Weitere Veröffentlichungen (${additional.length})</summary>
+<div class="overflow-auto"><table><caption>Veröffentlichungen für ${escapeHtml(scope.platforms.join(", "))}</caption>
+<thead><tr><th scope="col">Plattform</th><th scope="col">Jahr</th><th scope="col">Entwickler</th><th scope="col">Publisher</th><th scope="col">Länder</th></tr></thead>
+<tbody>${additional.map((release) => `<tr><td>${missing(release.platform)}</td><td>${missing(release.year)}</td><td>${missing(release.developer)}</td><td>${missing(release.publisher)}${release.publisherLabel ? ` (${escapeHtml(release.publisherLabel)})` : ""}</td><td>${countries(release)}</td></tr>`).join("")}</tbody>
+</table></div></details>` : ""}</section>`;
 }
 
 function renderGamePages(model, siteConfig, add) {
@@ -444,14 +505,7 @@ ${pagination(index.route, page, pageCount, config)}`,
       schema: [{ ...collectionSchema(videos, config, game.route, game.route), about: { "@id": `${config.href(game.route)}#game` } },
         gameSchema(game, config), ...videos.map((video) => videoSchema(video, config, game.route))],
       body: `${seriesVideos(videos, game.name, config, game, `<p>${videoCount(videos.length)} rund um ${escapeHtml(game.name)} auf Pretty Old Pixel.</p>
-${metadata([
-  ["Spieltitel", escapeHtml(game.name)],
-  ...(game.platforms.length ? [["Plattform", escapeHtml(game.platforms.join(", "))]] : []),
-  ["Erscheinungsjahr", game.releaseYear !== null
-    ? `${game.releaseYear} (${gameReleaseSource(game.releaseYearSource)})` : "Unbekannt"],
-  ...(game.aliases.length ? [["Weitere Titel", escapeHtml(game.aliases.join(", "))]] : []),
-  ["Videos", videos.length],
-])}
+${renderGameMetadata(game)}
 ${unknown.length ? `<p>${videoCount(unknown.length)} ohne bekanntes Veröffentlichungsdatum ${unknown.length === 1 ? "steht" : "stehen"} gesondert am Ende der Liste.</p>` : ""}`)}`,
     }, videos);
   }

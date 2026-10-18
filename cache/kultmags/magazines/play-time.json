@@ -857,5 +857,9 @@
       "readerUrl": null,
       "coverUrl": "https://www.kultmags.com/Play%20Time/Sonderhefte/Play%20Time%20-%20Sonderheft%20-%201994-01.rar.jpg"
     }
-  ]
+  ],
+  "logo": {
+    "url": "https://www.kultmags.com/Play%20Time/title.png",
+    "file": "0833bdadabd189d86f3ddcfbb4b81c3d5ec5b707d1553d9add2e9b280d2f8282.png"
+  }
 }

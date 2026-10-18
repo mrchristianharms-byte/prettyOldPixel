@@ -1,5 +1,4 @@
 import { slugify } from "./site-config.mjs";
-import gameReleaseYears from "./data-game-release-years.json" with { type: "json" };
 
 // Geprüfte Einzelspiel-Playlists: Titel und Mitglieder, nicht das Format allein, belegen die Zuordnung.
 // Neue Titel und fehlende Metadaten: doc/README.md#recherchierte-daten-pflegen
@@ -188,7 +187,7 @@ export const gameDefinitions = [...playlists.map(([playlistId, name, platform]) 
   const id = slugify(`${name}${platform ? ` ${platform}` : ""}`);
   return {
     id, name, aliases: aliases[id] ?? [], platforms: platform ? [platform] : [],
-    release: gameReleaseYears[id] ?? null,
+    release: null,
     playlistIds: [playlistId, ...(id === "sid-meier-s-railroad-tycoon-deluxe-ms-dos" ? ["PLZW5k3rtbudqOJb8J0g3KKhWvwBtporbE"] : [])],
     videoIds: supplements[id] ?? [],
     // Die Formatvorstellung in dieser ansonsten spielbezogenen Playlist gehört nicht zum Spiel.
@@ -197,7 +196,7 @@ export const gameDefinitions = [...playlists.map(([playlistId, name, platform]) 
 }), {
   id: "der-patrizier", name: "Der Patrizier", aliases: [],
   platforms: ["Amiga", "Atari ST", "MS-DOS"],
-  release: gameReleaseYears["der-patrizier"],
+  release: null,
   playlistIds: [],
   videoIds: [
     "XExOJTdRwO0", "7brTX6VaNAU", "PTF6XVb_kpc", "nLUAQAASLRU",
@@ -208,13 +207,13 @@ export const gameDefinitions = [...playlists.map(([playlistId, name, platform]) 
 }, {
   id: "airships-conquer-the-skies", name: "Airships: Conquer the Skies",
   aliases: ["Airships - Conquer the Skies"], platforms: [],
-  release: gameReleaseYears["airships-conquer-the-skies"],
+  release: null,
   playlistIds: [],
   videoIds: ["L5dl6cyoJOg", "_TMntZnoA2s", "FejpeWADb6Q", "s12md_R_AKY"],
 }, {
   id: "hyperspace-delivery-service", name: "Hyperspace Delivery Service",
   aliases: [], platforms: [],
-  release: gameReleaseYears["hyperspace-delivery-service"],
+  release: null,
   playlistIds: [],
   videoIds: [
     "iHwHp1yIbqc", "MBY8HVQyLEQ", "5IKiUnbudhM",

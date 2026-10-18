@@ -12,6 +12,7 @@ Dateipfade im Text beziehen sich auf dessen Wurzel.
 - [Kanalstatistik](#startseite-kanal-und-themen-in-zahlen)
 - [Hardware, Retrospektiven und Gespräche](#hardware-retrospektiven-und-gespräche)
 - [Spiele und Reihen](#spiele-und-bestätigte-playlist-zuordnungen)
+- [Spielemetadaten: Datenfluss und Pflege des lokalen Dumps](game-metadata-implementation.md)
 - [Neue Videos, Titel und fehlende Metadaten](#recherchierte-daten-pflegen)
 - [Kapitel und erwähnte Kanäle](#kapitel-und-erwähnte-kanäle)
 - [Zeitschriften und Ausgaben](#blätterabend-nach-zeitschrift-und-jahrgang)
@@ -224,7 +225,8 @@ nicht automatisch erzeugte Caches:
 | Datei | Pflegeinhalt |
 | --- | --- |
 | [`src/data-games.mjs`](../src/data-games.mjs) | Geprüfte Spieltitel, Plattformen, Playlist-IDs, Aliasse, zusätzliche und ausgeschlossene Video-IDs; einfache Muster zur Bildung der Spielidentität. |
-| [`src/data-game-release-years.json`](../src/data-game-release-years.json) | Pro Spiel-ID ein Erscheinungsjahr (`year`), eine öffentliche Quellen-URL (`source`) und bei Bedarf eine kurze Erklärung (`note`). |
+| [`src/data-game-dump-decisions.json`](../src/data-game-dump-decisions.json) | Explizit geprüfte MobyGames-Dump-Zuordnungen für bekannte mehrdeutige Titel. |
+| [`src/data-game-dump-policy.json`](../src/data-game-dump-policy.json) | Plattformregel für die ausschließlich dumpbasierte Metadatenaufbereitung. |
 | [`src/data-sections.mjs`](../src/data-sections.mjs) | Geprüfte Videozuordnungen für Hardware, Retrospektiven und Gespräche mit Themen, Personen und Folgenreihenfolge. |
 
 ### Neue Videos oder Titel aufnehmen
@@ -245,8 +247,10 @@ nicht automatisch erzeugte Caches:
    Eine Playlist ist bei einer vollständig manuell bestätigten Videoreihe
    nicht erforderlich; die Zwei-Video-Schwelle gilt weiterhin. Ähnliche Namen, Nachfolger,
    Plattformversionen und Neuauflagen nicht ungeprüft zusammenlegen.
-   Der Slug aus Name und Plattform ist zugleich der Schlüssel in
-   `src/data-game-release-years.json`; bestehende IDs nicht beiläufig ändern.
+   Der Slug aus Name und Plattform ist zugleich der Metadaten-Katalogschlüssel;
+   bestehende IDs nicht beiläufig ändern. Nach Katalogänderungen den lokalen
+   Dump-Report ergänzen beziehungsweise neu importieren und den fertigen Cache
+   mit `npm run prepare:game-metadata` erneuern.
    Eine Spieleseite entsteht erst ab zwei unterschiedlichen verfügbaren
    Nicht-`re.minder`-Videos. Ausnahme: genau ein verfügbares Video aus einer
    bestätigten Spielplaylist, dessen Veröffentlichung höchstens zwei
@@ -259,19 +263,15 @@ nicht automatisch erzeugte Caches:
 
 ### Fehlende oder widersprüchliche Metadaten
 
-- **Erscheinungsjahr:** Eine verlässliche öffentliche Quelle zur konkreten
-  Spiel-/Plattformversion recherchieren und Jahr plus Quellen-URL in
-  `src/data-game-release-years.json` dauerhaft pflegen. Für eine festgelegte
-  Plattform zählt ihre früheste Veröffentlichung, andernfalls die
-  Erstveröffentlichung des Spiels; Gold-/Deluxe-Ausgaben gesondert prüfen.
-  Nicht das Video-Uploadjahr und nicht ungeprüft eine Jahreszahl aus der
-  Beschreibung übernehmen. Unterschiede zu anderen Plattformen oder
-  Neuauflagen bei Bedarf im `note`-Feld erklären.
+- **Erscheinungsjahr:** Ausschließlich aus den Veröffentlichungen des lokalen
+  MobyGames-Dumps übernehmen. Genau eine ausgewählte Plattform und vollständig
+  datierte Veröffentlichungen sind Voraussetzung für ein pauschales Jahr;
+  dann zählt das früheste. Mehrfachplattformen oder undatierte Einträge bleiben
+  ohne pauschales Jahr. Keine manuell recherchierten oder externen Ersatzwerte.
 - **Kein belastbarer Beleg:** Nicht raten. Der Generator meldet ein fehlendes
-  Erscheinungsjahr und zeigt es als unbekannt. Der Vollständigkeitstest
-  verlangt für jede gepflegte Spielidentität einen Jahresbeleg; eine neue
-  Identität ist deshalb erst mit diesem Beleg veröffentlichungsfertig.
-  Ungültige Jahreszahlen oder Quellen-URLs brechen den Build ab.
+  Erscheinungsjahr und zeigt es als unbekannt. Spieleseiten und Videozuordnungen
+  bleiben auch ohne Metadaten verfügbar. Ungültige oder veraltete fertige
+  Metadatencaches brechen den Build ab.
 - **Laufzeit, Veröffentlichungsdatum oder Beschreibung fehlen:** Keine
   Ersatzwerte erfinden. Fehlende Laufzeiten bleiben unbekannt und
   Gesamtlaufzeiten werden als Teilsumme gekennzeichnet. Undatierte Videos
@@ -304,16 +304,11 @@ erfordert zugleich aktualisierte Imports und Dokumentationsverweise.
   Ähnliche Titel, Nachfolger und Plattformvarianten werden nicht automatisch
   zusammengelegt. Der Slug hängt von der gepflegten Identität ab, nicht von
   späteren Änderungen des gescrapten Playlist-Titels.
-- `src/data-game-release-years.json` pflegt je Spielidentität ein recherchiertes
-  Erscheinungsjahr mit Quellen-URL. Bei festgelegter Plattform zählt die
-  früheste Veröffentlichung dieser Version, andernfalls die Erstveröffentlichung
-  des Spiels; Gold-/Deluxe-Ausgaben werden gesondert berücksichtigt.
-  Die Spielekachel zeigt das Jahr, die Spieleseite zusätzlich den Quellenlink
-  mit Anbietername, etwa „Wikipedia“, „C64-Wiki“ oder „Internet Archive“.
-  Uploadjahre und widersprüchliche Jahresangaben in Videobeschreibungen sind
-  keine automatische Grundlage. Fehlende Jahre werden beim Build gemeldet
-  und sichtbar als unbekannt angezeigt; ungültige Jahre oder Quellen brechen
-  den Build ab. Neue Spielidentitäten benötigen ebenfalls einen Quellenbeleg.
+- [`cache/game-metadata/ready.json`](../cache/game-metadata/ready.json) ist die
+  einzige Quelle der Spielmetadaten beim Website-Build. Der Cache wird aus dem
+  lokalen MobyGames-Dump aufbereitet; auch Jahre kommen ausschließlich daraus.
+  Quellenlinks erscheinen als Link-Icons. Nicht eindeutig zugeordnete Titel
+  bleiben unverifiziert. [Datenfluss und Pflege](game-metadata-implementation.md).
 - Der aktuelle Katalog enthält 147 geprüfte Spielidentitäten aus den
   143 re.play-Playlists, der ebenfalls geprüften 1942-Playlist und der
   manuell bestätigten Patrizier-Reihe mit 16 Videos einschließlich re.minder sowie Airships: Conquer
@@ -1288,6 +1283,12 @@ bricht es ausdrücklich ab.
   Rückkehr zu einem früheren Spiel wird als eigener Abschnitt behandelt
   (Tiny Little Slug / Syndicate). Lange persönliche Aufnahmeberichte
   bleiben unabhängig von ihrer Dauer ausgeschlossen.
+  Sprechernamen, Anreden und Chatbegrüßungen (etwa Selma) sind keine
+  Spieltitel. Plattform-/Versionsangaben wie „Schneider CPC Version“
+  dürfen den Spieltitel nicht ersetzen. Der tatsächliche Titel muss im
+  gelieferten Kontext belegbar sein; andernfalls entfällt der Treffer.
+  Auch bei bekanntem Spiel bleiben Rückblicke auf eigene Videos und
+  Abstimmungen über die nächste Portierungsfolge ausgeschlossen.
 - Das Modell liefert Segmentverweise statt frei geschätzter Zeiten.
   Erkennung und Kontextprüfung ignorieren schnelle Folgen von Spielnamen,
   Ranglisten, Zuschauerabstimmungen und Auszählungen, auch mit kurzen
@@ -1309,6 +1310,19 @@ bricht es ausdrücklich ab.
   Antwort vollständig neu erzeugen. Es gibt keine stillen Ersatzwerte
   und keine scheinbar erfolgreich leere Analyse nach einem Fehler.
   Erkennung und Kontextprüfung besitzen jeweils dieses Versuchslimit.
+  Beide Prompts erklären dieselben Endregeln ausdrücklich:
+  `endReason: "window-end"` erfordert `continuesAfter: true`.
+  Abgelehnte Vorschläge liefern keine Besprechungsabschnitte. Bei weiteren
+  Versuchen bleiben alle bisherigen Validierungsfehler dieser Phase im
+  Feedback, damit wechselnde Schemafehler gemeinsam korrigiert werden.
+  Jeder fehlgeschlagene Versuch, auch der letzte, protokolliert Phase,
+  Versuch, Eingabezeichen, Ausgabelimit, gegebenenfalls Kontextlimit,
+  Endgrund und vom Server gelieferte Eingabe-/Ausgabetokenzahlen.
+  Fehlende Serverstatistiken stehen als `null` im Log. Verworfene
+  Modelltexte werden JSON-escaped bis höchstens 6000 Zeichen ausgegeben,
+  längere Antworten ausdrücklich als gekürzt markiert. Diese lokalen
+  Konsolenlogs können Transkriptausschnitte enthalten; Zugangsdaten und
+  Request-Header werden nicht ausgegeben.
   Dasselbe gilt für Zeitüberschreitungen, Verbindungsfehler und HTTP
   408/429/500/502/503/504 des lokalen Modellservers. Andere HTTP-Fehler
   (etwa falsche Konfiguration oder fehlendes Modell) brechen sofort ab.
@@ -1498,6 +1512,7 @@ Architecture Decision Records liegen in `doc/adr/`:
 - [ADR 0003: Seitenstruktur und Zuordnung von Videos zu Inhaltsbereichen](adr/0003-seitenstruktur-und-inhaltszuordnung.md)
 - [ADR 0004: Detailseiten, Videonavigation und fortlaufende Wiedergabe](adr/0004-detailseiten-und-videonavigation.md)
 - [ADR 0005: Wiederverwendbare Widgets und Komponenten](adr/0005-wiederverwendbare-widgets-und-komponenten.md)
+- [ADR 0006: Spielemetadaten ausschließlich aus lokalem MobyGames-Dump (angenommen)](adr/0006-spielemetadaten-aus-wikidata-und-lokalem-cache.md)
 
 ## GitHub Pages veröffentlichen
 

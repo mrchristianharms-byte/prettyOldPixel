@@ -1734,5 +1734,9 @@
       "readerUrl": null,
       "coverUrl": "https://www.kultmags.com/Total%21/Sonderhefte/Total%21%20Sonderheft%201996-03.rar.jpg"
     }
-  ]
+  ],
+  "logo": {
+    "url": "https://www.kultmags.com/Total%21/title.png",
+    "file": "bc0e56a19a889ce21cd8c9486753a5b930608d72a6bf88ece5ed977c11eeebf6.png"
+  }
 }

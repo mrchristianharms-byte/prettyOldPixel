@@ -1769,5 +1769,9 @@
       "readerUrl": "https://reader.kultmags.com/Happy%20Computer%20-%20Sonderheft%2025%20-%20DFUE",
       "coverUrl": "https://www.kultmags.com/Happy%20Computer/Sonderhefte/Happy%20Computer%20-%20Sonderheft%2025%20-%20DFUE.rar.jpg"
     }
-  ]
+  ],
+  "logo": {
+    "url": "https://www.kultmags.com/Happy%20Computer/title.png",
+    "file": "a94f1676325ce1607248fe2d54336b1d041036b5b88fc68be5bde571b7f468ed.png"
+  }
 }

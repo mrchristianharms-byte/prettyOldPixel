@@ -5,7 +5,6 @@ import path from "node:path";
 import test from "node:test";
 import { generateSite, validateSite } from "../src/generate-site.mjs";
 import { gameDefinitions } from "../src/data-games.mjs";
-import gameReleaseYears from "../src/data-game-release-years.json" with { type: "json" };
 import { createSiteConfig } from "../src/site-config.mjs";
 import { normalizeSources, loadSiteData } from "../src/site-data.mjs";
 import { renderSite } from "../src/site-render.mjs";
@@ -15,7 +14,7 @@ const videoId = (index) => `g${String(index).padStart(10, "0")}`;
 const playlistId = "PLZW5k3rtbudqSHgAFraosQMdGOpK08alM";
 const definition = (overrides = {}) => ({
   id: "cadaver", name: "Cadaver", playlistIds: [playlistId], videoIds: [], platforms: [], aliases: [],
-  release: { year: 1990, source: "https://en.wikipedia.org/wiki/Cadaver_(video_game)" }, ...overrides,
+  release: { year: 1990, source: "https://www.mobygames.com/game/42/" }, ...overrides,
 });
 const member = (index, position = index + 1) => ({ videoId: videoId(index), position, availability: "listed" });
 
@@ -44,6 +43,185 @@ function render(input = fixture(), definitions = [definition()]) {
 }
 
 const graph = (html) => JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/u)[1])["@graph"];
+
+test("bindet konsolidierte Metadaten im echten Offline-Modell ein und zeigt Quellenumfang je Spiel", async () => {
+  const model = await loadSiteData(path.resolve(import.meta.dirname, "../cache"));
+  const config = createSiteConfig();
+  const pages = renderSite(model, config, config.href("assets/test.css"));
+  const paradroid = model.games.find((game) => game.id === "paradroid-c64");
+  assert.equal(paradroid.metadata.status, "ready");
+  const html = pages.get(`${paradroid.route}index.html`).html;
+  assert.match(html, /Graftgold Ltd\./u);
+  assert.match(html, /Hewson Consultants Ltd\./u);
+  assert.match(html, /Thunder Mountain/u);
+  assert.match(html, /mobygames\.com\/game\/9272\//u);
+  assert.ok(!html.includes("Spiel-ID"));
+  assert.ok(!html.includes("lokalen MobyGames-Datenstand"));
+  assert.ok(!html.includes("nicht unabhängig gegengeprüft"));
+  assert.match(html, /<caption>Veröffentlichungen für C64<\/caption>/u);
+  assert.equal(paradroid.releaseYear, 1985);
+  assert.equal(new URL(paradroid.releaseYearSource).hostname, "www.mobygames.com");
+  const dune = model.games.find((game) => game.id === "dune-ii-the-building-of-a-dynasty");
+  assert.deepEqual(dune.platforms, []);
+  const duneHtml = pages.get(`${dune.route}index.html`).html;
+  assert.ok(!duneHtml.includes("Bei offener Katalogplattform"));
+  assert.ok(!duneHtml.includes("keine nachträgliche Bestätigung"));
+  assert.match(duneHtml, /mobygames\.com\/game\/241\//u);
+  const blocked = model.games.find((game) => game.id === "wing-commander-ii");
+  assert.equal(blocked.metadata.status, "blocked");
+  assert.match(pages.get(`${blocked.route}index.html`).html, /noch keine eindeutig zugeordneten zusätzlichen Metadaten/u);
+  for (const game of model.games) {
+    assert.match(pages.get(`${game.route}index.html`).html, /aria-label="Zusätzliche Spielinformationen"/u);
+    assert.equal(game.releaseYear, game.metadata.data?.releaseYear ?? null);
+    assert.equal(game.releaseYearSource, game.releaseYear === null ? null : game.metadata.data.evidence.sourceUrl);
+    const information = pages.get(`${game.route}index.html`).html
+      .match(/<section aria-label="Zusätzliche Spielinformationen">([\s\S]*?)<\/section>/u)[1];
+    for (const [, url] of information.matchAll(/href="([^"]+)"/gu)) {
+      assert.equal(new URL(url).hostname, "www.mobygames.com");
+    }
+    assert.equal((information.match(/href="/gu) ?? []).length, game.metadata.status === "ready" ? 1 : 0);
+  }
+});
+
+test("fehlender Metadatencache wird gemeldet; beschädigter Cache bricht das Laden ab", async (t) => {
+  const cacheDir = await mkdtemp(path.join(tmpdir(), "pixel-site-metadata-"));
+  t.after(() => rm(cacheDir, { recursive: true, force: true }));
+  const input = fixture();
+  for (const [file, data] of [
+    ["youtube-videos.json", input.videos], ["youtube-playlists.json", input.playlists],
+    ["blaetterabend-videos.json", input.magazines],
+  ]) await writeFile(path.join(cacheDir, file), JSON.stringify(data));
+  const model = await loadSiteData(cacheDir, { games: [definition()] });
+  assert.equal(model.games[0].metadata.reason, "metadata-cache-missing");
+  assert.equal(model.games[0].releaseYear, null);
+  assert.equal(model.games[0].releaseYearSource, null);
+  assert.ok(model.warnings.some((warning) => warning.includes("Erscheinungsjahr fehlt")));
+  assert.ok(model.warnings.some((warning) => warning.includes("Spielemetadaten-Cache fehlt")));
+  await mkdir(path.join(cacheDir, "game-metadata"));
+  await writeFile(path.join(cacheDir, "game-metadata/ready.json"), "{}");
+  await assert.rejects(loadSiteData(cacheDir, { games: [definition()] }), /beschädigt oder veraltet/u);
+});
+
+test("escaped konsolidierte Metadaten und behält leere Felder sowie Releaseunterschiede sichtbar", () => {
+  const model = normalizeSources(fixture(), { games: [definition()] });
+  const game = model.games[0];
+  game.metadata = { status: "ready", data: {
+    identity: { id: 10 }, evidence: { sourceUrl: "https://www.mobygames.com/game/10/", importedAt: "2026-10-18T20:00:00Z" },
+    scope: { platforms: ["MS-DOS"], platformBasis: "dos-amiga-c64-priority" },
+    genres: ["<script>genre</script>", "Simulation"],
+    releases: [
+      { platform: "DOS", year: 1990, developer: "<Studio>", publisher: "Original", countries: "Germany", publisherLabel: null },
+      { platform: "DOS", year: 2000, developer: null, publisher: "Reissue", countries: null, publisherLabel: "<Label>" },
+    ],
+  } };
+  const config = createSiteConfig();
+  const pages = renderSite(model, config, config.href("assets/test.css"));
+  validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""]]), config);
+  const html = pages.get("spiele/cadaver/index.html").html;
+  assert.match(html, /&lt;script&gt;genre&lt;\/script&gt;/u);
+  assert.match(html, /&lt;Studio&gt;/u);
+  assert.match(html, /&lt;Label&gt;/u);
+  assert.match(html, /Keine Angabe/u);
+  assert.match(html, /1990/u);
+  assert.match(html, /2000/u);
+  assert.ok(!html.includes("<script>genre"));
+});
+
+test("fasst nur länderabweichende Releases zusammen und erhält alle anderen Unterschiede", () => {
+  const model = normalizeSources(fixture(), { games: [definition()] });
+  const base = { platform: "DOS", year: 1990, developer: "Studio", publisher: "Publisher", publisherLabel: null };
+  const releases = [
+    { ...base, sourceReleaseId: 1, countries: "Germany" },
+    { ...base, sourceReleaseId: 2, countries: "United States, Germany" },
+    { ...base, sourceReleaseId: 3, countries: null },
+    { ...base, sourceReleaseId: 4, countries: "<Country>" },
+    { ...base, sourceReleaseId: 5, countries: "Germany", year: 1991 },
+    { ...base, sourceReleaseId: 6, countries: "Germany", platform: "Amiga" },
+    { ...base, sourceReleaseId: 7, countries: "Germany", developer: "Other Studio" },
+    { ...base, sourceReleaseId: 8, countries: "Germany", publisher: "Other Publisher" },
+    { ...base, sourceReleaseId: 9, countries: "Germany", publisherLabel: "Budget" },
+  ];
+  const before = structuredClone(releases);
+  model.games[0].metadata = { status: "ready", data: {
+    identity: { id: 10 }, evidence: { sourceUrl: "https://www.mobygames.com/game/10/", importedAt: "2026-10-18T20:00:00Z" },
+    scope: { platforms: ["MS-DOS", "Amiga"], platformBasis: "catalogue" },
+    genres: ["Simulation"], releases,
+  } };
+  const config = createSiteConfig();
+  const pages = renderSite(model, config, config.href("assets/test.css"));
+  validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""]]), config);
+  const html = pages.get("spiele/cadaver/index.html").html;
+  const table = html.match(/<tbody>([\s\S]*?)<\/tbody>/u)[1];
+  assert.equal((table.match(/<tr>/gu) ?? []).length, 5);
+  assert.match(html, /Weitere Veröffentlichungen \(5\)/u);
+  assert.match(html, /&lt;Country&gt;, Germany, United States/u);
+  assert.ok(!table.includes("Keine Angabe"));
+  assert.ok(!table.includes("Germany, Germany"));
+  assert.match(table, /Other Studio/u);
+  assert.match(table, /Other Publisher/u);
+  assert.match(html, /Budget/u);
+  assert.deepEqual(releases, before);
+});
+
+test("unterdrückt abgedeckte unvollständige Releases ohne widersprüchliche oder zusätzliche Angaben zu verlieren", () => {
+  const model = normalizeSources(fixture(), { games: [definition()] });
+  const full = { platform: "DOS", year: 1990, developer: "Studio", publisher: "Publisher", publisherLabel: "Budget", countries: "Germany" };
+  const releases = [
+    { ...full, developer: null },
+    { ...full, publisher: null },
+    { ...full, year: null },
+    { ...full, publisherLabel: null },
+    { ...full, countries: null },
+    full,
+    { ...full, developer: "Different Studio" },
+    { ...full, developer: null, countries: "France" },
+    { ...full, year: 1991, publisher: null, countries: null },
+  ];
+  const before = structuredClone(releases);
+  const config = createSiteConfig();
+  model.games[0].metadata = { status: "ready", data: {
+    identity: { id: 10 }, evidence: { sourceUrl: "https://www.mobygames.com/game/10/", importedAt: "2026-10-18T20:00:00Z" },
+    scope: { platforms: ["MS-DOS"], platformBasis: "catalogue" }, genres: ["Simulation"], releases,
+  } };
+  const pageHtml = () => renderSite(model, config, config.href("assets/test.css"))
+    .get("spiele/cadaver/index.html").html;
+  const tableHtml = () => pageHtml().match(/<tbody>([\s\S]*?)<\/tbody>/u)[1];
+  const table = tableHtml();
+  assert.equal((table.match(/<tr>/gu) ?? []).length, 3);
+  assert.match(pageHtml(), /Different Studio/u);
+  assert.match(table, /France/u);
+  assert.match(table, /1991/u);
+  assert.match(table, /Keine Angabe/u);
+  assert.deepEqual(releases, before);
+  model.games[0].metadata.data.releases = [...releases].reverse();
+  assert.equal((tableHtml().match(/<tr>/gu) ?? []).length, 3);
+});
+
+test("einheitlicher Steckbrief zeigt Einzelrelease ohne Tabelle und bewahrt abweichende Jahresbelege", () => {
+  const model = normalizeSources(fixture(), { games: [definition({ platforms: ["MS-DOS"], release: {
+    year: 1988, source: "https://www.mobygames.com/game/10/",
+  } })] });
+  model.games[0].metadata = { status: "ready", data: {
+    evidence: { sourceUrl: "https://www.mobygames.com/game/10/" },
+    scope: { platforms: ["MS-DOS"], platformBasis: "catalogue" }, genres: ["Simulation"],
+    releases: [{ platform: "DOS", year: 1989, developer: "Studio", publisher: "Publisher",
+      publisherLabel: null, countries: "United States" }],
+  } };
+  const config = createSiteConfig();
+  const html = renderSite(model, config, config.href("assets/test.css")).get("spiele/cadaver/index.html").html;
+  assert.equal((html.match(/<dt>Plattform<\/dt>/gu) ?? []).length, 1);
+  assert.ok(!html.includes("<dt>Spieltitel</dt>"));
+  assert.ok(!html.includes("Metadaten zur Plattform"));
+  assert.ok(!html.includes("<dt>Videos</dt>"));
+  assert.ok(!html.includes("<table"));
+  assert.ok(!html.includes("Weitere Veröffentlichungen"));
+  assert.match(html, /<dt>Erscheinungsjahr<\/dt><dd>1988/u);
+  assert.match(html, /<\/a><br>1989 · DOS · United States/u);
+  assert.ok(!html.includes("<dt>Veröffentlichung</dt>"));
+  assert.ok(!html.includes("Quellen:"));
+  assert.match(html, /aria-label="MobyGames \(externe Website\)"/u);
+  assert.match(html, /MobyGames/u);
+});
 
 test("veröffentlicht manuell bestätigte Spielreihen ohne Playlist, aber nicht ohne Zuordnung oder unterhalb der Schwelle", () => {
   const input = fixture();
@@ -79,7 +257,7 @@ test("ergänzt fehlende re.play-Zuordnungen und die vollständige Patrizier-Reih
   }
   const patrician = model.games.find((game) => game.id === "der-patrizier");
   assert.equal(patrician.videos.length, 16);
-  assert.equal(patrician.releaseYear, 1992);
+  assert.equal(patrician.releaseYear, null);
   assert.equal(patrician.series.entries.length, 16);
   assert.ok(patrician.videos.includes("rvL8B_qulwU"));
   assert.equal(patrician.series.entries.find((entry) => entry.videoId === "rvL8B_qulwU").phase.id, "reminder");
@@ -99,8 +277,8 @@ test("ergänzt fehlende re.play-Zuordnungen und die vollständige Patrizier-Reih
 test("ordnet ausschließlich die ausgewählten re.invented-Reihen manuell ihren Spielen zu", async () => {
   const model = await loadSiteData(path.resolve(import.meta.dirname, "../cache"));
   const selected = [
-    ["airships-conquer-the-skies", ["L5dl6cyoJOg", "_TMntZnoA2s", "FejpeWADb6Q", "s12md_R_AKY"], 2018],
-    ["hyperspace-delivery-service", ["iHwHp1yIbqc", "MBY8HVQyLEQ", "5IKiUnbudhM", "UbJ2Wat9hjQ", "CyYkUIRGx68", "cNv2GumJLXs"], 2019],
+    ["airships-conquer-the-skies", ["L5dl6cyoJOg", "_TMntZnoA2s", "FejpeWADb6Q", "s12md_R_AKY"], null],
+    ["hyperspace-delivery-service", ["iHwHp1yIbqc", "MBY8HVQyLEQ", "5IKiUnbudhM", "UbJ2Wat9hjQ", "CyYkUIRGx68", "cNv2GumJLXs"], null],
   ];
   const config = createSiteConfig();
   const pages = renderSite(model, config, "assets/test.css");
@@ -142,9 +320,9 @@ test("zeigt das gepflegte Erscheinungsjahr statt Uploadjahr oder Zahlen aus Besc
   assert.equal(model.games[0].releaseYearSource, definition().release.source);
   assert.ok(pages.get("spiele/index.html").html.includes("Erscheinungsjahr: 1990"));
   const detail = pages.get("spiele/cadaver/index.html").html;
-  assert.ok(detail.includes("<dt>Erscheinungsjahr</dt><dd>1990 ("));
+  assert.ok(detail.includes("<dt>Erscheinungsjahr</dt><dd>1990 <a"));
   assert.ok(detail.includes(`href="${definition().release.source}" rel="external"`));
-  assert.ok(detail.includes('>Wikipedia <span aria-hidden="true">↗</span>'));
+  assert.ok(detail.includes('aria-label="MobyGames (externe Website)"><span aria-hidden="true">↗</span>'));
   const unknown = render(input, [definition({ release: null })]);
   assert.ok(unknown.pages.get("spiele/index.html").html.includes("Erscheinungsjahr: unbekannt"));
   assert.ok(unknown.model.warnings.some((warning) => warning.includes("Erscheinungsjahr fehlt")));
@@ -163,18 +341,16 @@ test("verwendet die Einzahl für ein Spielvideo ohne Veröffentlichungsdatum", (
 
 test("benennt die recherchierte Quelle auf der Spieleseite nach ihrem Anbieter", () => {
   for (const [source, label] of [
-    ["https://de.wikipedia.org/wiki/Cadaver", "Wikipedia"],
-    ["https://www.c64-wiki.com/wiki/The_Goonies", "C64-Wiki"],
     ["https://www.mobygames.com/game/1/", "MobyGames"],
-    ["https://web.archive.org/web/20250101000000/https://www.mobygames.com/game/1/", "Internet Archive"],
     ["https://example.com/game?x=1&y=2", "example.com"],
   ]) {
     const { pages } = render(fixture(2), [definition({ release: { year: 1990, source } })]);
     const html = pages.get("spiele/cadaver/index.html").html;
     const field = html.match(/<dt>Erscheinungsjahr<\/dt><dd>(.*?)<\/dd>/u)[1];
     assert.ok(field.includes(`href="${source.replaceAll("&", "&amp;")}" rel="external"`));
-    assert.ok(field.includes(`>${label} <span aria-hidden="true">↗</span>`));
-    assert.ok(field.startsWith("1990 ("));
+    assert.ok(field.includes(`aria-label="${label} (externe Website)"`));
+    assert.ok(field.includes('><span aria-hidden="true">↗</span></a>'));
+    assert.ok(field.startsWith("1990 <a"));
   }
 });
 
@@ -188,14 +364,9 @@ test("weist ungültige Erscheinungsjahre und unbrauchbare Quellen zurück", () =
   ]) assert.throws(() => render(fixture(), [definition({ release })]));
 });
 
-test("pflegt zu jeder Spielidentität ein Erscheinungsjahr mit Quellenbeleg", () => {
-  assert.deepEqual(Object.keys(gameReleaseYears).sort(), gameDefinitions.map((game) => game.id).sort());
+test("Spielkatalog enthält keine manuell oder extern gepflegten Erscheinungsjahre", () => {
   for (const game of gameDefinitions) {
-    assert.ok(Number.isInteger(game.release.year) && game.release.year >= 1950 && game.release.year <= 2200, game.id);
-    const source = new URL(game.release.source);
-    assert.ok(["https:", "http:"].includes(source.protocol), game.id);
-    assert.equal(source.username, "", game.id);
-    assert.equal(source.password, "", game.id);
+    assert.equal(game.release, null, game.id);
   }
 });
 
@@ -347,7 +518,7 @@ test("rendert eine vollständige Spieleseite mit Metadaten, Player und Beschreib
   assert.ok(menu.includes("Laufzeit unbekannt"));
   assert.ok(menu.includes('<time datetime="2020-01-01T00:00:00.000Z">01.01.2020</time>'));
   assert.ok(menu.includes('tabindex="0"'));
-  assert.ok(html.includes('<div><dt>Spieltitel</dt><dd>Cadaver</dd></div>'));
+  assert.ok(!html.includes("<dt>Spieltitel</dt>"));
   assert.ok(html.includes('<div><dt>Plattform</dt><dd>Amiga</dd></div>'));
   const playlists = menu.match(/<div class="episode-playlists">([\s\S]*?)<\/div>/u)[1];
   assert.ok(!html.includes("Playlists auf YouTube"));

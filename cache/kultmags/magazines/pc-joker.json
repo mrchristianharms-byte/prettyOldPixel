@@ -2113,5 +2113,9 @@
       "readerUrl": "https://reader.kultmags.com/Joker%20Sonderheft%20-%2005%20-%20Strategie",
       "coverUrl": "https://www.kultmags.com/PC%20Joker/Sonderhefte/Joker%20Sonderheft%20-%2005%20-%20Strategie.rar.jpg"
     }
-  ]
+  ],
+  "logo": {
+    "url": "https://www.kultmags.com/PC%20Joker/title.png",
+    "file": "39da88f6c56cf14b71a11c2d35c68d05993280051abd4bba6cc67d244c2ad9a8.png"
+  }
 }

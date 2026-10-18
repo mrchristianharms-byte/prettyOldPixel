@@ -2973,5 +2973,9 @@
       "readerUrl": "https://reader.kultmags.com/Power%20Play%20Katalog",
       "coverUrl": "https://www.kultmags.com/Power%20Play/Special/Power%20Play%20Katalog.rar.jpg"
     }
-  ]
+  ],
+  "logo": {
+    "url": "https://www.kultmags.com/Power%20Play/title.png",
+    "file": "43a4a4922e47fe38f49c2c14b1b486687c2a069dd9b5e71315c6480eb613b0e6.png"
+  }
 }

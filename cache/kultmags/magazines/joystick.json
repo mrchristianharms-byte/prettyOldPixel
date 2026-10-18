@@ -202,5 +202,9 @@
       "readerUrl": null,
       "coverUrl": "https://www.kultmags.com/Joystick/1989/Joystick%20-%201989-09.rar.jpg"
     }
-  ]
+  ],
+  "logo": {
+    "url": "https://www.kultmags.com/Joystick/title.png",
+    "file": "4f3bc6ff9f551c5858189b8ba457ce1b9e009a7781769ec03096de28402fcde2.png"
+  }
 }
