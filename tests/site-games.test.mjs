@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdtemp, mkdir, readFile, rm, stat, utimes, writeFile } from "node:fs/promises";
+import { copyFile, mkdtemp, mkdir, readFile, rm, stat, utimes, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
@@ -36,13 +36,271 @@ function fixture(count = 3) {
 
 function render(input = fixture(), definitions = [definition()]) {
   const model = normalizeSources(input, { games: definitions });
-  const config = createSiteConfig();
+  return renderModel(model);
+}
+
+function renderModel(model, config = createSiteConfig()) {
   const pages = renderSite(model, config, config.href("assets/test.css"));
-  const budgets = validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""]]), config);
+  const budgets = validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""], ["assets/theme.js", ""], ["favicon.jpg", ""]]), config);
   return { model, config, pages, budgets };
 }
 
+function metadataModel(count = 2) {
+  const model = normalizeSources(fixture(2), { games: Array.from({ length: count }, (_, index) => definition({
+    id: `game-${String(index).padStart(2, "0")}`, name: `Spiel ${String(index).padStart(2, "0")}`,
+    playlistIds: [], videoIds: [videoId(0), videoId(1)],
+  })) });
+  for (const game of model.games) {
+    game.metadata = { status: "ready", data: {
+      evidence: { sourceUrl: "https://www.mobygames.com/game/10/" },
+      scope: { platforms: ["DOS"] }, genres: ["Simulation"],
+      releases: [{ platform: "DOS", year: 1990, developer: "Studio", publisher: "Publisher",
+        publisherLabel: null, countries: "Germany" }],
+    } };
+  }
+  return model;
+}
+
 const graph = (html) => JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/u)[1])["@graph"];
+
+test("zählt unterschiedliche Spiele im Beschreibungstext der Spielebox statt ihrer gemeinsamen Videos", () => {
+  for (const count of [1, 2, 6]) {
+    const home = renderModel(metadataModel(count)).pages.get("index.html").html;
+    const label = count === 1 ? "1 Retrospiel" : `${count} Retrospiele`;
+    assert.ok(home.includes(`<a href="spiele/">Spiele</a></h3><p class="theme-count">2 Videos</p><p>${label} wiederentdecken: vom ersten Start bis zum Fazit.</p>`));
+  }
+});
+
+test("zeigt pro Genre, Entwickler und Publisher die Top 5 als einzelne Links unter unverlinkten Überschriften", () => {
+  const model = metadataModel(6);
+  for (const [index, game] of model.games.entries()) {
+    const names = [
+      ...(index < 4 ? ['Alpha & "Partner"'] : []),
+      ...(index < 3 ? ["Beta"] : []),
+      ...(index < 2 ? ["Gamma"] : []),
+      ...(index < 2 ? ["Delta", "Epsilon"] : []),
+      ...(index >= 4 ? ["Zeta"] : []),
+      `Einzelwert ${index}`,
+    ];
+    game.metadata.data.genres = [...names, ...names];
+    const release = game.metadata.data.releases[0];
+    game.metadata.data.releases = names.flatMap((name) => [
+      { ...release, developer: name, publisher: name },
+      { ...release, developer: name, publisher: name },
+    ]);
+  }
+  const home = renderModel(model).pages.get("index.html").html;
+  const section = home.match(/<section aria-labelledby="bereiche">([\s\S]*?)<\/section>/u)[1];
+  for (const [segment, label] of [
+    ["genre", "Genre"], ["entwickler", "Entwickler"], ["publisher", "Publisher"],
+  ]) {
+    const ranking = section.match(new RegExp(`<article><h3>${label}</h3><ol class="theme-ranking">([\\s\\S]*?)</ol></article>`, "u"))?.[1];
+    assert.ok(ranking);
+    assert.deepEqual([...ranking.matchAll(/href="([^"]+)"/gu)].map((match) => match[1]),
+      ["alpha-partner", "beta", "delta", "epsilon", "gamma"].map((slug) => `spiele/${segment}/${slug}/`));
+    assert.deepEqual([...ranking.matchAll(/<span class="meta">([^<]+)<\/span>/gu)].map((match) => match[1]),
+      ["4 Spiele", "3 Spiele", "2 Spiele", "2 Spiele", "2 Spiele"]);
+    assert.ok(ranking.includes('>Alpha &amp; &quot;Partner&quot;</a>'));
+    assert.ok(!section.includes(`href="spiele/${segment}/zeta/"`));
+  }
+  assert.ok(section.includes('href="spiele/">Spiele</a>'));
+  assert.match(section, /<p class="theme-count">2 Videos<\/p>/u);
+  assert.equal((section.match(/class="theme-ranking"/gu) ?? []).length, 3);
+  model.games[4].metadata.data.genres.push("Beta");
+  model.games[5].metadata.data.genres.push("Beta");
+  const updated = renderModel(model).pages.get("index.html").html;
+  assert.match(updated, /<h3>Genre<\/h3><ol class="theme-ranking"><li><span class="theme-ranking-entry"><a href="spiele\/genre\/beta\/" title="Beta">Beta<\/a><span class="meta">5 Spiele/u);
+});
+
+test("wählt Spitzenfilter bei Gleichstand alphabetisch und blendet Boxen ohne gemeinsame Metadaten aus", () => {
+  const model = metadataModel();
+  for (const game of model.games) game.metadata.data.genres = ["Zeta", "Alpha"];
+  const home = () => renderModel(model).pages.get("index.html").html;
+  const before = home();
+  assert.ok(before.includes('<h3>Genre</h3><ol class="theme-ranking"><li><span class="theme-ranking-entry"><a href="spiele/genre/alpha/" title="Alpha">Alpha</a>'));
+  assert.ok(before.includes('href="spiele/genre/zeta/" title="Zeta">Zeta</a>'));
+  assert.equal((before.match(/<ol class="theme-ranking">([\s\S]*?)<\/ol>/u)[1].match(/<li>/gu) ?? []).length, 2);
+  for (const game of model.games) game.metadata.data.genres.reverse();
+  assert.equal(home(), before);
+  for (const game of model.games) game.metadata.data.releases = [];
+  const genreOnly = home();
+  assert.ok(genreOnly.includes('href="spiele/genre/alpha/"'));
+  assert.ok(!genreOnly.includes('href="spiele/entwickler/') && !genreOnly.includes('href="spiele/publisher/'));
+  model.games[1].metadata.status = "blocked";
+  assert.ok(!home().includes('class="theme-ranking"'));
+  delete model.games[0].metadata;
+  assert.ok(!home().includes('class="theme-ranking"'));
+});
+
+test("verlinkt gemeinsame Genres, Entwickler und Publisher nur für mindestens zwei veröffentlichte Spiele", () => {
+  const model = metadataModel(5);
+  model.games[0].metadata.data.genres.push("Simulation", "Einzelgenre");
+  model.games[0].metadata.data.releases.push({ ...model.games[0].metadata.data.releases[0], year: 2000 });
+  model.games[0].metadata.data.releases[0].publisherLabel = "Budget";
+  model.games[2].metadata.data.genres = ["Einzelnes Genre"];
+  model.games[2].metadata.data.releases[0].developer = "Einzelstudio";
+  model.games[2].metadata.data.releases[0].publisher = "Einzelpublisher";
+  model.games[3].metadata.status = "blocked";
+  delete model.games[4].metadata;
+  const { pages, config } = renderModel(model);
+  const routes = ["spiele/genre/simulation/", "spiele/entwickler/studio/", "spiele/publisher/publisher/"];
+  assert.deepEqual([...pages.keys()].filter((file) => /^spiele\/(?:genre|entwickler|publisher)\//u.test(file)),
+    routes.map((route) => `${route}index.html`));
+  for (const route of routes) {
+    const page = pages.get(`${route}index.html`);
+    assert.deepEqual(graph(page.html).find((item) => item["@type"] === "CollectionPage").mainEntity.itemListElement
+      .map((item) => item.name), ["Spiel 00", "Spiel 01"]);
+    assert.match(page.html, /2 Retrospiele, alphabetisch geordnet/u);
+    assert.ok(page.html.includes('class="game-catalog"><ul class="catalog-grid">'));
+    assert.match(page.html, /Erscheinungsjahr: 1990/u);
+    assert.match(page.html, /2 Videos/u);
+    assert.ok(!page.html.includes("data-video-series"));
+    assert.ok(page.html.includes(`href="${config.href("spiele/", route)}">Alle Spiele anzeigen</a>`));
+    for (const game of model.games.slice(0, 2)) {
+      assert.ok(pages.get(`${game.route}index.html`).html.includes(`href="${config.href(route, game.route)}"`));
+    }
+  }
+  const html = pages.get("spiele/game-00/index.html").html;
+  assert.match(html, /<\/a> \(Budget\)/u);
+  assert.match(html, /<\/a>, Einzelgenre<\/dd>/u);
+  assert.ok(![...pages.keys()].some((file) => file.includes("budget") || file.includes("einzel")));
+
+  model.games[1].metadata.status = "blocked";
+  const single = renderModel(model).pages;
+  assert.ok(![...single.keys()].some((file) => /^spiele\/(?:genre|entwickler|publisher)\//u.test(file)));
+  const information = single.get("spiele/game-00/index.html").html
+    .match(/<section aria-label="Zusätzliche Spielinformationen">([\s\S]*?)<\/section>/u)[1];
+  assert.match(information, /<dt>Entwickler<\/dt><dd>Studio<\/dd>/u);
+  assert.match(information, /<dt>Publisher<\/dt><dd>Publisher \(Budget\)<\/dd>/u);
+  assert.ok(!information.includes("../genre/") && !information.includes("../entwickler/") && !information.includes("../publisher/"));
+});
+
+test("berücksichtigt und verlinkt Entwickler sowie Publisher zusätzlicher Veröffentlichungen", () => {
+  const model = metadataModel();
+  const releases = model.games[0].metadata.data.releases;
+  releases.push({ ...releases[0], year: 2000 });
+  releases[0].developer = "Nur erstes Release";
+  releases[0].publisher = "Nur erster Publisher";
+  const { pages } = renderModel(model);
+  for (const route of ["entwickler/studio", "publisher/publisher"]) {
+    assert.ok(pages.has(`spiele/${route}/index.html`));
+    assert.ok(pages.get("spiele/game-00/index.html").html.match(/<tbody>([\s\S]*?)<\/tbody>/u)[1]
+      .includes(`href="../${route}/"`));
+  }
+  assert.match(pages.get("spiele/game-00/index.html").html, /<dt>Entwickler<\/dt><dd>Nur erstes Release<\/dd>/u);
+});
+
+test("paginiert gefilterte Spielelisten mit eigenen Links, Breadcrumbs und JSON-LD", () => {
+  const model = metadataModel(62);
+  model.games.at(-1).metadata.status = "blocked";
+  const config = createSiteConfig("https://example.org/anderer/tiefer/pfad/");
+  const { pages } = renderModel(model, config);
+  const relocated = renderModel(model, createSiteConfig("http://localhost:8000/"));
+  assert.deepEqual([...pages], [...relocated.pages]);
+  for (const [segment, value, label] of [
+    ["genre", "simulation", "Genre: Simulation"],
+    ["entwickler", "studio", "Entwickler: Studio"],
+    ["publisher", "publisher", "Publisher: Publisher"],
+  ]) {
+    const route = `spiele/${segment}/${value}/`;
+    const nextRoute = `${route}seite/2/`;
+    const first = pages.get(`${route}index.html`).html;
+    const second = pages.get(`${nextRoute}index.html`).html;
+    const entries = (html) => graph(html).find((item) => item["@type"] === "CollectionPage").mainEntity.itemListElement;
+    assert.equal(entries(first).length, 60);
+    assert.equal(entries(second).length, 1);
+    assert.equal(entries(second)[0].name, "Spiel 60");
+    assert.ok(!entries(first).some((item) => item.name === "Spiel 61"));
+    assert.equal((first.match(/<li><h2><a /gu) ?? []).length, 60);
+    assert.equal((second.match(/<li><h2><a /gu) ?? []).length, 1);
+    assert.ok(first.includes(`href="${config.href(nextRoute, route)}" rel="next"`));
+    assert.ok(second.includes(`href="${config.href(route, nextRoute)}" rel="prev"`));
+    assert.ok(second.includes(`rel="canonical" href="./"`));
+    assert.ok(second.includes(`<h1>${label} – Seite 2</h1>`));
+    assert.deepEqual(graph(second).at(-1).itemListElement.map((item) => item.name),
+      ["Startseite", "Spiele", label, "Seite 2"]);
+    assert.ok(!pages.has(`${route}seite/3/index.html`));
+  }
+  model.games[60].metadata.status = "blocked";
+  const exact = renderModel(model).pages;
+  assert.ok(![...exact.keys()].some((file) => /^spiele\/(?:genre|entwickler|publisher)\/[^/]+\/seite\//u.test(file)));
+});
+
+test("escaped Filterwerte und trennt kollidierende Slugs deterministisch", () => {
+  const model = metadataModel();
+  for (const game of model.games) {
+    game.metadata.data.genres = ["A+B", "A B", "A B Variante 1", '<Action & "Adventure">', "東京"];
+    game.metadata.data.releases[0].developer = 'D & "Studio"';
+    game.metadata.data.releases[0].publisher = "<Publisher>";
+  }
+  const { pages } = renderModel(model);
+  const detail = pages.get("spiele/game-00/index.html").html;
+  for (const [slug, text] of [
+    ["a-b-variante-2", "A B"], ["a-b-variante-3", "A+B"], ["a-b-variante-1", "A B Variante 1"],
+    ["action-adventure", "&lt;Action &amp; &quot;Adventure&quot;&gt;"], ["wert", "東京"],
+  ]) {
+    assert.ok(pages.has(`spiele/genre/${slug}/index.html`));
+    assert.ok(detail.includes(`href="../genre/${slug}/">${text}</a>`));
+  }
+  assert.ok(detail.includes('href="../entwickler/d-studio/">D &amp; &quot;Studio&quot;</a>'));
+  assert.ok(detail.includes('href="../publisher/publisher/">&lt;Publisher&gt;</a>'));
+  const filteredPages = (entries) => [...entries].filter(([file]) => /^spiele\/(?:genre|entwickler|publisher)\//u.test(file));
+  for (const game of model.games) game.metadata.data.genres.reverse();
+  assert.deepEqual(filteredPages(renderModel(model).pages), filteredPages(pages));
+});
+
+test("schreibt Filterseiten offline in Sitemap und Manifest und entfernt sie unterhalb der Schwelle", async (t) => {
+  const directory = await mkdtemp(path.join(tmpdir(), "pretty-pixel-game-filters-"));
+  t.after(() => rm(directory, { recursive: true, force: true }));
+  const cacheDirectory = path.join(directory, "cache");
+  const outputDirectory = path.join(directory, "docs");
+  await mkdir(path.join(cacheDirectory, "game-metadata"), { recursive: true });
+  const metadataFile = new URL("../cache/game-metadata/ready.json", import.meta.url);
+  const metadata = JSON.parse(await readFile(metadataFile, "utf8")).games;
+  const candidates = gameDefinitions.filter((game) => game.playlistIds.length
+    && metadata.find((record) => record.gameId === game.id)?.status === "ready");
+  const records = new Map(metadata.map((record) => [record.gameId, record]));
+  const first = candidates[0];
+  const second = candidates.find((game) => game.id !== first.id
+    && records.get(game.id).data.genres.some((genre) => records.get(first.id).data.genres.includes(genre)));
+  assert.ok(second, "Zwei Spiele mit gemeinsamem Genre im gepflegten Cache");
+  const input = fixture(4);
+  input.playlists.playlists = [first, second].map((game, index) => ({
+    id: game.playlistIds[0], title: game.name, videos: [member(index * 2), member(index * 2 + 1)],
+  }));
+  const save = () => Promise.all(Object.entries({
+    "youtube-videos.json": input.videos,
+    "youtube-playlists.json": input.playlists,
+    "blaetterabend-videos.json": input.magazines,
+  }).map(([file, data]) => writeFile(path.join(cacheDirectory, file), JSON.stringify(data))));
+  await copyFile(metadataFile, path.join(cacheDirectory, "game-metadata/ready.json"));
+  await save();
+  const options = { cacheDirectory, outputDirectory, logger: { warn() {}, log() {} } };
+  await generateSite(options);
+  const manifestFile = path.join(outputDirectory, "build-manifest.json");
+  const readManifest = async () => JSON.parse(await readFile(manifestFile, "utf8"));
+  const filtered = Object.keys((await readManifest()).pages).filter((file) => /^spiele\/(?:genre|entwickler|publisher)\//u.test(file));
+  assert.ok(filtered.some((file) => file.startsWith("spiele/genre/")));
+  const sitemap = await readFile(path.join(outputDirectory, "sitemap.xml"), "utf8");
+  for (const file of filtered) {
+    assert.match(await readFile(path.join(outputDirectory, file), "utf8"), /2 Retrospiele/u);
+    assert.ok(sitemap.includes(`/${file.replace(/index\.html$/u, "")}`));
+  }
+  const unchanged = await generateSite(options);
+  assert.equal(unchanged.reused, unchanged.files);
+  input.videos.videos.pop();
+  await save();
+  await generateSite(options);
+  const updated = await readManifest();
+  for (const file of filtered) {
+    assert.ok(!updated.pages[file]);
+    await assert.rejects(readFile(path.join(outputDirectory, file)), { code: "ENOENT" });
+  }
+  assert.ok(!(await readFile(path.join(outputDirectory, "sitemap.xml"), "utf8"))
+    .match(/\/spiele\/(?:genre|entwickler|publisher)\//u));
+  const detail = await readFile(path.join(outputDirectory, `spiele/${first.id}/index.html`), "utf8");
+  assert.doesNotMatch(detail, /href="[^"]*\/(?:genre|entwickler|publisher)\//u);
+});
 
 test("bindet konsolidierte Metadaten im echten Offline-Modell ein und zeigt Quellenumfang je Spiel", async () => {
   const model = await loadSiteData(path.resolve(import.meta.dirname, "../cache"));
@@ -76,10 +334,18 @@ test("bindet konsolidierte Metadaten im echten Offline-Modell ein und zeigt Quel
     assert.equal(game.releaseYearSource, game.releaseYear === null ? null : game.metadata.data.evidence.sourceUrl);
     const information = pages.get(`${game.route}index.html`).html
       .match(/<section aria-label="Zusätzliche Spielinformationen">([\s\S]*?)<\/section>/u)[1];
+    const externalUrls = [];
     for (const [, url] of information.matchAll(/href="([^"]+)"/gu)) {
-      assert.equal(new URL(url).hostname, "www.mobygames.com");
+      if (/^https:/u.test(url)) externalUrls.push(url);
+      else {
+        const target = new URL(url, config.absolute(game.route));
+        const file = `${target.pathname.slice(config.basePath.length)}index.html`;
+        assert.ok(pages.has(file), file);
+        assert.ok(/>Alle Spiele anzeigen<\/a>/u.test(pages.get(file).html));
+      }
     }
-    assert.equal((information.match(/href="/gu) ?? []).length, game.metadata.status === "ready" ? 1 : 0);
+    assert.ok(externalUrls.every((url) => new URL(url).hostname === "www.mobygames.com"));
+    assert.equal(externalUrls.length, game.metadata.status === "ready" ? 1 : 0);
   }
 });
 
@@ -116,7 +382,7 @@ test("escaped konsolidierte Metadaten und behält leere Felder sowie Releaseunte
   } };
   const config = createSiteConfig();
   const pages = renderSite(model, config, config.href("assets/test.css"));
-  validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""]]), config);
+  validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""], ["assets/theme.js", ""], ["favicon.jpg", ""]]), config);
   const html = pages.get("spiele/cadaver/index.html").html;
   assert.match(html, /&lt;script&gt;genre&lt;\/script&gt;/u);
   assert.match(html, /&lt;Studio&gt;/u);
@@ -149,7 +415,7 @@ test("fasst nur länderabweichende Releases zusammen und erhält alle anderen Un
   } };
   const config = createSiteConfig();
   const pages = renderSite(model, config, config.href("assets/test.css"));
-  validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""]]), config);
+  validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""], ["assets/theme.js", ""], ["favicon.jpg", ""]]), config);
   const html = pages.get("spiele/cadaver/index.html").html;
   const table = html.match(/<tbody>([\s\S]*?)<\/tbody>/u)[1];
   assert.equal((table.match(/<tr>/gu) ?? []).length, 5);
@@ -249,6 +515,18 @@ test("ergänzt fehlende re.play-Zuordnungen und die vollständige Patrizier-Reih
     "gWdsp_hujXs": "christoph-kolumbus-ms-dos",
     "52HT5sCdy-8": "die-siedler-ms-dos",
     "NsVj5ma3isI": "system-shock-ms-dos",
+    "YjYCvZPRCUc": "system-shock-ms-dos",
+    "PRp18az_Wig": "system-shock-ms-dos",
+    "F83fcQiixjE": "system-shock-ms-dos",
+    "eDYFb4PxBXg": "system-shock-ms-dos",
+    "P--e3iHUDQg": "system-shock-ms-dos",
+    "8v8TIC5Cpz4": "knights-of-the-sky-ms-dos",
+    "s909Oqn1kwQ": "darklands-ms-dos",
+    "WlpS5ygvi-w": "doom-ms-dos",
+    "_Fe2lnbPFBQ": "stonekeep-ms-dos",
+    "xAOFFuY_nXU": "ufo-enemy-unknown-ms-dos",
+    "dWVWoPCCEek": "star-control-ii-ur-quan-masters",
+    "E5G4S7y7538": "der-patrizier",
     "LPQ3nL7ltHU": "super-mario-bros-2-nes",
   };
   for (const [id, game] of Object.entries(assignments)) {
@@ -256,13 +534,14 @@ test("ergänzt fehlende re.play-Zuordnungen und die vollständige Patrizier-Reih
     assert.ok(!model.videoById.get(id).sections.some((item) => item.id === "sonstiges"), id);
   }
   const patrician = model.games.find((game) => game.id === "der-patrizier");
-  assert.equal(patrician.videos.length, 16);
+  assert.equal(patrician.videos.length, 17);
   assert.equal(patrician.releaseYear, null);
-  assert.equal(patrician.series.entries.length, 16);
+  assert.equal(patrician.series.entries.length, 17);
   assert.ok(patrician.videos.includes("rvL8B_qulwU"));
   assert.equal(patrician.series.entries.find((entry) => entry.videoId === "rvL8B_qulwU").phase.id, "reminder");
   for (const id of patrician.videos) {
-    assert.ok(model.videoById.get(id).title.startsWith(id === "rvL8B_qulwU" ? "Der Patrizier [re.minder]" : "Der Patrizier [re.play"));
+    assert.ok(model.videoById.get(id).title.startsWith(id === "E5G4S7y7538" ? "der Patrizier [streamstag]"
+      : id === "rvL8B_qulwU" ? "Der Patrizier [re.minder]" : "Der Patrizier [re.play"));
     assert.ok(!model.videoById.get(id).sections.some((section) => section.id === "sonstiges"));
   }
   const wizardry = model.games.find((game) => game.videos.includes("eXRHHZ8l_Jc"));

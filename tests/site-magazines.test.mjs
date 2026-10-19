@@ -9,6 +9,7 @@ import { normalizeSources } from "../src/site-data.mjs";
 import { renderSite } from "../src/site-render.mjs";
 import { loadSiteData } from "../src/site-data.mjs";
 import { cacheKultmagsLogo } from "../src/kultmags-logos.mjs";
+import { magazineGuestChannels } from "../src/data-magazine-guest-channels.mjs";
 
 const channel = { id: "UC-magazines", title: "Pretty Old Pixel" };
 const videoId = (index) => `m${String(index).padStart(10, "0")}`;
@@ -55,11 +56,202 @@ function render(input = variedFixture(), pageSize = createSiteConfig().pageSize)
   const model = normalizeSources(input);
   const config = { ...createSiteConfig(), pageSize };
   const pages = renderSite(model, config, config.href("assets/test.css"));
-  validateSite(pages, new Map([["assets/test.css", "body{}"], ["assets/video-series.js", ""]]), config);
+  validateSite(pages, new Map([["assets/test.css", "body{}"], ["assets/video-series.js", ""], ["assets/theme.js", ""], ["favicon.jpg", ""]]), config);
   return { model, pages, config };
 }
 
 const graph = (html) => JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/u)[1])["@graph"];
+
+test("ergänzt den Steinwallen-Blätterabend ohne mit-Zusatz samt Ausgabe und aktualisierten Kachelzahlen", async () => {
+  const model = await loadSiteData("cache");
+  const guest = model.magazineGuests.find((item) => item.key === "@steinwallen");
+  assert.ok(guest.videoIds.includes("GMF5SxCxE6M"));
+  assert.equal(guest.videoIds.length, new Set(guest.videoIds).size);
+  assert.ok(guest.entries.some((entry) => entry.videoId === "GMF5SxCxE6M"
+    && entry.mention.name === "Power Play"));
+  const config = createSiteConfig();
+  const pages = renderSite(model, config, config.href("assets/test.css"));
+  const html = pages.get(`${guest.route}index.html`).html;
+  assert.ok(html.includes("Strategie für Geniesser"));
+  assert.ok(html.includes(`${guest.videoIds.length} Videos mit`));
+  assert.ok(pages.get("zeitschriften/index.html").html.includes(
+    `<p class="meta">${guest.videoIds.length} Videos</p>`));
+});
+
+test("bündelt Gäste dynamisch nach Handle und verlinkt deren Ausgaben mit passendem Heftkontext", () => {
+  const input = fixture(5);
+  input.videos.videos[0].title = "Blätterabend mit Robin @retrokompott - PC Games";
+  input.videos.videos[1].title = "Blätterabend mit @RetroKompott - PC Games - Teil 2";
+  input.videos.videos[2].title = "Blätterabend mit @retrokompott - Power Play";
+  input.videos.videos[3].title = "Blätterabend mit Chat-Vote - PC Games";
+  input.videos.videos[4].title = "Blätterabend mit Gast außerhalb des Blätterabends";
+  input.magazines.videos.pop();
+  input.magazines.videos[0].part = 1;
+  input.magazines.videos[1].part = 2;
+  input.magazines.videos[0].magazines[0].kultmags = archive("guest-issue");
+  input.magazines.videos[2].magazines = [mention(issue(), "Power Play")];
+  const { model, pages, config } = render(input);
+  assert.equal(model.magazineGuests.length, 1);
+  const guest = model.magazineGuests[0];
+  assert.equal(guest.name, "Robin @retrokompott");
+  assert.equal(guest.route, "zeitschriften/gaeste/retrokompott/");
+  assert.equal(guest.issueCount, 2);
+  assert.equal(guest.videoIds.length, 3);
+  const index = pages.get("zeitschriften/index.html").html;
+  assert.ok(index.includes('<h2 id="gaeste">Blätterabend mit Gast</h2>'));
+  assert.ok(index.includes('href="gaeste/retrokompott/">Robin @retrokompott</a>'));
+  assert.ok(index.includes('<p class="meta">2 bekannte Ausgaben</p><p class="meta">3 Videos</p>'));
+  const html = pages.get(`${guest.route}index.html`).html;
+  assert.ok(!html.includes("Gäste werden aus den Videotiteln ermittelt."));
+  assert.ok(!html.includes("data-video-series") && !html.includes('script type="module"'));
+  assert.equal((html.match(/<section class="issue-group">/gu) ?? []).length, 2);
+  for (const magazine of model.magazines) {
+    const issue = [...magazine.issues.values()][0];
+    assert.ok(html.includes(`href="${config.href(issue.route, guest.route)}"`));
+  }
+  assert.ok(html.includes("guest-issue"));
+  assert.ok(html.includes("Teil 1: Blätterabend"));
+  assert.ok(!html.includes("Chat-Vote"));
+  assert.ok(!html.includes("außerhalb des Blätterabends"));
+  assert.deepEqual(graph(html).at(-1).itemListElement.map((item) => item.name),
+    ["Startseite", "Zeitschriften", "Robin @retrokompott"]);
+  const original = [...pages];
+  input.videos.videos.reverse();
+  input.magazines.videos.reverse();
+  assert.deepEqual([...render(input).pages], original);
+});
+
+test("lässt unbekannte Heftdaten und ungeklärte Zeitschriften auf Gästeseiten sichtbar", () => {
+  const input = fixture(2);
+  for (const video of input.videos.videos) video.title = "Blätterabend mit Jürgen";
+  input.magazines.videos[0].magazines = [mention(null)];
+  input.magazines.videos[1].magazines = [];
+  const { pages, model } = render(input);
+  const guest = model.magazineGuests[0];
+  assert.equal(guest.issueCount, 0);
+  const html = pages.get(`${guest.route}index.html`).html;
+  assert.ok(html.includes("Jahrgang unbekannt"));
+  assert.ok(html.includes("Heftausgabe unbekannt"));
+  assert.ok(html.includes("Zeitschrift ungeklärt"));
+  assert.ok(html.includes(`href="../../videos/${videoId(0)}/#video-${videoId(0)}"`));
+  assert.ok(html.includes(`href="../../videos/${videoId(1)}/#video-${videoId(1)}"`));
+  const index = pages.get("zeitschriften/index.html").html;
+  assert.ok(index.includes("Ausgabe ungeklärt"));
+  assert.ok(index.includes("Weitere Blätterabende"));
+});
+
+test("verlinkt nur statisch bestätigte @Gäste in der Überschrift, nicht in Seitentitel oder Brotkrümeln", () => {
+  assert.equal(Object.values(magazineGuestChannels).filter(Boolean).length, 14);
+  assert.equal(magazineGuestChannels["@v3to_c64pixels"], "https://www.youtube.com/@vetodrom");
+  assert.equal(magazineGuestChannels["@virtual_dimension"], magazineGuestChannels["@virtualdimension"]);
+  for (const [name, url] of [
+    ...Object.entries(magazineGuestChannels),
+    ["@UngepruefterGast", null], ["Jürgen", null],
+    ["Christian @StayForeverDE", magazineGuestChannels["@stayforeverde"]],
+    ["Robin @RetroKompott", magazineGuestChannels["@retrokompott"]],
+  ]) {
+    const input = fixture(1);
+    input.videos.videos[0].title = `Blätterabend mit ${name} - PC Games`;
+    const { model, pages } = render(input);
+    const guest = model.magazineGuests[0];
+    assert.equal(guest.channelUrl, url);
+    const html = pages.get(`${guest.route}index.html`).html;
+    const heading = html.match(/<h1>(.*?)<\/h1>/u)[1];
+    if (url) {
+      assert.match(url, /^https:\/\/www\.youtube\.com\/@[\p{L}\p{M}\p{N}_.-]+$/u);
+      assert.ok(heading.includes(`href="${url}" rel="external"`), name);
+      assert.ok(heading.includes(`>${name.slice(name.indexOf("@"))} <span aria-hidden="true">↗</span>`));
+      assert.ok(heading.startsWith(`Blätterabend mit ${name.slice(0, name.indexOf("@"))}<a `));
+    } else {
+      assert.equal(heading, `Blätterabend mit ${name}`);
+    }
+    assert.ok(html.includes(`<title>Blätterabend mit ${name} |`));
+    assert.deepEqual(graph(html).at(-1).itemListElement.map((item) => item.name),
+      ["Startseite", "Zeitschriften", name]);
+  }
+});
+
+test("erhält den statischen Kanallink auch auf Folgeseiten eines Gasts", () => {
+  const input = fixture(3);
+  input.videos.videos.forEach((video, index) => {
+    video.title = "Blätterabend mit Robin @retrokompott - PC Games";
+    input.magazines.videos[index].magazines = [mention(issue(1992, [index + 1]))];
+  });
+  const { pages, model } = render(input, 2);
+  const route = model.magazineGuests[0].route;
+  for (const suffix of ["index.html", "seite/2/index.html"]) {
+    const heading = pages.get(`${route}${suffix}`).html.match(/<h1>(.*?)<\/h1>/u)[1];
+    assert.ok(heading.includes(`href="${magazineGuestChannels["@retrokompott"]}" rel="external"`));
+    assert.ok(heading.startsWith("Blätterabend mit Robin <a "));
+    assert.equal(heading.endsWith(" – Seite 2"), suffix.startsWith("seite/"));
+  }
+});
+
+test("paginiert Gäste im Blätterabendindex und deren Ausgaben mit relativen Links", () => {
+  const input = fixture(5);
+  input.videos.videos.forEach((video, index) => {
+    video.title = `Blätterabend mit ${index < 3 ? "Anna" : "Ben"} - PC Games`;
+    input.magazines.videos[index].magazines = [mention(issue(1992, [index + 1]))];
+  });
+  const { model, pages, config } = render(input, 2);
+  assert.ok(pages.get("zeitschriften/index.html").html.includes('href="gaeste/anna/"'));
+  assert.ok(pages.get("zeitschriften/seite/2/index.html").html.includes('href="../../gaeste/ben/"'));
+  const guest = model.magazineGuests.find((item) => item.name === "Anna");
+  const nextRoute = `${guest.route}seite/2/`;
+  const first = pages.get(`${guest.route}index.html`).html;
+  const second = pages.get(`${nextRoute}index.html`).html;
+  assert.equal(graph(first)[0].mainEntity.itemListElement.length, 2);
+  assert.equal(graph(second)[0].mainEntity.itemListElement.length, 1);
+  assert.ok(first.includes(`href="${config.href(nextRoute, guest.route)}" rel="next"`));
+  assert.ok(second.includes(`href="${config.href(guest.route, nextRoute)}" rel="prev"`));
+  assert.ok(!pages.has(`${guest.route}seite/3/index.html`));
+  const relocatedConfig = createSiteConfig("https://example.org/anderer/pfad/");
+  relocatedConfig.pageSize = 2;
+  const relocated = renderSite(model, relocatedConfig, "assets/test.css");
+  assert.deepEqual([...relocated], [...pages]);
+});
+
+test("trennt kollidierende Gäste-Slugs und escapet Namen in Kacheln und Gästeseiten", () => {
+  const input = fixture(4);
+  ["Anna", "@Anna", "Jürgen", "J'urgen"].forEach((name, index) => {
+    input.videos.videos[index].title = `Blätterabend mit ${name}`;
+  });
+  const { model, pages } = render(input);
+  assert.equal(new Set(model.magazineGuests.map((guest) => guest.route)).size, 4);
+  for (const guest of model.magazineGuests) {
+    assert.ok(pages.has(`${guest.route}index.html`));
+    assert.ok(pages.get("zeitschriften/index.html").html.includes(guest.route.replace("zeitschriften/", "")));
+  }
+  assert.ok(pages.get("zeitschriften/index.html").html.includes("J&#39;urgen"));
+});
+
+test("aktualisiert Gästeseiten, Sitemap und Manifest beim Ändern der Videotitel", async (t) => {
+  const root = await mkdtemp(path.join(tmpdir(), "pixel-magazine-guests-"));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const cacheDirectory = path.join(root, "cache");
+  const outputDirectory = path.join(root, "docs");
+  await mkdir(cacheDirectory);
+  const input = fixture(1);
+  input.videos.videos[0].title = "Blätterabend mit Anna - PC Games";
+  const save = () => Promise.all([
+    ["youtube-videos", input.videos], ["youtube-playlists", input.playlists], ["blaetterabend-videos", input.magazines],
+  ].map(([name, data]) => writeFile(path.join(cacheDirectory, `${name}.json`), JSON.stringify(data))));
+  const options = { cacheDirectory, outputDirectory, logger: { log() {}, warn() {} } };
+  await save();
+  await generateSite(options);
+  const file = "zeitschriften/gaeste/anna/index.html";
+  assert.ok((await readFile(path.join(outputDirectory, "sitemap.xml"), "utf8")).includes("/zeitschriften/gaeste/anna/"));
+  assert.ok(JSON.parse(await readFile(path.join(outputDirectory, "build-manifest.json"), "utf8")).pages[file]);
+  const unchanged = await generateSite(options);
+  assert.equal(unchanged.reused, unchanged.files);
+  input.videos.videos[0].title = "Blätterabend ohne Gast";
+  await save();
+  await generateSite(options);
+  await assert.rejects(readFile(path.join(outputDirectory, file)), { code: "ENOENT" });
+  assert.ok(!(await readFile(path.join(outputDirectory, "sitemap.xml"), "utf8")).includes("/gaeste/"));
+  assert.ok(!JSON.parse(await readFile(path.join(outputDirectory, "build-manifest.json"), "utf8")).pages[file]);
+  assert.ok(!(await readFile(path.join(outputDirectory, "zeitschriften/index.html"), "utf8")).includes('id="gaeste"'));
+});
 
 test("übernimmt Kultmags-Logos offline als lokale Bildassets nur auf Zeitschriftenseiten", async (t) => {
   const root = await mkdtemp(path.join(tmpdir(), "pixel-logos-"));

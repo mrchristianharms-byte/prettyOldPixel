@@ -39,7 +39,7 @@ function render(input = fixture(), sections = [definition()], options = {}) {
   const config = createSiteConfig(options.baseUrl);
   if (options.pageSize !== undefined) config.pageSize = options.pageSize;
   const pages = renderSite(model, config, "assets/test.css");
-  validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""]]), config);
+  validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""], ["assets/theme.js", ""], ["favicon.jpg", ""]]), config);
   return { model, pages, config };
 }
 const graph = (html) => JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/u)[1])["@graph"];
@@ -278,7 +278,7 @@ test("verlinkt Bereiche intern auf Spiele oder eigene Detailseiten und hält Lis
 
   const config = createSiteConfig();
   const pages = renderSite(model, config, "assets/test.css");
-  validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""]]), config);
+  validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""], ["assets/theme.js", ""], ["favicon.jpg", ""]]), config);
   const html = pages.get("interviews/index.html").html;
   assert.ok(html.includes('href="../spiele/ein-spiel/#video-s0000000000"'));
   assert.ok(html.includes('href="s0000000003/#video-s0000000003"'));
@@ -360,7 +360,7 @@ test("meldet fehlende bestätigte Beiträge und escapet kuratierte Themen, Perso
   assert.ok(html.includes("&lt;script&gt;Fremdtext&lt;/script&gt;"));
   assert.ok(html.includes("Person &quot;A&quot; &lt;B&gt;"));
   assert.ok(html.includes("&lt;img src=x&gt;"));
-  assert.equal((html.match(/<script/gu) ?? []).length, 1);
+  assert.equal((html.match(/<script/gu) ?? []).length, 2);
 });
 
 test("prüft ungültige Zuordnungen, doppelte IDs und fehlende Personen oder Reihenfolgen", () => {

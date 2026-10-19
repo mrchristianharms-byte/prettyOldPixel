@@ -8,6 +8,7 @@ import policy from "./data-game-dump-policy.json" with { type: "json" };
 import { verifyGameDump } from "./verify-game-dump.mjs";
 import { writeJson } from "./archive-cache.mjs";
 import { platformMatches, selectDumpCandidate } from "./game-dump-matching.mjs";
+import { companyNamesHash, normalizeReleaseCompanies } from "./game-company-names.mjs";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const defaultCacheDir = path.join(root, "cache/game-metadata");
@@ -49,9 +50,11 @@ export async function buildReadyGameMetadata({
     };
     const candidate = candidates.find((entry) => entry.mobyid === selection.mobyid);
     const releases = candidate.releases.filter((release) => selection.matchingReleaseIds.includes(release.mobyreleaseid))
-      .map((release) => ({
+      .map((release) => normalizeReleaseCompanies({
         sourceReleaseId: release.mobyreleaseid, platform: release.platform, year: release.year,
-        developer: release.developer?.trim() || null, publisher: release.publisher?.trim() || null,
+        developer: release.developer, publisher: release.publisher,
+        ...(release.sourceDeveloper !== undefined ? { sourceDeveloper: release.sourceDeveloper } : {}),
+        ...(release.sourcePublisher !== undefined ? { sourcePublisher: release.sourcePublisher } : {}),
         countries: release.countries?.trim() || null, publisherLabel: release.publabel?.trim() || null,
       }));
     const years = releases.map((release) => release.year);
@@ -68,7 +71,7 @@ export async function buildReadyGameMetadata({
         evidence: { sourceUrl: `https://www.mobygames.com/game/${candidate.mobyid}/`,
           dumpHash: report.source.sha256, reportHash, importedAt: report.importedAt },
         quality: { basis: "single-source", usage: "attributed-source-data",
-          companyIdentities: "source-labels-only", credits: "not-available" },
+          companyIdentities: "reviewed-display-aliases", credits: "not-available" },
         releaseYear: year,
         genres: [...new Set(candidate.genres)], releases,
       },
@@ -76,7 +79,7 @@ export async function buildReadyGameMetadata({
   });
   const payload = {
     version: 3, generatedAt: new Date().toISOString(), catalogueHash: catalogueHash(games),
-    decisionsHash: hash(reviewedDecisions), selectionPolicyHash: hash(selectionPolicy),
+    decisionsHash: hash(reviewedDecisions), selectionPolicyHash: hash(selectionPolicy), companyNamesHash,
     summary: { games: records.length, ready: records.filter((record) => record.status === "ready").length,
       blocked: records.filter((record) => record.status === "blocked").length },
     games: records,
@@ -94,6 +97,7 @@ function validateReadyCache(cache, games, reviewedDecisions, selectionPolicy) {
   check(cache.version === 3 && contentHash === hash(payload)
     && cache.catalogueHash === catalogueHash(games) && cache.decisionsHash === hash(reviewedDecisions)
     && cache.selectionPolicyHash === hash(selectionPolicy)
+    && cache.companyNamesHash === companyNamesHash
     && Array.isArray(cache.games) && cache.games.length === games.length,
   "Cache beschädigt oder veraltet; prepare:game-metadata ausführen.");
   const seen = new Set();
@@ -136,7 +140,9 @@ function validateReadyCache(cache, games, reviewedDecisions, selectionPolicy) {
         && release.sourceReleaseId > 0 && typeof release.platform === "string" && platformMatches(platforms, release.platform)
         && (release.year === null || (Number.isInteger(release.year) && release.year >= 1900 && release.year <= 2099))
         && ["developer", "publisher", "countries", "publisherLabel"].every((key) =>
-          release[key] === null || typeof release[key] === "string")),
+          release[key] === null || typeof release[key] === "string")
+        && ["sourceDeveloper", "sourcePublisher"].every((key) =>
+          release[key] === undefined || typeof release[key] === "string")),
     `Ungültige nutzbare Daten: ${record.gameId}.`);
     const years = data.releases.map((release) => release.year);
     check(data.releaseYear === (platforms.length === 1 && years.every((year) => year !== null) ? Math.min(...years) : null),

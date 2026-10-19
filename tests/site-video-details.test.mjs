@@ -134,7 +134,7 @@ function rendered(description, durationSeconds = 600) {
     sections: [],
   });
   const config = createSiteConfig();
-  const assets = new Map([["assets/site.css", ""], ["assets/video-series.js", ""]]);
+  const assets = new Map([["assets/site.css", ""], ["assets/video-series.js", ""], ["assets/theme.js", ""], ["favicon.jpg", ""]]);
   const pages = renderSite(model, config, "assets/site.css");
   validateSite(pages, assets, config);
   return { pages, model };
@@ -166,7 +166,7 @@ test("rendert Kapitel und Kanäle in Spiel- und Ausgabepanels ohne neue Skripte 
     assert.ok(html.includes("Erwähnte Kanäle / Partner"));
     assert.ok(html.includes("Eine Erwähnung bedeutet nicht, dass eine bezahlte Zusammenarbeit besteht."));
     assert.equal((html.match(/<iframe /gu) ?? []).length, 1);
-    assert.equal((html.match(/<script/gu) ?? []).length, 2);
+    assert.equal((html.match(/<script/gu) ?? []).length, 3);
     assert.ok(!html.includes("iframe_api"));
   }
   assert.ok(!pages.get("news/index.html").html.includes("Kapitel und Zeitmarken"));
@@ -189,10 +189,10 @@ test("veröffentlicht Clip-Metadaten mit echten Zeitlinks, Grenzen und sichtbare
       assert.ok(clip.endOffset > clip.startOffset && clip.endOffset <= 600);
       assert.ok(html.includes(`data-chapter-seconds="${clip.startOffset}"`));
     }
-    assert.ok(html.includes('data-auto-next disabled'));
+    assert.equal(html.includes('data-auto-next disabled'), videos.length > 1);
     const controls = html.match(/<div class="player-controls meta"[^>]*>[\s\S]*?<\/div>/u)[0];
     assert.ok(controls.includes("data-player-reset hidden"));
-    assert.ok(controls.includes("data-auto-next disabled"));
+    assert.equal(controls.includes("data-auto-next disabled"), videos.length > 1);
     assert.ok(controls.includes('data-player-external'));
     assert.ok(!html.includes("YouTube-Player hier aktivieren"));
     assert.ok(controls.includes(`href="https://www.youtube.com/watch?v=${id}" rel="external"`));
@@ -217,10 +217,12 @@ test("setzt dasselbe Video-Widget genau einmal auf jeder Playerseite ein", () =>
     assert.equal(count, html.includes("<iframe ") ? 1 : 0, file);
     if (!count) continue;
     const widget = html.match(/<div class="detail-player" data-video-widget>[\s\S]*?<\/div><\/div>/u)[0];
-    for (const selector of ["data-player-reset", "data-auto-next", "data-player-external", "data-player-play"]) {
+    for (const selector of ["data-player-reset", "data-player-external", "data-player-play"]) {
       assert.equal((widget.match(new RegExp(selector, "gu")) ?? []).length, 1, `${file}: ${selector}`);
     }
-    widgets.push(widget);
+    const videoCount = (html.match(/data-video-panel /gu) ?? []).length;
+    assert.equal(widget.includes("data-auto-next"), videoCount > 1, file);
+    widgets.push(widget.replace(/<label><input type="checkbox" data-auto-next disabled> Nächste Folge automatisch<\/label>/u, ""));
   }
   assert.equal(widgets.length, 2);
   assert.equal(widgets[0], widgets[1]);

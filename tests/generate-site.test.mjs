@@ -27,7 +27,7 @@ function fixture(count = 53) {
 function render(input = fixture(), baseUrl) {
   const config = createSiteConfig(baseUrl);
   const pages = renderSite(normalizeSources(input), config, config.href("assets/site.css"));
-  return { pages, config, assets: new Map([["assets/site.css", "body{}"], ["assets/video-series.js", ""]]) };
+  return { pages, config, assets: new Map([["assets/site.css", "body{}"], ["assets/video-series.js", ""], ["assets/theme.js", ""], ["favicon.jpg", "image"]]) };
 }
 
 function issueFixture() {
@@ -59,6 +59,34 @@ test("entfernt Startseite nur aus der Hauptnavigation und behält Markenlink und
     assert.ok(header.includes(`<a class="brand" href="${config.forPage(route).href()}">Pretty Old Pixel</a>`));
   }
   assert.ok(pages.get("zeitschriften/pc-games/index.html").html.includes('href="../../">Startseite</a>'));
+});
+
+test("verlinkt YouTube und Twitch als externe Kanäle in der letzten Fußzeile jeder Seite", () => {
+  const { pages } = render(issueFixture());
+  for (const { html } of pages.values()) {
+    const footer = html.match(/<footer\b[^>]*>([\s\S]*?)<\/footer>/u)[1];
+    assert.equal((footer.match(/<p>/gu) ?? []).length, 1);
+    const lastParagraph = [...footer.matchAll(/<p>([\s\S]*?)<\/p>/gu)].at(-1)[1];
+    assert.ok(lastParagraph.includes('href="https://www.youtube.com/prettyoldpixel" rel="external"'));
+    assert.ok(lastParagraph.includes('href="https://www.twitch.tv/prettyoldpixel" rel="external"'));
+    assert.ok(lastParagraph.startsWith("Pretty Old Pixel"));
+    assert.ok(lastParagraph.includes(">YouTube "));
+    assert.ok(lastParagraph.includes(">Twitch "));
+    assert.equal((lastParagraph.match(/externe Website/gu) ?? []).length, 2);
+  }
+});
+
+test("trennt jede Ebene der Brotkrümelnavigation mit einem dekorativen Unicode-Pfeil", () => {
+  const { pages } = render(issueFixture());
+  for (const { html } of pages.values()) {
+    const breadcrumbs = html.match(/<ol class="breadcrumbs">([\s\S]*?)<\/ol>/u)[1];
+    const levels = (breadcrumbs.match(/<li>/gu) ?? []).length;
+    const separator = '<span class="breadcrumb-separator" aria-hidden="true"> → </span>';
+    assert.equal(breadcrumbs.split(separator).length - 1, levels - 1);
+    assert.ok(!breadcrumbs.startsWith(`<li>${separator}`));
+    assert.equal((breadcrumbs.match(/aria-current="page"/gu) ?? []).length, 1);
+    assert.match(breadcrumbs, /<span aria-current="page">[^<]+<\/span><\/li>$/u);
+  }
 });
 
 async function setup(t, input = fixture()) {
@@ -95,7 +123,7 @@ test("erzeugt News mit Sonstiges-Detailseiten ohne Gesamtkatalog", () => {
   assert.ok(validateSite(pages, assets, config).maxHtmlGzip < 50 * 1024);
 });
 
-test("rendert News vollständig ohne Laufzeit-JavaScript und setzt VideoObject-Metadaten korrekt", () => {
+test("rendert News-Inhalte vollständig ohne Laufzeit-JavaScript und setzt VideoObject-Metadaten korrekt", () => {
   const { pages } = render();
   const news = pages.get("news/index.html").html;
   assert.equal((news.match(/<li><article>/gu) ?? []).length, 20);
@@ -108,7 +136,7 @@ test("rendert News vollständig ohne Laufzeit-JavaScript und setzt VideoObject-M
   assert.equal(schema.contentUrl, undefined);
   assert.ok(schema.url.endsWith("#video-b0000000001"));
   assert.equal(graph.at(-1)["@type"], "BreadcrumbList");
-  assert.equal((video.match(/<script/gu) ?? []).length, 2);
+  assert.equal((video.match(/<script/gu) ?? []).length, 3);
   assert.ok(!video.includes("dateModified"));
 });
 
@@ -157,6 +185,7 @@ test("zeigt auf der Startseite korrekte Statistik statt neuer Videos und zählt 
   assert.ok(home.includes("nicht das Gründungsdatum"));
   assert.ok(home.includes('href="zeitschriften/"'));
   assert.ok(home.includes('href="news/"'));
+  assert.ok(!home.includes("Zu den 20 neuesten Videos"));
   assert.ok(home.includes("nicht addierbar"));
   assert.ok(!home.includes('class="video-list"'));
   assert.ok(!home.includes("Neu auf dem Kanal"));
@@ -180,6 +209,28 @@ test("kennzeichnet unvollständige Laufzeiten und fehlenden Kanalbeginn ohne erf
   assert.ok(!home.includes("datetime="));
   input.videos.videos[0].durationSeconds = null;
   assert.ok(!render(input).pages.get("index.html").html.includes("<dt>Stunden Video</dt>"));
+});
+
+test("zählt unterschiedliche Zeitschriften in der Infobox statt Videos oder Mehrfachzuordnungen", () => {
+  for (const count of [0, 1, 2]) {
+    const input = issueFixture();
+    input.magazines.videos = input.magazines.videos.slice(0, count);
+    const home = render(input).pages.get("index.html").html;
+    if (count === 0) {
+      assert.ok(!home.includes('href="zeitschriften/">Zeitschriften</a>'));
+    } else {
+      const box = home.match(/<article><h3><a href="zeitschriften\/">Zeitschriften<\/a>[\s\S]*?<\/article>/u)[0];
+      assert.ok(box.includes('<p class="theme-count">1 Zeitschrift</p>'));
+      assert.ok(!box.includes("Video"));
+      assert.ok(home.includes(`<dt>Heftausgaben</dt><dd>1</dd>`));
+    }
+  }
+  const input = issueFixture();
+  input.magazines.videos[1].magazines.push({
+    ...input.magazines.videos[1].magazines[0], name: "Power Play",
+  });
+  const home = render(input).pages.get("index.html").html;
+  assert.ok(home.includes('<a href="zeitschriften/">Zeitschriften</a></h3><p class="theme-count">2 Zeitschriften</p>'));
 });
 
 test("berechnet Startseitenzahlen nur aus öffentlichen Videos und aktualisiert Mengen ohne Videoliste", async (t) => {
@@ -206,6 +257,7 @@ test("erzeugt standortunabhängige Seiten mit relativen Links, Assets, Canonical
       assert.ok(!page.html.includes(config.baseUrl));
       assert.ok(!page.html.includes('href="/'));
       assert.ok(!page.html.includes('src="/'));
+      assert.ok(page.html.includes(`rel="icon" type="image/jpeg" href="${config.href("favicon.jpg", page.route)}"`));
       assert.ok(page.html.includes(`rel="stylesheet" href="${config.href("assets/site.css", page.route)}"`));
       assert.ok(page.html.includes(`property="og:url" content="${config.href(page.route, page.route)}"`));
       const breadcrumbs = JSON.parse(page.html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/u)[1])["@graph"].at(-1);
@@ -229,6 +281,21 @@ test("lehnt absolute interne Metadaten und Skriptpfade ab", () => {
   assert.throws(() => validateSite(pages, assets, config), /seitenrelativ/u);
 });
 
+test("bindet den zugänglichen Darstellungs-Schalter und sein lokales Skript vor dem CSS auf jeder Seite ein", () => {
+  const { pages, config, assets } = render(issueFixture());
+  for (const page of pages.values()) {
+    assert.ok(page.html.includes(`src="${config.href("assets/theme.js", page.route)}"`));
+    assert.ok(page.html.indexOf('src="' + config.href("assets/theme.js", page.route))
+      < page.html.indexOf('rel="stylesheet"'));
+    const header = page.html.match(/<header[\s\S]*?<\/header>/u)[0];
+    assert.ok(header.includes('type="button" class="theme-toggle" data-theme-toggle hidden'));
+    assert.ok(header.includes('aria-label="Darstellungsmodus wechseln"'));
+    assert.ok(header.includes('data-theme-status role="status"'));
+    assert.match(header, /<li class="navigation-control"><a [^>]+>[^<]+<\/a><button/u);
+  }
+  validateSite(pages, assets, config);
+});
+
 test("escapet Quelltexte und JSON-LD, verlinkt nur HTTP(S) und kennzeichnet externe Ziele", () => {
   const input = issueFixture();
   input.videos.videos[0].title = '<img src=x onerror="alert(1)">';
@@ -239,7 +306,7 @@ test("escapet Quelltexte und JSON-LD, verlinkt nur HTTP(S) und kennzeichnet exte
   assert.ok(!html.includes('<img src=x'));
   assert.ok(!html.includes('href="javascript:'));
   assert.ok(html.includes('href="https://example.com/?x=1&amp;y=2" rel="external"'));
-  assert.equal((html.match(/<script/gu) ?? []).length, 2);
+  assert.equal((html.match(/<script/gu) ?? []).length, 3);
   assert.ok(!jsonLd({ text: "</script>\u2028" }).includes("</script>"));
   assert.ok(descriptionHtml("https://example.com/path).").endsWith("</a>).</p>"));
   validateSite(pages, assets, config);
@@ -329,6 +396,12 @@ test("baut offline mit Projektpfad, Sitemap und Inhalts-Manifest; übernimmt unv
   assert.equal(first.reused, 0);
   assert.ok(first.cssGzip <= 20 * 1024);
   assert.ok(first.jsGzip <= 5 * 1024);
+  assert.deepEqual(
+    await readFile(path.join(options.outputDirectory, "favicon.jpg")),
+    await readFile(new URL("../src/favicon.jpg", import.meta.url)),
+  );
+  const newsHtml = await readFile(path.join(options.outputDirectory, "news", "index.html"), "utf8");
+  assert.ok(newsHtml.includes('<link rel="icon" type="image/jpeg" href="../favicon.jpg">'));
   const css = (await readdir(path.join(options.outputDirectory, "assets"))).find((file) => file.endsWith(".css"));
   assert.match(css, /^site\.[a-f0-9]{12}\.css$/u);
   const stylesheet = await readFile(path.join(options.outputDirectory, "assets", css), "utf8");
@@ -339,6 +412,8 @@ test("baut offline mit Projektpfad, Sitemap und Inhalts-Manifest; übernimmt unv
   assert.doesNotMatch(leadStyles, /(?:max-)?width\s*:|white-space\s*:|text-wrap\s*:/u);
   assert.match(stylesheet, /\.detail-heading\s*\{[^}]*white-space:\s*nowrap;[^}]*text-overflow:\s*ellipsis/u);
   assert.match(stylesheet, /\.video-player\s*\{[^}]*max-height:\s*min\(60svh,\s*calc\(100svh - 12rem\)\)/u);
+  assert.match(stylesheet, /\.detail-page main\.container\s*\{[^}]*width:\s*100%;[^}]*max-width:\s*none/u);
+  assert.match(stylesheet, /@media \(min-width: 768px\)\s*\{\s*\.detail-page \.video-player\s*\{[^}]*height:\s*auto;[^}]*max-height:\s*none/u);
   const sitemap = await readFile(path.join(options.outputDirectory, "sitemap.xml"), "utf8");
   assert.ok(sitemap.includes("https://mrchristianharms-byte.github.io/prettyOldPixel/news/"));
   assert.ok(!sitemap.includes("404.html"));

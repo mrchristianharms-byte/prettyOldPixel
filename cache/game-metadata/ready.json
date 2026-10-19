@@ -1,9 +1,10 @@
 {
   "version": 3,
-  "generatedAt": "2026-10-19T08:06:31.002Z",
+  "generatedAt": "2026-10-19T22:16:01.558Z",
   "catalogueHash": "780abb63f8b504a7e97fb9baec17898a8021dc6dba30bdd84705dafb88898db7",
   "decisionsHash": "7be5dad2ef2e19e79fbd9f4e7429bf563e2b414332a3ea489ce0ef1b03b848df",
   "selectionPolicyHash": "b320b83ac4264e9a45239fa5febe15574df67491a67483beb28253ef85c9a9a7",
+  "companyNamesHash": "5cebc68a6e6ea36186db794bed937fbd4efeb1d72f76ead91f9d3f0febede3c7",
   "summary": {
     "games": 147,
     "ready": 119,
@@ -56,7 +57,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1987,
@@ -126,7 +127,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1995,
@@ -229,7 +230,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1989,
@@ -367,7 +368,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1994,
@@ -545,7 +546,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1990,
@@ -716,7 +717,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1985,
@@ -728,19 +729,22 @@
             "sourceReleaseId": 13542,
             "platform": "Commodore 64",
             "year": 1985,
-            "developer": "MicroProse Software, Inc.",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MicroProse Software, Inc.",
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 14421,
             "platform": "Commodore 64",
             "year": 1985,
-            "developer": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
             "publisher": "U.S. Gold Ltd.",
             "countries": "United Kingdom",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 316488,
@@ -749,25 +753,30 @@
             "developer": null,
             "publisher": null,
             "countries": "United Kingdom",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           },
           {
             "sourceReleaseId": 61881,
             "platform": "Commodore 64",
             "year": 1986,
-            "developer": "MicroProse Software, Inc.",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "Germany,  United Kingdom",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MicroProse Software, Inc.",
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 258988,
             "platform": "Commodore 64",
             "year": 1992,
-            "developer": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
             "publisher": "U.S. Gold Ltd.",
             "countries": "United Kingdom",
-            "publisherLabel": "Kixx"
+            "publisherLabel": "Kixx",
+            "sourceDeveloper": "MicroProse Software, Inc."
           }
         ]
       }
@@ -820,7 +829,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1989,
@@ -836,7 +845,8 @@
             "developer": null,
             "publisher": "reLINE Software GmbH",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": ""
           }
         ]
       }
@@ -913,7 +923,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1994,
@@ -925,46 +935,55 @@
             "sourceReleaseId": 5094,
             "platform": "DOS",
             "year": 1994,
-            "developer": "Blue Byte Software GmbH",
+            "developer": "Blue Byte Studio GmbH",
             "publisher": "Accolade, Inc.",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Blue Byte Software GmbH"
           },
           {
             "sourceReleaseId": 75480,
             "platform": "DOS",
             "year": 1994,
-            "developer": "Blue Byte Software GmbH",
-            "publisher": "Blue Byte Software GmbH",
+            "developer": "Blue Byte Studio GmbH",
+            "publisher": "Blue Byte Studio GmbH",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Blue Byte Software GmbH",
+            "sourcePublisher": "Blue Byte Software GmbH"
           },
           {
             "sourceReleaseId": 82066,
             "platform": "DOS",
             "year": 1994,
-            "developer": "Blue Byte Software GmbH",
-            "publisher": "Blue Byte Software GmbH",
+            "developer": "Blue Byte Studio GmbH",
+            "publisher": "Blue Byte Studio GmbH",
             "countries": "United Kingdom",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Blue Byte Software GmbH",
+            "sourcePublisher": "Blue Byte Software GmbH"
           },
           {
             "sourceReleaseId": 133071,
             "platform": "DOS",
             "year": 1994,
-            "developer": "Blue Byte Software GmbH",
-            "publisher": "Blue Byte Software GmbH",
+            "developer": "Blue Byte Studio GmbH",
+            "publisher": "Blue Byte Studio GmbH",
             "countries": "Italy,  United Kingdom",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Blue Byte Software GmbH",
+            "sourcePublisher": "Blue Byte Software GmbH"
           },
           {
             "sourceReleaseId": 399795,
             "platform": "DOS",
             "year": 1994,
-            "developer": "Blue Byte Software GmbH",
-            "publisher": "Blue Byte Software GmbH",
+            "developer": "Blue Byte Studio GmbH",
+            "publisher": "Blue Byte Studio GmbH",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Blue Byte Software GmbH",
+            "sourcePublisher": "Blue Byte Software GmbH"
           }
         ]
       }
@@ -1020,7 +1039,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1992,
@@ -1034,18 +1053,20 @@
             "platform": "DOS",
             "year": 1992,
             "developer": "Argonaut Software Ltd.",
-            "publisher": "MicroProse Software, Inc.",
+            "publisher": "MicroProse",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 59319,
             "platform": "DOS",
             "year": 1992,
             "developer": "Argonaut Software Ltd.",
-            "publisher": "MicroProse Software, Inc.",
+            "publisher": "MicroProse",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 66964,
@@ -1054,16 +1075,19 @@
             "developer": null,
             "publisher": null,
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           },
           {
             "sourceReleaseId": 356389,
             "platform": "DOS",
             "year": 1994,
             "developer": "Argonaut Software Ltd.",
-            "publisher": "MicroProse Software, Inc.",
+            "publisher": "MicroProse",
             "countries": "Brazil",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourcePublisher": "MicroProse Software, Inc."
           }
         ]
       }
@@ -1117,7 +1141,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1988,
@@ -1196,7 +1220,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1990,
@@ -1272,7 +1296,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1995,
@@ -1296,7 +1320,9 @@
             "developer": null,
             "publisher": null,
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           }
         ]
       }
@@ -1354,7 +1380,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1992,
@@ -1369,7 +1395,9 @@
             "developer": null,
             "publisher": null,
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           },
           {
             "sourceReleaseId": 72421,
@@ -1396,7 +1424,9 @@
             "developer": null,
             "publisher": null,
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           },
           {
             "sourceReleaseId": 155368,
@@ -1412,9 +1442,10 @@
             "platform": "DOS",
             "year": 2008,
             "developer": "Dynamix, Inc.",
-            "publisher": "Sierra Entertainment, Inc.",
+            "publisher": "Sierra",
             "countries": "United States,  Canada",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourcePublisher": "Sierra Entertainment, Inc."
           }
         ]
       }
@@ -1472,7 +1503,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1993,
@@ -1583,7 +1614,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1991,
@@ -1656,7 +1687,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1996,
@@ -1669,46 +1700,56 @@
             "sourceReleaseId": 8417,
             "platform": "DOS",
             "year": 1996,
-            "developer": "Gremlin Interactive Limited",
-            "publisher": "Gremlin Interactive Limited",
+            "developer": "Gremlin",
+            "publisher": "Gremlin",
             "countries": "United Kingdom",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Gremlin Interactive Limited",
+            "sourcePublisher": "Gremlin Interactive Limited"
           },
           {
             "sourceReleaseId": 8418,
             "platform": "DOS",
             "year": 1997,
-            "developer": "Gremlin Interactive Limited",
-            "publisher": "Interplay Entertainment Corp.",
+            "developer": "Gremlin",
+            "publisher": "Interplay",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Gremlin Interactive Limited",
+            "sourcePublisher": "Interplay Entertainment Corp."
           },
           {
             "sourceReleaseId": 109662,
             "platform": "DOS",
             "year": 1997,
-            "developer": "Gremlin Interactive Limited",
-            "publisher": "Gremlin Interactive Limited",
+            "developer": "Gremlin",
+            "publisher": "Gremlin",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Gremlin Interactive Limited",
+            "sourcePublisher": "Gremlin Interactive Limited"
           },
           {
             "sourceReleaseId": 109663,
             "platform": "DOS",
             "year": 1997,
-            "developer": "Gremlin Interactive Limited",
-            "publisher": "Gremlin Interactive Limited",
+            "developer": "Gremlin",
+            "publisher": "Gremlin",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Gremlin Interactive Limited",
+            "sourcePublisher": "Gremlin Interactive Limited"
           },
           {
             "sourceReleaseId": 225784,
             "platform": "DOS",
             "year": 1997,
-            "developer": "Gremlin Interactive Limited",
-            "publisher": "Gremlin Interactive Limited",
+            "developer": "Gremlin",
+            "publisher": "Gremlin",
             "countries": "Poland",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Gremlin Interactive Limited",
+            "sourcePublisher": "Gremlin Interactive Limited"
           }
         ]
       }
@@ -1767,7 +1808,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1992,
@@ -1893,7 +1934,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1992,
@@ -1905,46 +1946,53 @@
             "sourceReleaseId": 20559,
             "platform": "NES",
             "year": 1992,
-            "developer": "Konami Co., Ltd.",
-            "publisher": "Konami, Inc.",
+            "developer": "Konami",
+            "publisher": "Konami",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Konami Co., Ltd.",
+            "sourcePublisher": "Konami, Inc."
           },
           {
             "sourceReleaseId": 73469,
             "platform": "NES",
             "year": 1992,
-            "developer": "Konami Co., Ltd.",
-            "publisher": "Konami Co., Ltd.",
+            "developer": "Konami",
+            "publisher": "Konami",
             "countries": "Japan",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Konami Co., Ltd.",
+            "sourcePublisher": "Konami Co., Ltd."
           },
           {
             "sourceReleaseId": 140935,
             "platform": "NES",
             "year": 1992,
-            "developer": "Konami Co., Ltd.",
+            "developer": "Konami",
             "publisher": "Palcom Software Ltd.",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Konami Co., Ltd."
           },
           {
             "sourceReleaseId": 62962,
             "platform": "NES",
             "year": 1993,
-            "developer": "Konami Co., Ltd.",
+            "developer": "Konami",
             "publisher": "Palcom Software Ltd.",
             "countries": "Sweden",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Konami Co., Ltd."
           },
           {
             "sourceReleaseId": 140933,
             "platform": "NES",
             "year": 1993,
-            "developer": "Konami Co., Ltd.",
+            "developer": "Konami",
             "publisher": "Palcom Software Ltd.",
             "countries": "United Kingdom",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Konami Co., Ltd."
           }
         ]
       }
@@ -2003,7 +2051,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1988,
@@ -2015,19 +2063,23 @@
             "sourceReleaseId": 3604,
             "platform": "DOS",
             "year": 1988,
-            "developer": "MicroProse Software, Inc.",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MicroProse Software, Inc.",
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 56227,
             "platform": "DOS",
             "year": 1988,
-            "developer": "MicroProse Software, Inc.",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MicroProse Software, Inc.",
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 159454,
@@ -2036,34 +2088,41 @@
             "developer": null,
             "publisher": null,
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           },
           {
             "sourceReleaseId": 302242,
             "platform": "DOS",
             "year": 1988,
-            "developer": "MicroProse Software, Inc.",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "United Kingdom",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MicroProse Software, Inc.",
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 486499,
             "platform": "DOS",
             "year": 1992,
-            "developer": "MicroProse Software, Inc.",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "Brazil",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MicroProse Software, Inc.",
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 101298,
             "platform": "DOS",
             "year": 1994,
-            "developer": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
             "publisher": "U.S. Gold Ltd.",
             "countries": "France,  Germany,  Italy,  United Kingdom",
-            "publisherLabel": "Kixx XL"
+            "publisherLabel": "Kixx XL",
+            "sourceDeveloper": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 200668,
@@ -2072,7 +2131,9 @@
             "developer": null,
             "publisher": null,
             "countries": "France,  Germany,  Italy,  Spain,  United Kingdom",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           }
         ]
       }
@@ -2126,7 +2187,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1990,
@@ -2207,7 +2268,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1995,
@@ -2223,7 +2284,8 @@
             "developer": null,
             "publisher": "Take-Two Interactive Software, Inc.",
             "countries": "United Kingdom",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": ""
           },
           {
             "sourceReleaseId": 64097,
@@ -2232,7 +2294,8 @@
             "developer": null,
             "publisher": "Take-Two Interactive Software, Inc.",
             "countries": "France",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": ""
           },
           {
             "sourceReleaseId": 64098,
@@ -2241,7 +2304,8 @@
             "developer": null,
             "publisher": "Take-Two Interactive Software, Inc.",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": ""
           },
           {
             "sourceReleaseId": 72683,
@@ -2250,7 +2314,8 @@
             "developer": null,
             "publisher": "Take-Two Interactive Software, Inc.",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": ""
           },
           {
             "sourceReleaseId": 6916,
@@ -2259,7 +2324,8 @@
             "developer": null,
             "publisher": "Take-Two Interactive Software, Inc.",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": ""
           }
         ]
       }
@@ -2313,7 +2379,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1986,
@@ -2336,9 +2402,10 @@
             "platform": "Amiga",
             "year": 1991,
             "developer": "Master Designer Software, Inc.",
-            "publisher": "EDOS, \n          Mirror Image",
+            "publisher": "EDOS, Mirror Image",
             "countries": "France,  Germany,  Italy,  Spain,  United Kingdom",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourcePublisher": "EDOS, \n          Mirror Image"
           }
         ]
       }
@@ -2436,7 +2503,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1994,
@@ -2565,7 +2632,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1996,
@@ -2596,19 +2663,23 @@
             "sourceReleaseId": 109177,
             "platform": "DOS",
             "year": 1996,
-            "developer": "Blue Byte Software GmbH",
-            "publisher": "Blue Byte Software GmbH",
+            "developer": "Blue Byte Studio GmbH",
+            "publisher": "Blue Byte Studio GmbH",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Blue Byte Software GmbH",
+            "sourcePublisher": "Blue Byte Software GmbH"
           },
           {
             "sourceReleaseId": 168320,
             "platform": "DOS",
             "year": 1996,
-            "developer": "Blue Byte Software GmbH",
-            "publisher": "Blue Byte Software GmbH",
+            "developer": "Blue Byte Studio GmbH",
+            "publisher": "Blue Byte Studio GmbH",
             "countries": "Poland",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Blue Byte Software GmbH",
+            "sourcePublisher": "Blue Byte Software GmbH"
           },
           {
             "sourceReleaseId": 662108,
@@ -2632,10 +2703,12 @@
             "sourceReleaseId": 168321,
             "platform": "DOS",
             "year": 1999,
-            "developer": "Blue Byte Software GmbH",
-            "publisher": "Blue Byte Software GmbH",
+            "developer": "Blue Byte Studio GmbH",
+            "publisher": "Blue Byte Studio GmbH",
             "countries": "United Kingdom",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Blue Byte Software GmbH",
+            "sourcePublisher": "Blue Byte Software GmbH"
           }
         ]
       }
@@ -2696,7 +2769,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1992,
@@ -2709,46 +2782,56 @@
             "sourceReleaseId": 2871,
             "platform": "DOS",
             "year": 1992,
-            "developer": "MicroProse Ltd.",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MicroProse Ltd.",
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 62103,
             "platform": "DOS",
             "year": 1992,
-            "developer": "MicroProse Ltd.",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MicroProse Ltd.",
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 171442,
             "platform": "DOS",
             "year": 1992,
-            "developer": "MicroProse Ltd.",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "France",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MicroProse Ltd.",
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 492708,
             "platform": "DOS",
             "year": 1993,
-            "developer": "MicroProse Ltd.",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "Brazil",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MicroProse Ltd.",
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 62104,
             "platform": "DOS",
             "year": 1994,
-            "developer": "MicroProse Ltd.",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "France,  Germany,  United Kingdom",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MicroProse Ltd.",
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 65667,
@@ -2757,34 +2840,41 @@
             "developer": null,
             "publisher": null,
             "countries": "France,  Germany,  United Kingdom",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           },
           {
             "sourceReleaseId": 68105,
             "platform": "DOS",
             "year": 1994,
-            "developer": "MicroProse Ltd.",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "Australia,  New Zealand",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MicroProse Ltd.",
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 171441,
             "platform": "DOS",
             "year": 1994,
-            "developer": "MicroProse Ltd.",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MicroProse Ltd.",
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 233999,
             "platform": "DOS",
             "year": 1999,
-            "developer": "MicroProse Ltd.",
+            "developer": "MicroProse",
             "publisher": "Hasbro Interactive, Inc.",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MicroProse Ltd."
           }
         ]
       }
@@ -2843,7 +2933,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1992,
@@ -2892,9 +2982,10 @@
             "platform": "DOS",
             "year": 1993,
             "developer": "Bullfrog Productions, Ltd.",
-            "publisher": "Electronic Arts, Inc., \n          Ocean Software Ltd.",
+            "publisher": "Electronic Arts, Inc., Ocean Software Ltd.",
             "countries": "Australia,  New Zealand",
-            "publisherLabel": "Hit Squad, The"
+            "publisherLabel": "Hit Squad, The",
+            "sourcePublisher": "Electronic Arts, Inc., \n          Ocean Software Ltd."
           },
           {
             "sourceReleaseId": 66286,
@@ -2992,7 +3083,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1986,
@@ -3004,118 +3095,131 @@
             "sourceReleaseId": 29742,
             "platform": "NES",
             "year": 1986,
-            "developer": "Nintendo R&D1, \n          Tose Co., Ltd.",
+            "developer": "Nintendo R&D1, Tose Co., Ltd.",
             "publisher": "Nintendo Co., Ltd.",
             "countries": "Japan",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Nintendo R&D1, \n          Tose Co., Ltd."
           },
           {
             "sourceReleaseId": 19276,
             "platform": "NES",
             "year": 1987,
-            "developer": "Nintendo R&D1, \n          Tose Co., Ltd.",
+            "developer": "Nintendo R&D1, Tose Co., Ltd.",
             "publisher": "Nintendo of America Inc.",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Nintendo R&D1, \n          Tose Co., Ltd."
           },
           {
             "sourceReleaseId": 619623,
             "platform": "NES",
             "year": 1987,
-            "developer": "Nintendo R&D1, \n          Tose Co., Ltd.",
+            "developer": "Nintendo R&D1, Tose Co., Ltd.",
             "publisher": "Nintendo of America Inc.",
             "countries": "Canada",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Nintendo R&D1, \n          Tose Co., Ltd."
           },
           {
             "sourceReleaseId": 619612,
             "platform": "NES",
             "year": 1988,
-            "developer": "Nintendo R&D1, \n          Tose Co., Ltd.",
+            "developer": "Nintendo R&D1, Tose Co., Ltd.",
             "publisher": "Nintendo Co., Ltd.",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Nintendo R&D1, \n          Tose Co., Ltd."
           },
           {
             "sourceReleaseId": 619613,
             "platform": "NES",
             "year": 1988,
-            "developer": "Nintendo R&D1, \n          Tose Co., Ltd.",
+            "developer": "Nintendo R&D1, Tose Co., Ltd.",
             "publisher": "Nintendo Co., Ltd.",
             "countries": "Belgium,  France,  Luxembourg,  The Netherlands",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Nintendo R&D1, \n          Tose Co., Ltd."
           },
           {
             "sourceReleaseId": 619614,
             "platform": "NES",
             "year": 1988,
-            "developer": "Nintendo R&D1, \n          Tose Co., Ltd.",
+            "developer": "Nintendo R&D1, Tose Co., Ltd.",
             "publisher": "Nintendo Co., Ltd.",
             "countries": "Austria",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Nintendo R&D1, \n          Tose Co., Ltd."
           },
           {
             "sourceReleaseId": 619615,
             "platform": "NES",
             "year": 1988,
-            "developer": "Nintendo R&D1, \n          Tose Co., Ltd.",
+            "developer": "Nintendo R&D1, Tose Co., Ltd.",
             "publisher": "Nintendo Co., Ltd.",
             "countries": "Switzerland",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Nintendo R&D1, \n          Tose Co., Ltd."
           },
           {
             "sourceReleaseId": 619616,
             "platform": "NES",
             "year": 1988,
-            "developer": "Nintendo R&D1, \n          Tose Co., Ltd.",
+            "developer": "Nintendo R&D1, Tose Co., Ltd.",
             "publisher": "Nintendo Co., Ltd.",
             "countries": "India,  Indonesia,  Malaysia,  Singapore,  Thailand",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Nintendo R&D1, \n          Tose Co., Ltd."
           },
           {
             "sourceReleaseId": 619617,
             "platform": "NES",
             "year": 1988,
-            "developer": "Nintendo R&D1, \n          Tose Co., Ltd.",
+            "developer": "Nintendo R&D1, Tose Co., Ltd.",
             "publisher": "Nintendo Co., Ltd.",
             "countries": "Hong Kong",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Nintendo R&D1, \n          Tose Co., Ltd."
           },
           {
             "sourceReleaseId": 619618,
             "platform": "NES",
             "year": 1988,
-            "developer": "Nintendo R&D1, \n          Tose Co., Ltd.",
+            "developer": "Nintendo R&D1, Tose Co., Ltd.",
             "publisher": "Nintendo Co., Ltd.",
             "countries": "Australia,  Ireland,  Italy,  New Zealand,  United Kingdom",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Nintendo R&D1, \n          Tose Co., Ltd."
           },
           {
             "sourceReleaseId": 619619,
             "platform": "NES",
             "year": 1988,
-            "developer": "Nintendo R&D1, \n          Tose Co., Ltd.",
+            "developer": "Nintendo R&D1, Tose Co., Ltd.",
             "publisher": "Nintendo Co., Ltd.",
             "countries": "Denmark,  Finland,  Norway,  Sweden",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Nintendo R&D1, \n          Tose Co., Ltd."
           },
           {
             "sourceReleaseId": 619620,
             "platform": "NES",
             "year": 1989,
-            "developer": "Nintendo R&D1, \n          Tose Co., Ltd.",
+            "developer": "Nintendo R&D1, Tose Co., Ltd.",
             "publisher": "Nintendo Co., Ltd.",
             "countries": "South Korea",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Nintendo R&D1, \n          Tose Co., Ltd."
           },
           {
             "sourceReleaseId": 619622,
             "platform": "NES",
             "year": 1991,
-            "developer": "Nintendo R&D1, \n          Tose Co., Ltd.",
+            "developer": "Nintendo R&D1, Tose Co., Ltd.",
             "publisher": "Nintendo of Europe GmbH",
             "countries": "Spain",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Nintendo R&D1, \n          Tose Co., Ltd."
           }
         ]
       }
@@ -3215,7 +3319,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1991,
@@ -3227,55 +3331,67 @@
             "sourceReleaseId": 2195,
             "platform": "DOS",
             "year": 1991,
-            "developer": "MPS Labs",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MPS Labs",
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 66962,
             "platform": "DOS",
             "year": 1991,
-            "developer": "MPS Labs",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MPS Labs",
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 115595,
             "platform": "DOS",
             "year": 1991,
-            "developer": "MPS Labs",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "United Kingdom",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MPS Labs",
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 126589,
             "platform": "DOS",
             "year": 1991,
-            "developer": "MPS Labs",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "France",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MPS Labs",
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 160484,
             "platform": "DOS",
             "year": 1991,
-            "developer": "MPS Labs",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "Spain",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MPS Labs",
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 160485,
             "platform": "DOS",
             "year": 1991,
-            "developer": "MPS Labs",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MPS Labs",
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 160486,
@@ -3284,34 +3400,41 @@
             "developer": null,
             "publisher": null,
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           },
           {
             "sourceReleaseId": 486497,
             "platform": "DOS",
             "year": 1992,
-            "developer": "MPS Labs",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "Brazil",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MPS Labs",
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 109283,
             "platform": "DOS",
             "year": 1997,
-            "developer": "MPS Labs",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MPS Labs",
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 319561,
             "platform": "DOS",
             "year": 1998,
-            "developer": "MPS Labs",
+            "developer": "MicroProse",
             "publisher": "Morerom GmbH & Co. KG",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MPS Labs"
           }
         ]
       }
@@ -3365,7 +3488,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1989,
@@ -3381,16 +3504,20 @@
             "developer": null,
             "publisher": null,
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           },
           {
             "sourceReleaseId": 167774,
             "platform": "DOS",
             "year": 1989,
-            "developer": "MicroProse Software, Inc.",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MicroProse Software, Inc.",
+            "sourcePublisher": "MicroProse Software, Inc."
           }
         ]
       }
@@ -3444,7 +3571,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1983,
@@ -3522,7 +3649,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1991,
@@ -3534,19 +3661,23 @@
             "sourceReleaseId": 19394,
             "platform": "NES",
             "year": 1991,
-            "developer": "Konami Co., Ltd.",
-            "publisher": "Konami, Inc.",
+            "developer": "Konami",
+            "publisher": "Konami",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Konami Co., Ltd.",
+            "sourcePublisher": "Konami, Inc."
           },
           {
             "sourceReleaseId": 86145,
             "platform": "NES",
             "year": 1991,
-            "developer": "Konami Co., Ltd.",
-            "publisher": "Konami Co., Ltd.",
+            "developer": "Konami",
+            "publisher": "Konami",
             "countries": "Japan",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Konami Co., Ltd.",
+            "sourcePublisher": "Konami Co., Ltd."
           }
         ]
       }
@@ -3610,7 +3741,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1994,
@@ -3623,27 +3754,30 @@
             "platform": "DOS",
             "year": 1994,
             "developer": "Mythos Games Ltd.",
-            "publisher": "MicroProse Software, Inc.",
+            "publisher": "MicroProse",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 171881,
             "platform": "DOS",
             "year": 1994,
             "developer": "Mythos Games Ltd.",
-            "publisher": "MicroProse Software, Inc.",
+            "publisher": "MicroProse",
             "countries": "United Kingdom",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 171883,
             "platform": "DOS",
             "year": 1994,
             "developer": "Mythos Games Ltd.",
-            "publisher": "MicroProse Software, Inc.",
+            "publisher": "MicroProse",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 171884,
@@ -3652,61 +3786,69 @@
             "developer": null,
             "publisher": null,
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           },
           {
             "sourceReleaseId": 171885,
             "platform": "DOS",
             "year": 1994,
             "developer": "Mythos Games Ltd.",
-            "publisher": "MicroProse Software, Inc.",
+            "publisher": "MicroProse",
             "countries": "Brazil",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 171886,
             "platform": "DOS",
             "year": 1994,
             "developer": "Mythos Games Ltd.",
-            "publisher": "MicroProse Software, Inc.",
+            "publisher": "MicroProse",
             "countries": "United Kingdom",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 458482,
             "platform": "DOS",
             "year": 1994,
             "developer": "Mythos Games Ltd.",
-            "publisher": "MicroProse Software, Inc.",
+            "publisher": "MicroProse",
             "countries": "Italy",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 171882,
             "platform": "DOS",
             "year": 1995,
             "developer": "Mythos Games Ltd.",
-            "publisher": "MicroProse Software, Inc.",
+            "publisher": "MicroProse",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 281360,
             "platform": "DOS",
             "year": 1995,
             "developer": "Mythos Games Ltd.",
-            "publisher": "MicroProse Software, Inc.",
+            "publisher": "MicroProse",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 316113,
             "platform": "DOS",
             "year": 1997,
             "developer": "Mythos Games Ltd.",
-            "publisher": "MicroProse Software, Inc.",
+            "publisher": "MicroProse",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 171888,
@@ -3777,7 +3919,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1989,
@@ -3847,7 +3989,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1992,
@@ -3951,7 +4093,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1991,
@@ -3963,10 +4105,11 @@
             "sourceReleaseId": 3567,
             "platform": "DOS",
             "year": 1991,
-            "developer": "Westwood Associates",
+            "developer": "Westwood",
             "publisher": "Strategic Simulations, Inc.",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Westwood Associates"
           },
           {
             "sourceReleaseId": 82732,
@@ -3975,7 +4118,9 @@
             "developer": null,
             "publisher": null,
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           }
         ]
       }
@@ -4028,7 +4173,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1987,
@@ -4044,7 +4189,8 @@
             "developer": null,
             "publisher": "Thunder Mountain",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": ""
           },
           {
             "sourceReleaseId": 108223,
@@ -4053,7 +4199,8 @@
             "developer": null,
             "publisher": "CRL Group PLC",
             "countries": "United Kingdom",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": ""
           },
           {
             "sourceReleaseId": 169485,
@@ -4062,7 +4209,8 @@
             "developer": null,
             "publisher": "Thunder Mountain",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": ""
           }
         ]
       }
@@ -4124,7 +4272,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1991,
@@ -4136,28 +4284,34 @@
             "sourceReleaseId": 3104,
             "platform": "DOS",
             "year": 1991,
-            "developer": "MPS Labs",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MPS Labs",
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 57053,
             "platform": "DOS",
             "year": 1991,
-            "developer": "MPS Labs",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MPS Labs",
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 114547,
             "platform": "DOS",
             "year": 1991,
-            "developer": "MPS Labs",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MPS Labs",
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 168372,
@@ -4166,7 +4320,9 @@
             "developer": null,
             "publisher": null,
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           },
           {
             "sourceReleaseId": 662122,
@@ -4175,52 +4331,63 @@
             "developer": null,
             "publisher": null,
             "countries": "France",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           },
           {
             "sourceReleaseId": 114546,
             "platform": "DOS",
             "year": 1992,
-            "developer": "MPS Labs",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "Australia",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MPS Labs",
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 486521,
             "platform": "DOS",
             "year": 1992,
-            "developer": "MPS Labs",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "Brazil",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MPS Labs",
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 111160,
             "platform": "DOS",
             "year": 1993,
-            "developer": "MPS Labs",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MPS Labs",
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 168370,
             "platform": "DOS",
             "year": 1997,
-            "developer": "MPS Labs",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MPS Labs",
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 168371,
             "platform": "DOS",
             "year": 1999,
-            "developer": "MPS Labs",
+            "developer": "MicroProse",
             "publisher": "Hasbro Interactive, Inc.",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MPS Labs"
           }
         ]
       }
@@ -4275,7 +4442,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1992,
@@ -4289,28 +4456,34 @@
             "sourceReleaseId": 3624,
             "platform": "DOS",
             "year": 1992,
-            "developer": "MicroProse Software, Inc.",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MicroProse Software, Inc.",
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 62840,
             "platform": "DOS",
             "year": 1992,
-            "developer": "MicroProse Software, Inc.",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MicroProse Software, Inc.",
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 169484,
             "platform": "DOS",
             "year": 1992,
-            "developer": "MPS Labs",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "France",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MPS Labs",
+            "sourcePublisher": "MicroProse Software, Inc."
           }
         ]
       }
@@ -4371,7 +4544,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1988,
@@ -4404,7 +4577,9 @@
             "developer": null,
             "publisher": null,
             "countries": "United Kingdom",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           },
           {
             "sourceReleaseId": 578240,
@@ -4449,7 +4624,9 @@
             "developer": null,
             "publisher": null,
             "countries": "Spain",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           },
           {
             "sourceReleaseId": 578243,
@@ -4516,7 +4693,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1990,
@@ -4550,7 +4727,9 @@
             "developer": null,
             "publisher": null,
             "countries": "United Kingdom",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           },
           {
             "sourceReleaseId": 170566,
@@ -4631,7 +4810,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1984,
@@ -4644,18 +4823,22 @@
             "platform": "Commodore 64",
             "year": 1984,
             "developer": null,
-            "publisher": "Virgin Games, Ltd.",
+            "publisher": "Virgin",
             "countries": "United Kingdom",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": "Virgin Games, Ltd."
           },
           {
             "sourceReleaseId": 461637,
             "platform": "Commodore 64",
             "year": 1984,
             "developer": null,
-            "publisher": "Virgin Games, Inc.",
+            "publisher": "Virgin",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": "Virgin Games, Inc."
           }
         ]
       }
@@ -4706,7 +4889,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1994,
@@ -4719,10 +4902,11 @@
             "sourceReleaseId": 110053,
             "platform": "DOS",
             "year": 1994,
-            "developer": "MPS Labs",
+            "developer": "MicroProse",
             "publisher": "U.S. Gold Ltd.",
             "countries": "France,  Germany,  Italy,  United Kingdom",
-            "publisherLabel": "Kixx XL"
+            "publisherLabel": "Kixx XL",
+            "sourceDeveloper": "MPS Labs"
           }
         ]
       }
@@ -4796,7 +4980,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1985,
@@ -4827,9 +5011,10 @@
             "platform": "Commodore 64",
             "year": 1989,
             "developer": "Lucasfilm Games LLC",
-            "publisher": "Virgin Mastertronic Ltd.",
+            "publisher": "Virgin",
             "countries": "France,  Germany,  United Kingdom",
-            "publisherLabel": "Mastertronic plus"
+            "publisherLabel": "Mastertronic plus",
+            "sourcePublisher": "Virgin Mastertronic Ltd."
           }
         ]
       }
@@ -4883,7 +5068,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1994,
@@ -4896,18 +5081,22 @@
             "platform": "DOS",
             "year": 1994,
             "developer": null,
-            "publisher": "MicroProse Software, Inc.",
+            "publisher": "MicroProse",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 267660,
             "platform": "DOS",
             "year": 1995,
             "developer": null,
-            "publisher": "MicroProse Software, Inc.",
+            "publisher": "MicroProse",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": "MicroProse Software, Inc."
           }
         ]
       }
@@ -4961,7 +5150,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1989,
@@ -4974,19 +5163,23 @@
             "sourceReleaseId": 10156,
             "platform": "Amiga",
             "year": 1989,
-            "developer": "Cinemaware Corporation",
-            "publisher": "Cinemaware Corporation",
+            "developer": "Cinemaware",
+            "publisher": "Cinemaware",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Cinemaware Corporation",
+            "sourcePublisher": "Cinemaware Corporation"
           },
           {
             "sourceReleaseId": 68954,
             "platform": "Amiga",
             "year": 1989,
-            "developer": "Cinemaware Corporation",
-            "publisher": "Cinemaware Corporation",
+            "developer": "Cinemaware",
+            "publisher": "Cinemaware",
             "countries": "United Kingdom",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Cinemaware Corporation",
+            "sourcePublisher": "Cinemaware Corporation"
           }
         ]
       }
@@ -5043,7 +5236,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1994,
@@ -5058,7 +5251,9 @@
             "developer": null,
             "publisher": null,
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           },
           {
             "sourceReleaseId": 29846,
@@ -5076,7 +5271,9 @@
             "developer": null,
             "publisher": null,
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           },
           {
             "sourceReleaseId": 29848,
@@ -5085,7 +5282,9 @@
             "developer": null,
             "publisher": null,
             "countries": "France",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           },
           {
             "sourceReleaseId": 29849,
@@ -5175,7 +5374,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1995,
@@ -5207,9 +5406,10 @@
             "platform": "DOS",
             "year": 1995,
             "developer": "Madlab Software",
-            "publisher": "Mindscape International Ltd.",
+            "publisher": "Mindscape",
             "countries": "United Kingdom",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourcePublisher": "Mindscape International Ltd."
           },
           {
             "sourceReleaseId": 218802,
@@ -5218,7 +5418,9 @@
             "developer": null,
             "publisher": null,
             "countries": "United States,  Canada",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           },
           {
             "sourceReleaseId": 455414,
@@ -5327,7 +5529,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1992,
@@ -5343,7 +5545,9 @@
             "developer": null,
             "publisher": null,
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           },
           {
             "sourceReleaseId": 112426,
@@ -5417,7 +5621,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1994,
@@ -5430,36 +5634,40 @@
             "platform": "DOS",
             "year": 1994,
             "developer": "SimTex, Inc.",
-            "publisher": "MicroProse Software, Inc.",
+            "publisher": "MicroProse",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 94586,
             "platform": "DOS",
             "year": 1994,
             "developer": "SimTex, Inc.",
-            "publisher": "MicroProse Software, Inc.",
+            "publisher": "MicroProse",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 124458,
             "platform": "DOS",
             "year": 1994,
             "developer": "SimTex, Inc.",
-            "publisher": "MicroProse Software, Inc.",
+            "publisher": "MicroProse",
             "countries": "United Kingdom",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 162728,
             "platform": "DOS",
             "year": 1994,
             "developer": "SimTex, Inc.",
-            "publisher": "MicroProse Software, Inc.",
+            "publisher": "MicroProse",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourcePublisher": "MicroProse Software, Inc."
           }
         ]
       }
@@ -5514,7 +5722,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1993,
@@ -5548,7 +5756,9 @@
             "developer": null,
             "publisher": null,
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           }
         ]
       }
@@ -5601,7 +5811,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1996,
@@ -5616,7 +5826,8 @@
             "developer": null,
             "publisher": "Strategic Studies Group Pty Ltd.",
             "countries": "Australia",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": ""
           }
         ]
       }
@@ -5671,7 +5882,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1991,
@@ -5683,28 +5894,31 @@
             "sourceReleaseId": 3260,
             "platform": "DOS",
             "year": 1991,
-            "developer": "Westwood Associates",
+            "developer": "Westwood",
             "publisher": "Strategic Simulations, Inc.",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Westwood Associates"
           },
           {
             "sourceReleaseId": 113134,
             "platform": "DOS",
             "year": 1992,
-            "developer": "Westwood Associates",
+            "developer": "Westwood",
             "publisher": "Softgold Computerspiele GmbH",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Westwood Associates"
           },
           {
             "sourceReleaseId": 258510,
             "platform": "DOS",
             "year": 1994,
-            "developer": "Westwood Associates",
+            "developer": "Westwood",
             "publisher": "U.S. Gold Ltd.",
             "countries": "United Kingdom",
-            "publisherLabel": "Kixx XL"
+            "publisherLabel": "Kixx XL",
+            "sourceDeveloper": "Westwood Associates"
           }
         ]
       }
@@ -5779,7 +5993,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1994,
@@ -5792,9 +6006,10 @@
             "platform": "Amiga",
             "year": 1994,
             "developer": "Celestial Software",
-            "publisher": "Gremlin Graphics Software Limited",
+            "publisher": "Gremlin",
             "countries": "France,  Germany,  Italy,  United Kingdom",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourcePublisher": "Gremlin Graphics Software Limited"
           }
         ]
       }
@@ -5873,7 +6088,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1993,
@@ -5895,9 +6110,10 @@
             "platform": "DOS",
             "year": 1993,
             "developer": "Adventuresoft Ltd.",
-            "publisher": "Adventure Soft Publishing Ltd.",
+            "publisher": "Adventuresoft Ltd.",
             "countries": "France,  Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourcePublisher": "Adventure Soft Publishing Ltd."
           },
           {
             "sourceReleaseId": 338598,
@@ -5922,9 +6138,10 @@
             "platform": "DOS",
             "year": 1994,
             "developer": "Adventuresoft Ltd.",
-            "publisher": "Adventure Soft Publishing Ltd.",
+            "publisher": "Adventuresoft Ltd.",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourcePublisher": "Adventure Soft Publishing Ltd."
           },
           {
             "sourceReleaseId": 168482,
@@ -5940,18 +6157,20 @@
             "platform": "DOS",
             "year": 1998,
             "developer": "Adventuresoft Ltd.",
-            "publisher": "Adventure Soft Publishing Ltd.",
+            "publisher": "Adventuresoft Ltd.",
             "countries": "United Kingdom",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourcePublisher": "Adventure Soft Publishing Ltd."
           },
           {
             "sourceReleaseId": 168484,
             "platform": "DOS",
             "year": 1998,
             "developer": "Adventuresoft Ltd.",
-            "publisher": "Adventure Soft Publishing Ltd.",
+            "publisher": "Adventuresoft Ltd.",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourcePublisher": "Adventure Soft Publishing Ltd."
           }
         ]
       }
@@ -6006,7 +6225,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1990,
@@ -6022,43 +6241,53 @@
             "developer": null,
             "publisher": null,
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           },
           {
             "sourceReleaseId": 114135,
             "platform": "DOS",
             "year": 1990,
-            "developer": "MPS Labs",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MPS Labs",
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 141529,
             "platform": "DOS",
             "year": 1990,
-            "developer": "MPS Labs",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "United Kingdom",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MPS Labs",
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 168377,
             "platform": "DOS",
             "year": 1990,
-            "developer": "MPS Labs",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MPS Labs",
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 168376,
             "platform": "DOS",
             "year": 1993,
-            "developer": "MPS Labs",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MPS Labs",
+            "sourcePublisher": "MicroProse Software, Inc."
           }
         ]
       }
@@ -6133,7 +6362,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1993,
@@ -6166,7 +6395,9 @@
             "developer": null,
             "publisher": null,
             "countries": "France,  Italy,  United Kingdom",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           },
           {
             "sourceReleaseId": 161114,
@@ -6229,7 +6460,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1990,
@@ -6245,7 +6476,9 @@
             "developer": null,
             "publisher": null,
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           },
           {
             "sourceReleaseId": 160435,
@@ -6311,7 +6544,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1994,
@@ -6324,9 +6557,10 @@
             "platform": "DOS",
             "year": 1994,
             "developer": "Dynamix, Inc.",
-            "publisher": "Sierra On-Line, Inc.",
+            "publisher": "Sierra",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourcePublisher": "Sierra On-Line, Inc."
           },
           {
             "sourceReleaseId": 71983,
@@ -6335,34 +6569,39 @@
             "developer": null,
             "publisher": null,
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           },
           {
             "sourceReleaseId": 121907,
             "platform": "DOS",
             "year": 1994,
             "developer": "Dynamix, Inc.",
-            "publisher": "Sierra On-Line, Inc.",
+            "publisher": "Sierra",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourcePublisher": "Sierra On-Line, Inc."
           },
           {
             "sourceReleaseId": 322963,
             "platform": "DOS",
             "year": 1994,
             "developer": "Dynamix, Inc.",
-            "publisher": "Sierra On-Line, Inc.",
+            "publisher": "Sierra",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourcePublisher": "Sierra On-Line, Inc."
           },
           {
             "sourceReleaseId": 484254,
             "platform": "DOS",
             "year": 1996,
             "developer": "Dynamix, Inc.",
-            "publisher": "Sierra On-Line, Inc.",
+            "publisher": "Sierra",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourcePublisher": "Sierra On-Line, Inc."
           }
         ]
       }
@@ -6417,7 +6656,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1985,
@@ -6510,7 +6749,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1991,
@@ -6522,46 +6761,56 @@
             "sourceReleaseId": 19168,
             "platform": "NES",
             "year": 1991,
-            "developer": "Sun Electronics Corp.",
-            "publisher": "Sun Corporation of America",
+            "developer": "Sun",
+            "publisher": "Sun",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Sun Electronics Corp.",
+            "sourcePublisher": "Sun Corporation of America"
           },
           {
             "sourceReleaseId": 28650,
             "platform": "NES",
             "year": 1991,
-            "developer": "Sun Electronics Corp.",
-            "publisher": "Sun Electronics Corp.",
+            "developer": "Sun",
+            "publisher": "Sun",
             "countries": "Japan",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Sun Electronics Corp.",
+            "sourcePublisher": "Sun Electronics Corp."
           },
           {
             "sourceReleaseId": 132892,
             "platform": "NES",
             "year": 1992,
-            "developer": "Sun Electronics Corp.",
-            "publisher": "Sun Electronics Corp.",
+            "developer": "Sun",
+            "publisher": "Sun",
             "countries": "United Kingdom",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Sun Electronics Corp.",
+            "sourcePublisher": "Sun Electronics Corp."
           },
           {
             "sourceReleaseId": 132895,
             "platform": "NES",
             "year": 1992,
-            "developer": "Sun Electronics Corp.",
-            "publisher": "Sun Electronics Corp.",
+            "developer": "Sun",
+            "publisher": "Sun",
             "countries": "Spain",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Sun Electronics Corp.",
+            "sourcePublisher": "Sun Electronics Corp."
           },
           {
             "sourceReleaseId": 132896,
             "platform": "NES",
             "year": 1992,
-            "developer": "Sun Electronics Corp.",
-            "publisher": "Sun Electronics Corp.",
+            "developer": "Sun",
+            "publisher": "Sun",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Sun Electronics Corp.",
+            "sourcePublisher": "Sun Electronics Corp."
           },
           {
             "sourceReleaseId": 132897,
@@ -6570,25 +6819,30 @@
             "developer": null,
             "publisher": null,
             "countries": "France",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           },
           {
             "sourceReleaseId": 132898,
             "platform": "NES",
             "year": 1992,
-            "developer": "Sun Electronics Corp.",
-            "publisher": "Sun Electronics Corp.",
+            "developer": "Sun",
+            "publisher": "Sun",
             "countries": "Sweden",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Sun Electronics Corp.",
+            "sourcePublisher": "Sun Electronics Corp."
           },
           {
             "sourceReleaseId": 656979,
             "platform": "NES",
             "year": 1994,
-            "developer": "Sun Electronics Corp.",
+            "developer": "Sun",
             "publisher": "Playtronic Industrial Ltda.",
             "countries": "Brazil",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Sun Electronics Corp."
           }
         ]
       }
@@ -6641,7 +6895,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1991,
@@ -6711,7 +6965,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1993,
@@ -6804,7 +7058,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1991,
@@ -6819,7 +7073,9 @@
             "developer": null,
             "publisher": null,
             "countries": "United Kingdom",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           },
           {
             "sourceReleaseId": 235646,
@@ -6888,7 +7144,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1992,
@@ -6900,28 +7156,34 @@
             "sourceReleaseId": 30344,
             "platform": "DOS",
             "year": 1992,
-            "developer": "Westwood Studios, Inc.",
-            "publisher": "Virgin Games, Inc.",
+            "developer": "Westwood",
+            "publisher": "Virgin",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Westwood Studios, Inc.",
+            "sourcePublisher": "Virgin Games, Inc."
           },
           {
             "sourceReleaseId": 111546,
             "platform": "DOS",
             "year": 1992,
-            "developer": "Westwood Studios, Inc.",
-            "publisher": "Virgin Games, Inc.",
+            "developer": "Westwood",
+            "publisher": "Virgin",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Westwood Studios, Inc.",
+            "sourcePublisher": "Virgin Games, Inc."
           },
           {
             "sourceReleaseId": 409685,
             "platform": "DOS",
             "year": 1992,
-            "developer": "Westwood Studios, Inc.",
-            "publisher": "Virgin Games, Inc.",
+            "developer": "Westwood",
+            "publisher": "Virgin",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Westwood Studios, Inc.",
+            "sourcePublisher": "Virgin Games, Inc."
           },
           {
             "sourceReleaseId": 409686,
@@ -6930,7 +7192,9 @@
             "developer": null,
             "publisher": null,
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           },
           {
             "sourceReleaseId": 409687,
@@ -6939,16 +7203,20 @@
             "developer": null,
             "publisher": null,
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           },
           {
             "sourceReleaseId": 409688,
             "platform": "DOS",
             "year": 1992,
-            "developer": "Westwood Studios, Inc.",
-            "publisher": "Virgin Games, Inc.",
+            "developer": "Westwood",
+            "publisher": "Virgin",
             "countries": "United Kingdom",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Westwood Studios, Inc.",
+            "sourcePublisher": "Virgin Games, Inc."
           },
           {
             "sourceReleaseId": 409783,
@@ -6957,7 +7225,9 @@
             "developer": null,
             "publisher": null,
             "countries": "Spain",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           },
           {
             "sourceReleaseId": 662107,
@@ -6966,25 +7236,29 @@
             "developer": null,
             "publisher": null,
             "countries": "France",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           },
           {
             "sourceReleaseId": 409690,
             "platform": "DOS",
             "year": 1995,
-            "developer": "Westwood Studios, Inc.",
+            "developer": "Westwood",
             "publisher": "Ocean Software Ltd.",
             "countries": "United Kingdom",
-            "publisherLabel": "Hit Squad, The"
+            "publisherLabel": "Hit Squad, The",
+            "sourceDeveloper": "Westwood Studios, Inc."
           },
           {
             "sourceReleaseId": 409784,
             "platform": "DOS",
             "year": 1995,
-            "developer": "Westwood Studios, Inc.",
+            "developer": "Westwood",
             "publisher": "Ocean Software Ltd.",
             "countries": "Belgium,  Luxembourg,  The Netherlands",
-            "publisherLabel": "Hit Squad, The"
+            "publisherLabel": "Hit Squad, The",
+            "sourceDeveloper": "Westwood Studios, Inc."
           }
         ]
       }
@@ -7045,7 +7319,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1993,
@@ -7186,7 +7460,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1985,
@@ -7199,9 +7473,11 @@
             "platform": "Commodore 64",
             "year": 1985,
             "developer": null,
-            "publisher": "Virgin Games, Ltd.",
+            "publisher": "Virgin",
             "countries": "United Kingdom",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": "Virgin Games, Ltd."
           },
           {
             "sourceReleaseId": 155488,
@@ -7210,7 +7486,8 @@
             "developer": null,
             "publisher": "Mastertronic Ltd.",
             "countries": "United Kingdom",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": ""
           }
         ]
       }
@@ -7263,7 +7540,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1989,
@@ -7337,7 +7614,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1994,
@@ -7441,7 +7718,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1996,
@@ -7530,7 +7807,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1986,
@@ -7564,7 +7841,9 @@
             "developer": null,
             "publisher": null,
             "countries": "United Kingdom",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           },
           {
             "sourceReleaseId": 257480,
@@ -7627,7 +7906,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1990,
@@ -7639,19 +7918,23 @@
             "sourceReleaseId": 130,
             "platform": "DOS",
             "year": 1990,
-            "developer": "MPS Labs",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MPS Labs",
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 302496,
             "platform": "DOS",
             "year": 1990,
-            "developer": "MPS Labs",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MPS Labs",
+            "sourcePublisher": "MicroProse Software, Inc."
           }
         ]
       }
@@ -7715,7 +7998,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1994,
@@ -7728,45 +8011,50 @@
             "platform": "DOS",
             "year": 1994,
             "developer": "Revolution Software Ltd.",
-            "publisher": "Virgin Interactive Entertainment, Inc.",
+            "publisher": "Virgin",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourcePublisher": "Virgin Interactive Entertainment, Inc."
           },
           {
             "sourceReleaseId": 18647,
             "platform": "DOS",
             "year": 1994,
             "developer": "Revolution Software Ltd.",
-            "publisher": "Virgin Interactive Entertainment (Europe) Ltd.",
+            "publisher": "Virgin",
             "countries": "United Kingdom",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourcePublisher": "Virgin Interactive Entertainment (Europe) Ltd."
           },
           {
             "sourceReleaseId": 60337,
             "platform": "DOS",
             "year": 1994,
             "developer": "Revolution Software Ltd.",
-            "publisher": "Virgin Interactive Entertainment (Europe) Ltd.",
+            "publisher": "Virgin",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourcePublisher": "Virgin Interactive Entertainment (Europe) Ltd."
           },
           {
             "sourceReleaseId": 72529,
             "platform": "DOS",
             "year": 1994,
             "developer": "Revolution Software Ltd.",
-            "publisher": "Virgin Interactive Entertainment (Europe) Ltd.",
+            "publisher": "Virgin",
             "countries": "Spain",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourcePublisher": "Virgin Interactive Entertainment (Europe) Ltd."
           },
           {
             "sourceReleaseId": 87055,
             "platform": "DOS",
             "year": 1994,
             "developer": "Revolution Software Ltd.",
-            "publisher": "Virgin Interactive Entertainment (Europe) Ltd.",
+            "publisher": "Virgin",
             "countries": "France",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourcePublisher": "Virgin Interactive Entertainment (Europe) Ltd."
           },
           {
             "sourceReleaseId": 133121,
@@ -7775,43 +8063,49 @@
             "developer": null,
             "publisher": null,
             "countries": "United Kingdom",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           },
           {
             "sourceReleaseId": 121743,
             "platform": "DOS",
             "year": 1995,
             "developer": "Revolution Software Ltd.",
-            "publisher": "Virgin Interactive Entertainment (Europe) Ltd.",
+            "publisher": "Virgin",
             "countries": "Germany",
-            "publisherLabel": "The White Label"
+            "publisherLabel": "The White Label",
+            "sourcePublisher": "Virgin Interactive Entertainment (Europe) Ltd."
           },
           {
             "sourceReleaseId": 122251,
             "platform": "DOS",
             "year": 1996,
             "developer": "Revolution Software Ltd.",
-            "publisher": "Virgin Interactive Entertainment (Europe) Ltd.",
+            "publisher": "Virgin",
             "countries": "France",
-            "publisherLabel": "The White Label"
+            "publisherLabel": "The White Label",
+            "sourcePublisher": "Virgin Interactive Entertainment (Europe) Ltd."
           },
           {
             "sourceReleaseId": 122254,
             "platform": "DOS",
             "year": 1996,
             "developer": "Revolution Software Ltd.",
-            "publisher": "Virgin Interactive Entertainment (Europe) Ltd.",
+            "publisher": "Virgin",
             "countries": "United Kingdom",
-            "publisherLabel": "The White Label"
+            "publisherLabel": "The White Label",
+            "sourcePublisher": "Virgin Interactive Entertainment (Europe) Ltd."
           },
           {
             "sourceReleaseId": 72528,
             "platform": "DOS",
             "year": 1998,
             "developer": "Revolution Software Ltd.",
-            "publisher": "Virgin Interactive Entertainment (Europe) Ltd.",
+            "publisher": "Virgin",
             "countries": "United Kingdom",
-            "publisherLabel": "Sold Out Software"
+            "publisherLabel": "Sold Out Software",
+            "sourcePublisher": "Virgin Interactive Entertainment (Europe) Ltd."
           },
           {
             "sourceReleaseId": 18384,
@@ -7820,7 +8114,8 @@
             "developer": "Revolution Software Ltd.",
             "publisher": null,
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourcePublisher": ""
           },
           {
             "sourceReleaseId": 88620,
@@ -7829,7 +8124,8 @@
             "developer": "Revolution Software Ltd.",
             "publisher": null,
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourcePublisher": ""
           },
           {
             "sourceReleaseId": 74490,
@@ -7838,7 +8134,8 @@
             "developer": "Revolution Software Ltd.",
             "publisher": null,
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourcePublisher": ""
           },
           {
             "sourceReleaseId": 513161,
@@ -7966,7 +8263,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1990,
@@ -7982,7 +8279,8 @@
             "developer": null,
             "publisher": "Activision, Inc.",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": ""
           },
           {
             "sourceReleaseId": 77299,
@@ -7991,7 +8289,9 @@
             "developer": null,
             "publisher": null,
             "countries": "United Kingdom",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           },
           {
             "sourceReleaseId": 159421,
@@ -8000,7 +8300,9 @@
             "developer": null,
             "publisher": null,
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           },
           {
             "sourceReleaseId": 159422,
@@ -8009,7 +8311,8 @@
             "developer": null,
             "publisher": "Activision, Inc.",
             "countries": "Taiwan",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": ""
           }
         ]
       }
@@ -8065,7 +8368,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1985,
@@ -8081,7 +8384,9 @@
             "developer": null,
             "publisher": null,
             "countries": "France,  Germany,  Italy,  The Netherlands,  United Kingdom",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           },
           {
             "sourceReleaseId": 344930,
@@ -8168,7 +8473,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1995,
@@ -8180,19 +8485,23 @@
             "sourceReleaseId": 24751,
             "platform": "DOS",
             "year": 1995,
-            "developer": "Interplay Entertainment Corp.",
-            "publisher": "Interplay Entertainment Corp.",
+            "developer": "Interplay",
+            "publisher": "Interplay",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Interplay Entertainment Corp.",
+            "sourcePublisher": "Interplay Entertainment Corp."
           },
           {
             "sourceReleaseId": 76758,
             "platform": "DOS",
             "year": 1995,
-            "developer": "Interplay Productions, Inc.",
-            "publisher": "Interplay Productions, Inc.",
+            "developer": "Interplay",
+            "publisher": "Interplay",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Interplay Productions, Inc.",
+            "sourcePublisher": "Interplay Productions, Inc."
           },
           {
             "sourceReleaseId": 108419,
@@ -8201,52 +8510,64 @@
             "developer": null,
             "publisher": null,
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           },
           {
             "sourceReleaseId": 128125,
             "platform": "DOS",
             "year": 1995,
-            "developer": "Interplay Productions, Inc.",
-            "publisher": "Interplay Productions, Inc.",
+            "developer": "Interplay",
+            "publisher": "Interplay",
             "countries": "France",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Interplay Productions, Inc.",
+            "sourcePublisher": "Interplay Productions, Inc."
           },
           {
             "sourceReleaseId": 169108,
             "platform": "DOS",
             "year": 1995,
-            "developer": "Interplay Productions, Inc.",
-            "publisher": "Interplay Productions, Inc.",
+            "developer": "Interplay",
+            "publisher": "Interplay",
             "countries": "United Kingdom",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Interplay Productions, Inc.",
+            "sourcePublisher": "Interplay Productions, Inc."
           },
           {
             "sourceReleaseId": 70326,
             "platform": "DOS",
             "year": 1999,
-            "developer": "Interplay Productions, Inc.",
-            "publisher": "Interplay Productions, Inc.",
+            "developer": "Interplay",
+            "publisher": "Interplay",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Interplay Productions, Inc.",
+            "sourcePublisher": "Interplay Productions, Inc."
           },
           {
             "sourceReleaseId": 169109,
             "platform": "DOS",
             "year": 1999,
-            "developer": "Interplay Productions, Inc.",
-            "publisher": "Interplay Productions, Inc.",
+            "developer": "Interplay",
+            "publisher": "Interplay",
             "countries": "Poland",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Interplay Productions, Inc.",
+            "sourcePublisher": "Interplay Productions, Inc."
           },
           {
             "sourceReleaseId": 169110,
             "platform": "DOS",
             "year": 2000,
-            "developer": "Interplay Productions, Inc.",
-            "publisher": "Interplay Productions, Inc.",
+            "developer": "Interplay",
+            "publisher": "Interplay",
             "countries": "Brazil",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Interplay Productions, Inc.",
+            "sourcePublisher": "Interplay Productions, Inc."
           }
         ]
       }
@@ -8303,7 +8624,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1994,
@@ -8316,9 +8637,10 @@
             "platform": "DOS",
             "year": 1994,
             "developer": "Epyx, Inc.",
-            "publisher": "Sierra On-Line, Inc.",
+            "publisher": "Sierra",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourcePublisher": "Sierra On-Line, Inc."
           },
           {
             "sourceReleaseId": 132995,
@@ -8327,7 +8649,9 @@
             "developer": null,
             "publisher": null,
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           },
           {
             "sourceReleaseId": 132996,
@@ -8336,7 +8660,9 @@
             "developer": null,
             "publisher": null,
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           },
           {
             "sourceReleaseId": 132997,
@@ -8345,16 +8671,19 @@
             "developer": null,
             "publisher": null,
             "countries": "France",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           },
           {
             "sourceReleaseId": 281363,
             "platform": "DOS",
             "year": 1996,
             "developer": "Epyx, Inc.",
-            "publisher": "Sierra On-Line, Inc.",
+            "publisher": "Sierra",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourcePublisher": "Sierra On-Line, Inc."
           }
         ]
       }
@@ -8411,7 +8740,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1995,
@@ -8521,7 +8850,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1989,
@@ -8537,61 +8866,73 @@
             "developer": null,
             "publisher": null,
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           },
           {
             "sourceReleaseId": 164888,
             "platform": "DOS",
             "year": 1989,
-            "developer": "MPS Labs",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MPS Labs",
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 164883,
             "platform": "DOS",
             "year": 1990,
-            "developer": "MPS Labs",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "United Kingdom",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MPS Labs",
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 164885,
             "platform": "DOS",
             "year": 1990,
-            "developer": "MPS Labs",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MPS Labs",
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 200209,
             "platform": "DOS",
             "year": 1990,
-            "developer": "MPS Labs",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "Spain",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MPS Labs",
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 111069,
             "platform": "DOS",
             "year": 1994,
-            "developer": "MPS Labs",
+            "developer": "MicroProse",
             "publisher": "U.S. Gold Ltd.",
             "countries": "France,  Germany,  Italy,  United Kingdom",
-            "publisherLabel": "Kixx XL"
+            "publisherLabel": "Kixx XL",
+            "sourceDeveloper": "MPS Labs"
           },
           {
             "sourceReleaseId": 200207,
             "platform": "DOS",
             "year": 1994,
-            "developer": "MPS Labs",
+            "developer": "MicroProse",
             "publisher": "U.S. Gold Ltd.",
             "countries": "Spain",
-            "publisherLabel": "Kixx XL"
+            "publisherLabel": "Kixx XL",
+            "sourceDeveloper": "MPS Labs"
           }
         ]
       }
@@ -8644,7 +8985,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1986,
@@ -8659,7 +9000,8 @@
             "developer": null,
             "publisher": "ariolasoft GmbH",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": ""
           }
         ]
       }
@@ -8713,7 +9055,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1992,
@@ -8728,18 +9070,20 @@
             "platform": "DOS",
             "year": 1992,
             "developer": "Evryware, Inc.",
-            "publisher": "MicroProse Software, Inc.",
+            "publisher": "MicroProse",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 131373,
             "platform": "DOS",
             "year": 1992,
             "developer": "Evryware, Inc.",
-            "publisher": "MicroProse Software, Inc.",
+            "publisher": "MicroProse",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourcePublisher": "MicroProse Software, Inc."
           }
         ]
       }
@@ -8800,7 +9144,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1994,
@@ -8813,82 +9157,96 @@
             "sourceReleaseId": 39277,
             "platform": "DOS",
             "year": 1994,
-            "developer": "Blue Byte Software GmbH & Co. KG",
-            "publisher": "Blue Byte Software GmbH & Co. KG",
+            "developer": "Blue Byte Studio GmbH",
+            "publisher": "Blue Byte Studio GmbH",
             "countries": "United Kingdom",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Blue Byte Software GmbH & Co. KG",
+            "sourcePublisher": "Blue Byte Software GmbH & Co. KG"
           },
           {
             "sourceReleaseId": 67055,
             "platform": "DOS",
             "year": 1994,
-            "developer": "Blue Byte Software GmbH",
-            "publisher": "Blue Byte Software GmbH",
+            "developer": "Blue Byte Studio GmbH",
+            "publisher": "Blue Byte Studio GmbH",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Blue Byte Software GmbH",
+            "sourcePublisher": "Blue Byte Software GmbH"
           },
           {
             "sourceReleaseId": 109183,
             "platform": "DOS",
             "year": 1995,
-            "developer": "Blue Byte Software GmbH",
-            "publisher": "Blue Byte Software GmbH",
+            "developer": "Blue Byte Studio GmbH",
+            "publisher": "Blue Byte Studio GmbH",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Blue Byte Software GmbH",
+            "sourcePublisher": "Blue Byte Software GmbH"
           },
           {
             "sourceReleaseId": 168308,
             "platform": "DOS",
             "year": 1995,
-            "developer": "Blue Byte Software GmbH",
+            "developer": "Blue Byte Studio GmbH",
             "publisher": "Strategic Simulations, Inc.",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Blue Byte Software GmbH"
           },
           {
             "sourceReleaseId": 546607,
             "platform": "DOS",
             "year": 1997,
-            "developer": "Blue Byte Software GmbH",
+            "developer": "Blue Byte Studio GmbH",
             "publisher": "Trendverlag",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Blue Byte Software GmbH"
           },
           {
             "sourceReleaseId": 168310,
             "platform": "DOS",
             "year": 1998,
-            "developer": "Blue Byte Software GmbH",
-            "publisher": "Blue Byte Software GmbH",
+            "developer": "Blue Byte Studio GmbH",
+            "publisher": "Blue Byte Studio GmbH",
             "countries": "United Kingdom",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Blue Byte Software GmbH",
+            "sourcePublisher": "Blue Byte Software GmbH"
           },
           {
             "sourceReleaseId": 350291,
             "platform": "DOS",
             "year": 1999,
-            "developer": "Blue Byte Software GmbH",
-            "publisher": "Blue Byte Software GmbH",
+            "developer": "Blue Byte Studio GmbH",
+            "publisher": "Blue Byte Studio GmbH",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Blue Byte Software GmbH",
+            "sourcePublisher": "Blue Byte Software GmbH"
           },
           {
             "sourceReleaseId": 168309,
             "platform": "DOS",
             "year": 2000,
-            "developer": "Blue Byte Software GmbH",
+            "developer": "Blue Byte Studio GmbH",
             "publisher": "Novitas GmbH",
             "countries": "Germany",
-            "publisherLabel": "Green Pepper"
+            "publisherLabel": "Green Pepper",
+            "sourceDeveloper": "Blue Byte Software GmbH"
           },
           {
             "sourceReleaseId": 168311,
             "platform": "DOS",
             "year": 2002,
-            "developer": "Blue Byte Software GmbH",
+            "developer": "Blue Byte Studio GmbH",
             "publisher": "Dice Multi Media Europe B.V.",
             "countries": "France,  The Netherlands",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Blue Byte Software GmbH"
           }
         ]
       }
@@ -8943,7 +9301,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1993,
@@ -8957,45 +9315,50 @@
             "platform": "DOS",
             "year": 1993,
             "developer": "Strategic Visions, Inc.",
-            "publisher": "Interplay Productions, Inc.",
+            "publisher": "Interplay",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourcePublisher": "Interplay Productions, Inc."
           },
           {
             "sourceReleaseId": 134915,
             "platform": "DOS",
             "year": 1993,
             "developer": "Strategic Visions, Inc.",
-            "publisher": "Interplay Productions, Inc.",
+            "publisher": "Interplay",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourcePublisher": "Interplay Productions, Inc."
           },
           {
             "sourceReleaseId": 66194,
             "platform": "DOS",
             "year": 1994,
             "developer": "Strategic Visions, Inc.",
-            "publisher": "Interplay Productions, Inc.",
+            "publisher": "Interplay",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourcePublisher": "Interplay Productions, Inc."
           },
           {
             "sourceReleaseId": 114779,
             "platform": "DOS",
             "year": 1995,
             "developer": "Strategic Visions, Inc.",
-            "publisher": "Virgin Interactive Entertainment (Europe) Ltd.",
+            "publisher": "Virgin",
             "countries": "Germany",
-            "publisherLabel": "The White Label"
+            "publisherLabel": "The White Label",
+            "sourcePublisher": "Virgin Interactive Entertainment (Europe) Ltd."
           },
           {
             "sourceReleaseId": 114780,
             "platform": "DOS",
             "year": 1995,
             "developer": "Strategic Visions, Inc.",
-            "publisher": "Virgin Interactive Entertainment (Europe) Ltd.",
+            "publisher": "Virgin",
             "countries": "France",
-            "publisherLabel": "The White Label"
+            "publisherLabel": "The White Label",
+            "sourcePublisher": "Virgin Interactive Entertainment (Europe) Ltd."
           }
         ]
       }
@@ -9050,7 +9413,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1983,
@@ -9135,7 +9498,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1991,
@@ -9150,7 +9513,9 @@
             "developer": null,
             "publisher": null,
             "countries": "United Kingdom",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           },
           {
             "sourceReleaseId": 74277,
@@ -9214,7 +9579,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1985,
@@ -9238,7 +9603,9 @@
             "developer": null,
             "publisher": null,
             "countries": "United Kingdom",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           },
           {
             "sourceReleaseId": 217662,
@@ -9299,7 +9666,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1986,
@@ -9386,7 +9753,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1992,
@@ -9399,100 +9766,122 @@
             "sourceReleaseId": 25526,
             "platform": "DOS",
             "year": 1992,
-            "developer": "Interplay Productions, Inc.",
-            "publisher": "Interplay Productions, Inc.",
+            "developer": "Interplay",
+            "publisher": "Interplay",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Interplay Productions, Inc.",
+            "sourcePublisher": "Interplay Productions, Inc."
           },
           {
             "sourceReleaseId": 108756,
             "platform": "DOS",
             "year": 1992,
-            "developer": "Interplay Productions, Inc.",
-            "publisher": "Interplay Productions, Inc.",
+            "developer": "Interplay",
+            "publisher": "Interplay",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Interplay Productions, Inc.",
+            "sourcePublisher": "Interplay Productions, Inc."
           },
           {
             "sourceReleaseId": 108765,
             "platform": "DOS",
             "year": 1992,
-            "developer": "Interplay Productions, Inc.",
-            "publisher": "Interplay Productions, Inc.",
+            "developer": "Interplay",
+            "publisher": "Interplay",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Interplay Productions, Inc.",
+            "sourcePublisher": "Interplay Productions, Inc."
           },
           {
             "sourceReleaseId": 168904,
             "platform": "DOS",
             "year": 1992,
-            "developer": "Interplay Productions, Inc.",
-            "publisher": "Interplay Productions, Inc.",
+            "developer": "Interplay",
+            "publisher": "Interplay",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Interplay Productions, Inc.",
+            "sourcePublisher": "Interplay Productions, Inc."
           },
           {
             "sourceReleaseId": 127677,
             "platform": "DOS",
             "year": 1993,
-            "developer": "Interplay Productions, Inc.",
-            "publisher": "Interplay Productions, Inc.",
+            "developer": "Interplay",
+            "publisher": "Interplay",
             "countries": "France",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Interplay Productions, Inc.",
+            "sourcePublisher": "Interplay Productions, Inc."
           },
           {
             "sourceReleaseId": 4546,
             "platform": "DOS",
             "year": 1994,
-            "developer": "Interplay Productions, Inc.",
-            "publisher": "Interplay Productions, Inc.",
+            "developer": "Interplay",
+            "publisher": "Interplay",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Interplay Productions, Inc.",
+            "sourcePublisher": "Interplay Productions, Inc."
           },
           {
             "sourceReleaseId": 168900,
             "platform": "DOS",
             "year": 1995,
-            "developer": "Interplay Productions, Inc.",
-            "publisher": "Virgin Interactive Entertainment (Europe) Ltd.",
+            "developer": "Interplay",
+            "publisher": "Virgin",
             "countries": "United Kingdom",
-            "publisherLabel": "The White Label"
+            "publisherLabel": "The White Label",
+            "sourceDeveloper": "Interplay Productions, Inc.",
+            "sourcePublisher": "Virgin Interactive Entertainment (Europe) Ltd."
           },
           {
             "sourceReleaseId": 168905,
             "platform": "DOS",
             "year": 1995,
-            "developer": "Interplay Productions, Inc.",
-            "publisher": "Virgin Interactive Entertainment (Europe) Ltd.",
+            "developer": "Interplay",
+            "publisher": "Virgin",
             "countries": "France",
-            "publisherLabel": "The White Label"
+            "publisherLabel": "The White Label",
+            "sourceDeveloper": "Interplay Productions, Inc.",
+            "sourcePublisher": "Virgin Interactive Entertainment (Europe) Ltd."
           },
           {
             "sourceReleaseId": 168906,
             "platform": "DOS",
             "year": 1995,
-            "developer": "Interplay Productions, Inc.",
-            "publisher": "Virgin Interactive Entertainment (Europe) Ltd.",
+            "developer": "Interplay",
+            "publisher": "Virgin",
             "countries": "Germany",
-            "publisherLabel": "The White Label"
+            "publisherLabel": "The White Label",
+            "sourceDeveloper": "Interplay Productions, Inc.",
+            "sourcePublisher": "Virgin Interactive Entertainment (Europe) Ltd."
           },
           {
             "sourceReleaseId": 168902,
             "platform": "DOS",
             "year": 1996,
-            "developer": "Interplay Productions, Inc.",
-            "publisher": "Interplay Productions, Inc.",
+            "developer": "Interplay",
+            "publisher": "Interplay",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Interplay Productions, Inc.",
+            "sourcePublisher": "Interplay Productions, Inc."
           },
           {
             "sourceReleaseId": 168903,
             "platform": "DOS",
             "year": 1996,
-            "developer": "Interplay Productions, Inc.",
-            "publisher": "Interplay Productions, Inc.",
+            "developer": "Interplay",
+            "publisher": "Interplay",
             "countries": "Australia",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Interplay Productions, Inc.",
+            "sourcePublisher": "Interplay Productions, Inc."
           }
         ]
       }
@@ -9546,7 +9935,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1990,
@@ -9558,19 +9947,22 @@
             "sourceReleaseId": 20928,
             "platform": "Amiga",
             "year": 1990,
-            "developer": "Interplay Productions, Inc.",
-            "publisher": "Interplay Productions, Inc.",
+            "developer": "Interplay",
+            "publisher": "Interplay",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Interplay Productions, Inc.",
+            "sourcePublisher": "Interplay Productions, Inc."
           },
           {
             "sourceReleaseId": 36704,
             "platform": "Amiga",
             "year": 1990,
-            "developer": "Interplay Productions, Inc.",
+            "developer": "Interplay",
             "publisher": "Electronic Arts, Inc.",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Interplay Productions, Inc."
           }
         ]
       }
@@ -9623,7 +10015,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1986,
@@ -9708,7 +10100,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1984,
@@ -9723,7 +10115,9 @@
             "developer": null,
             "publisher": null,
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           },
           {
             "sourceReleaseId": 172009,
@@ -9732,7 +10126,9 @@
             "developer": null,
             "publisher": null,
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           },
           {
             "sourceReleaseId": 172011,
@@ -9816,7 +10212,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1992,
@@ -9828,28 +10224,34 @@
             "sourceReleaseId": 1370,
             "platform": "DOS",
             "year": 1992,
-            "developer": "Westwood Studios, Inc.",
-            "publisher": "Virgin Games, Inc.",
+            "developer": "Westwood",
+            "publisher": "Virgin",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Westwood Studios, Inc.",
+            "sourcePublisher": "Virgin Games, Inc."
           },
           {
             "sourceReleaseId": 159054,
             "platform": "DOS",
             "year": 1992,
-            "developer": "Westwood Studios, Inc.",
-            "publisher": "Virgin Games, Inc.",
+            "developer": "Westwood",
+            "publisher": "Virgin",
             "countries": "United Kingdom",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Westwood Studios, Inc.",
+            "sourcePublisher": "Virgin Games, Inc."
           },
           {
             "sourceReleaseId": 159055,
             "platform": "DOS",
             "year": 1993,
-            "developer": "Westwood Studios, Inc.",
-            "publisher": "Virgin Games, Inc.",
+            "developer": "Westwood",
+            "publisher": "Virgin",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Westwood Studios, Inc.",
+            "sourcePublisher": "Virgin Games, Inc."
           },
           {
             "sourceReleaseId": 159063,
@@ -9858,34 +10260,41 @@
             "developer": null,
             "publisher": null,
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           },
           {
             "sourceReleaseId": 661978,
             "platform": "DOS",
             "year": 1993,
-            "developer": "Westwood Studios, Inc.",
-            "publisher": "Virgin Games, Inc.",
+            "developer": "Westwood",
+            "publisher": "Virgin",
             "countries": "France",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Westwood Studios, Inc.",
+            "sourcePublisher": "Virgin Games, Inc."
           },
           {
             "sourceReleaseId": 457585,
             "platform": "DOS",
             "year": 1994,
-            "developer": "Westwood Studios, Inc.",
-            "publisher": "Virgin Games, Inc.",
+            "developer": "Westwood",
+            "publisher": "Virgin",
             "countries": "United States",
-            "publisherLabel": "The White Label"
+            "publisherLabel": "The White Label",
+            "sourceDeveloper": "Westwood Studios, Inc.",
+            "sourcePublisher": "Virgin Games, Inc."
           },
           {
             "sourceReleaseId": 457584,
             "platform": "DOS",
             "year": 1995,
-            "developer": "Westwood Studios, Inc.",
+            "developer": "Westwood",
             "publisher": "Ocean Software Ltd.",
             "countries": "France,  United Kingdom",
-            "publisherLabel": "Hit Squad, The"
+            "publisherLabel": "Hit Squad, The",
+            "sourceDeveloper": "Westwood Studios, Inc."
           }
         ]
       }
@@ -9957,7 +10366,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1987,
@@ -9970,9 +10379,10 @@
             "platform": "Amiga",
             "year": 1987,
             "developer": "ICOM Simulations, Inc.",
-            "publisher": "Mindscape, Inc.",
+            "publisher": "Mindscape",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourcePublisher": "Mindscape, Inc."
           }
         ]
       }
@@ -10051,7 +10461,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1994,
@@ -10075,7 +10485,9 @@
             "developer": null,
             "publisher": null,
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           },
           {
             "sourceReleaseId": 108078,
@@ -10187,7 +10599,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1984,
@@ -10221,7 +10633,9 @@
             "developer": null,
             "publisher": null,
             "countries": "United Kingdom",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           },
           {
             "sourceReleaseId": 195553,
@@ -10303,7 +10717,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1995,
@@ -10317,27 +10731,30 @@
             "platform": "DOS",
             "year": 1995,
             "developer": "Graffiti",
-            "publisher": "Virgin Games, Ltd.",
+            "publisher": "Virgin",
             "countries": "United Kingdom",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourcePublisher": "Virgin Games, Ltd."
           },
           {
             "sourceReleaseId": 111818,
             "platform": "DOS",
             "year": 1995,
             "developer": "Graffiti",
-            "publisher": "Virgin Interactive Entertainment (Europe) Ltd.",
+            "publisher": "Virgin",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourcePublisher": "Virgin Interactive Entertainment (Europe) Ltd."
           },
           {
             "sourceReleaseId": 162330,
             "platform": "DOS",
             "year": 1997,
             "developer": "Graffiti",
-            "publisher": "Virgin Interactive Entertainment (Europe) Ltd.",
+            "publisher": "Virgin",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourcePublisher": "Virgin Interactive Entertainment (Europe) Ltd."
           }
         ]
       }
@@ -10392,7 +10809,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1994,
@@ -10425,7 +10842,9 @@
             "developer": null,
             "publisher": null,
             "countries": "Belgium,  France,  Luxembourg,  The Netherlands",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           }
         ]
       }
@@ -10477,7 +10896,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1986,
@@ -10559,7 +10978,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1991,
@@ -10583,7 +11002,9 @@
             "developer": null,
             "publisher": null,
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           },
           {
             "sourceReleaseId": 110021,
@@ -10665,7 +11086,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1993,
@@ -10687,10 +11108,11 @@
             "sourceReleaseId": 134913,
             "platform": "DOS",
             "year": 1994,
-            "developer": "Max Design GmbH & Co.",
+            "developer": "Max Design GesMBH",
             "publisher": "Ocean Software Ltd.",
             "countries": "United Kingdom",
-            "publisherLabel": "Hit Squad, The"
+            "publisherLabel": "Hit Squad, The",
+            "sourceDeveloper": "Max Design GmbH & Co."
           },
           {
             "sourceReleaseId": 283032,
@@ -10756,7 +11178,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1993,
@@ -10769,9 +11191,10 @@
             "platform": "DOS",
             "year": 1993,
             "developer": "Dynamix, Inc.",
-            "publisher": "Sierra On-Line, Inc.",
+            "publisher": "Sierra",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourcePublisher": "Sierra On-Line, Inc."
           },
           {
             "sourceReleaseId": 72060,
@@ -10780,34 +11203,39 @@
             "developer": null,
             "publisher": null,
             "countries": "France,  Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           },
           {
             "sourceReleaseId": 128490,
             "platform": "DOS",
             "year": 1994,
             "developer": "Dynamix, Inc.",
-            "publisher": "Sierra On-Line, Inc.",
+            "publisher": "Sierra",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourcePublisher": "Sierra On-Line, Inc."
           },
           {
             "sourceReleaseId": 155369,
             "platform": "DOS",
             "year": 1994,
             "developer": "Dynamix, Inc.",
-            "publisher": "Sierra On-Line, Inc.",
+            "publisher": "Sierra",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourcePublisher": "Sierra On-Line, Inc."
           },
           {
             "sourceReleaseId": 89116,
             "platform": "DOS",
             "year": 2007,
             "developer": "Dynamix, Inc.",
-            "publisher": "Sierra Entertainment, Inc.",
+            "publisher": "Sierra",
             "countries": "United States,  Canada",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourcePublisher": "Sierra Entertainment, Inc."
           }
         ]
       }
@@ -10866,7 +11294,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1993,
@@ -10878,64 +11306,77 @@
             "sourceReleaseId": 4717,
             "platform": "DOS",
             "year": 1993,
-            "developer": "MPS Labs",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MPS Labs",
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 109771,
             "platform": "DOS",
             "year": 1993,
-            "developer": "MPS Labs",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MPS Labs",
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 168395,
             "platform": "DOS",
             "year": 1993,
-            "developer": "MPS Labs",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "France",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MPS Labs",
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 168394,
             "platform": "DOS",
             "year": 1997,
-            "developer": "MPS Labs",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "United States,  Canada",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MPS Labs",
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 594302,
             "platform": "DOS",
             "year": 1999,
-            "developer": "MPS Labs",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "Czechia",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MPS Labs",
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 625124,
             "platform": "DOS",
             "year": 2003,
-            "developer": "MPS Labs",
+            "developer": "MicroProse",
             "publisher": "Sold Out Sales & Marketing Ltd.",
             "countries": "Slovakia",
-            "publisherLabel": "Sold Out Software"
+            "publisherLabel": "Sold Out Software",
+            "sourceDeveloper": "MPS Labs"
           },
           {
             "sourceReleaseId": 67805,
             "platform": "DOS",
             "year": 2006,
-            "developer": "MPS Labs",
+            "developer": "MicroProse",
             "publisher": null,
             "countries": "Worldwide",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MPS Labs",
+            "sourcePublisher": ""
           }
         ]
       }
@@ -11007,7 +11448,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1992,
@@ -11022,43 +11463,53 @@
             "developer": null,
             "publisher": null,
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           },
           {
             "sourceReleaseId": 142961,
             "platform": "DOS",
             "year": 1992,
-            "developer": "MPS Labs",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "United Kingdom",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MPS Labs",
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 158464,
             "platform": "DOS",
             "year": 1992,
-            "developer": "MPS Labs",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MPS Labs",
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 158466,
             "platform": "DOS",
             "year": 1992,
-            "developer": "MPS Labs",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MPS Labs",
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 158465,
             "platform": "DOS",
             "year": 1995,
-            "developer": "MPS Labs",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MPS Labs",
+            "sourcePublisher": "MicroProse Software, Inc."
           }
         ]
       }
@@ -11114,7 +11565,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1994,
@@ -11208,7 +11659,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1985,
@@ -11297,7 +11748,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1989,
@@ -11376,7 +11827,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1991,
@@ -11390,9 +11841,10 @@
             "platform": "DOS",
             "year": 1991,
             "developer": "Core Design Ltd.",
-            "publisher": "Virgin Games, Inc.",
+            "publisher": "Virgin",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourcePublisher": "Virgin Games, Inc."
           },
           {
             "sourceReleaseId": 18822,
@@ -11410,7 +11862,9 @@
             "developer": null,
             "publisher": null,
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           }
         ]
       }
@@ -11464,7 +11918,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1993,
@@ -11479,7 +11933,8 @@
             "developer": null,
             "publisher": "Electronic Arts, Inc.",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": ""
           },
           {
             "sourceReleaseId": 168279,
@@ -11488,7 +11943,9 @@
             "developer": null,
             "publisher": null,
             "countries": "France,  United Kingdom",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           }
         ]
       }
@@ -11542,7 +11999,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1990,
@@ -11554,19 +12011,23 @@
             "sourceReleaseId": 164225,
             "platform": "DOS",
             "year": 1990,
-            "developer": "MPS Labs",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MPS Labs",
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 164226,
             "platform": "DOS",
             "year": 1990,
-            "developer": "MPS Labs",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MPS Labs",
+            "sourcePublisher": "MicroProse Software, Inc."
           }
         ]
       }
@@ -11641,7 +12102,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1992,
@@ -11654,37 +12115,45 @@
             "sourceReleaseId": 111494,
             "platform": "DOS",
             "year": 1992,
-            "developer": "Magnetic Scrolls, \n          MicroProse Ltd.",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "Magnetic Scrolls, MicroProse",
+            "publisher": "MicroProse",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Magnetic Scrolls, \n          MicroProse Ltd.",
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 111495,
             "platform": "DOS",
             "year": 1992,
-            "developer": "Magnetic Scrolls, \n          MicroProse Ltd.",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "Magnetic Scrolls, MicroProse",
+            "publisher": "MicroProse",
             "countries": "United Kingdom",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Magnetic Scrolls, \n          MicroProse Ltd.",
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 163559,
             "platform": "DOS",
             "year": 1992,
-            "developer": "Magnetic Scrolls, \n          MicroProse Ltd.",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "Magnetic Scrolls, MicroProse",
+            "publisher": "MicroProse",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "Magnetic Scrolls, \n          MicroProse Ltd.",
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 80,
             "platform": "DOS",
             "year": 1993,
-            "developer": "MicroProse Ltd., \n          Magnetic Scrolls",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse, Magnetic Scrolls",
+            "publisher": "MicroProse",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MicroProse Ltd., \n          Magnetic Scrolls",
+            "sourcePublisher": "MicroProse Software, Inc."
           }
         ]
       }
@@ -11739,7 +12208,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1985,
@@ -11791,7 +12260,9 @@
             "developer": null,
             "publisher": null,
             "countries": "United Kingdom",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           }
         ]
       }
@@ -11845,7 +12316,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1984,
@@ -11860,7 +12331,8 @@
             "developer": null,
             "publisher": "Ocean Software Ltd.",
             "countries": "United Kingdom",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": ""
           },
           {
             "sourceReleaseId": 493776,
@@ -11869,7 +12341,8 @@
             "developer": null,
             "publisher": "Celery Software",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": ""
           }
         ]
       }
@@ -11925,7 +12398,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1994,
@@ -11940,7 +12413,9 @@
             "developer": null,
             "publisher": null,
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           },
           {
             "sourceReleaseId": 110389,
@@ -11967,7 +12442,9 @@
             "developer": null,
             "publisher": null,
             "countries": "France",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           }
         ]
       }
@@ -12024,7 +12501,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1988,
@@ -12126,7 +12603,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1982,
@@ -12194,7 +12671,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1992,
@@ -12271,7 +12748,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1991,
@@ -12413,7 +12890,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1989,
@@ -12425,46 +12902,55 @@
             "sourceReleaseId": 12280,
             "platform": "DOS",
             "year": 1989,
-            "developer": "MPS Labs",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MPS Labs",
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 56821,
             "platform": "DOS",
             "year": 1989,
-            "developer": "MPS Labs",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "Germany",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MPS Labs",
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 159426,
             "platform": "DOS",
             "year": 1990,
-            "developer": "MPS Labs",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MPS Labs",
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 486299,
             "platform": "DOS",
             "year": 1992,
-            "developer": "MPS Labs",
-            "publisher": "MicroProse Software, Inc.",
+            "developer": "MicroProse",
+            "publisher": "MicroProse",
             "countries": "Brazil",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "MPS Labs",
+            "sourcePublisher": "MicroProse Software, Inc."
           },
           {
             "sourceReleaseId": 159425,
             "platform": "DOS",
             "year": 1994,
-            "developer": "MPS Labs",
+            "developer": "MicroProse",
             "publisher": "U.S. Gold Ltd.",
             "countries": "France,  Germany,  Italy,  United Kingdom",
-            "publisherLabel": "Kixx XL"
+            "publisherLabel": "Kixx XL",
+            "sourceDeveloper": "MPS Labs"
           }
         ]
       }
@@ -12519,7 +13005,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": 1992,
@@ -12570,7 +13056,9 @@
             "developer": null,
             "publisher": null,
             "countries": "United States",
-            "publisherLabel": null
+            "publisherLabel": null,
+            "sourceDeveloper": "",
+            "sourcePublisher": ""
           }
         ]
       }
@@ -12638,7 +13126,7 @@
         "quality": {
           "basis": "single-source",
           "usage": "attributed-source-data",
-          "companyIdentities": "source-labels-only",
+          "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
         "releaseYear": null,
@@ -12771,5 +13259,5 @@
       "data": null
     }
   ],
-  "contentHash": "b1f2193d3a544329d98c9a49ed8ec0b3719aa9589acab2b70225d1db441cd784"
+  "contentHash": "fbcb9ec22062a46c26465dfeab5356f4defc6f4ddf26769997e69de75fb499d8"
 }

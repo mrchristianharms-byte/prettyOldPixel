@@ -70,6 +70,30 @@ test("fehlendes Jahr und Mehrfachplattform wählen kein pauschales Erscheinungsj
   assert.equal((await buildReadyGameMetadata(options)).games[0].data.releaseYear, null);
 });
 
+test("normalisiert bestehende Rohreports bei der Aufbereitung und verlangt den aktuellen Aliasstand", async (t) => {
+  const { options, report } = await fixture(t);
+  const release = report.games[0].candidates[0].releases[0];
+  release.developer = "Blue Byte Software GmbH & Co. KG";
+  release.publisher = "Sierra On-Line, Inc.";
+  const file = path.join(options.cacheDir, "local-dump/report.json");
+  await writeJson(file, report);
+  const original = await readFile(file, "utf8");
+  const cache = await buildReadyGameMetadata(options);
+  const normalized = cache.games[0].data.releases[0];
+  assert.equal(normalized.developer, "Blue Byte Studio GmbH");
+  assert.equal(normalized.publisher, "Sierra");
+  assert.equal(normalized.sourceDeveloper, release.developer);
+  assert.equal(normalized.sourcePublisher, release.publisher);
+  assert.equal(await readFile(file, "utf8"), original);
+  assert.equal((await loadReadyGameMetadata(options)).get("game").data.releases[0].publisher, "Sierra");
+  const { contentHash, ...payload } = cache;
+  payload.companyNamesHash = "a".repeat(64);
+  await writeJson(path.join(options.cacheDir, "ready.json"), {
+    ...payload, contentHash: createHash("sha256").update(JSON.stringify(payload)).digest("hex"),
+  });
+  await assert.rejects(loadReadyGameMetadata(options), /beschädigt oder veraltet/u);
+});
+
 test("Prüfentscheidung kann bekannte Dump-Mehrdeutigkeit auflösen, nie eine fehlende Plattform", async (t) => {
   const { options, report } = await fixture(t);
   const other = structuredClone(report.games[0].candidates[0]);

@@ -10,6 +10,7 @@ import { gameDefinitions } from "./data-games.mjs";
 import { writeJson } from "./archive-cache.mjs";
 import { escapeHtml } from "./site-html.mjs";
 import { normalizeDumpTitle, platformMatches } from "./game-dump-matching.mjs";
+import { normalizeReleaseCompanies } from "./game-company-names.mjs";
 export { normalizeDumpTitle } from "./game-dump-matching.mjs";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
@@ -233,7 +234,7 @@ export async function importGameDump({
       const candidates = [...ids].sort((a, b) => a - b).map((id) => {
         const source = getGame.get(id);
         requireValue(source, `Alternativtitel ohne Spiel: ${id}.`);
-        const releases = getReleases.all(id).map((release) => ({ ...release }));
+        const releases = getReleases.all(id).map(normalizeReleaseCompanies);
         const matchedReleases = releases.filter((release) => platformMatches(game.platforms, release.platform));
         return {
           ...source,

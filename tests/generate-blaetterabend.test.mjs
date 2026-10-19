@@ -16,6 +16,8 @@ const summarize = (title) => {
 
 const cases = [
   ["Blätterabendaufzeichnung - PowerPlay 11/88 -", ["Power Play 11/1988"], null],
+  ["Blätterabendaufzeichnung PowerPlay - 4-5/1988 Teil 1", ["Power Play 4+5/1988"], 1],
+  ["Blätterabend Power Play 04 – 05/88 Teil 2", ["Power Play 4+5/1988"], 2],
   ["Blätterabendaufzeichnung mit @MrVenom1974  - PowerPlay - 12 / 1988 - Teil 2", ["Power Play 12/1988"], 2],
   ["Blätterabendaufzeichnung - SMASH 3 Mai/Juni 1989 - Teil 2", ["Smash #3 5+6/1989"], 2],
   ["Blätterabendaufzeichnung - SMASH - 3 - Mai/Juni 1989 - Teil 1", ["Smash #3 5+6/1989"], 1],

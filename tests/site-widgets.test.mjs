@@ -9,6 +9,7 @@ import { pagination } from "../src/widget/pagination.mjs";
 import { archiveLinks } from "../src/widget/archive-links.mjs";
 import { videoPanel } from "../src/widget/video-panel.mjs";
 import { navigation } from "../src/widget/navigation.mjs";
+import { themeToggle } from "../src/widget/theme-toggle.mjs";
 import { normalizeSources } from "../src/site-data.mjs";
 import { createSiteConfig } from "../src/site-config.mjs";
 import { renderSite } from "../src/site-render.mjs";
@@ -50,7 +51,7 @@ test("alle generierten Seiten verwenden das Hauptnavigations-Widget mit den vorh
   const config = createSiteConfig();
   const entries = [["news/", "News"], ...model.sections.map((section) => [section.route, section.name, true])];
   for (const { html, route } of renderSite(model, config, "assets/site.css").values()) {
-    assert.ok(html.includes(navigation(entries, route, config.forPage(route))), route);
+    assert.ok(html.includes(navigation(entries, route, config.forPage(route), themeToggle())), route);
     assert.equal((html.match(/aria-label="Hauptnavigation"/gu) ?? []).length, 1);
   }
 });
@@ -118,7 +119,7 @@ test("Videoinformationen behalten Kapitel, Partner, Beschreibung und benachbarte
 });
 
 test("Video-Widget enthält genau einen Player und alle gemeinsamen Bedienelemente", () => {
-  const html = videoWidget(video);
+  const html = videoWidget(video, 2);
   assert.equal((html.match(/<iframe /gu) ?? []).length, 1);
   assert.ok(html.includes('title="YouTube-Video: Spiel &amp; &lt;Demo&gt;"'));
   assert.ok(html.includes("srcdoc="));
@@ -129,6 +130,16 @@ test("Video-Widget enthält genau einen Player und alle gemeinsamen Bedienelemen
   assert.ok(html.includes(`href="${video.url}" rel="external"`));
   assert.ok(html.includes("data-auto-next disabled"));
   assert.ok(playerPoster(video).includes(`href="${video.embedUrl}" rel="external"`));
+});
+
+test("zeigt automatische Folgenfortsetzung nur bei mehr als einem zugeordneten Video", () => {
+  for (const count of [1, 2, 3]) {
+    const html = videoWidget(video, count);
+    assert.equal(html.includes("data-auto-next"), count > 1);
+    assert.equal(html.includes("Nächste Folge automatisch"), count > 1);
+    assert.ok(html.includes("data-player-external"));
+  }
+  assert.ok(!videoWidget(video).includes("data-auto-next"));
 });
 
 test("Folgenlisten-Widget zeigt Heftvideos in übergebener Reihenfolge mit kompakten Metadaten", () => {

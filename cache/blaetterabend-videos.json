@@ -6,9 +6,41 @@
     "title": "Pretty Old Pixel",
     "url": "https://www.youtube.com/@PrettyOldPixel"
   },
-  "generatedAt": "2026-10-17T21:18:35.308Z",
-  "count": 247,
+  "generatedAt": "2026-10-19T22:35:25.068Z",
+  "count": 248,
   "videos": [
+    {
+      "id": "63foHISC8ms",
+      "url": "https://www.youtube.com/watch?v=63foHISC8ms",
+      "title": "Blätterabendaufzeichnung PowerPlay - 4-5/1988 Teil 1",
+      "publishedAt": "2026-10-18T10:00:20-07:00",
+      "durationSeconds": 9137,
+      "magazines": [
+        {
+          "name": "Power Play",
+          "issue": {
+            "label": "4+5/1988",
+            "number": null,
+            "months": [
+              4,
+              5
+            ],
+            "year": 1988,
+            "special": false
+          },
+          "kultmags": {
+            "match": "issue",
+            "matchedBy": "month",
+            "title": "Power Play 1988-04..05",
+            "pageUrl": "https://www.kultmags.com/mags.php?folder=UG93ZXIgUGxheS8xOTg4",
+            "readerUrl": "https://reader.kultmags.com/Power%20Play%201988-04..05",
+            "downloadUrl": "https://www.kultmags.com/Power%20Play/1988/Power%20Play%201988-04..05.rar",
+            "coverUrl": "https://www.kultmags.com/Power%20Play/1988/Power%20Play%201988-04..05.rar.jpg"
+          }
+        }
+      ],
+      "part": 1
+    },
     {
       "id": "0lPh2VZfUeo",
       "url": "https://www.youtube.com/watch?v=0lPh2VZfUeo",

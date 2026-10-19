@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "generate:site": "node src/generate-site.mjs",
+    "dev": "npx http-server docs -a 127.0.0.1 --port 8000",
     "fetch:youtube": "node src/fetch-youtube-videos.mjs",
     "fetch:videos": "node src/fetch-youtube-videos.mjs https://www.youtube.com/@PrettyOldPixel",
     "fetch:playlists": "node src/fetch-youtube-playlists.mjs",

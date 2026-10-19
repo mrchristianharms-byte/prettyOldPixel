@@ -1,4 +1,4 @@
-import { paginatedRoute } from "./site-config.mjs";
+import { paginatedRoute, slugify } from "./site-config.mjs";
 import { escapeHtml, externalLink } from "./site-html.mjs";
 import { videoHref } from "./site-video-links.mjs";
 import { videoWidget } from "./widget/video.mjs";
@@ -11,6 +11,7 @@ import { archiveLinks } from "./widget/archive-links.mjs";
 import { magazineLogo } from "./widget/magazine-logo.mjs";
 import { videoPanel } from "./widget/video-panel.mjs";
 import { navigation } from "./widget/navigation.mjs";
+import { themeToggle } from "./widget/theme-toggle.mjs";
 
 export { escapeHtml, externalLink } from "./site-html.mjs";
 export { videoHref } from "./site-video-links.mjs";
@@ -45,7 +46,7 @@ function catalogDuration(videoIds, model) {
     : `Bekannte Laufzeit: ${total} (${durations.length} von ${videoCount(videoIds.length)})`;
 }
 
-function homeOverview(model, config) {
+function homeOverview(model, config, filters) {
   const number = (value) => new Intl.NumberFormat("de-DE").format(value);
   const dated = model.videos.filter((video) => video.publishedTime !== null);
   const oldest = dated.reduce((first, video) => !first || video.publishedTime < first.publishedTime ? video : first, null);
@@ -63,27 +64,31 @@ function homeOverview(model, config) {
   const themes = [
     ...(model.magazines.length || model.unresolvedMagazines.length ? [{
       route: "zeitschriften/", name: "Zeitschriften",
-      count: model.videos.filter((video) => video.blaetterabend).length,
+      count: countLabel(model.magazines.length, "Zeitschrift", "Zeitschriften"),
       description: "Blätterabende durch Magazine, Jahrgänge und Heftausgaben.",
     }] : []),
     ...(model.games.length ? [{
       route: "spiele/", name: "Spiele",
-      count: model.videos.filter((video) => video.games.length).length,
-      description: "Retrospiele wiederentdecken: vom ersten Start bis zum Fazit.",
+      count: videoCount(model.videos.filter((video) => video.games.length).length),
+      description: `${countLabel(model.games.length, "Retrospiel", "Retrospiele")} wiederentdecken: vom ersten Start bis zum Fazit.`,
     }] : []),
     ...model.sections.map((section) => ({
-      ...section, count: section.entries.length,
+      ...section, count: videoCount(section.entries.length),
     })),
   ];
+  const topFilters = [...filters.values()].map((entries) => [...entries.values()]
+    .sort((a, b) => b.games.length - a.games.length
+      || a.name.localeCompare(b.name, "de") || a.name.localeCompare(b.name, "en"))
+    .slice(0, 5)).filter((entries) => entries.length);
   return `<section class="home-statistics" aria-labelledby="statistik">
 <h2 id="statistik">Pretty Old Pixel in Zahlen</h2>
 <dl class="stats-grid">${stats.map(([label, value, note]) => `<div><dt>${label}</dt><dd>${value}</dd><dd class="stat-note">${note}</dd></div>`).join("")}</dl>
 ${oldest ? `<p class="channel-history"><span>Videogeschichte seit</span> <strong><time datetime="${oldest.publishedAt}">${new Intl.DateTimeFormat("de-DE", { dateStyle: "long", timeZone: "UTC" }).format(new Date(oldest.publishedTime))}</time></strong><small>Datum des ältesten öffentlichen Videos in dieser Übersicht, nicht das Gründungsdatum des Kanals.</small></p>` : '<p class="meta">Der Beginn der Videogeschichte ist ohne bekannte Veröffentlichungsdaten nicht bestimmbar.</p>'}
 </section>
 <section aria-labelledby="bereiche"><h2 id="bereiche">Die Themen entdecken</h2>
-<div class="theme-grid">${themes.map((theme) => `<article><h3><a href="${config.href(theme.route)}">${escapeHtml(theme.name)}</a></h3><p class="theme-count">${videoCount(theme.count)}</p><p>${escapeHtml(theme.description)}</p></article>`).join("")}</div>
-<p class="meta">Ein Video kann zu mehreren Themen gehören; die Videozahlen der Themen sind daher nicht addierbar.</p></section>
-<p><a href="${config.href("news/")}" role="button" class="outline">Zu den 20 neuesten Videos</a></p>`;
+<div class="theme-grid">${themes.map((theme) => `<article><h3><a href="${config.href(theme.route)}">${escapeHtml(theme.name)}</a></h3><p class="theme-count">${escapeHtml(theme.count)}</p><p>${escapeHtml(theme.description)}</p></article>`).join("")}
+${topFilters.map((entries) => `<article><h3>${escapeHtml(entries[0].label)}</h3><ol class="theme-ranking">${entries.map((entry) => `<li><span class="theme-ranking-entry"><a href="${config.href(entry.route)}" title="${escapeHtml(entry.name)}">${escapeHtml(entry.name)}</a><span class="meta">${countLabel(entry.games.length, "Spiel", "Spiele")}</span></span></li>`).join("")}</ol></article>`).join("")}</div>
+<p class="meta">Ein Video kann zu mehreren Themen gehören; die Videozahlen der Themen sind daher nicht addierbar.</p></section>`;
 }
 
 function collectionSchema(videos, config, route, issueRoute) {
@@ -101,12 +106,12 @@ function collectionSchema(videos, config, route, issueRoute) {
 }
 
 function breadcrumbsMarkup(crumbs, config) {
-  return `<nav aria-label="Brotkrümelnavigation"><ol class="breadcrumbs">${crumbs.map((crumb, index) => `<li>${index === crumbs.length - 1
+  return `<nav aria-label="Brotkrümelnavigation"><ol class="breadcrumbs">${crumbs.map((crumb, index) => `<li>${index > 0 ? '<span class="breadcrumb-separator" aria-hidden="true"> → </span>' : ""}${index === crumbs.length - 1
     ? `<span aria-current="page">${escapeHtml(crumb.name)}</span>`
     : `<a href="${config.href(crumb.route)}">${escapeHtml(crumb.name)}</a>`}</li>`).join("")}</ol></nav>`;
 }
 
-function layout({ route, title, description, body, schema, crumbs, image, noindex = false, previous, next, interactive = false }, config, cssHref, hasMagazines, jsHref, hasGames, sections) {
+function layout({ route, title, description, body, schema, crumbs, image, noindex = false, previous, next, interactive = false }, config, cssHref, hasMagazines, jsHref, hasGames, sections, themeHref) {
   const canonical = config.href(route);
   const fullTitle = `${title} | ${config.name}`;
   const breadcrumbSchema = {
@@ -135,6 +140,7 @@ function layout({ route, title, description, body, schema, crumbs, image, noinde
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${escapeHtml(fullTitle)}</title>
 <meta name="description" content="${escapeHtml(description)}">
+<link rel="icon" type="image/jpeg" href="${config.href("favicon.jpg")}">
 ${noindex ? '<meta name="robots" content="noindex, follow">' : ""}
 <link rel="canonical" href="${canonical}">
 <meta property="og:title" content="${escapeHtml(fullTitle)}">
@@ -148,23 +154,22 @@ ${noindex ? '<meta name="robots" content="noindex, follow">' : ""}
 ${image ? `<meta property="og:image" content="${escapeHtml(image)}"><meta name="twitter:image" content="${escapeHtml(image)}">` : ""}
 ${previous ? `<link rel="prev" href="${config.href(previous)}">` : ""}
 ${next ? `<link rel="next" href="${config.href(next)}">` : ""}
-<link rel="stylesheet" href="${config.href(cssHref)}">
 <script type="application/ld+json">${jsonLd({ "@context": "https://schema.org", "@graph": [...(Array.isArray(schema) ? schema : [schema]), breadcrumbSchema] })}</script>
+<script src="${config.href(themeHref)}"></script>
+<link rel="stylesheet" href="${config.href(cssHref)}">
 ${interactive ? `<script type="module" src="${config.href(jsHref)}"></script>` : ""}
 </head>
 <body${interactive ? ' class="detail-page"' : ""}>
 <a class="skip-link" href="#inhalt">Zum Inhalt</a>
 <header class="container site-header">
 <a class="brand" href="${config.href()}">${config.name}</a>
-${navigation(navigationEntries, route, config)}
+${navigation(navigationEntries, route, config, themeToggle())}
 </header>
 <main id="inhalt" class="container">
 ${breadcrumbsMarkup(crumbs, config)}
 ${body}
 </main>
-<footer class="container site-footer"><p>${config.name} · Privates, nicht kommerzielles Projekt.
-<a href="${config.href("datenschutz/")}">${interactive ? "YouTube-Einbindung und Datenschutz" : "Datenschutz und Hinweise"}</a></p>
-<p>Videos und Vorschaubilder von YouTube.</p></footer>
+<footer class="container site-footer"><p>${config.name} · Privates, nicht kommerzielles Projekt. · <a href="${config.href("datenschutz/")}">${interactive ? "YouTube-Einbindung und Datenschutz" : "Datenschutz und Hinweise"}</a> · Videos und Vorschaubilder von YouTube. · ${externalLink("https://www.youtube.com/prettyoldpixel", "YouTube")} · ${externalLink("https://www.twitch.tv/prettyoldpixel", "Twitch")}</p></footer>
 </body>
 </html>
 `;
@@ -218,7 +223,8 @@ ${externalLink("https://docs.github.com/en/site-policy/privacy-policies/github-g
 <p>Gespeichert werden nur die Player-Aktivierung und die Einstellung zur automatischen Folgenfortsetzung, kein Wiedergabeverlauf. Das ausgewählte Video bleibt in der Seitenadresse erhalten. Ohne JavaScript werden die Einstellungen nicht gemerkt; Kapitel öffnen YouTube, und die Folgenfortsetzung ist nicht verfügbar. Sie können den Player weiterhin einzeln aktivieren, alle Beschreibungen lesen und den YouTube-Links folgen.</p>
 <p>${externalLink("https://policies.google.com/privacy?hl=de", "Datenschutzerklärung von Google")} · ${externalLink("https://www.youtube.com/t/terms", "Nutzungsbedingungen von YouTube")}</p>
 <h2>Externe Links und eigene Speicherung</h2>
-<p>Externe Links sind mit ↗ und einem zugänglichen Hinweis gekennzeichnet. Erst beim Aufrufen wird das jeweilige Ziel besucht; Vorschaubilder und bereits aktivierte Player sind davon ausgenommen. Diese Website setzt selbst keine Tracking-Cookies ein und verwendet keine Analytics-Dienste. Im Local Storage stehen ausschließlich Ihre Player-Aktivierung und die Einstellung zur automatischen Folgenfortsetzung; Session Storage wird nicht verwendet.</p>
+<p>Die Darstellung folgt zunächst dem im Browser eingestellten hellen oder dunklen Modus. Mit dem Symbol im Seitenkopf können Sie umschalten. Ihre manuelle Auswahl wird als „light“ oder „dark“ unter „pretty-old-pixel:theme“ im Local Storage gespeichert. Nach Löschen dieser Browserdaten gilt wieder die Browsereinstellung. Ohne JavaScript folgt die Darstellung weiterhin dem Browsermodus.</p>
+<p>Externe Links sind mit ↗ und einem zugänglichen Hinweis gekennzeichnet. Erst beim Aufrufen wird das jeweilige Ziel besucht; Vorschaubilder und bereits aktivierte Player sind davon ausgenommen. Diese Website setzt selbst keine Tracking-Cookies ein und verwendet keine Analytics-Dienste. Im Local Storage stehen ausschließlich Ihre Player-Aktivierung, die Einstellung zur automatischen Folgenfortsetzung und eine manuelle Auswahl des Darstellungsmodus; Session Storage wird nicht verwendet.</p>
 <p><a href="${config.href()}">Zur Startseite und den Themen</a></p>`;
 }
 
@@ -257,7 +263,7 @@ function groupedEntries(entries, model, config) {
     const title = `${year === null ? "Jahrgang unbekannt" : `Jahrgang ${year}`} – ${issue?.special ? "Sonderhefte" : "Ausgaben"}`;
     if (!sections.has(title)) sections.set(title, new Map());
     const groups = sections.get(title);
-    const key = issue?.id ?? entry.videoId;
+    const key = `${entry.mention.id ?? ""}/${issue?.id ?? entry.videoId}`;
     if (!groups.has(key)) groups.set(key, []);
     groups.get(key).push(entry);
   }
@@ -278,7 +284,7 @@ function renderMagazinePages(model, siteConfig, add) {
   if (!model.magazines.length && !model.unresolvedMagazines.length) return;
   const root = { route: "", name: "Startseite" };
   const index = { route: "zeitschriften/", name: "Zeitschriften" };
-  function addPaginated({ route: baseRoute, entries, title, description, crumbs, intro, render, schema = () => [], items }) {
+  function addPaginated({ route: baseRoute, entries, title, headingHtml, description, crumbs, intro, render, schema = () => [], items }) {
     const pageCount = Math.ceil(entries.length / siteConfig.pageSize);
     for (let page = 1; page <= pageCount; page += 1) {
       const route = paginatedRoute(baseRoute, page);
@@ -296,12 +302,13 @@ function renderMagazinePages(model, siteConfig, add) {
         }, ...pageSchema],
         previous: page > 1 ? paginatedRoute(baseRoute, page - 1) : null,
         next: page < pageCount ? paginatedRoute(baseRoute, page + 1) : null,
-        body: `<h1>${escapeHtml(title)}${page > 1 ? ` – Seite ${page}` : ""}</h1>${typeof intro === "function" ? intro(config) : intro}${pagination(baseRoute, page, pageCount, config)}${render(subset, config)}${pagination(baseRoute, page, pageCount, config)}`,
+        body: `<h1>${headingHtml ?? escapeHtml(title)}${page > 1 ? ` – Seite ${page}` : ""}</h1>${typeof intro === "function" ? intro(config) : intro}${pagination(baseRoute, page, pageCount, config)}${render(subset, config)}${pagination(baseRoute, page, pageCount, config)}`,
       }, videos);
     }
   }
   const indexEntries = [
     ...model.magazines.map((magazine) => ({ magazine, videoIds: magazine.videos })),
+    ...model.magazineGuests.map((guest) => ({ guest, videoIds: guest.videoIds })),
     ...model.unresolvedMagazines.map((video) => ({ videoId: video.id })),
   ];
   addPaginated({
@@ -310,20 +317,40 @@ function renderMagazinePages(model, siteConfig, add) {
     crumbs: [root, index],
     items: (entries) => entries.map((entry) => entry.magazine
       ? { title: entry.magazine.name, route: entry.magazine.route }
-      : model.videoById.get(entry.videoId)),
+      : entry.guest ? { title: entry.guest.name, route: entry.guest.route } : model.videoById.get(entry.videoId)),
     intro: `<p>${model.magazines.length} Zeitschriften, alphabetisch geordnet. Jahrgänge beziehen sich auf das Erscheinungsjahr der Hefte, nicht auf das Datum der Videos.</p>`,
     render: (entries, config) => {
       const magazines = entries.filter((entry) => entry.magazine).map((entry) => entry.magazine);
-      const unresolved = entries.filter((entry) => !entry.magazine);
+      const guests = entries.filter((entry) => entry.guest).map((entry) => entry.guest);
+      const unresolved = entries.filter((entry) => entry.videoId);
       return `${magazines.length ? catalogGrid(magazines.map((magazine) => ({
         ...magazine, facts: [
           ...(magazine.years.length ? [countLabel(magazine.years.length, "Jahrgang", "Jahrgänge")] : []),
           videoCount(magazine.videos.length), catalogDuration(magazine.videos, model),
         ],
       })), config) : ""}
+${guests.length ? `<section aria-labelledby="gaeste"><h2 id="gaeste">Blätterabend mit Gast</h2>${catalogGrid(guests.map((guest) => ({
+        ...guest, facts: [
+          ...(guest.issueCount ? [countLabel(guest.issueCount, "bekannte Ausgabe", "bekannte Ausgaben")] : ["Ausgabe ungeklärt"]),
+          videoCount(guest.videoIds.length),
+        ],
+      })), config)}</section>` : ""}
 ${unresolved.length ? `<section><h2>Weitere Blätterabende</h2><p>Bei diesen Videos ist der Zeitschriftentitel unbekannt.</p>${entryVideoList(unresolved.map((entry) => ({ ...entry, mention: {} })), model, config, 3)}</section>` : ""}`;
     },
   });
+  for (const guest of model.magazineGuests) {
+    const handleIndex = guest.name.lastIndexOf("@");
+    addPaginated({
+      route: guest.route, entries: guest.entries, title: `Blätterabend mit ${guest.name}`,
+      headingHtml: guest.channelUrl
+        ? `Blätterabend mit ${escapeHtml(guest.name.slice(0, handleIndex))}${externalLink(guest.channelUrl, guest.name.slice(handleIndex))}`
+        : undefined,
+      description: `Blätterabende mit ${guest.name}: die zugehörigen Zeitschriftenausgaben und Videos mit Archivlinks.`,
+      crumbs: [root, index, { route: guest.route, name: guest.name }],
+      intro: `<p>${videoCount(guest.videoIds.length)} mit ${escapeHtml(guest.name)}, ${countLabel(guest.issueCount, "bekannte Ausgabe", "bekannte Ausgaben")}.</p>`,
+      render: (entries, config) => groupedEntries(entries, model, config),
+    });
+  }
   for (const magazine of model.magazines) {
     const magazineCrumb = { route: magazine.route, name: magazine.name };
     const years = (config) => magazine.years.length > 1 ? `<nav aria-label="Jahrgänge von ${escapeHtml(magazine.name)}"><ul class="year-list">${magazine.years.map((year) => `<li><a href="${config.href(year.route)}">${year.year}</a> (${videoCount(year.entries.length)})</li>`).join("")}</ul></nav>` : "";
@@ -380,7 +407,7 @@ function seriesVideos(videos, title, config, game, introduction = "") {
   return `<section data-video-series data-title="${escapeHtml(title)}" class="detail-layout">
 <div class="detail-main">
 <h1 class="detail-heading" title="${escapeHtml(title)}">${escapeHtml(title)}</h1>
-${videoWidget(videos[0])}
+${videoWidget(videos[0], videos.length)}
 <div class="detail-information">${introduction}<hr>${panels}</div>
 </div>${menu}
 </section>`;
@@ -403,7 +430,50 @@ function gameReleaseSource(url, iconOnly = false) {
     : externalLink(url, label);
 }
 
-function renderGameMetadata(game) {
+function gameMetadataFilters(games) {
+  const filters = new Map();
+  for (const [field, label, segment] of [
+    ["genre", "Genre", "genre"],
+    ["developer", "Entwickler", "entwickler"],
+    ["publisher", "Publisher", "publisher"],
+  ]) {
+    const byName = new Map();
+    for (const game of games) {
+      if (game.metadata?.status !== "ready") continue;
+      const { genres = [], releases = [] } = game.metadata.data;
+      const values = field === "genre" ? genres : releases.map((release) => release[field]);
+      for (const name of new Set(values.filter(Boolean))) {
+        if (!byName.has(name)) byName.set(name, []);
+        byName.get(name).push(game);
+      }
+    }
+    const bySlug = new Map();
+    for (const name of [...byName.keys()].sort()) {
+      const matches = byName.get(name);
+      if (matches.length < 2) continue;
+      const slug = slugify(name) || "wert";
+      if (!bySlug.has(slug)) bySlug.set(slug, []);
+      bySlug.get(slug).push({ name, label, games: matches });
+    }
+    const entries = new Map();
+    const usedSlugs = new Set(bySlug.keys());
+    for (const [slug, values] of bySlug) {
+      let variant = 1;
+      for (const entry of values) {
+        let routeSlug = slug;
+        if (values.length > 1) {
+          do { routeSlug = `${slug}-variante-${variant++}`; } while (usedSlugs.has(routeSlug));
+          usedSlugs.add(routeSlug);
+        }
+        entries.set(entry.name, { ...entry, route: `spiele/${segment}/${routeSlug}/` });
+      }
+    }
+    filters.set(field, entries);
+  }
+  return filters;
+}
+
+function renderGameMetadata(game, config, filters) {
   const record = game.metadata;
   const data = record?.status === "ready" ? record.data : null;
   const { evidence, scope, genres = [], releases = [] } = data ?? {};
@@ -429,6 +499,10 @@ function renderGameMetadata(game) {
       || fields.filter((field) => Boolean(b[field])).length - fields.filter((field) => Boolean(a[field])).length
       || JSON.stringify(fields.map((field) => a[field])).localeCompare(JSON.stringify(fields.map((field) => b[field])), "de"));
   const missing = (value) => value ? escapeHtml(String(value)) : "Keine Angabe";
+  const linked = (field, value) => {
+    const filter = filters.get(field).get(value);
+    return filter ? `<a href="${config.href(filter.route)}">${escapeHtml(value)}</a>` : missing(value);
+  };
   const primary = displayedReleases[0];
   const additional = displayedReleases.slice(1);
   const countries = (release) => release.countries.size
@@ -451,9 +525,9 @@ function renderGameMetadata(game) {
 ${metadata([
     ...(platforms.length ? [["Plattform", escapeHtml(platforms.join(", "))]] : []),
     ...(data ? [
-      ["Genre", genres.length ? escapeHtml(genres.join(", ")) : "Keine Angabe"],
-      ["Entwickler", missing(primary?.developer)],
-      ["Publisher", `${missing(primary?.publisher)}${primary?.publisherLabel ? ` (${escapeHtml(primary.publisherLabel)})` : ""}`],
+      ["Genre", genres.length ? genres.map((genre) => linked("genre", genre)).join(", ") : "Keine Angabe"],
+      ["Entwickler", linked("developer", primary?.developer)],
+      ["Publisher", `${linked("publisher", primary?.publisher)}${primary?.publisherLabel ? ` (${escapeHtml(primary.publisherLabel)})` : ""}`],
     ] : []),
     ["Erscheinungsjahr", yearLines.length ? yearLines.join("<br>") : "Unbekannt"],
     ...(game.aliases.length ? [["Weitere Titel", escapeHtml(game.aliases.join(", "))]] : []),
@@ -462,37 +536,48 @@ ${!data ? "<p>Für dieses Spiel liegen noch keine eindeutig zugeordneten zusätz
 ${additional.length ? `<details><summary>Weitere Veröffentlichungen (${additional.length})</summary>
 <div class="overflow-auto"><table><caption>Veröffentlichungen für ${escapeHtml(scope.platforms.join(", "))}</caption>
 <thead><tr><th scope="col">Plattform</th><th scope="col">Jahr</th><th scope="col">Entwickler</th><th scope="col">Publisher</th><th scope="col">Länder</th></tr></thead>
-<tbody>${additional.map((release) => `<tr><td>${missing(release.platform)}</td><td>${missing(release.year)}</td><td>${missing(release.developer)}</td><td>${missing(release.publisher)}${release.publisherLabel ? ` (${escapeHtml(release.publisherLabel)})` : ""}</td><td>${countries(release)}</td></tr>`).join("")}</tbody>
+<tbody>${additional.map((release) => `<tr><td>${missing(release.platform)}</td><td>${missing(release.year)}</td><td>${linked("developer", release.developer)}</td><td>${linked("publisher", release.publisher)}${release.publisherLabel ? ` (${escapeHtml(release.publisherLabel)})` : ""}</td><td>${countries(release)}</td></tr>`).join("")}</tbody>
 </table></div></details>` : ""}</section>`;
 }
 
-function renderGamePages(model, siteConfig, add) {
+function renderGamePages(model, siteConfig, add, filters) {
   if (!model.games.length) return;
   const root = { route: "", name: "Startseite" };
   const index = { route: "spiele/", name: "Spiele" };
-  const pageCount = Math.ceil(model.games.length / siteConfig.pageSize);
-  for (let page = 1; page <= pageCount; page += 1) {
-    const route = paginatedRoute(index.route, page);
-    const config = siteConfig.forPage(route);
-    const games = model.games.slice((page - 1) * config.pageSize, page * config.pageSize);
-    const videos = [...new Set(games.flatMap((game) => game.videos))].map((id) => model.videoById.get(id));
-    add({
-      route, title: `Spiele – Retro-Spielereihen${page > 1 ? ` – Seite ${page}` : ""}`,
-      description: `Retrospiele von Pretty Old Pixel: Spielereihen vom Intro bis zum Fazit, alphabetisch geordnet. Seite ${page} von ${pageCount}.`,
-      crumbs: page === 1 ? [root, index] : [root, index, { route, name: `Seite ${page}` }],
-      schema: collectionSchema(games.map((game) => ({ title: game.name, route: game.route })), config, route),
-      previous: page > 1 ? paginatedRoute(index.route, page - 1) : null,
-      next: page < pageCount ? paginatedRoute(index.route, page + 1) : null,
-      body: `<h1>Spiele${page > 1 ? ` – Seite ${page}` : ""}</h1><p>${model.games.length} Retrospiele, alphabetisch geordnet. Entdecken Sie Spielverläufe, Unboxings und Gespräche rund um die Spiele.</p>
-${pagination(index.route, page, pageCount, config)}
+  const listings = [
+    { ...index, games: model.games },
+    ...[...filters.values()].flatMap((entries) => [...entries.values()].map((entry) => ({
+      ...entry, name: `${entry.label}: ${entry.name}`,
+    }))),
+  ];
+  for (const listing of listings) {
+    const filtered = listing.route !== index.route;
+    const crumbs = filtered ? [root, index, { route: listing.route, name: listing.name }] : [root, index];
+    const pageCount = Math.ceil(listing.games.length / siteConfig.pageSize);
+    for (let page = 1; page <= pageCount; page += 1) {
+      const route = paginatedRoute(listing.route, page);
+      const config = siteConfig.forPage(route);
+      const games = listing.games.slice((page - 1) * config.pageSize, page * config.pageSize);
+      const videos = [...new Set(games.flatMap((game) => game.videos))].map((id) => model.videoById.get(id));
+      add({
+        route, title: `${filtered ? `${listing.name} – Spiele` : "Spiele – Retro-Spielereihen"}${page > 1 ? ` – Seite ${page}` : ""}`,
+        description: `${filtered ? `${listing.name}: Retrospiele von Pretty Old Pixel, alphabetisch geordnet.` : "Retrospiele von Pretty Old Pixel: Spielereihen vom Intro bis zum Fazit, alphabetisch geordnet."} Seite ${page} von ${pageCount}.`,
+        crumbs: page === 1 ? crumbs : [...crumbs, { route, name: `Seite ${page}` }],
+        schema: collectionSchema(games.map((game) => ({ title: game.name, route: game.route })), config, route),
+        previous: page > 1 ? paginatedRoute(listing.route, page - 1) : null,
+        next: page < pageCount ? paginatedRoute(listing.route, page + 1) : null,
+        body: `<h1>${escapeHtml(listing.name)}${page > 1 ? ` – Seite ${page}` : ""}</h1><p>${countLabel(listing.games.length, "Retrospiel", "Retrospiele")}, alphabetisch geordnet. Entdecken Sie Spielverläufe, Unboxings und Gespräche rund um die Spiele.</p>
+${filtered ? `<p><a href="${config.href(index.route)}">Alle Spiele anzeigen</a></p>` : ""}
+${pagination(listing.route, page, pageCount, config)}
 <div class="game-catalog">${catalogGrid(games.map((game) => ({
-        ...game, facts: [
-          game.platforms.join(", "), `Erscheinungsjahr: ${game.releaseYear ?? "unbekannt"}`,
-          videoCount(game.videos.length), catalogDuration(game.videos, model),
-        ].filter(Boolean),
-      })), config)}</div>
-${pagination(index.route, page, pageCount, config)}`,
-    }, videos);
+          ...game, facts: [
+            game.platforms.join(", "), `Erscheinungsjahr: ${game.releaseYear ?? "unbekannt"}`,
+            videoCount(game.videos.length), catalogDuration(game.videos, model),
+          ].filter(Boolean),
+        })), config)}</div>
+${pagination(listing.route, page, pageCount, config)}`,
+      }, videos);
+    }
   }
   for (const game of model.games) {
     const config = siteConfig.forPage(game.route);
@@ -505,7 +590,7 @@ ${pagination(index.route, page, pageCount, config)}`,
       schema: [{ ...collectionSchema(videos, config, game.route, game.route), about: { "@id": `${config.href(game.route)}#game` } },
         gameSchema(game, config), ...videos.map((video) => videoSchema(video, config, game.route))],
       body: `${seriesVideos(videos, game.name, config, game, `<p>${videoCount(videos.length)} rund um ${escapeHtml(game.name)} auf Pretty Old Pixel.</p>
-${renderGameMetadata(game)}
+${renderGameMetadata(game, config, filters)}
 ${unknown.length ? `<p>${videoCount(unknown.length)} ohne bekanntes Veröffentlichungsdatum ${unknown.length === 1 ? "steht" : "stehen"} gesondert am Ende der Liste.</p>` : ""}`)}`,
     }, videos);
   }
@@ -549,14 +634,15 @@ ${pagination(section.route, page, count, config)}${listing}${pagination(section.
   }
 }
 
-export function renderSite(model, config, cssHref, jsHref = "assets/video-series.js") {
+export function renderSite(model, config, cssHref, jsHref = "assets/video-series.js", themeHref = "assets/theme.js") {
   const pages = new Map();
+  const filters = gameMetadataFilters(model.games);
   const hasMagazines = model.magazines.length > 0 || model.unresolvedMagazines.length > 0;
   function add(options, videos = []) {
     const file = options.file ?? `${options.route}index.html`;
     if (pages.has(file)) throw new Error(`Kollidierender Ausgabepfad: ${file}`);
     pages.set(file, {
-      html: layout(options, config.forPage(options.route), cssHref, hasMagazines, jsHref, model.games.length > 0, model.sections),
+      html: layout(options, config.forPage(options.route), cssHref, hasMagazines, jsHref, model.games.length > 0, model.sections, themeHref),
       route: options.route, indexable: !options.noindex,
       contentPublishedAt: latestPublication(videos),
     });
@@ -568,7 +654,7 @@ export function renderSite(model, config, cssHref, jsHref = "assets/video-series
     crumbs: [root], schema: { "@type": "WebPage", "@id": "./#page", name: "Pretty Old Pixel in Zahlen" },
     body: `<h1 class="visually-hidden">Pretty Old Pixel</h1>
 <p class="lead">Retrospiele entdecken, alte Computerzeitschriften durchblättern und Videos wiederfinden.</p>
-${homeOverview(model, config)}`,
+${homeOverview(model, config, filters)}`,
   }, model.videos);
   const newsConfig = config.forPage("news/");
   add({
@@ -596,7 +682,7 @@ ${homeOverview(model, config)}`,
         video.blaetterabend ? "<p>Die genaue Heftausgabe ist unbekannt oder nicht eindeutig bestimmbar.</p>" : ""),
     }, [video]);
   }
-  renderGamePages(model, config, add);
+  renderGamePages(model, config, add, filters);
   renderSectionPages(model, config, add);
 
   add({

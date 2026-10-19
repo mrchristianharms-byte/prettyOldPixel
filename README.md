@@ -21,15 +21,19 @@ Alle Befehle im Projektverzeichnis ausführen.
 
 ```sh
 npm run generate:site
-npx http-server docs -a 127.0.0.1 -p 8000
+npm run dev
 ```
 
 Anschließend http://localhost:8000/ öffnen. Der Generator arbeitet offline
-mit den vorhandenen JSON-Caches. `npx http-server` lädt bei Bedarf das externe
+mit den vorhandenen JSON-Caches. `npm run dev` startet den Webserver für `docs/`
+auf `127.0.0.1:8000`, ohne die Website erneut zu generieren. Der Befehl verwendet
+`npx http-server` und lädt bei Bedarf das externe
 npm-Paket `http-server` aus der npm-Registry; es ist nur ein Vorschauwerkzeug
 und keine Projektabhängigkeit. Alternativ mit vorhandenem Python 3:
 `python3 -m http.server 8000 --bind 127.0.0.1 --directory docs`.
 Python wird für die Node.js-Skripte nicht benötigt.
+Ist Port 8000 belegt, kann beispielsweise `npm run dev -- -p 8001` einen
+anderen Port verwenden.
 
 ## Externe Abhängigkeiten nach Arbeitsschritt
 
@@ -44,6 +48,7 @@ Externe Programme, Modellserver und deren Modelle werden nicht von npm verwaltet
 | Schritt | Programme / Dienste zusätzlich zu Node.js und npm | Netzwerk und lokale Daten |
 |---|---|---|
 | `generate:site` | Keine | Offline; benötigt die vorhandenen Video-, Playlist- und Blätterabend-Caches. Vorhandene Archivcaches, Logos und abgeschlossene Transkriptanalysen werden lokal eingelesen. Pico CSS 2.1.1 einschließlich Lizenz liegt bereits unter `src/vendor/`; kein CDN-Abruf beim Build. |
+| `dev` | `http-server` über `npx` | Lokale Vorschau der generierten Dateien unter `docs/` auf `127.0.0.1:8000`; beim ersten Aufruf gegebenenfalls Paketabruf aus der npm-Registry. |
 | `generate:blaetterabend` | Keine | Offline; liest Video- und vorhandene Archivcaches, ohne fehlende Archive nachzuladen. |
 | `fetch:youtube`, `fetch:videos`, `fetch:playlists`, `fetch:all` | Keine; insbesondere kein `yt-dlp` oder Browser | HTTPS zu YouTube für öffentliche Video-/Playlistdaten. Kein YouTube-API-Key; vorhandene Caches werden verwendet. `fetch:all` umfasst nur Videos und Playlists, nicht Archive oder Transkripte. |
 | `fetch:archives`, `fetch:archives:refresh` | Keine; kein Browser/Scraper-Paket | Video-Cache und HTTPS zu Kultmags, reetroz sowie bei passenden Zeitschriften PC Games Database und AMR; einschließlich lokal gespeicherter Logos. |

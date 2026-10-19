@@ -35,9 +35,10 @@ export function validateSite(pages, assets, config) {
     if ((page.html.match(/<h1(?:\s|>)/gu) ?? []).length !== 1) throw new Error(`${file}: Genau eine h1 erforderlich.`);
     if (!page.html.includes(`<link rel="canonical" href="${config.href(page.route, page.route)}">`)) throw new Error(`${file}: Canonical fehlt.`);
     const scripts = [...page.html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gu)];
-    if (scripts[0]?.[1] !== ' type="application/ld+json"' || scripts.length > 2
-      || (scripts.length === 2 && !/^ type="module" src="[^"]+"$/u.test(scripts[1][1]))) {
-      throw new Error(`${file}: Nur JSON-LD und ein lokales Videowechsel-Modul sind erlaubt.`);
+    if (scripts[0]?.[1] !== ' type="application/ld+json"' || scripts.length < 2 || scripts.length > 3
+      || !/^ src="[^"]+"$/u.test(scripts[1]?.[1] ?? "") || scripts[1]?.[2] !== ""
+      || (scripts.length === 3 && !/^ type="module" src="[^"]+"$/u.test(scripts[2][1]))) {
+      throw new Error(`${file}: Nur JSON-LD, ein lokales Darstellungs-Skript und ein lokales Videowechsel-Modul sind erlaubt.`);
     }
     const schema = JSON.parse(scripts[0][2]);
     for (const match of page.html.matchAll(/<(a|img|iframe|link|script)\b[^>]*>/gu)) {
@@ -146,11 +147,13 @@ export async function generateSite({
   const model = await loadSiteData(cache, { now });
   for (const warning of model.warnings) logger.warn(`Build-Hinweis: ${warning}`);
 
-  const [pico, customCss, license, seriesJs] = await Promise.all([
+  const [pico, customCss, license, seriesJs, favicon, themeJs] = await Promise.all([
     readFile(path.join(projectRoot, "src/vendor/pico-2.1.1.min.css"), "utf8"),
     readFile(path.join(projectRoot, "src/site.css"), "utf8"),
     readFile(path.join(projectRoot, "src/vendor/pico-LICENSE.md"), "utf8"),
     readFile(path.join(projectRoot, "src/video-series.js"), "utf8"),
+    readFile(path.join(projectRoot, "src/favicon.jpg")),
+    readFile(path.join(projectRoot, "src/theme.js"), "utf8"),
   ]);
   const css = `${pico.replace(/\/\*# sourceMappingURL=[\s\S]*?\*\//gu, "")}\n${customCss}`;
   const cssUrls = [...css.matchAll(/url\(\s*["']?([^)]*)\)/giu)].map((match) => match[1].replace(/["']$/u, "").trim());
@@ -159,8 +162,9 @@ export async function generateSite({
   }
   const cssFile = `assets/site.${hash(css).slice(0, 12)}.css`;
   const jsFile = `assets/video-series.${hash(seriesJs).slice(0, 12)}.js`;
-  const assets = new Map([[cssFile, css], [jsFile, seriesJs], ["assets/pico-LICENSE.txt", license], [".nojekyll", ""], ...model.magazineLogoAssets]);
-  const pages = renderSite(model, config, cssFile, jsFile);
+  const themeFile = `assets/theme.${hash(themeJs).slice(0, 12)}.js`;
+  const assets = new Map([[cssFile, css], [jsFile, seriesJs], [themeFile, themeJs], ["favicon.jpg", favicon], ["assets/pico-LICENSE.txt", license], [".nojekyll", ""], ...model.magazineLogoAssets]);
+  const pages = renderSite(model, config, cssFile, jsFile, themeFile);
   const budgets = validateSite(pages, assets, config);
   const manifest = {
     version: 2, baseUrl: config.baseUrl,
@@ -187,7 +191,7 @@ export async function generateSite({
   if (assetsStat) {
     if (!assetsStat.isDirectory() || assetsStat.isSymbolicLink()) throw new Error("Asset-Verzeichnis muss ein echtes Verzeichnis sein.");
     for (const file of (await readdir(previousAssets)).sort()) {
-      const match = /^(?:site\.([a-f0-9]{12})\.css|video-series\.([a-f0-9]{12})\.js)$/u.exec(file);
+      const match = /^(?:site\.([a-f0-9]{12})\.css|(?:video-series|theme)\.([a-f0-9]{12})\.js)$/u.exec(file);
       if (!match) continue;
       const source = path.join(previousAssets, file);
       const sourceStat = await lstat(source);

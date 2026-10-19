@@ -154,7 +154,9 @@ export function parseIssue(segment, textAfterMagazine = "") {
     months = [+match[1], +match[2]];
     year = toYear(match[3]);
   })
-    || take(/(?<![\d#])(\d{1,2})\s*\+\s*(\d{1,2})\s*\/\s*((?:19|20)?\d{2})(?!\d)/, (match) => {
+    || take(/(?<![\d#])(\d{1,2})\s*[+–-]\s*(\d{1,2})\s*\/\s*((?:19|20)?\d{2})(?!\d)/, (match) => {
+      if (!isMonth(+match[1]) || !isMonth(+match[2])) return false;
+      if (/(?:#|\b(?:nr|no)\.?|\b(?:ausgabe|sonderheft|sonderausgabe))\s*$/i.test(rest.slice(0, match.index))) return false;
       months = [+match[1], +match[2]];
       year = toYear(match[3]);
     })
@@ -175,7 +177,7 @@ export function parseIssue(segment, textAfterMagazine = "") {
     number = Number(match[1]);
   })) {
     // Bare number right after the magazine name, e.g. "SMASH 3" or "SMASH - 3 -".
-    const bare = /^\s*(?:-\s*)?(\d{1,3})(?![\w/+.])(?!\s*[/+]\s*\d)/.exec(textAfterMagazine);
+    const bare = /^\s*(?:-\s*)?(\d{1,3})(?![\w/+.])(?!\s*[/+–-]\s*\d)/.exec(textAfterMagazine);
     if (bare) {
       number = Number(bare[1]);
     }

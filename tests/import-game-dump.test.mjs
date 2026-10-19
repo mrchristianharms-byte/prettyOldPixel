@@ -92,6 +92,17 @@ test("Metadaten sind HTML-escaped und ein fehlender Tabellenimport erhält die E
   await access(options.input);
 });
 
+test("vereinheitlicht Entwickler und Publisher beim Import und erhält ursprüngliche Quellnamen", async (t) => {
+  const options = await fixture(t, dump.replace("'Origin', 'Origin'", "'Virgin Games, Inc.', 'MPS Labs'"));
+  const report = await importGameDump({ ...options, games });
+  const release = report.games[0].candidates[0].releases.find((entry) => entry.mobyreleaseid === 30);
+  assert.equal(release.developer, "MicroProse");
+  assert.equal(release.publisher, "Virgin");
+  assert.equal(release.sourceDeveloper, "MPS Labs");
+  assert.equal(release.sourcePublisher, "Virgin Games, Inc.");
+  assert.ok((await readFile(options.input, "utf8")).includes("'Virgin Games, Inc.', 'MPS Labs'"));
+});
+
 test("Löscht ausschließlich die Eingabe nach verifiziertem Export, Fehler erhalten sie", async (t) => {
   const options = await fixture(t);
   await importGameDump({ ...options, games, deleteInput: true });

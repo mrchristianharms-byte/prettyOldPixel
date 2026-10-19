@@ -56,7 +56,9 @@ Die Produktionsadresse lautet
 https://mrchristianharms-byte.github.io/prettyOldPixel/.
 Alle internen Links und Assets werden relativ zur jeweiligen Seite erzeugt,
 z. B. `../news/` oder `../../assets/site.<hash>.css`, ohne fest eingebauten
-Projektpfad. Auch Canonicals, `og:url`, Paginierung und interne JSON-LD-URLs
+Projektpfad. Die Brotkrümelnavigation trennt die Ebenen mit dem Unicode-Pfeil
+„→“ samt Abstand; der dekorative Trenner ist für Screenreader ausgeblendet.
+Auch Canonicals, `og:url`, Paginierung und interne JSON-LD-URLs
 einschließlich `@id` sind seitenrelativ. Nur die Sitemap enthält vollständige
 Seiten-URLs; ihre `Sitemap:`-Referenz in `robots.txt` bleibt ebenfalls absolut.
 Externe YouTube-/Archivlinks und Schema.org-Bezeichner bleiben unverändert.
@@ -69,11 +71,25 @@ werden, damit das Build-Manifest und unveränderte Dateizeitpunkte erhalten blei
 
 ### Erste Seiten und lokale Vorschau
 
+Die letzte Fußzeile jeder Website-Seite verlinkt die Kanäle
+[Pretty Old Pixel auf YouTube](https://www.youtube.com/prettyoldpixel) und
+[Pretty Old Pixel auf Twitch](https://www.twitch.tv/prettyoldpixel).
+Beide Links sind als externe Ziele gekennzeichnet. Der Seitenfuß steht in einem
+gemeinsamen Absatz vom Projektnamen bis zum Twitch-Link, mit kompakten
+Linkbeschriftungen „YouTube“ und „Twitch“. Auf schmalen Bildschirmen darf die
+Zeile ohne horizontalen Überlauf umbrechen.
+
 Umgesetzt sind Startseite, News mit den 20 neuesten veröffentlichten Videos,
 Zeitschriftenindex mit Zeitschriften-, Jahrgangs- und Ausgabenseiten,
 Spieleindex und Spieleseiten, Hardware, Retrospektiven sowie Interviews und Gespräche,
 Datenschutz, Sitemap, Robots-Datei und 404-Seite. Alle Inhalte stehen direkt im
-HTML. Nur Spiel-/Ausgabenseiten laden ein kleines lokales JavaScript für die Auswahl
+HTML. Alle Seiten laden ein kleines lokales Skript für den Hell-/Dunkel-Schalter.
+Ohne manuelle Auswahl folgt die Darstellung `prefers-color-scheme` im Browser,
+auch bei Änderungen und ohne JavaScript. Eine manuelle Auswahl wird unter
+`pretty-old-pixel:theme` im Local Storage gespeichert und hat Vorrang.
+Ohne JavaScript bleibt der Schalter verborgen. Speicherfehler werden gemeldet;
+die Umschaltung auf der aktuellen Seite bleibt möglich.
+Nur Spiel-/Ausgabenseiten laden zusätzlich ein kleines lokales JavaScript für die Auswahl
 von Video und Beschreibung; ohne JavaScript sind alle Beschreibungen sichtbar.
 Es gibt keinen Gesamtkatalog unter `/videos/`. Blätterabend-Videos ohne
 eindeutige Ausgabenseite oder Spieleseite erhalten eine Detailseite unter
@@ -106,9 +122,15 @@ Für eine lokale Vorschau ohne Projekt-Unterpfad:
 
 ```sh
 npm run generate:site -- --base-url http://localhost:8000/
-python3 -m http.server 8000 --bind 127.0.0.1 --directory docs
+npm run dev
 ```
 
+`npm run dev` verwendet `npx http-server docs -a 127.0.0.1 --port 8000`;
+beim ersten Aufruf kann `npx` das Vorschaupaket aus der npm-Registry laden.
+Der Befehl startet nur den Server; nach Inhaltsänderungen die Website erneut
+generieren. Bei belegtem Port lässt sich z. B. mit `npm run dev -- -p 8001`
+ein anderer Port wählen. Alternativ mit vorhandenem Python 3:
+`python3 -m http.server 8000 --bind 127.0.0.1 --directory docs`.
 Dann http://localhost:8000/ öffnen. Der HTML-/Asset-Baum funktioniert unverändert
 im Webroot oder in einem beliebigen Unterverzeichnis. Vor einem manuellen
 Produktions-Upload erneut `npm run generate:site` ohne lokale Basis-URL ausführen,
@@ -143,9 +165,22 @@ Unbekannte Datumswerte werden nicht erfunden. Alle Kennzahlen kommen aus dem
 lokalen normalisierten Datenbestand; zukünftige Videos werden nicht gezählt.
 
 Themenkacheln verlinken vorhandene Bereiche mit ihrer jeweiligen Videoanzahl.
+Die Zeitschriftenbox zeigt stattdessen die Anzahl unterschiedlicher Zeitschriften
+ohne Videozahl; die Beschreibung der Spielebox nennt zusätzlich die Anzahl
+unterschiedlicher veröffentlichter Spiele. Beide Zahlen werden bei jedem Build aus dem
+normalisierten Datenbestand ermittelt.
+Unter „Die Themen entdecken“ ergänzen drei Infoboxen für Genre, Entwickler und
+Publisher jeweils die fünf Werte mit den meisten Spielen. Die Überschriften
+sind nicht verlinkt; jeder Wert erhält einen eigenen Link zur gefilterten
+Spieleliste und seine Spieleanzahl. Es gelten dieselben Zählregeln und
+die Mindestzahl von zwei verschiedenen Spielen wie für die Filterseiten;
+bei weniger als fünf passenden Filtern erscheinen nur die vorhandenen Werte;
+ohne passenden Filter entfällt die jeweilige Box. Bei gleicher Trefferzahl
+entscheidet der alphabetische Name. Die Auswahl wird bei jedem Build aktualisiert.
 Mehrfachzuordnungen zählen innerhalb eines Bereichs nur einmal; die Bereiche
-sind untereinander nicht addierbar. Ein Link führt weiterhin zur separaten
-News-Seite mit den 20 neuesten Veröffentlichungen. Die Statistik braucht
+sind untereinander nicht addierbar. Die separate News-Seite mit den 20 neuesten
+Veröffentlichungen bleibt über die Hauptnavigation erreichbar; einen zusätzlichen
+News-Button im Startseiteninhalt gibt es nicht. Die Statistik braucht
 keine externen Ressourcen oder Laufzeit-JavaScript.
 
 ### Hardware, Retrospektiven und Gespräche
@@ -297,6 +332,19 @@ erfordert zugleich aktualisierte Imports und Dokumentationsverweise.
   Übersichtsseite. `/spiele/<slug>/` enthält die Spielinformationen, sämtliche
   Videos, Beschreibungen und einen gemeinsamen Player. Auch mehr als 60 Videos
   eines Spiels bleiben auf dieser einen Seite.
+- Genre, Entwickler und Publisher in den Spielinformationen verlinken auf
+  gefilterte Spielelisten unter `/spiele/genre/<wert>/`,
+  `/spiele/entwickler/<wert>/` und `/spiele/publisher/<wert>/`.
+  Diese Unterseiten und Links entstehen nur, wenn mindestens zwei verschiedene
+  Spiele der veröffentlichten Spieleliste denselben Metadatenwert haben.
+  Jedes Spiel zählt je Wert einmal, auch bei mehreren passenden Veröffentlichungen.
+  Es werden nur eindeutig zugeordnete Metadaten berücksichtigt; Entwickler und
+  Publisher weiterer Veröffentlichungen zählen ebenfalls. Publisher-Labels
+  bleiben Zusatzangaben und sind keine eigenen Filter.
+  Die gefilterten Listen verwenden dieselben Kacheln, die alphabetische
+  Reihenfolge und die Paginierung mit maximal 60 Spielen je Seite.
+  Sinkt die Trefferzahl unter zwei, entfallen beim nächsten Build sowohl
+  die Unterseiten als auch die Links.
 - `src/data-games.mjs` hält ausdrücklich geprüfte Spielidentitäten mit festen
   Playlist-IDs, kanonischem Namen, bekannten Plattformen, Quellschreibweisen
   und gegebenenfalls bestätigten zusätzlichen Video-IDs fest. Die Zuordnung
@@ -311,7 +359,7 @@ erfordert zugleich aktualisierte Imports und Dokumentationsverweise.
   bleiben unverifiziert. [Datenfluss und Pflege](game-metadata-implementation.md).
 - Der aktuelle Katalog enthält 147 geprüfte Spielidentitäten aus den
   143 re.play-Playlists, der ebenfalls geprüften 1942-Playlist und der
-  manuell bestätigten Patrizier-Reihe mit 16 Videos einschließlich re.minder sowie Airships: Conquer
+  manuell bestätigten Patrizier-Reihe mit 17 Videos einschließlich re.minder und streamstag sowie Airships: Conquer
   the Skies (vier Videos) und Hyperspace Delivery Service (sechs Videos)
   ohne eigene Quellplaylist. Die beiden re.invented-Spiele verwenden explizite
   `videoIds`, nicht die gesamte gemischte Formatplaylist. Die konkrete
@@ -490,7 +538,8 @@ HTML-Escaping und externe Links liegen gemeinsam in `src/site-html.mjs`,
 Datums-/Laufzeitformatierung in `src/site-format.mjs`. Widgets importieren
 gemeinsame interne Video- und Themenlinks aus `src/site-video-links.mjs`, aber
 nicht den Seitengenerator; so entstehen keine zyklischen Abhängigkeiten.
-Styles bleiben in `src/site.css`, Browserinteraktion in `src/video-series.js`.
+Styles bleiben in `src/site.css`, Browserinteraktion in `src/video-series.js`
+und der globale Hell-/Dunkel-Schalter in `src/theme.js`.
 Die Widget-Module werden nur beim Build ausgeführt, nicht zusätzlich im Browser.
 
 Alle eingebetteten Videos verwenden das gemeinsame `videoWidget`:
@@ -499,7 +548,8 @@ Aktivierung zurücksetzen, Folgenoption, direktem YouTube-Link und manuellem
 Start bei blockierter Wiedergabe. Spiel- und Heftausgabenseiten setzen genau
 eine Instanz ein; Übersichtsseiten ohne Player erhalten kein leeres Widget.
 
-„Nächste Folge automatisch“ steht auf Spiel- und Heftausgabenseiten und ist ohne
+„Nächste Folge automatisch“ steht nur bei mehr als einem Video in der
+zugehörigen Folgenliste zur Verfügung und ist ohne
 bisherige Auswahl aus. Ein- und Ausschalten wird als separater boolescher Wert
 `pretty-old-pixel:youtube-auto-next` im Local Storage gemerkt und bei bereiter
 Player-Steuerung wiederhergestellt. Neue Seiten starten weiterhin kein Video.
@@ -536,6 +586,39 @@ erhalten bleiben; die Jahrgangsüberschrift macht hierzu keine Aussage.
 
 - `/zeitschriften/` zeigt die erkannten Zeitschriften alphabetisch sowie eine
   Gruppe „Weitere Blätterabende“ für nicht sicher zugeordnete Blätterabend-Videos.
+  Unter „Blätterabend mit Gast“ erscheinen zusätzlich alphabetische Gästekacheln mit Videozahl
+  und Anzahl bekannter Ausgaben. Schon ein Gastauftritt genügt für eine Kachel.
+- `/zeitschriften/gaeste/<gast>/` bündelt die Ausgaben und Videoteile mit diesem
+  Gast, mit derselben Jahrgangs-/Ausgabengruppierung, Archivlinks, relativen
+  Heftlinks und Paginierung wie die Zeitschriftenlisten, aber ohne eigenen Player.
+  Ungeklärte Zeitschriften und Heftdaten bleiben gekennzeichnet sichtbar.
+  Gäste werden beim Offline-Build dynamisch aus dem Titelzusatz „mit NAME“
+  bzw. „mit @Handle“ der veröffentlichten Blätterabend-Videos ermittelt.
+  Titeltrenner, „in der …“ und „und dem/der …“ beenden die Namensangabe;
+  Angaben wie „Chat-Vote“ zählen nicht als Gast.
+  Ein zweiter Durchlauf sucht die bekannten Gastnamen und Handles (auch ohne
+  @ sowie über bestätigte Kanalhandles) in weiteren Blätterabend- und
+  Zeitschriften-Videotiteln. So wird beispielsweise „Power Play – Strategie
+  für Geniesser – Steinwallen“ dem bereits bekannten Gast @Steinwallen
+  zugeordnet. Groß-/Kleinschreibung wird ignoriert; Teilnamen und mehrdeutige
+  Namenszuordnungen werden nicht ergänzt. Videos außerhalb des
+  Zeitschriftenbereichs und bloße Erwähnungen in Beschreibungen zählen nicht.
+  Bereits ausdrücklich zugeordnete Gastvideos bleiben unverändert; etwa
+  „Christian @StayForeverDE“ wird nicht zusätzlich einem bloßen „Christian“
+  zugeordnet.
+  Bestätigte YouTube-Kanäle sind einmalig geprüft und statisch in
+  [`src/data-magazine-guest-channels.mjs`](../src/data-magazine-guest-channels.mjs)
+  hinterlegt. Auf der Gastseite verlinkt der @Handle in der Überschrift den
+  Kanal über dessen lesbare `https://www.youtube.com/@Name`-Adresse statt einer
+  Kanal-ID-URL. Der Build führt keine Kanalabfragen aus.
+  Nicht gefundene und neue, ungeprüfte Handles sowie Gäste ohne @ bleiben
+  unverlinkt. Neue Kanalzuordnungen müssen manuell geprüft und ergänzt werden.
+  Derselbe Handle wird unabhängig von Groß-/Kleinschreibung zusammengefasst;
+  die ausführlichste im Titel belegte Namensform wird angezeigt. Unterschiedliche
+  Handles (auch mit/ohne Unterstrich) und bloße Vornamen werden nicht ohne Beleg
+  zusammengelegt. Mehrere ausdrücklich mit „und“ oder „&“ verbundene Gäste
+  werden einzeln erfasst. Neue oder geänderte Titel aktualisieren Gästekacheln,
+  Unterseiten, Sitemap und Manifest beim nächsten Build automatisch.
 - `/zeitschriften/<slug>/` bündelt die Jahrgänge und Videos einer Zeitschrift.
   „Jahrgang unbekannt“ bleibt sichtbar; das Uploadjahr ersetzt kein Heftjahr.
 - `/zeitschriften/<slug>/<jahr>/` zeigt reguläre Ausgaben nach Monat bzw.
@@ -664,8 +747,10 @@ erhalten bleiben; die Jahrgangsüberschrift macht hierzu keine Aussage.
   Schrift. Ihre Liste ist unabhängig scrollbar, auch per Tastatur, ohne den
   Hauptplayer mitzuscrollen. Auf Desktop bleibt das Menü beim Scrollen
   erreichbar; mobil bleibt es aufklappbar mit begrenzter Listenhöhe.
-  Kompakte Kopf- und Navigationsabstände sowie eine auf 60 Prozent der Viewporthöhe begrenzte
-  Playerhöhe halten das Video beim normalen Seitenaufruf im sichtbaren Bereich.
+  Videodetailseiten nutzen die volle Fensterbreite mit seitlichen Abständen.
+  Ab 768 Pixeln füllt der Player im 16:9-Format den gesamten Platz neben der
+  Folgenliste, ohne maximale Inhaltsbreite oder Höhenbegrenzung.
+  Mobil bleibt die Playerhöhe auf höchstens 60 Prozent der Viewporthöhe begrenzt.
   Direkte Video-Fragmente wählen mit JavaScript den richtigen Beitrag und
   richten den sichtbaren Ausschnitt am Player aus, auch wenn der Browser
   seinen nativen Fragmentsprung erst nach dem Laden ausführt.
@@ -749,7 +834,9 @@ die nur seitenbezogene Folgenfortsetzung.
 
 Am 17.10.2026 wurde eine Microsoft-Defender-Browser-Protection-Warnung
 „Phishing threat“ für die Zeitschriftenübersicht gemeldet. Diese Übersicht
-führt kein eigenes JavaScript aus und greift nicht auf Local Storage zu.
+führte zum Zeitpunkt der Meldung kein eigenes JavaScript aus und griff nicht
+auf Local Storage zu. Inzwischen lädt sie das lokale Skript für den
+Hell-/Dunkel-Schalter und dessen Einstellung.
 Die Ursache der Microsoft-Einstufung ist damit nicht geklärt und die Warnung
 nicht aufgehoben. Für eine Neubewertung dient „Report that this site does not
 contain threats“ in der Warnungsseite; Schutzfunktionen nicht pauschal abschalten.
@@ -913,8 +1000,10 @@ npm run generate:blaetterabend
 
 Danach erzeugt `npm run generate:site` die Website aus den aktuellen JSON-Daten.
 
-Titel ohne erkannte Zeitschrift oder Ausgabe werden beim Lauf aufgelistet. Neue
-Zeitschriften oder Schreibweisen werden in der Liste `MAGAZINES` in
+Titel ohne erkannte Zeitschrift oder Ausgabe werden beim Lauf aufgelistet.
+Numerische Doppelausgaben wie `4-5/1988`, `4+5/1988` und `4/5 1988`
+werden als ein Heft mit beiden Monaten erkannt und mit dem Archiv abgeglichen.
+Neue Zeitschriften oder Schreibweisen werden in der Liste `MAGAZINES` in
 `src/generate-blaetterabend.mjs` ergänzt.
 Die bestätigte Titelbezeichnung „Computer Gaming World – 15th Anniversary“
 wird als Ausgabe #148 (11/1996) erkannt; auf dem

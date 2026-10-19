@@ -44,8 +44,19 @@ Daten. Beschädigte oder veraltete fertige Caches brechen den Build ab.
   weggefallenen Untertitel. Neun zuvor ausdrücklich geprüfte Dump-Entscheidungen
   lösen bekannte Mehrdeutigkeiten auf.
 - Derzeit sind 119 von 147 Spielen nutzbar; 28 bleiben unverifiziert.
-- Alle Firmenbezeichnungen sind Quellenlabels, keine normalisierten
-  Firmenidentitäten. Personen-Credits sind nicht vorhanden.
+- Firmenbezeichnungen werden beim SQL-Import und bei `prepare:game-metadata`
+  über eine explizite [Aliasliste](../src/game-company-names.mjs) vereinheitlicht.
+  Die kürzesten vorhandenen Bezeichnungen sind `Blue Byte Studio GmbH`,
+  `Cinemaware`, `Max Design GesMBH` und `Adventuresoft Ltd.`.
+  Zusätzlich werden MicroProse (einschließlich MPS Labs), Interplay, Westwood,
+  Gremlin, Sierra, Konami, Mindscape, Sun und Virgin als gemeinsame Anzeigenamen
+  verwendet. Das ist eine redaktionelle Gruppierung, keine Gleichsetzung
+  juristischer Firmenidentitäten. Andere Firmen bleiben unverändert.
+  Abweichende Quellwerte bleiben in `sourceDeveloper` bzw. `sourcePublisher`
+  erhalten; vorhandene Rohreports werden nicht überschrieben. Mehrfachnamen
+  bleiben Mehrfachnamen, ihre enthaltenen bekannten Aliasse werden normalisiert.
+  Die Aliasliste ist im fertigen Cache per Hash abgesichert; Änderungen erfordern
+  ein erneutes `prepare:game-metadata`. Personen-Credits sind nicht vorhanden.
 - Ein pauschales Erscheinungsjahr ist nur für genau eine ausgewählte Plattform
   und ausschließlich datierte Veröffentlichungen verfügbar; dann das früheste
   Jahr. Bei mehreren Plattformen oder unvollständiger Datierung bleibt es

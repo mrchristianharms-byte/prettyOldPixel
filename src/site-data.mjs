@@ -8,6 +8,7 @@ import { loadReadyGameMetadata } from "./game-metadata-ready.mjs";
 import { structureGameSeries } from "./site-game-series.mjs";
 import { sectionDefinitions } from "./data-sections.mjs";
 import { extractVideoDetails } from "./site-video-details.mjs";
+import { magazineGuests } from "./site-magazine-guests.mjs";
 import { loadGameDiscussions } from "./site-game-discussions.mjs";
 import { attachMagazineLogo, loadMagazineLogos } from "./kultmags-logos.mjs";
 import { addAmrLinks, loadAmrCatalog } from "./fetch-amr.mjs";
@@ -546,10 +547,11 @@ export function normalizeSources({ videos: videoCache, playlists: playlistCache,
       video.detailRoute = `${video.sections[0].route}${video.id}/`;
     }
   }
+  const magazines = [...magazineById.values()].sort((a, b) => a.name.localeCompare(b.name, "de"));
   return {
     channel: { id: videoCache.channel.id, title: text(videoCache.channel.title, "channel.title") },
     videos, videoById, playlists, games, sections,
-    magazines: [...magazineById.values()].sort((a, b) => a.name.localeCompare(b.name, "de")),
+    magazines, magazineGuests: magazineGuests(videos, magazines),
     unresolvedMagazines: videos.filter((video) => video.blaetterabend && !video.magazines.length),
     news: videos.filter((video) => video.publishedTime !== null).slice(0, 20),
     warnings,
