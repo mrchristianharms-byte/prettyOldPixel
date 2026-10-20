@@ -613,6 +613,7 @@ function renderGamePages(model, siteConfig, add, filters) {
       durationSeconds: videos.every((video) => video.durationSeconds !== null)
         ? videos.reduce((total, video) => total + video.durationSeconds, 0) : null,
       mobyGamesUrl: source && ["www.mobygames.com", "mobygames.com"].includes(new URL(source).hostname) ? source : null,
+      conclusionVideo: model.videoById.get(game.series.entries.find((entry) => entry.phase.id === "conclusion")?.videoId),
       video: firstVideo, duration: catalogDuration(game.videos, model, true),
     };
   }).sort((a, b) => (b.video.publishedTime ?? -Infinity) - (a.video.publishedTime ?? -Infinity)

@@ -14,9 +14,12 @@ Gesamtkatalog aller Videos gibt es nicht.
 
 Unter `spiele/uebersicht/` gibt es zusätzlich eine aus der Spieleübersicht
 verlinkte Tabelle mit allen Spielen: erstes Videojahr, Titel, Erscheinungsjahr,
-Plattform, Genre, YouTube-Vorschaubild und Spielzeit. Die gemeinsame Spalte
-„Links“ enthält nur Playlists und belegte MobyGames-Links, keine einzelnen
-Videolinks. „Gespielt“ zeigt das erste Videojahr; „Spielzeit“ zeigt
+Plattform und Genre (jeweils ein Wert pro Zeile), YouTube-Vorschaubild und
+Spielzeit. Die gemeinsame Spalte
+„Weiteres“ enthält Playlists, belegte MobyGames-Links („Moby“) und, sofern
+vorhanden, einen Link zur Spieleseite mit dem ersten zugeordneten Abschluss /
+Fazit als ausgewähltem Video („Abschlußgespräch“). Die Links bleiben jeweils
+ohne Textumbruch in einer Zeile. „Gespielt“ zeigt das erste Videojahr; „Spielzeit“ zeigt
 die summierte Videolaufzeit kompakt als Stunden und Minuten (z. B. `22:20h`).
 Standardmäßig wird nach der frühesten bekannten
 Videoveröffentlichung sortiert (neueste zuerst). Pfeilschaltflächen in den

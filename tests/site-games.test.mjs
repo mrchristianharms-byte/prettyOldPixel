@@ -88,7 +88,7 @@ test("zeigt alle Spiele in einer zusätzlichen Tabelle nach erstem Videojahr und
     ["Zeta", "Alpha", "Beta", "Ohne Datum"]);
   assert.deepEqual(rows.map((row) => row.match(/<td>(.*?)<\/td>/u)[1]),
     ["2021", "2020", "2020", "Unbekannt"]);
-  assert.ok(rows.every((row) => row.includes("<td>1990</td>") && row.includes("<td>Amiga, DOS</td>")));
+  assert.ok(rows.every((row) => row.includes("<td>1990</td>") && row.includes("<td>Amiga<br>DOS</td>")));
   assert.ok(rows[0].includes(`src="https://i.ytimg.com/vi/${videoId(0)}/mqdefault.jpg"`));
   assert.match(rows[0], /href="\.\.\/spiel-0\/"/u);
   for (const file of ["spiele/index.html", "spiele/seite/2/index.html"]) {
@@ -104,13 +104,13 @@ test("escaped Tabelleninhalte und nutzt belegte Metadaten ohne Ersatzjahre", () 
   const model = metadataModel(2);
   model.games[0].name = '<Spiel & "Demo">';
   model.games[0].releaseYear = null;
-  model.games[0].metadata.data.scope.platforms = ["<DOS>"];
+  model.games[0].metadata.data.scope.platforms = ["<DOS>", 'Amiga & "Demo"'];
   model.games[1].metadata = { status: "blocked", data: null };
   const { pages } = renderModel(model);
   const html = pages.get("spiele/uebersicht/index.html").html;
   const body = html.match(/<tbody>([\s\S]*?)<\/tbody>/u)[1];
   assert.ok(body.includes("&lt;Spiel &amp; &quot;Demo&quot;&gt;"));
-  assert.ok(body.includes("<td>&lt;DOS&gt;</td>"));
+  assert.ok(body.includes("<td>&lt;DOS&gt;<br>Amiga &amp; &quot;Demo&quot;</td>"));
   assert.ok(!body.includes("<Spiel") && !body.includes("<DOS>"));
   assert.match(body, /<td>Unbekannt<\/td>/u);
   assert.ok(body.includes('width="320" height="180" loading="lazy" decoding="async" referrerpolicy="no-referrer"'));
@@ -155,29 +155,47 @@ test("liefert Sortierdaten, Filter und belegte externe Links ausschließlich in 
   }
   assert.ok(!html.includes('id="game-sort"') && !html.includes("data-game-direction"));
   assert.ok(html.includes('<th scope="col">Plattform</th><th scope="col">Genre</th>'));
-  assert.ok(html.includes('<th scope="col">Links</th>'));
+  assert.ok(html.includes('<th scope="col">Weiteres</th>'));
   assert.ok(!html.includes('<th scope="col">Playlist</th>') && !html.includes('<th scope="col">MobyGames</th>'));
   const body = html.match(/<tbody>([\s\S]*?)<\/tbody>/u)[1];
   assert.doesNotMatch(body, /href="https:\/\/www\.youtube\.com\/watch\?/u);
-  const linksCell = [...body.matchAll(/<td>([\s\S]*?)<\/td>/gu)]
+  const linksCell = [...body.matchAll(/<td\b[^>]*>([\s\S]*?)<\/td>/gu)]
     .map((match) => match[1]).find((cell) => cell.includes("youtube.com/playlist"));
   assert.ok(linksCell);
   assert.ok(linksCell.includes(`href="https://www.youtube.com/playlist?list=${playlistId}" rel="external"`));
   assert.ok(linksCell.includes('href="https://www.mobygames.com/game/42/" rel="external"'));
+  assert.ok(linksCell.includes('>Moby <span'));
+  assert.ok(!linksCell.includes("Schlußgespräch"));
   const model = metadataModel(2);
-  model.games[0].metadata.data.genres = ['Action & "Adventure"'];
+  model.games[0].metadata.data.genres = ['Action & "Adventure"', "<Simulation>"];
   model.games[1].metadata = { status: "blocked", data: null };
   model.games[1].releaseYearSource = null;
   model.games[1].releaseYear = null;
   const metadataHtml = renderModel(model).pages.get("spiele/uebersicht/index.html").html;
   assert.ok(metadataHtml.includes('<option value="DOS">DOS</option>'));
   assert.ok(metadataHtml.includes('<option value="Action &amp; &quot;Adventure&quot;">'));
-  assert.ok(metadataHtml.includes('<td>DOS</td>\n<td>Action &amp; &quot;Adventure&quot;</td>'));
+  assert.ok(metadataHtml.includes('<td>DOS</td>\n<td>Action &amp; &quot;Adventure&quot;<br>&lt;Simulation&gt;</td>'));
   assert.ok(metadataHtml.includes('<td>Unbekannt</td>\n<td>Unbekannt</td>'));
-  assert.ok(metadataHtml.includes("<td>Nicht verfügbar</td>"));
+  assert.ok(metadataHtml.includes('<td class="game-table-links">Nicht verfügbar</td>'));
   assert.ok(metadataHtml.includes('href="https://www.mobygames.com/game/10/" rel="external"'));
   for (const [file, page] of pages) {
     if (file !== "spiele/uebersicht/index.html") assert.ok(!page.html.includes("assets/game-table.js"), file);
+  }
+});
+
+test("verlinkt das zugeordnete Schlußgespräch unter Weiteres statt eines beliebigen Spielvideos", () => {
+  for (const title of ["Schlußgespräch", "Schlussgespräch", "Abschlussgespräch", "Abschlussbesprechung", "Fazit"]) {
+    const input = fixture(3);
+    input.videos.videos[1].title = `Cadaver [re.play - #2] ${title}`;
+    const html = render(input).pages.get("spiele/uebersicht/index.html").html;
+    const body = html.match(/<tbody>([\s\S]*?)<\/tbody>/u)[1];
+    const cells = [...body.matchAll(/<td\b[^>]*>([\s\S]*?)<\/td>/gu)];
+    const links = cells.at(-1)[1];
+    assert.ok(links.includes(`<a href="../cadaver/#video-${videoId(1)}">Abschlußgespräch</a>`), title);
+    assert.ok(!links.includes(`watch?v=${videoId(0)}`));
+    assert.ok(!links.includes(`watch?v=${videoId(2)}`));
+    assert.ok(links.indexOf(">Playlist <span") < links.indexOf(">Moby <span"));
+    assert.ok(links.indexOf(">Moby <span") < links.indexOf(">Abschlußgespräch</a>"));
   }
 });
 

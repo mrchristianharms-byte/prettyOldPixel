@@ -1,4 +1,5 @@
 import { escapeHtml, externalLink } from "../site-html.mjs";
+import { videoLink } from "../site-video-links.mjs";
 
 export function gameTable(rows, config) {
   const options = (values) => [...new Set(values)].sort((a, b) => a.localeCompare(b, "de"))
@@ -22,18 +23,19 @@ export function gameTable(rows, config) {
 <div class="overflow-auto" role="region" aria-label="Gesamtübersicht aller Spiele" tabindex="0">
 <table class="game-table">
 <caption class="visually-hidden">Alle Systeme · Alle Genres · Videoveröffentlichung: neueste zuerst</caption>
-<thead><tr>${sortableHeading("Gespielt", "video", "Videoveröffentlichung")}${sortableHeading("Titel", "title", "Titel (Alphabet)")}${sortableHeading("Jahr", "release", "Erscheinungsjahr des Spiels")}<th scope="col">Plattform</th><th scope="col">Genre</th><th scope="col">Videovorschau</th>${sortableHeading("Spielzeit", "duration", "Spielzeit")}<th scope="col">Links</th></tr></thead>
+<thead><tr>${sortableHeading("Gespielt", "video", "Videoveröffentlichung")}${sortableHeading("Titel", "title", "Titel (Alphabet)")}${sortableHeading("Jahr", "release", "Erscheinungsjahr des Spiels")}<th scope="col">Plattform</th><th scope="col">Genre</th><th scope="col">Videovorschau</th>${sortableHeading("Spielzeit", "duration", "Spielzeit")}<th scope="col">Weiteres</th></tr></thead>
 <tbody>${rows.map((row) => `<tr data-video="${row.video.publishedTime ?? ""}" data-release="${row.releaseYear ?? ""}" data-title="${escapeHtml(row.name)}" data-duration="${row.durationSeconds ?? ""}" data-platforms="${escapeHtml(JSON.stringify(row.platforms))}" data-genres="${escapeHtml(JSON.stringify(row.genres))}">
 <td>${escapeHtml(row.firstYear ?? "Unbekannt")}</td>
 <th scope="row"><a href="${config.href(row.route)}">${escapeHtml(row.name)}</a></th>
 <td>${escapeHtml(row.releaseYear ?? "Unbekannt")}</td>
-<td>${escapeHtml(row.platforms.join(", ") || "Unbekannt")}</td>
-<td>${escapeHtml(row.genres.join(", ") || "Unbekannt")}</td>
+<td>${row.platforms.map((platform) => escapeHtml(platform)).join("<br>") || "Unbekannt"}</td>
+<td>${row.genres.map((genre) => escapeHtml(genre)).join("<br>") || "Unbekannt"}</td>
 <td><a href="${config.href(row.route)}"><img src="${escapeHtml(row.video.thumbnailUrl)}" alt="${escapeHtml(`Videovorschau zu ${row.name}: ${row.video.title}`)}" width="320" height="180" loading="lazy" decoding="async" referrerpolicy="no-referrer"></a></td>
 <td>${escapeHtml(row.duration)}</td>
-<td>${[
+<td class="game-table-links">${[
     ...row.playlists.map((playlist, index) => externalLink(playlist.url, row.playlists.length === 1 ? "Playlist" : `Playlist ${index + 1}`)),
-    ...(row.mobyGamesUrl ? [externalLink(row.mobyGamesUrl, "MobyGames")] : []),
+    ...(row.mobyGamesUrl ? [externalLink(row.mobyGamesUrl, "Moby")] : []),
+    ...(row.conclusionVideo ? [videoLink(row.conclusionVideo, config, "Abschlußgespräch", row.route)] : []),
   ].join("<br>") || "Nicht verfügbar"}</td>
 </tr>`).join("")}</tbody>
 </table></div>

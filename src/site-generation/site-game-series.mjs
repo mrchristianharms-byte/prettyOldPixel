@@ -26,7 +26,7 @@ function classifyPhase(video, context, sources) {
   if (context.format === "re.minder") return { id: "reminder", evidence: formatEvidence };
   if (context.format === "re.consider") return { id: "reconsider", evidence: formatEvidence };
   const rules = [
-    ["conclusion", /\b(?:Abschlussgespräch|Abschlussdiskussion|Fazit|Nachbetrachtung|Resümee)\b/iu],
+    ["conclusion", /\b(?:Abschlu(?:ss|ß)(?:gespräch|diskussion|besprechung)|Schlu(?:ss|ß)gespräch|Fazit|Nachbetrachtung|Resümee)\b/iu],
     ["interview", /\bInterview\b/iu],
     ["intro", /\bUnboxing\b|^(?:(?:Das|Die|Der)\s+)?(?:Intro\b|Box\b|Boxinhalte\b|Vorstellung\s+(?:der\s+)?(?:Box|Verpackung)\b)/iu],
   ];

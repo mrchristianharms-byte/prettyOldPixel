@@ -16,6 +16,11 @@ test("erkennt Phasen aus eindeutigen Titelmerkmalen und speichert den Beleg", ()
     ["Beispiel [re.play - #2] Vorstellung der Verpackung", "intro"],
     ["Beispiel [re.play - #11 Das Abschlussgespräch [German/Deutsch]", "conclusion"],
     ["Beispiel [re.play - #15] Fazit mit Gästen", "conclusion"],
+    ["Beispiel [re.play - #15] Schlußgespräch", "conclusion"],
+    ["Beispiel [re.play - #15] Schlussgespräch", "conclusion"],
+    ["Beispiel [re.play - #15] Abschlußgespräch", "conclusion"],
+    ["Beispiel [re.play - #15] Abschlussbesprechung", "conclusion"],
+    ["Beispiel [re.play - #15] Abschlußbesprechung", "conclusion"],
     ["Beispiel [re.play - #9] Interview mit dem Grafiker", "interview"],
     ["Beispiel [re.consider] Intro und Fazit", "reconsider"],
     ["re.minder / Streamaufzeichnung - Beispiel", "reminder"],
@@ -38,6 +43,7 @@ test("rät weder aus Folgenummern noch aus Level-Abschlüssen eine Phasenfolge",
     "Beispiel [re.play - #8] Die Anleitung sagt etwas anderes",
     "Unboxing Simulator [re.play - #1] Neuer Level",
     "The Final Interview [re.play - #4] Die Flucht",
+    "Rogue [re.play - #9] Die Atari ST Version [German/Deutsch]",
   ]) assert.equal(classify(title).id, "gameplay", title);
 });
 
