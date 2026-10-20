@@ -92,6 +92,22 @@ test("Metadaten sind HTML-escaped und ein fehlender Tabellenimport erhält die E
   await access(options.input);
 });
 
+test("exportiert freigegebene zusätzliche Veröffentlichungen getrennt von Spielkandidaten", async (t) => {
+  const options = await fixture(t);
+  const catalogue = [{ ...games[2], additionalReleases: [
+    { mobyid: 3, title: "Wing Commander", platforms: ["MS-DOS"] },
+  ] }];
+  const report = await importGameDump({ ...options, games: catalogue });
+  const entry = report.games[0];
+  assert.deepEqual(entry.candidates.map((candidate) => candidate.mobyid), [4]);
+  assert.equal(entry.additionalReleases[0].releases.length, 1);
+  assert.equal(entry.additionalReleases[0].releases[0].mobyreleaseid, 30);
+  catalogue[0].additionalReleases[0].platforms = ["NES"];
+  await assert.rejects(importGameDump({ ...options, games: catalogue }), /Plattform.*fehlt/u);
+  catalogue[0].additionalReleases[0].title = "Other";
+  await assert.rejects(importGameDump({ ...options, games: catalogue }), /Titel geändert/u);
+});
+
 test("vereinheitlicht Entwickler und Publisher beim Import und erhält ursprüngliche Quellnamen", async (t) => {
   const options = await fixture(t, dump.replace("'Origin', 'Origin'", "'Virgin Games, Inc.', 'MPS Labs'"));
   const report = await importGameDump({ ...options, games });

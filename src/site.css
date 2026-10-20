@@ -5,6 +5,9 @@
 }
 
 body { overflow-wrap: anywhere; }
+.release-table { overflow-wrap: normal; }
+.release-table th { white-space: nowrap; }
+.release-country { display: block; white-space: nowrap; }
 .container { max-width: 76rem; padding-inline: clamp(1rem, 3vw, 2rem); }
 .site-header { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: .25rem 1rem; padding-block: .35rem; border-bottom: 1px solid var(--pico-muted-border-color); }
 .site-header nav ul { flex-wrap: wrap; margin-inline: 0; }

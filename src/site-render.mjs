@@ -315,7 +315,7 @@ function renderMagazinePages(model, siteConfig, add) {
     items: (entries) => entries.map((entry) => entry.magazine
       ? { title: entry.magazine.name, route: entry.magazine.route }
       : entry.guest ? { title: entry.guest.name, route: entry.guest.route } : model.videoById.get(entry.videoId)),
-    intro: `<p>${model.magazines.length} Zeitschriften, alphabetisch geordnet. Jahrgänge beziehen sich auf das Erscheinungsjahr der Hefte, nicht auf das Datum der Videos.</p>`,
+    intro: `<p>${countLabel(model.magazines.length, "Computerzeitschrift", "Computerzeitschriften")} im Blätterabend: klassische Spielemagazine, Heftausgaben und Jahrgänge mit Videos und Archivlinks.</p>`,
     render: (entries, config) => {
       const magazines = entries.filter((entry) => entry.magazine).map((entry) => entry.magazine);
       const guests = entries.filter((entry) => entry.guest).map((entry) => entry.guest);
@@ -332,7 +332,7 @@ ${guests.length ? `<section aria-labelledby="gaeste"><h2 id="gaeste">Blätterabe
           videoCount(guest.videoIds.length),
         ],
       })), config)}</section>` : ""}
-${unresolved.length ? `<section><h2>Weitere Blätterabende</h2><p>Bei diesen Videos ist der Zeitschriftentitel unbekannt.</p>${entryVideoList(unresolved.map((entry) => ({ ...entry, mention: {} })), model, config, 3)}</section>` : ""}`;
+${unresolved.length ? `<section><h2>Weitere Blätterabende</h2><p>Weitere Streifzüge durch klassische Computer- und Spielezeitschriften.</p>${entryVideoList(unresolved.map((entry) => ({ ...entry, mention: {} })), model, config, 3)}</section>` : ""}`;
     },
   });
   for (const guest of model.magazineGuests) {
@@ -365,7 +365,7 @@ ${unresolved.length ? `<section><h2>Weitere Blätterabende</h2><p>Bei diesen Vid
       addPaginated({
         route: year.route, entries: year.entries,
         title: `${magazine.name} ${year.year} – Ausgaben und Blätterabend-Videos`,
-        description: `${magazine.name}, Jahrgang ${year.year}: reguläre Ausgaben und Sonderhefte mit Blätterabend-Videos. Das Jahr bezeichnet das Erscheinen der Zeitschrift.`,
+        description: `${magazine.name}, Jahrgang ${year.year}: Heftausgaben, Spieletests und Computergeschichte im Blätterabend mit Videos und Archivlinks.`,
         crumbs: [root, index, magazineCrumb, { route: year.route, name: String(year.year) }],
         schema: (config) => [periodicalSchema(magazine, config)],
         intro: `<p>Die Ausgaben von ${escapeHtml(magazine.name)} aus ${year.year}: Blättern Sie durch die Hefte oder wählen Sie einen Videoteil.</p>`,
@@ -433,12 +433,14 @@ function gameMetadataFilters(games) {
     ["genre", "Genre", "genre"],
     ["developer", "Entwickler", "entwickler"],
     ["publisher", "Publisher", "publisher"],
+    ["platform", "Spieleplattformen", "plattform"],
   ]) {
     const byName = new Map();
     for (const game of games) {
       if (game.metadata?.status !== "ready") continue;
       const { genres = [], releases = [] } = game.metadata.data;
-      const values = field === "genre" ? genres : releases.map((release) => release[field]);
+      const values = field === "platform" ? (game.platforms.length ? game.platforms : game.metadata.data.scope?.platforms ?? [])
+        : field === "genre" ? genres : releases.map((release) => release[field]);
       for (const name of new Set(values.filter(Boolean))) {
         if (!byName.has(name)) byName.set(name, []);
         byName.get(name).push(game);
@@ -473,26 +475,31 @@ function gameMetadataFilters(games) {
 function renderGameMetadata(game, config, filters) {
   const record = game.metadata;
   const data = record?.status === "ready" ? record.data : null;
-  const { evidence, scope, genres = [], releases = [] } = data ?? {};
+  const { evidence, scope, genres = [], releases = [], additionalReleases = [] } = data ?? {};
+  const supplementary = additionalReleases.flatMap((entry) => entry.releases.map((release) => ({
+    ...release, sourceTitle: entry.title, sourceUrl: entry.sourceUrl,
+  })));
   const groups = new Map();
-  for (const release of releases) {
+  for (const release of [...releases, ...supplementary]) {
     const key = JSON.stringify([release.platform, release.year, release.developer,
-      release.publisher, release.publisherLabel]);
+      release.publisher, release.publisherLabel, release.sourceTitle]);
     if (!groups.has(key)) groups.set(key, { ...release, countries: new Set() });
     const countries = release.countries?.split(",").map((country) => country.trim()).filter(Boolean) ?? [];
     for (const country of countries) {
       groups.get(key).countries.add(country);
     }
   }
-  const fields = ["platform", "year", "developer", "publisher", "publisherLabel"];
+  const fields = ["platform", "year", "developer", "publisher", "publisherLabel", "sourceTitle"];
   const groupedReleases = [...groups.values()];
   const displayedReleases = groupedReleases.filter((release) => !groupedReleases.some((other) =>
     other !== release
+    && release.sourceTitle === other.sourceTitle
     && fields.every((field) => release[field] === null || release[field] === undefined
       || release[field] === "" || release[field] === other[field])
     && fields.some((field) => !release[field] && Boolean(other[field]))
     && [...release.countries].every((country) => other.countries.has(country))))
-    .sort((a, b) => (a.year ?? Infinity) - (b.year ?? Infinity)
+    .sort((a, b) => Number(Boolean(a.sourceTitle)) - Number(Boolean(b.sourceTitle))
+      || (a.year ?? Infinity) - (b.year ?? Infinity)
       || fields.filter((field) => Boolean(b[field])).length - fields.filter((field) => Boolean(a[field])).length
       || JSON.stringify(fields.map((field) => a[field])).localeCompare(JSON.stringify(fields.map((field) => b[field])), "de"));
   const missing = (value) => value ? escapeHtml(String(value)) : "Keine Angabe";
@@ -502,8 +509,12 @@ function renderGameMetadata(game, config, filters) {
   };
   const primary = displayedReleases[0];
   const additional = displayedReleases.slice(1);
-  const countries = (release) => release.countries.size
-    ? escapeHtml([...release.countries].sort((a, b) => a.localeCompare(b, "de")).join(", ")) : "Keine Angabe";
+  const countries = (release, multiline = false) => {
+    const names = [...release.countries].sort((a, b) => a.localeCompare(b, "de"));
+    return names.length ? (multiline
+      ? names.map((name) => `<span class="release-country">${escapeHtml(name)}</span>`).join("")
+      : escapeHtml(names.join(", "))) : "Keine Angabe";
+  };
   const platforms = game.platforms.length ? game.platforms : scope?.platforms ?? [];
   const sources = [...new Set([
     ...(game.releaseYearSource ? [gameReleaseSource(game.releaseYearSource, true)] : []),
@@ -529,11 +540,11 @@ ${metadata([
     ["Erscheinungsjahr", yearLines.length ? yearLines.join("<br>") : "Unbekannt"],
     ...(game.aliases.length ? [["Weitere Titel", escapeHtml(game.aliases.join(", "))]] : []),
   ])}
-${!data ? "<p>Für dieses Spiel liegen noch keine eindeutig zugeordneten zusätzlichen Metadaten vor.</p>" : ""}
+${!data ? "<p>Weitere Spielinformationen sind derzeit nicht verfügbar.</p>" : ""}
 ${additional.length ? `<details><summary>Weitere Veröffentlichungen (${additional.length})</summary>
-<div class="overflow-auto"><table><caption>Veröffentlichungen für ${escapeHtml(scope.platforms.join(", "))}</caption>
-<thead><tr><th scope="col">Plattform</th><th scope="col">Jahr</th><th scope="col">Entwickler</th><th scope="col">Publisher</th><th scope="col">Länder</th></tr></thead>
-<tbody>${additional.map((release) => `<tr><td>${missing(release.platform)}</td><td>${missing(release.year)}</td><td>${linked("developer", release.developer)}</td><td>${linked("publisher", release.publisher)}${release.publisherLabel ? ` (${escapeHtml(release.publisherLabel)})` : ""}</td><td>${countries(release)}</td></tr>`).join("")}</tbody>
+<div class="overflow-auto"><table class="release-table"><caption>Veröffentlichungen für ${escapeHtml([...new Set([...scope.platforms, ...additionalReleases.flatMap((entry) => entry.platforms)])].join(", "))}</caption>
+<thead><tr>${supplementary.length ? '<th scope="col">Veröffentlichung</th>' : ""}<th scope="col">Plattform</th><th scope="col">Jahr</th><th scope="col">Entwickler</th><th scope="col">Publisher</th><th scope="col">Länder</th></tr></thead>
+<tbody>${additional.map((release) => `<tr>${supplementary.length ? `<td>${release.sourceTitle ? `${escapeHtml(release.sourceTitle)} ${gameReleaseSource(release.sourceUrl, true)}` : escapeHtml(game.name)}</td>` : ""}<td>${missing(release.platform)}</td><td>${missing(release.year)}</td><td>${linked("developer", release.developer)}</td><td>${linked("publisher", release.publisher)}${release.publisherLabel ? ` (${escapeHtml(release.publisherLabel)})` : ""}</td><td>${countries(release, true)}</td></tr>`).join("")}</tbody>
 </table></div></details>` : ""}</section>`;
 }
 
@@ -579,16 +590,14 @@ ${pagination(listing.route, page, pageCount, config)}`,
   for (const game of model.games) {
     const config = siteConfig.forPage(game.route);
     const videos = game.videos.map((id) => model.videoById.get(id));
-    const unknown = videos.filter((video) => video.publishedAt === null);
     add({
       route: game.route, title: `${game.name} – Spielinformationen und Videos`, interactive: true,
-      description: `${game.name}${game.platforms.length ? ` (${game.platforms.join(", ")})` : ""}: ${videoCount(videos.length)} von Pretty Old Pixel mit vollständigen Beschreibungen, chronologisch von der ersten bis zur neuesten Veröffentlichung.`,
+      description: `${game.name}${game.platforms.length ? ` (${game.platforms.join(", ")})` : ""}: ${videoCount(videos.length)} von Pretty Old Pixel. Gameplay, Hintergründe und Spielinformationen zu Genre, Entwicklung und Veröffentlichung.`,
       crumbs: [root, index, { route: game.route, name: game.name }],
       schema: [{ ...collectionSchema(videos, config, game.route, game.route), about: { "@id": `${config.href(game.route)}#game` } },
         gameSchema(game, config), ...videos.map((video) => videoSchema(video, config, game.route))],
       body: `${seriesVideos(videos, game.name, config, game, `<p>${videoCount(videos.length)} rund um ${escapeHtml(game.name)} auf Pretty Old Pixel.</p>
-${renderGameMetadata(game, config, filters)}
-${unknown.length ? `<p>${videoCount(unknown.length)} ohne bekanntes Veröffentlichungsdatum ${unknown.length === 1 ? "steht" : "stehen"} gesondert am Ende der Liste.</p>` : ""}`)}`,
+${renderGameMetadata(game, config, filters)}`)}`,
     }, videos);
   }
 }
@@ -646,8 +655,8 @@ export function renderSite(model, config, cssHref, jsHref = "assets/video-series
   }
   const root = { route: "", name: "Startseite" };
   add({
-    route: "", title: "Retrospiele, Zeitschriften und Kanalgeschichte",
-    description: "Pretty Old Pixel in Zahlen: Videos, Spiele, Zeitschriften und Heftausgaben. Retro-Themen entdecken und passende Videos finden.",
+    route: "", title: "Retrospiele, Computerzeitschriften und Retro-Hardware",
+    description: "Retrospiele, klassische Computerzeitschriften und Retro-Hardware bei Pretty Old Pixel: Let's Plays, Blätterabende, Retrospektiven und Interviews entdecken.",
     crumbs: [root], schema: { "@type": "WebPage", "@id": "./#page", name: "Pretty Old Pixel in Zahlen" },
     body: `<h1 class="visually-hidden">Pretty Old Pixel</h1>
 <p class="lead">Retrospiele entdecken, alte Computerzeitschriften durchblättern und Videos wiederfinden.</p>
@@ -656,10 +665,10 @@ ${homeOverview(model, config, filters)}`,
   const newsConfig = config.forPage("news/");
   add({
     route: "news/", title: "News – die 20 neuesten Videos",
-    description: "Die 20 neuesten veröffentlichten Videos von Pretty Old Pixel, chronologisch nach YouTube-Veröffentlichung: Retrospiele, Blätterabend und weitere Themen.",
+    description: "Die 20 neuesten Videos von Pretty Old Pixel: Retrospiele, Blätterabende, Retro-Hardware, Retrospektiven und Interviews.",
     crumbs: [root, { route: "news/", name: "News" }],
     schema: collectionSchema(model.news, newsConfig, "news/"),
-    body: `<h1>News – die neuesten Videos</h1><p>Die neuesten Veröffentlichungen, neueste zuerst. Maßgeblich ist das Veröffentlichungsdatum des Videos, nicht der Abruf der Daten.</p>${videoList(model.news, newsConfig)}`,
+    body: `<h1>News – die neuesten Videos</h1><p>Neue Videos von Pretty Old Pixel: Retrospiele, Blätterabende, Hardware und Gespräche aus der Welt der Computer- und Videospiele.</p>${videoList(model.news, newsConfig)}`,
   }, model.news);
 
   renderMagazinePages(model, config, add);
@@ -671,12 +680,12 @@ ${homeOverview(model, config, filters)}`,
     add({
       route: video.detailRoute, title: `${video.title} – ${video.blaetterabend ? "Blätterabend" : "Videoinformationen"}`, interactive: true,
       description: video.blaetterabend
-        ? `${video.title}: Blätterabend mit unbekannter oder nicht eindeutig bestimmbarer Heftausgabe.`
-        : `${video.title}: Video, Beschreibung und Zeitmarken von Pretty Old Pixel.`,
+        ? `${video.title}: klassische Computer- und Spielezeitschriften im Blätterabend von Pretty Old Pixel.`
+        : `${video.title}: ${section.name} bei Pretty Old Pixel.`,
       crumbs: [root, section, { route: video.detailRoute, name: video.title }],
       schema: videoSchema(video, pageConfig, video.detailRoute),
       body: seriesVideos([video], video.title, pageConfig, null,
-        video.blaetterabend ? "<p>Die genaue Heftausgabe ist unbekannt oder nicht eindeutig bestimmbar.</p>" : ""),
+        video.blaetterabend ? "<p>Klassische Computer- und Spielezeitschriften im Blätterabend von Pretty Old Pixel.</p>" : ""),
     }, [video]);
   }
   renderGamePages(model, config, add, filters);

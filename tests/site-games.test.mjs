@@ -105,7 +105,7 @@ test("zeigt pro Genre, Entwickler und Publisher die Top 5 als einzelne Links unt
   }
   assert.ok(section.includes('href="spiele/">Spiele</a>'));
   assert.match(section, /<p class="theme-count">2 Videos<\/p>/u);
-  assert.equal((section.match(/class="theme-ranking"/gu) ?? []).length, 3);
+  assert.equal((section.match(/class="theme-ranking"/gu) ?? []).length, 4);
   model.games[4].metadata.data.genres.push("Beta");
   model.games[5].metadata.data.genres.push("Beta");
   const updated = renderModel(model).pages.get("index.html").html;
@@ -130,6 +130,45 @@ test("wählt Spitzenfilter bei Gleichstand alphabetisch und blendet Boxen ohne g
   assert.ok(!home().includes('class="theme-ranking"'));
   delete model.games[0].metadata;
   assert.ok(!home().includes('class="theme-ranking"'));
+});
+
+test("zeigt die fünf häufigsten Spieleplattformen mit eindeutigen Spielzahlen und Filterlinks", () => {
+  const model = metadataModel(8);
+  const assignments = [
+    ["MS-DOS", "MS-DOS", "Amiga", "C64", "NES", "SNES", "Windows"],
+    ["MS-DOS", "Amiga", "C64", "NES", "SNES", "Windows"],
+    ["MS-DOS", "Amiga", "C64"],
+    ["MS-DOS", "Amiga"],
+    ["MS-DOS"],
+    ["MS-DOS"],
+    ["Windows"],
+    ["Windows"],
+  ];
+  model.games.forEach((game, index) => {
+    game.platforms = assignments[index];
+    game.metadata.data.scope.platforms = ["DOS"];
+  });
+  model.games[6].metadata.status = "blocked";
+  delete model.games[7].metadata;
+  const { pages } = renderModel(model);
+  const html = pages.get("index.html").html;
+  const ranking = html.match(/<h3>Spieleplattformen<\/h3><ol class="theme-ranking">([\s\S]*?)<\/ol>/u)[1];
+  assert.deepEqual([...ranking.matchAll(/title="([^"]+)"/gu)].map((match) => match[1]),
+    ["MS-DOS", "Amiga", "C64", "NES", "SNES"]);
+  assert.deepEqual([...ranking.matchAll(/<span class="meta">([^<]+)<\/span>/gu)].map((match) => match[1]),
+    ["6 Spiele", "4 Spiele", "3 Spiele", "2 Spiele", "2 Spiele"]);
+  assert.ok(!ranking.includes("Windows"));
+  for (const slug of ["ms-dos", "amiga", "c64", "nes", "snes", "windows"]) {
+    const route = `spiele/plattform/${slug}/`;
+    assert.ok(pages.has(`${route}index.html`), route);
+    const filtered = pages.get(`${route}index.html`).html;
+    assert.match(filtered, /Alle Spiele anzeigen/u);
+    assert.match(filtered, /Spieleplattformen:/u);
+    assert.ok(graph(filtered).some((item) => item["@type"] === "BreadcrumbList"));
+  }
+  assert.ok(ranking.includes('href="spiele/plattform/ms-dos/"'));
+  const dos = pages.get("spiele/plattform/ms-dos/index.html").html;
+  assert.equal((dos.match(/<li><h2>/gu) ?? []).length, 6);
 });
 
 test("verlinkt gemeinsame Genres, Entwickler und Publisher nur für mindestens zwei veröffentlichte Spiele", () => {
@@ -339,7 +378,7 @@ test("bindet konsolidierte Metadaten im echten Offline-Modell ein und zeigt Quel
     assert.equal(game.metadata.status, "ready");
     assert.deepEqual(game.platforms, [platform]);
     assert.equal(game.releaseYear, year);
-    assert.doesNotMatch(pages.get(`${game.route}index.html`).html, /noch keine eindeutig zugeordneten zusätzlichen Metadaten/u);
+    assert.doesNotMatch(pages.get(`${game.route}index.html`).html, /Weitere Spielinformationen sind derzeit nicht verfügbar/u);
   }
   for (const game of model.games) {
     assert.match(pages.get(`${game.route}index.html`).html, /aria-label="Zusätzliche Spielinformationen"/u);
@@ -358,8 +397,29 @@ test("bindet konsolidierte Metadaten im echten Offline-Modell ein und zeigt Quel
       }
     }
     assert.ok(externalUrls.every((url) => new URL(url).hostname === "www.mobygames.com"));
-    assert.equal(externalUrls.length, game.metadata.status === "ready" ? 1 : 0);
+    const additionalSources = game.metadata.data?.additionalReleases ?? [];
+    for (const entry of additionalSources) assert.ok(externalUrls.includes(entry.sourceUrl));
+    if (!additionalSources.length) assert.equal(externalUrls.length, game.metadata.status === "ready" ? 1 : 0);
   }
+});
+
+test("Akalabeth behält Apple II als Hauptversion und zeigt Ultima Collection als DOS-Veröffentlichung", async () => {
+  const model = await loadSiteData(path.resolve(import.meta.dirname, "../cache"));
+  const game = model.games.find((entry) => entry.id === "akalabeth-world-of-doom");
+  assert.deepEqual(game.platforms, ["Apple II"]);
+  assert.equal(game.releaseYear, 1980);
+  assert.equal(game.metadata.data.identity.id, 1256);
+  const config = createSiteConfig();
+  const html = renderSite(model, config, "assets/test.css").get(`${game.route}index.html`).html;
+  const table = html.match(/<details><summary>Weitere Veröffentlichungen[\s\S]*?<\/details>/u)[0];
+  assert.match(table, /Ultima Collection/u);
+  assert.match(table, /mobygames\.com\/game\/1254\//u);
+  assert.match(table, /<td>DOS<\/td><td>1998<\/td>/u);
+  assert.match(table, /Electronic Arts/u);
+  assert.match(table, /<table class="release-table">/u);
+  assert.match(table, /<td><span class="release-country">United Kingdom<\/span><span class="release-country">United States<\/span><\/td>/u);
+  assert.match(table, /Veröffentlichungen für Apple II, MS-DOS/u);
+  assert.match(html, /<dt>Plattform<\/dt><dd>Apple II<\/dd>/u);
 });
 
 test("fehlender Metadatencache wird gemeldet; beschädigter Cache bricht das Laden ab", async (t) => {
@@ -433,7 +493,7 @@ test("fasst nur länderabweichende Releases zusammen und erhält alle anderen Un
   const table = html.match(/<tbody>([\s\S]*?)<\/tbody>/u)[1];
   assert.equal((table.match(/<tr>/gu) ?? []).length, 5);
   assert.match(html, /Weitere Veröffentlichungen \(5\)/u);
-  assert.match(html, /&lt;Country&gt;, Germany, United States/u);
+  assert.match(table, /<span class="release-country">&lt;Country&gt;<\/span><span class="release-country">Germany<\/span><span class="release-country">United States<\/span>/u);
   assert.ok(!table.includes("Keine Angabe"));
   assert.ok(!table.includes("Germany, Germany"));
   assert.match(table, /Other Studio/u);
@@ -627,7 +687,8 @@ test("verwendet die Einzahl für ein Spielvideo ohne Veröffentlichungsdatum", (
   assert.ok(pages.get("spiele/index.html").html.includes('<p class="meta">2 Videos</p>'));
   const detail = pages.get("spiele/cadaver/index.html").html;
   assert.ok(detail.includes("<p>2 Videos rund um Cadaver"));
-  assert.ok(detail.includes("1 Video ohne bekanntes Veröffentlichungsdatum steht gesondert"));
+  assert.ok(detail.includes("Datum unbekannt"));
+  assert.doesNotMatch(detail, /steht gesondert|zugeordneten zusätzlichen Metadaten/u);
   assert.ok(!/\b1 Videos\b/u.test(detail));
 });
 
@@ -787,7 +848,7 @@ test("sortiert numerisch nach Veröffentlichung und kennzeichnet undatierte Vide
   assert.deepEqual(model.games[0].videos, [videoId(0), videoId(1), videoId(2), videoId(3)]);
   const html = pages.get("spiele/cadaver/index.html").html;
   assert.ok(html.includes("Datum unbekannt"));
-  assert.ok(html.includes("gesondert am Ende"));
+  assert.doesNotMatch(html, /gesondert am Ende/u);
   assert.ok(html.indexOf(`id="video-${videoId(0)}"`) < html.indexOf(`id="video-${videoId(3)}"`));
 });
 

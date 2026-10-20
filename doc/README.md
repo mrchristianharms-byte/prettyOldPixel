@@ -29,6 +29,12 @@ Dateipfade im Text beziehen sich auf dessen Wurzel.
 Statische Website für GitHub Pages. Die Quelldateien und der Websitegenerator liegen
 in `src/`; `npm run generate:site` erzeugt die veröffentlichbaren Dateien in `docs/`.
 
+Öffentliche Einleitungen und SEO-Beschreibungen erläutern den Inhalt:
+Spiele, Zeitschriften, Hardware und Gespräche. Hinweise zur Datenaufbereitung
+gehören in diese Dokumentation, nicht in Seiteneinleitungen. Originale
+Videobeschreibungen, Datenschutz- und Bedienhinweise sowie notwendige Hinweise
+auf fehlende oder unsichere Angaben bleiben erhalten.
+
 ## Lokal bauen
 
 Voraussetzung: Node.js 22 oder neuer.
@@ -171,14 +177,17 @@ Die Zeitschriftenbox zeigt stattdessen die Anzahl unterschiedlicher Zeitschrifte
 ohne Videozahl; die Beschreibung der Spielebox nennt zusätzlich die Anzahl
 unterschiedlicher veröffentlichter Spiele. Beide Zahlen werden bei jedem Build aus dem
 normalisierten Datenbestand ermittelt.
-Unter „Die Themen entdecken“ ergänzen drei Infoboxen für Genre, Entwickler und
-Publisher jeweils die fünf Werte mit den meisten Spielen. Die Überschriften
+Unter „Die Themen entdecken“ ergänzen vier Infoboxen für Genre, Entwickler,
+Publisher und Spieleplattformen jeweils die fünf Werte mit den meisten Spielen. Die Überschriften
 sind nicht verlinkt; jeder Wert erhält einen eigenen Link zur gefilterten
 Spieleliste und seine Spieleanzahl. Es gelten dieselben Zählregeln und
 die Mindestzahl von zwei verschiedenen Spielen wie für die Filterseiten;
 bei weniger als fünf passenden Filtern erscheinen nur die vorhandenen Werte;
 ohne passenden Filter entfällt die jeweilige Box. Bei gleicher Trefferzahl
 entscheidet der alphabetische Name. Die Auswahl wird bei jedem Build aktualisiert.
+Plattformlinks führen auf `/spiele/plattform/<name>/`. Maßgeblich sind die
+Katalogplattformen, sonst die ausgewählten Metadatenplattformen; Mehrfachplattformen
+zählen je Plattform einmal pro Spiel, zusätzliche Veröffentlichungen nicht mehrfach.
 Mehrfachzuordnungen zählen innerhalb eines Bereichs nur einmal; die Bereiche
 sind untereinander nicht addierbar. Die separate News-Seite mit den 20 neuesten
 Veröffentlichungen bleibt über die Hauptnavigation erreichbar; einen zusätzlichen

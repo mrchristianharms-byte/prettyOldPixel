@@ -13,6 +13,8 @@ import { platformMatches } from "../src/game-dump-matching.mjs";
 test("freigegebene Originalspiele und beschreibungsbelegte Plattformen bleiben eindeutig zugeordnet", async () => {
   const reader = await loadReadyGameMetadata();
   for (const [id, mobyid, platforms] of [
+    ["little-computer-people", 9241, ["C64"]],
+    ["f15-strike-eagle-ii", 1737, ["MS-DOS"]],
     ["labyrinth", 12175, ["C64"]],
     ["rogue", 1743, ["MS-DOS"]],
     ["worms", 340, ["MS-DOS"]],
@@ -152,6 +154,36 @@ test("fehlendes Jahr und Mehrfachplattform wählen kein pauschales Erscheinungsj
   report.games[0].candidates[0].releases[1].year = 1988;
   await writeJson(file, report);
   assert.equal((await buildReadyGameMetadata(options)).games[0].data.releaseYear, null);
+});
+
+test("zusätzliche Sammlungen ändern weder Hauptspiel noch Plattformumfang oder Erscheinungsjahr", async (t) => {
+  const { options, report } = await fixture(t);
+  const reference = { mobyid: 20, title: "Collection", platforms: ["MS-DOS"] };
+  options.games[0].additionalReleases = [reference];
+  report.games[0].additionalReleases = [{ ...reference, releases: [{
+    mobyid: 20, mobyreleaseid: 200, year: 1998, platform: "DOS",
+    developer: null, publisher: "Collection Publisher", countries: "Germany", publabel: null,
+  }] }];
+  const file = path.join(options.cacheDir, "local-dump/report.json");
+  await writeJson(file, report);
+  await buildReadyGameMetadata(options);
+  const record = (await loadReadyGameMetadata(options)).get("game");
+  assert.equal(record.data.identity.id, 10);
+  assert.deepEqual(record.data.scope.platforms, ["C64"]);
+  assert.equal(record.data.releaseYear, 1985);
+  assert.equal(record.data.additionalReleases[0].sourceUrl, "https://www.mobygames.com/game/20/");
+  assert.equal(record.data.additionalReleases[0].releases[0].year, 1998);
+  assert.ok(renderGameMetadataReview(await loadReadyGameMetadata(options), options.games).includes("Collection"));
+  const cache = JSON.parse(await readFile(path.join(options.cacheDir, "ready.json"), "utf8"));
+  const { contentHash, ...payload } = cache;
+  payload.games[0].data.additionalReleases[0].releases[0].platform = "NES";
+  await writeJson(path.join(options.cacheDir, "ready.json"), {
+    ...payload, contentHash: createHash("sha256").update(JSON.stringify(payload)).digest("hex"),
+  });
+  await assert.rejects(loadReadyGameMetadata(options), /zusätzliche Veröffentlichung/u);
+  delete report.games[0].additionalReleases;
+  await writeJson(file, report);
+  await assert.rejects(buildReadyGameMetadata(options), /Zusätzliche Veröffentlichungen veraltet/u);
 });
 
 test("normalisiert bestehende Rohreports bei der Aufbereitung und verlangt den aktuellen Aliasstand", async (t) => {

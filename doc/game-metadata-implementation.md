@@ -83,6 +83,13 @@ Daten. Beschädigte oder veraltete fertige Caches brechen den Build ab.
   Jahr. Bei mehreren Plattformen oder unvollständiger Datierung bleibt es
   unbekannt. Einzelne Veröffentlichungsjahre bleiben plattformgebunden sichtbar.
 - Andere oder manuell recherchierte Jahresangaben sind kein Fallback.
+- Explizite `additionalReleases` im Katalog ergänzen separat belegte Sammlungen,
+  ohne diese zu Titelaliasen oder Hauptspiel-Kandidaten zu machen.
+  Akalabeth bleibt Apple II (Dump-Jahr 1980); die Ultima Collection wird mit ihren
+  DOS-Releases ab 1998 unter „Weitere Veröffentlichungen“ samt eigener Quelle gezeigt.
+  Import, Report-Prüfung und fertiger Cache prüfen ID, Titel und Plattformbezug;
+  der Cache-Hash sichert auch diese Katalogfreigaben. Sammlungen ändern weder
+  das Hauptjahr noch die Plattformzählung der Startseite.
 
 ## Anzeige und Pflege
 
@@ -91,6 +98,9 @@ Veröffentlichung sowie weiteren Veröffentlichungen in einem geschlossenen
 Detailbereich. Quellenlinks sind Link-Icons. Länderunterschiede werden nur für
 die Anzeige zusammengefasst; vollständig von reicheren Datensätzen abgedeckte
 Leerangaben entfallen. Abweichende Jahre oder Firmen bleiben erhalten.
+In Veröffentlichungstabellen steht jedes Land auf einer eigenen, ungetrennten
+Zeile. Spaltenüberschriften und Jahreszahlen werden nicht mitten im Wort
+umgebrochen; auf schmalen Bildschirmen ist die Tabelle horizontal scrollbar.
 
 Neue Spielidentitäten werden im [Katalog](../src/data-games.mjs) gepflegt. Fehlen
 sie im zurückbehaltenen Dump-Report, bleiben sie unverifiziert, bis ein neuer

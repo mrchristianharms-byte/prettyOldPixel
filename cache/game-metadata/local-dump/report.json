@@ -1,7 +1,7 @@
 {
   "version": 1,
   "provider": "mobygames-local-dump",
-  "importedAt": "2026-10-20T09:29:09.271Z",
+  "importedAt": "2026-10-20T10:20:48.836Z",
   "source": {
     "fileName": "gdb.sql",
     "sha256": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
@@ -9562,6 +9562,73 @@
               "publisher": "Quantum Toast",
               "developer": null,
               "countries": "Worldwide",
+              "publabel": "",
+              "sourceDeveloper": ""
+            }
+          ]
+        }
+      ],
+      "additionalReleases": [
+        {
+          "mobyid": 1254,
+          "title": "Ultima Collection",
+          "platforms": [
+            "MS-DOS"
+          ],
+          "releases": [
+            {
+              "mobyid": 1254,
+              "mobyreleaseid": 1018,
+              "year": 1998,
+              "platform": "DOS",
+              "publisher": "Electronic Arts, Inc.",
+              "developer": null,
+              "countries": "United States",
+              "publabel": "",
+              "sourceDeveloper": ""
+            },
+            {
+              "mobyid": 1254,
+              "mobyreleaseid": 54859,
+              "year": 1998,
+              "platform": "DOS",
+              "publisher": "Electronic Arts, Inc.",
+              "developer": null,
+              "countries": "United Kingdom",
+              "publabel": "",
+              "sourceDeveloper": ""
+            },
+            {
+              "mobyid": 1254,
+              "mobyreleaseid": 170087,
+              "year": 1999,
+              "platform": "DOS",
+              "publisher": "Electronic Arts, Inc.",
+              "developer": null,
+              "countries": "United States",
+              "publabel": "",
+              "sourceDeveloper": ""
+            },
+            {
+              "mobyid": 1254,
+              "mobyreleaseid": 170088,
+              "year": 1999,
+              "platform": "DOS",
+              "publisher": null,
+              "developer": null,
+              "countries": "United States",
+              "publabel": "",
+              "sourceDeveloper": "",
+              "sourcePublisher": ""
+            },
+            {
+              "mobyid": 1254,
+              "mobyreleaseid": 326639,
+              "year": 2000,
+              "platform": "DOS",
+              "publisher": "Locus Company Ltd.",
+              "developer": null,
+              "countries": "Japan",
               "publabel": "",
               "sourceDeveloper": ""
             }
@@ -22767,7 +22834,9 @@
     {
       "gameId": "little-computer-people",
       "title": "Little Computer People",
-      "platforms": [],
+      "platforms": [
+        "C64"
+      ],
       "status": "needs-identity-review",
       "candidates": [
         {
@@ -22795,8 +22864,12 @@
               "info": "Title on alternate package"
             }
           ],
-          "platformMatch": null,
-          "matchingReleaseIds": [],
+          "platformMatch": true,
+          "matchingReleaseIds": [
+            14977,
+            345743,
+            257507
+          ],
           "releases": [
             {
               "mobyid": 9241,
@@ -30041,7 +30114,9 @@
     {
       "gameId": "f15-strike-eagle-ii",
       "title": "F15 Strike Eagle II",
-      "platforms": [],
+      "platforms": [
+        "MS-DOS"
+      ],
       "status": "needs-identity-review",
       "candidates": [
         {
@@ -30060,8 +30135,14 @@
             "Simulation"
           ],
           "alternativeTitles": [],
-          "platformMatch": null,
-          "matchingReleaseIds": [],
+          "platformMatch": true,
+          "matchingReleaseIds": [
+            12280,
+            56821,
+            159426,
+            486299,
+            159425
+          ],
           "releases": [
             {
               "mobyid": 1737,

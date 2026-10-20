@@ -229,6 +229,21 @@ export async function importGameDump({
     const getGame = db.prepare("SELECT * FROM mobygames WHERE mobyid = ?");
     const getTitles = db.prepare("SELECT title, info FROM mobygames_alttitles WHERE mobyid = ? ORDER BY title, info");
     const getReleases = db.prepare("SELECT * FROM mobygames_releases WHERE mobyid = ? ORDER BY platform, year, mobyreleaseid");
+    function additionalRelease(reference) {
+      requireValue(Number.isSafeInteger(reference.mobyid) && reference.mobyid > 0
+        && typeof reference.title === "string" && Array.isArray(reference.platforms)
+        && reference.platforms.length > 0 && reference.platforms.every((platform) => typeof platform === "string"),
+      "Ungültige zusätzliche Veröffentlichung.");
+      const source = getGame.get(reference.mobyid);
+      requireValue(source && normalizeDumpTitle(source.title) === normalizeDumpTitle(reference.title),
+        `Zusätzliche Veröffentlichung fehlt oder Titel geändert: ${reference.title}.`);
+      const releases = getReleases.all(reference.mobyid).map(normalizeReleaseCompanies)
+        .filter((release) => platformMatches(reference.platforms, release.platform));
+      requireValue(reference.platforms.every((platform) =>
+        releases.some((release) => platformMatches([platform], release.platform))),
+      `Plattform der zusätzlichen Veröffentlichung fehlt: ${reference.title}.`);
+      return { ...reference, releases };
+    }
     const entries = games.map((game) => {
       const ids = new Set([game.name, ...(game.aliases ?? [])].flatMap((title) => [...(titleIndex.get(normalizeDumpTitle(title)) ?? [])]));
       const candidates = [...ids].sort((a, b) => a - b).map((id) => {
@@ -250,6 +265,8 @@ export async function importGameDump({
         gameId: game.id, title: game.name, platforms: game.platforms,
         status: candidates.length ? "needs-identity-review" : "no-exact-title-match",
         candidates,
+        ...(game.additionalReleases?.length
+          ? { additionalReleases: game.additionalReleases.map(additionalRelease) } : {}),
       };
     });
     const report = {

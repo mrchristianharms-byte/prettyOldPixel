@@ -60,8 +60,9 @@ test("lädt nur abgeschlossene Analysen mit passendem Transkript und zeigt Sprun
   const pages = renderSite(model, config, "assets/test.css");
   const issue = [...pages].find(([name]) => name.includes("/ausgaben/"))[1].html;
   assert.ok(issue.includes('<section class="game-discussions">'));
-  assert.ok(issue.includes("Erkannte Spielebesprechungen"));
-  assert.ok(issue.includes("Automatisch erkannte Vorschläge"));
+  assert.ok(issue.includes("Spielebesprechungen im Video"));
+  assert.ok(issue.includes("Spielnamen und Zeitmarken können ungenau sein."));
+  assert.doesNotMatch(issue, /Automatisch erkannte|Erkannte Spielebesprechungen/u);
   assert.ok(issue.includes('<li data-chapter-seconds="12">'));
   assert.ok(issue.includes(`href="https://www.youtube.com/watch?v=${videoId}&amp;t=12s"`));
   assert.ok(issue.includes("0:12–0:30 · Spiel &amp; &lt;Demo&gt;"));
@@ -110,7 +111,7 @@ test("zeigt geprüfte und offene Zeitbereiche ohne erfundene Endzeit oder falsch
     gameDiscussions: [{ ...discussion, endMs: null, reviewed: true }],
   });
   assert.ok(html.includes("0:12 · Spiel &amp; &lt;Demo&gt;"));
-  assert.ok(!html.includes("Automatisch erkannte Vorschläge"));
+  assert.ok(!html.includes("Spielnamen und Zeitmarken können ungenau sein."));
 });
 
 test("behält wiederholte Besprechungen desselben Spiels als einzelne Zeitmarken", async (t) => {
@@ -133,11 +134,11 @@ test("Änderungen an Spielebesprechungen aktualisieren den offline generierten A
   const pages = renderSite(await loadSiteData(directory), createSiteConfig(), "assets/test.css");
   const route = [...pages.keys()].find((file) => file.includes("/ausgaben/"));
   const before = await readFile(path.join(outputDirectory, route), "utf8");
-  assert.ok(!before.includes("Erkannte Spielebesprechungen"));
+  assert.ok(!before.includes("Spielebesprechungen im Video"));
   await writeFile(file, JSON.stringify(analysis));
   await generateSite(options);
   const after = await readFile(path.join(outputDirectory, route), "utf8");
-  assert.ok(after.includes("Erkannte Spielebesprechungen"));
+  assert.ok(after.includes("Spielebesprechungen im Video"));
   const repeat = await generateSite(options);
   assert.equal(repeat.files, repeat.reused);
 });

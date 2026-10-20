@@ -142,6 +142,38 @@ test("rendert News-Inhalte vollständig ohne Laufzeit-JavaScript und setzt Video
   assert.ok(!video.includes("dateModified"));
 });
 
+test("beschreibt Seiteninhalte in Einleitungen und SEO-Texten statt Datenaufbereitung", () => {
+  const input = issueFixture();
+  input.magazines.videos[1].magazines[0].issue = {
+    label: "1/1993", year: 1993, months: [1], number: null, special: false,
+  };
+  input.videos.videos.push({
+    id: "b0000000002", title: "Blätterabend mit Gast",
+    description: "Originalbeschreibung: Abruf der Daten bleibt unverändert.",
+    publishedAt: "2020-02-01T00:00:00Z",
+  });
+  input.magazines.videos.push({ id: "b0000000002", magazines: [] });
+  const { pages } = render(input);
+  for (const [file, { html }] of pages) {
+    if (file === "datenschutz/index.html") continue;
+    const description = html.match(/<meta name="description" content="([^"]+)">/u)[1];
+    assert.doesNotMatch(description, /Abruf|Metadaten|bestimmbar|chronologisch|Das Jahr bezeichnet/u, file);
+    assert.ok(html.includes(`<meta property="og:description" content="${description}">`), file);
+    const content = html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gu, "")
+      .replace(/<div class="description">[\s\S]*?<\/div>/gu, "");
+    assert.doesNotMatch(content, /Maßgeblich ist|Jahrgänge beziehen sich|Das Jahr bezeichnet|nicht eindeutig bestimmbar/u, file);
+  }
+  const news = pages.get("news/index.html").html;
+  assert.match(news, /Neue Videos von Pretty Old Pixel: Retrospiele, Blätterabende, Hardware und Gespräche/u);
+  assert.match(pages.get("zeitschriften/index.html").html, /Computerzeitschrift.*im Blätterabend/u);
+  const standalone = pages.get("zeitschriften/videos/blatterabend-mit-gast/index.html");
+  assert.ok(standalone);
+  assert.match(standalone.html, /Originalbeschreibung: Abruf der Daten bleibt unverändert\./u);
+  const privacy = pages.get("datenschutz/index.html").html;
+  assert.match(privacy, /IP-Adresse/u);
+  assert.match(privacy, /Local Storage/u);
+});
+
 test("zeigt kompakte Videodaten in Berliner Winter- und Sommerzeit mit unverändertem ISO-Datum", () => {
   const input = issueFixture();
   const cases = [

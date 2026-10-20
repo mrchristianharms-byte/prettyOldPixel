@@ -4,7 +4,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { gameDefinitions } from "./data-games.mjs";
 import { writeJson } from "./archive-cache.mjs";
-import { normalizeDumpTitle } from "./game-dump-matching.mjs";
+import { normalizeDumpTitle, platformMatches } from "./game-dump-matching.mjs";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 function check(condition, message) {
@@ -21,6 +21,20 @@ export async function verifyGameDump({
     && Number.isFinite(Date.parse(report.importedAt))
     && Array.isArray(report.games), "Ungültiger Report.");
   const catalogue = new Map(games.map((game) => [game.id, game]));
+  function validateReleases(releases, mobyid, gameId) {
+    const releaseIds = new Set();
+    check(Array.isArray(releases) && releases.length > 0, `Veröffentlichungen fehlen: ${gameId}.`);
+    for (const release of releases) {
+      check(release.mobyid === mobyid && Number.isSafeInteger(release.mobyreleaseid)
+        && release.mobyreleaseid > 0 && !releaseIds.has(release.mobyreleaseid)
+        && typeof release.platform === "string" && release.platform.trim()
+        && (release.year === null || (Number.isInteger(release.year) && release.year >= 1900 && release.year <= 2099))
+        && ["developer", "publisher", "countries", "publabel"].every((key) =>
+          release[key] === null || typeof release[key] === "string"),
+      `Ungültige Releasefelder: ${gameId}.`);
+      releaseIds.add(release.mobyreleaseid);
+    }
+  }
   const ids = new Set();
   check(catalogue.size === games.length, "Doppelte Katalog-ID.");
   for (const entry of report.games) {
@@ -43,17 +57,20 @@ export async function verifyGameDump({
         && [game.name, ...(game.aliases ?? [])].some((title) =>
           titles.some((sourceTitle) => normalizeDumpTitle(title) === normalizeDumpTitle(sourceTitle))),
       `Kandidat ohne aktuellen Titel-/Aliasbezug: ${game.id}/${candidate.mobyid}.`);
-      const releaseIds = new Set();
-      for (const release of candidate.releases) {
-        check(release.mobyid === candidate.mobyid && Number.isSafeInteger(release.mobyreleaseid)
-          && release.mobyreleaseid > 0 && !releaseIds.has(release.mobyreleaseid)
-          && typeof release.platform === "string" && release.platform.trim()
-          && (release.year === null || (Number.isInteger(release.year) && release.year >= 1900 && release.year <= 2099))
-          && ["developer", "publisher", "countries", "publabel"].every((key) =>
-            release[key] === null || typeof release[key] === "string"),
-        `Ungültige Releasefelder: ${game.id}.`);
-        releaseIds.add(release.mobyreleaseid);
-      }
+      if (candidate.releases.length) validateReleases(candidate.releases, candidate.mobyid, game.id);
+    }
+    const references = game.additionalReleases ?? [];
+    const additional = entry.additionalReleases ?? [];
+    check(Array.isArray(additional) && additional.length === references.length,
+      `Zusätzliche Veröffentlichungen veraltet: ${game.id}.`);
+    for (const [index, release] of additional.entries()) {
+      const { releases, ...reference } = release;
+      check(JSON.stringify(reference) === JSON.stringify(references[index]),
+        `Zusätzliche Veröffentlichung ohne Freigabe: ${game.id}.`);
+      validateReleases(releases, reference.mobyid, game.id);
+      check(releases.every((entry) => platformMatches(reference.platforms, entry.platform))
+        && reference.platforms.every((platform) => releases.some((entry) => platformMatches([platform], entry.platform))),
+      `Plattform der zusätzlichen Veröffentlichung fehlt: ${game.id}.`);
     }
   }
   check(ids.size === catalogue.size, "Report deckt den Katalog nicht vollständig ab.");

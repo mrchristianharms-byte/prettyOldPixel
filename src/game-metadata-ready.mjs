@@ -13,9 +13,17 @@ import { companyNamesHash, normalizeReleaseCompanies } from "./game-company-name
 const root = fileURLToPath(new URL("../", import.meta.url));
 const defaultCacheDir = path.join(root, "cache/game-metadata");
 const hash = (value) => createHash("sha256").update(JSON.stringify(value)).digest("hex");
-const catalogueHash = (games) => hash(games.map(({ id, name, platforms, aliases }) => ({
+const catalogueHash = (games) => hash(games.map(({ id, name, platforms, aliases, additionalReleases }) => ({
   id, name, platforms, aliases: aliases ?? [],
+  ...(additionalReleases?.length ? { additionalReleases } : {}),
 })));
+const readyRelease = (release) => normalizeReleaseCompanies({
+  sourceReleaseId: release.mobyreleaseid, platform: release.platform, year: release.year,
+  developer: release.developer, publisher: release.publisher,
+  ...(release.sourceDeveloper !== undefined ? { sourceDeveloper: release.sourceDeveloper } : {}),
+  ...(release.sourcePublisher !== undefined ? { sourcePublisher: release.sourcePublisher } : {}),
+  countries: release.countries?.trim() || null, publisherLabel: release.publabel?.trim() || null,
+});
 function check(condition, message) {
   if (!condition) throw new Error(`Nutzbare Spielemetadaten: ${message}`);
 }
@@ -28,7 +36,8 @@ export async function buildReadyGameMetadata({
   const ids = new Set(games.map((game) => game.id));
   check(Object.keys(reviewedDecisions).every((id) => ids.has(id)), "Entscheidung für unbekanntes Spiel.");
   const records = games.map((game) => {
-    const candidates = report.games.find((entry) => entry.gameId === game.id).candidates;
+    const reportEntry = report.games.find((entry) => entry.gameId === game.id);
+    const candidates = reportEntry.candidates;
     const decision = reviewedDecisions[game.id];
     let selection = selectDumpCandidate(game, candidates, selectionPolicy);
     if (decision) {
@@ -50,13 +59,7 @@ export async function buildReadyGameMetadata({
     };
     const candidate = candidates.find((entry) => entry.mobyid === selection.mobyid);
     const releases = candidate.releases.filter((release) => selection.matchingReleaseIds.includes(release.mobyreleaseid))
-      .map((release) => normalizeReleaseCompanies({
-        sourceReleaseId: release.mobyreleaseid, platform: release.platform, year: release.year,
-        developer: release.developer, publisher: release.publisher,
-        ...(release.sourceDeveloper !== undefined ? { sourceDeveloper: release.sourceDeveloper } : {}),
-        ...(release.sourcePublisher !== undefined ? { sourcePublisher: release.sourcePublisher } : {}),
-        countries: release.countries?.trim() || null, publisherLabel: release.publabel?.trim() || null,
-      }));
+      .map(readyRelease);
     const years = releases.map((release) => release.year);
     // Missing dates or a multi-platform scope must not manufacture a game-wide first year.
     const year = selection.platforms.length === 1 && years.length > 0 && years.every((value) => value !== null)
@@ -74,6 +77,12 @@ export async function buildReadyGameMetadata({
           companyIdentities: "reviewed-display-aliases", credits: "not-available" },
         releaseYear: year,
         genres: [...new Set(candidate.genres)], releases,
+        ...(reportEntry.additionalReleases?.length ? {
+          additionalReleases: reportEntry.additionalReleases.map(({ mobyid, title, platforms, releases }) => ({
+            mobyid, title, platforms, sourceUrl: `https://www.mobygames.com/game/${mobyid}/`,
+            releases: releases.map(readyRelease),
+          })),
+        } : {}),
       },
     };
   });
@@ -145,6 +154,28 @@ function validateReadyCache(cache, games, reviewedDecisions, selectionPolicy) {
           release[key] === undefined || typeof release[key] === "string")),
     `Ungültige nutzbare Daten: ${record.gameId}.`);
     const years = data.releases.map((release) => release.year);
+    const references = game.additionalReleases ?? [];
+    const additional = data.additionalReleases ?? [];
+    check(Array.isArray(additional) && additional.length === references.length,
+      `Zusätzliche Veröffentlichungen fehlen: ${record.gameId}.`);
+    for (const [index, entry] of additional.entries()) {
+      const reference = references[index];
+      check(entry.mobyid === reference.mobyid && entry.title === reference.title
+        && JSON.stringify(entry.platforms) === JSON.stringify(reference.platforms)
+        && entry.sourceUrl === `https://www.mobygames.com/game/${reference.mobyid}/`
+        && Array.isArray(entry.releases) && entry.releases.length > 0
+        && new Set(entry.releases.map((release) => release.sourceReleaseId)).size === entry.releases.length
+        && reference.platforms.every((platform) =>
+          entry.releases.some((release) => platformMatches([platform], release.platform)))
+        && entry.releases.every((release) => Number.isSafeInteger(release.sourceReleaseId)
+          && release.sourceReleaseId > 0 && platformMatches(reference.platforms, release.platform)
+          && (release.year === null || (Number.isInteger(release.year) && release.year >= 1900 && release.year <= 2099))
+          && ["developer", "publisher", "countries", "publisherLabel"].every((key) =>
+            release[key] === null || typeof release[key] === "string")
+          && ["sourceDeveloper", "sourcePublisher"].every((key) =>
+            release[key] === undefined || typeof release[key] === "string")),
+      `Ungültige zusätzliche Veröffentlichung: ${record.gameId}.`);
+    }
     check(data.releaseYear === (platforms.length === 1 && years.every((year) => year !== null) ? Math.min(...years) : null),
       `Ungültige Jahresauswahl: ${record.gameId}.`);
   }

@@ -17,6 +17,9 @@ export function renderGameMetadataReview(reader, games = gameDefinitions) {
 · Kandidaten: ${escapeHtml(selection.consideredIds.join(", ") || "keine")}</p>
 ${data ? `<p><a href="${data.evidence.sourceUrl}">MobyGames ${data.identity.id}</a> · Genre: ${escapeHtml(data.genres.join(", ") || "keine Angabe")}
 · Jahr im Plattformumfang: ${data.releaseYear ?? "unbekannt"} · ${data.releases.length} Veröffentlichungen</p>` : ""}
+${(data?.additionalReleases ?? []).map((entry) => `<p>Zusätzliche Veröffentlichung:
+<a href="${entry.sourceUrl}">${escapeHtml(entry.title)}</a> · ${escapeHtml(entry.platforms.join(", "))}
+· ${entry.releases.length} Veröffentlichungen</p>`).join("")}
 </details>`;
   }).join("\n");
   return `<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">

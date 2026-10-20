@@ -205,6 +205,8 @@ const aliases = {
 
 // Videobeschreibungen und freigegebene Dump-Zuordnungen; IDs und Routen bleiben erhalten.
 const reviewedPlatforms = {
+  "little-computer-people": ["C64"],
+  "f15-strike-eagle-ii": ["MS-DOS"],
   labyrinth: ["C64"],
   "wing-commander-ii": ["MS-DOS"],
   "tom-clancy-s-endwar": ["PSP"],
@@ -223,6 +225,9 @@ export const gameDefinitions = [...playlists.map(([playlistId, name, platform]) 
   return {
     id, name, aliases: aliases[id] ?? [], platforms: reviewedPlatforms[id] ?? (platform ? [platform] : []),
     release: null,
+    ...(id === "akalabeth-world-of-doom" ? { additionalReleases: [{
+      mobyid: 1254, title: "Ultima Collection", platforms: ["MS-DOS"],
+    }] } : {}),
     playlistIds: [playlistId, ...(id === "sid-meier-s-railroad-tycoon-deluxe-ms-dos" ? ["PLZW5k3rtbudqOJb8J0g3KKhWvwBtporbE"] : [])],
     videoIds: supplements[id] ?? [],
     // Die Formatvorstellung in dieser ansonsten spielbezogenen Playlist gehört nicht zum Spiel.

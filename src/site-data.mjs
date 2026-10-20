@@ -521,7 +521,7 @@ export function normalizeSources({ videos: videoCache, playlists: playlistCache,
   if (reconsiderVideos.length) {
     const section = {
       id: "reconsider", name: "re.consider", route: "reconsider/",
-      description: "re.consider: Einzelne Spiele im Rückblick, mit einem Video pro Spiel.",
+      description: "re.consider: Rückblicke und persönliche Einschätzungen zu klassischen Computer- und Videospielen.",
       entries: reconsiderVideos.map((video) => ({ videoId: video.id })),
     };
     sections.push(section);
@@ -533,7 +533,7 @@ export function normalizeSources({ videos: videoCache, playlists: playlistCache,
   if (otherVideos.length) {
     const section = {
       id: "sonstiges", name: "Sonstiges", route: "sonstiges/",
-      description: "Weitere Videos von Pretty Old Pixel außerhalb der Spiele, Zeitschriften und übrigen Themenbereiche.",
+      description: "Weitere Videos von Pretty Old Pixel: Fundstücke, besondere Aktionen und Gespräche rund um Retrospiele und Computerkultur.",
       entries: otherVideos.map((video) => ({ videoId: video.id })),
     };
     sections.push(section);
