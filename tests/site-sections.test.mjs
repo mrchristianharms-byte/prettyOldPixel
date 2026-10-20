@@ -144,6 +144,12 @@ test("Sonstiges nutzt News-Einträge, paginiert alle Videos und erscheint in Nav
   assert.equal(model.sections[0].entries.length, 61);
   assert.equal((first.match(/<li><article>/gu) ?? []).length, 60);
   assert.equal((second.match(/<li><article>/gu) ?? []).length, 1);
+  for (const html of [first, second]) {
+    assert.equal((html.match(/<nav class="pagination"/gu) ?? []).length, 1);
+    assert.ok(html.indexOf('<nav class="pagination"') > html.indexOf('</article>'));
+  }
+  assert.ok(first.includes('href="seite/2/" rel="next"'));
+  assert.ok(second.includes('href="../../" rel="prev"'));
   assert.equal(graph(first)[0].mainEntity.itemListElement.length, 60);
   assert.ok(second.includes("Veröffentlichungsdatum unbekannt"));
   assert.ok(first.includes('href="./" aria-current="page">Sonstiges</a>'));

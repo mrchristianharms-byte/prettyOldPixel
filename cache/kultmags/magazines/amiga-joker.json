@@ -1275,6 +1275,16 @@
   ],
   "logo": {
     "url": "https://www.kultmags.com/Amiga%20Joker/title.png",
-    "file": "c239d2139df4c662124f627fda7e8d8c25c64f93c3569292d378cd22eda9b1ff.png"
+    "file": "c239d2139df4c662124f627fda7e8d8c25c64f93c3569292d378cd22eda9b1ff.png",
+    "variants": [
+      {
+        "file": "c239d2139df4c662124f627fda7e8d8c25c64f93c3569292d378cd22eda9b1ff.webp",
+        "sha256": "8ad73f21fbfdbae225a8c5aeac1d640ee80cffc80b9d23311aa13ca51a9b90f5"
+      },
+      {
+        "file": "c239d2139df4c662124f627fda7e8d8c25c64f93c3569292d378cd22eda9b1ff.gif",
+        "sha256": "afb87ccc6b9718b195cc20153584a94eada9cf44b5436fc1a43da4159211f0be"
+      }
+    ]
   }
 }

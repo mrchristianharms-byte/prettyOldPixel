@@ -3401,6 +3401,16 @@
   ],
   "logo": {
     "url": "https://www.kultmags.com/PC-Games/title.png",
-    "file": "0ffe348bcc7f70ef623c91c227ae2d173308ffb781b61d5ae41471cf472dbbe1.png"
+    "file": "0ffe348bcc7f70ef623c91c227ae2d173308ffb781b61d5ae41471cf472dbbe1.png",
+    "variants": [
+      {
+        "file": "0ffe348bcc7f70ef623c91c227ae2d173308ffb781b61d5ae41471cf472dbbe1.webp",
+        "sha256": "65c55df3fcc5277f53e1665575ab3a70f718041a4f66a833ca2bb6c4d783142a"
+      },
+      {
+        "file": "0ffe348bcc7f70ef623c91c227ae2d173308ffb781b61d5ae41471cf472dbbe1.gif",
+        "sha256": "85aa377ef0d3a908ed6a314dc10b075339912c3d0bf129dfded15e28220d2ce7"
+      }
+    ]
   }
 }

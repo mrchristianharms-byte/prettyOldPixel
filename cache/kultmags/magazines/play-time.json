@@ -860,6 +860,16 @@
   ],
   "logo": {
     "url": "https://www.kultmags.com/Play%20Time/title.png",
-    "file": "0833bdadabd189d86f3ddcfbb4b81c3d5ec5b707d1553d9add2e9b280d2f8282.png"
+    "file": "0833bdadabd189d86f3ddcfbb4b81c3d5ec5b707d1553d9add2e9b280d2f8282.png",
+    "variants": [
+      {
+        "file": "0833bdadabd189d86f3ddcfbb4b81c3d5ec5b707d1553d9add2e9b280d2f8282.webp",
+        "sha256": "7e5f46a98596ddc0fd7aa4bdac5965c71cca9c9b6bd5f5326c940e2462dfdf0e"
+      },
+      {
+        "file": "0833bdadabd189d86f3ddcfbb4b81c3d5ec5b707d1553d9add2e9b280d2f8282.gif",
+        "sha256": "d80c87a0825d4b94bc41730a7e465b311159de2d8185464a569a66fe0369d14c"
+      }
+    ]
   }
 }

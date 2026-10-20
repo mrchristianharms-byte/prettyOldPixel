@@ -1772,6 +1772,16 @@
   ],
   "logo": {
     "url": "https://www.kultmags.com/Happy%20Computer/title.png",
-    "file": "a94f1676325ce1607248fe2d54336b1d041036b5b88fc68be5bde571b7f468ed.png"
+    "file": "a94f1676325ce1607248fe2d54336b1d041036b5b88fc68be5bde571b7f468ed.png",
+    "variants": [
+      {
+        "file": "a94f1676325ce1607248fe2d54336b1d041036b5b88fc68be5bde571b7f468ed.webp",
+        "sha256": "ef37f2db313501752344ee7a7d5de16fd48b329d64c3507b8738095862c00206"
+      },
+      {
+        "file": "a94f1676325ce1607248fe2d54336b1d041036b5b88fc68be5bde571b7f468ed.gif",
+        "sha256": "4dc7bdf3fc35313e57f25ae961a765ce8e69db1091ed40d9fcd1553642676319"
+      }
+    ]
   }
 }

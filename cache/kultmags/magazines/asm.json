@@ -2002,6 +2002,16 @@
   ],
   "logo": {
     "url": "https://www.kultmags.com/ASM/title.png",
-    "file": "1ede268f7bb20aee2c6a26370736410c7c5c8caec8fa028fcfb70508419d0af2.png"
+    "file": "1ede268f7bb20aee2c6a26370736410c7c5c8caec8fa028fcfb70508419d0af2.png",
+    "variants": [
+      {
+        "file": "1ede268f7bb20aee2c6a26370736410c7c5c8caec8fa028fcfb70508419d0af2.webp",
+        "sha256": "c7726c85fd6e6b3606e3386ffcdad142a09c6fec022a5bacafb6f5524497aa57"
+      },
+      {
+        "file": "1ede268f7bb20aee2c6a26370736410c7c5c8caec8fa028fcfb70508419d0af2.gif",
+        "sha256": "cf1b91a2f0549e3ca93265702054f9005d2e3f111ff2f478fcf62d15a775db71"
+      }
+    ]
   }
 }

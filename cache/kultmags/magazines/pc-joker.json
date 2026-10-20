@@ -2116,6 +2116,16 @@
   ],
   "logo": {
     "url": "https://www.kultmags.com/PC%20Joker/title.png",
-    "file": "39da88f6c56cf14b71a11c2d35c68d05993280051abd4bba6cc67d244c2ad9a8.png"
+    "file": "39da88f6c56cf14b71a11c2d35c68d05993280051abd4bba6cc67d244c2ad9a8.png",
+    "variants": [
+      {
+        "file": "39da88f6c56cf14b71a11c2d35c68d05993280051abd4bba6cc67d244c2ad9a8.webp",
+        "sha256": "4143246928b9232ec838755d9a51115952d7308c1354dfc5396933b98280e07f"
+      },
+      {
+        "file": "39da88f6c56cf14b71a11c2d35c68d05993280051abd4bba6cc67d244c2ad9a8.gif",
+        "sha256": "c97d5440de3f67504208d2255c6cff3fcc4fbea8df7ba774df2727de6a2a1682"
+      }
+    ]
   }
 }

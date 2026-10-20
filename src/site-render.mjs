@@ -48,8 +48,6 @@ function catalogDuration(videoIds, model) {
 
 function homeOverview(model, config, filters) {
   const number = (value) => new Intl.NumberFormat("de-DE").format(value);
-  const dated = model.videos.filter((video) => video.publishedTime !== null);
-  const oldest = dated.reduce((first, video) => !first || video.publishedTime < first.publishedTime ? video : first, null);
   const knownDurations = model.videos.filter((video) => video.durationSeconds !== null);
   const hours = Math.floor(knownDurations.reduce((total, video) => total + video.durationSeconds, 0) / 3600);
   const issues = model.magazines.reduce((total, magazine) => total + magazine.issues.size, 0);
@@ -83,7 +81,6 @@ function homeOverview(model, config, filters) {
   return `<section class="home-statistics" aria-labelledby="statistik">
 <h2 id="statistik">Pretty Old Pixel in Zahlen</h2>
 <dl class="stats-grid">${stats.map(([label, value, note]) => `<div><dt>${label}</dt><dd>${value}</dd><dd class="stat-note">${note}</dd></div>`).join("")}</dl>
-${oldest ? `<p class="channel-history"><span>Videogeschichte seit</span> <strong><time datetime="${oldest.publishedAt}">${new Intl.DateTimeFormat("de-DE", { dateStyle: "long", timeZone: "UTC" }).format(new Date(oldest.publishedTime))}</time></strong><small>Datum des ältesten öffentlichen Videos in dieser Übersicht, nicht das Gründungsdatum des Kanals.</small></p>` : '<p class="meta">Der Beginn der Videogeschichte ist ohne bekannte Veröffentlichungsdaten nicht bestimmbar.</p>'}
 </section>
 <section aria-labelledby="bereiche"><h2 id="bereiche">Die Themen entdecken</h2>
 <div class="theme-grid">${themes.map((theme) => `<article><h3><a href="${config.href(theme.route)}">${escapeHtml(theme.name)}</a></h3><p class="theme-count">${escapeHtml(theme.count)}</p><p>${escapeHtml(theme.description)}</p></article>`).join("")}
@@ -162,7 +159,7 @@ ${interactive ? `<script type="module" src="${config.href(jsHref)}"></script>` :
 <body${interactive ? ' class="detail-page"' : ""}>
 <a class="skip-link" href="#inhalt">Zum Inhalt</a>
 <header class="container site-header">
-<a class="brand" href="${config.href()}">${config.name}</a>
+<a class="brand" href="${config.href()}"><img class="brand-logo" src="${config.href("favicon.jpg")}" alt="" width="40" height="40">${config.name}</a>
 ${navigation(navigationEntries, route, config, themeToggle())}
 </header>
 <main id="inhalt" class="container">
@@ -628,7 +625,7 @@ function renderSectionPages(model, siteConfig, add) {
 <p>${escapeHtml(section.description)}</p><p>${videoCount(section.entries.length)}. ${section.id === "retrospektiven"
   ? "Wählen Sie ein Thema und entdecken Sie die Geschichte der Spiele Folge für Folge."
   : "Entdecken Sie die Beiträge, beginnend mit den neuesten Videos."}</p>
-${pagination(section.route, page, count, config)}${listing}${pagination(section.route, page, count, config)}`,
+${section.id === "sonstiges" ? "" : pagination(section.route, page, count, config)}${listing}${pagination(section.route, page, count, config)}`,
       }, videos);
     }
   }
@@ -650,7 +647,7 @@ export function renderSite(model, config, cssHref, jsHref = "assets/video-series
   const root = { route: "", name: "Startseite" };
   add({
     route: "", title: "Retrospiele, Zeitschriften und Kanalgeschichte",
-    description: "Pretty Old Pixel in Zahlen: Videos, Spiele, Zeitschriften, Heftausgaben und Kanalgeschichte. Retro-Themen entdecken und passende Videos finden.",
+    description: "Pretty Old Pixel in Zahlen: Videos, Spiele, Zeitschriften und Heftausgaben. Retro-Themen entdecken und passende Videos finden.",
     crumbs: [root], schema: { "@type": "WebPage", "@id": "./#page", name: "Pretty Old Pixel in Zahlen" },
     body: `<h1 class="visually-hidden">Pretty Old Pixel</h1>
 <p class="lead">Retrospiele entdecken, alte Computerzeitschriften durchblättern und Videos wiederfinden.</p>

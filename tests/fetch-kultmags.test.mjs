@@ -3,6 +3,7 @@ import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
+import sharp from "sharp";
 import { parseBlaetterabendTitle } from "../src/generate-blaetterabend.mjs";
 import {
   findKultmagsIssue,
@@ -89,7 +90,7 @@ test("ergänzt alte frische Caches nur über die Titelseite und speichert das Lo
     const original = JSON.parse(await readFile(file, "utf8"));
     delete original.logo;
     await writeFile(file, JSON.stringify(original));
-    const bytes = Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aX1cAAAAASUVORK5CYII=", "base64");
+    const bytes = await sharp({ create: { width: 1, height: 1, channels: 4, background: "#ffffff" } }).png().toBuffer();
     const requests = [];
     const catalog = await loadKultmagsCatalog({
       ...options, magazineNames: ["Smash"],
@@ -105,9 +106,17 @@ test("ergänzt alte frische Caches nur über die Titelseite und speichert das Lo
     assert.equal(updated.fetchedAt, original.fetchedAt);
     assert.equal(updated.logo.url, "https://www.kultmags.com/Smash/title.png");
     assert.deepEqual(await readFile(path.join(cacheDir, "logos", updated.logo.file)), bytes);
+    assert.equal(updated.logo.variants.length, 2);
     await loadKultmagsCatalog({
       ...options, magazineNames: ["Smash"], fetchImpl: () => assert.fail("Erneuter Abruf"),
     });
+    const { variants, ...legacyLogo } = updated.logo;
+    await writeFile(file, JSON.stringify({ ...updated, logo: legacyLogo }));
+    const migrated = await loadKultmagsCatalog({
+      ...options, magazineNames: ["Smash"], fetchImpl: () => assert.fail("Migration muss offline erfolgen"),
+    });
+    assert.deepEqual(migrated.magazines.get("Smash").logo.variants, variants);
+    assert.equal(migrated.magazines.get("Smash").fetchedAt, original.fetchedAt);
   });
 });
 test("parseIssueTitle erkennt Doppelausgaben, Beilagen und Sonderheftnummern", () => {

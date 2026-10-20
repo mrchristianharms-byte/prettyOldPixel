@@ -2726,6 +2726,16 @@
   ],
   "logo": {
     "url": "https://www.kultmags.com/PC-Action/title.png",
-    "file": "7e7f13471aeedc36292a3fe001e4f09b576b4ed3bc0d5e740973a5ca8e25cde6.png"
+    "file": "7e7f13471aeedc36292a3fe001e4f09b576b4ed3bc0d5e740973a5ca8e25cde6.png",
+    "variants": [
+      {
+        "file": "7e7f13471aeedc36292a3fe001e4f09b576b4ed3bc0d5e740973a5ca8e25cde6.webp",
+        "sha256": "5560097a4052b577e009d003421cfeb40fd92963c5a0bbb62f60a83c1b19eccd"
+      },
+      {
+        "file": "7e7f13471aeedc36292a3fe001e4f09b576b4ed3bc0d5e740973a5ca8e25cde6.gif",
+        "sha256": "1cd817d4326f3a80a2fbaa7c26916af670cef32e66e476ba1953d498783e9efb"
+      }
+    ]
   }
 }

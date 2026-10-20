@@ -1737,6 +1737,16 @@
   ],
   "logo": {
     "url": "https://www.kultmags.com/Total%21/title.png",
-    "file": "bc0e56a19a889ce21cd8c9486753a5b930608d72a6bf88ece5ed977c11eeebf6.png"
+    "file": "bc0e56a19a889ce21cd8c9486753a5b930608d72a6bf88ece5ed977c11eeebf6.png",
+    "variants": [
+      {
+        "file": "bc0e56a19a889ce21cd8c9486753a5b930608d72a6bf88ece5ed977c11eeebf6.webp",
+        "sha256": "b59324a782dd4d29783dfdf6e48aaac019fe11c2cc43b5a313e9c4667263c568"
+      },
+      {
+        "file": "bc0e56a19a889ce21cd8c9486753a5b930608d72a6bf88ece5ed977c11eeebf6.gif",
+        "sha256": "dddcbfe42545c7d966d683f868ede163e60920ac24063e6e9fc1b6634d50301e"
+      }
+    ]
   }
 }

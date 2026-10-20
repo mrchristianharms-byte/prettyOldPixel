@@ -114,6 +114,16 @@
   ],
   "logo": {
     "url": "https://www.kultmags.com/PC%20Xtreme/title.png",
-    "file": "602ba27b158eb4a1962af7c3552fbf8f9d41fd0cb6bec7150511f52b7b3a5732.png"
+    "file": "602ba27b158eb4a1962af7c3552fbf8f9d41fd0cb6bec7150511f52b7b3a5732.png",
+    "variants": [
+      {
+        "file": "602ba27b158eb4a1962af7c3552fbf8f9d41fd0cb6bec7150511f52b7b3a5732.webp",
+        "sha256": "1fae028558aea5b907303b2494b208cddd4f1616233b310c803eef18020c5b6b"
+      },
+      {
+        "file": "602ba27b158eb4a1962af7c3552fbf8f9d41fd0cb6bec7150511f52b7b3a5732.gif",
+        "sha256": "9b078566f085bef87719e0d205e26b3ab8b6a453dbe65d082bd412e651600c30"
+      }
+    ]
   }
 }

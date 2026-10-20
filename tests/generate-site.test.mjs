@@ -43,9 +43,9 @@ function issueFixture() {
 const issuePage = (pages) => [...pages].find(([file]) => file.includes("/ausgaben/"))[1].html;
 
 test("zeigt auf der Startseite den Markennamen nur im Kopf statt als zusätzliche Überschrift", () => {
-  const { pages } = render();
+  const { pages, config } = render();
   const html = pages.get("index.html").html;
-  assert.ok(html.includes('<a class="brand" href="./">Pretty Old Pixel</a>'));
+  assert.ok(html.includes(`<a class="brand" href="./"><img class="brand-logo" src="${config.href("favicon.jpg")}" alt="" width="40" height="40">Pretty Old Pixel</a>`));
   assert.ok(!html.includes("<h1>Pretty Old Pixel</h1>"));
   assert.ok(html.includes('<h1 class="visually-hidden">Pretty Old Pixel</h1>'));
   assert.ok(html.includes('<p class="lead">Retrospiele entdecken'));
@@ -56,7 +56,9 @@ test("entfernt Startseite nur aus der Hauptnavigation und behält Markenlink und
   for (const { html, route } of pages.values()) {
     const header = html.match(/<header[\s\S]*?<\/header>/u)[0];
     assert.ok(!header.includes(">Startseite</a>"));
-    assert.ok(header.includes(`<a class="brand" href="${config.forPage(route).href()}">Pretty Old Pixel</a>`));
+    const pageConfig = config.forPage(route);
+    assert.ok(header.includes(`<a class="brand" href="${pageConfig.href()}"><img class="brand-logo" src="${pageConfig.href("favicon.jpg")}" alt="" width="40" height="40">Pretty Old Pixel</a>`));
+    assert.equal((header.match(/class="brand-logo"/gu) ?? []).length, 1);
   }
   assert.ok(pages.get("zeitschriften/pc-games/index.html").html.includes('href="../../">Startseite</a>'));
 });
@@ -181,8 +183,8 @@ test("zeigt auf der Startseite korrekte Statistik statt neuer Videos und zählt 
   for (const [label, value] of [["Videos insgesamt", "2"], ["Zeitschriften", "1"], ["Heftausgaben", "1"], ["Spiele", "0"], ["Playlists", "0"], ["Stunden Video", "1"]]) {
     assert.ok(home.includes(`<dt>${label}</dt><dd>${value}</dd>`), label);
   }
-  assert.ok(home.includes('datetime="2020-01-01T00:00:00.000Z"'));
-  assert.ok(home.includes("nicht das Gründungsdatum"));
+  assert.ok(!home.includes('class="channel-history"'));
+  assert.ok(!home.includes("Videogeschichte"));
   assert.ok(home.includes('href="zeitschriften/"'));
   assert.ok(home.includes('href="news/"'));
   assert.ok(!home.includes("Zu den 20 neuesten Videos"));
@@ -197,7 +199,7 @@ test("zeigt auf der Startseite korrekte Statistik statt neuer Videos und zählt 
   validateSite(pages, assets, config);
 });
 
-test("kennzeichnet unvollständige Laufzeiten und fehlenden Kanalbeginn ohne erfundene Werte", () => {
+test("kennzeichnet unvollständige Laufzeiten und zeigt keine Videogeschichte bei fehlenden Datumswerten", () => {
   const input = fixture(2);
   input.videos.videos[0].durationSeconds = 7200;
   input.videos.videos[1].durationSeconds = null;
@@ -205,7 +207,7 @@ test("kennzeichnet unvollständige Laufzeiten und fehlenden Kanalbeginn ohne erf
   const home = render(input).pages.get("index.html").html;
   assert.ok(home.includes("<dt>Stunden Video</dt><dd>2</dd>"));
   assert.ok(home.includes("Bekannte Laufzeiten: 1 von 2 Videos"));
-  assert.ok(home.includes("ohne bekannte Veröffentlichungsdaten nicht bestimmbar"));
+  assert.ok(!home.includes("Videogeschichte"));
   assert.ok(!home.includes("datetime="));
   input.videos.videos[0].durationSeconds = null;
   assert.ok(!render(input).pages.get("index.html").html.includes("<dt>Stunden Video</dt>"));
@@ -371,6 +373,10 @@ test("validiert defekte Links, Fragmente und HTML-/CSS-Budgets als Build-Fehler"
   assert.throws(() => validateSite(pages, assets, config), /ohne Kennzeichnung/u);
   pages.get("index.html").html = `${original}<img src="https://example.com/cover.jpg" width="320" height="180" alt="Cover">`;
   assert.throws(() => validateSite(pages, assets, config), /Unerlaubte externe Ressource/u);
+  pages.get("index.html").html = `${original}<picture><source type="image/webp" srcset="https://example.com/logo.webp"></picture>`;
+  assert.throws(() => validateSite(pages, assets, config), /Unerlaubte externe Ressource/u);
+  pages.get("index.html").html = `${original}<picture><source type="image/webp" srcset="missing-logo.webp"></picture>`;
+  assert.throws(() => validateSite(pages, assets, config), /Nicht erzeugtes Linkziel/u);
   pages.get("index.html").html = original;
   const noise = Array.from({ length: 50000 }, (_, i) => `${i}:${Math.imul(i, 2654435761) >>> 0};`).join("");
   assert.ok(gzipSync(noise).length > 50 * 1024);

@@ -506,6 +506,16 @@
   ],
   "logo": {
     "url": "https://www.kultmags.com/PC%20Power/title.png",
-    "file": "838fed9cfe788e53551e55f5fa76e0ba9044a362977b43f79621e208cf208196.png"
+    "file": "838fed9cfe788e53551e55f5fa76e0ba9044a362977b43f79621e208cf208196.png",
+    "variants": [
+      {
+        "file": "838fed9cfe788e53551e55f5fa76e0ba9044a362977b43f79621e208cf208196.webp",
+        "sha256": "fabadaa9440f4bebf058adb65fe7bdcce98f8661cf681753c8380d47584810a7"
+      },
+      {
+        "file": "838fed9cfe788e53551e55f5fa76e0ba9044a362977b43f79621e208cf208196.gif",
+        "sha256": "8f0f93ea8fea100ac5776377550334e70c98154178e790f3e187c885f490796a"
+      }
+    ]
   }
 }

@@ -48,6 +48,16 @@
   ],
   "logo": {
     "url": "https://www.kultmags.com/Amiga%20Fever/title.png",
-    "file": "fb5a6d5f274ccbcbb7f8bdc516cfc30d65adbadbddfd63ecf8724aa231003086.png"
+    "file": "fb5a6d5f274ccbcbb7f8bdc516cfc30d65adbadbddfd63ecf8724aa231003086.png",
+    "variants": [
+      {
+        "file": "fb5a6d5f274ccbcbb7f8bdc516cfc30d65adbadbddfd63ecf8724aa231003086.webp",
+        "sha256": "8e5e4a57389fe0732a5704e20274ebca5e0d78e4b335b93d631f8796d9133d03"
+      },
+      {
+        "file": "fb5a6d5f274ccbcbb7f8bdc516cfc30d65adbadbddfd63ecf8724aa231003086.gif",
+        "sha256": "3e5fc77505aa7c234ba0b154783c8a2062e2b23690b470d4ed3df45f68ccb7f1"
+      }
+    ]
   }
 }

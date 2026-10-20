@@ -2976,6 +2976,16 @@
   ],
   "logo": {
     "url": "https://www.kultmags.com/Power%20Play/title.png",
-    "file": "43a4a4922e47fe38f49c2c14b1b486687c2a069dd9b5e71315c6480eb613b0e6.png"
+    "file": "43a4a4922e47fe38f49c2c14b1b486687c2a069dd9b5e71315c6480eb613b0e6.png",
+    "variants": [
+      {
+        "file": "43a4a4922e47fe38f49c2c14b1b486687c2a069dd9b5e71315c6480eb613b0e6.webp",
+        "sha256": "0d96dedbf28623628734e9514a54f8ff0466e5a4f312730543aae8d35d42db0f"
+      },
+      {
+        "file": "43a4a4922e47fe38f49c2c14b1b486687c2a069dd9b5e71315c6480eb613b0e6.gif",
+        "sha256": "5badd16fea4be83a43fd8e34f3e01a0c938cb1de4ff3511567d9945244f80482"
+      }
+    ]
   }
 }

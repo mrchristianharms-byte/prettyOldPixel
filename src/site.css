@@ -13,7 +13,8 @@ body { overflow-wrap: anywhere; }
 .theme-toggle { width: 2.5rem; height: 2.5rem; padding: .5rem; margin: 0; flex-shrink: 0; line-height: 1; }
 .theme-toggle svg { display: block; margin: auto; }
 [data-theme="dark"] .theme-moon, [data-theme="light"] .theme-sun { display: none; }
-.brand { font-size: 1.4rem; font-weight: 750; text-decoration: none; }
+.brand { display: inline-flex; align-items: center; gap: .6rem; font-size: 1.4rem; font-weight: 750; text-decoration: none; }
+.brand-logo { display: block; flex-shrink: 0; width: 2.5rem; height: 2.5rem; padding: 2px; object-fit: contain; background: #fff; border: 1px solid #adb5bd; border-radius: .25rem; }
 main.container { padding-block: .75rem; }
 h1, h2, h3, h4, h5, h6 { font-size: clamp(1.05rem, 1.8vw, 1.25rem); line-height: 1.35; margin-bottom: .6rem; }
 .lead { font-size: 1.2rem; }
@@ -24,9 +25,7 @@ h1, h2, h3, h4, h5, h6 { font-size: clamp(1.05rem, 1.8vw, 1.25rem); line-height:
 .stats-grid dt { color: var(--pico-muted-color); font-size: .9rem; }
 .stats-grid dd { margin: .25rem 0 0; font-size: clamp(2rem, 4vw, 3rem); font-weight: 750; line-height: 1.2; font-variant-numeric: tabular-nums; }
 .stats-grid .stat-note { margin-top: .6rem; font-size: .8rem; font-weight: 400; line-height: 1.5; color: var(--pico-muted-color); }
-.channel-history { padding: 1rem 1.25rem; border-inline-start: .25rem solid var(--pico-primary); background: var(--pico-card-background-color); }
-.channel-history strong { display: block; font-size: 1.4rem; }
-.channel-history small { display: block; margin-top: .3rem; color: var(--pico-muted-color); }
+.stats-grid > div, .theme-grid > article { min-width: 0; }
 .theme-grid article { margin: 0; box-shadow: none; border: 1px solid var(--pico-muted-border-color); }
 .theme-count { color: var(--pico-primary); font-size: 1.25rem; font-weight: 700; }
 .theme-grid article p:last-child { margin-bottom: 0; }
@@ -144,4 +143,12 @@ h1, h2, h3, h4, h5, h6 { font-size: clamp(1.05rem, 1.8vw, 1.25rem); line-height:
   .breadcrumbs { display: block; }
   .breadcrumbs li { display: inline; }
   .video-list article { padding: 1rem; }
+}
+@media (max-width: 767px) {
+  .stats-grid, .theme-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .65rem; }
+  .stats-grid > div, .theme-grid article { padding: .65rem; }
+  .theme-grid { font-size: .85rem; }
+  .theme-ranking { padding-inline-start: 1.1rem; }
+  .theme-ranking-entry { gap: .25rem; }
+  .theme-ranking .meta { font-size: .75rem; }
 }

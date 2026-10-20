@@ -2235,6 +2235,16 @@
   ],
   "logo": {
     "url": "https://www.kultmags.com/PC-Player/title.png",
-    "file": "7772db8e5d1dbfa9ebf5db4d9acc8f317ca52d2f1d891f741143af1c7ef16359.png"
+    "file": "7772db8e5d1dbfa9ebf5db4d9acc8f317ca52d2f1d891f741143af1c7ef16359.png",
+    "variants": [
+      {
+        "file": "7772db8e5d1dbfa9ebf5db4d9acc8f317ca52d2f1d891f741143af1c7ef16359.webp",
+        "sha256": "2c8d6c3ea17608b0d12da8bdf8dba978f4de048abde429325b195df50c4afec3"
+      },
+      {
+        "file": "7772db8e5d1dbfa9ebf5db4d9acc8f317ca52d2f1d891f741143af1c7ef16359.gif",
+        "sha256": "f51467f8e012608f0129e9825a134cc9a7fed9dd3cc49b80f97cc381cf69a37a"
+      }
+    ]
   }
 }

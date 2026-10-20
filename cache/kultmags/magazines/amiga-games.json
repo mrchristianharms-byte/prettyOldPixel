@@ -953,6 +953,16 @@
   ],
   "logo": {
     "url": "https://www.kultmags.com/Amiga%20Games/title.png",
-    "file": "b84ff655f81d6694a23f46e46f7d75ba249a18aa4cbd6a37bcf71a3696d9457a.png"
+    "file": "b84ff655f81d6694a23f46e46f7d75ba249a18aa4cbd6a37bcf71a3696d9457a.png",
+    "variants": [
+      {
+        "file": "b84ff655f81d6694a23f46e46f7d75ba249a18aa4cbd6a37bcf71a3696d9457a.webp",
+        "sha256": "112010cda44528a5cb6e35ca19f4cf4e0a08e5084928762cf722e8b163e7f589"
+      },
+      {
+        "file": "b84ff655f81d6694a23f46e46f7d75ba249a18aa4cbd6a37bcf71a3696d9457a.gif",
+        "sha256": "39b2c6c1aa1110395e0446472933926556b6da11da48190b786fc9128941dced"
+      }
+    ]
   }
 }

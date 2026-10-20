@@ -41,9 +41,9 @@ export function validateSite(pages, assets, config) {
       throw new Error(`${file}: Nur JSON-LD, ein lokales Darstellungs-Skript und ein lokales Videowechsel-Modul sind erlaubt.`);
     }
     const schema = JSON.parse(scripts[0][2]);
-    for (const match of page.html.matchAll(/<(a|img|iframe|link|script)\b[^>]*>/gu)) {
+    for (const match of page.html.matchAll(/<(a|img|source|iframe|link|script)\b[^>]*>/gu)) {
       const tag = match[0];
-      const url = /\b(?:href|src)="([^"]*)"/u.exec(tag)?.[1];
+      const url = /\b(?:href|src|srcset)="([^"]*)"/u.exec(tag)?.[1];
       if (!url) continue;
       const target = new URL(url.replaceAll("&amp;", "&"), config.absolute(page.route));
       if (target.origin === new URL(config.baseUrl).origin) continue;
@@ -72,7 +72,7 @@ export function validateSite(pages, assets, config) {
         if (!pages.get(targetFile).html.includes(`id="${escapeHtml(fragment)}"`)) throw new Error(`${file}: Unbekanntes Fragment ${value}`);
       }
     }
-    for (const match of page.html.matchAll(/\b(?:href|src)="([^"]*)"/gu)) {
+    for (const match of page.html.matchAll(/\b(?:href|src|srcset)="([^"]*)"/gu)) {
       validateUrl(match[1].replaceAll("&amp;", "&"));
     }
     const ogUrl = /<meta property="og:url" content="([^"]*)">/u.exec(page.html)?.[1];

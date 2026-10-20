@@ -159,9 +159,9 @@ Statistikraster mit Gesamtzahl öffentlicher Videos, Zeitschriften,
 unterschiedlichen Heftausgaben, qualifizierten Spielereihen, Playlists und
 Videostunden (abgerundet). Fehlende Laufzeiten werden als Teilsumme kenntlich
 gemacht; bei vollständig fehlenden Laufzeiten entfällt diese Kennzahl.
-Der belegbare Kanalbeginn wird als Datum des ältesten erfassten öffentlichen
-Videos angezeigt, ausdrücklich nicht als unbekanntes Gründungsdatum.
-Unbekannte Datumswerte werden nicht erfunden. Alle Kennzahlen kommen aus dem
+Eine zusätzliche Angabe zur Videogeschichte entfällt.
+Statistik- und Themenkacheln stehen mobil zweispaltig mit kompakten Abständen.
+Alle Kennzahlen kommen aus dem
 lokalen normalisierten Datenbestand; zukünftige Videos werden nicht gezählt.
 
 Themenkacheln verlinken vorhandene Bereiche mit ihrer jeweiligen Videoanzahl.
@@ -671,6 +671,9 @@ erhalten bleiben; die Jahrgangsüberschrift macht hierzu keine Aussage.
 
 - Die Hauptnavigation enthält die Themenbereiche und News; der Markenlink
   führt weiterhin zur Startseite, ebenso die Brotkrümelnavigation.
+  Links neben dem Markennamen steht auf jeder Seite das lokal gespeicherte
+  Kanal-Logo (zugleich Favicon). Eine weiße Fläche mit grauem Rahmen grenzt
+  es auch im Dark Mode ab; reservierte Bildmaße verhindern Layoutsprünge.
   Alle Überschriften verwenden eine gemeinsame kompakte Schriftgröße;
   Spiele-Kacheltitel sind mit 0,95rem zusätzlich verkleinert, um Umbrüche
   zu reduzieren. Lange Titel bleiben vollständig und dürfen umbrechen.
@@ -1063,16 +1066,32 @@ gegen `https://www.kultmags.com/` aufgelöst. Nur PNG, JPEG, GIF und WebP
 vom HTTPS-Host `www.kultmags.com` werden übernommen, ohne Weiterleitungen
 und mit maximal 2 MiB pro Bild. Die Bildsignatur wird geprüft.
 
-Das Magazin-JSON erhält `logo: { url, file }`, bei fehlendem Titelbild
+Beim Abruf erzeugt `sharp` zusätzlich verlustfreies WebP und GIF, ohne
+Größenänderung und unter Erhalt vorhandener Animationen.
+Das Magazin-JSON erhält `logo: { url, file, variants: [{ file, sha256 }] }`, bei fehlendem Titelbild
 `logo: null`. Die Bilddateien liegen in `cache/kultmags/logos/` mit
-SHA-256-Inhaltsnamen. Bei älteren, noch frischen Archiv-Caches wird nur
+dem SHA-256-Inhaltsnamen des Originals als gemeinsamem Basisnamen:
+Original, GIF und WebP unterscheiden sich ausschließlich in der Dateiendung.
+Die Varianten haben zur Inhaltsprüfung einen separaten SHA-256-Wert im JSON.
+Ist das Original bereits GIF oder WebP, wird dieselbe Datei wiederverwendet.
+Bei älteren, noch frischen Archiv-Caches wird nur
 die Magazinübersicht für das Logo nachgeladen; die vorhandenen
 Ausgabenlisten und ihr ursprüngliches Abrufdatum bleiben erhalten.
 Weitere Läufe verwenden den Cache; ein Archiv-Refresh prüft auch Logos neu.
+Bestehende frische Logo-Caches ohne Varianten oder mit alten Variantennamen werden lokal nachkonvertiert,
+ohne die Bilddatei oder Heftlisten erneut abzurufen.
+Nach einem erfolgreichen Online-Abruflauf entfernt das Script nicht mehr
+referenzierte Bilddateien aus dem Logo-Verzeichnis. Dabei werden die Referenzen
+aller gespeicherten Magazin-JSONs geprüft, nicht nur der aktuell angefragten.
+Offline-Builds verändern den Cache nicht.
 
 `npm run generate:site` übernimmt diese Dateien rein offline nach
 `docs/assets/magazine-logos/`. Die jeweilige Zeitschriftenseite zeigt
 das Logo responsiv unter der Überschrift, mit Alternativtext und
+nach tatsächlicher Dateigröße sortierten `picture`-Quellen: Der Browser
+lädt die kleinste von ihm unterstützte Datei (einschließlich Original).
+Für Browser ohne `picture` dient die kleinste Nicht-WebP-Datei als Fallback.
+Das Logo erhält einen
 Quellenlink zur Magazinübersicht auf Kultmags. Jahrgangs- und Ausgabenseiten
 bleiben unverändert. Ohne Logo wird kein leerer Bildbereich ausgegeben.
 Beim Seitenaufruf wird kein Bild vom Archivserver nachgeladen.

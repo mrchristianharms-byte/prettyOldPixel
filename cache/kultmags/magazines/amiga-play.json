@@ -80,6 +80,16 @@
   ],
   "logo": {
     "url": "https://www.kultmags.com/Amiga%20Play/title.png",
-    "file": "ca08dc30540ee7cb75b4412f5cb00cbb06f202bb3eeff365aa9e149453e536b2.png"
+    "file": "ca08dc30540ee7cb75b4412f5cb00cbb06f202bb3eeff365aa9e149453e536b2.png",
+    "variants": [
+      {
+        "file": "ca08dc30540ee7cb75b4412f5cb00cbb06f202bb3eeff365aa9e149453e536b2.webp",
+        "sha256": "8dd60ef76b8bdca8eea0419205610ca376651c99a69aa4b42efa6331c2d32430"
+      },
+      {
+        "file": "ca08dc30540ee7cb75b4412f5cb00cbb06f202bb3eeff365aa9e149453e536b2.gif",
+        "sha256": "a87d7b5046549bbea45f5963bbbb163178a8b3c0969adabf532ac4c27b3b036e"
+      }
+    ]
   }
 }

@@ -205,6 +205,16 @@
   ],
   "logo": {
     "url": "https://www.kultmags.com/Joystick/title.png",
-    "file": "4f3bc6ff9f551c5858189b8ba457ce1b9e009a7781769ec03096de28402fcde2.png"
+    "file": "4f3bc6ff9f551c5858189b8ba457ce1b9e009a7781769ec03096de28402fcde2.png",
+    "variants": [
+      {
+        "file": "4f3bc6ff9f551c5858189b8ba457ce1b9e009a7781769ec03096de28402fcde2.webp",
+        "sha256": "45b0ee20c1a1a38a5414dfa55a0d9c05fe50111f7b8b22ab6e1d1597e8c6dade"
+      },
+      {
+        "file": "4f3bc6ff9f551c5858189b8ba457ce1b9e009a7781769ec03096de28402fcde2.gif",
+        "sha256": "607f6716b9f137ec21cadf6220616630c0f29fbdd5a0a48028cd4cb140be6c95"
+      }
+    ]
   }
 }

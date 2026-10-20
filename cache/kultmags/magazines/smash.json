@@ -63,6 +63,16 @@
   ],
   "logo": {
     "url": "https://www.kultmags.com/Smash/title.png",
-    "file": "ef86f68ceaeadfbf62d4230dd9d04ec7a2f2f50014cb59def6b5fabd69492843.png"
+    "file": "ef86f68ceaeadfbf62d4230dd9d04ec7a2f2f50014cb59def6b5fabd69492843.png",
+    "variants": [
+      {
+        "file": "ef86f68ceaeadfbf62d4230dd9d04ec7a2f2f50014cb59def6b5fabd69492843.webp",
+        "sha256": "8ef25a1205228b57950b9deafe2efc04eed860e36a68a6a56aa6f5f06f3eabfb"
+      },
+      {
+        "file": "ef86f68ceaeadfbf62d4230dd9d04ec7a2f2f50014cb59def6b5fabd69492843.gif",
+        "sha256": "995b7be10daa0f83ef4891943084fe79afcbf4f0eea79516b5fb2ab68b8a5f75"
+      }
+    ]
   }
 }

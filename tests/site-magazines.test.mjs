@@ -3,6 +3,7 @@ import { mkdtemp, mkdir, readFile, rm, stat, writeFile } from "node:fs/promises"
 import path from "node:path";
 import { tmpdir } from "node:os";
 import test from "node:test";
+import sharp from "sharp";
 import { generateSite, validateSite } from "../src/generate-site.mjs";
 import { createSiteConfig } from "../src/site-config.mjs";
 import { normalizeSources } from "../src/site-data.mjs";
@@ -259,7 +260,7 @@ test("übernimmt Kultmags-Logos offline als lokale Bildassets nur auf Zeitschrif
   const cacheDirectory = path.join(root, "cache");
   const cacheDir = path.join(cacheDirectory, "kultmags");
   await mkdir(path.join(cacheDir, "magazines"), { recursive: true });
-  const bytes = Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aX1cAAAAASUVORK5CYII=", "base64");
+  const bytes = await sharp({ create: { width: 1, height: 1, channels: 4, background: "#ffffff" } }).png().toBuffer();
   const logo = await cacheKultmagsLogo("https://www.kultmags.com/PC-Games/title.png", cacheDir, {
     fetchResponse: async (_url, options) => {
       assert.equal(options.redirect, "error");
@@ -278,12 +279,16 @@ test("übernimmt Kultmags-Logos offline als lokale Bildassets nur auf Zeitschrif
   const result = await generateSite({ cacheDirectory, outputDirectory, logger: { log() {}, warn() {} } });
   assert.ok(result.pages > 0);
   const detail = await readFile(path.join(outputDirectory, "zeitschriften/pc-games/index.html"), "utf8");
-  assert.ok(detail.includes(`src="../../assets/magazine-logos/${logo.file}"`));
+  const model = await loadSiteData(cacheDirectory);
+  const attachedLogo = model.magazines.find((magazine) => magazine.name === "PC Games").logo;
+  assert.ok(detail.includes(`src="../../${attachedLogo.asset}"`));
+  for (const candidate of attachedLogo.candidates) {
+    assert.ok(detail.includes(`srcset="../../${candidate.asset}"`));
+  }
   assert.ok(detail.includes('alt="PC Games – Zeitschriftenlogo"'));
   assert.ok(detail.includes("Logoquelle: kultmags.com"));
   assert.ok(!detail.includes('<img src="https://www.kultmags.com'));
   assert.deepEqual(await readFile(path.join(outputDirectory, "assets/magazine-logos", logo.file)), bytes);
-  const model = await loadSiteData(cacheDirectory);
   const pages = renderSite(model, createSiteConfig(), "assets/test.css");
   for (const [file, page] of pages) {
     if (file === "zeitschriften/pc-games/index.html") continue;

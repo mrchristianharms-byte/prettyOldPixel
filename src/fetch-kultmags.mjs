@@ -1,6 +1,6 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { cacheKultmagsLogo, kultmagsLogoUrl } from "./kultmags-logos.mjs";
+import { cacheKultmagsLogo, cleanKultmagsLogos, convertKultmagsLogo, kultmagsLogoUrl } from "./kultmags-logos.mjs";
 import {
   DEFAULT_MAX_AGE_DAYS,
   DEFAULT_INDEX_MAX_AGE_DAYS,
@@ -111,7 +111,11 @@ async function loadMagazine(name, { cacheDir, maxAgeDays, refresh, now, fetcher,
     return cached;
   }
   if (!refresh && isFresh(cached, maxAgeDays, now) && cached.logo !== undefined) {
-    return cached;
+    const logo = await convertKultmagsLogo(cached.logo, cacheDir);
+    if (logo === cached.logo) return cached;
+    const updated = { ...cached, logo };
+    await writeJson(file, updated);
+    return updated;
   }
 
   const top = parseFolderPage(await fetcher.fetchPage(folderUrl(name)));
@@ -173,6 +177,10 @@ export async function loadKultmagsCatalog({
   }
   if (fetcher.requestCount() > 0) {
     log(`kultmags.com: ${fetcher.requestCount()} Seiten geladen, Cache: ${cacheDir}`);
+  }
+  if (!cachedOnly) {
+    const removed = await cleanKultmagsLogos(cacheDir);
+    if (removed.length) log(`kultmags.com: ${removed.length} nicht mehr referenzierte Logo-Dateien entfernt.`);
   }
   return { index, magazines };
 }
