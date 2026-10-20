@@ -3,12 +3,12 @@ import { fileURLToPath } from "node:url";
 import {
   DEFAULT_MAX_AGE_DAYS, createFetcher, decodeHtml, defaultSleep, isFresh,
   normalizeMagazineName, readJson, writeJson,
-} from "./archive-cache.mjs";
+} from "../shared/archive-cache.mjs";
 import { cacheMagazineLogo } from "./kultmags-logos.mjs";
 
 export const AMIGA_ACTION_URL = "https://amr.abime.net/issues_1";
 export const AMIGA_ACTION_LOGO = "https://amr.abime.net/logos/amiga_action_logos.png";
-const projectRoot = fileURLToPath(new URL("../", import.meta.url));
+const projectRoot = fileURLToPath(new URL("../../", import.meta.url));
 const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Xmas"];
 const plain = (html) => decodeHtml(html.replace(/<[^>]*>/gu, "")).trim();
 
@@ -133,13 +133,13 @@ export function addAmrLinks(videos, magazine) {
   }
 }
 
-if (process.argv[1] === fileURLToPath(import.meta.url)) {
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const args = process.argv.slice(2);
   if (args.length && (args.length !== 1 || args[0] !== "--refresh")) {
-    console.error("Aufruf: node src/fetch-amr.mjs [--refresh]");
+    console.error("Aufruf: node src/fetch-magazine/fetch-amr.mjs [--refresh]");
     process.exitCode = 1;
   } else {
-    loadAmrCatalog({ refresh: args.includes("--refresh") }).catch((error) => {
+    await loadAmrCatalog({ refresh: args.includes("--refresh") }).catch((error) => {
       console.error(error.message);
       process.exitCode = 1;
     });

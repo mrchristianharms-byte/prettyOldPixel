@@ -21,7 +21,7 @@ export function videoListEntry(video, config, entry, headingLevel = 2, { label =
   const external = Boolean(httpUrl(href));
   return `<li><article>
 <h${headingLevel}>${videoLink(video, config, label, issueRoute)}</h${headingLevel}>
-<a class="video-entry-thumbnail" href="${escapeHtml(href)}"${external ? ' rel="external"' : ""} aria-label="${escapeHtml(label)}${external ? " (externe Website)" : ""}"><img src="${escapeHtml(video.thumbnailUrl)}" width="320" height="180" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer"></a>
+<a class="video-entry-thumbnail" href="${escapeHtml(href)}"${external ? ' rel="external"' : ""} aria-label="${escapeHtml(label)}${external ? " (externe Website)" : ""}"><img src="${escapeHtml(video.thumbnailUrl)}" width="320" height="180" alt="${escapeHtml(`Videovorschau: ${video.title}`)}" loading="lazy" decoding="async" referrerpolicy="no-referrer"></a>
 <div class="video-entry-content">
 <p class="meta">${videoDate(video)}${video.durationSeconds !== null ? ` · ${durationLabel(video.durationSeconds)}` : ""}</p>
 ${entry ? `<p class="meta">${entry.people.length ? `Im Gespräch: ${escapeHtml(entry.people.join(", "))} · ` : ""}Thema: ${escapeHtml(entry.topic)}</p>${entry.note ? `<p class="meta">${escapeHtml(entry.note)}</p>` : ""}` : ""}

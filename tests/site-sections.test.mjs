@@ -3,12 +3,12 @@ import { mkdir, mkdtemp, readFile, rm, stat, writeFile } from "node:fs/promises"
 import path from "node:path";
 import { tmpdir } from "node:os";
 import test from "node:test";
-import { sectionDefinitions } from "../src/data-sections.mjs";
-import { normalizeSources, loadSiteData } from "../src/site-data.mjs";
-import { createSiteConfig, slugify } from "../src/site-config.mjs";
-import { renderSite } from "../src/site-render.mjs";
-import { generateSite, validateSite } from "../src/generate-site.mjs";
-import { videoListEntry } from "../src/widget/video-entry.mjs";
+import { sectionDefinitions } from "../src/data/data-sections.mjs";
+import { normalizeSources, loadSiteData } from "../src/site-generation/site-data.mjs";
+import { createSiteConfig, slugify } from "../src/site-generation/site-config.mjs";
+import { renderSite } from "../src/site-generation/site-render.mjs";
+import { generateSite, validateSite } from "../src/site-generation/generate-site.mjs";
+import { videoListEntry } from "../src/site-generation/widget/video-entry.mjs";
 
 const channel = { id: "UC-sections", title: "Pretty Old Pixel" };
 const videoId = (index) => `s${String(index).padStart(10, "0")}`;
@@ -39,7 +39,7 @@ function render(input = fixture(), sections = [definition()], options = {}) {
   const config = createSiteConfig(options.baseUrl);
   if (options.pageSize !== undefined) config.pageSize = options.pageSize;
   const pages = renderSite(model, config, "assets/test.css");
-  validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""], ["assets/theme.js", ""], ["favicon.webp", ""]]), config);
+  validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""], ["assets/theme.js", ""], ["favicon.webp", ""], ["apple-touch-icon.png", ""]]), config);
   return { model, pages, config };
 }
 const graph = (html) => JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/u)[1])["@graph"];
@@ -61,7 +61,8 @@ test("verlinkt Sonstiges und News intern auf eigene Videodetailseiten mit gemein
     const html = pages.get(`${route}index.html`).html;
     assert.ok(html.includes(`id="video-${video.id}"`));
     assert.ok(html.includes('class="detail-player"'));
-    assert.ok(html.includes("<h3>Videobeschreibung</h3>"));
+    assert.ok(html.includes('<div class="description">'));
+    assert.ok(!html.includes("<h3>Videobeschreibung</h3>"));
     assert.ok(html.includes('aria-label="Videos auf dieser Seite"'));
     assert.ok(!html.includes("Heftausgabe"));
     const schema = graph(html);
@@ -320,7 +321,7 @@ test("verlinkt Bereiche intern auf Spiele oder eigene Detailseiten und hält Lis
 
   const config = createSiteConfig();
   const pages = renderSite(model, config, "assets/test.css");
-  validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""], ["assets/theme.js", ""], ["favicon.webp", ""]]), config);
+  validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""], ["assets/theme.js", ""], ["favicon.webp", ""], ["apple-touch-icon.png", ""]]), config);
   const html = pages.get("interviews/index.html").html;
   assert.ok(html.includes('href="../spiele/ein-spiel/#video-s0000000000"'));
   assert.ok(html.includes('href="beitrag-3/#video-s0000000003"'));

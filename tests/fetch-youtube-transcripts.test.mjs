@@ -3,7 +3,7 @@ import { mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { tmpdir } from "node:os";
 import test from "node:test";
-import { fetchTranscript, fetchYoutubeTranscripts, parseTranscript, selectCaptionTrack, YoutubeRateLimitError } from "../src/fetch-youtube-transcripts.mjs";
+import { fetchTranscript, fetchYoutubeTranscripts, parseTranscript, selectCaptionTrack, YoutubeRateLimitError } from "../src/extra-data/fetch-youtube-transcripts.mjs";
 
 const id = "t0000000000";
 const url = "https://www.youtube.com/api/timedtext?v=t0000000000&fmt=json3";

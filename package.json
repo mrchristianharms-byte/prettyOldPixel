@@ -1,29 +1,36 @@
 {
   "name": "pretty-old-pixel",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "private": true,
   "type": "module",
   "devDependencies": {
+    "purgecss": "^7.0.2",
     "sharp": "^0.35.5"
   },
+  "overrides": {
+    "purgecss": {
+      "postcss-selector-parser": "^7.1.6"
+    }
+  },
   "scripts": {
-    "test": "node --test \"tests/site-*.test.mjs\" tests/generate-site.test.mjs tests/theme.test.mjs tests/video-series.test.mjs tests/fetch-youtube-videos.test.mjs tests/fetch-youtube-playlists.test.mjs",
+    "test": "node --test \"tests/site-*.test.mjs\" tests/generate-site.test.mjs tests/theme.test.mjs tests/video-series.test.mjs tests/fetch-youtube-videos.test.mjs tests/fetch-youtube-playlists.test.mjs tests/source-layout.test.mjs",
     "fetch:all": "node src/fetch-youtube.mjs",
-    "fetch:videos": "node src/fetch-youtube-videos.mjs https://www.youtube.com/@PrettyOldPixel",
-    "fetch:playlists": "node src/fetch-youtube-playlists.mjs",
+    "fetch:videos": "node src/fetch-channel/fetch-youtube-videos.mjs https://www.youtube.com/@PrettyOldPixel",
+    "fetch:playlists": "node src/fetch-channel/fetch-youtube-playlists.mjs",
     "generate:site": "node src/generate-site.mjs",
     "dev": "npx http-server docs -a 127.0.0.1 --port 8000",
     "dev:test": "node --test \"tests/**/*.test.mjs\"",
-    "dev:fetch:transcripts": "node src/fetch-youtube-transcripts.mjs",
-    "dev:fetch:archives": "node src/fetch-archives.mjs",
-    "dev:fetch:archives:refresh": "node src/fetch-archives.mjs --refresh",
-    "dev:fetch:gamestar": "node src/fetch-pcgamesdatabase.mjs",
-    "dev:fetch:amiga-action": "node src/fetch-amr.mjs",
-    "dev:generate:blaetterabend": "node src/generate-blaetterabend.mjs",
-    "dev:generate:games-from-transcript": "node src/generate-games-from-transcript.mjs",
-    "dev:review:games": "node src/generate-game-metadata-review.mjs",
-    "dev:import:game-dump": "node src/import-game-dump.mjs",
-    "dev:verify:game-dump": "node src/verify-game-dump.mjs",
-    "dev:prepare:game-metadata": "node src/game-metadata-ready.mjs"
+    "dev:generate:css": "node src/site-generation/generate-css.mjs",
+    "dev:fetch:transcripts": "node src/extra-data/fetch-youtube-transcripts.mjs",
+    "dev:fetch:archives": "node src/fetch-magazine/fetch-archives.mjs",
+    "dev:fetch:archives:refresh": "node src/fetch-magazine/fetch-archives.mjs --refresh",
+    "dev:fetch:gamestar": "node src/fetch-magazine/fetch-pcgamesdatabase.mjs",
+    "dev:fetch:amiga-action": "node src/fetch-magazine/fetch-amr.mjs",
+    "dev:generate:blaetterabend": "node src/extra-data/generate-blaetterabend.mjs",
+    "dev:generate:games-from-transcript": "node src/extra-data/generate-games-from-transcript.mjs",
+    "dev:review:games": "node src/fetch-game/generate-game-metadata-review.mjs",
+    "dev:import:game-dump": "node src/fetch-game/import-game-dump.mjs",
+    "dev:verify:game-dump": "node src/fetch-game/verify-game-dump.mjs",
+    "dev:prepare:game-metadata": "node src/fetch-game/game-metadata-ready.mjs"
   }
 }

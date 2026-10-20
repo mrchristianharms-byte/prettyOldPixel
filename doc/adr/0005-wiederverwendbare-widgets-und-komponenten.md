@@ -26,7 +26,7 @@ nicht alle Seiten.
 ### 1. Gemeinsame Bestandteile sind zwingend Widgets
 
 Wiederverwendbare UI-Bestandteile werden als zentrale Widgets bzw.
-Komponenten in ES-Modulen unter **`src/widget/`** definiert.
+Komponenten in ES-Modulen unter **`src/site-generation/widget/`** definiert.
 Alle betreffenden Seiten müssen diese Implementierung verwenden.
 Das gilt insbesondere für:
 
@@ -55,13 +55,13 @@ Layout- und Verhaltensschaltern.
 
 ### 3. Gemeinsame Hilfen und bestehendes Verhalten bleiben erhalten
 
-- HTML-Escaping und externe Links kommen aus `src/site-html.mjs`.
-- Datums- und Laufzeitformatierung kommen aus `src/site-format.mjs`.
-- Interne Video- und Themenverweise kommen aus `src/site-video-links.mjs`.
+- HTML-Escaping und externe Links kommen aus `src/site-generation/site-html.mjs`.
+- Datums- und Laufzeitformatierung kommen aus `src/site-generation/site-format.mjs`.
+- Interne Video- und Themenverweise kommen aus `src/site-generation/site-video-links.mjs`.
 - Widgets importieren nicht den Seitengenerator; zyklische Abhängigkeiten
   sind zu vermeiden.
-- Styles bleiben in `src/site.css`, Browserinteraktion in
-  `src/video-series.js`. Die Widget-Module laufen ausschließlich beim Build.
+- Styles bleiben in `src/site-generation/site.css`, Browserinteraktion in
+  `src/site-generation/video-series.js`. Die Widget-Module laufen ausschließlich beim Build.
 - Eine Extraktion ändert nicht nebenbei HTML, Linkziele, zugängliche
   Beschriftungen, Datenschutzverhalten oder JavaScript-Anknüpfungspunkte.
 - Es werden dafür keine zusätzlichen Browser-Skripte oder Abhängigkeiten
@@ -71,7 +71,7 @@ Layout- und Verhaltensschaltern.
 
 Stand dieser Entscheidung:
 
-| Modul unter `src/widget/` | Exporte | Aufgabe und Einsatz |
+| Modul unter `src/site-generation/widget/` | Exporte | Aufgabe und Einsatz |
 |---|---|---|
 | `navigation.mjs` | `navigation` | Gemeinsame Hauptnavigation aller Seiten mit relativen Links und aktivem Bereich; Auswahl und Reihenfolge der Einträge kommen aus dem Renderer. |
 | `video.mjs` | `videoWidget`, `playerPoster` | Gemeinsamer Player mit Aktivierungsvorschau, Statushinweisen und Steuerzeile auf Spiel- und Heftausgabenseiten; Vorschau auch beim Folgenwechsel. |
@@ -87,7 +87,7 @@ Stand dieser Entscheidung:
 
 `descriptionHtml` ist ein Formatierungshelfer innerhalb des
 Videoinformationsmoduls und bleibt zur Kompatibilität auch aus
-`src/site-render.mjs` exportiert.
+`src/site-generation/site-render.mjs` exportiert.
 
 ## Prüfung
 

@@ -5,10 +5,10 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
 import { gzipSync } from "node:zlib";
-import { generateSite, validateSite } from "../src/generate-site.mjs";
-import { createSiteConfig } from "../src/site-config.mjs";
-import { normalizeSources } from "../src/site-data.mjs";
-import { descriptionHtml, jsonLd, renderSite } from "../src/site-render.mjs";
+import { generateSite, validateSite } from "../src/site-generation/generate-site.mjs";
+import { createSiteConfig } from "../src/site-generation/site-config.mjs";
+import { normalizeSources, loadSiteData } from "../src/site-generation/site-data.mjs";
+import { descriptionHtml, jsonLd, renderSite } from "../src/site-generation/site-render.mjs";
 
 const channel = { id: "UC-build", title: "Pretty Old Pixel" };
 function fixture(count = 53) {
@@ -27,7 +27,7 @@ function fixture(count = 53) {
 function render(input = fixture(), baseUrl) {
   const config = createSiteConfig(baseUrl);
   const pages = renderSite(normalizeSources(input), config, config.href("assets/site.css"));
-  return { pages, config, assets: new Map([["assets/site.css", "body{}"], ["assets/video-series.js", ""], ["assets/theme.js", ""], ["favicon.webp", "image"]]) };
+  return { pages, config, assets: new Map([["assets/site.css", "body{}"], ["assets/video-series.js", ""], ["assets/theme.js", ""], ["favicon.webp", "image"], ["apple-touch-icon.png", "image"]]) };
 }
 
 function issueFixture() {
@@ -42,10 +42,37 @@ function issueFixture() {
 
 const issuePage = (pages) => [...pages].find(([file]) => file.includes("/ausgaben/"))[1].html;
 
+test("enthält auf allen Seiten und in eingebetteten Player-Vorschauen nicht leere Bild-Alt-Texte", async () => {
+  const model = await loadSiteData(new URL("../cache/", import.meta.url).pathname);
+  const pages = renderSite(model, createSiteConfig(), "assets/site.css");
+  const entities = { "&amp;": "&", "&lt;": "<", "&gt;": ">", "&quot;": '"', "&#39;": "'" };
+  const decode = (value) => value.replace(/&(?:amp|lt|gt|quot|#39);/gu, (entity) => entities[entity]);
+  let images = 0;
+  let posters = 0;
+  for (const [file, { html }] of pages) {
+    const documents = [
+      html,
+      ...[...html.matchAll(/\b(?:srcdoc|data-poster)="([^"]*)"/gu)].map((match) => {
+        posters++;
+        return decode(match[1]);
+      }),
+    ];
+    for (const document of documents) {
+      for (const [image] of document.matchAll(/<img\b[^>]*>/gu)) {
+        const alt = image.match(/\balt="([^"]*)"/u)?.[1];
+        assert.ok(alt && decode(alt).trim(), `${file}: Bild ohne Alt-Text: ${image}`);
+        images++;
+      }
+    }
+  }
+  assert.ok(images >= pages.size);
+  assert.ok(posters > 0);
+});
+
 test("zeigt auf der Startseite den Markennamen nur im Kopf statt als zusätzliche Überschrift", () => {
   const { pages, config } = render();
   const html = pages.get("index.html").html;
-  assert.ok(html.includes(`<a class="brand" href="./"><img class="brand-logo" src="${config.href("favicon.webp")}" alt="" width="40" height="40">Pretty Old Pixel</a>`));
+  assert.ok(html.includes(`<a class="brand" href="./"><img class="brand-logo" src="${config.href("favicon.webp")}" alt="Pretty Old Pixel – Logo" width="40" height="40">Pretty Old Pixel</a>`));
   assert.ok(!html.includes("<h1>Pretty Old Pixel</h1>"));
   assert.ok(html.includes('<h1 class="visually-hidden">Pretty Old Pixel</h1>'));
   assert.ok(html.includes('<p class="lead">Retrospiele entdecken'));
@@ -57,7 +84,7 @@ test("entfernt Startseite nur aus der Hauptnavigation und behält Markenlink und
     const header = html.match(/<header[\s\S]*?<\/header>/u)[0];
     assert.ok(!header.includes(">Startseite</a>"));
     const pageConfig = config.forPage(route);
-    assert.ok(header.includes(`<a class="brand" href="${pageConfig.href()}"><img class="brand-logo" src="${pageConfig.href("favicon.webp")}" alt="" width="40" height="40">Pretty Old Pixel</a>`));
+    assert.ok(header.includes(`<a class="brand" href="${pageConfig.href()}"><img class="brand-logo" src="${pageConfig.href("favicon.webp")}" alt="Pretty Old Pixel – Logo" width="40" height="40">Pretty Old Pixel</a>`));
     assert.equal((header.match(/class="brand-logo"/gu) ?? []).length, 1);
   }
   assert.ok(pages.get("zeitschriften/pc-games/index.html").html.includes('href="../../">Startseite</a>'));
@@ -292,6 +319,7 @@ test("erzeugt absolute Canonicals und Open-Graph-URLs bei relativen Links, Asset
         assert.ok(!page.html.includes('href="/'));
         assert.ok(!page.html.includes('src="/'));
         assert.ok(page.html.includes(`rel="icon" type="image/webp" href="${config.href("favicon.webp", page.route)}"`));
+        assert.ok(page.html.includes(`rel="apple-touch-icon" sizes="180x180" href="${config.href("apple-touch-icon.png", page.route)}"`));
         assert.ok(page.html.includes(`rel="stylesheet" href="${config.href("assets/site.css", page.route)}"`));
         assert.ok(page.html.includes(`property="og:url" content="${canonical}"`));
         const breadcrumbs = JSON.parse(page.html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/u)[1])["@graph"].at(-1);
@@ -452,20 +480,29 @@ test("baut offline mit Projektpfad, Sitemap und Inhalts-Manifest; übernimmt unv
   const first = await generateSite(options);
   assert.equal(first.pages, 58);
   assert.equal(first.reused, 0);
-  assert.ok(first.cssGzip <= 20 * 1024);
+  assert.ok(first.cssGzip < 10 * 1024);
   assert.ok(first.jsGzip <= 5 * 1024);
   const favicon = await readFile(path.join(options.outputDirectory, "favicon.webp"));
-  assert.deepEqual(favicon, await readFile(new URL("../src/favicon.webp", import.meta.url)));
+  assert.deepEqual(favicon, await readFile(new URL("../src/site-generation/favicon.webp", import.meta.url)));
   assert.equal(favicon.subarray(0, 4).toString("ascii"), "RIFF");
   assert.equal(favicon.subarray(8, 12).toString("ascii"), "WEBP");
   assert.ok(favicon.length < 1.5 * 1024);
   await assert.rejects(stat(path.join(options.outputDirectory, "favicon.jpg")), { code: "ENOENT" });
+  const touchIcon = await readFile(path.join(options.outputDirectory, "apple-touch-icon.png"));
+  assert.deepEqual(touchIcon, await readFile(new URL("../src/site-generation/apple-touch-icon.png", import.meta.url)));
+  assert.deepEqual(touchIcon.subarray(0, 8), Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]));
+  assert.equal(touchIcon.readUInt32BE(16), 180);
+  assert.equal(touchIcon.readUInt32BE(20), 180);
   const newsHtml = await readFile(path.join(options.outputDirectory, "news", "index.html"), "utf8");
   assert.ok(newsHtml.includes('<link rel="icon" type="image/webp" href="../favicon.webp">'));
+  assert.ok(newsHtml.includes('<link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">'));
   const css = (await readdir(path.join(options.outputDirectory, "assets"))).find((file) => file.endsWith(".css"));
   assert.match(css, /^site\.[a-f0-9]{12}\.css$/u);
   const stylesheet = await readFile(path.join(options.outputDirectory, "assets", css), "utf8");
   assert.ok(stylesheet.includes("Pico CSS"));
+  const reducedPico = await readFile(new URL("../src/site-generation/vendor/pico-2.1.1.site.min.css", import.meta.url), "utf8");
+  assert.ok(stylesheet.startsWith(reducedPico));
+  assert.ok(!stylesheet.includes("[data-tooltip]"));
   assert.ok(!stylesheet.includes("sourceMappingURL"));
   const leadStyles = stylesheet.match(/\.lead\s*\{([^}]*)\}/u)?.[1];
   assert.ok(leadStyles);

@@ -6,14 +6,14 @@ import { createInterface } from "node:readline";
 import { DatabaseSync } from "node:sqlite";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { gameDefinitions } from "./data-games.mjs";
-import { writeJson } from "./archive-cache.mjs";
-import { escapeHtml } from "./site-html.mjs";
+import { gameDefinitions } from "../data/data-games.mjs";
+import { writeJson } from "../shared/archive-cache.mjs";
+import { escapeHtml } from "../site-generation/site-html.mjs";
 import { normalizeDumpTitle, platformMatches } from "./game-dump-matching.mjs";
 import { normalizeReleaseCompanies } from "./game-company-names.mjs";
 export { normalizeDumpTitle } from "./game-dump-matching.mjs";
 
-const root = fileURLToPath(new URL("../", import.meta.url));
+const root = fileURLToPath(new URL("../../", import.meta.url));
 const fields = {
   mobygames: ["mobyid", "title", "mobylink", "genre", "perspective", "gameplay", "interface", "setting", "sport", "misc"],
   mobygames_alttitles: ["mobyid", "title", "info"],

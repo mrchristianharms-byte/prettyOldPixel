@@ -1,11 +1,11 @@
 import { mkdir, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { gameDefinitions } from "./data-games.mjs";
+import { gameDefinitions } from "../data/data-games.mjs";
 import { loadReadyGameMetadata } from "./game-metadata-ready.mjs";
-import { escapeHtml } from "./site-html.mjs";
+import { escapeHtml } from "../site-generation/site-html.mjs";
 
-const root = fileURLToPath(new URL("../", import.meta.url));
+const root = fileURLToPath(new URL("../../", import.meta.url));
 export function renderGameMetadataReview(reader, games = gameDefinitions) {
   const cards = games.map((game) => {
     const record = reader.get(game.id);

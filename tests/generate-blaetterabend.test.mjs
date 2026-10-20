@@ -7,7 +7,7 @@ import {
   generateBlaetterabendList,
   extractBlaetterabendVideos,
   parseBlaetterabendTitle,
-} from "../src/generate-blaetterabend.mjs";
+} from "../src/extra-data/generate-blaetterabend.mjs";
 
 const summarize = (title) => {
   const { magazines, part } = parseBlaetterabendTitle(title);

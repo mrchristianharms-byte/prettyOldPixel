@@ -4,7 +4,7 @@
 **Datum:** 2026-10-16 (überarbeitet 2026-10-17)
 **Entscheider:** Christian Harms
 **Kontext:** Export aller Video-Metadaten eines YouTube-Kanals in ein lokales System, ohne YouTube-Data-API-Key.
-**Referenzimplementierung:** [`src/fetch-youtube-videos.mjs`](../../src/fetch-youtube-videos.mjs)
+**Referenzimplementierung:** [`src/fetch-channel/fetch-youtube-videos.mjs`](../../src/fetch-channel/fetch-youtube-videos.mjs)
 
 ## Kontext
 
@@ -64,7 +64,7 @@ Erläuterung zur Referenzimplementierung:
 
 ## Entscheidung
 
-Wir verwenden die **eigene, abhängigkeitsfreie Implementierung** in `src/fetch-youtube-videos.mjs`. Sie greift direkt auf die öffentlichen YouTube-Webseiten und die inoffizielle Innertube-Schnittstelle zu (`youtube.com/youtubei/v1/…`).
+Wir verwenden die **eigene, abhängigkeitsfreie Implementierung** in `src/fetch-channel/fetch-youtube-videos.mjs`. Sie greift direkt auf die öffentlichen YouTube-Webseiten und die inoffizielle Innertube-Schnittstelle zu (`youtube.com/youtubei/v1/…`).
 
 Ablauf:
 

@@ -3,12 +3,12 @@ import { fileURLToPath } from "node:url";
 import {
   DEFAULT_MAX_AGE_DAYS, createFetcher, decodeHtml, defaultSleep, isFresh,
   normalizeMagazineName, readJson, writeJson,
-} from "./archive-cache.mjs";
+} from "../shared/archive-cache.mjs";
 import { cacheMagazineLogo } from "./kultmags-logos.mjs";
 
 export const GAMESTAR_ARCHIVE_URL = "https://www.pcgamesdatabase.de/gamestar.php";
 export const GAMESTAR_LOGO_URL = "https://www.pcgamesdatabase.de/images/gamestar.jpg";
-const projectRoot = fileURLToPath(new URL("../", import.meta.url));
+const projectRoot = fileURLToPath(new URL("../../", import.meta.url));
 
 export function parseGameStarArchive(html) {
   const issues = new Map();
@@ -124,13 +124,13 @@ export function addPcgamesdatabaseLinks(videos, magazine) {
   }
 }
 
-if (process.argv[1] === fileURLToPath(import.meta.url)) {
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const args = process.argv.slice(2);
   if (args.length && (args.length !== 1 || args[0] !== "--refresh")) {
-    console.error("Aufruf: node src/fetch-pcgamesdatabase.mjs [--refresh]");
+    console.error("Aufruf: node src/fetch-magazine/fetch-pcgamesdatabase.mjs [--refresh]");
     process.exitCode = 1;
   } else {
-    loadPcgamesdatabaseCatalog({ refresh: args.includes("--refresh") }).catch((error) => {
+    await loadPcgamesdatabaseCatalog({ refresh: args.includes("--refresh") }).catch((error) => {
       console.error(error.message);
       process.exitCode = 1;
     });

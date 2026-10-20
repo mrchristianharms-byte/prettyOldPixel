@@ -3,7 +3,7 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 import { runInNewContext } from "node:vm";
 
-const script = await readFile(new URL("../src/video-series.js", import.meta.url), "utf8");
+const script = await readFile(new URL("../src/site-generation/video-series.js", import.meta.url), "utf8");
 const preferenceKey = "pretty-old-pixel:youtube-player-enabled";
 const autoNextKey = "pretty-old-pixel:youtube-auto-next";
 const flush = () => new Promise((resolve) => setImmediate(resolve));

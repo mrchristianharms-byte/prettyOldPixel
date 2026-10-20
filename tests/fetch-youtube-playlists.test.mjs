@@ -7,7 +7,7 @@ import {
   extractChannelPlaylistsPage,
   extractPlaylistMembersPage,
   syncYoutubePlaylists,
-} from "../src/fetch-youtube-playlists.mjs";
+} from "../src/fetch-channel/fetch-youtube-playlists.mjs";
 
 const CHANNEL_ID = "UCrFoFXdc15HN5aRXpr_ic0w";
 const continuation = (token) => ({

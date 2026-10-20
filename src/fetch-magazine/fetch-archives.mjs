@@ -1,13 +1,13 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { extractBlaetterabendVideos } from "./generate-blaetterabend.mjs";
+import { extractBlaetterabendVideos } from "../extra-data/generate-blaetterabend.mjs";
 import { findKultmagsIssue, loadKultmagsCatalog } from "./fetch-kultmags.mjs";
 import { loadReetrozCatalog } from "./fetch-reetroz.mjs";
 import { loadPcgamesdatabaseCatalog } from "./fetch-pcgamesdatabase.mjs";
 import { loadAmrCatalog } from "./fetch-amr.mjs";
 
-const projectRoot = fileURLToPath(new URL("../", import.meta.url));
+const projectRoot = fileURLToPath(new URL("../../", import.meta.url));
 
 export async function fetchArchives({
   sourceFile = path.join(projectRoot, "cache", "youtube-videos.json"),
@@ -35,13 +35,13 @@ export async function fetchArchives({
   await loadReetrozCatalog({ ...reetroz, log, refresh, magazineNames: missingNames, cachedOnly: false });
 }
 
-if (process.argv[1] === fileURLToPath(import.meta.url)) {
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const args = process.argv.slice(2);
   if (args.length && (args.length !== 1 || args[0] !== "--refresh")) {
-    console.error("Aufruf: node src/fetch-archives.mjs [--refresh]");
+    console.error("Aufruf: node src/fetch-magazine/fetch-archives.mjs [--refresh]");
     process.exitCode = 1;
   } else {
-    fetchArchives({ refresh: args.includes("--refresh") }).catch((error) => {
+    await fetchArchives({ refresh: args.includes("--refresh") }).catch((error) => {
       console.error(error.message);
       process.exitCode = 1;
     });

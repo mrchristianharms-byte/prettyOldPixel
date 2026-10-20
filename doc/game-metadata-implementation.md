@@ -5,7 +5,7 @@
 Spielemetadaten einschließlich Erscheinungsjahren stammen ausschließlich aus dem
 lokal exportierten Games-Dump.
 
-1. [`import-game-dump.mjs`](../src/import-game-dump.mjs) liest einen lokalen
+1. [`import-game-dump.mjs`](../src/fetch-game/import-game-dump.mjs) liest einen lokalen
    MariaDB-Dump als Daten, führt dessen SQL nicht aus und verwendet eine temporäre
    SQLite-Datenbank. Nur Kandidaten für Katalogspiele werden exportiert.
 2. [`local-dump/report.json`](../cache/game-metadata/local-dump/report.json)
@@ -18,11 +18,11 @@ lokal exportierten Games-Dump.
 4. `npm run dev:prepare:game-metadata` erzeugt
    [`ready.json`](../cache/game-metadata/ready.json), Schema 3. Eingaben sind
    ausschließlich Report, Katalog,
-   [explizite Prüfentscheidungen](../src/data-game-dump-decisions.json) und
-   [Plattformregel](../src/data-game-dump-policy.json).
+   [explizite Prüfentscheidungen](../src/data/data-game-dump-decisions.json) und
+   [Plattformregel](../src/data/data-game-dump-policy.json).
 5. `npm run dev:review:games` erzeugt eine lokale durchsuchbare HTML-Prüfübersicht.
 6. `npm run generate:site` liest nur den fertigen Cache über
-   [`game-metadata-ready.mjs`](../src/game-metadata-ready.mjs). Der Katalog bleibt
+   [`game-metadata-ready.mjs`](../src/fetch-game/game-metadata-ready.mjs). Der Katalog bleibt
    maßgeblich für Spielnamen, Routen und Videozuordnungen.
 
 Der Build benötigt keine externen Spielequellen und nicht den Eingabereport.
@@ -66,7 +66,7 @@ Daten. Beschädigte oder veraltete fertige Caches brechen den Build ab.
   Der aktuelle Dump enthält keine strukturierten Designer- oder
   Personen-Credits; diese werden nicht aus Beschreibungen abgeleitet.
 - Firmenbezeichnungen werden beim SQL-Import und bei `dev:prepare:game-metadata`
-  über eine explizite [Aliasliste](../src/game-company-names.mjs) vereinheitlicht.
+  über eine explizite [Aliasliste](../src/fetch-game/game-company-names.mjs) vereinheitlicht.
   Die kürzesten vorhandenen Bezeichnungen sind `Blue Byte Studio GmbH`,
   `Cinemaware`, `Max Design GesMBH` und `Adventuresoft Ltd.`.
   Zusätzlich werden MicroProse (einschließlich MPS Labs), Interplay, Westwood,
@@ -102,7 +102,7 @@ In Veröffentlichungstabellen steht jedes Land auf einer eigenen, ungetrennten
 Zeile. Spaltenüberschriften und Jahreszahlen werden nicht mitten im Wort
 umgebrochen; auf schmalen Bildschirmen ist die Tabelle horizontal scrollbar.
 
-Neue Spielidentitäten werden im [Katalog](../src/data-games.mjs) gepflegt. Fehlen
+Neue Spielidentitäten werden im [Katalog](../src/data/data-games.mjs) gepflegt. Fehlen
 sie im zurückbehaltenen Dump-Report, bleiben sie unverifiziert, bis ein neuer
 lokaler Import passende Titel exportiert. Fehlende Originaldumps nicht
 aus den reduzierten Exporten rekonstruieren. SQL-Dumps und temporäre

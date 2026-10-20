@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { normalizeCompanyName, normalizeReleaseCompanies } from "../src/game-company-names.mjs";
+import { normalizeCompanyName, normalizeReleaseCompanies } from "../src/fetch-game/game-company-names.mjs";
 
 test("vereinheitlicht ausschließlich die ausdrücklich ausgewählten Firmengruppen", () => {
   const cases = [

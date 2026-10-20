@@ -2,15 +2,15 @@ import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { gameDefinitions } from "./data-games.mjs";
-import decisions from "./data-game-dump-decisions.json" with { type: "json" };
-import policy from "./data-game-dump-policy.json" with { type: "json" };
+import { gameDefinitions } from "../data/data-games.mjs";
+import decisions from "../data/data-game-dump-decisions.json" with { type: "json" };
+import policy from "../data/data-game-dump-policy.json" with { type: "json" };
 import { verifyGameDump } from "./verify-game-dump.mjs";
-import { writeJson } from "./archive-cache.mjs";
+import { writeJson } from "../shared/archive-cache.mjs";
 import { platformMatches, selectDumpCandidate } from "./game-dump-matching.mjs";
 import { companyNamesHash, normalizeReleaseCompanies } from "./game-company-names.mjs";
 
-const root = fileURLToPath(new URL("../", import.meta.url));
+const root = fileURLToPath(new URL("../../", import.meta.url));
 const defaultCacheDir = path.join(root, "cache/game-metadata");
 const hash = (value) => createHash("sha256").update(JSON.stringify(value)).digest("hex");
 const catalogueHash = (games) => hash(games.map(({ id, name, platforms, aliases, additionalReleases }) => ({

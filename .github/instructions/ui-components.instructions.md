@@ -1,18 +1,18 @@
 ---
 description: "Regeln fuer kompakte UI-Komponenten: Kacheln, Metadaten, Datumsangaben, Laufzeiten und Mengenangaben."
-applyTo: "src/site-*.mjs,src/widget/**/*.mjs,src/site.css,tests/site-*.test.mjs,tests/generate-site.test.mjs"
+applyTo: "src/site-generation/**/*.mjs,src/site-generation/site.css,src/generate-site.mjs,tests/site-*.test.mjs,tests/generate-site.test.mjs"
 ---
 
 # Kompakte UI-Komponenten
 
-- Wiederverwendbare HTML-Widgets unter `src/widget/` als ES-Module definieren
+- Wiederverwendbare HTML-Widgets unter `src/site-generation/widget/` als ES-Module definieren
   und im Seitengenerator importieren, nicht dort erneut implementieren.
   `video.mjs`, `episode-list.mjs`, `catalog-grid.mjs`, `metadata.mjs`, `video-entry.mjs`,
   `pagination.mjs`, `archive-links.mjs`, `video-panel.mjs`, `navigation.mjs`
   `game-discussions.mjs` und `magazine-logo.mjs`
-  sind die gemeinsamen Komponenten. Escaping/Links aus `src/site-html.mjs`
-  und Datums-/Laufzeitformatierung aus `src/site-format.mjs` wiederverwenden.
-  Interne Video- und Themenlinks aus `src/site-video-links.mjs` wiederverwenden.
+  sind die gemeinsamen Komponenten. Escaping/Links aus `src/site-generation/site-html.mjs`
+  und Datums-/Laufzeitformatierung aus `src/site-generation/site-format.mjs` wiederverwenden.
+  Interne Video- und Themenlinks aus `src/site-generation/site-video-links.mjs` wiederverwenden.
   Widgets duerfen nicht den Renderer importieren; keine zyklischen Abhaengigkeiten.
   News, Hardware, Retrospektiven, Interviews, Sonstiges sowie Zeitschriften-
   und Jahrgangslisten setzen pro Beitrag
@@ -58,7 +58,7 @@ applyTo: "src/site-*.mjs,src/widget/**/*.mjs,src/site.css,tests/site-*.test.mjs,
 - Player-Einstellungen (Aktivierung zuruecksetzen und automatische Folge)
   in einer gemeinsamen Zeile unter dem Player anordnen. Auf schmalen
   Bildschirmen umbrechen lassen, statt horizontalen Ueberlauf zu erzeugen.
-  Alle eingebetteten Videos verwenden dasselbe `videoWidget` aus `src/widget/video.mjs`,
+  Alle eingebetteten Videos verwenden dasselbe `videoWidget` aus `src/site-generation/widget/video.mjs`,
   genau einmal pro Spiel- bzw. Heftausgabenseite. Keine abweichenden
   Steuerelemente oder Spiel-spezifischen Varianten; Uebersichten ohne Player
   erhalten kein Widget. Automatische Fortsetzung nur innerhalb desselben

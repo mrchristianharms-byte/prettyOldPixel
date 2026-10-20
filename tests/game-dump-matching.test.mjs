@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { platformMatches, selectDumpCandidate } from "../src/game-dump-matching.mjs";
-import policy from "../src/data-game-dump-policy.json" with { type: "json" };
+import { platformMatches, selectDumpCandidate } from "../src/fetch-game/game-dump-matching.mjs";
+import policy from "../src/data/data-game-dump-policy.json" with { type: "json" };
 
 const game = (platforms = []) => ({ name: "Game II", aliases: [], platforms });
 const candidate = (mobyid, platforms, title = "Game II") => ({

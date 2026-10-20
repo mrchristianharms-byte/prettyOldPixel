@@ -1,12 +1,12 @@
 import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { findKultmagsIssue, loadKultmagsCatalog } from "./fetch-kultmags.mjs";
-import { findReetrozIssue, loadReetrozCatalog } from "./fetch-reetroz.mjs";
-import { addPcgamesdatabaseLinks, loadPcgamesdatabaseCatalog } from "./fetch-pcgamesdatabase.mjs";
-import { addAmrLinks, loadAmrCatalog } from "./fetch-amr.mjs";
+import { findKultmagsIssue, loadKultmagsCatalog } from "../fetch-magazine/fetch-kultmags.mjs";
+import { findReetrozIssue, loadReetrozCatalog } from "../fetch-magazine/fetch-reetroz.mjs";
+import { addPcgamesdatabaseLinks, loadPcgamesdatabaseCatalog } from "../fetch-magazine/fetch-pcgamesdatabase.mjs";
+import { addAmrLinks, loadAmrCatalog } from "../fetch-magazine/fetch-amr.mjs";
 
-const projectRoot = fileURLToPath(new URL("../", import.meta.url));
+const projectRoot = fileURLToPath(new URL("../../", import.meta.url));
 const defaultSourceFile = path.join(projectRoot, "cache", "youtube-videos.json");
 const defaultTargetFile = path.join(projectRoot, "cache", "blaetterabend-videos.json");
 
@@ -354,12 +354,12 @@ export async function generateBlaetterabendList({
   return result;
 }
 
-if (process.argv[1] === fileURLToPath(import.meta.url)) {
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   if (process.argv.length > 2) {
-    console.error("Aufruf: node src/generate-blaetterabend.mjs (nur lokale Caches). Archive vorher mit npm run dev:fetch:archives aktualisieren.");
+    console.error("Aufruf: node src/extra-data/generate-blaetterabend.mjs (nur lokale Caches). Archive vorher mit npm run dev:fetch:archives aktualisieren.");
     process.exitCode = 1;
   } else {
-    generateBlaetterabendList().catch((error) => {
+    await generateBlaetterabendList().catch((error) => {
       console.error(error.message);
       process.exitCode = 1;
     });

@@ -5,9 +5,9 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
 import sharp from "sharp";
-import { attachMagazineLogo, cacheKultmagsLogo, cleanKultmagsLogos, convertKultmagsLogo } from "../src/kultmags-logos.mjs";
-import { magazineLogo } from "../src/widget/magazine-logo.mjs";
-import { createSiteConfig } from "../src/site-config.mjs";
+import { attachMagazineLogo, cacheKultmagsLogo, cleanKultmagsLogos, convertKultmagsLogo } from "../src/fetch-magazine/kultmags-logos.mjs";
+import { magazineLogo } from "../src/site-generation/widget/magazine-logo.mjs";
+import { createSiteConfig } from "../src/site-generation/site-config.mjs";
 
 test("konvertiert Kultmags-Logos und sortiert Original, WebP und GIF nach tatsächlichen Bytes", async () => {
   const cacheDir = await mkdtemp(path.join(tmpdir(), "logo-variants-"));

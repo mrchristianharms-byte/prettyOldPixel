@@ -2,17 +2,17 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { createHash } from "node:crypto";
 import { slugify } from "./site-config.mjs";
-import { secondsToIsoDuration } from "./fetch-youtube-videos.mjs";
-import { gameDefinitions } from "./data-games.mjs";
-import { loadReadyGameMetadata } from "./game-metadata-ready.mjs";
+import { secondsToIsoDuration } from "../fetch-channel/fetch-youtube-videos.mjs";
+import { gameDefinitions } from "../data/data-games.mjs";
+import { loadReadyGameMetadata } from "../fetch-game/game-metadata-ready.mjs";
 import { structureGameSeries } from "./site-game-series.mjs";
-import { sectionDefinitions } from "./data-sections.mjs";
+import { sectionDefinitions } from "../data/data-sections.mjs";
 import { extractVideoDetails } from "./site-video-details.mjs";
 import { magazineGuests } from "./site-magazine-guests.mjs";
 import { loadGameDiscussions } from "./site-game-discussions.mjs";
-import { attachMagazineLogo, loadMagazineLogos } from "./kultmags-logos.mjs";
-import { addAmrLinks, loadAmrCatalog } from "./fetch-amr.mjs";
-import { addPcgamesdatabaseLinks, loadPcgamesdatabaseCatalog } from "./fetch-pcgamesdatabase.mjs";
+import { attachMagazineLogo, loadMagazineLogos } from "../fetch-magazine/kultmags-logos.mjs";
+import { addAmrLinks, loadAmrCatalog } from "../fetch-magazine/fetch-amr.mjs";
+import { addPcgamesdatabaseLinks, loadPcgamesdatabaseCatalog } from "../fetch-magazine/fetch-pcgamesdatabase.mjs";
 
 function requireValue(condition, message) {
   if (!condition) throw new Error(message);

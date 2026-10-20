@@ -1,18 +1,19 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { videoWidget, playerPoster } from "../src/widget/video.mjs";
-import { episodeList } from "../src/widget/episode-list.mjs";
-import { catalogGrid } from "../src/widget/catalog-grid.mjs";
-import { metadata } from "../src/widget/metadata.mjs";
-import { videoList, videoListEntry } from "../src/widget/video-entry.mjs";
-import { pagination } from "../src/widget/pagination.mjs";
-import { archiveLinks } from "../src/widget/archive-links.mjs";
-import { videoPanel } from "../src/widget/video-panel.mjs";
-import { navigation } from "../src/widget/navigation.mjs";
-import { themeToggle } from "../src/widget/theme-toggle.mjs";
-import { normalizeSources } from "../src/site-data.mjs";
-import { createSiteConfig } from "../src/site-config.mjs";
-import { renderSite } from "../src/site-render.mjs";
+import { videoWidget, playerPoster } from "../src/site-generation/widget/video.mjs";
+import { episodeList } from "../src/site-generation/widget/episode-list.mjs";
+import { catalogGrid } from "../src/site-generation/widget/catalog-grid.mjs";
+import { metadata } from "../src/site-generation/widget/metadata.mjs";
+import { videoList, videoListEntry } from "../src/site-generation/widget/video-entry.mjs";
+import { pagination } from "../src/site-generation/widget/pagination.mjs";
+import { archiveLinks } from "../src/site-generation/widget/archive-links.mjs";
+import { videoPanel } from "../src/site-generation/widget/video-panel.mjs";
+import { navigation } from "../src/site-generation/widget/navigation.mjs";
+import { themeToggle } from "../src/site-generation/widget/theme-toggle.mjs";
+import { magazineLogo } from "../src/site-generation/widget/magazine-logo.mjs";
+import { normalizeSources } from "../src/site-generation/site-data.mjs";
+import { createSiteConfig } from "../src/site-generation/site-config.mjs";
+import { renderSite } from "../src/site-generation/site-render.mjs";
 
 const video = {
   id: "a0000000000", title: "Spiel & <Demo>",
@@ -130,6 +131,21 @@ test("Video-Widget enthält genau einen Player und alle gemeinsamen Bedienelemen
   assert.ok(html.includes(`href="${video.url}" rel="external"`));
   assert.ok(html.includes("data-auto-next disabled"));
   assert.ok(playerPoster(video).includes(`href="${video.embedUrl}" rel="external"`));
+  assert.ok(playerPoster(video).includes('alt="Videovorschau: Spiel &amp; &lt;Demo&gt;"'));
+});
+
+test("escapet kurze Bildbeschreibungen für Videovorschauen und Zeitschriftenlogos", () => {
+  const title = 'Spiel mit "Titel" & <Demo>';
+  const preview = { ...video, title };
+  const config = createSiteConfig();
+  for (const html of [playerPoster(preview), videoListEntry(preview, config)]) {
+    assert.ok(html.includes('alt="Videovorschau: Spiel mit &quot;Titel&quot; &amp; &lt;Demo&gt;"'));
+  }
+  const logo = magazineLogo({
+    name: 'Magazin "Retro" & <Spiele>',
+    logo: { asset: "assets/logo.webp", sourceUrl: "https://www.kultmags.com/" },
+  }, config);
+  assert.ok(logo.includes('alt="Magazin &quot;Retro&quot; &amp; &lt;Spiele&gt; – Zeitschriftenlogo"'));
 });
 
 test("zeigt automatische Folgenfortsetzung nur bei mehr als einem zugeordneten Video", () => {
@@ -185,7 +201,7 @@ test("Listen-Eintrag kombiniert sichere Titel, kompakte Metadaten und redaktione
     assert.ok(html.includes('<div class="video-entry-content">\n<p class="meta">'));
     assert.ok(html.includes(`class="video-entry-thumbnail" href="${video.url}" rel="external"`));
     assert.ok(html.includes('aria-label="Spiel &amp; &lt;Demo&gt; (externe Website)"'));
-    assert.ok(html.includes(`src="${video.thumbnailUrl}" width="320" height="180" alt="" loading="lazy" decoding="async"`));
+    assert.ok(html.includes(`src="${video.thumbnailUrl}" width="320" height="180" alt="Videovorschau: Spiel &amp; &lt;Demo&gt;" loading="lazy" decoding="async"`));
     assert.ok(html.includes(`href="${video.url}" rel="external">Spiel &amp; &lt;Demo&gt;`));
     assert.ok(html.includes(">23.11.2016, 18:42</time> · 15:29"));
     assert.ok(html.includes("Im Gespräch: Person &amp; &lt;Gast&gt; · Thema: Thema &amp; &lt;Details&gt;"));

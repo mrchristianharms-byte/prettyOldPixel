@@ -10,10 +10,10 @@ import {
   normalizeMagazineName,
   readJson,
   writeJson,
-} from "./archive-cache.mjs";
+} from "../shared/archive-cache.mjs";
 
 export const REETROZ_URL = "https://reetroz.com/";
-const projectRoot = fileURLToPath(new URL("../", import.meta.url));
+const projectRoot = fileURLToPath(new URL("../../", import.meta.url));
 const defaultCacheDir = path.join(projectRoot, "cache", "reetroz");
 
 const MONTHS = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];

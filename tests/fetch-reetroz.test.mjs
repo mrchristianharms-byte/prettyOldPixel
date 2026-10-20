@@ -3,15 +3,15 @@ import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
-import { generateBlaetterabendList, parseBlaetterabendTitle } from "../src/generate-blaetterabend.mjs";
-import { fetchArchives } from "../src/fetch-archives.mjs";
+import { generateBlaetterabendList, parseBlaetterabendTitle } from "../src/extra-data/generate-blaetterabend.mjs";
+import { fetchArchives } from "../src/fetch-magazine/fetch-archives.mjs";
 import {
   findReetrozIssue,
   loadReetrozCatalog,
   parseCatalogPage,
   parseIssueDate,
   parseMagazinePage,
-} from "../src/fetch-reetroz.mjs";
+} from "../src/fetch-magazine/fetch-reetroz.mjs";
 
 const railLink = (name, slug) => `<a title="${name}" class="flex" href="/catalog?pub=${slug}"><span>${name}</span></a>`;
 const card = (slug, name, number, date, pages = 100) => `<li><a class="group block" href="/issue/${slug}"><div class="cover-3d">`

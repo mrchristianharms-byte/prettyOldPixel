@@ -1,6 +1,6 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { readJson, writeJson } from "./archive-cache.mjs";
+import { readJson, writeJson } from "../shared/archive-cache.mjs";
 import {
   extractJsonAssignment,
   fetchHtml,
@@ -11,7 +11,7 @@ import {
   postInnertube,
 } from "./fetch-youtube-videos.mjs";
 
-const projectRoot = fileURLToPath(new URL("../", import.meta.url));
+const projectRoot = fileURLToPath(new URL("../../", import.meta.url));
 const defaultCacheFile = path.join(projectRoot, "cache", "youtube-playlists.json");
 const YOUTUBE_URL = "https://www.youtube.com";
 const PLAYLIST_CONCURRENCY = 3;
@@ -257,9 +257,9 @@ export async function syncYoutubePlaylists({
   return readJson(cacheFile);
 }
 
-if (process.argv[1] === fileURLToPath(import.meta.url)) {
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const channel = process.argv[2] ?? process.env.YOUTUBE_CHANNEL ?? "PrettyOldPixel";
-  syncYoutubePlaylists({ channel }).catch((error) => {
+  await syncYoutubePlaylists({ channel }).catch((error) => {
     console.error(error.message);
     process.exitCode = 1;
   });

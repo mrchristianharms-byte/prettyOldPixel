@@ -3,11 +3,12 @@ import { copyFile, mkdtemp, mkdir, readFile, rm, stat, utimes, writeFile } from 
 import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
-import { generateSite, validateSite } from "../src/generate-site.mjs";
-import { gameDefinitions } from "../src/data-games.mjs";
-import { createSiteConfig } from "../src/site-config.mjs";
-import { normalizeSources, loadSiteData } from "../src/site-data.mjs";
-import { renderSite } from "../src/site-render.mjs";
+import { generateSite, validateSite } from "../src/site-generation/generate-site.mjs";
+import { gameDefinitions } from "../src/data/data-games.mjs";
+import { createSiteConfig } from "../src/site-generation/site-config.mjs";
+import { normalizeSources, loadSiteData } from "../src/site-generation/site-data.mjs";
+import { renderSite } from "../src/site-generation/site-render.mjs";
+import { escapeHtml } from "../src/site-generation/site-html.mjs";
 
 const channel = { id: "UC-games", title: "Pretty Old Pixel" };
 const videoId = (index) => `g${String(index).padStart(10, "0")}`;
@@ -41,7 +42,7 @@ function render(input = fixture(), definitions = [definition()]) {
 
 function renderModel(model, config = createSiteConfig()) {
   const pages = renderSite(model, config, config.href("assets/test.css"));
-  const budgets = validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""], ["assets/theme.js", ""], ["favicon.webp", ""]]), config);
+  const budgets = validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""], ["assets/theme.js", ""], ["favicon.webp", ""], ["apple-touch-icon.png", ""]]), config);
   return { model, config, pages, budgets };
 }
 
@@ -62,6 +63,114 @@ function metadataModel(count = 2) {
 }
 
 const graph = (html) => JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/u)[1])["@graph"];
+
+test("verlängert Spielüberschriften unter 20 Zeichen mit eindeutigem System und Seiteninhalt", () => {
+  for (const [name, platforms, expected] of [
+    ["Aces of the Pacific", ["MS-DOS"], "Aces of the Pacific - DOS"],
+    ["Cadaver", ["Amiga"], "Cadaver - Amiga - Spielinformationen und Videos"],
+    ["Aces of the Pacific", [], "Aces of the Pacific - Spielinformationen und Videos"],
+    ["Aces of the Pacific", ["MS-DOS", "Amiga"], "Aces of the Pacific - Spielinformationen und Videos"],
+    ["1234567890123456789", ["DOS"], "1234567890123456789 - DOS"],
+    ["12345678901234567890", ["DOS"], "12345678901234567890"],
+    ["Cadaver - Amiga", ["Amiga"], "Cadaver - Amiga - Spielinformationen und Videos"],
+    ["Cadaver & <Demo>", ["<Amiga>"], "Cadaver & <Demo> - <Amiga>"],
+    ["X", [], "X - Spielinformationen und Videos"],
+    ["😀".repeat(10), [], `${"😀".repeat(10)} - Spielinformationen und Videos`],
+    ["1234567890123", ["DOS"], "1234567890123 - DOS - Spielinformationen und Videos"],
+    ["12345678901234", ["DOS"], "12345678901234 - DOS"],
+  ]) {
+    const { pages, model } = render(fixture(2), [definition({ name, platforms })]);
+    const html = pages.get("spiele/cadaver/index.html").html;
+    assert.ok(html.includes(`<h1 class="detail-heading" title="${escapeHtml(expected)}">${escapeHtml(expected)}</h1>`), name);
+    assert.ok([...expected].length >= 20);
+    assert.equal(model.games[0].name, name);
+    assert.equal(graph(html).find((item) => item["@type"] === "VideoGame").name, name);
+  }
+});
+
+test("nutzt ein eindeutiges System aus freigegebenen Metadaten für kurze Spielüberschriften", () => {
+  const model = metadataModel(1);
+  let html = renderModel(model).pages.get("spiele/game-00/index.html").html;
+  assert.ok(html.includes('<h1 class="detail-heading" title="Spiel 00 - DOS - Spielinformationen und Videos">Spiel 00 - DOS - Spielinformationen und Videos</h1>'));
+  model.games[0].metadata.data.scope.platforms.push("Amiga");
+  html = renderModel(model).pages.get("spiele/game-00/index.html").html;
+  assert.ok(html.includes('<h1 class="detail-heading" title="Spiel 00 - Spielinformationen und Videos">Spiel 00 - Spielinformationen und Videos</h1>'));
+  model.games[0].metadata.status = "blocked";
+  html = renderModel(model).pages.get("spiele/game-00/index.html").html;
+  assert.ok(html.includes('<h1 class="detail-heading" title="Spiel 00 - Spielinformationen und Videos">Spiel 00 - Spielinformationen und Videos</h1>'));
+});
+
+test("erzeugt für alle veröffentlichten Spiele eine H1 mit mindestens 20 Zeichen", async () => {
+  const model = await loadSiteData(new URL("../cache/", import.meta.url).pathname);
+  const pages = renderSite(model, createSiteConfig(), "assets/test.css");
+  assert.ok(model.games.length > 0);
+  for (const game of model.games) {
+    const html = pages.get(`${game.route}index.html`).html;
+    const headings = [...html.matchAll(/<h1\b[^>]*>(.*?)<\/h1>/gu)];
+    assert.equal(headings.length, 1, game.name);
+    const expectedMinimum = escapeHtml(game.name);
+    assert.ok(headings[0][1].startsWith(expectedMinimum), game.name);
+    const entities = { "&amp;": "&", "&lt;": "<", "&gt;": ">", "&quot;": '"', "&#39;": "'" };
+    const heading = headings[0][1].replace(/&(?:amp|lt|gt|quot|#39);/gu, (entity) => entities[entity]);
+    assert.ok([...heading].length >= 20, `${game.name}: ${heading}`);
+    if ([...game.name].length >= 20) assert.equal(headings[0][1], expectedMinimum);
+    assert.equal(graph(html).find((item) => item["@type"] === "VideoGame").name, game.name);
+  }
+});
+
+test("vermeidet wiederholte Beschreibungsüberschriften auf langen Spieleseiten", () => {
+  const { pages } = render(fixture(40), [definition({
+    name: "Aces of the Pacific", platforms: ["MS-DOS"],
+  })]);
+  const html = pages.get("spiele/cadaver/index.html").html;
+  const headings = [...html.matchAll(/<h[1-6]\b[^>]*>(.*?)<\/h[1-6]>/gu)].map((match) => match[1]);
+  assert.equal(headings.length, 42);
+  assert.equal(new Set(headings).size, headings.length);
+  assert.equal((html.match(/class="description"/gu) ?? []).length, 40);
+  assert.ok(html.includes("Beschreibung 39"));
+  assert.ok(html.includes("Für dieses Video ist keine Beschreibung vorhanden."));
+});
+
+test("erweitert kurze Filterüberschriften und stimmt H1, Titel, Beschreibung und Einleitung ab", () => {
+  const model = metadataModel(2);
+  for (const game of model.games) {
+    game.metadata.data.genres = ["X", "Action", "1234567890123", "123456789012"];
+    game.metadata.data.releases[0].publisher = "Sierra";
+    game.metadata.data.releases[0].developer = "Ocean";
+  }
+  const { pages } = renderModel(model);
+  for (const [route, heading] of [
+    ["publisher/sierra", "Spiele des Publishers Sierra"],
+    ["entwickler/ocean", "Spiele des Entwicklers Ocean"],
+    ["genre/action", "Spiele im Genre Action"],
+    ["genre/x", "Spiele im Genre X – Retrospiele und Videos"],
+    ["genre/1234567890123", "Genre: 1234567890123"],
+    ["genre/123456789012", "Spiele im Genre 123456789012"],
+    ["plattform/dos", "Spieleplattformen: DOS"],
+  ]) {
+    const html = pages.get(`spiele/${route}/index.html`).html;
+    assert.ok(html.includes(`<h1>${heading}</h1>`), route);
+    assert.ok(html.includes(`<title>${heading} | Pretty Old Pixel</title>`), route);
+    assert.ok(html.includes(`<meta name="description" content="${heading}:`), route);
+    assert.ok(html.includes(`<p>${heading}: 2 Retrospiele`), route);
+    assert.ok([...heading].length >= 20, route);
+  }
+});
+
+test("haben alle veröffentlichten Spielefilter mindestens 20 Zeichen in der H1", async () => {
+  const model = await loadSiteData(new URL("../cache/", import.meta.url).pathname);
+  const pages = renderSite(model, createSiteConfig(), "assets/test.css");
+  let checked = 0;
+  for (const [file, { html }] of pages) {
+    if (!/^spiele\/(?:genre|entwickler|publisher|plattform)\//u.test(file)) continue;
+    const heading = html.match(/<h1>(.*?)<\/h1>/u)[1];
+    const entities = { "&amp;": "&", "&lt;": "<", "&gt;": ">", "&quot;": '"', "&#39;": "'" };
+    const text = heading.replace(/&(?:amp|lt|gt|quot|#39);/gu, (entity) => entities[entity]);
+    assert.ok([...text].length >= 20, `${file}: ${text}`);
+    checked++;
+  }
+  assert.ok(checked > 0);
+});
 
 test("zählt unterschiedliche Spiele im Beschreibungstext der Spielebox statt ihrer gemeinsamen Videos", () => {
   for (const count of [1, 2, 6]) {
@@ -239,10 +348,10 @@ test("paginiert gefilterte Spielelisten mit eigenen Links, Breadcrumbs und JSON-
   assert.deepEqual([...pages].map(([file, page]) => [
     file, { ...page, html: page.html.replaceAll(config.baseUrl, relocatedConfig.baseUrl) },
   ]), [...relocated.pages]);
-  for (const [segment, value, label] of [
-    ["genre", "simulation", "Genre: Simulation"],
-    ["entwickler", "studio", "Entwickler: Studio"],
-    ["publisher", "publisher", "Publisher: Publisher"],
+  for (const [segment, value, label, heading] of [
+    ["genre", "simulation", "Genre: Simulation", "Spiele im Genre Simulation"],
+    ["entwickler", "studio", "Entwickler: Studio", "Spiele des Entwicklers Studio"],
+    ["publisher", "publisher", "Publisher: Publisher", "Publisher: Publisher"],
   ]) {
     const route = `spiele/${segment}/${value}/`;
     const nextRoute = `${route}seite/2/`;
@@ -258,7 +367,7 @@ test("paginiert gefilterte Spielelisten mit eigenen Links, Breadcrumbs und JSON-
     assert.ok(first.includes(`href="${config.href(nextRoute, route)}" rel="next"`));
     assert.ok(second.includes(`href="${config.href(route, nextRoute)}" rel="prev"`));
     assert.ok(second.includes(`rel="canonical" href="${config.absolute(nextRoute)}"`));
-    assert.ok(second.includes(`<h1>${label} – Seite 2</h1>`));
+    assert.ok(second.includes(`<h1>${heading} – Seite 2</h1>`));
     assert.deepEqual(graph(second).at(-1).itemListElement.map((item) => item.name),
       ["Startseite", "Spiele", label, "Seite 2"]);
     assert.ok(!pages.has(`${route}seite/3/index.html`));
@@ -458,7 +567,7 @@ test("escaped konsolidierte Metadaten und behält leere Felder sowie Releaseunte
   } };
   const config = createSiteConfig();
   const pages = renderSite(model, config, config.href("assets/test.css"));
-  validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""], ["assets/theme.js", ""], ["favicon.webp", ""]]), config);
+  validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""], ["assets/theme.js", ""], ["favicon.webp", ""], ["apple-touch-icon.png", ""]]), config);
   const html = pages.get("spiele/cadaver/index.html").html;
   assert.match(html, /&lt;script&gt;genre&lt;\/script&gt;/u);
   assert.match(html, /&lt;Studio&gt;/u);
@@ -491,7 +600,7 @@ test("fasst nur länderabweichende Releases zusammen und erhält alle anderen Un
   } };
   const config = createSiteConfig();
   const pages = renderSite(model, config, config.href("assets/test.css"));
-  validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""], ["assets/theme.js", ""], ["favicon.webp", ""]]), config);
+  validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""], ["assets/theme.js", ""], ["favicon.webp", ""], ["apple-touch-icon.png", ""]]), config);
   const html = pages.get("spiele/cadaver/index.html").html;
   const table = html.match(/<tbody>([\s\S]*?)<\/tbody>/u)[1];
   assert.equal((table.match(/<tr>/gu) ?? []).length, 5);
@@ -862,7 +971,7 @@ test("rendert eine vollständige Spieleseite mit Metadaten, Player und Beschreib
   const html = pages.get("spiele/cadaver/index.html").html;
   assert.equal((html.match(/data-video-panel /gu) ?? []).length, 65);
   assert.equal((html.match(/<iframe /gu) ?? []).length, 1);
-  assert.ok(html.includes('class="detail-layout">\n<div class="detail-main">\n<h1 class="detail-heading" title="Cadaver">Cadaver'));
+  assert.ok(html.includes('class="detail-layout">\n<div class="detail-main">\n<h1 class="detail-heading" title="Cadaver - Amiga - Spielinformationen und Videos">Cadaver - Amiga - Spielinformationen und Videos'));
   assert.equal((html.match(/class="episode-menu"/gu) ?? []).length, 1);
   assert.ok(html.indexOf('class="detail-player"') < html.indexOf('class="episode-menu"'));
   assert.ok(html.indexOf('class="detail-player"') < html.indexOf('<dl class="detail-meta">'));

@@ -3,7 +3,7 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 import { runInNewContext } from "node:vm";
 
-const script = await readFile(new URL("../src/theme.js", import.meta.url), "utf8");
+const script = await readFile(new URL("../src/site-generation/theme.js", import.meta.url), "utf8");
 const key = "pretty-old-pixel:theme";
 
 function setup({ dark = false, saved = null, blocked = false } = {}) {

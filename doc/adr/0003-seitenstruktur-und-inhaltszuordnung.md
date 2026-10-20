@@ -61,7 +61,7 @@ Der vollständig abgeschlossene Abruf vom 2026-10-17 enthält:
 | Playlists mit re.play im Titel | 143 |
 
 Das Script
-[`src/fetch-youtube-playlists.mjs`](../../src/fetch-youtube-playlists.mjs)
+[`src/fetch-channel/fetch-youtube-playlists.mjs`](../../src/fetch-channel/fetch-youtube-playlists.mjs)
 liefert je Playlist `id`, `title`, `description`, `url`, `videoCount`, `videos`,
 `lastModified` und `checkedAt`. Jeder Mitgliedseintrag enthält `position`
 (beginnend bei 1), `videoId`, `title` und `availability`. Reihenfolge und
@@ -234,7 +234,7 @@ Sammelplaylists können mehrere Spiele enthalten. Erforderlich sind eine
 bestätigte Zuordnung der Playlist zu einem Spiel und die Mitgliedschaften der
 Videos. Mehrere Playlists dürfen demselben Spiel zugeordnet werden.
 Die Implementierung pflegt diese Identitäten ausdrücklich in
-[`src/data-games.mjs`](../../src/data-games.mjs): 147 geprüfte Einzelspiel-Identitäten
+[`src/data/data-games.mjs`](../../src/data/data-games.mjs): 147 geprüfte Einzelspiel-Identitäten
 einschließlich der nicht mit re.play betitelten 1942-Playlist und der manuell
 bestätigten Patrizier-Reihe sowie Airships: Conquer the Skies und Hyperspace
 Delivery Service. Nur diese beiden re.invented-Spielreihen werden nach
@@ -287,7 +287,7 @@ vorhandene Folgenummern nicht vermischt werden.
 Beschreibung. Die zusätzliche Übersicht „Abschnitte und Reihen“ entfällt,
 um die Videoauswahl nicht durch eine zweite Navigation zu verkomplizieren.
 Es entstehen weder neue Videoseiten noch leere Phasen. Die Erkennung steht in
-[`src/site-game-series.mjs`](../../src/site-game-series.mjs).
+[`src/site-generation/site-game-series.mjs`](../../src/site-generation/site-game-series.mjs).
 
 Ausdrückliche Titelmerkmale belegen Intro/Unboxing, Abschlussgespräch/Fazit
 und Interview. re.consider und re.minder bleiben eigene Beitragsarten, auch
@@ -349,7 +349,7 @@ re.ware-Beitrag ungeprüft als Hardware zu behandeln.
 
 **Umgesetzt:** 14 bestätigte Beiträge aus den Hardware-/re.ware-Playlists und
 geprüften einzelnen Hardwaretiteln. Die Zuordnung steht explizit in
-[`src/data-sections.mjs`](../../src/data-sections.mjs). Der reine Verpackungsbeitrag
+[`src/data/data-sections.mjs`](../../src/data/data-sections.mjs). Der reine Verpackungsbeitrag
 `bwVnfQJ-WEw` bleibt ausgeschlossen; der gemischte Beitrag `XDvGVislnJg`
 ist wegen der ausdrücklich beschriebenen Hardware-Reinigung enthalten und
 sichtbar als gemischtes Thema gekennzeichnet.

@@ -4,14 +4,14 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
 import sharp from "sharp";
-import { parseBlaetterabendTitle } from "../src/generate-blaetterabend.mjs";
+import { parseBlaetterabendTitle } from "../src/extra-data/generate-blaetterabend.mjs";
 import {
   findKultmagsIssue,
   folderUrl,
   loadKultmagsCatalog,
   parseFolderPage,
   parseIssueTitle,
-} from "../src/fetch-kultmags.mjs";
+} from "../src/fetch-magazine/fetch-kultmags.mjs";
 
 const folderLink = (folder) => `<div class="folder-name"><a href="mags.php?folder=${encodeURIComponent(Buffer.from(folder).toString("base64"))}"><strong>${folder.split("/").pop()}</strong></a></div>`;
 const card = (title, file, reader = true) => `<article class="magazine-card"><div class="item-title"><strong><u>${title}</u></strong></div>`

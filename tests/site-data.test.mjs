@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { createSiteConfig, productionUrl, slugify } from "../src/site-config.mjs";
-import { chronological, normalizeSources } from "../src/site-data.mjs";
+import { createSiteConfig, productionUrl, slugify } from "../src/site-generation/site-config.mjs";
+import { chronological, normalizeSources } from "../src/site-generation/site-data.mjs";
 
 function sources(count = 3) {
   const channel = { id: "UC-test", title: "Pretty Old Pixel" };

@@ -3,8 +3,8 @@ import assert from "node:assert/strict";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import { writeJson } from "../src/archive-cache.mjs";
-import { verifyGameDump } from "../src/verify-game-dump.mjs";
+import { writeJson } from "../src/shared/archive-cache.mjs";
+import { verifyGameDump } from "../src/fetch-game/verify-game-dump.mjs";
 
 test("prüft nur den Dump und weist falsche Titel, doppelte IDs und ungültige Releases zurück", async (t) => {
   const cacheDir = await mkdtemp(path.join(tmpdir(), "pixel-dump-validation-"));

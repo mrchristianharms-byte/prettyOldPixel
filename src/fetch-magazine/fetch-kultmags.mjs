@@ -12,12 +12,12 @@ import {
   normalizeMagazineName,
   readJson,
   writeJson,
-} from "./archive-cache.mjs";
+} from "../shared/archive-cache.mjs";
 
 export { normalizeMagazineName };
 
 export const KULTMAGS_URL = "https://www.kultmags.com/";
-const projectRoot = fileURLToPath(new URL("../", import.meta.url));
+const projectRoot = fileURLToPath(new URL("../../", import.meta.url));
 const defaultCacheDir = path.join(projectRoot, "cache", "kultmags");
 
 const STOPWORDS = new Set([

@@ -6,10 +6,10 @@ import test from "node:test";
 import {
   GAMESTAR_ARCHIVE_URL, GAMESTAR_LOGO_URL, addPcgamesdatabaseLinks, findPcgamesdatabaseIssue,
   loadPcgamesdatabaseCatalog, parseGameStarArchive,
-} from "../src/fetch-pcgamesdatabase.mjs";
-import { loadSiteData } from "../src/site-data.mjs";
-import { generateSite } from "../src/generate-site.mjs";
-import { generateBlaetterabendList } from "../src/generate-blaetterabend.mjs";
+} from "../src/fetch-magazine/fetch-pcgamesdatabase.mjs";
+import { loadSiteData } from "../src/site-generation/site-data.mjs";
+import { generateSite } from "../src/site-generation/generate-site.mjs";
+import { generateBlaetterabendList } from "../src/extra-data/generate-blaetterabend.mjs";
 
 const html = `<a href="gamestar.php?mag=gamestar&amp;vol=10/1997#gamestar">Erste Ausgabe</a>
 <a class="newslink" href="gamestar.php?mag=gamestar&vol=10/1997#gamestar">10/1997</a>

@@ -4,12 +4,12 @@ import { mkdtemp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { tmpdir } from "node:os";
 import test from "node:test";
-import { loadSiteData } from "../src/site-data.mjs";
-import { createSiteConfig } from "../src/site-config.mjs";
-import { renderSite } from "../src/site-render.mjs";
-import { generateSite } from "../src/generate-site.mjs";
-import { gameDiscussions } from "../src/widget/game-discussions.mjs";
-import { videoPanel } from "../src/widget/video-panel.mjs";
+import { loadSiteData } from "../src/site-generation/site-data.mjs";
+import { createSiteConfig } from "../src/site-generation/site-config.mjs";
+import { renderSite } from "../src/site-generation/site-render.mjs";
+import { generateSite } from "../src/site-generation/generate-site.mjs";
+import { gameDiscussions } from "../src/site-generation/widget/game-discussions.mjs";
+import { videoPanel } from "../src/site-generation/widget/video-panel.mjs";
 
 const videoId = "d0000000000";
 const discussion = {

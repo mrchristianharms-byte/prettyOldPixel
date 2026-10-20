@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { structureGameSeries } from "../src/site-game-series.mjs";
+import { structureGameSeries } from "../src/site-generation/site-game-series.mjs";
 
 const playlist = { id: "PL-first", title: "re.play - Beispiel" };
 const video = (id, title, overrides = {}) => ({

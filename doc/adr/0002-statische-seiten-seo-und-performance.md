@@ -81,9 +81,9 @@ werden dürfen ihre URLs und die Video-IDs für die direkte Einbindung.
 ### 2. Stabile, crawlbare Seitenstruktur
 
 Die folgende Übersicht beschreibt den **implementierten Stand**, abgeglichen
-mit [`src/site-render.mjs`](../../src/site-render.mjs),
-[`src/site-data.mjs`](../../src/site-data.mjs),
-[`src/generate-blaetterabend.mjs`](../../src/generate-blaetterabend.mjs) und den
+mit [`src/site-generation/site-render.mjs`](../../src/site-generation/site-render.mjs),
+[`src/site-generation/site-data.mjs`](../../src/site-generation/site-data.mjs),
+[`src/extra-data/generate-blaetterabend.mjs`](../../src/extra-data/generate-blaetterabend.mjs) und den
 gepflegten Spiele-/Bereichszuordnungen. Die ausführliche fachliche Begründung
 steht in [ADR 0003](0003-seitenstruktur-und-inhaltszuordnung.md).
 
@@ -225,7 +225,7 @@ Ausgabenseite nicht.
   chronologischen Platz.
 
 **Spiele:** Nur explizite Identitäten aus
-[`src/data-games.mjs`](../../src/data-games.mjs) mit bestätigten Quellplaylist-IDs,
+[`src/data/data-games.mjs`](../../src/data/data-games.mjs) mit bestätigten Quellplaylist-IDs,
 optionalen bestätigten Zusatzvideos und Ausschlüssen. Playlist-Titel oder
 zufällige Titelnennungen allein erzeugen kein Spiel. Eine Seite braucht
 mindestens zwei unterschiedliche verfügbare Videos, die nicht als
@@ -238,7 +238,7 @@ Gameplay und Fazit strukturieren die Reihe zusätzlich, ändern aber weder
 deren Mitgliedschaft noch die Gesamtreihenfolge.
 
 **Hardware:** Nur geprüfte explizite Video-IDs aus
-[`src/data-sections.mjs`](../../src/data-sections.mjs). Hardware-/re.ware-Playlists
+[`src/data/data-sections.mjs`](../../src/data/data-sections.mjs). Hardware-/re.ware-Playlists
 und Titel mit `re.ware` oder „Hardware“ liefern lediglich Prüfkandidaten.
 Gerätevorstellungen, Restaurierung, Computergrundlagen und Bastelstreams
 sind nach Prüfung enthalten. Der reine Verpackungsbeitrag `bwVnfQJ-WEw`
@@ -247,14 +247,14 @@ Hardware-Reinigung mit Hinweis als gemischter Beitrag enthalten.
 Sortierung: Veröffentlichung absteigend, unbekannte Daten zuletzt.
 
 **Retrospektiven:** Ebenfalls ausschließlich explizit geprüfte Video-IDs
-aus `src/data-sections.mjs`. Playlist-Mitgliedschaft und `re.trospektive` im
+aus `src/data/data-sections.mjs`. Playlist-Mitgliedschaft und `re.trospektive` im
 Titel melden nur neue Kandidaten. Aktuell enthalten sind die
 Formateinleitung und zwölf Beiträge zur Geschichte der Flugsimulationen.
 Die gepflegten Felder `topic` und `order` bestimmen Themen und
 Folgenreihenfolge. Doppelte Originalnummern wie `#11` bleiben unverändert
 und werden nicht als alleinige Sortiergrundlage verwendet.
 
-**Interviews und Gespräche:** Explizite IDs aus `src/data-sections.mjs`, jeweils
+**Interviews und Gespräche:** Explizite IDs aus `src/data/data-sections.mjs`, jeweils
 mit bestätigten Personen und Thema. Interview-Playlist sowie die Titelwörter
 „Interview“ und „Talk“ liefern nur Prüfkandidaten, keine automatische
 Freigabe. Bestätigte Beiträge außerhalb der Playlist sind zulässig, etwa
@@ -592,7 +592,7 @@ Große Listen und lange Beschreibungen gehören zu den Testfällen.
 
 - Datenänderungen erfordern einen erneuten Build und eine Veröffentlichung.
 - Templates, HTML-Escaping, Pfade und Schema.org-Daten müssen gepflegt und getestet werden.
-- Bestätigte Spielezuordnungen stehen im gepflegten Katalog `src/data-games.mjs`;
+- Bestätigte Spielezuordnungen stehen im gepflegten Katalog `src/data/data-games.mjs`;
   neue unbestätigte Spiel-Playlists benötigen weiterhin eine inhaltliche Prüfung.
   Die Produktionsadresse ist festgelegt.
 - Lokal gespeicherte Bilder erhöhen das Repository- und Deployment-Volumen;

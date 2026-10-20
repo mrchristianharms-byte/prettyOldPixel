@@ -4,10 +4,10 @@ import { mkdir, open, readFile, readdir, unlink } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { setTimeout as delay } from "node:timers/promises";
-import { writeJson } from "./archive-cache.mjs";
-import { gameDefinitions } from "./data-games.mjs";
+import { writeJson } from "../shared/archive-cache.mjs";
+import { gameDefinitions } from "../data/data-games.mjs";
 
-const projectRoot = fileURLToPath(new URL("../", import.meta.url));
+const projectRoot = fileURLToPath(new URL("../../", import.meta.url));
 const ANALYSIS_VERSION = "3";
 const WINDOW_MS = 180_000;
 const OVERLAP_MS = 30_000;
@@ -555,14 +555,14 @@ export async function generateGamesFromTranscript(videoId, {
   }
 }
 
-if (process.argv[1] === fileURLToPath(import.meta.url)) {
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const controller = new AbortController();
   const interrupt = () => controller.abort(new Error("Analyse unterbrochen; Zwischenstände bleiben erhalten."));
   process.once("SIGINT", interrupt);
   process.once("SIGTERM", interrupt);
   try {
     loadEnvFile(path.join(projectRoot, ".env"));
-    requireValue(process.argv.length === 3, "Aufruf: node src/generate-games-from-transcript.mjs <video-id>");
+    requireValue(process.argv.length === 3, "Aufruf: node src/extra-data/generate-games-from-transcript.mjs <video-id>");
     await generateGamesFromTranscript(process.argv[2], { signal: controller.signal });
   } catch (error) {
     console.error(error.message);

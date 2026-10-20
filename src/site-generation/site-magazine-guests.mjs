@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 import { slugify } from "./site-config.mjs";
-import { magazineGuestChannels } from "./data-magazine-guest-channels.mjs";
+import { magazineGuestChannels } from "../data/data-magazine-guest-channels.mjs";
 
 export function extractMagazineGuests(title) {
   const match = /\bmit\s+(.+)$/iu.exec(title);

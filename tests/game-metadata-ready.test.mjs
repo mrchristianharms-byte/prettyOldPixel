@@ -4,11 +4,11 @@ import { createHash } from "node:crypto";
 import { mkdtemp, readFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import { writeJson } from "../src/archive-cache.mjs";
-import { buildReadyGameMetadata, loadReadyGameMetadata } from "../src/game-metadata-ready.mjs";
-import { renderGameMetadataReview } from "../src/generate-game-metadata-review.mjs";
-import { gameDefinitions } from "../src/data-games.mjs";
-import { platformMatches } from "../src/game-dump-matching.mjs";
+import { writeJson } from "../src/shared/archive-cache.mjs";
+import { buildReadyGameMetadata, loadReadyGameMetadata } from "../src/fetch-game/game-metadata-ready.mjs";
+import { renderGameMetadataReview } from "../src/fetch-game/generate-game-metadata-review.mjs";
+import { gameDefinitions } from "../src/data/data-games.mjs";
+import { platformMatches } from "../src/fetch-game/game-dump-matching.mjs";
 
 test("freigegebene Originalspiele und beschreibungsbelegte Plattformen bleiben eindeutig zugeordnet", async () => {
   const reader = await loadReadyGameMetadata();

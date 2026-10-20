@@ -1,11 +1,11 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
-import { extractVideoDetails } from "../src/site-video-details.mjs";
-import { normalizeSources } from "../src/site-data.mjs";
-import { createSiteConfig } from "../src/site-config.mjs";
-import { renderSite } from "../src/site-render.mjs";
-import { validateSite } from "../src/generate-site.mjs";
+import { extractVideoDetails } from "../src/site-generation/site-video-details.mjs";
+import { normalizeSources } from "../src/site-generation/site-data.mjs";
+import { createSiteConfig } from "../src/site-generation/site-config.mjs";
+import { renderSite } from "../src/site-generation/site-render.mjs";
+import { validateSite } from "../src/site-generation/generate-site.mjs";
 
 const channel = { id: "UC-own", handle: "PrettyOldPixel", title: "Pretty Old Pixel" };
 const id = "a0000000000";
@@ -134,7 +134,7 @@ function rendered(description, durationSeconds = 600) {
     sections: [],
   });
   const config = createSiteConfig();
-  const assets = new Map([["assets/site.css", ""], ["assets/video-series.js", ""], ["assets/theme.js", ""], ["favicon.webp", ""]]);
+  const assets = new Map([["assets/site.css", ""], ["assets/video-series.js", ""], ["assets/theme.js", ""], ["favicon.webp", ""], ["apple-touch-icon.png", ""]]);
   const pages = renderSite(model, config, "assets/site.css");
   validateSite(pages, assets, config);
   return { pages, model };

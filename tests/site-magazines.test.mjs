@@ -3,13 +3,13 @@ import { mkdtemp, mkdir, readFile, rm, stat, writeFile } from "node:fs/promises"
 import path from "node:path";
 import { tmpdir } from "node:os";
 import test from "node:test";
-import { generateSite, validateSite } from "../src/generate-site.mjs";
-import { createSiteConfig, slugify } from "../src/site-config.mjs";
-import { normalizeSources } from "../src/site-data.mjs";
-import { renderSite } from "../src/site-render.mjs";
-import { loadSiteData } from "../src/site-data.mjs";
-import { cacheMagazineLogo } from "../src/kultmags-logos.mjs";
-import { magazineGuestChannels } from "../src/data-magazine-guest-channels.mjs";
+import { generateSite, validateSite } from "../src/site-generation/generate-site.mjs";
+import { createSiteConfig, slugify } from "../src/site-generation/site-config.mjs";
+import { normalizeSources } from "../src/site-generation/site-data.mjs";
+import { renderSite } from "../src/site-generation/site-render.mjs";
+import { loadSiteData } from "../src/site-generation/site-data.mjs";
+import { cacheMagazineLogo } from "../src/fetch-magazine/kultmags-logos.mjs";
+import { magazineGuestChannels } from "../src/data/data-magazine-guest-channels.mjs";
 
 const channel = { id: "UC-magazines", title: "Pretty Old Pixel" };
 const videoId = (index) => `m${String(index).padStart(10, "0")}`;
@@ -56,11 +56,46 @@ function render(input = variedFixture(), pageSize = createSiteConfig().pageSize)
   const model = normalizeSources(input);
   const config = { ...createSiteConfig(), pageSize };
   const pages = renderSite(model, config, config.href("assets/test.css"));
-  validateSite(pages, new Map([["assets/test.css", "body{}"], ["assets/video-series.js", ""], ["assets/theme.js", ""], ["favicon.webp", ""]]), config);
+  validateSite(pages, new Map([["assets/test.css", "body{}"], ["assets/video-series.js", ""], ["assets/theme.js", ""], ["favicon.webp", ""], ["apple-touch-icon.png", ""]]), config);
   return { model, pages, config };
 }
 
 const graph = (html) => JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/u)[1])["@graph"];
+
+test("stimmt Zeitschriften-H1, Fließtext und Meta-Beschreibung auch auf Folgeseiten aufeinander ab", async () => {
+  const realModel = await loadSiteData(new URL("../cache/", import.meta.url).pathname);
+  const guestInput = fixture(5);
+  guestInput.videos.videos.forEach((video) => { video.title = "Blätterabend mit Anna"; });
+  const models = [
+    realModel,
+    normalizeSources(variedFixture()),
+    normalizeSources(guestInput),
+  ];
+  const entities = { "&amp;": "&", "&lt;": "<", "&gt;": ">", "&quot;": '"', "&#39;": "'" };
+  const text = (html) => html.replace(/<span\b[^>]*class="visually-hidden"[^>]*>[\s\S]*?<\/span>/gu, "")
+    .replace(/<[^>]+>/gu, " ").replace(/&(?:amp|lt|gt|quot|#39);/gu, (entity) => entities[entity]);
+  const words = (value) => text(value).toLowerCase().match(/[\p{L}\p{N}]+/gu) ?? [];
+  let checked = 0;
+  for (const model of models) {
+    const config = { ...createSiteConfig(), pageSize: 2 };
+    const pages = renderSite(model, config, "assets/test.css");
+    for (const [file, { html }] of pages) {
+      if (!file.startsWith("zeitschriften/")) continue;
+      const main = html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/u)[1];
+      const heading = main.match(/<h1\b[^>]*>([\s\S]*?)<\/h1>/u)[1];
+      const paragraphs = [...main.matchAll(/<p\b[^>]*>([\s\S]*?)<\/p>/gu)].map((match) => match[1]).join(" ");
+      const description = html.match(/<meta name="description" content="([^"]+)">/u)[1];
+      const proseWords = new Set(words(paragraphs));
+      const descriptionWords = new Set(words(description));
+      for (const word of words(heading)) {
+        assert.ok(proseWords.has(word), `${file}: H1-Wort "${word}" fehlt im Fließtext.`);
+        assert.ok(descriptionWords.has(word), `${file}: H1-Wort "${word}" fehlt in der Meta-Beschreibung.`);
+      }
+      checked++;
+    }
+  }
+  assert.ok(checked > realModel.magazines.length);
+});
 
 test("ergänzt den Steinwallen-Blätterabend ohne mit-Zusatz samt Ausgabe und aktualisierten Kachelzahlen", async () => {
   const model = await loadSiteData("cache");
@@ -73,7 +108,7 @@ test("ergänzt den Steinwallen-Blätterabend ohne mit-Zusatz samt Ausgabe und ak
   const pages = renderSite(model, config, config.href("assets/test.css"));
   const html = pages.get(`${guest.route}index.html`).html;
   assert.ok(html.includes("Strategie für Geniesser"));
-  assert.ok(html.includes(`${guest.videoIds.length} Videos mit`));
+  assert.ok(html.includes(`${guest.videoIds.length} Videos,`));
   assert.ok(pages.get("zeitschriften/index.html").html.includes(
     `<p class="meta">${guest.videoIds.length} Videos</p>`));
 });
@@ -317,7 +352,7 @@ test("zeigt Zeitschriften als Kachelliste mit Titel, Videos und Jahrgängen", ()
   assert.ok(grid.includes('href="amiga-joker/">Amiga Joker</a></h2><p class="meta">1 Jahrgang</p><p class="meta">1 Video</p><p class="meta">Gesamtlaufzeit: 0:02 h</p>'));
   assert.ok(grid.includes('<p class="meta">2 Jahrgänge</p>'));
   const detail = pages.get("zeitschriften/amiga-joker/index.html").html;
-  assert.ok(detail.includes("<p>1 Video zu Amiga Joker."));
+  assert.ok(detail.includes("<p>Blätterabend-Videos zu Amiga Joker: 1 Video."));
   assert.ok(!detail.includes('class="year-list"'));
   assert.ok(!pages.has("zeitschriften/amiga-joker/1991/index.html"));
   assert.ok(pages.get("zeitschriften/pc-games/index.html").html.includes('class="year-list"'));
@@ -374,7 +409,8 @@ test("verlinkt unbekannte Ausgaben mehrerer Zeitschriften auf eine gemeinsame Vi
   const detail = pages.get(`${route}index.html`).html;
   assert.ok(detail.includes(`id="video-${video.id}"`));
   assert.ok(detail.includes('class="detail-player"'));
-  assert.ok(detail.includes("<h3>Videobeschreibung</h3>"));
+  assert.ok(detail.includes('<div class="description">'));
+  assert.ok(!detail.includes("<h3>Videobeschreibung</h3>"));
   assert.ok(detail.includes("Die genaue Heftausgabe ist unbekannt"));
   assert.ok(detail.includes("kultmags: Zeitschriftenübersicht"));
   for (const name of ["ASM", "PC Player", "PC Power"]) assert.ok(detail.includes(`<h4>${name}</h4>`));

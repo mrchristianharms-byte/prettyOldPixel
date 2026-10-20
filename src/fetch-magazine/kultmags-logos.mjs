@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 import { mkdir, readFile, readdir, rename, unlink, writeFile } from "node:fs/promises";
 import path from "node:path";
-import { cacheFileName, normalizeMagazineName, readJson } from "./archive-cache.mjs";
+import { cacheFileName, normalizeMagazineName, readJson } from "../shared/archive-cache.mjs";
 
 const MAX_BYTES = 2 * 1024 * 1024;
 

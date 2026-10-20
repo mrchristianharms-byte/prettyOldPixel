@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { mkdtemp, readFile, writeFile, rm, access } from "node:fs/promises";
 import path from "node:path";
 import { tmpdir } from "node:os";
-import { importGameDump, parseDumpArguments, parseSqlValues, readSqlStatements, normalizeDumpTitle } from "../src/import-game-dump.mjs";
+import { importGameDump, parseDumpArguments, parseSqlValues, readSqlStatements, normalizeDumpTitle } from "../src/fetch-game/import-game-dump.mjs";
 
 const dump = `-- Dump with comments
 /*!40101 SET NAMES utf8mb4 */;

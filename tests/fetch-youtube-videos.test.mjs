@@ -9,7 +9,7 @@ import {
   parseChannelHandle,
   secondsToIsoDuration,
   syncYoutubeVideos,
-} from "../src/fetch-youtube-videos.mjs";
+} from "../src/fetch-channel/fetch-youtube-videos.mjs";
 
 const CHANNEL_ID = "UCrFoFXdc15HN5aRXpr_ic0w";
 

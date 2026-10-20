@@ -3,10 +3,10 @@ import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
-import { AMIGA_ACTION_LOGO, AMIGA_ACTION_URL, addAmrLinks, findAmrIssue, loadAmrCatalog, parseAmigaActionArchive } from "../src/fetch-amr.mjs";
-import { loadSiteData } from "../src/site-data.mjs";
-import { generateSite } from "../src/generate-site.mjs";
-import { generateBlaetterabendList } from "../src/generate-blaetterabend.mjs";
+import { AMIGA_ACTION_LOGO, AMIGA_ACTION_URL, addAmrLinks, findAmrIssue, loadAmrCatalog, parseAmigaActionArchive } from "../src/fetch-magazine/fetch-amr.mjs";
+import { loadSiteData } from "../src/site-generation/site-data.mjs";
+import { generateSite } from "../src/site-generation/generate-site.mjs";
+import { generateBlaetterabendList } from "../src/extra-data/generate-blaetterabend.mjs";
 
 const monthNames = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Xmas"];
 const row = (values) => `<tr>${values.map((value) => `<td>${value}</td>`).join("")}</tr>`;

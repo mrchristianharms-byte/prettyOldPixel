@@ -6,7 +6,7 @@ import test from "node:test";
 import {
   analyzeWindow, generateGamesFromTranscript, llmConfiguration, mergeDiscussions,
   prepareSegments, transcriptWindows, validateDiscussions,
-} from "../src/generate-games-from-transcript.mjs";
+} from "../src/extra-data/generate-games-from-transcript.mjs";
 
 const config = llmConfiguration({ OPENAI_BASE_URL: "http://127.0.0.1:11434/v1", OPENAI_MODEL: "qwen3:14b" });
 const segments = prepareSegments({

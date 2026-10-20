@@ -3,10 +3,10 @@ import { mkdir, open, readFile, unlink } from "node:fs/promises";
 import path from "node:path";
 import { promisify } from "node:util";
 import { fileURLToPath } from "node:url";
-import { writeJson, defaultSleep } from "./archive-cache.mjs";
-import { loadSiteData } from "./site-data.mjs";
+import { writeJson, defaultSleep } from "../shared/archive-cache.mjs";
+import { loadSiteData } from "../site-generation/site-data.mjs";
 
-const projectRoot = fileURLToPath(new URL("../", import.meta.url));
+const projectRoot = fileURLToPath(new URL("../../", import.meta.url));
 const execute = promisify(execFile);
 const MAX_BYTES = 16 * 1024 * 1024;
 
@@ -222,12 +222,12 @@ export async function fetchYoutubeTranscripts({
   return result;
 }
 
-if (process.argv[1] === fileURLToPath(import.meta.url)) {
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   if (process.argv.length > 2) {
-    console.error("Aufruf: node src/fetch-youtube-transcripts.mjs");
+    console.error("Aufruf: node src/extra-data/fetch-youtube-transcripts.mjs");
     process.exitCode = 1;
   } else {
-    fetchYoutubeTranscripts().catch((error) => {
+    await fetchYoutubeTranscripts().catch((error) => {
       console.error(error.message);
       process.exitCode = 1;
     });

@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { parseReviewArguments, renderGameMetadataReview } from "../src/generate-game-metadata-review.mjs";
+import { parseReviewArguments, renderGameMetadataReview } from "../src/fetch-game/generate-game-metadata-review.mjs";
 
 test("Dump-Prüfübersicht zeigt Nutzbarkeit und escaped Titel ohne andere Anbieter", () => {
   const games = [{ id: "game", name: "<Game>", platforms: ["C64"] }];

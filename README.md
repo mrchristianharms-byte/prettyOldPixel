@@ -55,7 +55,7 @@ Externe Programme, Modellserver und deren Modelle werden nicht von npm verwaltet
 | npm-Target | Programme / Dienste zusätzlich zu Node.js und npm | Netzwerk und lokale Daten |
 |---|---|---|
 | `test` | Keine | Actions-taugliche Tests für YouTube-Abrufe, Seitengenerierung, Darstellung und Browser-Skripte; offline mit simulierten HTTP-Antworten. |
-| `generate:site` | Keine | Offline; benötigt die vorhandenen Video-, Playlist- und Blätterabend-Caches. Vorhandene Archivcaches, Logos und abgeschlossene Transkriptanalysen werden lokal eingelesen. Pico CSS 2.1.1 einschließlich Lizenz liegt bereits unter `src/vendor/`; kein CDN-Abruf beim Build. |
+| `generate:site` | Keine | Offline; benötigt die vorhandenen Video-, Playlist- und Blätterabend-Caches. Vorhandene Archivcaches, Logos und abgeschlossene Transkriptanalysen werden lokal eingelesen. Pico CSS 2.1.1 einschließlich Lizenz liegt bereits unter `src/site-generation/vendor/`; kein CDN-Abruf beim Build. |
 
 ### GitHub Actions: YouTube-Daten aktualisieren
 
@@ -115,8 +115,8 @@ npm run dev:review:games
 npm run generate:site
 ```
 
-Titelaliase und Plattformen stehen in `src/data-games.mjs`, manuelle Freigaben
-in `src/data-game-dump-decisions.json`. Beide werden bei jedem Lauf beachtet,
+Titelaliase und Plattformen stehen in `src/data/data-games.mjs`, manuelle Freigaben
+in `src/data/data-game-dump-decisions.json`. Beide werden bei jedem Lauf beachtet,
 nicht überschrieben. Ohne feste Plattform gilt DOS → Amiga → C64 → NES → SNES;
 unaufgelöste Mehrdeutigkeiten bleiben gesperrt. Nicht mehr belegte Freigaben
 brechen die Aufbereitung ab.
@@ -222,15 +222,53 @@ Er benötigt keine npm-Installation und führt keine lokalen `dev:`-Aufgaben aus
 GitHub kann geplante Starts verzögern. Der Workflow benötigt Schreibrechte auf
 `main`; Branch-Regeln müssen den Bot-Push erlauben.
 Ein Push mit `GITHUB_TOKEN` startet den Pages-Push-Workflow nicht erneut.
-Für die Veröffentlichung anschließend `Deploy to GitHub Pages` manuell starten.
+Stattdessen startet der erfolgreiche Abschluss des YouTube-Workflows über
+`workflow_run` automatisch `Deploy to GitHub Pages`, auch ohne Cacheänderungen.
+
+## CSS schlank halten
+
+Der Seitenbuild verwendet eine eingecheckte, auf die Website reduzierte
+Pico-CSS-Fassung statt aller Framework-Komponenten. Nach Änderungen an
+Templates, Widgets oder dynamischen Browserzuständen die Fassung lokal
+aktualisieren und prüfen:
+
+```sh
+npm run dev:generate:css
+npm run dev:test
+npm run generate:site
+```
+
+Das Target benötigt die mit `npm ci` installierte Entwicklungsabhängigkeit
+PurgeCSS. Die erzeugte Datei unter `src/site-generation/vendor/` wird
+mit versioniert. Der normale Seitenbuild und GitHub Actions brauchen
+PurgeCSS nicht und bleiben ohne npm-Installation ausführbar.
+Das kleine Stylesheet wird weiterhin regulär geladen: kein Aufblitzen
+ungestylter Inhalte und keine JavaScript-Abhängigkeit beim Laden der Styles.
 
 ## Projektstruktur
 
-- `src/`: Abrufscripts, Generatoren, Vorlagen und Gestaltung.
+[Umbau, Zuständigkeiten, npm-Einstiege und geprüfte Kompatibilität](doc/source-structure.md) ·
+[Ausführung: lokal und GitHub Actions](doc/source-structure.md#ausführung-lokal-und-github-actions).
+
+- `src/`: nur die dünnen Hauptstarter `fetch-youtube.mjs` (`fetch:all`) und
+  `generate-site.mjs` (`generate:site`); alle weiteren npm-Aufgaben starten
+  ihre Implementierung direkt aus dem passenden Fachordner.
+  - `site-generation/`: Websitegenerator, Renderer, Widgets, Browser-Skripte, Styles, Bilder und vendiertes CSS.
+  - `fetch-channel/`: Abruf von YouTube-Kanalvideos und Playlists.
+  - `fetch-magazine/`: Zeitschriftenarchive, Archivabrufe und lokale Zeitschriftenlogos.
+  - `fetch-game/`: lokale Spielemetadaten-Pipeline einschließlich Import, Abgleich, Prüfung und Prüfbericht.
+  - `extra-data/`: Transkript-Abruf und -Analyse sowie lokale Blätterabend-Aufbereitung.
+  - `data/`: gepflegte Kataloge, Zuordnungen und JSON-Freigaberegeln.
+  - `shared/`: gemeinsam genutzte Cache- und Abrufhilfen.
 - `tests/`: automatisierte Tests.
 - `cache/`: lokale JSON-Daten als Grundlage der Generierung.
 - `docs/`: generierte Website; Git-ignoriert und bei jedem Build ersetzt.
 - `doc/`: Funktionsreferenz und Architekturentscheidungen.
+
+Andere Module und Tests importieren die Implementierungen aus den Fachordnern,
+nicht die CLI-Starter. Zusätzliche Abrufe und Entwicklungsaufgaben benötigen
+keinen eigenen Starter in `src/`; ihre npm-Befehle verweisen direkt auf den
+Fachordner. Die Namen und Optionen der npm-Befehle bleiben unverändert.
 
 ## GitHub Pages
 
@@ -239,7 +277,8 @@ nicht „Deploy from a branch“.
 
 Die beiden Workflows haben getrennte Aufgaben:
 
-- **Deploy to GitHub Pages** startet bei regulären Pushes auf `main` oder
+- **Deploy to GitHub Pages** startet bei regulären Pushes auf `main`,
+  nach erfolgreichem Abschluss von **Update YouTube caches** auf `main` oder
   manuell unter **Actions → Deploy to GitHub Pages → Run workflow**.
   Er führt die Produktionstests aus, generiert die Website aus den vorhandenen
   Caches und veröffentlicht `docs/` als Pages-Artefakt. Es werden weder Daten
@@ -248,13 +287,21 @@ Die beiden Workflows haben getrennte Aufgaben:
   (`Europe/Berlin`, einschließlich Sommer-/Winterzeit) oder manuell.
   Er ruft `fetch:videos` und `fetch:playlists` auf und committet ausschließlich
   die beiden aktualisierten Cache-Dateien nach `main`. Der Workflow
-  veröffentlicht selbst keine Website.
+  veröffentlicht selbst keine Website; sein erfolgreicher Abschluss startet
+  den Pages-Workflow automatisch.
 
 **Wichtig:** Der Cache-Push mit `GITHUB_TOKEN` löst keinen weiteren
-Push-Workflow aus. Nach einer automatischen Cache-Aktualisierung muss
-**Deploy to GitHub Pages** manuell gestartet werden, damit die Änderungen
-auf der Website erscheinen. Reguläre Pushes auf `main` lösen das Deployment
-weiterhin automatisch aus.
+Push-Workflow aus. Die Verkettung erfolgt stattdessen über `workflow_run`.
+Der nachgelagerte Pages-Build checkt den aktuellen Stand von `main` aus,
+einschließlich des zuvor gespeicherten Cache-Commits. Auch ohne Cacheänderungen
+wird nach einem erfolgreichen Abruf gebaut; nach fehlgeschlagenen oder
+abgebrochenen Abrufen werden Build und Deployment übersprungen.
+Die Verknüpfung wird aktiv, sobald die Workflowänderung auf `main` liegt.
+
+Lokale Optimierungs- und Aufbereitungsschritte (`dev:*`) werden dabei nicht
+ausgeführt: keine Archivabrufe, Transkriptanalysen oder Spiele-Dump-Aufbereitung.
+Vorhandene gepflegte Zuordnungen, Metadaten und fertige Analyse-Caches bleiben
+unverändert und werden beim Websitebuild weiterhin verwendet.
 
 Die generierten Dateien unter `docs/` müssen nicht committed werden.
 Die lokal gepflegten Daten- und Logo-Caches hingegen gehören ins Repository,
@@ -265,5 +312,6 @@ Website: https://mrchristianharms-byte.github.io/prettyOldPixel/
 ## Weiterführende Dokumentation
 
 [Funktionen, Datenformate und weitere Befehle](doc/README.md) ·
+[Quellstruktur und Verzeichnisumbau](doc/source-structure.md) ·
 [Neue Videos, Titel und fehlende Metadaten](doc/README.md#recherchierte-daten-pflegen) ·
 [Architekturentscheidungen](doc/adr/)

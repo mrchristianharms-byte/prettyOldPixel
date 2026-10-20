@@ -3,7 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const YOUTUBE_URL = "https://www.youtube.com";
-const projectRoot = fileURLToPath(new URL("../", import.meta.url));
+const projectRoot = fileURLToPath(new URL("../../", import.meta.url));
 const defaultCacheFile = path.join(projectRoot, "cache", "youtube-videos.json");
 const DETAIL_CONCURRENCY = 4;
 const MAX_RETRIES = 3;
@@ -327,9 +327,9 @@ export async function syncYoutubeVideos({
   return readCache(cacheFile);
 }
 
-if (process.argv[1] === fileURLToPath(import.meta.url)) {
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const channel = process.argv[2] ?? process.env.YOUTUBE_CHANNEL ?? "PrettyOldPixel";
-  syncYoutubeVideos({ channel }).catch((error) => {
+  await syncYoutubeVideos({ channel }).catch((error) => {
     console.error(error.message);
     process.exitCode = 1;
   });

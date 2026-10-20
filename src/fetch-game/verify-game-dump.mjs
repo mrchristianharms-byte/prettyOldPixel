@@ -2,11 +2,11 @@ import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { gameDefinitions } from "./data-games.mjs";
-import { writeJson } from "./archive-cache.mjs";
+import { gameDefinitions } from "../data/data-games.mjs";
+import { writeJson } from "../shared/archive-cache.mjs";
 import { normalizeDumpTitle, platformMatches } from "./game-dump-matching.mjs";
 
-const root = fileURLToPath(new URL("../", import.meta.url));
+const root = fileURLToPath(new URL("../../", import.meta.url));
 function check(condition, message) {
   if (!condition) throw new Error(`Dump-Prüfung: ${message}`);
 }

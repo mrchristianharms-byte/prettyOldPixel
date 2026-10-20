@@ -138,6 +138,7 @@ function layout({ route, title, description, body, schema, crumbs, image, noinde
 <title>${escapeHtml(fullTitle)}</title>
 <meta name="description" content="${escapeHtml(description)}">
 <link rel="icon" type="image/webp" href="${config.href("favicon.webp")}">
+<link rel="apple-touch-icon" sizes="180x180" href="${config.href("apple-touch-icon.png")}">
 ${noindex ? '<meta name="robots" content="noindex, follow">' : ""}
 <link rel="canonical" href="${canonical}">
 <meta property="og:title" content="${escapeHtml(fullTitle)}">
@@ -159,7 +160,7 @@ ${interactive ? `<script type="module" src="${config.href(jsHref)}"></script>` :
 <body${interactive ? ' class="detail-page"' : ""}>
 <a class="skip-link" href="#inhalt">Zum Inhalt</a>
 <header class="container site-header">
-<a class="brand" href="${config.href()}"><img class="brand-logo" src="${config.href("favicon.webp")}" alt="" width="40" height="40">${config.name}</a>
+<a class="brand" href="${config.href()}"><img class="brand-logo" src="${config.href("favicon.webp")}" alt="Pretty Old Pixel – Logo" width="40" height="40">${config.name}</a>
 ${navigation(navigationEntries, route, config, themeToggle())}
 </header>
 <main id="inhalt" class="container">
@@ -291,7 +292,7 @@ function renderMagazinePages(model, siteConfig, add) {
       const videos = [...new Set(subset.flatMap((entry) => entry.videoId
         ? [entry.videoId] : entry.videoIds ?? []))].map((id) => model.videoById.get(id));
       add({
-        route, title: `${title}${page > 1 ? ` – Seite ${page}` : ""}`, description: `${description}${page > 1 ? ` Seite ${page} von ${pageCount}.` : ""}`,
+        route, title: `${title}${page > 1 ? ` – Seite ${page}` : ""}`, description: `${title}: ${description}${page > 1 ? ` Seite ${page} von ${pageCount}.` : ""}`,
         crumbs: page === 1 ? crumbs : [...crumbs, { route, name: `Seite ${page}` }],
         schema: [{
           ...collectionSchema(items ? items(subset) : videos, config, route),
@@ -299,7 +300,7 @@ function renderMagazinePages(model, siteConfig, add) {
         }, ...pageSchema],
         previous: page > 1 ? paginatedRoute(baseRoute, page - 1) : null,
         next: page < pageCount ? paginatedRoute(baseRoute, page + 1) : null,
-        body: `<h1>${headingHtml ?? escapeHtml(title)}${page > 1 ? ` – Seite ${page}` : ""}</h1>${typeof intro === "function" ? intro(config) : intro}${pagination(baseRoute, page, pageCount, config)}${render(subset, config)}${pagination(baseRoute, page, pageCount, config)}`,
+        body: `<h1>${headingHtml ?? escapeHtml(title)}${page > 1 ? ` – Seite ${page}` : ""}</h1>${typeof intro === "function" ? intro(config) : intro}${page > 1 ? `<p>Seite ${page} von ${pageCount}: weitere Einträge zu ${escapeHtml(title)}.</p>` : ""}${pagination(baseRoute, page, pageCount, config)}${render(subset, config)}${pagination(baseRoute, page, pageCount, config)}`,
       }, videos);
     }
   }
@@ -310,12 +311,12 @@ function renderMagazinePages(model, siteConfig, add) {
   ];
   addPaginated({
     route: index.route, entries: indexEntries, title: "Blätterabend – Zeitschriften",
-    description: "Klassische Computerzeitschriften im Blätterabend: Zeitschriften, Jahrgänge und Ausgaben mit Videos und passenden Archivlinks.",
+    description: "Klassische Computerzeitschriften, Jahrgänge und Ausgaben mit Videos und passenden Archivlinks.",
     crumbs: [root, index],
     items: (entries) => entries.map((entry) => entry.magazine
       ? { title: entry.magazine.name, route: entry.magazine.route }
       : entry.guest ? { title: entry.guest.name, route: entry.guest.route } : model.videoById.get(entry.videoId)),
-    intro: `<p>${countLabel(model.magazines.length, "Computerzeitschrift", "Computerzeitschriften")} im Blätterabend: klassische Spielemagazine, Heftausgaben und Jahrgänge mit Videos und Archivlinks.</p>`,
+    intro: `<p>${countLabel(model.magazines.length, "Computerzeitschrift", "Computerzeitschriften")} im Blätterabend: Zeitschriften, Heftausgaben und Jahrgänge mit Videos und Archivlinks.</p>`,
     render: (entries, config) => {
       const magazines = entries.filter((entry) => entry.magazine).map((entry) => entry.magazine);
       const guests = entries.filter((entry) => entry.guest).map((entry) => entry.guest);
@@ -342,9 +343,9 @@ ${unresolved.length ? `<section><h2>Weitere Blätterabende</h2><p>Weitere Streif
       headingHtml: guest.channelUrl
         ? `Blätterabend mit ${escapeHtml(guest.name.slice(0, handleIndex))}${externalLink(guest.channelUrl, guest.name.slice(handleIndex))}`
         : undefined,
-      description: `Blätterabende mit ${guest.name}: die zugehörigen Zeitschriftenausgaben und Videos mit Archivlinks.`,
+      description: "Die zugehörigen Zeitschriftenausgaben und Videos mit Archivlinks.",
       crumbs: [root, index, { route: guest.route, name: guest.name }],
-      intro: `<p>${videoCount(guest.videoIds.length)} mit ${escapeHtml(guest.name)}, ${countLabel(guest.issueCount, "bekannte Ausgabe", "bekannte Ausgaben")}.</p>`,
+      intro: `<p>Blätterabend mit ${escapeHtml(guest.name)}: ${videoCount(guest.videoIds.length)}, ${countLabel(guest.issueCount, "bekannte Ausgabe", "bekannte Ausgaben")}.</p>`,
       render: (entries, config) => groupedEntries(entries, model, config),
     });
   }
@@ -356,19 +357,19 @@ ${unresolved.length ? `<section><h2>Weitere Blätterabende</h2><p>Weitere Streif
     addPaginated({
       route: magazine.route, entries: magazine.entries,
       title: `${magazine.name} – Blätterabend-Videos`,
-      description: `${magazine.name} im Blätterabend: Jahrgänge, Ausgaben und zugehörige Videos mit Archivverweisen.`,
+      description: "Jahrgänge, Ausgaben und zugehörige Videos mit Archivverweisen.",
       crumbs: [root, index, magazineCrumb], schema: (config) => [periodicalSchema(magazine, config)],
-      intro: (config) => `${magazineLogo(magazine, config)}<p>${videoCount(magazine.videos.length)} zu ${escapeHtml(magazine.name)}. ${magazine.years.length > 1 ? "Wählen Sie einen Jahrgang oder eine Ausgabe." : "Wählen Sie eine Ausgabe."}</p>${years(config)}${unknownLink(config)}`,
+      intro: (config) => `${magazineLogo(magazine, config)}<p>Blätterabend-Videos zu ${escapeHtml(magazine.name)}: ${videoCount(magazine.videos.length)}. ${magazine.years.length > 1 ? "Wählen Sie einen Jahrgang oder eine Ausgabe." : "Wählen Sie eine Ausgabe."}</p>${years(config)}${unknownLink(config)}`,
       render: (entries, config) => groupedEntries(entries, model, config),
     });
     for (const year of magazine.years.length > 1 ? magazine.years : []) {
       addPaginated({
         route: year.route, entries: year.entries,
         title: `${magazine.name} ${year.year} – Ausgaben und Blätterabend-Videos`,
-        description: `${magazine.name}, Jahrgang ${year.year}: Heftausgaben, Spieletests und Computergeschichte im Blätterabend mit Videos und Archivlinks.`,
+        description: "Heftausgaben, Spieletests und Computergeschichte im Blätterabend mit Videos und Archivlinks.",
         crumbs: [root, index, magazineCrumb, { route: year.route, name: String(year.year) }],
         schema: (config) => [periodicalSchema(magazine, config)],
-        intro: `<p>Die Ausgaben von ${escapeHtml(magazine.name)} aus ${year.year}: Blättern Sie durch die Hefte oder wählen Sie einen Videoteil.</p>`,
+        intro: `<p>Ausgaben und Blätterabend-Videos zu ${escapeHtml(magazine.name)} aus ${year.year}: Blättern Sie durch die Hefte oder wählen Sie einen Videoteil.</p>`,
         render: (entries, config) => groupedEntries(entries, model, config),
       });
     }
@@ -378,15 +379,15 @@ ${unresolved.length ? `<section><h2>Weitere Blätterabende</h2><p>Weitere Streif
       const title = `${magazine.name} ${issue.label}`;
       add({
         route: issue.route, title: `${title} – Blätterabend`, interactive: true,
-        description: `${title}: Informationen zur Zeitschriftenausgabe, passende Archivlinks und alle zugehörigen Blätterabend-Videos.`,
+        description: `${title} – Blätterabend: Informationen zur Zeitschriftenausgabe, passende Archivlinks und alle zugehörigen Videos.`,
         crumbs: [root, index, magazineCrumb, { route: issue.route, name: title }],
         schema: [collectionSchema(videos, config, issue.route, issue.route), periodicalSchema(magazine, config),
           issueSchema(magazine, issue, config), ...videos.map((video) => videoSchema(video, config, issue.route))],
-        body: `${seriesVideos(videos, title, config, null, metadata([
+        body: `${seriesVideos(videos, title, config, null, `<p>Blätterabend zu ${escapeHtml(title)}: ${videoCount(videos.length)} zur Zeitschriftenausgabe mit passenden Archivlinks.</p>${metadata([
   ["Zeitschrift", `<a href="${config.href(magazine.route)}">${escapeHtml(magazine.name)}</a>`],
   ["Ausgabe", `${escapeHtml(issue.label)}${issue.special ? " (Sonderheft)" : ""}`],
   ["Archivlinks", archiveLinks(issue.archives, false, { visibleLabel: true })],
-]))}
+])}`)}
 <p><a href="${config.href(magazine.route)}">Weitere Ausgaben von ${escapeHtml(magazine.name)}</a> · <a href="${config.href(index.route)}">Andere Zeitschriften entdecken</a></p>`,
       }, videos);
     }
@@ -394,6 +395,12 @@ ${unresolved.length ? `<section><h2>Weitere Blätterabende</h2><p>Weitere Streif
 }
 
 function seriesVideos(videos, title, config, game, introduction = "") {
+  const platforms = game?.platforms.length ? game.platforms
+    : game?.metadata?.status === "ready" ? game.metadata.data.scope?.platforms ?? [] : [];
+  const platform = platforms[0] === "MS-DOS" ? "DOS" : platforms[0];
+  let heading = game && [...title].length < 20 && platforms.length === 1
+    && !title.toLowerCase().endsWith(platform.toLowerCase()) ? `${title} - ${platform}` : title;
+  if (game && [...heading].length < 20) heading += " - Spielinformationen und Videos";
   const entries = new Map(game?.series.entries.map((entry) => [entry.videoId, entry]) ?? []);
   const runs = new Map(game?.series.runs.map((run) => [run.id, run]) ?? []);
   const menu = episodeList(videos, game);
@@ -403,7 +410,7 @@ function seriesVideos(videos, title, config, game, introduction = "") {
   })).join("")}</div>`;
   return `<section data-video-series data-title="${escapeHtml(title)}" class="detail-layout">
 <div class="detail-main">
-<h1 class="detail-heading" title="${escapeHtml(title)}">${escapeHtml(title)}</h1>
+<h1 class="detail-heading" title="${escapeHtml(heading)}">${escapeHtml(heading)}</h1>
 ${videoWidget(videos[0], videos.length)}
 <div class="detail-information">${introduction}<hr>${panels}</div>
 </div>${menu}
@@ -554,12 +561,22 @@ function renderGamePages(model, siteConfig, add, filters) {
   const index = { route: "spiele/", name: "Spiele" };
   const listings = [
     { ...index, games: model.games },
-    ...[...filters.values()].flatMap((entries) => [...entries.values()].map((entry) => ({
-      ...entry, name: `${entry.label}: ${entry.name}`,
-    }))),
+    ...[...filters].flatMap(([field, entries]) => [...entries.values()].map((entry) => {
+      const name = `${entry.label}: ${entry.name}`;
+      const prefixes = {
+        genre: "Spiele im Genre",
+        developer: "Spiele des Entwicklers",
+        publisher: "Spiele des Publishers",
+        platform: "Spiele für die Plattform",
+      };
+      let heading = [...name].length < 20 ? `${prefixes[field]} ${entry.name}` : name;
+      if ([...heading].length < 20) heading += " – Retrospiele und Videos";
+      return { ...entry, name, heading };
+    })),
   ];
   for (const listing of listings) {
     const filtered = listing.route !== index.route;
+    const heading = filtered ? listing.heading : listing.name;
     const crumbs = filtered ? [root, index, { route: listing.route, name: listing.name }] : [root, index];
     const pageCount = Math.ceil(listing.games.length / siteConfig.pageSize);
     for (let page = 1; page <= pageCount; page += 1) {
@@ -568,13 +585,13 @@ function renderGamePages(model, siteConfig, add, filters) {
       const games = listing.games.slice((page - 1) * config.pageSize, page * config.pageSize);
       const videos = [...new Set(games.flatMap((game) => game.videos))].map((id) => model.videoById.get(id));
       add({
-        route, title: `${filtered ? `${listing.name} – Spiele` : "Spiele – Retro-Spielereihen"}${page > 1 ? ` – Seite ${page}` : ""}`,
-        description: `${filtered ? `${listing.name}: Retrospiele von Pretty Old Pixel, alphabetisch geordnet.` : "Retrospiele von Pretty Old Pixel: Spielereihen vom Intro bis zum Fazit, alphabetisch geordnet."} Seite ${page} von ${pageCount}.`,
+        route, title: `${filtered ? heading : "Spiele – Retro-Spielereihen"}${page > 1 ? ` – Seite ${page}` : ""}`,
+        description: `${filtered ? `${heading}: Retrospiele von Pretty Old Pixel, alphabetisch geordnet.` : "Retrospiele von Pretty Old Pixel: Spielereihen vom Intro bis zum Fazit, alphabetisch geordnet."} Seite ${page} von ${pageCount}.`,
         crumbs: page === 1 ? crumbs : [...crumbs, { route, name: `Seite ${page}` }],
         schema: collectionSchema(games.map((game) => ({ title: game.name, route: game.route })), config, route),
         previous: page > 1 ? paginatedRoute(listing.route, page - 1) : null,
         next: page < pageCount ? paginatedRoute(listing.route, page + 1) : null,
-        body: `<h1>${escapeHtml(listing.name)}${page > 1 ? ` – Seite ${page}` : ""}</h1><p>${countLabel(listing.games.length, "Retrospiel", "Retrospiele")}, alphabetisch geordnet. Entdecken Sie Spielverläufe, Unboxings und Gespräche rund um die Spiele.</p>
+        body: `<h1>${escapeHtml(heading)}${page > 1 ? ` – Seite ${page}` : ""}</h1><p>${filtered ? `${escapeHtml(heading)}: ` : ""}${countLabel(listing.games.length, "Retrospiel", "Retrospiele")}, alphabetisch geordnet. Entdecken Sie Spielverläufe, Unboxings und Gespräche rund um die Spiele.</p>
 ${filtered ? `<p><a href="${config.href(index.route)}">Alle Spiele anzeigen</a></p>` : ""}
 ${pagination(listing.route, page, pageCount, config)}
 <div class="game-catalog">${catalogGrid(games.map((game) => ({
@@ -685,7 +702,7 @@ ${homeOverview(model, config, filters)}`,
       crumbs: [root, section, { route: video.detailRoute, name: video.title }],
       schema: videoSchema(video, pageConfig, video.detailRoute),
       body: seriesVideos([video], video.title, pageConfig, null,
-        video.blaetterabend ? "<p>Klassische Computer- und Spielezeitschriften im Blätterabend von Pretty Old Pixel.</p>" : ""),
+        video.blaetterabend ? `<p>${escapeHtml(video.title)}: klassische Computer- und Spielezeitschriften im Blätterabend von Pretty Old Pixel.</p>` : ""),
     }, [video]);
   }
   renderGamePages(model, config, add, filters);

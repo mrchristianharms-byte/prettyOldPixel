@@ -8,6 +8,8 @@ Dateipfade im Text beziehen sich auf dessen Wurzel.
 
 ## Inhalt
 
+- [Quellstruktur und Verzeichnisumbau](source-structure.md)
+- [Ausführung: lokal und GitHub Actions](source-structure.md#ausführung-lokal-und-github-actions)
 - [Generierung und lokale Vorschau](#lokal-bauen)
 - [Kanalstatistik](#startseite-kanal-und-themen-in-zahlen)
 - [Hardware, Retrospektiven und Gespräche](#hardware-retrospektiven-und-gespräche)
@@ -47,7 +49,21 @@ npm run generate:site
 Die Namenskonvention trennt Internetabrufe (`fetch-*` bzw. `fetch:*`) von
 lokaler Generierung (`generate-*` bzw. `generate:*`). Der Websitegenerator
 heißt `src/generate-site.mjs`, das npm-Ziel `generate:site`; das bisherige
-allgemeine `build`-Ziel entfällt. Gemeinsam genutzte `site-*`-Module sind
+allgemeine `build`-Ziel entfällt. Direkt unter `src/` liegen nur die dünnen
+Hauptstarter `fetch-youtube.mjs` (`fetch:all`) und `generate-site.mjs`
+(`generate:site`), die `runCli()` aus ihren Implementierungen aufrufen.
+Alle weiteren npm-Aufgaben starten das jeweilige Fachmodul direkt,
+ohne zusätzlichen Wrapper in `src/`.
+Die Fachordner trennen Websitegenerierung (`src/site-generation/`),
+YouTube-Kanaldaten (`src/fetch-channel/`), Zeitschriftenarchive und Logos
+(`src/fetch-magazine/`), die lokale Spielemetadaten-Pipeline
+(`src/fetch-game/`) sowie Transkripte und abgeleitete Zusatzdaten
+(`src/extra-data/`). Gepflegte Kataloge und Freigaberegeln liegen unter
+`src/data/`, gemeinsame Cachehilfen unter `src/shared/`.
+Tests und andere Module importieren die Implementierungen aus diesen
+Fachordnern. Die Namen und Optionen der npm-Befehle sowie die Cacheorte
+bleiben unverändert; einzelne Scriptpfade liegen jetzt im Fachordner.
+Gemeinsam genutzte `site-*`-Module unter `src/site-generation/` sind
 Bausteine des Websitegenerators, keine separaten Abrufscripts.
 Überwiegend recherchierte, dauerhaft gepflegte Daten und einfache
 Zuordnungsmuster erhalten den Präfix `data-`; ausführende Scraper,
@@ -75,10 +91,16 @@ Externe YouTube-/Archivlinks und Schema.org-Bezeichner bleiben unverändert.
 Die generierten Dateien unter `docs/` sind Build-Artefakte und gehören nicht
 in neue Commits; GitHub Actions erzeugt und prüft sie vor dem Deployment.
 Das Kopfzeilenlogo und das Favicon verwenden dieselbe optimierte Datei
-`src/favicon.webp` (70 × 70 Pixel für hochauflösende Displays, unter 1,5 KiB).
-`src/favicon.jpg` bleibt die Originalvorlage; der Build kopiert das fertige
+`src/site-generation/favicon.webp` (70 × 70 Pixel für hochauflösende Displays, unter 1,5 KiB).
+`src/site-generation/favicon.jpg` bleibt die Originalvorlage; der Build kopiert das fertige
 WebP ohne Bildbibliothek. Das kleine Darstellungs-Skript bleibt vor dem CSS,
 damit eine gespeicherte Farbauswahl ohne Aufblitzen des falschen Modus gilt.
+Alle Seiten verweisen zusätzlich auf `apple-touch-icon.png` als
+180 × 180 Pixel großes PNG für iOS-Startbildschirm-Verknüpfungen. Der Build
+kopiert die vorbereitete Datei aus `src/site-generation/`; Logo und Browser-Favicon bleiben WebP.
+Alle eingebundenen Inhaltsbilder haben einen nicht leeren Alt-Text:
+„Pretty Old Pixel – Logo“, „<Name> – Zeitschriftenlogo“ oder
+„Videovorschau: <Videotitel>“. Das gilt auch für die Vorschau im Player-Iframe.
 `docs/` ist ausschließlich für die generierte Website reserviert und wird beim
 Build vollständig ersetzt. Die Projektdokumentation bleibt unter `doc/`.
 Eine vorhandene Ausgabe unter `public/` kann einmalig nach `docs/` verschoben
@@ -165,8 +187,8 @@ Playlist werden zusätzlich chronologisch vom ältesten zum neuesten sortiert;
 Quellpositionen und Mehrfacheinträge bleiben separat erhalten. Fehlende oder
 nicht verfügbare Mitglieder werden gemeldet und nicht als Videos erfunden.
 Playlist-Titel allein bestätigen noch kein Spiel. Die geprüften Spielezuordnungen
-stehen in `src/data-games.mjs`, die bestätigten Zuordnungen für weitere Bereiche
-in `src/data-sections.mjs`. Es gibt keine Links auf noch nicht erzeugte Bereichsseiten.
+stehen in `src/data/data-games.mjs`, die bestätigten Zuordnungen für weitere Bereiche
+in `src/data/data-sections.mjs`. Es gibt keine Links auf noch nicht erzeugte Bereichsseiten.
 
 ### Startseite: Kanal und Themen in Zahlen
 
@@ -242,7 +264,7 @@ keine externen Ressourcen oder Laufzeit-JavaScript.
   am Ende. Diese Videos entfallen aus Sonstiges; vorhandene weitere
   Zuordnungen bleiben erhalten. Die Zwei-Video-Schwelle für Spieleseiten
   wird dadurch nicht verändert.
-- `src/data-sections.mjs` hält explizite Video-IDs, Themen, bei Gesprächen Personen
+- `src/data/data-sections.mjs` hält explizite Video-IDs, Themen, bei Gesprächen Personen
   und bei Retrospektiven die Reihenfolge. Titel, Beschreibungen und bestätigte
   Playlist-Mitgliedschaften wurden hierfür geprüft. Änderungen der
   Playlist-Mitgliedschaft allein erzeugen keine ungeprüften Zuordnungen.
@@ -287,10 +309,10 @@ nicht automatisch erzeugte Caches:
 
 | Datei | Pflegeinhalt |
 | --- | --- |
-| [`src/data-games.mjs`](../src/data-games.mjs) | Geprüfte Spieltitel, Plattformen, Playlist-IDs, Aliasse, zusätzliche und ausgeschlossene Video-IDs; einfache Muster zur Bildung der Spielidentität. |
-| [`src/data-game-dump-decisions.json`](../src/data-game-dump-decisions.json) | Explizit geprüfte Games-Dump-Zuordnungen für bekannte mehrdeutige Titel. |
-| [`src/data-game-dump-policy.json`](../src/data-game-dump-policy.json) | Plattformregel für die ausschließlich dumpbasierte Metadatenaufbereitung. |
-| [`src/data-sections.mjs`](../src/data-sections.mjs) | Geprüfte Videozuordnungen für Hardware, Retrospektiven und Gespräche mit Themen, Personen und Folgenreihenfolge. |
+| [`src/data/data-games.mjs`](../src/data/data-games.mjs) | Geprüfte Spieltitel, Plattformen, Playlist-IDs, Aliasse, zusätzliche und ausgeschlossene Video-IDs; einfache Muster zur Bildung der Spielidentität. |
+| [`src/data/data-game-dump-decisions.json`](../src/data/data-game-dump-decisions.json) | Explizit geprüfte Games-Dump-Zuordnungen für bekannte mehrdeutige Titel. |
+| [`src/data/data-game-dump-policy.json`](../src/data/data-game-dump-policy.json) | Plattformregel für die ausschließlich dumpbasierte Metadatenaufbereitung. |
+| [`src/data/data-sections.mjs`](../src/data/data-sections.mjs) | Geprüfte Videozuordnungen für Hardware, Retrospektiven und Gespräche mit Themen, Personen und Folgenreihenfolge. |
 
 ### Neue Videos oder Titel aufnehmen
 
@@ -303,9 +325,9 @@ nicht automatisch erzeugte Caches:
    Eine neue Folge in einer bereits bestätigten Spielplaylist wird automatisch
    dem Spiel zugeordnet. Fehlt sie dort, ihre Zugehörigkeit anhand von Titel,
    Beschreibung und Quellplaylist prüfen und erst dann als Zusatzvideo in
-   `src/data-games.mjs` aufnehmen. Bekannte Ausschlüsse bleiben bestehen.
+   `src/data/data-games.mjs` aufnehmen. Bekannte Ausschlüsse bleiben bestehen.
 3. Bei einem **neuen Spieltitel** eine eigene bestätigte Spielidentität in
-   `src/data-games.mjs` anlegen: kanonischer Name, gegebenenfalls Plattform,
+   `src/data/data-games.mjs` anlegen: kanonischer Name, gegebenenfalls Plattform,
    Quellplaylist oder explizit geprüfte `videoIds` sowie belegte Aliasse.
    Eine Playlist ist bei einer vollständig manuell bestätigten Videoreihe
    nicht erforderlich; die Zwei-Video-Schwelle gilt weiterhin. Ähnliche Namen, Nachfolger,
@@ -319,7 +341,7 @@ nicht automatisch erzeugte Caches:
    bestätigten Spielplaylist, dessen Veröffentlichung höchstens zwei
    Kalendermonate zurückliegt.
 4. Für neue **Hardware-, Retrospektiven- oder Gesprächsbeiträge** die konkrete
-   Video-ID in `src/data-sections.mjs` nach Prüfung ergänzen. Thema und bei
+   Video-ID in `src/data/data-sections.mjs` nach Prüfung ergänzen. Thema und bei
    Gesprächen die Personen belegen; bei Retrospektiven zusätzlich die
    Reihenfolge pflegen. Ein Titelmuster oder eine Playlist-Mitgliedschaft
    ist dort nur ein Prüfhinweis, keine automatische Freigabe.
@@ -345,12 +367,12 @@ nicht automatisch erzeugte Caches:
 - **Zeitschrift oder Ausgabe unklar:** Keine spekulative Heftseite erzeugen.
   Titel, Beschreibung und Archivtreffer prüfen. Bestätigte Sonderzuordnungen
   bzw. neue Zeitschriftentitel gehören zu den Zuordnungsdaten/-mustern in
-  `src/generate-blaetterabend.mjs`; danach die Blätterabend-Datei neu erzeugen.
+  `src/extra-data/generate-blaetterabend.mjs`; danach die Blätterabend-Datei neu erzeugen.
   Ungeklärte Angaben bleiben in den vorhandenen unbekannten Gruppen sichtbar.
 
 Zum Abschluss `npm test` und `npm run generate:site` ausführen und die betroffenen
 Kacheln, Detailseiten und Quellenlinks in der lokalen Vorschau kontrollieren.
-Geänderte `src/data-*`-Dateien samt Tests/Dokumentation versionieren; die Website
+Geänderte `src/data/data-*`-Dateien samt Tests/Dokumentation versionieren; die Website
 unter `docs/` bleibt ein generiertes Artefakt. Das Umbenennen von Datendateien
 erfordert zugleich aktualisierte Imports und Dokumentationsverweise.
 
@@ -360,6 +382,18 @@ erfordert zugleich aktualisierte Imports und Dokumentationsverweise.
   Übersichtsseite. `/spiele/<slug>/` enthält die Spielinformationen, sämtliche
   Videos, Beschreibungen und einen gemeinsamen Player. Auch mehr als 60 Videos
   eines Spiels bleiben auf dieser einen Seite.
+- Spielüberschriften mit weniger als 20 Zeichen erhalten bei genau einem
+  bekannten System den Zusatz ` - <System>`; `MS-DOS` wird dabei als `DOS`
+  angezeigt, etwa `Aces of the Pacific - DOS`. Vorrang hat die gepflegte
+  Plattform, sonst der eindeutige Umfang freigegebener Spielmetadaten.
+  Bleibt die Überschrift danach unter 20 Zeichen oder ist kein System
+  eindeutig bekannt, folgt der Zusatz ` - Spielinformationen und Videos`.
+  Damit hat jede Spieleseiten-H1 mindestens 20 Zeichen; Namen ab 20 Zeichen
+  bleiben unverändert. Bereits am Titelende genannte Systeme werden nicht
+  erneut angehängt. Die Regel wird bei jeder Seitengenerierung angewendet.
+  Spielidentität, URLs und strukturierte Spieldaten ändern sich dadurch nicht.
+  Videotitel bleiben eigene Überschriften; Beschreibungen folgen ohne die
+  je Folge wiederholte Zwischenüberschrift „Videobeschreibung“.
 - Genre, Entwickler und Publisher in den Spielinformationen verlinken auf
   gefilterte Spielelisten unter `/spiele/genre/<wert>/`,
   `/spiele/entwickler/<wert>/` und `/spiele/publisher/<wert>/`.
@@ -371,9 +405,16 @@ erfordert zugleich aktualisierte Imports und Dokumentationsverweise.
   bleiben Zusatzangaben und sind keine eigenen Filter.
   Die gefilterten Listen verwenden dieselben Kacheln, die alphabetische
   Reihenfolge und die Paginierung mit maximal 60 Spielen je Seite.
+  Filter-H1 mit weniger als 20 Zeichen werden ausgeschrieben, etwa
+  „Spiele des Publishers Sierra“, „Spiele des Entwicklers Ocean“,
+  oder „Spiele im Genre Action“. Bereits ausreichend lange Überschriften
+  wie „Spieleplattformen: DOS“ bleiben unverändert.
+  Bleibt die H1 zu kurz, folgt „– Retrospiele und Videos“.
+  Titel, Meta-Beschreibung und Einleitung verwenden dieselbe Formulierung;
+  Filterwerte, Brotkrümel und URLs bleiben unverändert.
   Sinkt die Trefferzahl unter zwei, entfallen beim nächsten Build sowohl
   die Unterseiten als auch die Links.
-- `src/data-games.mjs` hält ausdrücklich geprüfte Spielidentitäten mit festen
+- `src/data/data-games.mjs` hält ausdrücklich geprüfte Spielidentitäten mit festen
   Playlist-IDs, kanonischem Namen, bekannten Plattformen, Quellschreibweisen
   und gegebenenfalls bestätigten zusätzlichen Video-IDs fest. Die Zuordnung
   basiert auf Playlist- und Mitgliedstiteln, nicht allein dem Formatnamen.
@@ -432,7 +473,7 @@ erfordert zugleich aktualisierte Imports und Dokumentationsverweise.
   ausgewählten Video. Die Reihenfolge bleibt chronologisch, auch wenn nach
   einem Abschlussgespräch noch weitere Spielvideos erscheinen. Eine zusätzliche
   Übersicht „Abschnitte und Reihen“ wird nicht angezeigt.
-- `src/site-game-series.mjs` erkennt Abschnitte nur aus ausdrücklichen
+- `src/site-generation/site-game-series.mjs` erkennt Abschnitte nur aus ausdrücklichen
   Titelmerkmalen und bestätigtem Playlist-Kontext. Eine Folgenummer `#0` oder
   `#1` allein ist kein Intro; „Abschluss Level 1“ ist kein Abschlussgespräch.
   Bei widersprüchlichem oder fehlendem Formatkontext bleibt der Beitrag als
@@ -463,7 +504,7 @@ Zeitlinks zum eigenen Video werden in der sichtbaren Videobeschreibung
 nicht erneut ausgegeben. Begleittexte, ungültige Zeitangaben und Links
 zu anderen Videos bleiben erhalten; die Originalbeschreibung im Cache
 und in den strukturierten Daten bleibt unverändert.
-`src/site-video-details.mjs` bereitet diese Daten rein offline auf:
+`src/site-generation/site-video-details.mjs` bereitet diese Daten rein offline auf:
 
 - Kapitelzeilen verwenden `MM:SS` oder `HH:MM:SS` mit Beschriftung. Ein
   aufsteigender Block ab `00:00` braucht mindestens zwei Einträge; ohne
@@ -504,8 +545,8 @@ Der Frame bleibt auf `youtube-nocookie.com`, mit `enablejsapi=1` und der
 tatsächlichen Browser-Origin. Fehler oder ausbleibende Antworten werden
 sichtbar gemeldet; externe Links und der manuelle Player bleiben verfügbar.
 
-Wiederverwendbare HTML-Komponenten liegen als ES-Module unter `src/widget/`;
-`src/site-render.mjs` importiert sie direkt:
+Wiederverwendbare HTML-Komponenten liegen als ES-Module unter `src/site-generation/widget/`;
+`src/site-generation/site-render.mjs` importiert sie direkt:
 
 Die verpflichtende zentrale Wiederverwendung und Zuständigkeitsgrenzen
 beschreibt [ADR 0005](adr/0005-wiederverwendbare-widgets-und-komponenten.md).
@@ -562,12 +603,12 @@ beschreibt [ADR 0005](adr/0005-wiederverwendbare-widgets-und-komponenten.md).
   führen dadurch auch bei mehreren Zeitschriftenzuordnungen zur passenden
   Ausgabe. Ausgabenüberschriften und deren Archivlinks bleiben separat.
 
-HTML-Escaping und externe Links liegen gemeinsam in `src/site-html.mjs`,
-Datums-/Laufzeitformatierung in `src/site-format.mjs`. Widgets importieren
-gemeinsame interne Video- und Themenlinks aus `src/site-video-links.mjs`, aber
+HTML-Escaping und externe Links liegen gemeinsam in `src/site-generation/site-html.mjs`,
+Datums-/Laufzeitformatierung in `src/site-generation/site-format.mjs`. Widgets importieren
+gemeinsame interne Video- und Themenlinks aus `src/site-generation/site-video-links.mjs`, aber
 nicht den Seitengenerator; so entstehen keine zyklischen Abhängigkeiten.
-Styles bleiben in `src/site.css`, Browserinteraktion in `src/video-series.js`
-und der globale Hell-/Dunkel-Schalter in `src/theme.js`.
+Styles bleiben in `src/site-generation/site.css`, Browserinteraktion in `src/site-generation/video-series.js`
+und der globale Hell-/Dunkel-Schalter in `src/site-generation/theme.js`.
 Die Widget-Module werden nur beim Build ausgeführt, nicht zusätzlich im Browser.
 
 Alle eingebetteten Videos verwenden das gemeinsame `videoWidget`:
@@ -606,6 +647,13 @@ Lange Werte und Beschriftungen umbrechen innerhalb ihrer Spalte.
 
 ### Blätterabend nach Zeitschrift und Jahrgang
 
+H1, sichtbare Einleitung und Meta-Beschreibung benennen denselben Seiteninhalt.
+Die Meta-Beschreibung übernimmt den Seitentitel; im Fließtext stehen der
+Zeitschriften-/Gastname und die Begriffe der H1, etwa „Blätterabend-Videos“.
+Jahrgänge und Ausgaben werden ausdrücklich genannt, Folgeseiten zusätzlich
+mit Seitennummer. Die automatisch erzeugten Einleitungen ergänzen die
+unveränderten Originalbeschreibungen der Videos.
+
 Jahrgangsgruppen heißen beispielsweise „Jahrgang 1996 – Ausgaben“;
 Sonderhefte stehen separat unter „Jahrgang 1996 – Sonderhefte“.
 Einträge ohne bekanntes Heftjahr folgen am Ende unter „Jahrgang unbekannt“.
@@ -635,7 +683,7 @@ erhalten bleiben; die Jahrgangsüberschrift macht hierzu keine Aussage.
   „Christian @StayForeverDE“ wird nicht zusätzlich einem bloßen „Christian“
   zugeordnet.
   Bestätigte YouTube-Kanäle sind einmalig geprüft und statisch in
-  [`src/data-magazine-guest-channels.mjs`](../src/data-magazine-guest-channels.mjs)
+  [`src/data/data-magazine-guest-channels.mjs`](../src/data/data-magazine-guest-channels.mjs)
   hinterlegt. Auf der Gastseite verlinkt der @Handle in der Überschrift den
   Kanal über dessen lesbare `https://www.youtube.com/@Name`-Adresse statt einer
   Kanal-ID-URL. Der Build führt keine Kanalabfragen aus.
@@ -740,9 +788,26 @@ erhalten bleiben; die Jahrgangsüberschrift macht hierzu keine Aussage.
   auf der Datenschutzseite, erreichbar über den Link im Seitenfuß.
   Interne Auswahlregeln, Cachezugriffe und Buildabläufe stehen nur in dieser
   Dokumentation und den ADRs, nicht in den Einleitungen der Website.
-- Pico CSS **2.1.1** liegt einschließlich MIT-Lizenz unter `src/vendor/`.
-  Der Build bündelt es mit `src/site.css` zu einer lokalen Datei mit
-  Inhalts-Hash. Es werden keine Fonts, CDNs oder anderen externen Assets geladen.
+- Pico CSS **2.1.1** liegt einschließlich MIT-Lizenz unter `src/site-generation/vendor/`.
+  Die unveränderte Originaldatei `pico-2.1.1.min.css` bleibt als Quelle erhalten.
+  `npm run dev:generate:css` erzeugt mit PurgeCSS aus den Generator-/Widget-
+  Templates und Browser-Skripten die eingecheckte Fassung
+  `pico-2.1.1.site.min.css`. Nicht benötigte Framework-Komponenten und
+  ungenutzte Variablen werden entfernt. Dynamische Hell-/Dunkel-Selektoren,
+  Überschriftenregeln und die in `site.css` verwendeten Variablen bleiben erhalten.
+  Der Build bündelt nur die reduzierte Fassung mit `src/site-generation/site.css`
+  zu einer lokalen Datei mit Inhalts-Hash. Es werden keine Fonts, CDNs oder
+  anderen externen Assets geladen. Das Stylesheet bleibt synchron eingebunden,
+  damit Layout, Darstellung und Bedienbarkeit auch ohne JavaScript erhalten bleiben.
+  Nach Template- oder Browserzustandsänderungen `dev:generate:css` und `dev:test`
+  ausführen; der Reproduzierbarkeitstest erkennt eine veraltete CSS-Fassung.
+  Die Produktionstests begrenzen das aktuelle Bundle auf weniger als 10 KiB gzip
+  und verlangen mindestens 30 Prozent weniger gzip-Bytes als mit dem vollständigen
+  Framework. Das allgemeine harte Build-Budget bleibt bei 20 KiB.
+  PurgeCSS ist ausschließlich eine lokale Entwicklungsabhängigkeit; der
+  Seitenbuild führt es nicht aus. Der Parser-Override in `package.json` verwendet
+  die korrigierte `postcss-selector-parser`-Version ab 7.1.6 statt der
+  verwundbaren, transitiv angeforderten 6.x-Fassung.
 - Bereits erzeugte CSS- und JavaScript-Dateien mit passendem Inhalts-Hash
   bleiben bei späteren Builds erhalten. GitHub Pages kann HTML noch zehn
   Minuten zwischenspeichern; dessen ältere Asset-URLs dürfen nach einem
@@ -944,7 +1009,7 @@ npm run fetch:playlists
 npm run fetch:playlists -- https://www.youtube.com/@PrettyOldPixel
 ```
 
-`src/fetch-youtube-playlists.mjs` liest ohne API-Key die öffentlichen Playlists
+`src/fetch-channel/fetch-youtube-playlists.mjs` liest ohne API-Key die öffentlichen Playlists
 des Kanals und alle Seiten ihrer Mitgliederlisten. Bis zu drei Playlists werden
 parallel geladen; innerhalb einer Playlist werden Fortsetzungen nacheinander
 abgefragt. Der gemeinsame Task wartet auf beide Scripts und endet bei einem
@@ -1023,14 +1088,14 @@ npm run dev:fetch:archives
 npm run dev:generate:blaetterabend
 ```
 
-`src/fetch-archives.mjs` aktualisiert ausschließlich die Archive-Caches für
+`src/fetch-magazine/fetch-archives.mjs` aktualisiert ausschließlich die Archive-Caches für
 die im Video-Cache erkannten Zeitschriften. GameStar erhält zusätzlich
 Heftlinks von PC Games Database, Amiga Action von AMR einschließlich Logo. Kultmags wird für die übrige Archivsuche
 zuerst geprüft; reetroz bleibt der Fallback für dort fehlende Zeitschriften. Mit
 `npm run dev:fetch:archives:refresh` werden die Quellen unabhängig vom Cache-Alter
 neu abgefragt. Das erzeugt noch keine neue Blätterabend-Datei.
 
-`src/generate-blaetterabend.mjs` liest anschließend ausschließlich lokale
+`src/extra-data/generate-blaetterabend.mjs` liest anschließend ausschließlich lokale
 JSON-Dateien und lädt auch bei veralteten Caches nichts aus dem Internet.
 Fehlende benötigte Cache-Dateien führen zu einem Fehler mit Hinweis auf
 `dev:fetch:archives`, nicht zu einem automatischen Abruf. Zum bisherigen kombinierten
@@ -1047,7 +1112,7 @@ Titel ohne erkannte Zeitschrift oder Ausgabe werden beim Lauf aufgelistet.
 Numerische Doppelausgaben wie `4-5/1988`, `4+5/1988` und `4/5 1988`
 werden als ein Heft mit beiden Monaten erkannt und mit dem Archiv abgeglichen.
 Neue Zeitschriften oder Schreibweisen werden in der Liste `MAGAZINES` in
-`src/generate-blaetterabend.mjs` ergänzt.
+`src/extra-data/generate-blaetterabend.mjs` ergänzt.
 Die bestätigte Titelbezeichnung „Computer Gaming World – 15th Anniversary“
 wird als Ausgabe #148 (11/1996) erkannt; auf dem
 [Cover](https://assets.reetroz.com/covers/cgw-148.jpg) sind beide Angaben zu sehen.
@@ -1079,7 +1144,7 @@ Archivlinks-Sektion entfällt; Übersichtslisten bleiben bei kompakten Symbolen.
 
 Jede erkannte Zeitschrift bekommt ein Feld `kultmags` mit einem Link in das
 Archiv von [kultmags.com](https://www.kultmags.com/mags.php)
-(`src/fetch-kultmags.mjs`):
+(`src/fetch-magazine/fetch-kultmags.mjs`):
 
 - `match: "issue"`: Die passende Ausgabe wurde gefunden, mit `title`, `pageUrl`,
   `readerUrl` (Online-Reader, falls vorhanden), `downloadUrl` und `coverUrl`.
@@ -1147,7 +1212,7 @@ npm run dev:fetch:gamestar -- --refresh
 npm run generate:site
 ```
 
-`src/fetch-pcgamesdatabase.mjs` lädt ausschließlich die öffentliche
+`src/fetch-magazine/fetch-pcgamesdatabase.mjs` lädt ausschließlich die öffentliche
 [GameStar-Archivübersicht](https://www.pcgamesdatabase.de/gamestar.php).
 Sie enthält bereits die direkten Heftlinks; einzelne Heftseiten werden
 nicht zusätzlich abgerufen. Nur tatsächliche Links auf
@@ -1196,7 +1261,7 @@ npm run dev:fetch:amiga-action -- --refresh
 npm run generate:site
 ```
 
-`src/fetch-amr.mjs` liest ausschließlich die
+`src/fetch-magazine/fetch-amr.mjs` liest ausschließlich die
 [Amiga-Action-Übersicht](https://amr.abime.net/issues_1) sowie das
 [Magazinlogo](https://amr.abime.net/logos/amiga_action_logos.png).
 Heftseiten werden nicht einzeln abgerufen. Die Jahrgangstabelle gibt
@@ -1238,7 +1303,7 @@ Ausgabe und wird nicht auf das US-Archiv umgeleitet.
 
 kultmags.com enthält nur deutsche Zeitschriften. Für Zeitschriften, die dort
 fehlen (`kultmags: null`), wird im Archiv von
-[reetroz.com](https://reetroz.com/catalog) gesucht (`src/fetch-reetroz.mjs`), z. B.
+[reetroz.com](https://reetroz.com/catalog) gesucht (`src/fetch-magazine/fetch-reetroz.mjs`), z. B.
 Computer Gaming World, PC Gamer (US) und Computer Games Strategy Plus. Das
 Ergebnis steht im Feld `reetroz` im selben Format wie `kultmags`:
 
@@ -1268,7 +1333,7 @@ yt-dlp --version
 npm run dev:fetch:transcripts
 ```
 
-Das separate Script `src/fetch-youtube-transcripts.mjs` benötigt zusätzlich
+Das separate Script `src/extra-data/fetch-youtube-transcripts.mjs` benötigt zusätzlich
 ein aktuelles [yt-dlp](https://github.com/yt-dlp/yt-dlp#installation) im `PATH`.
 Es ist kein npm-Paket und wird nicht automatisch installiert.
 Es verwendet die bereits vorhandenen drei Quellcaches und dieselben
@@ -1387,7 +1452,7 @@ Sperr- und temporäre Schreibdateien bleiben Git-ignoriert.
 npm run dev:generate:games-from-transcript -- _PHiFsxtF0k
 ```
 
-`src/generate-games-from-transcript.mjs` analysiert bewusst jeweils ein
+`src/extra-data/generate-games-from-transcript.mjs` analysiert bewusst jeweils ein
 bereits lokal gespeichertes Transkript. Es benötigt Node.js 22, eine lokale
 `.env` und einen laufenden OpenAI-kompatiblen Modellserver, aktuell Ollama
 mit `qwen3:14b`. Es lädt `.env` selbst; bereits gesetzte Prozessvariablen
@@ -1600,7 +1665,7 @@ bleiben Git-ignoriert. Die Analyse ändert keine Spielzuordnungen und
 veröffentlicht selbst nichts.
 Beim nächsten Website-Build werden abgeschlossene Analysen zusammen mit
 dem passenden Transkript für Blätterabend-Ausgabenseiten eingelesen:
-Das Widget `src/widget/game-discussions.mjs` zeigt erkannte Spielnamen
+Das Widget `src/site-generation/widget/game-discussions.mjs` zeigt erkannte Spielnamen
 und Zeitmarken im jeweiligen Videobereich. Ungeprüfte Vorschläge werden
 als automatisch erkannt und möglicherweise ungenau gekennzeichnet.
 Ein aktiver, bereiter Player springt über die bestehende Kapitelsteuerung
@@ -1665,5 +1730,15 @@ Architecture Decision Records liegen in `doc/adr/`:
 ## GitHub Pages veröffentlichen
 
 Der Workflow in `.github/workflows/pages.yml` baut die Website bei Pushes auf
-den Branch `main` und veröffentlicht `docs/` über GitHub Pages. Aktiviere im
-Repository unter **Settings → Pages** die Bereitstellung über **GitHub Actions**.
+den Branch `main`, bei manuellen Starts und nach erfolgreichem Abschluss
+von `Update YouTube caches` auf `main`. Er veröffentlicht `docs/` über
+GitHub Pages. Die Verkettung erfolgt über `workflow_run`, nicht über den
+Cache-Push mit `GITHUB_TOKEN`. Der nachgelagerte Build liest den aktuellen
+Stand von `main`, auch wenn der Abruf keine Cacheänderungen ergeben hat.
+Nach fehlgeschlagenen oder abgebrochenen Abrufen werden Build und Deployment
+übersprungen.
+
+Lokale `dev:`-Aufbereitungsaufgaben laufen dabei nicht. Vorhandene manuelle
+Zuordnungen und fertige Metadaten-/Analyse-Caches bleiben erhalten und
+werden weiterhin verwendet. Aktiviere im Repository unter
+**Settings → Pages** die Bereitstellung über **GitHub Actions**.

@@ -1,4 +1,4 @@
-import { slugify } from "./site-config.mjs";
+import { slugify } from "../site-generation/site-config.mjs";
 
 // Geprüfte Einzelspiel-Playlists: Titel und Mitglieder, nicht das Format allein, belegen die Zuordnung.
 // Neue Titel und fehlende Metadaten: doc/README.md#recherchierte-daten-pflegen
