@@ -1,8 +1,8 @@
 {
   "version": 3,
-  "generatedAt": "2026-10-20T10:20:49.965Z",
+  "generatedAt": "2026-10-20T18:47:56.357Z",
   "catalogueHash": "666176e9df6e92f7ad15774073bcad13919520dc4fd6cce02da086087eadf1cf",
-  "decisionsHash": "45ae9f9712f93dca3bef215b32c06c23ad6eb3b229c8317592da044e2ca42d46",
+  "decisionsHash": "f5ef70e7c279ab52a0e1de8a754514d83aeb53b97080e709390edae33cec7191",
   "selectionPolicyHash": "c1ab79becbb5258efa667bffbe96df2a3433d2c7f67ba579a9757f37f098a3d4",
   "companyNamesHash": "5cebc68a6e6ea36186db794bed937fbd4efeb1d72f76ead91f9d3f0febede3c7",
   "summary": {
@@ -3046,6 +3046,9 @@
         "Amiga"
       ],
       "selection": {
+        "status": "selected",
+        "reason": "reviewed-dump-decision",
+        "mobyid": 3066,
         "platforms": [
           "MS-DOS",
           "Amiga"
@@ -3054,28 +3057,25 @@
         "consideredIds": [
           3066
         ],
-        "status": "selected",
-        "reason": "unique-title-and-platform",
-        "mobyid": 3066,
+        "identityBasis": "reviewed-dump-decision",
         "matchingReleaseIds": [
           31124,
           59726,
           62903,
           15242,
           15243
-        ],
-        "identityBasis": "dump-title-and-platform"
+        ]
       },
       "status": "ready",
-      "reason": "policy-selected-source-scoped-data",
+      "reason": "reviewed-source-scoped-data",
       "data": {
         "identity": {
           "provider": "mobygames",
           "id": 3066,
-          "basis": "dump-title-and-platform",
+          "basis": "reviewed-dump-decision",
           "scope": "game",
           "reviewedAt": "2026-10-20",
-          "note": "Ausschließlich lokaler Games-Dump: bekannte Plattformen erhalten; bei offener Plattform DOS, dann Amiga, dann C64, dann NES, dann SNES. Verbleibende Mehrdeutigkeit bleibt unverifiziert."
+          "note": "Erscheinungsjahr 1990 ausdrücklich bestätigt; lokaler Dump belegt Amiga 1990 und DOS 1991. Gemeinsames Erstveröffentlichungsjahr 1990 freigegeben, beide Plattformen bleiben erhalten."
         },
         "scope": {
           "platforms": [
@@ -3096,7 +3096,7 @@
           "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
-        "releaseYear": null,
+        "releaseYear": 1990,
         "genres": [
           "Role-playing (RPG)"
         ],
@@ -15256,6 +15256,9 @@
         "MS-DOS"
       ],
       "selection": {
+        "status": "selected",
+        "reason": "reviewed-dump-decision",
+        "mobyid": 5949,
         "platforms": [
           "Amiga",
           "Atari ST",
@@ -15265,9 +15268,7 @@
         "consideredIds": [
           5949
         ],
-        "status": "selected",
-        "reason": "unique-title-and-platform",
-        "mobyid": 5949,
+        "identityBasis": "reviewed-dump-decision",
         "matchingReleaseIds": [
           28758,
           66513,
@@ -15279,19 +15280,18 @@
           461819,
           71077,
           533306
-        ],
-        "identityBasis": "dump-title-and-platform"
+        ]
       },
       "status": "ready",
-      "reason": "policy-selected-source-scoped-data",
+      "reason": "reviewed-source-scoped-data",
       "data": {
         "identity": {
           "provider": "mobygames",
           "id": 5949,
-          "basis": "dump-title-and-platform",
+          "basis": "reviewed-dump-decision",
           "scope": "game",
           "reviewedAt": "2026-10-20",
-          "note": "Ausschließlich lokaler Games-Dump: bekannte Plattformen erhalten; bei offener Plattform DOS, dann Amiga, dann C64, dann NES, dann SNES. Verbleibende Mehrdeutigkeit bleibt unverifiziert."
+          "note": "Erscheinungsjahr 1992 ausdrücklich bestätigt; lokale Dump-Releases belegen 1992 für Amiga, Atari ST und DOS. Plattformumfang bleibt erhalten."
         },
         "scope": {
           "platforms": [
@@ -15313,7 +15313,7 @@
           "companyIdentities": "reviewed-display-aliases",
           "credits": "not-available"
         },
-        "releaseYear": null,
+        "releaseYear": 1992,
         "genres": [
           "Simulation",
           "Strategy / tactics"
@@ -15553,5 +15553,5 @@
       }
     }
   ],
-  "contentHash": "e474b30ef2daea7a7bb1fa6662303b33992bf90bd4d4f590feb5710a1e9a6bd6"
+  "contentHash": "78bcb6ce74871ffe7331e1d302b5d4e711ea457f3c2d5d04b99164580d4dd33e"
 }

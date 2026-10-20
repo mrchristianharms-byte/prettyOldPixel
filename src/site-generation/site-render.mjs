@@ -4,6 +4,8 @@ import { videoHref } from "./site-video-links.mjs";
 import { videoWidget } from "./widget/video.mjs";
 import { episodeList } from "./widget/episode-list.mjs";
 import { catalogGrid } from "./widget/catalog-grid.mjs";
+import { gameTable } from "./widget/game-table.mjs";
+import { dateLabel } from "./site-format.mjs";
 import { metadata } from "./widget/metadata.mjs";
 import { videoList, videoListEntry } from "./widget/video-entry.mjs";
 import { pagination } from "./widget/pagination.mjs";
@@ -51,15 +53,15 @@ function latestPublication(videos) {
   return times.length ? new Date(Math.max(...times)).toISOString() : null;
 }
 
-function catalogDuration(videoIds, model) {
+function catalogDuration(videoIds, model, compact = false) {
   const durations = videoIds.map((id) => model.videoById.get(id).durationSeconds).filter((seconds) => seconds !== null);
-  if (!durations.length) return "Gesamtlaufzeit unbekannt";
+  if (!durations.length) return compact ? "Spielzeit unbekannt" : "Gesamtlaufzeit unbekannt";
   const minutes = Math.round(durations.reduce((sum, seconds) => sum + seconds, 0) / 60);
   const hours = Math.floor(minutes / 60);
-  const total = `${hours}:${String(minutes % 60).padStart(2, "0")} h`;
+  const total = `${hours}:${String(minutes % 60).padStart(2, "0")}${compact ? "" : " "}h`;
   return durations.length === videoIds.length
-    ? `Gesamtlaufzeit: ${total}`
-    : `Bekannte Laufzeit: ${total} (${durations.length} von ${videoCount(videoIds.length)})`;
+    ? compact ? total : `Gesamtlaufzeit: ${total}`
+    : `Bekannte ${compact ? "Spielzeit" : "Laufzeit"}: ${total} (${durations.length} von ${videoCount(videoIds.length)})`;
 }
 
 function homeOverview(model, config, filters) {
@@ -124,7 +126,7 @@ function breadcrumbsMarkup(crumbs, config) {
     : `<a href="${config.href(crumb.route)}">${escapeHtml(crumb.name)}</a>`}</li>`).join("")}</ol></nav>`;
 }
 
-function layout({ route, title, description, body, schema, crumbs, image, imageAlt, noindex = false, previous, next, interactive = false }, config, cssHref, hasMagazines, jsHref, hasGames, sections, themeHref) {
+function layout({ route, title, description, body, schema, crumbs, image, imageAlt, noindex = false, previous, next, interactive = false, sortableGames = false }, config, cssHref, hasMagazines, jsHref, hasGames, sections, themeHref, tableHref) {
   const canonical = config.absolute(route);
   const fullTitle = `${title} | ${config.name}`;
   const breadcrumbSchema = {
@@ -172,6 +174,7 @@ ${next ? `<link rel="next" href="${config.href(next)}">` : ""}
 <script src="${config.href(themeHref)}"></script>
 <link rel="stylesheet" href="${config.href(cssHref)}">
 ${interactive ? `<script type="module" src="${config.href(jsHref)}"></script>` : ""}
+${sortableGames ? `<script defer src="${config.href(tableHref)}"></script>` : ""}
 </head>
 <body${interactive ? ' class="detail-page"' : ""}>
 <a class="skip-link" href="#inhalt">Zum Inhalt</a>
@@ -228,7 +231,7 @@ ${externalLink("https://docs.github.com/en/site-policy/privacy-policies/github-g
 <h2>Videoinformationen</h2>
 <p>Titel, Beschreibungen und Veröffentlichungsdaten stammen aus öffentlichen Angaben auf YouTube; Heftangaben ergänzen Informationen der Zeitschriftenarchive. Wenn Sie diese Texte lesen, wird keine Verbindung zu YouTube oder den Archiven hergestellt.</p>
 <h2>YouTube-Vorschaubilder</h2>
-<p>Auf Spiel- und Ausgabenseiten sowie in den Videolisten von News, Zeitschriften und Jahrgängen, Hardware, Retrospektiven, Interviews, re.consider und Sonstiges werden Vorschaubilder direkt von i.ytimg.com geladen. Seiten mit Videobezug verweisen außerdem in ihren Metadaten auf ein YouTube-Vorschaubild für Linkvorschauen; soziale Netzwerke können dieses Bild beim Teilen direkt von YouTube abrufen. Bereits solche Bildabrufe übermitteln insbesondere Ihre IP-Adresse und technische Request-Daten an den Anbieter. Die kleinen Listenvorschauen werden beim Annähern an den sichtbaren Bereich geladen, unabhängig von der Player-Aktivierung. Die Spiele- und Zeitschriftenkacheln enthalten keine externen Bilder.</p>
+<p>Auf Spiel- und Ausgabenseiten, in der tabellarischen Spiele-Gesamtübersicht sowie in den Videolisten von News, Zeitschriften und Jahrgängen, Hardware, Retrospektiven, Interviews, re.consider und Sonstiges werden Vorschaubilder direkt von i.ytimg.com geladen. Seiten mit Videobezug verweisen außerdem in ihren Metadaten auf ein YouTube-Vorschaubild für Linkvorschauen; soziale Netzwerke können dieses Bild beim Teilen direkt von YouTube abrufen. Bereits solche Bildabrufe übermitteln insbesondere Ihre IP-Adresse und technische Request-Daten an den Anbieter. Die kleinen Listen- und Tabellenvorschauen werden beim Annähern an den sichtbaren Bereich geladen, unabhängig von der Player-Aktivierung. Die Spiele- und Zeitschriftenkacheln enthalten keine externen Bilder.</p>
 <h2>YouTube-Player</h2>
 <p>Der eingebettete Player wird erstmals geladen, wenn Sie „YouTube-Player aktivieren“ wählen. Er verwendet youtube-nocookie.com, den erweiterten Datenschutzmodus von YouTube. Das bedeutet nicht, dass keine Daten verarbeitet werden. Nach der Aktivierung kann YouTube/Google weitere Verbindungen aufbauen und Daten im Rahmen der Wiedergabe verarbeiten. Auf einen externen Player können Sie verzichten und stattdessen einen normalen YouTube-Link verwenden.</p>
 <p>Diese Website merkt sich die Aktivierung in diesem Browser im Local Storage. Danach wird der Player auch bei weiteren Videos und Seitenbesuchen direkt geladen, ohne automatisch abzuspielen. Die Einstellung bleibt bis zum Zurücksetzen oder Löschen der Browserdaten erhalten. Mit „YouTube-Aktivierung zurücksetzen“ unter dem Player können Sie sie jederzeit löschen und wieder zum Vorschaubild wechseln.</p>
@@ -593,6 +596,36 @@ function renderGamePages(model, siteConfig, add, filters) {
   if (!model.games.length) return;
   const root = { route: "", name: "Startseite" };
   const index = { route: "spiele/", name: "Spiele" };
+  const overview = { route: "spiele/uebersicht/", name: "Alle Spiele als Tabelle" };
+  const overviewConfig = siteConfig.forPage(overview.route);
+  const rows = model.games.map((game) => {
+    const videos = game.videos.map((id) => model.videoById.get(id));
+    const firstVideo = [...videos].sort((a, b) =>
+      (a.publishedTime ?? Infinity) - (b.publishedTime ?? Infinity) || a.id.localeCompare(b.id, "en"))[0];
+    const data = game.metadata?.status === "ready" ? game.metadata.data : null;
+    const source = data?.evidence?.sourceUrl ?? game.releaseYearSource;
+    return {
+      ...game,
+      firstYear: firstVideo.publishedAt ? Number(dateLabel(firstVideo.publishedAt, false).slice(-4)) : null,
+      platforms: game.platforms.length ? game.platforms
+        : game.metadata?.status === "ready" ? game.metadata.data.scope?.platforms ?? [] : [],
+      genres: data?.genres ?? [],
+      durationSeconds: videos.every((video) => video.durationSeconds !== null)
+        ? videos.reduce((total, video) => total + video.durationSeconds, 0) : null,
+      mobyGamesUrl: source && ["www.mobygames.com", "mobygames.com"].includes(new URL(source).hostname) ? source : null,
+      video: firstVideo, duration: catalogDuration(game.videos, model, true),
+    };
+  }).sort((a, b) => (b.video.publishedTime ?? -Infinity) - (a.video.publishedTime ?? -Infinity)
+    || a.name.localeCompare(b.name, "de") || a.id.localeCompare(b.id, "en"));
+  add({
+    route: overview.route, title: overview.name, sortableGames: true,
+    description: "Alle Retrospiele von Pretty Old Pixel als Tabelle: erstes Videojahr, Titel, Erscheinungsjahr, Plattform, Videovorschau und gesamte Videolaufzeit.",
+    crumbs: [root, index, overview],
+    schema: collectionSchema(rows.map((game) => ({ title: game.name, route: game.route })), overviewConfig, overview.route),
+    body: `<h1>${overview.name}</h1>
+<p><a href="${overviewConfig.href(index.route)}">Zur Spiele-Kachelübersicht</a></p>
+${gameTable(rows, overviewConfig)}`,
+  }, [...new Set(rows.flatMap((game) => game.videos))].map((id) => model.videoById.get(id)));
   const listings = [
     { ...index, games: model.games },
     ...[...filters].flatMap(([field, entries]) => [...entries.values()].map((entry) => {
@@ -629,7 +662,7 @@ function renderGamePages(model, siteConfig, add, filters) {
         previous: page > 1 ? paginatedRoute(listing.route, page - 1) : null,
         next: page < pageCount ? paginatedRoute(listing.route, page + 1) : null,
         body: `<h1>${escapeHtml(heading)}${page > 1 ? ` – Seite ${page}` : ""}</h1><p>${filtered ? `${escapeHtml(heading)}: ` : ""}${countLabel(listing.games.length, "Retrospiel", "Retrospiele")}, alphabetisch geordnet. Entdecken Sie Spielverläufe, Unboxings und Gespräche rund um die Spiele.</p>
-${filtered ? `<p><a href="${config.href(index.route)}">Alle Spiele anzeigen</a></p>` : ""}
+${filtered ? `<p><a href="${config.href(index.route)}">Alle Spiele anzeigen</a></p>` : `<p><a href="${config.href(overview.route)}">${overview.name}</a></p>`}
 ${pagination(listing.route, page, pageCount, config)}
 <div class="game-catalog">${catalogGrid(games.map((game) => ({
           ...game, facts: [
@@ -699,7 +732,7 @@ ${section.id === "sonstiges" ? "" : pagination(section.route, page, count, confi
   }
 }
 
-export function renderSite(model, config, cssHref, jsHref = "assets/video-series.js", themeHref = "assets/theme.js") {
+export function renderSite(model, config, cssHref, jsHref = "assets/video-series.js", themeHref = "assets/theme.js", tableHref = "assets/game-table.js") {
   const pages = new Map();
   const filters = gameMetadataFilters(model.games);
   const hasMagazines = model.magazines.length > 0 || model.unresolvedMagazines.length > 0;
@@ -713,7 +746,7 @@ export function renderSite(model, config, cssHref, jsHref = "assets/video-series
       imageAlt: options.imageAlt ?? `Vorschaubild: ${previewVideo.title}`,
     } : options;
     pages.set(file, {
-      html: layout(pageOptions, config.forPage(options.route), cssHref, hasMagazines, jsHref, model.games.length > 0, model.sections, themeHref),
+      html: layout(pageOptions, config.forPage(options.route), cssHref, hasMagazines, jsHref, model.games.length > 0, model.sections, themeHref, tableHref),
       route: options.route, indexable: !options.noindex,
       contentPublishedAt: latestPublication(videos),
     });

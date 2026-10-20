@@ -220,7 +220,7 @@ function normalizeGames(definitions, playlists, videoById, warnings, now) {
     object(definition, "Spielzuordnung");
     const name = text(definition.name, "Spiel.name");
     const id = text(definition.id, `${name}.id`);
-    requireValue(/^[a-z0-9]+(?:-[a-z0-9]+)*$/u.test(id) && id !== "seite" && !gameIds.has(id), `Ungültige oder doppelte Spiele-ID: ${id}`);
+    requireValue(/^[a-z0-9]+(?:-[a-z0-9]+)*$/u.test(id) && !["seite", "uebersicht"].includes(id) && !gameIds.has(id), `Ungültige oder doppelte Spiele-ID: ${id}`);
     gameIds.add(id);
     const release = definition.release ?? null;
     if (release !== null) {

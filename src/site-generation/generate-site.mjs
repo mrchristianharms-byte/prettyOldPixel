@@ -24,10 +24,8 @@ export function validateSite(pages, assets, config) {
   let maxHtmlGzip = 0;
   const cssGzip = [...assets.entries()].filter(([file]) => file.endsWith(".css"))
     .reduce((sum, [, content]) => sum + gzipSync(content).length, 0);
-  const jsGzip = [...assets.entries()].filter(([file]) => file.endsWith(".js"))
-    .reduce((sum, [, content]) => sum + gzipSync(content).length, 0);
+  let jsGzip = 0;
   if (cssGzip > 20 * 1024) throw new Error(`CSS überschreitet 20 KiB gzip: ${cssGzip} Bytes.`);
-  if (jsGzip > 5 * 1024) throw new Error(`JavaScript überschreitet 5 KiB gzip: ${jsGzip} Bytes.`);
   for (const [file, page] of pages) {
     const bytes = gzipSync(page.html).length;
     maxHtmlGzip = Math.max(bytes, maxHtmlGzip);
@@ -41,9 +39,17 @@ export function validateSite(pages, assets, config) {
     const scripts = [...page.html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gu)];
     if (scripts[0]?.[1] !== ' type="application/ld+json"' || scripts.length < 2 || scripts.length > 3
       || !/^ src="[^"]+"$/u.test(scripts[1]?.[1] ?? "") || scripts[1]?.[2] !== ""
-      || (scripts.length === 3 && !/^ type="module" src="[^"]+"$/u.test(scripts[2][1]))) {
-      throw new Error(`${file}: Nur JSON-LD, ein lokales Darstellungs-Skript und ein lokales Videowechsel-Modul sind erlaubt.`);
+      || (scripts.length === 3 && !/^ (?:type="module"|defer) src="[^"]+"$/u.test(scripts[2][1]))) {
+      throw new Error(`${file}: Nur JSON-LD, ein lokales Darstellungs-Skript und ein lokales Interaktions-Skript sind erlaubt.`);
     }
+    const pageJsGzip = scripts.slice(1).reduce((sum, script) => {
+      const url = new URL(/\bsrc="([^"]+)"/u.exec(script[1])[1], config.absolute(page.route));
+      const asset = url.pathname.slice(config.basePath.length);
+      const content = assets.get(asset);
+      return sum + (content === undefined ? 0 : gzipSync(content).length);
+    }, 0);
+    jsGzip = Math.max(jsGzip, pageJsGzip);
+    if (pageJsGzip > 5 * 1024) throw new Error(`${file}: JavaScript überschreitet 5 KiB gzip: ${pageJsGzip} Bytes.`);
     const schema = JSON.parse(scripts[0][2]);
     for (const match of page.html.matchAll(/<(a|img|source|iframe|link|script)\b[^>]*>/gu)) {
       const tag = match[0];
@@ -153,7 +159,7 @@ export async function generateSite({
   const model = await loadSiteData(cache, { now });
   for (const warning of model.warnings) logger.warn(`Build-Hinweis: ${warning}`);
 
-  const [pico, customCss, license, seriesJs, favicon, themeJs, touchIcon] = await Promise.all([
+  const [pico, customCss, license, seriesJs, favicon, themeJs, touchIcon, tableJs] = await Promise.all([
     readFile(new URL("./vendor/pico-2.1.1.site.min.css", import.meta.url), "utf8"),
     readFile(new URL("./site.css", import.meta.url), "utf8"),
     readFile(new URL("./vendor/pico-LICENSE.md", import.meta.url), "utf8"),
@@ -161,6 +167,7 @@ export async function generateSite({
     readFile(new URL("./favicon.webp", import.meta.url)),
     readFile(new URL("./theme.js", import.meta.url), "utf8"),
     readFile(new URL("./apple-touch-icon.png", import.meta.url)),
+    readFile(new URL("./game-table.js", import.meta.url), "utf8"),
   ]);
   const css = `${pico.replace(/\/\*# sourceMappingURL=[\s\S]*?\*\//gu, "")}\n${customCss}`;
   const cssUrls = [...css.matchAll(/url\(\s*["']?([^)]*)\)/giu)].map((match) => match[1].replace(/["']$/u, "").trim());
@@ -170,8 +177,9 @@ export async function generateSite({
   const cssFile = `assets/site.${hash(css).slice(0, 12)}.css`;
   const jsFile = `assets/video-series.${hash(seriesJs).slice(0, 12)}.js`;
   const themeFile = `assets/theme.${hash(themeJs).slice(0, 12)}.js`;
-  const assets = new Map([[cssFile, css], [jsFile, seriesJs], [themeFile, themeJs], ["favicon.webp", favicon], ["apple-touch-icon.png", touchIcon], ["assets/pico-LICENSE.txt", license], [".nojekyll", ""], ...model.magazineLogoAssets]);
-  const pages = renderSite(model, config, cssFile, jsFile, themeFile);
+  const tableFile = `assets/game-table.${hash(tableJs).slice(0, 12)}.js`;
+  const assets = new Map([[cssFile, css], [jsFile, seriesJs], [themeFile, themeJs], [tableFile, tableJs], ["favicon.webp", favicon], ["apple-touch-icon.png", touchIcon], ["assets/pico-LICENSE.txt", license], [".nojekyll", ""], ...model.magazineLogoAssets]);
+  const pages = renderSite(model, config, cssFile, jsFile, themeFile, tableFile);
   const budgets = validateSite(pages, assets, config);
   const manifest = {
     version: 2, baseUrl: config.baseUrl,
@@ -198,7 +206,7 @@ export async function generateSite({
   if (assetsStat) {
     if (!assetsStat.isDirectory() || assetsStat.isSymbolicLink()) throw new Error("Asset-Verzeichnis muss ein echtes Verzeichnis sein.");
     for (const file of retainPreviousAssets ? (await readdir(previousAssets)).sort() : []) {
-      const match = /^(?:site\.([a-f0-9]{12})\.css|(?:video-series|theme)\.([a-f0-9]{12})\.js)$/u.exec(file);
+      const match = /^(?:site\.([a-f0-9]{12})\.css|(?:video-series|theme|game-table)\.([a-f0-9]{12})\.js)$/u.exec(file);
       if (!match) continue;
       const source = path.join(previousAssets, file);
       const sourceStat = await lstat(source);

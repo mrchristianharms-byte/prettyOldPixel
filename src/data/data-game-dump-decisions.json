@@ -1,4 +1,6 @@
 {
+  "b-s-s-jane-seymour": { "mobyid": 3066, "releaseYear": 1990, "reviewedAt": "2026-10-20", "note": "Erscheinungsjahr 1990 ausdrücklich bestätigt; lokaler Dump belegt Amiga 1990 und DOS 1991. Gemeinsames Erstveröffentlichungsjahr 1990 freigegeben, beide Plattformen bleiben erhalten." },
+  "der-patrizier": { "mobyid": 5949, "releaseYear": 1992, "reviewedAt": "2026-10-20", "note": "Erscheinungsjahr 1992 ausdrücklich bestätigt; lokale Dump-Releases belegen 1992 für Amiga, Atari ST und DOS. Plattformumfang bleibt erhalten." },
   "labyrinth": { "mobyid": 12175, "reviewedAt": "2026-10-20", "note": "C64 ausdrücklich bestätigt; Videobeschreibung nennt Lucasfilm Games und 1986. Nicht die gleichnamigen Spiele von 1983 oder 1990." },
   "rogue": { "mobyid": 1743, "reviewedAt": "2026-10-20", "note": "Videobeschreibungen nennen A.I. Design und MS-DOS; Originalspiel statt Rogue Clone. Freigegebene DOS-Zuordnung." },
   "worms": { "mobyid": 340, "reviewedAt": "2026-10-20", "note": "Videobeschreibung nennt Team17 und 1995; freigegebenes DOS-Grundspiel statt Reinforcements oder Worms United." },

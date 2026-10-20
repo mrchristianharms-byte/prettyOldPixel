@@ -8,6 +8,25 @@ body { overflow-wrap: anywhere; }
 .release-table { overflow-wrap: normal; }
 .release-table th { white-space: nowrap; }
 .release-country { display: block; white-space: nowrap; }
+.game-table { position: relative; min-width: 44rem; font-size: .85rem; }
+.game-table th, .game-table td { vertical-align: middle; }
+.game-table thead th { white-space: nowrap; }
+.game-table img { display: block; width: 8rem; max-width: none; height: auto; aspect-ratio: 16 / 9; object-fit: cover; }
+.game-table th[scope="row"] { min-width: 10rem; }
+.game-table-toolbar { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; gap: 1rem; margin-bottom: 1rem; }
+.game-table-toolbar > p { margin: 0; }
+.game-table-summary > span { display: block; }
+.game-table-controls { min-width: 0; }
+.game-table-sort { display: inline-flex; align-items: center; justify-content: center; width: 2rem; height: 2rem; padding: .2rem; margin: 0; background: transparent; border: 1px solid var(--pico-muted-border-color); color: var(--pico-muted-color); }
+.game-table th[aria-sort] .game-table-sort { background: var(--pico-primary-background); border-color: var(--pico-primary-border); color: var(--pico-primary-inverse); }
+.game-table-sort[hidden] { display: none; }
+.game-table-controls fieldset { min-width: 0; margin-bottom: 0; }
+.game-table-controls legend { font-weight: 700; }
+.game-table-control-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; }
+.game-table-control-pair label { min-width: 0; }
+.game-table-controls select { width: 100%; font-size: .85rem; }
+.game-table tr[hidden], .game-table-controls[hidden] { display: none; }
+@media (max-width: 767px) { .game-table-toolbar { grid-template-columns: minmax(0, 1fr); } }
 .container { max-width: 76rem; padding-inline: clamp(1rem, 3vw, 2rem); }
 .site-header { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: .25rem 1rem; padding-block: .35rem; border-bottom: 1px solid var(--pico-muted-border-color); }
 .site-header nav ul { flex-wrap: wrap; margin-inline: 0; }

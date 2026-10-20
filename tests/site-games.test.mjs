@@ -42,7 +42,7 @@ function render(input = fixture(), definitions = [definition()]) {
 
 function renderModel(model, config = createSiteConfig()) {
   const pages = renderSite(model, config, config.href("assets/test.css"));
-  const budgets = validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""], ["assets/theme.js", ""], ["favicon.webp", ""], ["apple-touch-icon.png", ""]]), config);
+  const budgets = validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""], ["assets/game-table.js", ""], ["assets/theme.js", ""], ["favicon.webp", ""], ["apple-touch-icon.png", ""], ...(model.magazineLogoAssets ?? [])]), config);
   return { model, config, pages, budgets };
 }
 
@@ -63,6 +63,123 @@ function metadataModel(count = 2) {
 }
 
 const graph = (html) => JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/u)[1])["@graph"];
+
+test("zeigt alle Spiele in einer zusätzlichen Tabelle nach erstem Videojahr und Titel", () => {
+  const input = fixture(8);
+  const dates = [
+    "2021-07-01T10:00:00Z", "2022-07-01T10:00:00Z",
+    "2019-12-31T23:30:00Z", "2021-01-01T10:00:00Z",
+    "2020-07-01T10:00:00Z", "2021-07-01T10:00:00Z",
+    null, null,
+  ];
+  input.videos.videos.forEach((video, index) => { video.publishedAt = dates[index]; });
+  const definitions = ["Zeta", "Beta", "Alpha", "Ohne Datum"].map((name, index) => definition({
+    id: `spiel-${index}`, name, playlistIds: [],
+    videoIds: [videoId(index * 2 + 1), videoId(index * 2)], platforms: ["Amiga", "DOS"],
+  }));
+  const model = normalizeSources(input, { games: definitions, sections: [] });
+  const config = { ...createSiteConfig("https://example.org/retro/"), pageSize: 2 };
+  const { pages } = renderModel(model, config);
+  const html = pages.get("spiele/uebersicht/index.html").html;
+  const body = html.match(/<tbody>([\s\S]*?)<\/tbody>/u)[1];
+  const rows = [...body.matchAll(/<tr\b[^>]*>([\s\S]*?)<\/tr>/gu)].map((match) => match[1]);
+  assert.equal(rows.length, 4);
+  assert.deepEqual(rows.map((row) => row.match(/<th scope="row"><a[^>]*>(.*?)<\/a>/u)[1]),
+    ["Zeta", "Alpha", "Beta", "Ohne Datum"]);
+  assert.deepEqual(rows.map((row) => row.match(/<td>(.*?)<\/td>/u)[1]),
+    ["2021", "2020", "2020", "Unbekannt"]);
+  assert.ok(rows.every((row) => row.includes("<td>1990</td>") && row.includes("<td>Amiga, DOS</td>")));
+  assert.ok(rows[0].includes(`src="https://i.ytimg.com/vi/${videoId(0)}/mqdefault.jpg"`));
+  assert.match(rows[0], /href="\.\.\/spiel-0\/"/u);
+  for (const file of ["spiele/index.html", "spiele/seite/2/index.html"]) {
+    assert.ok(pages.get(file).html.includes(">Alle Spiele als Tabelle</a>"));
+  }
+  assert.ok(!pages.has("spiele/uebersicht/seite/2/index.html"));
+  assert.ok(!html.includes('class="detail-player"'));
+  assert.deepEqual(graph(html).find((item) => item["@type"] === "CollectionPage")
+    .mainEntity.itemListElement.map((item) => item.name), ["Zeta", "Alpha", "Beta", "Ohne Datum"]);
+});
+
+test("escaped Tabelleninhalte und nutzt belegte Metadaten ohne Ersatzjahre", () => {
+  const model = metadataModel(2);
+  model.games[0].name = '<Spiel & "Demo">';
+  model.games[0].releaseYear = null;
+  model.games[0].metadata.data.scope.platforms = ["<DOS>"];
+  model.games[1].metadata = { status: "blocked", data: null };
+  const { pages } = renderModel(model);
+  const html = pages.get("spiele/uebersicht/index.html").html;
+  const body = html.match(/<tbody>([\s\S]*?)<\/tbody>/u)[1];
+  assert.ok(body.includes("&lt;Spiel &amp; &quot;Demo&quot;&gt;"));
+  assert.ok(body.includes("<td>&lt;DOS&gt;</td>"));
+  assert.ok(!body.includes("<Spiel") && !body.includes("<DOS>"));
+  assert.match(body, /<td>Unbekannt<\/td>/u);
+  assert.ok(body.includes('width="320" height="180" loading="lazy" decoding="async" referrerpolicy="no-referrer"'));
+  assert.doesNotMatch(html, /Standardmäßig stehen|„Gespielt“ entspricht|„Spielzeit“ summiert|Sortierung und Filter benötigen/u);
+  assert.match(html, /Alle Systeme · Alle Genres · Videoveröffentlichung: neueste zuerst/u);
+  assert.ok(pages.get("datenschutz/index.html").html.includes("tabellarischen Spiele-Gesamtübersicht"));
+});
+
+test("deckt mit der unpaginierten Spieletabelle den vollständigen echten Katalog ab", async () => {
+  const model = await loadSiteData(new URL("../cache/", import.meta.url).pathname);
+  const { pages, budgets } = renderModel(model);
+  const html = pages.get("spiele/uebersicht/index.html").html;
+  const body = html.match(/<tbody>([\s\S]*?)<\/tbody>/u)[1];
+  assert.equal((body.match(/<tr\b/gu) ?? []).length, model.games.length);
+  for (const game of model.games) {
+    assert.ok(body.includes(`href="../${game.id}/">${escapeHtml(game.name)}</a>`), game.id);
+  }
+  assert.match(html, /<meta property="og:image" content="https:\/\/i\.ytimg\.com\//u);
+  assert.ok(budgets.maxHtmlGzip < 50 * 1024);
+});
+
+test("reserviert die Route der Spiele-Gesamtübersicht", () => {
+  assert.throws(() => render(fixture(), [definition({ id: "uebersicht" })]),
+    /Ungültige oder doppelte Spiele-ID: uebersicht/u);
+  assert.ok(!render(fixture(), []).pages.has("spiele/uebersicht/index.html"));
+});
+
+test("liefert Sortierdaten, Filter und belegte externe Links ausschließlich in der Spieletabelle", () => {
+  const input = fixture(2);
+  input.videos.videos.forEach((video) => { video.durationSeconds = 3600; });
+  const { pages } = render(input);
+  const html = pages.get("spiele/uebersicht/index.html").html;
+  assert.match(html, /<th scope="col" aria-sort="descending">Gespielt <button/u);
+  assert.match(html, /<th scope="col">Spielzeit <button/u);
+  assert.ok(html.includes("<td>2:00h</td>"));
+  assert.ok(html.includes('<script defer src="../../assets/game-table.js"></script>'));
+  assert.ok(html.includes('<div class="game-table-controls" data-game-table-controls hidden>'));
+  assert.match(html, /<div class="game-table-toolbar">\s*<p class="game-table-summary" role="status" aria-live="polite"><span data-game-table-count>1 von 1 Spiel<\/span>\s*<span data-game-table-filters>Filter: Alle Systeme · Alle Genres<\/span>\s*<span data-game-table-sort>Sortierung: Videoveröffentlichung: neueste zuerst<\/span><\/p>\s*<div class="game-table-controls"/u);
+  assert.ok(html.includes('data-duration="7200"'));
+  for (const value of ["video", "release", "title", "duration"]) {
+    assert.ok(html.includes(`data-game-sort="${value}"`), value);
+  }
+  assert.ok(!html.includes('id="game-sort"') && !html.includes("data-game-direction"));
+  assert.ok(html.includes('<th scope="col">Plattform</th><th scope="col">Genre</th>'));
+  assert.ok(html.includes('<th scope="col">Links</th>'));
+  assert.ok(!html.includes('<th scope="col">Playlist</th>') && !html.includes('<th scope="col">MobyGames</th>'));
+  const body = html.match(/<tbody>([\s\S]*?)<\/tbody>/u)[1];
+  assert.doesNotMatch(body, /href="https:\/\/www\.youtube\.com\/watch\?/u);
+  const linksCell = [...body.matchAll(/<td>([\s\S]*?)<\/td>/gu)]
+    .map((match) => match[1]).find((cell) => cell.includes("youtube.com/playlist"));
+  assert.ok(linksCell);
+  assert.ok(linksCell.includes(`href="https://www.youtube.com/playlist?list=${playlistId}" rel="external"`));
+  assert.ok(linksCell.includes('href="https://www.mobygames.com/game/42/" rel="external"'));
+  const model = metadataModel(2);
+  model.games[0].metadata.data.genres = ['Action & "Adventure"'];
+  model.games[1].metadata = { status: "blocked", data: null };
+  model.games[1].releaseYearSource = null;
+  model.games[1].releaseYear = null;
+  const metadataHtml = renderModel(model).pages.get("spiele/uebersicht/index.html").html;
+  assert.ok(metadataHtml.includes('<option value="DOS">DOS</option>'));
+  assert.ok(metadataHtml.includes('<option value="Action &amp; &quot;Adventure&quot;">'));
+  assert.ok(metadataHtml.includes('<td>DOS</td>\n<td>Action &amp; &quot;Adventure&quot;</td>'));
+  assert.ok(metadataHtml.includes('<td>Unbekannt</td>\n<td>Unbekannt</td>'));
+  assert.ok(metadataHtml.includes("<td>Nicht verfügbar</td>"));
+  assert.ok(metadataHtml.includes('href="https://www.mobygames.com/game/10/" rel="external"'));
+  for (const [file, page] of pages) {
+    if (file !== "spiele/uebersicht/index.html") assert.ok(!page.html.includes("assets/game-table.js"), file);
+  }
+});
 
 test("verlängert Spielüberschriften unter 20 Zeichen mit eindeutigem System und Seiteninhalt", () => {
   for (const [name, platforms, expected] of [
@@ -575,7 +692,7 @@ test("escaped konsolidierte Metadaten und behält leere Felder sowie Releaseunte
   } };
   const config = createSiteConfig();
   const pages = renderSite(model, config, config.href("assets/test.css"));
-  validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""], ["assets/theme.js", ""], ["favicon.webp", ""], ["apple-touch-icon.png", ""]]), config);
+  validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""], ["assets/game-table.js", ""], ["assets/theme.js", ""], ["favicon.webp", ""], ["apple-touch-icon.png", ""]]), config);
   const html = pages.get("spiele/cadaver/index.html").html;
   assert.match(html, /&lt;script&gt;genre&lt;\/script&gt;/u);
   assert.match(html, /&lt;Studio&gt;/u);
@@ -608,7 +725,7 @@ test("fasst nur länderabweichende Releases zusammen und erhält alle anderen Un
   } };
   const config = createSiteConfig();
   const pages = renderSite(model, config, config.href("assets/test.css"));
-  validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""], ["assets/theme.js", ""], ["favicon.webp", ""], ["apple-touch-icon.png", ""]]), config);
+  validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""], ["assets/game-table.js", ""], ["assets/theme.js", ""], ["favicon.webp", ""], ["apple-touch-icon.png", ""]]), config);
   const html = pages.get("spiele/cadaver/index.html").html;
   const table = html.match(/<tbody>([\s\S]*?)<\/tbody>/u)[1];
   assert.equal((table.match(/<tr>/gu) ?? []).length, 5);
@@ -728,7 +845,8 @@ test("ergänzt fehlende re.play-Zuordnungen und die vollständige Patrizier-Reih
   }
   const patrician = model.games.find((game) => game.id === "der-patrizier");
   assert.equal(patrician.videos.length, 17);
-  assert.equal(patrician.releaseYear, null);
+  assert.equal(patrician.releaseYear, 1992);
+  assert.equal(patrician.releaseYearSource, "https://www.mobygames.com/game/5949/");
   assert.equal(patrician.series.entries.length, 17);
   assert.ok(patrician.videos.includes("rvL8B_qulwU"));
   assert.equal(patrician.series.entries.find((entry) => entry.videoId === "rvL8B_qulwU").phase.id, "reminder");
@@ -844,15 +962,15 @@ test("Spielkatalog enthält keine manuell oder extern gepflegten Erscheinungsjah
 });
 
 test("summiert Spiel-Laufzeiten über 24 Stunden und kennzeichnet fehlende Werte", () => {
-  for (const [durations, expected] of [
-    [[3661, 90000], "Gesamtlaufzeit: 26:01 h"],
-    [[3661, null], "Bekannte Laufzeit: 1:01 h (1 von 2 Videos)"],
-    [[null, null], "Gesamtlaufzeit unbekannt"],
-    [[0, 0], "Gesamtlaufzeit: 0:00 h"],
-    [[14, 15], "Gesamtlaufzeit: 0:00 h"],
-    [[15, 15], "Gesamtlaufzeit: 0:01 h"],
-    [[1799, 1771], "Gesamtlaufzeit: 1:00 h"],
-    [[7200, 780], "Gesamtlaufzeit: 2:13 h"],
+  for (const [durations, expected, compact] of [
+    [[3661, 90000], "Gesamtlaufzeit: 26:01 h", "26:01h"],
+    [[3661, null], "Bekannte Laufzeit: 1:01 h (1 von 2 Videos)", "Bekannte Spielzeit: 1:01h (1 von 2 Videos)"],
+    [[null, null], "Gesamtlaufzeit unbekannt", "Spielzeit unbekannt"],
+    [[0, 0], "Gesamtlaufzeit: 0:00 h", "0:00h"],
+    [[14, 15], "Gesamtlaufzeit: 0:00 h", "0:00h"],
+    [[15, 15], "Gesamtlaufzeit: 0:01 h", "0:01h"],
+    [[1799, 1771], "Gesamtlaufzeit: 1:00 h", "1:00h"],
+    [[7200, 780], "Gesamtlaufzeit: 2:13 h", "2:13h"],
   ]) {
     const input = fixture(3);
     input.videos.videos.forEach((video, index) => { video.durationSeconds = durations[index] ?? null; });
@@ -861,6 +979,8 @@ test("summiert Spiel-Laufzeiten über 24 Stunden und kennzeichnet fehlende Werte
     const { pages } = render(input);
     const grid = pages.get("spiele/index.html").html.match(/<ul class="catalog-grid">[\s\S]*?<\/ul>/u)[0];
     assert.ok(grid.includes(`<p class="meta">2 Videos</p><p class="meta">${expected}</p>`), expected);
+    const table = pages.get("spiele/uebersicht/index.html").html;
+    assert.ok(table.includes(`<td>${compact}</td>`), compact);
   }
 });
 

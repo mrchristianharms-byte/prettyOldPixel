@@ -143,6 +143,39 @@ test("Dump allein erzeugt Plattformdaten und Jahresauswahl; gesperrte Titel blei
   assert.equal((await loadReadyGameMetadata(options)).get("game").status, "ready");
 });
 
+test("Patrizier erhält das freigegebene Dump-Jahr 1992 ohne Plattformverlust", async () => {
+  const record = (await loadReadyGameMetadata()).get("der-patrizier");
+  assert.equal(record.data.releaseYear, 1992);
+  assert.deepEqual(record.data.scope.platforms, ["Amiga", "Atari ST", "MS-DOS"]);
+  assert.equal(record.data.evidence.sourceUrl, "https://www.mobygames.com/game/5949/");
+});
+
+test("B.S.S. Jane Seymour erhält das bestätigte Erstveröffentlichungsjahr 1990", async () => {
+  const record = (await loadReadyGameMetadata()).get("b-s-s-jane-seymour");
+  assert.equal(record.data.releaseYear, 1990);
+  assert.deepEqual(record.data.scope.platforms, ["MS-DOS", "Amiga"]);
+  assert.ok(record.data.releases.some((release) => release.platform === "DOS" && release.year === 1991));
+  assert.equal(record.data.evidence.sourceUrl, "https://www.mobygames.com/game/3066/");
+});
+
+test("Mehrfachplattform-Jahr erfordert Freigabe und vollständig datierten Dump-Beleg", async (t) => {
+  const { options, report } = await fixture(t);
+  options.games[0].platforms = ["C64", "Amiga"];
+  report.games[0].platforms = ["C64", "Amiga"];
+  await writeJson(path.join(options.cacheDir, "local-dump/report.json"), report);
+  options.reviewedDecisions = { game: {
+    mobyid: 10, releaseYear: 1985, reviewedAt: "2026-10-20", note: "Dump-Jahr ausdrücklich freigegeben.",
+  } };
+  assert.equal((await buildReadyGameMetadata(options)).games[0].data.releaseYear, 1985);
+  assert.equal((await loadReadyGameMetadata(options)).get("game").data.releaseYear, 1985);
+  options.reviewedDecisions.game.releaseYear = 1984;
+  await assert.rejects(buildReadyGameMetadata(options), /Erscheinungsjahr nicht im Dump belegt/u);
+  options.reviewedDecisions.game.releaseYear = 1985;
+  report.games[0].candidates[0].releases[1].year = null;
+  await writeJson(path.join(options.cacheDir, "local-dump/report.json"), report);
+  await assert.rejects(buildReadyGameMetadata(options), /Erscheinungsjahr nicht im Dump belegt/u);
+});
+
 test("fehlendes Jahr und Mehrfachplattform wählen kein pauschales Erscheinungsjahr", async (t) => {
   const { options, report } = await fixture(t);
   const file = path.join(options.cacheDir, "local-dump/report.json");

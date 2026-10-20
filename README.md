@@ -12,6 +12,32 @@ erhalten eine eigene Videodetailseite. Alle Listen verwenden dasselbe
 Video-Widget mit internen Detailverweisen; einen
 Gesamtkatalog aller Videos gibt es nicht.
 
+Unter `spiele/uebersicht/` gibt es zusätzlich eine aus der Spieleübersicht
+verlinkte Tabelle mit allen Spielen: erstes Videojahr, Titel, Erscheinungsjahr,
+Plattform, Genre, YouTube-Vorschaubild und Spielzeit. Die gemeinsame Spalte
+„Links“ enthält nur Playlists und belegte MobyGames-Links, keine einzelnen
+Videolinks. „Gespielt“ zeigt das erste Videojahr; „Spielzeit“ zeigt
+die summierte Videolaufzeit kompakt als Stunden und Minuten (z. B. `22:20h`).
+Standardmäßig wird nach der frühesten bekannten
+Videoveröffentlichung sortiert (neueste zuerst). Pfeilschaltflächen in den
+Tabellenköpfen für Gespielt, Titel, Jahr und Spielzeit wechseln die Sortierung
+zwischen auf- und absteigend. Nur die aktive Spalte ist hervorgehoben.
+Der dynamische Übersichtstext steht links, die kombinierbaren System- und
+Genre-Filter rechts auf gleicher Höhe; auf schmalen Bildschirmen untereinander.
+Fehlende Sortierwerte und
+unvollständige Spielzeiten stehen in beiden Richtungen zuletzt. Ohne JavaScript
+bleibt die vollständige Tabelle mit allen Links zugänglich. Das Videojahr ist
+das Veröffentlichungsjahr in Berliner Zeit, kein Aufnahmedatum. Laufzeiten
+umfassen alle zugeordneten Videos; fehlende Werte und bekannte Teilsummen werden
+gekennzeichnet. Die Tabelle ist auf schmalen Bildschirmen seitlich scrollbar.
+Das zusätzliche Tabellenskript wird nur auf dieser Seite geladen; das
+JavaScript-Budget von 5 KiB gzip wird pro Seite einschließlich Theme-Skript geprüft.
+Als Ausnahme zu den statisch generierten Listen erfolgen Sortierung und Filterung
+dieser Tabelle ausschließlich per JavaScript auf derselben Seite, ohne
+Variantenseiten. Der kurze Übersichtstext zeigt dynamisch drei Zeilen:
+Trefferzahl, System-/Genre-Filter und Sortierreihenfolge; zusätzliche
+Erklärungstexte entfallen.
+
 ## Schnellstart
 
 Voraussetzung: **Node.js 22 oder neuer mit npm**. Projektabhängigkeiten zuerst

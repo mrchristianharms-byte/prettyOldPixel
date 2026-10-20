@@ -465,6 +465,20 @@ test("stellt Zeitschriften mit Archiv-Match-Typ dar, ohne Cover-Hotlinks oder Ph
   validateSite(pages, assets, config);
 });
 
+test("prüft das JavaScript-Budget pro Seite statt unverbundene Interaktionsskripte zu addieren", () => {
+  const { pages, config, assets } = render(issueFixture());
+  const script = Array.from({ length: 50000 }, (_, i) => `${i}:${Math.imul(i, 2654435761) >>> 0};`).join("").slice(0, 7000);
+  const size = gzipSync(script).length;
+  assert.ok(size < 5 * 1024 && size * 2 > 5 * 1024);
+  assets.set("assets/video-series.js", script);
+  assets.set("assets/game-table.js", script);
+  const news = pages.get("news/index.html");
+  news.html = news.html.replace("</head>", '<script defer src="../assets/game-table.js"></script></head>');
+  assert.ok(validateSite(pages, assets, config).jsGzip < 5 * 1024);
+  assets.set("assets/theme.js", script);
+  assert.throws(() => validateSite(pages, assets, config), /JavaScript überschreitet/u);
+});
+
 test("validiert defekte Links, Fragmente und HTML-/CSS-Budgets als Build-Fehler", () => {
   const { pages, config, assets } = render(fixture(1));
   const original = pages.get("index.html").html;

@@ -352,7 +352,13 @@ nicht automatisch erzeugte Caches:
   Games-Dumps übernehmen. Genau eine ausgewählte Plattform und vollständig
   datierte Veröffentlichungen sind Voraussetzung für ein pauschales Jahr;
   dann zählt das früheste. Mehrfachplattformen oder undatierte Einträge bleiben
-  ohne pauschales Jahr. Keine manuell recherchierten oder externen Ersatzwerte.
+  ohne pauschales Jahr. Ausnahme: Ein ausdrücklich freigegebenes `releaseYear`
+  in `src/data/data-game-dump-decisions.json` darf bei mehreren Plattformen
+  das früheste vollständig belegte Dump-Jahr übernehmen. Für „Der Patrizier“
+  ist 1992 freigegeben; Amiga, Atari ST und DOS bleiben erhalten.
+  Für „B.S.S. Jane Seymour“ ist 1990 als Erstveröffentlichungsjahr freigegeben;
+  die abweichende DOS-Veröffentlichung von 1991 bleibt separat erhalten.
+  Keine manuell recherchierten oder externen Ersatzwerte.
 - **Kein belastbarer Beleg:** Nicht raten. Der Generator meldet ein fehlendes
   Erscheinungsjahr und zeigt es als unbekannt. Spieleseiten und Videozuordnungen
   bleiben auch ohne Metadaten verfügbar. Ungültige oder veraltete fertige

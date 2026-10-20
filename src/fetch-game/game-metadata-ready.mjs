@@ -28,6 +28,18 @@ function check(condition, message) {
   if (!condition) throw new Error(`Nutzbare Spielemetadaten: ${message}`);
 }
 
+function selectedReleaseYear(platforms, releases, decision, gameId) {
+  const years = releases.map((release) => release.year);
+  if (decision?.releaseYear !== undefined) {
+    check(Number.isInteger(decision.releaseYear) && years.length > 0
+      && years.every((year) => year !== null) && decision.releaseYear === Math.min(...years),
+    `Freigegebenes Erscheinungsjahr nicht im Dump belegt: ${gameId}.`);
+    return decision.releaseYear;
+  }
+  return platforms.length === 1 && years.length > 0 && years.every((year) => year !== null)
+    ? Math.min(...years) : null;
+}
+
 export async function buildReadyGameMetadata({
   cacheDir = defaultCacheDir, games = gameDefinitions,
   reviewedDecisions = decisions, selectionPolicy = policy,
@@ -60,10 +72,7 @@ export async function buildReadyGameMetadata({
     const candidate = candidates.find((entry) => entry.mobyid === selection.mobyid);
     const releases = candidate.releases.filter((release) => selection.matchingReleaseIds.includes(release.mobyreleaseid))
       .map(readyRelease);
-    const years = releases.map((release) => release.year);
-    // Missing dates or a multi-platform scope must not manufacture a game-wide first year.
-    const year = selection.platforms.length === 1 && years.length > 0 && years.every((value) => value !== null)
-      ? Math.min(...years) : null;
+    const year = selectedReleaseYear(selection.platforms, releases, decision, game.id);
     return {
       ...base, status: "ready", reason: decision ? "reviewed-source-scoped-data" : "policy-selected-source-scoped-data",
       data: {
@@ -153,7 +162,6 @@ function validateReadyCache(cache, games, reviewedDecisions, selectionPolicy) {
         && ["sourceDeveloper", "sourcePublisher"].every((key) =>
           release[key] === undefined || typeof release[key] === "string")),
     `Ungültige nutzbare Daten: ${record.gameId}.`);
-    const years = data.releases.map((release) => release.year);
     const references = game.additionalReleases ?? [];
     const additional = data.additionalReleases ?? [];
     check(Array.isArray(additional) && additional.length === references.length,
@@ -176,7 +184,7 @@ function validateReadyCache(cache, games, reviewedDecisions, selectionPolicy) {
             release[key] === undefined || typeof release[key] === "string")),
       `Ungültige zusätzliche Veröffentlichung: ${record.gameId}.`);
     }
-    check(data.releaseYear === (platforms.length === 1 && years.every((year) => year !== null) ? Math.min(...years) : null),
+    check(data.releaseYear === selectedReleaseYear(platforms, data.releases, decision, record.gameId),
       `Ungültige Jahresauswahl: ${record.gameId}.`);
   }
   check(cache.summary?.games === cache.games.length
