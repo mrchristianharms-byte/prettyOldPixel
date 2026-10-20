@@ -1742,7 +1742,9 @@ GitHub Pages. Die Verkettung erfolgt über `workflow_run`, nicht über den
 Cache-Push mit `GITHUB_TOKEN`. Der nachgelagerte Build liest den aktuellen
 Stand von `main`, auch wenn der Abruf keine Cacheänderungen ergeben hat.
 Nach fehlgeschlagenen oder abgebrochenen Abrufen werden Build und Deployment
-übersprungen.
+übersprungen. Die drei Jobs laufen nacheinander: `test` → `build` → `deploy`.
+`test` führt `npm test` aus; `build` startet nur bei Erfolg und verwendet
+denselben getesteten Commit. Erst nach erfolgreichem Build folgt `deploy`.
 
 Lokale `dev:`-Aufbereitungsaufgaben laufen dabei nicht. Vorhandene manuelle
 Zuordnungen und fertige Metadaten-/Analyse-Caches bleiben erhalten und

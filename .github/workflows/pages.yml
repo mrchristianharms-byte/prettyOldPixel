@@ -19,9 +19,11 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
+  test:
     if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
+    outputs:
+      revision: ${{ steps.revision.outputs.sha }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -33,6 +35,22 @@ jobs:
           node-version: 22
       - name: Run production tests
         run: npm test
+      - name: Record tested revision
+        id: revision
+        run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out tested revision
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.test.outputs.revision }}
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
       - name: Restore page modification history
         uses: actions/cache@v4
         with:

@@ -238,6 +238,8 @@ npm run dev:test
 
 Die GitHub-Pages-Pipeline verwendet Node.js 22 und führt `npm test`
 und `npm run generate:site` ohne npm-Installation aus.
+Sie hat drei aufeinanderfolgende Jobs: `test` → `build` → `deploy`.
+Nur erfolgreiche Tests geben den Build frei; gebaut wird genau der getestete Commit.
 Sie installiert keine npm-Pakete, Downloader,
 Browser oder Modelle und ruft keine Fetch- oder LLM-Schritte auf.
 Checkout, Actions-Cache und Pages-Deployment benötigen unabhängig davon
