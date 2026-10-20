@@ -268,6 +268,7 @@ function entryVideoList(entries, model, config, headingLevel = 4) {
     return videoListEntry(video, config, undefined, headingLevel, {
       label: `${mention.part ? `Teil ${mention.part}: ` : ""}${video.title}`,
       issueRoute: mention.issue?.route,
+      showMagazineLinks: false,
     });
   }).join("")}</ol>`;
 }

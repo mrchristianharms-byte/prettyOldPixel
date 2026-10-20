@@ -11,6 +11,8 @@ eindeutig bekannte Ausgabe sowie Themenvideos ohne Spiel-/Ausgabeseite
 erhalten eine eigene Videodetailseite. Alle Listen verwenden dasselbe
 Video-Widget mit internen Detailverweisen; einen
 Gesamtkatalog aller Videos gibt es nicht.
+Zeitschriftenlisten verzichten auf wiederholte Links zu Übersicht, Magazin,
+Jahrgang und Ausgabe pro Video; Breadcrumbs und Ausgabenlinks bleiben erhalten.
 
 Unter `spiele/uebersicht/` gibt es zusätzlich eine aus der Spieleübersicht
 verlinkte Tabelle mit allen Spielen: erstes Videojahr, Titel, Erscheinungsjahr,

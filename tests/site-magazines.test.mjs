@@ -62,6 +62,20 @@ function render(input = variedFixture(), pageSize = createSiteConfig().pageSize)
 
 const graph = (html) => JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/u)[1])["@graph"];
 
+test("entfernt redundante Zeitschriften-Linklisten nur aus Zeitschriftenseiten und erhält die Navigation", () => {
+  const { model, pages } = render();
+  for (const [file, { html }] of pages) {
+    if (!file.startsWith("zeitschriften/")) continue;
+    assert.ok(!html.includes(">Blätterabend / Zeitschriften</a>:"), file);
+    assert.ok(html.includes('aria-label="Brotkrümelnavigation"'), file);
+  }
+  const magazine = model.magazines.find((item) => item.name === "PC Games");
+  const issue = [...magazine.issues.values()].find((item) => item.year === 1992 && item.months.includes(11));
+  const html = pages.get(`${magazine.route}index.html`).html;
+  assert.ok(html.includes(`href="${createSiteConfig().forPage(magazine.route).href(issue.route)}#video-`));
+  assert.ok(pages.get("news/index.html").html.includes(">Blätterabend / Zeitschriften</a>:"));
+});
+
 test("stimmt Zeitschriften-H1, Fließtext und Meta-Beschreibung auch auf Folgeseiten aufeinander ab", async () => {
   const realModel = await loadSiteData(new URL("../cache/", import.meta.url).pathname);
   const guestInput = fixture(5);

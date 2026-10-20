@@ -8,15 +8,15 @@ function excerpt(text, length = 220) {
   return normalized.length > length ? `${normalized.slice(0, length - 1).trimEnd()}…` : normalized;
 }
 
-function topics(video, config) {
+function topics(video, config, showMagazineLinks) {
   const games = video.games.length ? `<p class="topics">Spiele: ${video.games.map((game) => `<a href="${config.href(game.route)}">${escapeHtml(game.name)}</a>`).join(" · ")}</p>` : "";
-  if (!video.blaetterabend) return `${games}${sectionLinks(video, config)}`;
+  if (!video.blaetterabend || !showMagazineLinks) return `${games}${sectionLinks(video, config)}`;
   return `${games}${sectionLinks(video, config)}<p class="topics"><a href="${config.href("zeitschriften/")}">Blätterabend / Zeitschriften</a>: ${video.magazines.length
     ? video.magazines.map((magazine) => magazineLinks(magazine, config)).join(" · ")
     : "Zeitschrift ungeklärt"}</p>`;
 }
 
-export function videoListEntry(video, config, entry, headingLevel = 2, { label = video.title, issueRoute } = {}) {
+export function videoListEntry(video, config, entry, headingLevel = 2, { label = video.title, issueRoute, showMagazineLinks = true } = {}) {
   const href = videoHref(video, config, issueRoute);
   const external = Boolean(httpUrl(href));
   return `<li><article>
@@ -25,7 +25,7 @@ export function videoListEntry(video, config, entry, headingLevel = 2, { label =
 <div class="video-entry-content">
 <p class="meta">${videoDate(video)}${video.durationSeconds !== null ? ` · ${durationLabel(video.durationSeconds)}` : ""}</p>
 ${entry ? `<p class="meta">${entry.people.length ? `Im Gespräch: ${escapeHtml(entry.people.join(", "))} · ` : ""}Thema: ${escapeHtml(entry.topic)}</p>${entry.note ? `<p class="meta">${escapeHtml(entry.note)}</p>` : ""}` : ""}
-${topics(video, config)}
+${topics(video, config, showMagazineLinks)}
 ${video.description ? `<p>${escapeHtml(excerpt(video.description))}</p>` : ""}
 </div></article></li>`;
 }
