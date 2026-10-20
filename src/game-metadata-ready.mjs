@@ -99,7 +99,7 @@ function validateReadyCache(cache, games, reviewedDecisions, selectionPolicy) {
     && cache.selectionPolicyHash === hash(selectionPolicy)
     && cache.companyNamesHash === companyNamesHash
     && Array.isArray(cache.games) && cache.games.length === games.length,
-  "Cache beschädigt oder veraltet; prepare:game-metadata ausführen.");
+  "Cache beschädigt oder veraltet; dev:prepare:game-metadata ausführen.");
   const seen = new Set();
   for (const record of cache.games) {
     const game = games.find((entry) => entry.id === record.gameId);
@@ -172,7 +172,7 @@ export async function loadReadyGameMetadata({
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   try {
-    check(process.argv.length === 2, "Aufruf ohne Optionen: npm run prepare:game-metadata");
+    check(process.argv.length === 2, "Aufruf ohne Optionen: npm run dev:prepare:game-metadata");
     console.log(JSON.stringify((await buildReadyGameMetadata()).summary, null, 2));
   } catch (error) {
     console.error(error.message);

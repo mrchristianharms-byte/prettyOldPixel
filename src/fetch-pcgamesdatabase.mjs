@@ -71,7 +71,7 @@ export async function loadPcgamesdatabaseCatalog({
   const cached = await readJson(file);
   if (cached) validateMagazine(cached);
   if (cachedOnly) {
-    if (!cached && !optional) throw new Error(`PC Games Database-Cache fehlt: ${file}. Zuerst npm run fetch:gamestar ausführen.`);
+    if (!cached && !optional) throw new Error(`PC Games Database-Cache fehlt: ${file}. Zuerst npm run dev:fetch:gamestar ausführen.`);
     return cached;
   }
   if (!refresh && isFresh(cached, maxAgeDays, now) && cached.logo !== undefined) return cached;

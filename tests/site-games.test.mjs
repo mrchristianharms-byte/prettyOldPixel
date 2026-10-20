@@ -678,7 +678,7 @@ test("erfordert bestätigte Spieleidentitäten statt Format- oder Titelheuristik
   assert.ok(model.videos.every((video) => video.games.length === 0));
   assert.ok(model.warnings.some((warning) => warning.includes("Spielzuordnung nicht bestätigt")));
   assert.equal(render(input).pages.has("spiele/index.html"), false);
-  assert.ok(render(input).pages.get("news/index.html").html.includes('href="../sonstiges/g0000000002/#video-g0000000002"'));
+  assert.ok(render(input).pages.get("news/index.html").html.includes('href="../sonstiges/cadaver-re-play-2/#video-g0000000002"'));
 });
 
 test("vereinigt bestätigte Playlists und zählt nur unterschiedliche öffentliche Videos", () => {

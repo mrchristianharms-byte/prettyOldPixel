@@ -13,22 +13,22 @@ und Videoquellen bleiben unverändert.
 2. [`local-dump/report.json`](../cache/game-metadata/local-dump/report.json)
    enthält die zurückbehaltenen Titel, Aliasse, Genres und Veröffentlichungen.
    Der ursprüngliche SQL-Dump und die temporäre Datenbank sind gelöscht.
-3. `npm run verify:game-dump` prüft Katalogabdeckung, Titel/Aliasse, eindeutige
+3. `npm run dev:verify:game-dump` prüft Katalogabdeckung, Titel/Aliasse, eindeutige
    IDs und Veröffentlichungsfelder ausschließlich innerhalb dieses Reports.
    Das ist eine Konsistenzprüfung, keine unabhängige Bestätigung durch Dritte.
-4. `npm run prepare:game-metadata` erzeugt
+4. `npm run dev:prepare:game-metadata` erzeugt
    [`ready.json`](../cache/game-metadata/ready.json), Schema 3. Eingaben sind
    ausschließlich Report, Katalog,
    [explizite Prüfentscheidungen](../src/data-game-dump-decisions.json) und
    [Plattformregel](../src/data-game-dump-policy.json).
-5. `npm run review:games` erzeugt eine lokale durchsuchbare HTML-Prüfübersicht.
+5. `npm run dev:review:games` erzeugt eine lokale durchsuchbare HTML-Prüfübersicht.
 6. `npm run generate:site` liest nur den fertigen Cache über
    [`game-metadata-ready.mjs`](../src/game-metadata-ready.mjs). Der Katalog bleibt
    maßgeblich für Spielnamen, Routen und Videozuordnungen.
 
 Der Build benötigt keine externen Spielequellen und nicht den Eingabereport.
 Hashes prüfen Integrität und den aktuellen Katalog/Entscheidungsstand.
-Nach einer neuen Report-Ausgabe muss `prepare:game-metadata` erneut laufen;
+Nach einer neuen Report-Ausgabe muss `dev:prepare:game-metadata` erneut laufen;
 der Offline-Reader vergleicht bewusst nicht mit einem eventuell vorhandenen Report.
 Bei fehlendem fertigen Cache meldet der Build eine Warnung und zeigt unbekannte
 Daten. Beschädigte oder veraltete fertige Caches brechen den Build ab.
@@ -44,7 +44,7 @@ Daten. Beschädigte oder veraltete fertige Caches brechen den Build ab.
   weggefallenen Untertitel. Neun zuvor ausdrücklich geprüfte Dump-Entscheidungen
   lösen bekannte Mehrdeutigkeiten auf.
 - Derzeit sind 119 von 147 Spielen nutzbar; 28 bleiben unverifiziert.
-- Firmenbezeichnungen werden beim SQL-Import und bei `prepare:game-metadata`
+- Firmenbezeichnungen werden beim SQL-Import und bei `dev:prepare:game-metadata`
   über eine explizite [Aliasliste](../src/game-company-names.mjs) vereinheitlicht.
   Die kürzesten vorhandenen Bezeichnungen sind `Blue Byte Studio GmbH`,
   `Cinemaware`, `Max Design GesMBH` und `Adventuresoft Ltd.`.
@@ -56,7 +56,7 @@ Daten. Beschädigte oder veraltete fertige Caches brechen den Build ab.
   erhalten; vorhandene Rohreports werden nicht überschrieben. Mehrfachnamen
   bleiben Mehrfachnamen, ihre enthaltenen bekannten Aliasse werden normalisiert.
   Die Aliasliste ist im fertigen Cache per Hash abgesichert; Änderungen erfordern
-  ein erneutes `prepare:game-metadata`. Personen-Credits sind nicht vorhanden.
+  ein erneutes `dev:prepare:game-metadata`. Personen-Credits sind nicht vorhanden.
 - Ein pauschales Erscheinungsjahr ist nur für genau eine ausgewählte Plattform
   und ausschließlich datierte Veröffentlichungen verfügbar; dann das früheste
   Jahr. Bei mehreren Plattformen oder unvollständiger Datierung bleibt es

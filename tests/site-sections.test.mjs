@@ -5,7 +5,7 @@ import { tmpdir } from "node:os";
 import test from "node:test";
 import { sectionDefinitions } from "../src/data-sections.mjs";
 import { normalizeSources, loadSiteData } from "../src/site-data.mjs";
-import { createSiteConfig } from "../src/site-config.mjs";
+import { createSiteConfig, slugify } from "../src/site-config.mjs";
 import { renderSite } from "../src/site-render.mjs";
 import { generateSite, validateSite } from "../src/generate-site.mjs";
 import { videoListEntry } from "../src/widget/video-entry.mjs";
@@ -49,7 +49,7 @@ test("verlinkt Sonstiges und News intern auf eigene Videodetailseiten mit gemein
   input.videos.videos[0].description = "Vollständige Beschreibung zum Video.";
   const { model, pages, config } = render(input, []);
   for (const video of model.videos) {
-    const route = `sonstiges/${video.id}/`;
+    const route = `sonstiges/${slugify(video.title)}/`;
     assert.equal(video.detailRoute, route);
     for (const listing of ["sonstiges/", "news/"]) {
       const html = pages.get(`${listing}index.html`).html;
@@ -69,10 +69,10 @@ test("verlinkt Sonstiges und News intern auf eigene Videodetailseiten mit gemein
     assert.deepEqual(schema.find((item) => item["@type"] === "BreadcrumbList").itemListElement.map((item) => item.name),
       ["Startseite", "Sonstiges", video.title]);
   }
-  assert.ok(pages.get(`sonstiges/${videoId(0)}/index.html`).html.includes(input.videos.videos[0].description));
+  assert.ok(pages.get("sonstiges/beitrag-0/index.html").html.includes(input.videos.videos[0].description));
   const assigned = render(input, [definition("hardware", 1)]);
-  assert.equal(assigned.model.videoById.get(videoId(0)).detailRoute, `hardware/${videoId(0)}/`);
-  assert.ok(!assigned.pages.has(`sonstiges/${videoId(0)}/index.html`));
+  assert.equal(assigned.model.videoById.get(videoId(0)).detailRoute, "hardware/beitrag-0/");
+  assert.ok(!assigned.pages.has("sonstiges/beitrag-0/index.html"));
 });
 
 test("ordnet Themenblock Vietnam per Titelregel chronologisch und ohne manuelle IDs zu", () => {
@@ -102,6 +102,42 @@ test("ordnet Themenblock Vietnam per Titelregel chronologisch und ohne manuelle 
   const assigned = render(input, [manual]).model.sections.find((section) => section.id === "retrospektiven").entries;
   assert.equal(assigned.filter((entry) => entry.videoId === videoId(0)).length, 1);
   assert.equal(assigned.find((entry) => entry.videoId === videoId(0)).topic, "Geprüfter Kontext");
+});
+
+test("bildet lesbare Titelpfade in allen Bereichen und hält Linkmetadaten konsistent", () => {
+  for (const id of ["hardware", "interviews", "retrospektiven", "sonstiges"]) {
+    const input = fixture(1);
+    input.videos.videos[0].title = "Mein Amiga: Zubehör & Spaß!";
+    const { model, pages, config } = render(input, id === "sonstiges" ? [] : [definition(id, 1)]);
+    const video = model.videos[0];
+    const route = `${id}/mein-amiga-zubehor-spass/`;
+    assert.equal(video.detailRoute, route);
+    const html = pages.get(`${route}index.html`).html;
+    assert.ok(html.includes(`<link rel="canonical" href="${config.href(route, route)}">`));
+    assert.ok(html.includes(`<meta property="og:url" content="${config.href(route, route)}">`));
+    assert.ok(!pages.has(`${id}/${video.id}/index.html`));
+  }
+});
+
+test("löst kollidierende, leere und lange Titel ohne IDs und unabhängig von der Quellreihenfolge auf", () => {
+  const input = fixture(7);
+  const titles = ["Über Spaß!", "Uber Spass", "Uber Spass 2", "!!!", "???", "A".repeat(240), `${"A".repeat(240)} B`];
+  input.videos.videos.forEach((video, index) => { video.title = titles[index]; });
+  const { model, pages } = render(input, []);
+  const routes = model.videos.map((video) => video.detailRoute);
+  assert.equal(new Set(routes).size, 7);
+  assert.equal(model.videoById.get(videoId(0)).detailRoute, "sonstiges/uber-spass/");
+  assert.equal(model.videoById.get(videoId(1)).detailRoute, "sonstiges/uber-spass-3/");
+  assert.equal(model.videoById.get(videoId(2)).detailRoute, "sonstiges/uber-spass-2/");
+  assert.equal(model.videoById.get(videoId(3)).detailRoute, "sonstiges/video/");
+  assert.equal(model.videoById.get(videoId(4)).detailRoute, "sonstiges/video-2/");
+  for (const video of model.videos) {
+    assert.ok(!video.detailRoute.includes(video.id));
+    assert.ok(video.detailRoute.split("/")[1].length <= 162);
+  }
+  input.videos.videos.reverse();
+  const reversed = render(input, []);
+  assert.deepEqual([...pages], [...reversed.pages]);
 });
 
 test("Sonstiges erfasst nur thematisch unzugeordnete Videos unabhängig von News und Playlists", () => {
@@ -287,7 +323,7 @@ test("verlinkt Bereiche intern auf Spiele oder eigene Detailseiten und hält Lis
   validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""], ["assets/theme.js", ""], ["favicon.jpg", ""]]), config);
   const html = pages.get("interviews/index.html").html;
   assert.ok(html.includes('href="../spiele/ein-spiel/#video-s0000000000"'));
-  assert.ok(html.includes('href="s0000000003/#video-s0000000003"'));
+  assert.ok(html.includes('href="beitrag-3/#video-s0000000003"'));
   assert.ok(html.includes("Im Gespräch: Person 0"));
   assert.ok(html.includes("Thema: Thema 0"));
   assert.ok(!html.includes("<iframe"));
@@ -308,8 +344,8 @@ test("hält Themen auch bei überlappenden Folgenpositionen in HTML und JSON-LD 
   const html = pages.get("retrospektiven/index.html").html;
   assert.deepEqual(graph(html)[0].mainEntity.itemListElement.map((item) => item.url.split("#video-")[1]),
     [videoId(0), videoId(2), videoId(1), videoId(3)]);
-  assert.ok(html.indexOf(`href="${videoId(2)}/#video-${videoId(2)}"`)
-    < html.indexOf(`href="${videoId(1)}/#video-${videoId(1)}"`));
+  assert.ok(html.indexOf(`href="beitrag-2/#video-${videoId(2)}"`)
+    < html.indexOf(`href="beitrag-1/#video-${videoId(1)}"`));
 });
 
 test("paginiert Bereiche und bewahrt relative Links sowie aktive Hauptnavigation", () => {
@@ -396,7 +432,8 @@ test("prüft die echten kuratierten Zuordnungen und die doppelte Originalnummer 
       && video.sections.every((section) => section.id === "sonstiges")).map((video) => video.id));
   assert.ok(model.sections[0].entries.some((entry) => entry.videoId === "bwVnfQJ-WEw"));
   assert.ok(!other.entries.some((entry) => entry.videoId === "bwVnfQJ-WEw"));
-  assert.equal(model.videoById.get("bwVnfQJ-WEw").detailRoute, "hardware/bwVnfQJ-WEw/");
+  const hardwareVideo = model.videoById.get("bwVnfQJ-WEw");
+  assert.equal(hardwareVideo.detailRoute, `hardware/${slugify(hardwareVideo.title)}/`);
   assert.ok(model.sections[0].entries.find((entry) => entry.videoId === "XDvGVislnJg").note);
   assert.deepEqual(model.sections[1].entries.filter((entry) => entry.topic === "Geschichte der Flugsimulationen").slice(-2).map((entry) => entry.videoId), ["4KrDqSCgFNw", "LuWmntgoZEo"]);
   assert.deepEqual(model.sections[1].entries.filter((entry) => entry.topic === "Themenblock Vietnam").map((entry) => entry.videoId),

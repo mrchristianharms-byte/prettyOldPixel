@@ -1,7 +1,6 @@
 import { createHash } from "node:crypto";
 import { mkdir, readFile, readdir, rename, unlink, writeFile } from "node:fs/promises";
 import path from "node:path";
-import sharp from "sharp";
 import { cacheFileName, normalizeMagazineName, readJson } from "./archive-cache.mjs";
 
 const MAX_BYTES = 2 * 1024 * 1024;
@@ -64,6 +63,7 @@ export async function convertKultmagsLogo(logo, cacheDir) {
     return logo;
   }
   const variants = [];
+  const { default: sharp } = await import("sharp");
   for (const format of ["webp", "gif"]) {
     const image = sharp(bytes, { animated: true, limitInputPixels: 40_000_000 });
     const converted = imageExtension(bytes) === format ? bytes

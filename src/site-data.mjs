@@ -510,7 +510,7 @@ export function normalizeSources({ videos: videoCache, playlists: playlistCache,
   const sections = normalizeSections(sectionAssignments, videoById, playlists, warnings);
   for (const video of videos) {
     video.detailRoute = video.blaetterabend && !video.magazines.some((magazine) => magazine.issue?.route) && !video.games.length
-      ? `zeitschriften/videos/${video.id}/` : null;
+      ? "zeitschriften/videos/" : null;
     video.magazines.sort((a, b) => a.id.localeCompare(b.id, "en"));
     video.playlists.sort((a, b) => a.id.localeCompare(b.id, "en"));
     video.games.sort((a, b) => a.id.localeCompare(b.id, "en"));
@@ -538,14 +538,34 @@ export function normalizeSources({ videos: videoCache, playlists: playlistCache,
     };
     sections.push(section);
     for (const video of otherVideos) {
-      video.detailRoute = `${section.route}${video.id}/`;
+      video.detailRoute = section.route;
       video.sections.push({ id: section.id, name: section.name, route: section.route });
     }
   }
   for (const video of videos) {
     if (!video.detailRoute && !video.games.length && !video.magazines.some((magazine) => magazine.issue?.route)) {
-      video.detailRoute = `${video.sections[0].route}${video.id}/`;
+      video.detailRoute = video.sections[0].route;
     }
+  }
+  const detailVideos = videos.filter((video) => video.detailRoute);
+  const baseRoutes = new Map(detailVideos.map((video) => [
+    video.id, `${video.detailRoute}${slugify(video.title).slice(0, 160).replace(/-$/u, "") || "video"}/`,
+  ]));
+  const reservedRoutes = new Set(baseRoutes.values());
+  const usedRoutes = new Set();
+  for (const video of [...detailVideos].sort((a, b) =>
+    (a.publishedTime ?? Infinity) - (b.publishedTime ?? Infinity) || a.id.localeCompare(b.id, "en"))) {
+    const base = baseRoutes.get(video.id);
+    let route = base;
+    for (let suffix = 2; usedRoutes.has(route); suffix += 1) {
+      route = `${base.slice(0, -1)}-${suffix}/`;
+      while (reservedRoutes.has(route)) {
+        suffix += 1;
+        route = `${base.slice(0, -1)}-${suffix}/`;
+      }
+    }
+    video.detailRoute = route;
+    usedRoutes.add(route);
   }
   const magazines = [...magazineById.values()].sort((a, b) => a.name.localeCompare(b.name, "de"));
   return {
@@ -581,7 +601,7 @@ export async function loadSiteData(cacheDirectory, options) {
     metadata = await loadReadyGameMetadata({ cacheDir: path.join(cacheDirectory, "game-metadata") });
   } catch (error) {
     if (error.code !== "ENOENT") throw error;
-    model.warnings.push("Konsolidierter Spielemetadaten-Cache fehlt; prepare:game-metadata ausführen.");
+    model.warnings.push("Konsolidierter Spielemetadaten-Cache fehlt; dev:prepare:game-metadata ausführen.");
   }
   for (const game of model.games) {
     game.metadata = metadata ? metadata.get(game.id)

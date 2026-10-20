@@ -62,7 +62,7 @@ export async function verifyGameDump({
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   try {
-    check(process.argv.length === 2, "Aufruf ohne Optionen: npm run verify:game-dump");
+    check(process.argv.length === 2, "Aufruf ohne Optionen: npm run dev:verify:game-dump");
     const { report, reportHash } = await verifyGameDump();
     const result = { version: 2, provider: "mobygames-local-dump-validation",
       verifiedAt: new Date().toISOString(), reportHash, dumpHash: report.source.sha256,

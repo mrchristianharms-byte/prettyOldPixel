@@ -3,27 +3,27 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "dependencies": {
+  "devDependencies": {
     "sharp": "^0.35.5"
   },
   "scripts": {
-    "dev": "npx http-server docs -a 127.0.0.1 --port 8000",
-    "test": "node --test \"tests/**/*.test.mjs\"",
+    "test": "node --test \"tests/site-*.test.mjs\" tests/generate-site.test.mjs tests/theme.test.mjs tests/video-series.test.mjs tests/fetch-youtube-videos.test.mjs tests/fetch-youtube-playlists.test.mjs",
     "fetch:all": "node src/fetch-youtube.mjs",
-    "fetch:youtube": "node src/fetch-youtube-videos.mjs",
     "fetch:videos": "node src/fetch-youtube-videos.mjs https://www.youtube.com/@PrettyOldPixel",
     "fetch:playlists": "node src/fetch-youtube-playlists.mjs",
-    "fetch:transcripts": "node src/fetch-youtube-transcripts.mjs",
-    "fetch:archives": "node src/fetch-archives.mjs",
-    "fetch:archives:refresh": "node src/fetch-archives.mjs --refresh",
-    "fetch:gamestar": "node src/fetch-pcgamesdatabase.mjs",
-    "fetch:amiga-action": "node src/fetch-amr.mjs",
     "generate:site": "node src/generate-site.mjs",
-    "generate:blaetterabend": "node src/generate-blaetterabend.mjs",
-    "generate:games-from-transcript": "node src/generate-games-from-transcript.mjs",
-    "review:games": "node src/generate-game-metadata-review.mjs",
-    "import:game-dump": "node src/import-game-dump.mjs",
-    "verify:game-dump": "node src/verify-game-dump.mjs",
-    "prepare:game-metadata": "node src/game-metadata-ready.mjs"
+    "dev": "npx http-server docs -a 127.0.0.1 --port 8000",
+    "dev:test": "node --test \"tests/**/*.test.mjs\"",
+    "dev:fetch:transcripts": "node src/fetch-youtube-transcripts.mjs",
+    "dev:fetch:archives": "node src/fetch-archives.mjs",
+    "dev:fetch:archives:refresh": "node src/fetch-archives.mjs --refresh",
+    "dev:fetch:gamestar": "node src/fetch-pcgamesdatabase.mjs",
+    "dev:fetch:amiga-action": "node src/fetch-amr.mjs",
+    "dev:generate:blaetterabend": "node src/generate-blaetterabend.mjs",
+    "dev:generate:games-from-transcript": "node src/generate-games-from-transcript.mjs",
+    "dev:review:games": "node src/generate-game-metadata-review.mjs",
+    "dev:import:game-dump": "node src/import-game-dump.mjs",
+    "dev:verify:game-dump": "node src/verify-game-dump.mjs",
+    "dev:prepare:game-metadata": "node src/game-metadata-ready.mjs"
   }
 }

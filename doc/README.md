@@ -34,6 +34,7 @@ in `src/`; `npm run generate:site` erzeugt die veröffentlichbaren Dateien in `d
 Voraussetzung: Node.js 22 oder neuer.
 
 ```sh
+npm ci
 npm run generate:site
 ```
 
@@ -93,7 +94,7 @@ Nur Spiel-/Ausgabenseiten laden zusätzlich ein kleines lokales JavaScript für 
 von Video und Beschreibung; ohne JavaScript sind alle Beschreibungen sichtbar.
 Es gibt keinen Gesamtkatalog unter `/videos/`. Blätterabend-Videos ohne
 eindeutige Ausgabenseite oder Spieleseite erhalten eine Detailseite unter
-`/zeitschriften/videos/<video-id>/`, mit demselben Player und denselben
+`/zeitschriften/videos/<videotitel>/`, mit demselben Player und denselben
 Videoinformationen wie Ausgabenseiten, ohne erfundene Heftdaten.
 Videos unter „Sonstiges“ erhalten entsprechend eine eigene Seite unter
 `/sonstiges/<video-id>/`. Titel und Vorschaubilder in Sonstiges und News
@@ -243,6 +244,15 @@ keine externen Ressourcen oder Laufzeit-JavaScript.
   umbrechen auf schmalen Displays. Videolinks führen zu vorhandenen
   Spiel-/Ausgabeabschnitten, bei Sonstiges zu eigenen Videodetailseiten
   sowie bei allen anderen Themen ersatzweise zu eigenen Videodetailseiten.
+  Einzelvideoseiten verwenden lesbare, aus dem Videotitel gebildete Pfade
+  statt YouTube-IDs, etwa `hardware/mein-amiga-1200/`. Das gilt auch für
+  Interviews, Retrospektiven, Sonstiges, re.consider und unbekannte Heftausgaben.
+  Sonderzeichen werden normalisiert; Titelpfade sind auf 160 Zeichen begrenzt.
+  Gleiche Titel erhalten bei Bedarf einen numerischen Zusatz, niemals eine ID.
+  Die Auswahl bleibt bei geänderter Quellreihenfolge gleich. Interne Links,
+  Canonicals und Sitemap verwenden dieselben Pfade; alte ID-Seiten entfallen
+  beim nächsten Build. Video-Fragmente und externe YouTube-Adressen bleiben
+  für Player und Folgenauswahl unverändert.
   Die Sonstiges-Detailseiten verwenden den gemeinsamen Player und das
   vorhandene Laufzeitskript; die Listen bleiben ohne Player. Vorschaubilder verwenden das
   gemeinsame Videoeintrags-Widget und werden direkt von YouTube geladen.
@@ -268,7 +278,7 @@ nicht automatisch erzeugte Caches:
 
 1. `npm run fetch:all` lädt neue öffentliche Videos und prüft die
    Playlist-Mitgliedschaften erneut. Für Blätterabende anschließend
-   `npm run fetch:archives` und `npm run generate:blaetterabend` ausführen.
+   `npm run dev:fetch:archives` und `npm run dev:generate:blaetterabend` ausführen.
    Die Originaltitel und Beschreibungen bleiben als Quellen erhalten;
    sie werden nicht durch redaktionell geratene Metadaten ersetzt.
 2. `npm run generate:site` ausführen und die Build-Hinweise prüfen.
@@ -285,7 +295,7 @@ nicht automatisch erzeugte Caches:
    Der Slug aus Name und Plattform ist zugleich der Metadaten-Katalogschlüssel;
    bestehende IDs nicht beiläufig ändern. Nach Katalogänderungen den lokalen
    Dump-Report ergänzen beziehungsweise neu importieren und den fertigen Cache
-   mit `npm run prepare:game-metadata` erneuern.
+   mit `npm run dev:prepare:game-metadata` erneuern.
    Eine Spieleseite entsteht erst ab zwei unterschiedlichen verfügbaren
    Nicht-`re.minder`-Videos. Ausnahme: genau ein verfügbares Video aus einer
    bestätigten Spielplaylist, dessen Veröffentlichung höchstens zwei
@@ -851,11 +861,25 @@ Projekt ohne Anschrift, behauptet aber keine pauschale gesetzliche Ausnahme.
 
 ## Tests
 
-Alle Testdateien liegen in `tests/` (`*.test.mjs`) und werden ausgeführt mit:
+Alle Testdateien liegen in `tests/` (`*.test.mjs`). Die Actions-taugliche
+Auswahl umfasst YouTube-Abrufe, Seitenbuild, Darstellung und Browser-Skripte:
 
 ```sh
 npm test
 ```
+
+Die vollständige Suite einschließlich lokaler Archiv-, Logo-, Spielzuordnungs-
+und Transkriptaufgaben läuft ausschließlich lokal mit Entwicklungsabhängigkeiten:
+
+```sh
+npm ci
+npm run dev:test
+```
+
+`sharp` ist eine Entwicklungsabhängigkeit und wird nur zur lokalen
+Bildkonvertierung geladen. Actions benötigen keine npm-Installation
+und können vorhandene Logo-Varianten ohne Bildbibliothek veröffentlichen.
+Lokale Datenpflegebefehle tragen durchgehend das Präfix `dev:`.
 
 ## YouTube-Videos cachen
 
@@ -867,14 +891,6 @@ Für den Kanal https://www.youtube.com/@PrettyOldPixel:
 
 ```sh
 npm run fetch:videos
-```
-
-Für einen beliebigen Kanal:
-
-```sh
-npm run fetch:youtube -- https://www.youtube.com/@PrettyOldPixel
-# oder
-npm run fetch:youtube -- PrettyOldPixel
 ```
 
 Beim ersten Lauf werden alle Seiten der Upload-Playlist geladen und die Details
@@ -979,26 +995,26 @@ Für jedes Video werden Zeitschrift, Ausgabe
 aus dem Titel erkannt und in `cache/blaetterabend-videos.json` gespeichert.
 
 ```sh
-npm run fetch:archives
-npm run generate:blaetterabend
+npm run dev:fetch:archives
+npm run dev:generate:blaetterabend
 ```
 
 `src/fetch-archives.mjs` aktualisiert ausschließlich die Archive-Caches für
 die im Video-Cache erkannten Zeitschriften. GameStar erhält zusätzlich
 Heftlinks von PC Games Database, Amiga Action von AMR einschließlich Logo. Kultmags wird für die übrige Archivsuche
 zuerst geprüft; reetroz bleibt der Fallback für dort fehlende Zeitschriften. Mit
-`npm run fetch:archives:refresh` werden die Quellen unabhängig vom Cache-Alter
+`npm run dev:fetch:archives:refresh` werden die Quellen unabhängig vom Cache-Alter
 neu abgefragt. Das erzeugt noch keine neue Blätterabend-Datei.
 
 `src/generate-blaetterabend.mjs` liest anschließend ausschließlich lokale
 JSON-Dateien und lädt auch bei veralteten Caches nichts aus dem Internet.
 Fehlende benötigte Cache-Dateien führen zu einem Fehler mit Hinweis auf
-`fetch:archives`, nicht zu einem automatischen Abruf. Zum bisherigen kombinierten
+`dev:fetch:archives`, nicht zu einem automatischen Abruf. Zum bisherigen kombinierten
 Refresh-Aufruf gehören jetzt zwei Schritte:
 
 ```sh
-npm run fetch:archives:refresh
-npm run generate:blaetterabend
+npm run dev:fetch:archives:refresh
+npm run dev:generate:blaetterabend
 ```
 
 Danach erzeugt `npm run generate:site` die Website aus den aktuellen JSON-Daten.
@@ -1054,13 +1070,13 @@ Die Zeitschriftenliste und die Ausgabenlisten der benötigten Zeitschriften
 werden in `cache/kultmags/` gespeichert. Ausgabendetails werden regulär
 365 Tage wiederverwendet, der Zeitschriftenindex weiterhin 30 Tage, damit neue
 Zeitschriften gefunden werden können. Mit
-`npm run fetch:archives:refresh` werden sie neu geladen (zusammen mit
+`npm run dev:fetch:archives:refresh` werden sie neu geladen (zusammen mit
 dem reetroz-Cache). Ein vollständiger Abruf braucht etwa 140 Seitenaufrufe, mit
 200 ms Pause zwischen den Aufrufen.
 
 ### Zeitschriftenlogos von Kultmags
 
-`npm run fetch:archives` liest auf der jeweiligen Magazinübersicht das
+`npm run dev:fetch:archives` liest auf der jeweiligen Magazinübersicht das
 `img` innerhalb von `.archive-title-image`. Relative Bildadressen werden
 gegen `https://www.kultmags.com/` aufgelöst. Nur PNG, JPEG, GIF und WebP
 vom HTTPS-Host `www.kultmags.com` werden übernommen, ohne Weiterleitungen
@@ -1102,8 +1118,8 @@ nicht Git-ignoriert und muss für einen GitHub-Pages-Build mit bereitstehen.
 ### GameStar bei PC Games Database
 
 ```sh
-npm run fetch:gamestar
-npm run fetch:gamestar -- --refresh
+npm run dev:fetch:gamestar
+npm run dev:fetch:gamestar -- --refresh
 npm run generate:site
 ```
 
@@ -1129,7 +1145,7 @@ in `cache/pcgamesdatabase/logos/`. Frische ältere Caches werden nur um
 das Logo ergänzt, ohne die Heftübersicht neu abzurufen. Die Zeitschriftenseite
 zeigt das Bild als lokales Asset mit „Logoquelle: PC Games Database“.
 Format, Größe und Inhalt werden wie bei den übrigen Magazinlogos geprüft.
-Auch `fetch:archives` berücksichtigt diese Quelle, wenn GameStar im
+Auch `dev:fetch:archives` berücksichtigt diese Quelle, wenn GameStar im
 Video-Cache vorkommt.
 
 Die lokale Blätterabend-Generierung ergänzt bei vorhandenem Cache das
@@ -1140,7 +1156,7 @@ Archivübersicht. Heftnummern werden nicht mit Kalendermonaten verwechselt.
 Die Quelle ergänzt vorhandene Kultmags-/reetroz-Verweise, statt sie zu ersetzen.
 
 Der Website-Build liest diesen Cache zusätzlich direkt ein: Nach
-`fetch:gamestar` ist deshalb keine erneute Blätterabend-Generierung nötig.
+`dev:fetch:gamestar` ist deshalb keine erneute Blätterabend-Generierung nötig.
 Die Links erscheinen in Zeitschriften-/Jahrgangslisten und in der dritten
 Metadatenspalte auf Heftseiten als „PC Games Database: Ausgabe“.
 Der Build bleibt offline und verwendet auch veraltete Daten unverändert.
@@ -1151,8 +1167,8 @@ Der neue Cache ist für den GitHub-Pages-Build ebenfalls mit bereitzustellen.
 ### Amiga Action bei Amiga Magazine Rack (AMR)
 
 ```sh
-npm run fetch:amiga-action
-npm run fetch:amiga-action -- --refresh
+npm run dev:fetch:amiga-action
+npm run dev:fetch:amiga-action -- --refresh
 npm run generate:site
 ```
 
@@ -1170,7 +1186,7 @@ Ausgaben enthalten zusätzlich `issueNumber`. `pageUrl` verweist auf
 die belegte `https://amr.abime.net/issue_<id>`-Heftseite; Reader- und
 Downloadlinks werden nicht erfunden und bleiben `null`.
 Der Cache gilt 365 Tage, `--refresh` erzwingt einen neuen Abruf.
-Auch `fetch:archives` berücksichtigt AMR bei Amiga-Action-Videos.
+Auch `dev:fetch:archives` berücksichtigt AMR bei Amiga-Action-Videos.
 
 Heftnummern oder Jahr und Monat dürfen einen eindeutigen Treffer ergeben.
 Widersprüchliche Nummern-/Datumsangaben führen nur zur Übersicht,
@@ -1225,7 +1241,7 @@ Ein ausdrücklich angeforderter Refresh darf die Jahresfrist übergehen.
 
 ```sh
 yt-dlp --version
-npm run fetch:transcripts
+npm run dev:fetch:transcripts
 ```
 
 Das separate Script `src/fetch-youtube-transcripts.mjs` benötigt zusätzlich
@@ -1344,7 +1360,7 @@ Sperr- und temporäre Schreibdateien bleiben Git-ignoriert.
 ## Spielebesprechungen aus Transkripten
 
 ```sh
-npm run generate:games-from-transcript -- _PHiFsxtF0k
+npm run dev:generate:games-from-transcript -- _PHiFsxtF0k
 ```
 
 `src/generate-games-from-transcript.mjs` analysiert bewusst jeweils ein
@@ -1467,7 +1483,7 @@ OLLAMA_NUM_CTX=32768
 Alternativ nur für einen Lauf:
 
 ```sh
-OLLAMA_NUM_CTX=32768 npm run generate:games-from-transcript -- _PHiFsxtF0k
+OLLAMA_NUM_CTX=32768 npm run dev:generate:games-from-transcript -- _PHiFsxtF0k
 ```
 
 Damit verwendet das Skript für Modellaufrufe Ollamas lokale native
@@ -1534,7 +1550,7 @@ Segmentbereich und Fehlerphase. Zur Wiederaufnahme denselben Befehl
 erneut ausführen:
 
 ```bash
-npm run generate:games-from-transcript -- _PHiFsxtF0k
+npm run dev:generate:games-from-transcript -- _PHiFsxtF0k
 ```
 
 Erfolgreiche Fenster werden dabei ohne Modellaufruf wiederverwendet.

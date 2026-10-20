@@ -115,7 +115,7 @@ test("erzeugt News mit Sonstiges-Detailseiten ohne Gesamtkatalog", () => {
   const { pages, config, assets } = render();
   assert.equal(pages.size, 58);
   assert.ok(![...pages.keys()].some((file) => file.startsWith("videos/")));
-  assert.ok(pages.get("news/index.html").html.includes('href="../sonstiges/b0000000052/#video-b0000000052"'));
+  assert.ok(pages.get("news/index.html").html.includes('href="../sonstiges/video-52-retrospiel/#video-b0000000052"'));
   for (const page of pages.values()) {
     assert.ok(!page.html.includes("Alle Videos"));
     assert.ok(!/href="[^"]*videos\//u.test(page.html));

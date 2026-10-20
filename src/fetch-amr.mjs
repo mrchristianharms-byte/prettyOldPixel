@@ -82,7 +82,7 @@ export async function loadAmrCatalog({
   const cached = await readJson(file);
   if (cached) validateMagazine(cached);
   if (cachedOnly) {
-    if (!cached && !optional) throw new Error(`AMR-Cache fehlt: ${file}. Zuerst npm run fetch:amiga-action ausführen.`);
+    if (!cached && !optional) throw new Error(`AMR-Cache fehlt: ${file}. Zuerst npm run dev:fetch:amiga-action ausführen.`);
     return cached;
   }
   if (!refresh && isFresh(cached, maxAgeDays, now)) return cached;

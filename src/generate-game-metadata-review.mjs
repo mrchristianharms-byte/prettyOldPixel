@@ -36,7 +36,7 @@ export function parseReviewArguments(args) {
   for (let i = 0; i < args.length; i += 1) {
     const key = { "--cache-dir": "cacheDir", "--output": "output" }[args[i]];
     if (!key || options[key] || !args[i + 1] || args[i + 1].startsWith("--")) {
-      throw new Error("Aufruf: npm run review:games -- [--cache-dir <pfad>] [--output <html-pfad>]");
+      throw new Error("Aufruf: npm run dev:review:games -- [--cache-dir <pfad>] [--output <html-pfad>]");
     }
     options[key] = path.resolve(args[++i]);
   }

@@ -3,13 +3,12 @@ import { mkdtemp, mkdir, readFile, rm, stat, writeFile } from "node:fs/promises"
 import path from "node:path";
 import { tmpdir } from "node:os";
 import test from "node:test";
-import sharp from "sharp";
 import { generateSite, validateSite } from "../src/generate-site.mjs";
-import { createSiteConfig } from "../src/site-config.mjs";
+import { createSiteConfig, slugify } from "../src/site-config.mjs";
 import { normalizeSources } from "../src/site-data.mjs";
 import { renderSite } from "../src/site-render.mjs";
 import { loadSiteData } from "../src/site-data.mjs";
-import { cacheKultmagsLogo } from "../src/kultmags-logos.mjs";
+import { cacheMagazineLogo } from "../src/kultmags-logos.mjs";
 import { magazineGuestChannels } from "../src/data-magazine-guest-channels.mjs";
 
 const channel = { id: "UC-magazines", title: "Pretty Old Pixel" };
@@ -134,8 +133,8 @@ test("lässt unbekannte Heftdaten und ungeklärte Zeitschriften auf Gästeseiten
   assert.ok(html.includes("Jahrgang unbekannt"));
   assert.ok(html.includes("Heftausgabe unbekannt"));
   assert.ok(html.includes("Zeitschrift ungeklärt"));
-  assert.ok(html.includes(`href="../../videos/${videoId(0)}/#video-${videoId(0)}"`));
-  assert.ok(html.includes(`href="../../videos/${videoId(1)}/#video-${videoId(1)}"`));
+  assert.ok(html.includes(`href="../../videos/blatterabend-mit-jurgen/#video-${videoId(0)}"`));
+  assert.ok(html.includes(`href="../../videos/blatterabend-mit-jurgen-2/#video-${videoId(1)}"`));
   const index = pages.get("zeitschriften/index.html").html;
   assert.ok(index.includes("Ausgabe ungeklärt"));
   assert.ok(index.includes("Weitere Blätterabende"));
@@ -260,8 +259,8 @@ test("übernimmt Kultmags-Logos offline als lokale Bildassets nur auf Zeitschrif
   const cacheDirectory = path.join(root, "cache");
   const cacheDir = path.join(cacheDirectory, "kultmags");
   await mkdir(path.join(cacheDir, "magazines"), { recursive: true });
-  const bytes = await sharp({ create: { width: 1, height: 1, channels: 4, background: "#ffffff" } }).png().toBuffer();
-  const logo = await cacheKultmagsLogo("https://www.kultmags.com/PC-Games/title.png", cacheDir, {
+  const bytes = Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAPoAAAD6AG1e1JrAAAADUlEQVQImWP4////fwAJ+wP9CNHoHgAAAABJRU5ErkJggg==", "base64");
+  const logo = await cacheMagazineLogo("https://www.kultmags.com/PC-Games/title.png", cacheDir, {
     fetchResponse: async (_url, options) => {
       assert.equal(options.redirect, "error");
       return new Response(bytes);
@@ -302,7 +301,7 @@ test("lehnt nicht-bildliche und übergroße Kultmags-Logoantworten ab", async (t
   const cacheDir = await mkdtemp(path.join(tmpdir(), "pixel-invalid-logo-"));
   t.after(() => rm(cacheDir, { recursive: true, force: true }));
   for (const bytes of [Buffer.from("<html>Fehler</html>"), Buffer.alloc(2 * 1024 * 1024 + 1)]) {
-    await assert.rejects(cacheKultmagsLogo("https://www.kultmags.com/title.png", cacheDir, {
+    await assert.rejects(cacheMagazineLogo("https://www.kultmags.com/title.png", cacheDir, {
       fetchResponse: async () => new Response(bytes),
     }), /Bildformat|2 MiB/u);
   }
@@ -361,7 +360,7 @@ test("verlinkt unbekannte Ausgaben mehrerer Zeitschriften auf eine gemeinsame Vi
   }));
   const { model, pages, config } = render(input);
   const video = model.videoById.get(videoId(0));
-  const route = `zeitschriften/videos/${video.id}/`;
+  const route = `zeitschriften/videos/${slugify(video.title)}/`;
   assert.equal(video.detailRoute, route);
   assert.equal([...pages.keys()].filter((file) => file.startsWith("zeitschriften/videos/")).length, 1);
   for (const source of ["zeitschriften/asm/", "zeitschriften/pc-player/", "zeitschriften/pc-power/", "news/"]) {

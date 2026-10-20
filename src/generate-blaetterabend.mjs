@@ -356,7 +356,7 @@ export async function generateBlaetterabendList({
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   if (process.argv.length > 2) {
-    console.error("Aufruf: node src/generate-blaetterabend.mjs (nur lokale Caches). Archive vorher mit npm run fetch:archives aktualisieren.");
+    console.error("Aufruf: node src/generate-blaetterabend.mjs (nur lokale Caches). Archive vorher mit npm run dev:fetch:archives aktualisieren.");
     process.exitCode = 1;
   } else {
     generateBlaetterabendList().catch((error) => {

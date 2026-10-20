@@ -80,7 +80,7 @@ async function loadIndex({ cacheDir, maxAgeDays, refresh, now, fetcher, cachedOn
   const file = path.join(cacheDir, "index.json");
   const cached = await readJson(file);
   if (cachedOnly) {
-    if (!cached) throw new Error(`reetroz-Cache fehlt: ${file}. Zuerst npm run fetch:archives ausführen.`);
+    if (!cached) throw new Error(`reetroz-Cache fehlt: ${file}. Zuerst npm run dev:fetch:archives ausführen.`);
     return cached;
   }
   if (!refresh && isFresh(cached, maxAgeDays, now)) {
@@ -99,7 +99,7 @@ async function loadMagazine(entry, { cacheDir, maxAgeDays, refresh, now, fetcher
   const file = path.join(cacheDir, "magazines", `${entry.slug}.json`);
   const cached = await readJson(file);
   if (cachedOnly) {
-    if (!cached) throw new Error(`reetroz-Cache fehlt: ${file}. Zuerst npm run fetch:archives ausführen.`);
+    if (!cached) throw new Error(`reetroz-Cache fehlt: ${file}. Zuerst npm run dev:fetch:archives ausführen.`);
     return cached;
   }
   if (!refresh && isFresh(cached, maxAgeDays, now)) {
