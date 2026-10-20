@@ -72,5 +72,6 @@ test("ignoriert ungültige Speicherwerte und meldet blockierten Speicher ohne Um
   app.button.dispatchEvent(new Event("click"));
   assert.equal(app.theme(), "dark");
   assert.equal(app.warnings.length, 2);
-  assert.match(app.status.textContent, /nicht dauerhaft gespeichert/u);
+  assert.equal(app.status.textContent, "");
+  assert.equal(app.warnings[1][0], "Darstellungsmodus konnte nicht gespeichert werden.");
 });

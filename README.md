@@ -179,6 +179,18 @@ Browser oder Modelle und ruft keine Fetch- oder LLM-Schritte auf.
 Checkout, Actions-Cache und Pages-Deployment benötigen unabhängig davon
 die GitHub-Dienste.
 
+Der zweite Workflow `Update YouTube caches` startet täglich um 06:00 Uhr
+in `Europe/Berlin` (einschließlich Sommer-/Winterzeit), zusätzlich manuell
+über `workflow_dispatch`. Er führt ausschließlich `fetch:videos` und
+`fetch:playlists` aus und committet Änderungen an `cache/youtube-videos.json`
+und `cache/youtube-playlists.json` nach `main`. Ohne Änderungen entsteht
+kein Commit; bei einem fehlgeschlagenen Abruf werden keine Teilstände eingecheckt.
+Er benötigt keine npm-Installation und führt keine lokalen `dev:`-Aufgaben aus.
+GitHub kann geplante Starts verzögern. Der Workflow benötigt Schreibrechte auf
+`main`; Branch-Regeln müssen den Bot-Push erlauben.
+Ein Push mit `GITHUB_TOKEN` startet den Pages-Push-Workflow nicht erneut.
+Für die Veröffentlichung anschließend `Deploy to GitHub Pages` manuell starten.
+
 ## Projektstruktur
 
 - `src/`: Abrufscripts, Generatoren, Vorlagen und Gestaltung.

@@ -112,6 +112,7 @@ export async function generateSite({
   cacheDirectory = path.join(projectRoot, "cache"),
   outputDirectory = path.join(projectRoot, "docs"),
   baseUrl,
+  retainPreviousAssets = process.env.GITHUB_ACTIONS === "true",
   now = Date.now(),
   logger = console,
 } = {}) {
@@ -190,7 +191,7 @@ export async function generateSite({
   const assetsStat = await optionalStat(previousAssets);
   if (assetsStat) {
     if (!assetsStat.isDirectory() || assetsStat.isSymbolicLink()) throw new Error("Asset-Verzeichnis muss ein echtes Verzeichnis sein.");
-    for (const file of (await readdir(previousAssets)).sort()) {
+    for (const file of retainPreviousAssets ? (await readdir(previousAssets)).sort() : []) {
       const match = /^(?:site\.([a-f0-9]{12})\.css|(?:video-series|theme)\.([a-f0-9]{12})\.js)$/u.exec(file);
       if (!match) continue;
       const source = path.join(previousAssets, file);

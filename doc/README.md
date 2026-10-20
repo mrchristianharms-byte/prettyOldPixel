@@ -88,7 +88,8 @@ HTML. Alle Seiten laden ein kleines lokales Skript für den Hell-/Dunkel-Schalte
 Ohne manuelle Auswahl folgt die Darstellung `prefers-color-scheme` im Browser,
 auch bei Änderungen und ohne JavaScript. Eine manuelle Auswahl wird unter
 `pretty-old-pixel:theme` im Local Storage gespeichert und hat Vorrang.
-Ohne JavaScript bleibt der Schalter verborgen. Speicherfehler werden gemeldet;
+Ohne JavaScript bleibt der Schalter verborgen. Speicherfehler beim Darstellungsmodus
+werden ausschließlich mit `console.warn` protokolliert, ohne Meldung auf der Seite;
 die Umschaltung auf der aktuellen Seite bleibt möglich.
 Nur Spiel-/Ausgabenseiten laden zusätzlich ein kleines lokales JavaScript für die Auswahl
 von Video und Beschreibung; ohne JavaScript sind alle Beschreibungen sichtbar.
@@ -779,6 +780,12 @@ erhalten bleiben; die Jahrgangsüberschrift macht hierzu keine Aussage.
   entfernte Seiten bleiben nicht liegen. Identische Dateien werden einschließlich
   Dateizeit übernommen. Bei ungültigen Quellen bleibt die bestehende Website
   unberührt.
+  Lokale Builds entfernen dabei auch ältere Hash-Versionen von CSS und
+  JavaScript; nur die aktuell verwendeten Versionen bleiben erhalten.
+  Das Aufräumen erfolgt erst mit dem erfolgreichen Austausch der Ausgabe,
+  nicht durch vorzeitiges Löschen des letzten funktionierenden Builds.
+  Nur in GitHub Actions (`GITHUB_ACTIONS=true`) werden historische Assets
+  für noch im Browser gecachte HTML-Seiten weiter aufbewahrt.
 - `docs/build-manifest.json` enthält je Seite Inhalts-Fingerabdruck und
   `contentPublishedAt` aus den zugehörigen Video-Veröffentlichungen sowie
   `lastModified` für die zuletzt beim Erzeugen festgestellte Änderung am HTML.

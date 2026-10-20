@@ -31,8 +31,6 @@
         localStorage.setItem(key, preference);
       } catch (error) {
         console.warn("Darstellungsmodus konnte nicht gespeichert werden.", error);
-        document.querySelector("[data-theme-status]").textContent =
-          "Der Darstellungsmodus kann nicht dauerhaft gespeichert werden.";
       }
     });
   });

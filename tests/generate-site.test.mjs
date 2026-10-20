@@ -292,7 +292,7 @@ test("bindet den zugänglichen Darstellungs-Schalter und sein lokales Skript vor
     const header = page.html.match(/<header[\s\S]*?<\/header>/u)[0];
     assert.ok(header.includes('type="button" class="theme-toggle" data-theme-toggle hidden'));
     assert.ok(header.includes('aria-label="Darstellungsmodus wechseln"'));
-    assert.ok(header.includes('data-theme-status role="status"'));
+    assert.ok(!header.includes("data-theme-status"));
     assert.match(header, /<li class="navigation-control"><a [^>]+>[^<]+<\/a><button/u);
   }
   validateSite(pages, assets, config);
@@ -471,8 +471,8 @@ test("ignoriert Abrufzeiten, aktualisiert nur betroffene Inhalte und entfernt ve
   assert.notEqual(await readFile(newsPath, "utf8"), before);
 });
 
-test("erhält versionierte Assets für gecachtes HTML über lokale und frische CI-Builds", async (t) => {
-  const options = await setup(t, fixture(1));
+test("erhält alte Assets nur für Deployments und bereinigt sie bei lokalen Builds", async (t) => {
+  const options = { ...await setup(t, fixture(1)), retainPreviousAssets: true };
   const first = await generateSite(options);
   const assetsPath = path.join(options.outputDirectory, "assets");
   const previousAssets = new Map([
@@ -504,10 +504,21 @@ test("erhält versionierte Assets für gecachtes HTML über lokale und frische C
   const html = await readFile(path.join(restoredOutput, "index.html"), "utf8");
   assert.match(html, /<link rel="stylesheet" href="assets\/site\.[a-f0-9]{12}\.css">/u);
   for (const file of previousAssets.keys()) assert.ok(!html.includes(file));
+  const cleaned = await generateSite({ ...options, retainPreviousAssets: false });
+  assert.equal(cleaned.files, first.files);
+  assert.equal(cleaned.cssGzip, first.cssGzip);
+  assert.equal(cleaned.jsGzip, first.jsGzip);
+  for (const file of previousAssets.keys()) {
+    await assert.rejects(stat(path.join(assetsPath, file)), { code: "ENOENT" });
+  }
+  const currentAssets = await readdir(assetsPath);
+  assert.equal(currentAssets.filter((file) => /^site\..*\.css$/u.test(file)).length, 1);
+  assert.equal(currentAssets.filter((file) => /^video-series\..*\.js$/u.test(file)).length, 1);
+  assert.equal(currentAssets.filter((file) => /^theme\..*\.js$/u.test(file)).length, 1);
 });
 
 test("verweigert beschädigte oder verlinkte historische Assets und erhält den bisherigen Build", async (t) => {
-  const options = await setup(t, fixture(1));
+  const options = { ...await setup(t, fixture(1)), retainPreviousAssets: true };
   await generateSite(options);
   const htmlPath = path.join(options.outputDirectory, "index.html");
   const previousHtml = await readFile(htmlPath, "utf8");
