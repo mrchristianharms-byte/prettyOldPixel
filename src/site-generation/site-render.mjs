@@ -30,6 +30,22 @@ function videoCount(count) {
   return countLabel(count, "Video", "Videos");
 }
 
+function previewList(values, limit = 2) {
+  const unique = [...new Set(values.filter(Boolean))];
+  const visible = unique.slice(0, limit);
+  if (visible.length < 2) return visible[0] ?? "";
+  if (unique.length > limit) return `${visible.join(", ")} und mehr`;
+  return `${visible.slice(0, -1).join(", ")} und ${visible.at(-1)}`;
+}
+
+function previewDescription(value, maximum = 180) {
+  const characters = [...value];
+  if (characters.length <= maximum) return value;
+  const prefix = characters.slice(0, maximum - 1).join("");
+  const boundary = prefix.lastIndexOf(" ");
+  return `${prefix.slice(0, boundary > maximum * 0.65 ? boundary : maximum - 1).trimEnd()}…`;
+}
+
 function latestPublication(videos) {
   const times = videos.map((video) => video.publishedTime).filter((value) => value !== null);
   return times.length ? new Date(Math.max(...times)).toISOString() : null;
@@ -108,7 +124,7 @@ function breadcrumbsMarkup(crumbs, config) {
     : `<a href="${config.href(crumb.route)}">${escapeHtml(crumb.name)}</a>`}</li>`).join("")}</ol></nav>`;
 }
 
-function layout({ route, title, description, body, schema, crumbs, image, noindex = false, previous, next, interactive = false }, config, cssHref, hasMagazines, jsHref, hasGames, sections, themeHref) {
+function layout({ route, title, description, body, schema, crumbs, image, imageAlt, noindex = false, previous, next, interactive = false }, config, cssHref, hasMagazines, jsHref, hasGames, sections, themeHref) {
   const canonical = config.absolute(route);
   const fullTitle = `${title} | ${config.name}`;
   const breadcrumbSchema = {
@@ -144,12 +160,12 @@ ${noindex ? '<meta name="robots" content="noindex, follow">' : ""}
 <meta property="og:title" content="${escapeHtml(fullTitle)}">
 <meta property="og:description" content="${escapeHtml(description)}">
 <meta property="og:url" content="${canonical}">
-<meta property="og:type" content="${image ? "video.other" : "website"}">
+<meta property="og:type" content="website">
 <meta property="og:locale" content="de_DE">
 <meta name="twitter:card" content="${image ? "summary_large_image" : "summary"}">
 <meta name="twitter:title" content="${escapeHtml(fullTitle)}">
 <meta name="twitter:description" content="${escapeHtml(description)}">
-${image ? `<meta property="og:image" content="${escapeHtml(image)}"><meta name="twitter:image" content="${escapeHtml(image)}">` : ""}
+${image ? `<meta property="og:image" content="${escapeHtml(image)}"><meta property="og:image:alt" content="${escapeHtml(imageAlt ?? title)}"><meta name="twitter:image" content="${escapeHtml(image)}"><meta name="twitter:image:alt" content="${escapeHtml(imageAlt ?? title)}">` : ""}
 ${previous ? `<link rel="prev" href="${config.href(previous)}">` : ""}
 ${next ? `<link rel="next" href="${config.href(next)}">` : ""}
 <script type="application/ld+json">${jsonLd({ "@context": "https://schema.org", "@graph": [...(Array.isArray(schema) ? schema : [schema]), breadcrumbSchema] })}</script>
@@ -212,7 +228,7 @@ ${externalLink("https://docs.github.com/en/site-policy/privacy-policies/github-g
 <h2>Videoinformationen</h2>
 <p>Titel, Beschreibungen und Veröffentlichungsdaten stammen aus öffentlichen Angaben auf YouTube; Heftangaben ergänzen Informationen der Zeitschriftenarchive. Wenn Sie diese Texte lesen, wird keine Verbindung zu YouTube oder den Archiven hergestellt.</p>
 <h2>YouTube-Vorschaubilder</h2>
-<p>Auf Spiel- und Ausgabenseiten sowie in den Videolisten von News, Zeitschriften und Jahrgängen, Hardware, Retrospektiven, Interviews, re.consider und Sonstiges werden Vorschaubilder direkt von i.ytimg.com geladen. Bereits dieser Bildabruf übermittelt insbesondere Ihre IP-Adresse und technische Request-Daten an den Anbieter. Die kleinen Listenvorschauen werden beim Annähern an den sichtbaren Bereich geladen, unabhängig von der Player-Aktivierung. Die Spiele- und Zeitschriftenkacheln enthalten keine externen Bilder.</p>
+<p>Auf Spiel- und Ausgabenseiten sowie in den Videolisten von News, Zeitschriften und Jahrgängen, Hardware, Retrospektiven, Interviews, re.consider und Sonstiges werden Vorschaubilder direkt von i.ytimg.com geladen. Seiten mit Videobezug verweisen außerdem in ihren Metadaten auf ein YouTube-Vorschaubild für Linkvorschauen; soziale Netzwerke können dieses Bild beim Teilen direkt von YouTube abrufen. Bereits solche Bildabrufe übermitteln insbesondere Ihre IP-Adresse und technische Request-Daten an den Anbieter. Die kleinen Listenvorschauen werden beim Annähern an den sichtbaren Bereich geladen, unabhängig von der Player-Aktivierung. Die Spiele- und Zeitschriftenkacheln enthalten keine externen Bilder.</p>
 <h2>YouTube-Player</h2>
 <p>Der eingebettete Player wird erstmals geladen, wenn Sie „YouTube-Player aktivieren“ wählen. Er verwendet youtube-nocookie.com, den erweiterten Datenschutzmodus von YouTube. Das bedeutet nicht, dass keine Daten verarbeitet werden. Nach der Aktivierung kann YouTube/Google weitere Verbindungen aufbauen und Daten im Rahmen der Wiedergabe verarbeiten. Auf einen externen Player können Sie verzichten und stattdessen einen normalen YouTube-Link verwenden.</p>
 <p>Diese Website merkt sich die Aktivierung in diesem Browser im Local Storage. Danach wird der Player auch bei weiteren Videos und Seitenbesuchen direkt geladen, ohne automatisch abzuspielen. Die Einstellung bleibt bis zum Zurücksetzen oder Löschen der Browserdaten erhalten. Mit „YouTube-Aktivierung zurücksetzen“ unter dem Player können Sie sie jederzeit löschen und wieder zum Vorschaubild wechseln.</p>
@@ -278,6 +294,16 @@ ${!archives.length ? archiveLinks([]) : ""}
   }).join("")}</section>`).join("");
 }
 
+function magazineEntryHighlights(entries, model) {
+  return entries.map((entry) => {
+    if (entry.magazine) return entry.magazine.name;
+    if (entry.guest) return `Blätterabend mit ${entry.guest.name}`;
+    if (entry.videoId) return model.videoById.get(entry.videoId)?.title;
+    const issue = entry.mention?.issue;
+    return issue ? `${entry.mention.name} ${issue.label}` : null;
+  });
+}
+
 function renderMagazinePages(model, siteConfig, add) {
   if (!model.magazines.length && !model.unresolvedMagazines.length) return;
   const root = { route: "", name: "Startseite" };
@@ -291,8 +317,10 @@ function renderMagazinePages(model, siteConfig, add) {
       const subset = entries.slice((page - 1) * config.pageSize, page * config.pageSize);
       const videos = [...new Set(subset.flatMap((entry) => entry.videoId
         ? [entry.videoId] : entry.videoIds ?? []))].map((id) => model.videoById.get(id));
+      const pageTitle = `${title}${page > 1 ? ` – Seite ${page}` : ""}`;
       add({
-        route, title: `${title}${page > 1 ? ` – Seite ${page}` : ""}`, description: `${title}: ${description}${page > 1 ? ` Seite ${page} von ${pageCount}.` : ""}`,
+        route, title: pageTitle,
+        description: previewDescription(`${pageTitle}: ${typeof description === "function" ? description(subset) : description}`),
         crumbs: page === 1 ? crumbs : [...crumbs, { route, name: `Seite ${page}` }],
         schema: [{
           ...collectionSchema(items ? items(subset) : videos, config, route),
@@ -311,7 +339,7 @@ function renderMagazinePages(model, siteConfig, add) {
   ];
   addPaginated({
     route: index.route, entries: indexEntries, title: "Blätterabend – Zeitschriften",
-    description: "Klassische Computerzeitschriften, Jahrgänge und Ausgaben mit Videos und passenden Archivlinks.",
+    description: (entries) => `Entdecke ${previewList(magazineEntryHighlights(entries, model))} – mit Videos zu klassischen Computerzeitschriften und ihren Ausgaben.`,
     crumbs: [root, index],
     items: (entries) => entries.map((entry) => entry.magazine
       ? { title: entry.magazine.name, route: entry.magazine.route }
@@ -343,7 +371,13 @@ ${unresolved.length ? `<section><h2>Weitere Blätterabende</h2><p>Weitere Streif
       headingHtml: guest.channelUrl
         ? `Blätterabend mit ${escapeHtml(guest.name.slice(0, handleIndex))}${externalLink(guest.channelUrl, guest.name.slice(handleIndex))}`
         : undefined,
-      description: "Die zugehörigen Zeitschriftenausgaben und Videos mit Archivlinks.",
+      description: (entries) => {
+        const issues = previewList(entries.flatMap((entry) => entry.mention.issue
+          ? [`${entry.mention.name} ${entry.mention.issue.label}`] : []));
+        return issues
+          ? `Blättere in ${issues} und entdecke klassische Computerzeitschriften gemeinsam im Video.`
+          : "Entdecke klassische Computerzeitschriften und ihre Geschichten im Video.";
+      },
       crumbs: [root, index, { route: guest.route, name: guest.name }],
       intro: `<p>Blätterabend mit ${escapeHtml(guest.name)}: ${videoCount(guest.videoIds.length)}, ${countLabel(guest.issueCount, "bekannte Ausgabe", "bekannte Ausgaben")}.</p>`,
       render: (entries, config) => groupedEntries(entries, model, config),
@@ -357,7 +391,7 @@ ${unresolved.length ? `<section><h2>Weitere Blätterabende</h2><p>Weitere Streif
     addPaginated({
       route: magazine.route, entries: magazine.entries,
       title: `${magazine.name} – Blätterabend-Videos`,
-      description: "Jahrgänge, Ausgaben und zugehörige Videos mit Archivverweisen.",
+      description: (entries) => `Entdecke ${previewList(magazineEntryHighlights(entries, model))} – historische Ausgaben im Video.`,
       crumbs: [root, index, magazineCrumb], schema: (config) => [periodicalSchema(magazine, config)],
       intro: (config) => `${magazineLogo(magazine, config)}<p>Blätterabend-Videos zu ${escapeHtml(magazine.name)}: ${videoCount(magazine.videos.length)}. ${magazine.years.length > 1 ? "Wählen Sie einen Jahrgang oder eine Ausgabe." : "Wählen Sie eine Ausgabe."}</p>${years(config)}${unknownLink(config)}`,
       render: (entries, config) => groupedEntries(entries, model, config),
@@ -366,7 +400,7 @@ ${unresolved.length ? `<section><h2>Weitere Blätterabende</h2><p>Weitere Streif
       addPaginated({
         route: year.route, entries: year.entries,
         title: `${magazine.name} ${year.year} – Ausgaben und Blätterabend-Videos`,
-        description: "Heftausgaben, Spieletests und Computergeschichte im Blätterabend mit Videos und Archivlinks.",
+        description: (entries) => `Entdecke ${previewList(magazineEntryHighlights(entries, model))} – historische Heftausgaben im Video.`,
         crumbs: [root, index, magazineCrumb, { route: year.route, name: String(year.year) }],
         schema: (config) => [periodicalSchema(magazine, config)],
         intro: `<p>Ausgaben und Blätterabend-Videos zu ${escapeHtml(magazine.name)} aus ${year.year}: Blättern Sie durch die Hefte oder wählen Sie einen Videoteil.</p>`,
@@ -379,7 +413,7 @@ ${unresolved.length ? `<section><h2>Weitere Blätterabende</h2><p>Weitere Streif
       const title = `${magazine.name} ${issue.label}`;
       add({
         route: issue.route, title: `${title} – Blätterabend`, interactive: true,
-        description: `${title} – Blätterabend: Informationen zur Zeitschriftenausgabe, passende Archivlinks und alle zugehörigen Videos.`,
+        description: previewDescription(`Blätterabend zu ${title}: Blättere gemeinsam durch die historische Ausgabe und entdecke verfügbare Archivlinks zum Heft.`),
         crumbs: [root, index, magazineCrumb, { route: issue.route, name: title }],
         schema: [collectionSchema(videos, config, issue.route, issue.route), periodicalSchema(magazine, config),
           issueSchema(magazine, issue, config), ...videos.map((video) => videoSchema(video, config, issue.route))],
@@ -584,9 +618,12 @@ function renderGamePages(model, siteConfig, add, filters) {
       const config = siteConfig.forPage(route);
       const games = listing.games.slice((page - 1) * config.pageSize, page * config.pageSize);
       const videos = [...new Set(games.flatMap((game) => game.videos))].map((id) => model.videoById.get(id));
+      const gameHighlights = previewList(games.map((game) => game.name));
       add({
         route, title: `${filtered ? heading : "Spiele – Retro-Spielereihen"}${page > 1 ? ` – Seite ${page}` : ""}`,
-        description: `${filtered ? `${heading}: Retrospiele von Pretty Old Pixel, alphabetisch geordnet.` : "Retrospiele von Pretty Old Pixel: Spielereihen vom Intro bis zum Fazit, alphabetisch geordnet."} Seite ${page} von ${pageCount}.`,
+        description: previewDescription(filtered
+          ? `${heading}: Entdecke ${gameHighlights} mit Spielreihen, Unboxings und Hintergrundwissen zu Retro-Klassikern.`
+          : `Retrospiele von Pretty Old Pixel: ${gameHighlights} und mehr – Spielreihen vom Intro bis zum Fazit, Unboxings und Hintergrundgeschichten.`),
         crumbs: page === 1 ? crumbs : [...crumbs, { route, name: `Seite ${page}` }],
         schema: collectionSchema(games.map((game) => ({ title: game.name, route: game.route })), config, route),
         previous: page > 1 ? paginatedRoute(listing.route, page - 1) : null,
@@ -628,6 +665,9 @@ function renderSectionPages(model, siteConfig, add) {
       const entries = section.entries.slice((page - 1) * config.pageSize, page * config.pageSize);
       const videos = entries.map((entry) => model.videoById.get(entry.videoId));
       const byVideo = new Map(entries.filter((entry) => entry.topic !== undefined).map((entry) => [entry.videoId, entry]));
+      const highlights = previewList(section.id === "retrospektiven"
+        ? entries.map((entry) => entry.topic)
+        : videos.map((video) => video.title));
       let listing;
       if (section.id === "retrospektiven") {
         const groups = new Map();
@@ -641,7 +681,9 @@ function renderSectionPages(model, siteConfig, add) {
       }
       add({
         route, title: `${section.name}${page > 1 ? ` – Seite ${page}` : ""}`,
-        description: `${section.description} Seite ${page} von ${count}.`,
+        description: previewDescription(section.id === "retrospektiven"
+          ? `re.trospektive: ${highlights} – entdecke die Geschichte klassischer Video- und Computerspiele Folge für Folge.`
+          : `${section.name}: ${highlights} – neue Beiträge zu Retro-Hardware, Technik und Computerkultur.`),
         crumbs: [{ route: "", name: "Startseite" }, { route: section.route, name: section.name },
           ...(page > 1 ? [{ route, name: `Seite ${page}` }] : [])],
         schema: collectionSchema(videos, config, route),
@@ -664,8 +706,14 @@ export function renderSite(model, config, cssHref, jsHref = "assets/video-series
   function add(options, videos = []) {
     const file = options.file ?? `${options.route}index.html`;
     if (pages.has(file)) throw new Error(`Kollidierender Ausgabepfad: ${file}`);
+    const previewVideo = videos.find((video) => video?.thumbnailUrl);
+    const pageOptions = previewVideo ? {
+      ...options,
+      image: options.image ?? previewVideo.thumbnailUrl,
+      imageAlt: options.imageAlt ?? `Vorschaubild: ${previewVideo.title}`,
+    } : options;
     pages.set(file, {
-      html: layout(options, config.forPage(options.route), cssHref, hasMagazines, jsHref, model.games.length > 0, model.sections, themeHref),
+      html: layout(pageOptions, config.forPage(options.route), cssHref, hasMagazines, jsHref, model.games.length > 0, model.sections, themeHref),
       route: options.route, indexable: !options.noindex,
       contentPublishedAt: latestPublication(videos),
     });
@@ -682,7 +730,7 @@ ${homeOverview(model, config, filters)}`,
   const newsConfig = config.forPage("news/");
   add({
     route: "news/", title: "News – die 20 neuesten Videos",
-    description: "Die 20 neuesten Videos von Pretty Old Pixel: Retrospiele, Blätterabende, Retro-Hardware, Retrospektiven und Interviews.",
+    description: previewDescription(`Neue Videos von Pretty Old Pixel: ${previewList(model.news.slice(0, 2).map((video) => video.title))} – Retrospiele, Blätterabende, Hardware und Gespräche aus der Computerkultur.`),
     crumbs: [root, { route: "news/", name: "News" }],
     schema: collectionSchema(model.news, newsConfig, "news/"),
     body: `<h1>News – die neuesten Videos</h1><p>Neue Videos von Pretty Old Pixel: Retrospiele, Blätterabende, Hardware und Gespräche aus der Welt der Computer- und Videospiele.</p>${videoList(model.news, newsConfig)}`,

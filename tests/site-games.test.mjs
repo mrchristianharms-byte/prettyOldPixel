@@ -157,6 +157,14 @@ test("erweitert kurze Filterüberschriften und stimmt H1, Titel, Beschreibung un
   }
 });
 
+test("nennt in Spielefilter-Vorschauen konkrete Spiele statt alphabetischer Seitenhinweise", () => {
+  const { pages } = renderModel(metadataModel(2));
+  const html = pages.get("spiele/genre/simulation/index.html").html;
+  const description = html.match(/<meta name="description" content="([^"]+)">/u)[1];
+  assert.match(description, /^Spiele im Genre Simulation: Entdecke Spiel 00 und Spiel 01/u);
+  assert.doesNotMatch(description, /alphabetisch geordnet|Seite 1 von 1/u);
+});
+
 test("haben alle veröffentlichten Spielefilter mindestens 20 Zeichen in der H1", async () => {
   const model = await loadSiteData(new URL("../cache/", import.meta.url).pathname);
   const pages = renderSite(model, createSiteConfig(), "assets/test.css");

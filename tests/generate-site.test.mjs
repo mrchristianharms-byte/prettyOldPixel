@@ -201,6 +201,35 @@ test("beschreibt Seiteninhalte in Einleitungen und SEO-Texten statt Datenaufbere
   assert.match(privacy, /Local Storage/u);
 });
 
+test("macht Gastvorschauen mit Heftausgaben und Namen der Gäste konkret", () => {
+  const input = issueFixture();
+  input.videos.videos[0].title = "Blätterabend mit @VirtualDimension – PC Games 11/1992";
+  const { pages } = render(input);
+  const html = pages.get("zeitschriften/gaeste/virtualdimension/index.html").html;
+  const description = html.match(/<meta name="description" content="([^"]+)">/u)[1];
+  assert.match(description, /Blätterabend mit @VirtualDimension: Blättere in PC Games 11\/1992/u);
+  assert.doesNotMatch(description, /zugehörigen Zeitschriftenausgaben|Seite 1 von 1/u);
+  const issueDescription = issuePage(pages).match(/<meta name="description" content="([^"]+)">/u)[1];
+  assert.match(issueDescription, /Blätterabend zu PC Games 11\/1992: Blättere gemeinsam durch die historische Ausgabe/u);
+});
+
+test("verlinkt YouTube-Thumbnails als Social-Vorschaubilder auf Videoseiten", () => {
+  const { pages } = render(issueFixture());
+  const assertPreviewImage = (html) => {
+    const image = html.match(/<meta property="og:image" content="([^"]+)">/u)?.[1];
+    assert.match(image ?? "", /^https:\/\/i\.ytimg\.com\/vi\/b\d{10}\/mqdefault\.jpg$/u);
+    assert.ok(html.includes(`<meta name="twitter:image" content="${image}">`));
+    assert.ok(html.includes('<meta name="twitter:card" content="summary_large_image">'));
+    assert.match(html, /<meta property="og:image:alt" content="Vorschaubild: Video \d+ – Retrospiel">/u);
+    assert.match(html, /<meta name="twitter:image:alt" content="Vorschaubild: Video \d+ – Retrospiel">/u);
+    assert.ok(html.includes('<meta property="og:type" content="website">'));
+  };
+  assertPreviewImage(pages.get("index.html").html);
+  assertPreviewImage(pages.get("news/index.html").html);
+  assertPreviewImage(issuePage(pages));
+  assert.ok(!pages.get("datenschutz/index.html").html.includes('property="og:image"'));
+});
+
 test("zeigt kompakte Videodaten in Berliner Winter- und Sommerzeit mit unverändertem ISO-Datum", () => {
   const input = issueFixture();
   const cases = [
