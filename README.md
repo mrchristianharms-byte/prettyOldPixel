@@ -47,25 +47,52 @@ beim lokalen Konvertieren, nicht beim Einlesen fertiger Logo-Caches.
 HTTP-Abrufe verwenden Nodes eingebautes `fetch`;
 Tests verwenden `node:test` und `node:assert`.
 Spielemetadaten stammen ausschließlich aus dem bereits lokal exportierten
-MobyGames-Dump; dafür werden weder Browser noch zusätzliche Pakete benötigt.
+Games-Dump; dafür werden weder Browser noch zusätzliche Pakete benötigt.
 Externe Programme, Modellserver und deren Modelle werden nicht von npm verwaltet.
 
-| Schritt | Programme / Dienste zusätzlich zu Node.js und npm | Netzwerk und lokale Daten |
+### GitHub Actions: Seiten veröffentlichen
+
+| npm-Target | Programme / Dienste zusätzlich zu Node.js und npm | Netzwerk und lokale Daten |
 |---|---|---|
+| `test` | Keine | Actions-taugliche Tests für YouTube-Abrufe, Seitengenerierung, Darstellung und Browser-Skripte; offline mit simulierten HTTP-Antworten. |
 | `generate:site` | Keine | Offline; benötigt die vorhandenen Video-, Playlist- und Blätterabend-Caches. Vorhandene Archivcaches, Logos und abgeschlossene Transkriptanalysen werden lokal eingelesen. Pico CSS 2.1.1 einschließlich Lizenz liegt bereits unter `src/vendor/`; kein CDN-Abruf beim Build. |
-| `dev` | `http-server` über `npx` | Lokale Vorschau der generierten Dateien unter `docs/` auf `127.0.0.1:8000`; beim ersten Aufruf gegebenenfalls Paketabruf aus der npm-Registry. |
-| `dev:generate:blaetterabend` | Keine | Offline; liest Video- und vorhandene Archivcaches, ohne fehlende Archive nachzuladen. |
+
+### GitHub Actions: YouTube-Daten aktualisieren
+
+| npm-Target | Programme / Dienste zusätzlich zu Node.js und npm | Netzwerk und lokale Daten |
+|---|---|---|
 | `fetch:videos`, `fetch:playlists`, `fetch:all` | Keine; insbesondere kein `yt-dlp` oder Browser | HTTPS zu YouTube für öffentliche Video-/Playlistdaten. Kein YouTube-API-Key; vorhandene Caches werden verwendet. `fetch:all` umfasst nur Videos und Playlists, nicht Archive oder Transkripte. |
+
+### Lokal: Zeitschriften und Archive pflegen
+
+| npm-Target | Programme / Dienste zusätzlich zu Node.js und npm | Netzwerk und lokale Daten |
+|---|---|---|
 | `dev:fetch:archives`, `dev:fetch:archives:refresh` | Keine; kein Browser/Scraper-Paket | Video-Cache und HTTPS zu Kultmags, reetroz sowie bei passenden Zeitschriften PC Games Database und AMR; einschließlich lokal gespeicherter Logos. |
 | `dev:fetch:gamestar` | Keine | HTTPS zu `www.pcgamesdatabase.de` für GameStar-Ausgaben und Logo. |
 | `dev:fetch:amiga-action` | Keine | HTTPS zu `amr.abime.net` für Amiga-Action-Ausgaben und Logo. |
+| `dev:generate:blaetterabend` | Keine | Offline; liest Video- und vorhandene Archivcaches, ohne fehlende Archive nachzuladen. |
+
+### Lokal: Spielemetadaten aufbereiten
+
+| npm-Target | Programme / Dienste zusätzlich zu Node.js und npm | Netzwerk und lokale Daten |
+|---|---|---|
 | `dev:review:games` | Keine | Offline-Prüfübersicht aus dem fertigen Dump-Cache: nutzbare/gesperrte Spiele, Plattformumfang und Kandidaten. |
-| `dev:import:game-dump -- --input cache/gdb.sql` | Node mit eingebautem `node:sqlite` (ab 22.13 ohne Startflag) | Lokaler MariaDB-Dump wird ohne SQL-Ausführung temporär konvertiert; nur Katalogtreffer als JSON/HTML exportiert. `--delete-input` löscht die Eingabe erst nach geprüften Exporten. Dump und SQLite-Dateien nicht einchecken. |
+| `dev:import:game-dump -- --input gdb.sql` | Node mit eingebautem `node:sqlite` (ab 22.13 ohne Startflag) | Exportiert Katalogkandidaten aus dem lokalen SQL-Dump; keine SQL-Ausführung. |
 | `dev:verify:game-dump` | Keine | Validiert offline Katalogabdeckung, Titel/Aliasse, IDs und Veröffentlichungen des lokalen Dump-Reports. Schreibt `local-dump/verification.json`; keine anderen Referenzquellen. |
-| `dev:prepare:game-metadata` | Keine | Erzeugt offline `cache/game-metadata/ready.json` (Version 3) aus Dump, Prüfentscheidungen und Plattformregel: bekannte Plattform erhalten, sonst DOS → Amiga → C64; nur eindeutige Kandidaten. 119 Spiele nutzbar, 28 gesperrt. Alle Daten einschließlich Jahresangaben kommen aus dem Dump. |
+| `dev:prepare:game-metadata` | Keine | Erzeugt `cache/game-metadata/ready.json` aus Report, Katalog und gespeicherten Freigaben. Alle 147 Spiele zugeordnet. |
+
+### Lokal: Transkripte und Spielebesprechungen verarbeiten
+
+| npm-Target | Programme / Dienste zusätzlich zu Node.js und npm | Netzwerk und lokale Daten |
+|---|---|---|
 | `dev:fetch:transcripts` | Aktuelles `yt-dlp` als ausführbares Programm im `PATH` | Lokale Katalogdaten zur Videoauswahl; YouTube-Metadaten über `yt-dlp`, Untertitel anschließend per Node-HTTP-Abruf. Kein Audio-/Videodownload. |
 | `dev:generate:games-from-transcript` | Laufender lokaler OpenAI-kompatibler Modellserver, derzeit Ollama mit `qwen3:14b` | Bereits gecachtes Transkript und lokale Modellgewichte; Analyse ausschließlich über einen Loopback-Endpunkt. Internet nur für die vorherige Installation bzw. den Modelldownload nötig. |
-| `npm test` | Keine | Actions-taugliche Tests für YouTube-Abrufe, Seitengenerierung, Darstellung und Browser-Skripte; offline mit simulierten HTTP-Antworten. |
+
+### Lokal: Vorschau und vollständige Tests
+
+| npm-Target | Programme / Dienste zusätzlich zu Node.js und npm | Netzwerk und lokale Daten |
+|---|---|---|
+| `dev` | `http-server` über `npx` | Lokale Vorschau der generierten Dateien unter `docs/` auf `127.0.0.1:8000`; beim ersten Aufruf gegebenenfalls Paketabruf aus der npm-Registry. |
 | `dev:test` | `sharp` aus den Entwicklungsabhängigkeiten | Vollständige lokale Testsuite einschließlich Archivabrufen, Logo-Konvertierung, Spielzuordnung, Dump-Verarbeitung und Transkripten. Kein Browser, `yt-dlp` oder Modellserver nötig. |
 
 ### Actions-Tasks und lokale Entwicklung
@@ -81,17 +108,23 @@ ist ein lokaler Datenpflegeschritt; der Seitenbuild verwendet ihren fertigen Cac
 ### Spielemetadaten aus dem lokalen Dump
 
 ```sh
+npm run dev:import:game-dump -- --input gdb.sql
 npm run dev:verify:game-dump
 npm run dev:prepare:game-metadata
 npm run dev:review:games
 npm run generate:site
 ```
 
-Der Website-Build liest ausschließlich den fertigen Cache. Fehlende oder
-mehrdeutige Zuordnungen bleiben unverifiziert, ohne Ersatz aus anderen Quellen.
-Ein pauschales Erscheinungsjahr wird nur bei genau einer ausgewählten Plattform
-und vollständig datierten Veröffentlichungen angegeben. Der ursprüngliche
-SQL-Dump wurde nach dem geprüften Export gelöscht.
+Titelaliase und Plattformen stehen in `src/data-games.mjs`, manuelle Freigaben
+in `src/data-game-dump-decisions.json`. Beide werden bei jedem Lauf beachtet,
+nicht überschrieben. Ohne feste Plattform gilt DOS → Amiga → C64 → NES → SNES;
+unaufgelöste Mehrdeutigkeiten bleiben gesperrt. Nicht mehr belegte Freigaben
+brechen die Aufbereitung ab.
+
+Der Build liest nur `cache/game-metadata/ready.json`: plattformbezogene Genres,
+Firmen und Jahre aus dem Dump, keine Designer-Credits. Die erzeugten Caches
+werden neu geschrieben und versioniert. Der ignorierte SQL-Dump bleibt lokal;
+nur `--delete-input` löscht ihn nach geprüftem Export.
 [Umsetzungsstand und Grenzen](doc/game-metadata-implementation.md).
 
 ### Transkript-Downloader installieren
@@ -201,10 +234,31 @@ Für die Veröffentlichung anschließend `Deploy to GitHub Pages` manuell starte
 
 ## GitHub Pages
 
-Bei Pushes auf `main` prüft und generiert GitHub Actions die Website und
-veröffentlicht `docs/`. Unter **Settings → Pages → Source** muss
-**GitHub Actions** ausgewählt sein, nicht „Deploy from a branch“.
-Die generierten Dateien müssen nicht committed werden.
+Unter **Settings → Pages → Source** muss **GitHub Actions** ausgewählt sein,
+nicht „Deploy from a branch“.
+
+Die beiden Workflows haben getrennte Aufgaben:
+
+- **Deploy to GitHub Pages** startet bei regulären Pushes auf `main` oder
+  manuell unter **Actions → Deploy to GitHub Pages → Run workflow**.
+  Er führt die Produktionstests aus, generiert die Website aus den vorhandenen
+  Caches und veröffentlicht `docs/` als Pages-Artefakt. Es werden weder Daten
+  abgerufen noch Entwicklungsabhängigkeiten wie `sharp` installiert.
+- **Update YouTube caches** startet täglich um **06:00 Uhr deutscher Zeit**
+  (`Europe/Berlin`, einschließlich Sommer-/Winterzeit) oder manuell.
+  Er ruft `fetch:videos` und `fetch:playlists` auf und committet ausschließlich
+  die beiden aktualisierten Cache-Dateien nach `main`. Der Workflow
+  veröffentlicht selbst keine Website.
+
+**Wichtig:** Der Cache-Push mit `GITHUB_TOKEN` löst keinen weiteren
+Push-Workflow aus. Nach einer automatischen Cache-Aktualisierung muss
+**Deploy to GitHub Pages** manuell gestartet werden, damit die Änderungen
+auf der Website erscheinen. Reguläre Pushes auf `main` lösen das Deployment
+weiterhin automatisch aus.
+
+Die generierten Dateien unter `docs/` müssen nicht committed werden.
+Die lokal gepflegten Daten- und Logo-Caches hingegen gehören ins Repository,
+damit der Build ohne lokale `dev:`-Aufgaben auskommt.
 
 Website: https://mrchristianharms-byte.github.io/prettyOldPixel/
 

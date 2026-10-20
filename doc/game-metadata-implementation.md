@@ -1,18 +1,17 @@
-# Spielemetadaten: lokaler MobyGames-Dump
+# Spielemetadaten: lokaler Games-Dump
 
 ## Entscheidung und Datenfluss
 
 Spielemetadaten einschließlich Erscheinungsjahren stammen ausschließlich aus dem
-lokal exportierten MobyGames-Dump. Die früheren Wikimedia-, C64-Wiki-, HOL- und
-GOG-Abrufe, manuelle Jahresliste und deren Caches sind entfernt. Zeitschriften-
-und Videoquellen bleiben unverändert.
+lokal exportierten Games-Dump.
 
 1. [`import-game-dump.mjs`](../src/import-game-dump.mjs) liest einen lokalen
    MariaDB-Dump als Daten, führt dessen SQL nicht aus und verwendet eine temporäre
    SQLite-Datenbank. Nur Kandidaten für Katalogspiele werden exportiert.
 2. [`local-dump/report.json`](../cache/game-metadata/local-dump/report.json)
    enthält die zurückbehaltenen Titel, Aliasse, Genres und Veröffentlichungen.
-   Der ursprüngliche SQL-Dump und die temporäre Datenbank sind gelöscht.
+   Der SQL-Dump bleibt standardmäßig lokal erhalten; die temporäre Datenbank
+   wird nach dem Import entfernt.
 3. `npm run dev:verify:game-dump` prüft Katalogabdeckung, Titel/Aliasse, eindeutige
    IDs und Veröffentlichungsfelder ausschließlich innerhalb dieses Reports.
    Das ist eine Konsistenzprüfung, keine unabhängige Bestätigung durch Dritte.
@@ -37,13 +36,35 @@ Daten. Beschädigte oder veraltete fertige Caches brechen den Build ab.
 
 - Bereits bekannte Katalogplattformen bleiben erhalten; bei mehreren müssen
   alle durch denselben Kandidaten gedeckt sein.
-- Nur bei offener Plattform gilt DOS, dann Amiga, dann C64.
+- Nur bei offener Plattform gilt DOS → Amiga → C64 → NES → SNES.
+  NES und SNES werden auch über ihre ausgeschriebenen Plattformnamen erkannt
+  und nicht miteinander verwechselt.
 - Mehrere Kandidaten auf der gewählten Plattform bleiben gesperrt; es gibt
   keinen Ausweichversuch auf die nächste Plattform.
 - Titel/Aliasse und Edition müssen passen. Keine erratenen Fortsetzungen oder
-  weggefallenen Untertitel. Neun zuvor ausdrücklich geprüfte Dump-Entscheidungen
+  weggefallenen Untertitel. 18 ausdrücklich geprüfte Dump-Entscheidungen
   lösen bekannte Mehrdeutigkeiten auf.
-- Derzeit sind 119 von 147 Spielen nutzbar; 28 bleiben unverifiziert.
+- Derzeit sind alle 147 Spiele zugeordnet; keines bleibt unverifiziert.
+  Darunter ist nun auch `Kabuki: Quantum Fighter` für NES.
+- `David Crane's A Boy and His Blob: Trouble on Blobolonia` ist dem NES-Original
+  statt dem späteren gleichnamigen Spiel zugeordnet. Die NES-Veröffentlichungen
+  im Dump sind mit 1990 datiert; die Nutzerangabe 1989 überschreibt diese
+  Quelljahre nicht. Airships: Conquer the Skies (2018) und Hyperspace Delivery
+  Service (2019) sind ausdrücklich Windows zugeordnet.
+- Erneut geprüfte Videobeschreibungen belegen Labyrinth für C64,
+  Tom Clancy's EndWar für PSP und Akalabeth für Apple II.
+  Explizite Plattformkorrekturen erhalten bestehende Katalog-IDs und Routen.
+- Vollständige Dump-Titel sind als explizite Katalogaliase hinterlegt, etwa
+  `Wing Commander II: Vengeance of the Kilrathi`,
+  `X-COM: Terror from the Deep` und `They $tole a Million`.
+  B.S.S. Jane Seymour verwendet den Umfang MS-DOS und Amiga.
+  Need for Speed III: Hot Pursuit ist ausdrücklich Windows zugeordnet:
+  Der Dump enthält dafür keine MS-DOS-Veröffentlichung.
+- Entwicklerfirmen und Publisher werden aus den Veröffentlichungen der
+  ausgewählten Plattform übernommen. 134 Spiele enthalten Entwicklerangaben.
+  Bei Airships fehlen Entwickler und Publisher im Dump; diese bleiben unbekannt.
+  Der aktuelle Dump enthält keine strukturierten Designer- oder
+  Personen-Credits; diese werden nicht aus Beschreibungen abgeleitet.
 - Firmenbezeichnungen werden beim SQL-Import und bei `dev:prepare:game-metadata`
   über eine explizite [Aliasliste](../src/game-company-names.mjs) vereinheitlicht.
   Die kürzesten vorhandenen Bezeichnungen sind `Blue Byte Studio GmbH`,
@@ -73,7 +94,7 @@ Leerangaben entfallen. Abweichende Jahre oder Firmen bleiben erhalten.
 
 Neue Spielidentitäten werden im [Katalog](../src/data-games.mjs) gepflegt. Fehlen
 sie im zurückbehaltenen Dump-Report, bleiben sie unverifiziert, bis ein neuer
-lokaler Import passende Titel exportiert. Den fehlenden Originaldump nicht
-aus den reduzierten Exporten rekonstruieren. Neue SQL-Dumps und temporäre
+lokaler Import passende Titel exportiert. Fehlende Originaldumps nicht
+aus den reduzierten Exporten rekonstruieren. SQL-Dumps und temporäre
 SQLite-Dateien nicht einchecken; `--delete-input` löscht die Eingabe erst nach
 geprüftem JSON-/HTML-Export.

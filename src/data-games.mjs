@@ -184,15 +184,44 @@ const supplements = {
 const aliases = {
   "bedlam-ms-dos": ["Bedlem"],
   "ufo-enemy-unknown-ms-dos": ["UFO: Enemy Unkown"],
-  "b-s-s-jane-seymour": ["B.S.S Jane Seymour"],
+  "b-s-s-jane-seymour": ["B.S.S Jane Seymour", "B.S.S Jane Seymour: Federation Quest 1"],
   "r-c-pro-am-nes": ["R.C. Pro Am"],
   "f15-strike-eagle-ii": ["F-15 Strike Eagle II"],
+  "chip-n-dale-nes": ["Disney's Chip 'n Dale: Rescue Rangers"],
+  "darkwing-duck-nes": ["Disney's Darkwing Duck"],
+  "dogfight-air-duel-ms-dos": ["Dog Fight", "Air Duel: 80 Years of Dogfighting"],
+  "duck-tales-nes": ["Disney's DuckTales"],
+  "little-nemo-nes": ["Little Nemo: The Dream Master"],
+  "need-for-speed-3-hot-pursuit-pc": ["Need for Speed III: Hot Pursuit"],
+  "star-control-ii-ur-quan-masters": ["Star Control II"],
+  "terror-from-the-deep": ["X-COM: Terror from the Deep"],
+  "they-stole-a-million-c64": ["They $tole a Million"],
+  "tmnt-2-the-arcade-game-nes": ["Teenage Mutant Ninja Turtles II: The Arcade Game"],
+  "wario-blast-game-boy": ["Wario Blast featuring Bomberman!"],
+  "wing-commander-ii": ["Wing Commander II: Vengeance of the Kilrathi"],
+  "a-boy-and-his-blob-nes": ["A Boy and His Blob: Trouble on Blobolonia",
+    "David Crane's A Boy and His Blob: Trouble on Blobolonia"],
+};
+
+// Videobeschreibungen und freigegebene Dump-Zuordnungen; IDs und Routen bleiben erhalten.
+const reviewedPlatforms = {
+  labyrinth: ["C64"],
+  "wing-commander-ii": ["MS-DOS"],
+  "tom-clancy-s-endwar": ["PSP"],
+  rogue: ["MS-DOS"],
+  worms: ["MS-DOS"],
+  "b-s-s-jane-seymour": ["MS-DOS", "Amiga"],
+  "need-for-speed-3-hot-pursuit-pc": ["Windows"],
+  "star-control-ii-ur-quan-masters": ["MS-DOS"],
+  "akalabeth-world-of-doom": ["Apple II"],
+  "terror-from-the-deep": ["MS-DOS"],
+  populous: ["MS-DOS"],
 };
 
 export const gameDefinitions = [...playlists.map(([playlistId, name, platform]) => {
   const id = slugify(`${name}${platform ? ` ${platform}` : ""}`);
   return {
-    id, name, aliases: aliases[id] ?? [], platforms: platform ? [platform] : [],
+    id, name, aliases: aliases[id] ?? [], platforms: reviewedPlatforms[id] ?? (platform ? [platform] : []),
     release: null,
     playlistIds: [playlistId, ...(id === "sid-meier-s-railroad-tycoon-deluxe-ms-dos" ? ["PLZW5k3rtbudqOJb8J0g3KKhWvwBtporbE"] : [])],
     videoIds: supplements[id] ?? [],
@@ -213,13 +242,13 @@ export const gameDefinitions = [...playlists.map(([playlistId, name, platform]) 
   ],
 }, {
   id: "airships-conquer-the-skies", name: "Airships: Conquer the Skies",
-  aliases: ["Airships - Conquer the Skies"], platforms: [],
+  aliases: ["Airships - Conquer the Skies"], platforms: ["Windows"],
   release: null,
   playlistIds: [],
   videoIds: ["L5dl6cyoJOg", "_TMntZnoA2s", "FejpeWADb6Q", "s12md_R_AKY"],
 }, {
   id: "hyperspace-delivery-service", name: "Hyperspace Delivery Service",
-  aliases: [], platforms: [],
+  aliases: [], platforms: ["Windows"],
   release: null,
   playlistIds: [],
   videoIds: [

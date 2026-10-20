@@ -1,8 +1,8 @@
 {
   "version": 1,
-  "approvedAt": "2026-10-18",
+  "approvedAt": "2026-10-20",
   "preserveCataloguePlatforms": true,
-  "openPlatformPriority": ["MS-DOS", "Amiga", "C64"],
+  "openPlatformPriority": ["MS-DOS", "Amiga", "C64", "NES", "SNES"],
   "requireUniqueCandidate": true,
-  "note": "Ausschließlich lokaler MobyGames-Dump: bekannte Plattformen erhalten; bei offener Plattform DOS, dann Amiga, dann C64. Verbleibende Mehrdeutigkeit bleibt unverifiziert."
+  "note": "Ausschließlich lokaler Games-Dump: bekannte Plattformen erhalten; bei offener Plattform DOS, dann Amiga, dann C64, dann NES, dann SNES. Verbleibende Mehrdeutigkeit bleibt unverifiziert."
 }

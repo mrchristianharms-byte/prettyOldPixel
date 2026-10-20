@@ -251,8 +251,8 @@ Neue unbestätigte re.play-/re.connect-Playlists werden als Build-Hinweis gemeld
 Sie erzeugen keine automatisch erratene Spieleseite. Die Spielidentität und
 ihr Slug ändern sich nicht durch einen geänderten Cache-Playlist-Titel.
 Spielmetadaten einschließlich Jahresangaben stammen gemäß
-[ADR 0006](0006-spielemetadaten-aus-wikidata-und-lokalem-cache.md) ausschließlich
-aus dem lokalen MobyGames-Dump, aufbereitet in `cache/game-metadata/ready.json`.
+[ADR 0006](0006-spielemetadaten-aus-lokalem-games-dump.md) ausschließlich
+aus dem lokalen Games-Dump, aufbereitet in `cache/game-metadata/ready.json`.
 Nur bei genau einer ausgewählten Plattform und vollständig datierten
 Veröffentlichungen wird deren frühestes Jahr als pauschales Jahr angegeben.
 Die Spieleseite zeigt zusätzlich plattformgebundene Veröffentlichungen und

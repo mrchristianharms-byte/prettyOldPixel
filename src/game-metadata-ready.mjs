@@ -126,7 +126,7 @@ function validateReadyCache(cache, games, reviewedDecisions, selectionPolicy) {
       && JSON.stringify(selection.consideredIds) === JSON.stringify([data.identity.id])
       && Array.isArray(platforms) && platforms.length > 0
       && JSON.stringify(platforms) === JSON.stringify(game.platforms.length ? game.platforms : selection.platforms)
-      && data.scope.platformBasis === (game.platforms.length ? "catalogue" : "dos-amiga-c64-priority")
+      && data.scope.platformBasis === (game.platforms.length ? "catalogue" : "dos-amiga-c64-nes-snes-priority")
       && (game.platforms.length || (platforms.length === 1 && selectionPolicy.openPlatformPriority.includes(platforms[0])))
       && data.evidence?.sourceUrl === `https://www.mobygames.com/game/${data.identity.id}/`
       && /^[a-f0-9]{64}$/u.test(data.evidence.reportHash) && /^[a-f0-9]{64}$/u.test(data.evidence.dumpHash)

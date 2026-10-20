@@ -7,7 +7,8 @@ const platformNames = {
   C64: ["commodore 64", "commodore 64 128", "c64"],
   "MS-DOS": ["dos", "ms dos"],
   Amiga: ["amiga"],
-  NES: ["nes", "nintendo entertainment system"],
+  NES: ["nes", "nintendo entertainment system", "famicom", "nes nintendo entertainment system"],
+  SNES: ["snes", "super nintendo", "super nintendo entertainment system", "super famicom", "snes super nintendo entertainment system"],
   "Game Boy": ["game boy"],
 };
 
@@ -21,13 +22,13 @@ export function selectDumpCandidate(game, candidates, policy) {
     || policy.requireUniqueCandidate !== true
     || !/^\d{4}-\d{2}-\d{2}$/u.test(policy.approvedAt)
     || typeof policy.note !== "string" || !policy.note.trim()
-    || JSON.stringify(policy.openPlatformPriority) !== JSON.stringify(["MS-DOS", "Amiga", "C64"])) {
+    || JSON.stringify(policy.openPlatformPriority) !== JSON.stringify(["MS-DOS", "Amiga", "C64", "NES", "SNES"])) {
     throw new Error("Dump-Auswahl: Ungültige oder nicht unterstützte Auswahlregel.");
   }
   const platforms = game.platforms.length ? [...game.platforms]
     : policy.openPlatformPriority.filter((platform) =>
       candidates.some((candidate) => candidate.releases.some((release) => platformMatches([platform], release.platform)))).slice(0, 1);
-  const platformBasis = game.platforms.length ? "catalogue" : "dos-amiga-c64-priority";
+  const platformBasis = game.platforms.length ? "catalogue" : "dos-amiga-c64-nes-snes-priority";
   const eligible = candidates.filter((candidate) => platforms.length > 0
     && platforms.every((platform) => candidate.releases.some((release) => platformMatches([platform], release.platform))));
   const base = { platforms, platformBasis, consideredIds: eligible.map((candidate) => candidate.mobyid) };

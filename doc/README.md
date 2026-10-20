@@ -271,7 +271,7 @@ nicht automatisch erzeugte Caches:
 | Datei | Pflegeinhalt |
 | --- | --- |
 | [`src/data-games.mjs`](../src/data-games.mjs) | Geprüfte Spieltitel, Plattformen, Playlist-IDs, Aliasse, zusätzliche und ausgeschlossene Video-IDs; einfache Muster zur Bildung der Spielidentität. |
-| [`src/data-game-dump-decisions.json`](../src/data-game-dump-decisions.json) | Explizit geprüfte MobyGames-Dump-Zuordnungen für bekannte mehrdeutige Titel. |
+| [`src/data-game-dump-decisions.json`](../src/data-game-dump-decisions.json) | Explizit geprüfte Games-Dump-Zuordnungen für bekannte mehrdeutige Titel. |
 | [`src/data-game-dump-policy.json`](../src/data-game-dump-policy.json) | Plattformregel für die ausschließlich dumpbasierte Metadatenaufbereitung. |
 | [`src/data-sections.mjs`](../src/data-sections.mjs) | Geprüfte Videozuordnungen für Hardware, Retrospektiven und Gespräche mit Themen, Personen und Folgenreihenfolge. |
 
@@ -310,7 +310,7 @@ nicht automatisch erzeugte Caches:
 ### Fehlende oder widersprüchliche Metadaten
 
 - **Erscheinungsjahr:** Ausschließlich aus den Veröffentlichungen des lokalen
-  MobyGames-Dumps übernehmen. Genau eine ausgewählte Plattform und vollständig
+  Games-Dumps übernehmen. Genau eine ausgewählte Plattform und vollständig
   datierte Veröffentlichungen sind Voraussetzung für ein pauschales Jahr;
   dann zählt das früheste. Mehrfachplattformen oder undatierte Einträge bleiben
   ohne pauschales Jahr. Keine manuell recherchierten oder externen Ersatzwerte.
@@ -365,7 +365,7 @@ erfordert zugleich aktualisierte Imports und Dokumentationsverweise.
   späteren Änderungen des gescrapten Playlist-Titels.
 - [`cache/game-metadata/ready.json`](../cache/game-metadata/ready.json) ist die
   einzige Quelle der Spielmetadaten beim Website-Build. Der Cache wird aus dem
-  lokalen MobyGames-Dump aufbereitet; auch Jahre kommen ausschließlich daraus.
+  lokalen Games-Dump aufbereitet; auch Jahre kommen ausschließlich daraus.
   Quellenlinks erscheinen als Link-Icons. Nicht eindeutig zugeordnete Titel
   bleiben unverifiziert. [Datenfluss und Pflege](game-metadata-implementation.md).
 - Der aktuelle Katalog enthält 147 geprüfte Spielidentitäten aus den
@@ -1643,7 +1643,7 @@ Architecture Decision Records liegen in `doc/adr/`:
 - [ADR 0003: Seitenstruktur und Zuordnung von Videos zu Inhaltsbereichen](adr/0003-seitenstruktur-und-inhaltszuordnung.md)
 - [ADR 0004: Detailseiten, Videonavigation und fortlaufende Wiedergabe](adr/0004-detailseiten-und-videonavigation.md)
 - [ADR 0005: Wiederverwendbare Widgets und Komponenten](adr/0005-wiederverwendbare-widgets-und-komponenten.md)
-- [ADR 0006: Spielemetadaten ausschließlich aus lokalem MobyGames-Dump (angenommen)](adr/0006-spielemetadaten-aus-wikidata-und-lokalem-cache.md)
+- [ADR 0006: Spielemetadaten ausschließlich aus lokalem Games-Dump (angenommen)](adr/0006-spielemetadaten-aus-lokalem-games-dump.md)
 
 ## GitHub Pages veröffentlichen
 

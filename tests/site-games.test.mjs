@@ -325,9 +325,22 @@ test("bindet konsolidierte Metadaten im echten Offline-Modell ein und zeigt Quel
   assert.ok(!duneHtml.includes("Bei offener Katalogplattform"));
   assert.ok(!duneHtml.includes("keine nachträgliche Bestätigung"));
   assert.match(duneHtml, /mobygames\.com\/game\/241\//u);
-  const blocked = model.games.find((game) => game.id === "wing-commander-ii");
-  assert.equal(blocked.metadata.status, "blocked");
-  assert.match(pages.get(`${blocked.route}index.html`).html, /noch keine eindeutig zugeordneten zusätzlichen Metadaten/u);
+  const wingCommander = model.games.find((game) => game.id === "wing-commander-ii");
+  assert.equal(wingCommander.metadata.status, "ready");
+  assert.deepEqual(wingCommander.platforms, ["MS-DOS"]);
+  assert.equal(wingCommander.releaseYear, 1991);
+  assert.match(pages.get(`${wingCommander.route}index.html`).html, /mobygames\.com\/game\/823\//u);
+  for (const [id, platform, year] of [
+    ["a-boy-and-his-blob-nes", "NES", 1990],
+    ["airships-conquer-the-skies", "Windows", 2018],
+    ["hyperspace-delivery-service", "Windows", 2019],
+  ]) {
+    const game = model.games.find((game) => game.id === id);
+    assert.equal(game.metadata.status, "ready");
+    assert.deepEqual(game.platforms, [platform]);
+    assert.equal(game.releaseYear, year);
+    assert.doesNotMatch(pages.get(`${game.route}index.html`).html, /noch keine eindeutig zugeordneten zusätzlichen Metadaten/u);
+  }
   for (const game of model.games) {
     assert.match(pages.get(`${game.route}index.html`).html, /aria-label="Zusätzliche Spielinformationen"/u);
     assert.equal(game.releaseYear, game.metadata.data?.releaseYear ?? null);
@@ -373,7 +386,7 @@ test("escaped konsolidierte Metadaten und behält leere Felder sowie Releaseunte
   const game = model.games[0];
   game.metadata = { status: "ready", data: {
     identity: { id: 10 }, evidence: { sourceUrl: "https://www.mobygames.com/game/10/", importedAt: "2026-10-18T20:00:00Z" },
-    scope: { platforms: ["MS-DOS"], platformBasis: "dos-amiga-c64-priority" },
+    scope: { platforms: ["MS-DOS"], platformBasis: "dos-amiga-c64-nes-snes-priority" },
     genres: ["<script>genre</script>", "Simulation"],
     releases: [
       { platform: "DOS", year: 1990, developer: "<Studio>", publisher: "Original", countries: "Germany", publisherLabel: null },
@@ -556,8 +569,8 @@ test("ergänzt fehlende re.play-Zuordnungen und die vollständige Patrizier-Reih
 test("ordnet ausschließlich die ausgewählten re.invented-Reihen manuell ihren Spielen zu", async () => {
   const model = await loadSiteData(path.resolve(import.meta.dirname, "../cache"));
   const selected = [
-    ["airships-conquer-the-skies", ["L5dl6cyoJOg", "_TMntZnoA2s", "FejpeWADb6Q", "s12md_R_AKY"], null],
-    ["hyperspace-delivery-service", ["iHwHp1yIbqc", "MBY8HVQyLEQ", "5IKiUnbudhM", "UbJ2Wat9hjQ", "CyYkUIRGx68", "cNv2GumJLXs"], null],
+    ["airships-conquer-the-skies", ["L5dl6cyoJOg", "_TMntZnoA2s", "FejpeWADb6Q", "s12md_R_AKY"], 2018],
+    ["hyperspace-delivery-service", ["iHwHp1yIbqc", "MBY8HVQyLEQ", "5IKiUnbudhM", "UbJ2Wat9hjQ", "CyYkUIRGx68", "cNv2GumJLXs"], 2019],
   ];
   const config = createSiteConfig();
   const pages = renderSite(model, config, "assets/test.css");

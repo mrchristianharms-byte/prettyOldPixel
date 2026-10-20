@@ -24,7 +24,7 @@ ${data ? `<p><a href="${data.evidence.sourceUrl}">MobyGames ${data.identity.id}<
 details{border:1px solid #aaa;padding:1rem;margin:.5rem 0}summary{cursor:pointer}[hidden]{display:none}</style></head>
 <body><h1>Spielmetadaten: Dump-Prüfung</h1>
 <p>${reader.summary.games} Spiele · ${reader.summary.ready} nutzbar · ${reader.summary.blocked} unverifiziert.</p>
-<p>Einzige Metadatenquelle: lokaler MobyGames-Dump. Bekannte Plattformen bleiben erhalten; sonst DOS, Amiga, C64. Mehrdeutige Titel bleiben gesperrt.</p>
+<p>Einzige Metadatenquelle: lokaler Games-Dump. Bekannte Plattformen bleiben erhalten; sonst DOS, Amiga, C64, NES, SNES. Mehrdeutige Titel bleiben gesperrt.</p>
 <label>Suche <input id="search" type="search"></label>${cards}
 <script>document.querySelector("#search").addEventListener("input",event=>{const query=event.target.value.toLocaleLowerCase("de");
 for(const game of document.querySelectorAll(".game"))game.hidden=!game.dataset.search.toLocaleLowerCase("de").includes(query);});</script>

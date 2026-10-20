@@ -1,4 +1,13 @@
 {
+  "labyrinth": { "mobyid": 12175, "reviewedAt": "2026-10-20", "note": "C64 ausdrücklich bestätigt; Videobeschreibung nennt Lucasfilm Games und 1986. Nicht die gleichnamigen Spiele von 1983 oder 1990." },
+  "rogue": { "mobyid": 1743, "reviewedAt": "2026-10-20", "note": "Videobeschreibungen nennen A.I. Design und MS-DOS; Originalspiel statt Rogue Clone. Freigegebene DOS-Zuordnung." },
+  "worms": { "mobyid": 340, "reviewedAt": "2026-10-20", "note": "Videobeschreibung nennt Team17 und 1995; freigegebenes DOS-Grundspiel statt Reinforcements oder Worms United." },
+  "elite-plus-ms-dos": { "mobyid": 3433, "reviewedAt": "2026-10-20", "note": "Videobeschreibung nennt MS-DOS, 1991 und verlinkt Elite Plus; nicht Elite mit abweichendem Amiga-Wiederveröffentlichungstitel." },
+  "bedlam-ms-dos": { "mobyid": 3244, "reviewedAt": "2026-10-20", "note": "Videobeschreibung nennt Mirage Technologies, 1996 und MS-DOS; nicht das gleichnamige Beam-Spiel von 1988." },
+  "strike-commander-ms-dos": { "mobyid": 1365, "reviewedAt": "2026-10-20", "note": "Freigegebenes Grundspiel für DOS von ORIGIN, 1993 laut Videobeschreibung; nicht die separate CD-ROM Edition." },
+  "super-mario-bros-2-nes": { "mobyid": 7299, "reviewedAt": "2026-10-20", "note": "Videobeschreibung nennt 1988 und Europa 1989 sowie den NES-Quelllink; westliches Super Mario Bros. 2 statt The Lost Levels von 1986." },
+  "magic-carpet-ms-dos": { "mobyid": 361, "reviewedAt": "2026-10-20", "note": "Freigegebenes Grundspiel von Bullfrog, 1994 laut Videobeschreibung; nicht Magic Carpet Plus." },
+  "populous": { "mobyid": 613, "reviewedAt": "2026-10-20", "note": "Videobeschreibungen nennen Bullfrog, ab 1989, und eine gespielte MS-DOS-Portierung; freigegebenes Grundspiel statt Zusammenstellung mit The Promised Lands." },
   "battle-isle-2-ms-dos": { "mobyid": 3420, "reviewedAt": "2026-10-18", "note": "Battle Isle 2200 ist der nordamerikanische Titel von Battle Isle 2; direkte ID und DOS-Releases geprüft." },
   "burntime-ms-dos": { "mobyid": 6166, "reviewedAt": "2026-10-18", "note": "Originalspiel mit direkter ID und DOS-Releases; Firmennamen und Wiederveröffentlichungen bleiben getrennt." },
   "civilization-ms-dos": { "mobyid": 585, "reviewedAt": "2026-10-18", "note": "Sid Meier's Civilization, Originalspiel statt Reihe oder CivNet; direkte ID und DOS-Releases geprüft." },

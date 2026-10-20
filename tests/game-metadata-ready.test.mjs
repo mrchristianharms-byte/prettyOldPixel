@@ -7,6 +7,90 @@ import path from "node:path";
 import { writeJson } from "../src/archive-cache.mjs";
 import { buildReadyGameMetadata, loadReadyGameMetadata } from "../src/game-metadata-ready.mjs";
 import { renderGameMetadataReview } from "../src/generate-game-metadata-review.mjs";
+import { gameDefinitions } from "../src/data-games.mjs";
+import { platformMatches } from "../src/game-dump-matching.mjs";
+
+test("freigegebene Originalspiele und beschreibungsbelegte Plattformen bleiben eindeutig zugeordnet", async () => {
+  const reader = await loadReadyGameMetadata();
+  for (const [id, mobyid, platforms] of [
+    ["labyrinth", 12175, ["C64"]],
+    ["rogue", 1743, ["MS-DOS"]],
+    ["worms", 340, ["MS-DOS"]],
+    ["elite-plus-ms-dos", 3433, ["MS-DOS"]],
+    ["bedlam-ms-dos", 3244, ["MS-DOS"]],
+    ["strike-commander-ms-dos", 1365, ["MS-DOS"]],
+    ["super-mario-bros-2-nes", 7299, ["NES"]],
+    ["magic-carpet-ms-dos", 361, ["MS-DOS"]],
+    ["populous", 613, ["MS-DOS"]],
+    ["tom-clancy-s-endwar", 49906, ["PSP"]],
+    ["akalabeth-world-of-doom", 1256, ["Apple II"]],
+  ]) {
+    const record = reader.get(id);
+    assert.equal(record.status, "ready", id);
+    assert.equal(record.data.identity.id, mobyid, id);
+    assert.deepEqual(record.data.scope.platforms, platforms, id);
+    assert.deepEqual(gameDefinitions.find((game) => game.id === id).platforms, platforms, id);
+  }
+});
+
+test("vollständige Dump-Titel lösen die 13 bestätigten Spiele mit plattformgebundenen Werten auf", async () => {
+  const reader = await loadReadyGameMetadata();
+  const report = JSON.parse(await readFile(new URL("../cache/game-metadata/local-dump/report.json", import.meta.url), "utf8"));
+  for (const [id, mobyid, platforms] of [
+    ["b-s-s-jane-seymour", 3066, ["MS-DOS", "Amiga"]],
+    ["chip-n-dale-nes", 10070, ["NES"]],
+    ["darkwing-duck-nes", 8623, ["NES"]],
+    ["dogfight-air-duel-ms-dos", 4226, ["MS-DOS"]],
+    ["duck-tales-nes", 8606, ["NES"]],
+    ["little-nemo-nes", 7879, ["NES"]],
+    ["need-for-speed-3-hot-pursuit-pc", 636, ["Windows"]],
+    ["star-control-ii-ur-quan-masters", 179, ["MS-DOS"]],
+    ["terror-from-the-deep", 543, ["MS-DOS"]],
+    ["they-stole-a-million-c64", 21773, ["C64"]],
+    ["tmnt-2-the-arcade-game-nes", 7470, ["NES"]],
+    ["wario-blast-game-boy", 11293, ["Game Boy"]],
+    ["wing-commander-ii", 823, ["MS-DOS"]],
+  ]) {
+    const record = reader.get(id);
+    assert.equal(record.status, "ready", id);
+    assert.equal(record.data.identity.id, mobyid, id);
+    assert.deepEqual(record.data.scope.platforms, platforms, id);
+    assert.deepEqual(gameDefinitions.find((game) => game.id === id).platforms, platforms, id);
+    const candidate = report.games.find((game) => game.gameId === id).candidates.find((entry) => entry.mobyid === mobyid);
+    const releases = candidate.releases.filter((release) => platformMatches(platforms, release.platform));
+    assert.deepEqual(record.data.releases.map((release) => release.sourceReleaseId),
+      releases.map((release) => release.mobyreleaseid), id);
+    for (const [index, release] of record.data.releases.entries()) {
+      assert.equal(release.year, releases[index].year, id);
+      assert.equal(release.developer, releases[index].developer, id);
+      assert.equal(release.publisher, releases[index].publisher, id);
+    }
+    assert.ok(record.data.releases.some((release) => release.developer), id);
+    assert.ok(record.data.releases.some((release) => release.publisher), id);
+    assert.ok(record.data.genres.length > 0, id);
+  }
+});
+
+test("alle Katalogspiele sind zugeordnet; letzte drei Spiele behalten Plattform und Dump-Jahr", async () => {
+  const reader = await loadReadyGameMetadata();
+  for (const definition of gameDefinitions) {
+    assert.equal(reader.get(definition.id).status, "ready", definition.id);
+  }
+  for (const [id, sourceId, platform, year] of [
+    ["a-boy-and-his-blob-nes", 14618, "NES", 1990],
+    ["airships-conquer-the-skies", 112651, "Windows", 2018],
+    ["hyperspace-delivery-service", 143640, "Windows", 2019],
+  ]) {
+    const record = reader.get(id);
+    assert.equal(record.data.identity.id, sourceId);
+    assert.deepEqual(record.data.scope.platforms, [platform]);
+    assert.equal(record.data.releaseYear, year);
+    assert.ok(record.data.releases.every((release) => release.platform === platform));
+  }
+  const airships = reader.get("airships-conquer-the-skies");
+  assert.equal(airships.data.releases[0].developer, null);
+  assert.equal(airships.data.releases[0].publisher, null);
+});
 
 async function fixture(t) {
   const cacheDir = await mkdtemp(path.join(tmpdir(), "pixel-ready-test-"));
@@ -121,6 +205,37 @@ test("offene Plattform wählt DOS nur im Metadatenumfang und lässt Katalog unve
   assert.deepEqual(record.platforms, []);
   assert.deepEqual(record.data.scope.platforms, ["MS-DOS"]);
   assert.equal(record.data.releaseYear, 1987);
+});
+
+test("NES und SNES behalten Entwickler und Publisher im lesbaren fertigen Cache", async (t) => {
+  for (const [platform, sourcePlatform, cataloguePlatforms] of [
+    ["NES", "Nintendo Entertainment System", []],
+    ["SNES", "Super Nintendo Entertainment System", []],
+    ["SNES", "SNES", ["SNES"]],
+  ]) {
+    await t.test(`${sourcePlatform}, Katalog: ${cataloguePlatforms.join(", ") || "offen"}`, async (t) => {
+      const { options, report } = await fixture(t);
+      options.games[0].platforms = [...cataloguePlatforms];
+      report.games[0].platforms = [...cataloguePlatforms];
+      const candidate = report.games[0].candidates[0];
+      candidate.releases = [{
+        ...candidate.releases[0], platform: sourcePlatform, year: 1991,
+        developer: "Console Studio", publisher: "Console Publisher",
+      }];
+      await writeJson(path.join(options.cacheDir, "local-dump/report.json"), report);
+      await buildReadyGameMetadata(options);
+      const record = (await loadReadyGameMetadata(options)).get("game");
+      assert.deepEqual(record.platforms, cataloguePlatforms);
+      assert.deepEqual(record.data.scope.platforms, [platform]);
+      assert.equal(record.data.scope.platformBasis,
+        cataloguePlatforms.length ? "catalogue" : "dos-amiga-c64-nes-snes-priority");
+      assert.equal(record.data.releases.length, 1);
+      assert.equal(record.data.releases[0].developer, "Console Studio");
+      assert.equal(record.data.releases[0].publisher, "Console Publisher");
+      assert.equal(record.data.releaseYear, 1991);
+      assert.equal(record.data.quality.credits, "not-available");
+    });
+  }
 });
 
 test("Adapter weist fehlende, beschädigte, veraltete und unzulässige Jahresdaten explizit zurück", async (t) => {
