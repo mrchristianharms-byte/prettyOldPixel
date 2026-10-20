@@ -65,12 +65,20 @@ Alle internen Links und Assets werden relativ zur jeweiligen Seite erzeugt,
 z. B. `../news/` oder `../../assets/site.<hash>.css`, ohne fest eingebauten
 Projektpfad. Die Brotkrümelnavigation trennt die Ebenen mit dem Unicode-Pfeil
 „→“ samt Abstand; der dekorative Trenner ist für Screenreader ausgeblendet.
-Auch Canonicals, `og:url`, Paginierung und interne JSON-LD-URLs
-einschließlich `@id` sind seitenrelativ. Nur die Sitemap enthält vollständige
-Seiten-URLs; ihre `Sitemap:`-Referenz in `robots.txt` bleibt ebenfalls absolut.
+Canonicals und `og:url` enthalten absolute, selbstreferenzierende Seiten-URLs
+aus der konfigurierten Basis-URL, ohne Query oder Fragment. Bei einem anderen
+Host oder Unterpfad muss die Website mit `--base-url` neu erzeugt werden.
+Paginierung und interne JSON-LD-URLs einschließlich `@id` bleiben seitenrelativ.
+Auch die Sitemap und ihre `Sitemap:`-Referenz in `robots.txt` verwenden
+vollständige URLs.
 Externe YouTube-/Archivlinks und Schema.org-Bezeichner bleiben unverändert.
 Die generierten Dateien unter `docs/` sind Build-Artefakte und gehören nicht
 in neue Commits; GitHub Actions erzeugt und prüft sie vor dem Deployment.
+Das Kopfzeilenlogo und das Favicon verwenden dieselbe optimierte Datei
+`src/favicon.webp` (70 × 70 Pixel für hochauflösende Displays, unter 1,5 KiB).
+`src/favicon.jpg` bleibt die Originalvorlage; der Build kopiert das fertige
+WebP ohne Bildbibliothek. Das kleine Darstellungs-Skript bleibt vor dem CSS,
+damit eine gespeicherte Farbauswahl ohne Aufblitzen des falschen Modus gilt.
 `docs/` ist ausschließlich für die generierte Website reserviert und wird beim
 Build vollständig ersetzt. Die Projektdokumentation bleibt unter `doc/`.
 Eine vorhandene Ausgabe unter `public/` kann einmalig nach `docs/` verschoben

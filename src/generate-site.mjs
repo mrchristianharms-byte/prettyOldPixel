@@ -33,7 +33,11 @@ export function validateSite(pages, assets, config) {
     maxHtmlGzip = Math.max(bytes, maxHtmlGzip);
     if (bytes > 50 * 1024) throw new Error(`${file}: HTML überschreitet 50 KiB gzip (${bytes} Bytes).`);
     if ((page.html.match(/<h1(?:\s|>)/gu) ?? []).length !== 1) throw new Error(`${file}: Genau eine h1 erforderlich.`);
-    if (!page.html.includes(`<link rel="canonical" href="${config.href(page.route, page.route)}">`)) throw new Error(`${file}: Canonical fehlt.`);
+    const canonicalTag = `<link rel="canonical" href="${config.absolute(page.route)}">`;
+    if ((page.html.match(/<link\b[^>]*\brel="canonical"[^>]*>/gu) ?? []).length !== 1
+      || !page.html.includes(canonicalTag)) {
+      throw new Error(`${file}: Genau ein absoluter, selbstreferenzierender Canonical erforderlich.`);
+    }
     const scripts = [...page.html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gu)];
     if (scripts[0]?.[1] !== ' type="application/ld+json"' || scripts.length < 2 || scripts.length > 3
       || !/^ src="[^"]+"$/u.test(scripts[1]?.[1] ?? "") || scripts[1]?.[2] !== ""
@@ -56,14 +60,14 @@ export function validateSite(pages, assets, config) {
         throw new Error(`${file}: Unerlaubte externe Ressource ${target.href}`);
       }
     }
-    function validateUrl(value, checkFragment = true) {
+    function validateUrl(value, checkFragment = true, allowAbsolute = false) {
       const target = new URL(value, config.absolute(page.route));
       if (target.origin !== new URL(config.baseUrl).origin) {
         if (!["http:", "https:"].includes(target.protocol)) throw new Error(`${file}: Unerlaubtes Linkprotokoll.`);
         return;
       }
       if (!target.pathname.startsWith(config.basePath)) throw new Error(`${file}: Link außerhalb des Projektpfads: ${value}`);
-      if (/^(?:\/|[a-z][a-z\d+.-]*:)/iu.test(value)) throw new Error(`${file}: Interner Link muss seitenrelativ sein: ${value}`);
+      if (!allowAbsolute && /^(?:\/|[a-z][a-z\d+.-]*:)/iu.test(value)) throw new Error(`${file}: Interner Link muss seitenrelativ sein: ${value}`);
       const relative = target.pathname.slice(config.basePath.length);
       const targetFile = relative.endsWith("/") || !relative ? `${relative}index.html` : relative;
       if (!files.has(targetFile)) throw new Error(`${file}: Nicht erzeugtes Linkziel ${value}`);
@@ -72,11 +76,12 @@ export function validateSite(pages, assets, config) {
         if (!pages.get(targetFile).html.includes(`id="${escapeHtml(fragment)}"`)) throw new Error(`${file}: Unbekanntes Fragment ${value}`);
       }
     }
-    for (const match of page.html.matchAll(/\b(?:href|src|srcset)="([^"]*)"/gu)) {
+    validateUrl(config.absolute(page.route), false, true);
+    for (const match of page.html.replace(canonicalTag, "").matchAll(/\b(?:href|src|srcset)="([^"]*)"/gu)) {
       validateUrl(match[1].replaceAll("&amp;", "&"));
     }
     const ogUrl = /<meta property="og:url" content="([^"]*)">/u.exec(page.html)?.[1];
-    if (ogUrl) validateUrl(ogUrl.replaceAll("&amp;", "&"));
+    if (ogUrl) validateUrl(ogUrl.replaceAll("&amp;", "&"), true, true);
     function validateSchema(value, key) {
       if (Array.isArray(value)) {
         for (const item of value) validateSchema(item, key);
@@ -153,7 +158,7 @@ export async function generateSite({
     readFile(path.join(projectRoot, "src/site.css"), "utf8"),
     readFile(path.join(projectRoot, "src/vendor/pico-LICENSE.md"), "utf8"),
     readFile(path.join(projectRoot, "src/video-series.js"), "utf8"),
-    readFile(path.join(projectRoot, "src/favicon.jpg")),
+    readFile(path.join(projectRoot, "src/favicon.webp")),
     readFile(path.join(projectRoot, "src/theme.js"), "utf8"),
   ]);
   const css = `${pico.replace(/\/\*# sourceMappingURL=[\s\S]*?\*\//gu, "")}\n${customCss}`;
@@ -164,7 +169,7 @@ export async function generateSite({
   const cssFile = `assets/site.${hash(css).slice(0, 12)}.css`;
   const jsFile = `assets/video-series.${hash(seriesJs).slice(0, 12)}.js`;
   const themeFile = `assets/theme.${hash(themeJs).slice(0, 12)}.js`;
-  const assets = new Map([[cssFile, css], [jsFile, seriesJs], [themeFile, themeJs], ["favicon.jpg", favicon], ["assets/pico-LICENSE.txt", license], [".nojekyll", ""], ...model.magazineLogoAssets]);
+  const assets = new Map([[cssFile, css], [jsFile, seriesJs], [themeFile, themeJs], ["favicon.webp", favicon], ["assets/pico-LICENSE.txt", license], [".nojekyll", ""], ...model.magazineLogoAssets]);
   const pages = renderSite(model, config, cssFile, jsFile, themeFile);
   const budgets = validateSite(pages, assets, config);
   const manifest = {

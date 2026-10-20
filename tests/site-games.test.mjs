@@ -41,7 +41,7 @@ function render(input = fixture(), definitions = [definition()]) {
 
 function renderModel(model, config = createSiteConfig()) {
   const pages = renderSite(model, config, config.href("assets/test.css"));
-  const budgets = validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""], ["assets/theme.js", ""], ["favicon.jpg", ""]]), config);
+  const budgets = validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""], ["assets/theme.js", ""], ["favicon.webp", ""]]), config);
   return { model, config, pages, budgets };
 }
 
@@ -234,8 +234,11 @@ test("paginiert gefilterte Spielelisten mit eigenen Links, Breadcrumbs und JSON-
   model.games.at(-1).metadata.status = "blocked";
   const config = createSiteConfig("https://example.org/anderer/tiefer/pfad/");
   const { pages } = renderModel(model, config);
-  const relocated = renderModel(model, createSiteConfig("http://localhost:8000/"));
-  assert.deepEqual([...pages], [...relocated.pages]);
+  const relocatedConfig = createSiteConfig("http://localhost:8000/");
+  const relocated = renderModel(model, relocatedConfig);
+  assert.deepEqual([...pages].map(([file, page]) => [
+    file, { ...page, html: page.html.replaceAll(config.baseUrl, relocatedConfig.baseUrl) },
+  ]), [...relocated.pages]);
   for (const [segment, value, label] of [
     ["genre", "simulation", "Genre: Simulation"],
     ["entwickler", "studio", "Entwickler: Studio"],
@@ -254,7 +257,7 @@ test("paginiert gefilterte Spielelisten mit eigenen Links, Breadcrumbs und JSON-
     assert.equal((second.match(/<li><h2><a /gu) ?? []).length, 1);
     assert.ok(first.includes(`href="${config.href(nextRoute, route)}" rel="next"`));
     assert.ok(second.includes(`href="${config.href(route, nextRoute)}" rel="prev"`));
-    assert.ok(second.includes(`rel="canonical" href="./"`));
+    assert.ok(second.includes(`rel="canonical" href="${config.absolute(nextRoute)}"`));
     assert.ok(second.includes(`<h1>${label} – Seite 2</h1>`));
     assert.deepEqual(graph(second).at(-1).itemListElement.map((item) => item.name),
       ["Startseite", "Spiele", label, "Seite 2"]);
@@ -455,7 +458,7 @@ test("escaped konsolidierte Metadaten und behält leere Felder sowie Releaseunte
   } };
   const config = createSiteConfig();
   const pages = renderSite(model, config, config.href("assets/test.css"));
-  validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""], ["assets/theme.js", ""], ["favicon.jpg", ""]]), config);
+  validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""], ["assets/theme.js", ""], ["favicon.webp", ""]]), config);
   const html = pages.get("spiele/cadaver/index.html").html;
   assert.match(html, /&lt;script&gt;genre&lt;\/script&gt;/u);
   assert.match(html, /&lt;Studio&gt;/u);
@@ -488,7 +491,7 @@ test("fasst nur länderabweichende Releases zusammen und erhält alle anderen Un
   } };
   const config = createSiteConfig();
   const pages = renderSite(model, config, config.href("assets/test.css"));
-  validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""], ["assets/theme.js", ""], ["favicon.jpg", ""]]), config);
+  validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""], ["assets/theme.js", ""], ["favicon.webp", ""]]), config);
   const html = pages.get("spiele/cadaver/index.html").html;
   const table = html.match(/<tbody>([\s\S]*?)<\/tbody>/u)[1];
   assert.equal((table.match(/<tr>/gu) ?? []).length, 5);

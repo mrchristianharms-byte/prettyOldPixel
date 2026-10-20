@@ -109,11 +109,11 @@ function breadcrumbsMarkup(crumbs, config) {
 }
 
 function layout({ route, title, description, body, schema, crumbs, image, noindex = false, previous, next, interactive = false }, config, cssHref, hasMagazines, jsHref, hasGames, sections, themeHref) {
-  const canonical = config.href(route);
+  const canonical = config.absolute(route);
   const fullTitle = `${title} | ${config.name}`;
   const breadcrumbSchema = {
     "@type": "BreadcrumbList",
-    "@id": `${canonical}#breadcrumbs`,
+    "@id": `${config.href(route)}#breadcrumbs`,
     itemListElement: crumbs.map((crumb, index) => ({
       "@type": "ListItem", position: index + 1, name: crumb.name, item: config.href(crumb.route),
     })),
@@ -137,7 +137,7 @@ function layout({ route, title, description, body, schema, crumbs, image, noinde
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${escapeHtml(fullTitle)}</title>
 <meta name="description" content="${escapeHtml(description)}">
-<link rel="icon" type="image/jpeg" href="${config.href("favicon.jpg")}">
+<link rel="icon" type="image/webp" href="${config.href("favicon.webp")}">
 ${noindex ? '<meta name="robots" content="noindex, follow">' : ""}
 <link rel="canonical" href="${canonical}">
 <meta property="og:title" content="${escapeHtml(fullTitle)}">
@@ -159,7 +159,7 @@ ${interactive ? `<script type="module" src="${config.href(jsHref)}"></script>` :
 <body${interactive ? ' class="detail-page"' : ""}>
 <a class="skip-link" href="#inhalt">Zum Inhalt</a>
 <header class="container site-header">
-<a class="brand" href="${config.href()}"><img class="brand-logo" src="${config.href("favicon.jpg")}" alt="" width="40" height="40">${config.name}</a>
+<a class="brand" href="${config.href()}"><img class="brand-logo" src="${config.href("favicon.webp")}" alt="" width="40" height="40">${config.name}</a>
 ${navigation(navigationEntries, route, config, themeToggle())}
 </header>
 <main id="inhalt" class="container">

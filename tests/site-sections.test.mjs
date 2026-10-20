@@ -39,7 +39,7 @@ function render(input = fixture(), sections = [definition()], options = {}) {
   const config = createSiteConfig(options.baseUrl);
   if (options.pageSize !== undefined) config.pageSize = options.pageSize;
   const pages = renderSite(model, config, "assets/test.css");
-  validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""], ["assets/theme.js", ""], ["favicon.jpg", ""]]), config);
+  validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""], ["assets/theme.js", ""], ["favicon.webp", ""]]), config);
   return { model, pages, config };
 }
 const graph = (html) => JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/u)[1])["@graph"];
@@ -113,8 +113,8 @@ test("bildet lesbare Titelpfade in allen Bereichen und hält Linkmetadaten konsi
     const route = `${id}/mein-amiga-zubehor-spass/`;
     assert.equal(video.detailRoute, route);
     const html = pages.get(`${route}index.html`).html;
-    assert.ok(html.includes(`<link rel="canonical" href="${config.href(route, route)}">`));
-    assert.ok(html.includes(`<meta property="og:url" content="${config.href(route, route)}">`));
+    assert.ok(html.includes(`<link rel="canonical" href="${config.absolute(route)}">`));
+    assert.ok(html.includes(`<meta property="og:url" content="${config.absolute(route)}">`));
     assert.ok(!pages.has(`${id}/${video.id}/index.html`));
   }
 });
@@ -320,7 +320,7 @@ test("verlinkt Bereiche intern auf Spiele oder eigene Detailseiten und hält Lis
 
   const config = createSiteConfig();
   const pages = renderSite(model, config, "assets/test.css");
-  validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""], ["assets/theme.js", ""], ["favicon.jpg", ""]]), config);
+  validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""], ["assets/theme.js", ""], ["favicon.webp", ""]]), config);
   const html = pages.get("interviews/index.html").html;
   assert.ok(html.includes('href="../spiele/ein-spiel/#video-s0000000000"'));
   assert.ok(html.includes('href="beitrag-3/#video-s0000000003"'));
@@ -350,12 +350,12 @@ test("hält Themen auch bei überlappenden Folgenpositionen in HTML und JSON-LD 
 
 test("paginiert Bereiche und bewahrt relative Links sowie aktive Hauptnavigation", () => {
   for (const id of ["hardware", "retrospektiven", "interviews"]) {
-    const { pages } = render(fixture(61), [definition(id, 61)]);
+    const { pages, config } = render(fixture(61), [definition(id, 61)]);
     const first = pages.get(`${id}/index.html`).html;
     const second = pages.get(`${id}/seite/2/index.html`).html;
     assert.equal(graph(first)[0].mainEntity.itemListElement.length, 60);
     assert.equal(graph(second)[0].mainEntity.itemListElement.length, 1);
-    assert.ok(second.includes('rel="canonical" href="./"'));
+    assert.ok(second.includes(`rel="canonical" href="${config.absolute(`${id}/seite/2/`)}"`));
     assert.ok(second.includes('href="../../" rel="prev"'));
     assert.ok(second.includes(`href="../../" aria-current="page">${{ hardware: "re.ware", interviews: "Interviews", retrospektiven: "projects" }[id] ?? sectionDefinitions.find((section) => section.id === id).name}</a>`));
     if (id === "interviews") {
@@ -369,12 +369,15 @@ test("paginiert Bereiche und bewahrt relative Links sowie aktive Hauptnavigation
 test("erhält deterministische Ausgabe bei Quellreihenfolge und unterschiedlicher Basisadresse", () => {
   const input = fixture();
   const sections = [definition("hardware"), definition("interviews"), definition("retrospektiven")];
-  const first = render(input, sections).pages;
+  const { pages: first, config } = render(input, sections);
   input.videos.videos.reverse();
   sections.reverse();
   sections.forEach((section) => section.videos.reverse());
-  const second = render(input, sections, { baseUrl: "https://example.com/anderer/pfad/" }).pages;
-  assert.deepEqual([...first], [...second]);
+  const baseUrl = "https://example.com/anderer/pfad/";
+  const second = render(input, sections, { baseUrl }).pages;
+  assert.deepEqual([...first].map(([file, page]) => [
+    file, { ...page, html: page.html.replaceAll(config.baseUrl, baseUrl) },
+  ]), [...second]);
 });
 
 test("erzeugt keine leeren Bereiche und lässt fehlende oder zukünftige Beiträge aus", () => {

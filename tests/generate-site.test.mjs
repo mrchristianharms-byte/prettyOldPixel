@@ -27,7 +27,7 @@ function fixture(count = 53) {
 function render(input = fixture(), baseUrl) {
   const config = createSiteConfig(baseUrl);
   const pages = renderSite(normalizeSources(input), config, config.href("assets/site.css"));
-  return { pages, config, assets: new Map([["assets/site.css", "body{}"], ["assets/video-series.js", ""], ["assets/theme.js", ""], ["favicon.jpg", "image"]]) };
+  return { pages, config, assets: new Map([["assets/site.css", "body{}"], ["assets/video-series.js", ""], ["assets/theme.js", ""], ["favicon.webp", "image"]]) };
 }
 
 function issueFixture() {
@@ -45,7 +45,7 @@ const issuePage = (pages) => [...pages].find(([file]) => file.includes("/ausgabe
 test("zeigt auf der Startseite den Markennamen nur im Kopf statt als zusätzliche Überschrift", () => {
   const { pages, config } = render();
   const html = pages.get("index.html").html;
-  assert.ok(html.includes(`<a class="brand" href="./"><img class="brand-logo" src="${config.href("favicon.jpg")}" alt="" width="40" height="40">Pretty Old Pixel</a>`));
+  assert.ok(html.includes(`<a class="brand" href="./"><img class="brand-logo" src="${config.href("favicon.webp")}" alt="" width="40" height="40">Pretty Old Pixel</a>`));
   assert.ok(!html.includes("<h1>Pretty Old Pixel</h1>"));
   assert.ok(html.includes('<h1 class="visually-hidden">Pretty Old Pixel</h1>'));
   assert.ok(html.includes('<p class="lead">Retrospiele entdecken'));
@@ -57,7 +57,7 @@ test("entfernt Startseite nur aus der Hauptnavigation und behält Markenlink und
     const header = html.match(/<header[\s\S]*?<\/header>/u)[0];
     assert.ok(!header.includes(">Startseite</a>"));
     const pageConfig = config.forPage(route);
-    assert.ok(header.includes(`<a class="brand" href="${pageConfig.href()}"><img class="brand-logo" src="${pageConfig.href("favicon.jpg")}" alt="" width="40" height="40">Pretty Old Pixel</a>`));
+    assert.ok(header.includes(`<a class="brand" href="${pageConfig.href()}"><img class="brand-logo" src="${pageConfig.href("favicon.webp")}" alt="" width="40" height="40">Pretty Old Pixel</a>`));
     assert.equal((header.match(/class="brand-logo"/gu) ?? []).length, 1);
   }
   assert.ok(pages.get("zeitschriften/pc-games/index.html").html.includes('href="../../">Startseite</a>'));
@@ -119,7 +119,7 @@ test("erzeugt News mit Sonstiges-Detailseiten ohne Gesamtkatalog", () => {
   for (const page of pages.values()) {
     assert.ok(!page.html.includes("Alle Videos"));
     assert.ok(!/href="[^"]*videos\//u.test(page.html));
-    assert.ok(page.html.includes(`rel="canonical" href="${config.href(page.route, page.route)}"`));
+    assert.ok(page.html.includes(`rel="canonical" href="${config.absolute(page.route)}"`));
   }
   assert.ok(![...pages.values()].some((page) => /href="[^"]*\/spiele\/|href="[^"]*\/zeitschriften\//u.test(page.html)));
   assert.ok(validateSite(pages, assets, config).maxHtmlGzip < 50 * 1024);
@@ -280,34 +280,54 @@ test("berechnet Startseitenzahlen nur aus öffentlichen Videos und aktualisiert 
   assert.ok((await readFile(homeFile, "utf8")).includes("<dt>Videos insgesamt</dt><dd>1</dd>"));
 });
 
-test("erzeugt standortunabhängige Seiten mit relativen Links, Assets, Canonicals und JSON-LD", () => {
+test("erzeugt absolute Canonicals und Open-Graph-URLs bei relativen Links, Assets und JSON-LD", () => {
   for (const input of [fixture(), issueFixture()]) {
-    const { pages, config, assets } = render(input);
-    const relocated = render(input, "https://example.org/anderer/tiefer/pfad/");
-    assert.deepEqual([...relocated.pages], [...pages]);
-    validateSite(pages, assets, relocated.config);
-    validateSite(pages, assets, createSiteConfig("http://localhost:8000/"));
-    for (const page of pages.values()) {
-      assert.ok(!page.html.includes(config.baseUrl));
-      assert.ok(!page.html.includes('href="/'));
-      assert.ok(!page.html.includes('src="/'));
-      assert.ok(page.html.includes(`rel="icon" type="image/jpeg" href="${config.href("favicon.jpg", page.route)}"`));
-      assert.ok(page.html.includes(`rel="stylesheet" href="${config.href("assets/site.css", page.route)}"`));
-      assert.ok(page.html.includes(`property="og:url" content="${config.href(page.route, page.route)}"`));
-      const breadcrumbs = JSON.parse(page.html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/u)[1])["@graph"].at(-1);
-      assert.equal(breadcrumbs.itemListElement[0].item, config.href("", page.route));
+    for (const baseUrl of [undefined, "https://example.org/anderer/tiefer/pfad/", "http://localhost:8000/"]) {
+      const { pages, config, assets } = render(input, baseUrl);
+      validateSite(pages, assets, config);
+      for (const page of pages.values()) {
+        const canonical = page.html.match(/<link rel="canonical" href="([^"]+)">/u)[1];
+        assert.equal(canonical, config.absolute(page.route));
+        assert.equal(new URL(canonical).href, canonical);
+        assert.ok(!page.html.includes('href="/'));
+        assert.ok(!page.html.includes('src="/'));
+        assert.ok(page.html.includes(`rel="icon" type="image/webp" href="${config.href("favicon.webp", page.route)}"`));
+        assert.ok(page.html.includes(`rel="stylesheet" href="${config.href("assets/site.css", page.route)}"`));
+        assert.ok(page.html.includes(`property="og:url" content="${canonical}"`));
+        const breadcrumbs = JSON.parse(page.html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/u)[1])["@graph"].at(-1);
+        assert.equal(breadcrumbs.itemListElement[0].item, config.href("", page.route));
+      }
     }
   }
 });
 
-test("lehnt absolute interne Metadaten und Skriptpfade ab", () => {
+test("lehnt relative, falsche oder doppelte Canonicals ab", () => {
+  const { pages, config, assets } = render(issueFixture());
+  const page = pages.get("news/index.html");
+  const original = page.html;
+  const canonical = `<link rel="canonical" href="${config.absolute(page.route)}">`;
+  for (const invalid of [
+    "",
+    '<link rel="canonical" href="./">',
+    '<link rel="canonical" href="/prettyOldPixel/news/">',
+    '<link rel="canonical" href="https://example.org/news/">',
+    `<link rel="canonical" href="${config.absolute()}">`,
+    `<link rel="canonical" href="${config.absolute(page.route)}?t=90#video">`,
+    `${canonical}${canonical}`,
+  ]) {
+    page.html = original.replace(canonical, invalid);
+    assert.throws(() => validateSite(pages, assets, config), /Canonical/u);
+  }
+  page.html = original;
+  assert.throws(() => validateSite(pages, assets, createSiteConfig("https://example.org/")), /Canonical/u);
+});
+
+test("lehnt absolute interne JSON-LD-URLs und Skriptpfade ab", () => {
   const { pages, config, assets } = render(issueFixture());
   const page = pages.get("news/index.html");
   const original = page.html;
   page.html = original.replace('"@id":"./#page"', `"@id":"${config.absolute("news/")}#page"`);
   assert.notEqual(page.html, original);
-  assert.throws(() => validateSite(pages, assets, config), /seitenrelativ/u);
-  page.html = original.replace('property="og:url" content="./"', `property="og:url" content="${config.absolute("news/")}"`);
   assert.throws(() => validateSite(pages, assets, config), /seitenrelativ/u);
   page.html = original;
   const detail = [...pages.values()].find((page) => page.html.includes('type="module"'));
@@ -434,12 +454,14 @@ test("baut offline mit Projektpfad, Sitemap und Inhalts-Manifest; übernimmt unv
   assert.equal(first.reused, 0);
   assert.ok(first.cssGzip <= 20 * 1024);
   assert.ok(first.jsGzip <= 5 * 1024);
-  assert.deepEqual(
-    await readFile(path.join(options.outputDirectory, "favicon.jpg")),
-    await readFile(new URL("../src/favicon.jpg", import.meta.url)),
-  );
+  const favicon = await readFile(path.join(options.outputDirectory, "favicon.webp"));
+  assert.deepEqual(favicon, await readFile(new URL("../src/favicon.webp", import.meta.url)));
+  assert.equal(favicon.subarray(0, 4).toString("ascii"), "RIFF");
+  assert.equal(favicon.subarray(8, 12).toString("ascii"), "WEBP");
+  assert.ok(favicon.length < 1.5 * 1024);
+  await assert.rejects(stat(path.join(options.outputDirectory, "favicon.jpg")), { code: "ENOENT" });
   const newsHtml = await readFile(path.join(options.outputDirectory, "news", "index.html"), "utf8");
-  assert.ok(newsHtml.includes('<link rel="icon" type="image/jpeg" href="../favicon.jpg">'));
+  assert.ok(newsHtml.includes('<link rel="icon" type="image/webp" href="../favicon.webp">'));
   const css = (await readdir(path.join(options.outputDirectory, "assets"))).find((file) => file.endsWith(".css"));
   assert.match(css, /^site\.[a-f0-9]{12}\.css$/u);
   const stylesheet = await readFile(path.join(options.outputDirectory, "assets", css), "utf8");
@@ -608,7 +630,13 @@ test("setzt Sitemap-lastmod nur bei Inhaltsänderungen und erhält Zeitpunkte au
   assert.equal(await readFile(path.join(restoredOutput, "sitemap.xml"), "utf8"), await readFile(sitemapPath, "utf8"));
 
   await generateSite({ ...options, now: laterTime + 86400000, baseUrl: "https://example.com/other/" });
-  assert.deepEqual((await readManifest()).pages, updated.pages);
+  const relocated = await readManifest();
+  assert.deepEqual(Object.keys(relocated.pages), Object.keys(updated.pages));
+  for (const [file, page] of Object.entries(relocated.pages)) {
+    assert.notEqual(page.fingerprint, updated.pages[file].fingerprint);
+    assert.equal(page.contentPublishedAt, updated.pages[file].contentPublishedAt);
+    assert.equal(page.lastModified, new Date(laterTime + 86400000).toISOString());
+  }
   assert.ok((await readFile(sitemapPath, "utf8")).includes("https://example.com/other/news/"));
 });
 
@@ -673,8 +701,7 @@ test("unterstützt lokale Vorschau-Basis und verweigert das Überschreiben von Q
   await generateSite({ ...options, baseUrl: "http://localhost:4173/" });
   const html = await readFile(path.join(options.outputDirectory, "index.html"), "utf8");
   assert.ok(html.includes('href="news/"'));
-  assert.ok(html.includes('rel="canonical" href="./"'));
-  assert.ok(!html.includes("http://localhost:4173/"));
+  assert.ok(html.includes('rel="canonical" href="http://localhost:4173/"'));
   await assert.rejects(generateSite({ ...options, outputDirectory: options.cacheDirectory }), /Unsicheres Ausgabeverzeichnis/u);
   const legacyOutput = path.join(path.dirname(options.outputDirectory), "public");
   await assert.rejects(generateSite({ ...options, outputDirectory: legacyOutput }), /Ausgabeordner muss docs heißen/u);

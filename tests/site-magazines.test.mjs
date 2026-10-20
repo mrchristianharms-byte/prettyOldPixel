@@ -56,7 +56,7 @@ function render(input = variedFixture(), pageSize = createSiteConfig().pageSize)
   const model = normalizeSources(input);
   const config = { ...createSiteConfig(), pageSize };
   const pages = renderSite(model, config, config.href("assets/test.css"));
-  validateSite(pages, new Map([["assets/test.css", "body{}"], ["assets/video-series.js", ""], ["assets/theme.js", ""], ["favicon.jpg", ""]]), config);
+  validateSite(pages, new Map([["assets/test.css", "body{}"], ["assets/video-series.js", ""], ["assets/theme.js", ""], ["favicon.webp", ""]]), config);
   return { model, pages, config };
 }
 
@@ -208,7 +208,9 @@ test("paginiert Gäste im Blätterabendindex und deren Ausgaben mit relativen Li
   const relocatedConfig = createSiteConfig("https://example.org/anderer/pfad/");
   relocatedConfig.pageSize = 2;
   const relocated = renderSite(model, relocatedConfig, "assets/test.css");
-  assert.deepEqual([...relocated], [...pages]);
+  assert.deepEqual([...relocated], [...pages].map(([file, page]) => [
+    file, { ...page, html: page.html.replaceAll(config.baseUrl, relocatedConfig.baseUrl) },
+  ]));
 });
 
 test("trennt kollidierende Gäste-Slugs und escapet Namen in Kacheln und Gästeseiten", () => {
@@ -695,7 +697,7 @@ test("paginiert Übersichten mit 60 Videos, behält jedoch alle Videoteile auf e
     assert.equal((first.match(/<li><article>/gu) ?? []).length, 60);
     assert.equal((second.match(/<li><article>/gu) ?? []).length, 60);
     assert.equal((third.match(/<li><article>/gu) ?? []).length, route === magazine.route ? 6 : 5);
-    assert.ok(second.includes('rel="canonical" href="./"'));
+    assert.ok(second.includes(`rel="canonical" href="${config.absolute(`${route}seite/2/`)}"`));
     assert.ok(second.includes('href="../../" rel="prev"'));
   }
   const video = pages.get(`${entity.route}index.html`).html;

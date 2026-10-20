@@ -282,13 +282,13 @@ Unbekannte Ausgaben bekommen keine spekulative Detailseite. Seiten ohne
 belastbaren Inhalt werden nicht vorsorglich angelegt.
 
 Eine zentrale Konfiguration enthält die öffentliche Basis-URL einschließlich
-eines eventuellen GitHub-Pages-Projektpfads. Interne Links, Assets, Paginierung,
-Canonical-URLs und `og:url` werden relativ zur jeweiligen Seite erzeugt,
-nicht als vollständige URL oder als wurzelrelativer Projektpfad. Das HTML kann
-dadurch ohne Neugenerierung unter einem anderen Host oder Unterpfad liegen.
-Diese Portabilität ist eine bewusste Abweichung von der üblichen Empfehlung,
-Canonical- und Open-Graph-URLs absolut auszugeben; relative URLs werden gegen
-die Dokumentadresse aufgelöst. Es gibt kein fest verdrahtetes `<base>`-Element.
+eines eventuellen GitHub-Pages-Projektpfads. Interne Links, Assets und Paginierung
+werden relativ zur jeweiligen Seite erzeugt, nicht als vollständige URL oder
+als wurzelrelativer Projektpfad. Canonical-URLs und `og:url` sind dagegen
+absolute, selbstreferenzierende URLs aus der konfigurierten Basis-URL, ohne
+Query oder Fragment. Damit erfüllen Canonicals die Lighthouse-SEO-Prüfung;
+bei einem anderen Host oder Unterpfad ist eine Neugenerierung mit passender
+Basis-URL erforderlich. Es gibt kein fest verdrahtetes `<base>`-Element.
 Sitemap-Einträge verwenden weiterhin absolute HTTPS-URLs; auch die
 `Sitemap:`-Referenz in `robots.txt` bleibt eine vollständige URL.
 Die Produktions-Basis-URL ist die öffentliche Projektseite dieses Repositorys:

@@ -134,7 +134,7 @@ function rendered(description, durationSeconds = 600) {
     sections: [],
   });
   const config = createSiteConfig();
-  const assets = new Map([["assets/site.css", ""], ["assets/video-series.js", ""], ["assets/theme.js", ""], ["favicon.jpg", ""]]);
+  const assets = new Map([["assets/site.css", ""], ["assets/video-series.js", ""], ["assets/theme.js", ""], ["favicon.webp", ""]]);
   const pages = renderSite(model, config, "assets/site.css");
   validateSite(pages, assets, config);
   return { pages, model };
