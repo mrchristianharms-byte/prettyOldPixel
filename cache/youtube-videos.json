@@ -5,10 +5,18 @@
     "title": "Pretty Old Pixel",
     "url": "https://www.youtube.com/@PrettyOldPixel"
   },
-  "lastModified": "2026-10-20T10:00:06-07:00",
-  "fetchedAt": "2026-10-21T09:12:49.471Z",
+  "lastModified": "2026-10-21T17:00:28Z",
+  "fetchedAt": "2026-10-21T20:25:08.668Z",
   "complete": true,
   "videos": [
+    {
+      "id": "myeiw2wTPBA",
+      "title": "Wing Commander II [re.play - #14] Finale [German]",
+      "description": "Spiel: Wing Commander II: Vengeance of the Kilrathi\nPublisher: Mindscape\nEntwickler: ORIGIN Systems, Inc.\nReleasedatum: 1991\nSystem: MS-DOS\n\nGespielte Version: MS-DOS\n\nPlaylist: https://www.youtube.com/playlist?list=PLO77B_AOBv8s",
+      "duration": "PT24M1S",
+      "durationSeconds": 1441,
+      "publishedAt": "2026-10-21T17:00:28Z"
+    },
     {
       "id": "PjtS58grwiw",
       "title": "Ports of Call [re.play - #7] Der Griff zur Seeherrschaft [German/Deutsch]",
