@@ -6,6 +6,7 @@ import test from "node:test";
 import {
   extractPlaylistPage,
   extractJsonAssignment,
+  fetchHtml,
   parseChannelHandle,
   secondsToIsoDuration,
   syncYoutubeVideos,
@@ -82,6 +83,74 @@ test("liest direkte Seitendaten und das alternative application/json-Element", (
   const html = `<script type="application/json" id="yt-initial-data">${json}</script>
     <script>window['ytInitialData'] = JSON.parse(ytDataEl.textContent);</script>`;
   assert.deepEqual(extractJsonAssignment(html, "ytInitialData"), data);
+});
+
+test("beachtet Retry-After und verwendet bei Rate-Limits mindestens 30 Sekunden Pause", async () => {
+  for (const [header, expected] of [[null, 30000], ["invalid", 30000], ["0", 30000], ["90", 90000], ["Wed, 21 Oct 2015 07:28:00 GMT", 30000]]) {
+    const delays = [];
+    const messages = [];
+    let requests = 0;
+    const result = await fetchHtml("https://www.youtube.com/watch?v=test", {
+      fetchImpl: async () => ++requests === 1
+        ? { ok: false, status: 429, headers: new Headers(header ? { "retry-after": header } : {}) }
+        : htmlResponse("ok"),
+      sleep: async (delay) => { delays.push(delay); },
+      log: (message) => messages.push(message),
+    });
+    assert.equal(result, "ok");
+    assert.equal(requests, 2);
+    assert.deepEqual(delays, [expected]);
+    assert.match(messages[0], /HTTP 429.*Wiederholung 1\/3/);
+  }
+});
+
+test("beachtet Retry-After als HTTP-Datum", async () => {
+  const retryAt = Math.floor(Date.now() / 1000) * 1000 + 90000;
+  const startedAt = Date.now();
+  const delays = [];
+  let requests = 0;
+  await fetchHtml("https://www.youtube.com/watch?v=test", {
+    fetchImpl: async () => ++requests === 1
+      ? { ok: false, status: 429, headers: new Headers({ "retry-after": new Date(retryAt).toUTCString() }) }
+      : htmlResponse("ok"),
+    sleep: async (delay) => { delays.push(delay); },
+    log: () => {},
+  });
+  assert.equal(delays.length, 1);
+  assert.ok(delays[0] >= retryAt - Date.now());
+  assert.ok(delays[0] <= retryAt - startedAt);
+});
+
+test("bricht nach drei Wiederholungen weiterhin mit einem Fehler ab", async () => {
+  const delays = [];
+  let requests = 0;
+  await assert.rejects(fetchHtml("https://www.youtube.com/watch?v=test", {
+    fetchImpl: async () => {
+      requests += 1;
+      return { ok: false, status: 429 };
+    },
+    sleep: async (delay) => { delays.push(delay); },
+    log: () => {},
+  }), /YouTube-Anfrage fehlgeschlagen \(429\).*Rate-Limit/);
+  assert.equal(requests, 4);
+  assert.deepEqual(delays, [30000, 60000, 120000]);
+});
+
+test("behält kurze Wiederholungen für Serverfehler und sofortige Fehler bei HTTP 403 bei", async () => {
+  for (const [status, expectedDelays] of [[503, [1000, 2000, 4000]], [403, []]]) {
+    const delays = [];
+    let requests = 0;
+    await assert.rejects(fetchHtml("https://www.youtube.com/watch?v=test", {
+      fetchImpl: async () => {
+        requests += 1;
+        return { ok: false, status };
+      },
+      sleep: async (delay) => { delays.push(delay); },
+      log: () => {},
+    }), new RegExp(`fehlgeschlagen \\(${status}\\)`));
+    assert.equal(requests, expectedDelays.length + 1);
+    assert.deepEqual(delays, expectedDelays);
+  }
 });
 
 test("lädt alle Seiten ohne API-Key und danach nur neuere Videos", async () => {

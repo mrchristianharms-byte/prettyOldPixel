@@ -252,6 +252,12 @@ in `Europe/Berlin` (einschließlich Sommer-/Winterzeit), zusätzlich manuell
 und `cache/youtube-playlists.json` nach `main`. Ohne Änderungen entsteht
 kein Commit; bei einem fehlgeschlagenen Abruf werden keine Teilstände eingecheckt.
 Er benötigt keine npm-Installation und führt keine lokalen `dev:`-Aufgaben aus.
+Bei HTTP 429 (YouTube-Rate-Limit) warten beide Fetcher vor maximal drei
+Wiederholungen mindestens 30, 60 und 120 Sekunden; ein längeres `Retry-After`
+(Sekunden oder HTTP-Datum) wird berücksichtigt. Die Wartezeiten stehen im
+Job-Log. Bleibt die Sperre bestehen, schlägt der Lauf ausdrücklich fehl;
+dann vor einem manuellen Neustart ausreichend warten. Eine längerfristige
+Sperre der GitHub-Runner-IP lässt sich durch Wiederholungen nicht beheben.
 GitHub kann geplante Starts verzögern. Der Workflow benötigt Schreibrechte auf
 `main`; Branch-Regeln müssen den Bot-Push erlauben.
 Ein Push mit `GITHUB_TOKEN` startet den Pages-Push-Workflow nicht erneut.

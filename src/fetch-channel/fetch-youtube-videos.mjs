@@ -142,16 +142,24 @@ export function extractPlaylistPage(data) {
   return { videoIds: [...new Set(videoIds)], continuation };
 }
 
-async function request(url, init, { fetchImpl, sleep }) {
+async function request(url, init, { fetchImpl, sleep, log = console.log }) {
   for (let attempt = 0; ; attempt += 1) {
     const response = await fetchImpl(url, { ...init, headers: { ...REQUEST_HEADERS, ...init?.headers } });
     if (response.ok) {
       return response;
     }
     if (attempt >= MAX_RETRIES || (response.status !== 429 && response.status < 500)) {
-      throw new Error(`YouTube-Anfrage fehlgeschlagen (${response.status}): ${url}`);
+      const advice = response.status === 429 ? " Rate-Limit: Vor einem neuen Lauf ausreichend warten; die Runner-IP kann weiterhin gesperrt sein." : "";
+      throw new Error(`YouTube-Anfrage fehlgeschlagen (${response.status}): ${url}${advice}`);
     }
-    await sleep(1000 * 2 ** attempt);
+    const retryAfter = response.headers?.get("retry-after");
+    const retryAfterMilliseconds = retryAfter
+      ? (/^\d+$/.test(retryAfter) ? Number(retryAfter) * 1000 : Date.parse(retryAfter) - Date.now())
+      : 0;
+    const backoff = (response.status === 429 ? 30000 : 1000) * 2 ** attempt;
+    const delay = Math.max(backoff, Number.isFinite(retryAfterMilliseconds) ? retryAfterMilliseconds : 0);
+    log(`YouTube HTTP ${response.status}: ${url}; Wiederholung ${attempt + 1}/${MAX_RETRIES} in ${Math.ceil(delay / 1000)} Sekunden.`);
+    await sleep(delay);
   }
 }
 
@@ -262,7 +270,7 @@ export async function syncYoutubeVideos({
   const lastModifiedTime = lastModified ? Date.parse(lastModified) : null;
   const videosById = new Map((sameChannel ? cache.videos ?? [] : []).map((video) => [video.id, video]));
 
-  const options = { fetchImpl, sleep, clientVersion: undefined };
+  const options = { fetchImpl, sleep, log, clientVersion: undefined };
   // The channel ID never changes, so a cached one saves the channel page request.
   const channelData = sameChannel && cache.channel.id ? cache.channel : await fetchChannel(handle, options);
   const channelInfo = {

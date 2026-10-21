@@ -191,7 +191,7 @@ export async function syncYoutubePlaylists({
   const cached = await readJson(cacheFile);
   const previous = cached?.channel?.handle?.toLowerCase() === handle.toLowerCase() ? cached : null;
   const checkedAt = now();
-  const options = { fetchImpl, sleep };
+  const options = { fetchImpl, sleep, log };
   const html = await fetchHtml(`${YOUTUBE_URL}/@${encodeURIComponent(handle)}/playlists`, options);
   const data = extractJsonAssignment(html, "ytInitialData");
   checkResponse(data);
