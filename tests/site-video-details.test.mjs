@@ -6,6 +6,7 @@ import { normalizeSources } from "../src/site-generation/site-data.mjs";
 import { createSiteConfig } from "../src/site-generation/site-config.mjs";
 import { renderSite } from "../src/site-generation/site-render.mjs";
 import { validateSite } from "../src/site-generation/generate-site.mjs";
+import { descriptionHtml } from "../src/site-generation/widget/video-panel.mjs";
 
 const channel = { id: "UC-own", handle: "PrettyOldPixel", title: "Pretty Old Pixel" };
 const id = "a0000000000";
@@ -13,6 +14,37 @@ const video = (description, durationSeconds = 7200) => ({
   id, url: `https://www.youtube.com/watch?v=${id}`, description, durationSeconds,
 });
 const details = (description, duration) => extractVideoDetails(video(description, duration), channel);
+
+test("verlinkt Handles und bekannte Playlists lesbar ohne E-Mail-Adressen oder fremde URLs umzudeuten", () => {
+  const playlists = [{ id: "PL-test", title: 're.play - Spiel & "Demo"' }];
+  const html = descriptionHtml('Gast: @retrokompott. Kontakt: mail@example.com\n\nPlaylist: https://www.youtube.com/playlist?list=PL-test).', playlists);
+  assert.ok(html.includes('href="https://www.youtube.com/@retrokompott" rel="external">@retrokompott '));
+  assert.ok(html.includes("mail@example.com"));
+  assert.ok(!html.includes("youtube.com/@example.com"));
+  assert.ok(html.includes('rel="external">re.play - Spiel &amp; &quot;Demo&quot; '));
+  assert.ok(html.endsWith("</a>).</p>"));
+  for (const url of [
+    "https://youtube.com.evil.test/playlist?list=PL-test",
+    "https://youtube.com/playlist?list=PL-unknown",
+    "https://example.com/@Guest",
+  ]) {
+    const result = descriptionHtml(url, playlists);
+    assert.ok(result.includes(`rel="external">${url} `));
+    assert.equal((result.match(/<a /gu) ?? []).length, 1);
+  }
+  assert.equal(descriptionHtml("<script> & Test"), "<p>&lt;script&gt; &amp; Test</p>");
+});
+
+test("zeigt die Beschreibung vor den Kapiteln und lässt die doppelte Spiel-/Playlistzeile weg", () => {
+  const { pages } = rendered("Gast: @retrokompott\n\n00:00 Intro\n01:30 Spiel\n\nSpiel: Ein Spiel\n\nPlaylist zum Spiel: https://www.youtube.com/playlist?list=PL-test");
+  const html = pages.get("spiele/ein-spiel/index.html").html;
+  const panel = html.match(/<article id="video-a0000000000"[\s\S]*?<\/article>/u)[0];
+  assert.ok(panel.indexOf('class="description"') < panel.indexOf('class="video-chapters"'));
+  assert.ok(!panel.includes("<p>Spiel: <a"));
+  assert.ok(panel.includes('<p>Spiel: Ein Spiel</p>'));
+  assert.ok(panel.includes('rel="external">Ein Spiel <span'));
+  assert.equal((panel.match(/playlist\?list=PL-test/gu) ?? []).length, 1);
+});
 
 test("entfernt nur tatsächlich erkannte Kapitelzeilen samt Überschrift und erhält den übrigen Text", () => {
   const source = "Einleitung\n\nKapitel:\n00:00 Intro\n01:30 Spiel\n02:00 Außerhalb\n\nKontakt und Hinweise";

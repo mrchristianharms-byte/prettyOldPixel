@@ -13,6 +13,9 @@ Video-Widget mit internen Detailverweisen; einen
 Gesamtkatalog aller Videos gibt es nicht.
 Zeitschriftenlisten verzichten auf wiederholte Links zu Übersicht, Magazin,
 Jahrgang und Ausgabe pro Video; Breadcrumbs und Ausgabenlinks bleiben erhalten.
+Videobeschreibungen stehen vor den Kapitel-Links und erhalten ihre Absätze und
+Zeilenumbrüche. YouTube-Handles sind direkt verlinkt; bekannte Playlist-URLs
+zeigen den Playlistnamen. Eine zusätzliche Spiel-/Playlistzeile pro Video entfällt.
 
 Unter `spiele/uebersicht/` gibt es zusätzlich eine aus der Spieleübersicht
 verlinkte Tabelle mit allen Spielen: erstes Videojahr, Titel, Erscheinungsjahr,
