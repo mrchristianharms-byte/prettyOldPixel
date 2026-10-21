@@ -33,6 +33,17 @@ const cliPath = (file) => {
   return `${entry[1]}/${file}`;
 };
 
+test("Pages-Jobs installieren Build-Abhängigkeiten vor Tests und Seitengenerierung", async () => {
+  const workflow = await readFile(new URL("../.github/workflows/pages.yml", import.meta.url), "utf8");
+  for (const [job, command] of [["test", "npm test"], ["build", "npm run generate:site"]]) {
+    const steps = workflow.match(new RegExp(`^  ${job}:\\n([\\s\\S]*?)(?=^  \\w+:|(?![\\s\\S]))`, "mu"))?.[1];
+    assert.ok(steps, job);
+    const install = steps.indexOf("run: npm ci --ignore-scripts --omit=dev");
+    const run = steps.indexOf(`run: ${command}`);
+    assert.ok(install >= 0 && run > install, job);
+  }
+});
+
 test("src enthält nur Fachordner und die beiden Hauptaufgaben-Starter", async () => {
   const entries = await readdir(source, { withFileTypes: true });
   assert.deepEqual(entries.filter((entry) => entry.isDirectory()).map((entry) => entry.name).sort(), [

@@ -976,8 +976,11 @@ npm run dev:test
 ```
 
 `sharp` ist eine Entwicklungsabhängigkeit und wird nur zur lokalen
-Bildkonvertierung geladen. Actions benötigen keine npm-Installation
-und können vorhandene Logo-Varianten ohne Bildbibliothek veröffentlichen.
+Bildkonvertierung geladen. Die Pages-Jobs installieren vor Tests und Build
+nur die regulären Abhängigkeiten mit `npm ci --ignore-scripts --omit=dev`.
+Terser ist eine reguläre Abhängigkeit, da `generate:site` es benötigt;
+Sharp und PurgeCSS bleiben Entwicklungsabhängigkeiten für lokale Aufbereitungsaufgaben.
+Vorhandene Logo-Varianten werden weiterhin ohne Laden der Bildbibliothek veröffentlicht.
 Lokale Datenpflegebefehle tragen durchgehend das Präfix `dev:`.
 
 ## YouTube-Videos cachen
@@ -1790,6 +1793,8 @@ Nach fehlgeschlagenen oder abgebrochenen Abrufen werden Build und Deployment
 übersprungen. Die drei Jobs laufen nacheinander: `test` → `build` → `deploy`.
 `test` führt `npm test` aus; `build` startet nur bei Erfolg und verwendet
 denselben getesteten Commit. Erst nach erfolgreichem Build folgt `deploy`.
+Beide Node.js-Jobs installieren zuvor die im Lockfile festgelegten Abhängigkeiten;
+der npm-Downloadcache wird über `actions/setup-node` wiederverwendet.
 
 Lokale `dev:`-Aufbereitungsaufgaben laufen dabei nicht. Vorhandene manuelle
 Zuordnungen und fertige Metadaten-/Analyse-Caches bleiben erhalten und
