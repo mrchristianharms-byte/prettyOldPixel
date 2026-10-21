@@ -106,7 +106,8 @@ h1, h2, h3, h4, h5, h6 { font-size: clamp(1.05rem, 1.8vw, 1.25rem); line-height:
 .episode-menu { align-self: start; }
 .video-panels { min-width: 0; }
 .video-panels article { box-shadow: none; }
-.detail-page main.container { width: 100%; max-width: none; }
+/* Header, content and footer share the full width so logo and navigation align with the player. */
+.detail-page .container { width: 100%; max-width: none; }
 .detail-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(13rem, 18rem); gap: 1rem; align-items: start; }
 .detail-main, .detail-player, .detail-information { min-width: 0; }
 .detail-heading { min-width: 0; margin: 0 0 .5rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

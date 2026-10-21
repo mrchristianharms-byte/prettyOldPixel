@@ -552,7 +552,7 @@ test("baut offline mit Projektpfad, Sitemap und Inhalts-Manifest; übernimmt unv
   assert.doesNotMatch(leadStyles, /(?:max-)?width\s*:|white-space\s*:|text-wrap\s*:/u);
   assert.match(stylesheet, /\.detail-heading\s*\{[^}]*white-space:\s*nowrap;[^}]*text-overflow:\s*ellipsis/u);
   assert.match(stylesheet, /\.video-player\s*\{[^}]*max-height:\s*min\(60svh,\s*calc\(100svh - 12rem\)\)/u);
-  assert.match(stylesheet, /\.detail-page main\.container\s*\{[^}]*width:\s*100%;[^}]*max-width:\s*none/u);
+  assert.match(stylesheet, /\.detail-page \.container\s*\{[^}]*width:\s*100%;[^}]*max-width:\s*none/u);
   assert.match(stylesheet, /@media \(min-width: 768px\)\s*\{\s*\.detail-page \.video-player\s*\{[^}]*height:\s*auto;[^}]*max-height:\s*none/u);
   const sitemap = await readFile(path.join(options.outputDirectory, "sitemap.xml"), "utf8");
   assert.ok(sitemap.includes("https://mrchristianharms-byte.github.io/prettyOldPixel/news/"));
