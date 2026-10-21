@@ -978,9 +978,39 @@ Lokale Datenpflegebefehle tragen durchgehend das Präfix `dev:`.
 
 ## YouTube-Videos cachen
 
-Das Script liest alle öffentlichen Videos eines YouTube-Kanals ohne API-Key über
-die öffentlichen YouTube-Webseiten aus und speichert Video-ID, Titel,
-Beschreibung, Länge und Veröffentlichungsdatum in `cache/youtube-videos.json`.
+Das Script liest alle öffentlichen Videos eines YouTube-Kanals und speichert
+Video-ID, Titel, Beschreibung, Länge und Veröffentlichungsdatum in
+`cache/youtube-videos.json`.
+
+### Abrufweg: YouTube Data API v3 oder anonym
+
+Ist `GOOGLE_YT_DATA_API_KEY` als Umgebungsvariable gesetzt oder ersatzweise in
+der lokalen `.env` eingetragen, nutzen `fetch:videos`, `fetch:playlists` und
+`fetch:all` die offizielle
+[YouTube Data API v3](https://developers.google.com/youtube/v3). Ein leerer
+Wert gilt als nicht gesetzt; die Umgebungsvariable hat Vorrang vor `.env`.
+Ohne Schlüssel lesen die Scripts wie bisher anonym die öffentlichen
+YouTube-Webseiten. Die Zugriffe auf die API liegen in
+`src/fetch-channel/youtube-data-api.mjs`; der Schlüssel wird nur im Header
+`x-goog-api-key` gesendet und erscheint nicht in URLs, Logs oder Fehlermeldungen.
+Beim Start nennt jedes Script den Abrufweg und die Herkunft des Schlüssels,
+z. B. `YouTube-Abruf: offizielle YouTube Data API v3 (GOOGLE_YT_DATA_API_KEY aus .env).`
+oder `YouTube-Abruf: anonyme Fetch-Skripte über öffentliche YouTube-Seiten (GOOGLE_YT_DATA_API_KEY nicht gesetzt).`
+Der Schlüssel selbst wird nie ausgegeben.
+
+Beide Wege schreiben dasselbe Cacheformat. Unterschiede der API:
+
+- Laufzeiten sind dort aufgerundet und deshalb oft eine Sekunde länger als
+  beim anonymen Abruf. Bereits gecachte Videos werden nicht neu geladen.
+- `publishedAt` steht in UTC (`…Z`) statt mit der Pacific-Zeitzone der
+  Webseite; Sortierung und inkrementeller Abgleich vergleichen Zeitpunkte.
+- `playlists.list` liefert alle öffentlichen Playlists des Kanals, auch solche,
+  die nicht auf dessen Playlist-Seite erscheinen. Gelöschte und private
+  Playlist-Einträge werden wie auf der Webseite ausgelassen.
+- Ein Lauf kostet etwa eine Kontingenteinheit je 50 Videos bzw. je
+  Playlist-Seite (Standardkontingent 10.000 Einheiten pro Tag). Bei
+  `quotaExceeded` bricht der Lauf mit einem Hinweis ab; Rate-Limits und
+  Serverfehler werden wie beim anonymen Abruf wiederholt.
 
 Für den Kanal https://www.youtube.com/@PrettyOldPixel:
 
@@ -1015,7 +1045,8 @@ npm run fetch:playlists
 npm run fetch:playlists -- https://www.youtube.com/@PrettyOldPixel
 ```
 
-`src/fetch-channel/fetch-youtube-playlists.mjs` liest ohne API-Key die öffentlichen Playlists
+`src/fetch-channel/fetch-youtube-playlists.mjs` liest (mit oder ohne API-Key, siehe
+[Abrufweg](#abrufweg-youtube-data-api-v3-oder-anonym)) die öffentlichen Playlists
 des Kanals und alle Seiten ihrer Mitgliederlisten. Bis zu drei Playlists werden
 parallel geladen; innerhalb einer Playlist werden Fortsetzungen nacheinander
 abgefragt. Der gemeinsame Task wartet auf beide Scripts und endet bei einem

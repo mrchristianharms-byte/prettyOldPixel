@@ -95,7 +95,7 @@ Externe Programme, Modellserver und deren Modelle werden nicht von npm verwaltet
 
 | npm-Target | Programme / Dienste zusätzlich zu Node.js und npm | Netzwerk und lokale Daten |
 |---|---|---|
-| `fetch:videos`, `fetch:playlists`, `fetch:all` | Keine; insbesondere kein `yt-dlp` oder Browser | HTTPS zu YouTube für öffentliche Video-/Playlistdaten. Kein YouTube-API-Key; vorhandene Caches werden verwendet. `fetch:all` umfasst nur Videos und Playlists, nicht Archive oder Transkripte. |
+| `fetch:videos`, `fetch:playlists`, `fetch:all` | Keine; insbesondere kein `yt-dlp` oder Browser | HTTPS zu YouTube für öffentliche Video-/Playlistdaten. Mit `GOOGLE_YT_DATA_API_KEY` (Umgebungsvariable, `.env` oder Actions-Secret) über die YouTube Data API v3, sonst anonym über die öffentlichen Webseiten; vorhandene Caches werden verwendet. `fetch:all` umfasst nur Videos und Playlists, nicht Archive oder Transkripte. |
 
 ### Lokal: Zeitschriften und Archive pflegen
 
@@ -211,7 +211,10 @@ npm run generate:site          # Website aus den lokalen Daten erzeugen
 ```
 
 Internetabrufe (`fetch:*`) und lokale Generierung (`generate:*`) sind getrennt.
-YouTube-Abrufe benötigen keinen API-Key und verwenden vorhandene Caches.
+YouTube-Abrufe verwenden vorhandene Caches. Ist `GOOGLE_YT_DATA_API_KEY` als
+Umgebungsvariable oder in `.env` gesetzt, laden Videos und Playlists über die
+offizielle YouTube Data API v3, sonst anonym über die öffentlichen Webseiten
+([Details](doc/README.md#abrufweg-youtube-data-api-v3-oder-anonym)).
 Zum Bauen der Website sind keine erneuten Internetabrufe nötig.
 
 Optional: `npm run dev:fetch:transcripts` speichert öffentliche Untertitel mit
@@ -248,13 +251,17 @@ Browser oder Modelle und ruft keine Fetch- oder LLM-Schritte auf.
 Checkout, Actions-Cache und Pages-Deployment benötigen unabhängig davon
 die GitHub-Dienste.
 
-Der zweite Workflow `Update YouTube caches` startet täglich um 06:00 Uhr
+Der zweite Workflow `Update YouTube caches` startet täglich um 06:17 Uhr
 in `Europe/Berlin` (einschließlich Sommer-/Winterzeit), zusätzlich manuell
-über `workflow_dispatch`. Er führt ausschließlich `fetch:videos` und
+über `workflow_dispatch`. Die Minute 17 statt der vollen Stunde verringert
+Verzögerungen und ausgelassene Läufe, die GitHub bei hoher Last zur vollen
+Stunde verursacht. Er führt ausschließlich `fetch:videos` und
 `fetch:playlists` aus und committet Änderungen an `cache/youtube-videos.json`
 und `cache/youtube-playlists.json` nach `main`. Ohne Änderungen entsteht
 kein Commit; bei einem fehlgeschlagenen Abruf werden keine Teilstände eingecheckt.
 Er benötigt keine npm-Installation und führt keine lokalen `dev:`-Aufgaben aus.
+Ist das Repository-Secret `GOOGLE_YT_DATA_API_KEY` angelegt, verwenden beide
+Schritte die YouTube Data API v3; ohne Secret bleibt es beim anonymen Abruf.
 Bei HTTP 429 (YouTube-Rate-Limit) warten beide Fetcher vor maximal drei
 Wiederholungen mindestens 30, 60 und 120 Sekunden; ein längeres `Retry-After`
 (Sekunden oder HTTP-Datum) wird berücksichtigt. Die Wartezeiten stehen im
@@ -325,7 +332,7 @@ Die beiden Workflows haben getrennte Aufgaben:
   Er führt die Produktionstests aus, generiert die Website aus den vorhandenen
   Caches und veröffentlicht `docs/` als Pages-Artefakt. Es werden weder Daten
   abgerufen noch Entwicklungsabhängigkeiten wie `sharp` installiert.
-- **Update YouTube caches** startet täglich um **06:00 Uhr deutscher Zeit**
+- **Update YouTube caches** startet täglich um **06:17 Uhr deutscher Zeit**
   (`Europe/Berlin`, einschließlich Sommer-/Winterzeit) oder manuell.
   Er ruft `fetch:videos` und `fetch:playlists` auf und committet ausschließlich
   die beiden aktualisierten Cache-Dateien nach `main`. Der Workflow

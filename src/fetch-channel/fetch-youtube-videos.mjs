@@ -1,6 +1,9 @@
 import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { createYoutubeDataApi, resolveYoutubeApiKey, secondsToIsoDuration, youtubeAccessMessage } from "./youtube-data-api.mjs";
+
+export { secondsToIsoDuration };
 
 const YOUTUBE_URL = "https://www.youtube.com";
 const projectRoot = fileURLToPath(new URL("../../", import.meta.url));
@@ -34,16 +37,6 @@ export function parseChannelHandle(input) {
     throw new Error(`Ungültiger YouTube-Handle: ${value}`);
   }
   return handle;
-}
-
-export function secondsToIsoDuration(totalSeconds) {
-  if (!Number.isFinite(totalSeconds)) {
-    return null;
-  }
-  const hours = Math.floor(totalSeconds / 3600);
-  const minutes = Math.floor((totalSeconds % 3600) / 60);
-  const seconds = totalSeconds % 60;
-  return `PT${hours ? `${hours}H` : ""}${minutes ? `${minutes}M` : ""}${seconds || (!hours && !minutes) ? `${seconds}S` : ""}`;
 }
 
 export function extractJsonAssignment(html, variableName) {
@@ -220,6 +213,35 @@ async function fetchVideo(videoId, options) {
   return toVideo(extractJsonAssignment(html, "ytInitialPlayerResponse"));
 }
 
+export function createYoutubeScraper({ fetchImpl = fetch, log = console.log, sleep }) {
+  const options = { fetchImpl, sleep, log, clientVersion: undefined };
+  return {
+    mode: "scraper",
+    channel: (handle) => fetchChannel(handle, options),
+    async* playlistVideoIds(playlistId) {
+      const html = await fetchHtml(`${YOUTUBE_URL}/playlist?list=${encodeURIComponent(playlistId)}`, options);
+      options.clientVersion = findClientVersion(html);
+      let pageData = extractJsonAssignment(html, "ytInitialData");
+      while (pageData) {
+        const { videoIds, continuation } = extractPlaylistPage(pageData);
+        yield videoIds;
+        if (!continuation) return;
+        const response = await postInnertube("browse", { continuation }, options);
+        pageData = response.onResponseReceivedActions ?? response.continuationContents ?? null;
+      }
+    },
+    videos: (ids) => mapWithConcurrency(ids, DETAIL_CONCURRENCY, (id) => fetchVideo(id, options)),
+  };
+}
+
+export function createYoutubeSource({ apiKey = null, fetchImpl = fetch, log = console.log, sleep }) {
+  return apiKey ? createYoutubeDataApi({ apiKey, fetchImpl, log, sleep }) : createYoutubeScraper({ fetchImpl, log, sleep });
+}
+
+export function sourceLabel(source) {
+  return source.mode === "api" ? "YouTube Data API v3" : "anonymer Abruf öffentlicher YouTube-Seiten";
+}
+
 export async function mapWithConcurrency(items, limit, mapper) {
   const results = new Array(items.length);
   let nextIndex = 0;
@@ -252,13 +274,20 @@ async function writeCache(cacheFile, data) {
   await rename(temporaryFile, cacheFile);
 }
 
+function publishedTime(video) {
+  const time = video.publishedAt ? Date.parse(video.publishedAt) : Number.NaN;
+  return Number.isNaN(time) ? -Infinity : time;
+}
+
+// Compares instants because scraped dates carry a Pacific offset while the API returns UTC.
 function sortVideos(videosById) {
-  return [...videosById.values()].sort((a, b) => (b.publishedAt ?? "").localeCompare(a.publishedAt ?? ""));
+  return [...videosById.values()].sort((a, b) => (publishedTime(b) - publishedTime(a)) || 0);
 }
 
 export async function syncYoutubeVideos({
   channel,
   cacheFile = defaultCacheFile,
+  apiKey = null,
   fetchImpl = fetch,
   log = console.log,
   sleep = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds)),
@@ -270,9 +299,10 @@ export async function syncYoutubeVideos({
   const lastModifiedTime = lastModified ? Date.parse(lastModified) : null;
   const videosById = new Map((sameChannel ? cache.videos ?? [] : []).map((video) => [video.id, video]));
 
-  const options = { fetchImpl, sleep, log, clientVersion: undefined };
+  const source = createYoutubeSource({ apiKey, fetchImpl, log, sleep });
+  log(`Videos über ${sourceLabel(source)}.`);
   // The channel ID never changes, so a cached one saves the channel page request.
-  const channelData = sameChannel && cache.channel.id ? cache.channel : await fetchChannel(handle, options);
+  const channelData = sameChannel && cache.channel.id ? cache.channel : await source.channel(handle);
   const channelInfo = {
     id: channelData.id,
     handle,
@@ -289,16 +319,12 @@ export async function syncYoutubeVideos({
   });
 
   const uploadsPlaylistId = `UU${channelData.id.slice(2)}`;
-  const playlistHtml = await fetchHtml(`${YOUTUBE_URL}/playlist?list=${uploadsPlaylistId}`, options);
-  options.clientVersion = findClientVersion(playlistHtml);
-  let pageData = extractJsonAssignment(playlistHtml, "ytInitialData");
   let page = 0;
   let newVideos = 0;
-  let reachedKnownVideos = false;
 
-  while (pageData) {
+  for await (const videoIds of source.playlistVideoIds(uploadsPlaylistId)) {
     page += 1;
-    const { videoIds, continuation } = extractPlaylistPage(pageData);
+    let reachedKnownVideos = false;
     const unknownIds = videoIds.filter((id) => !videosById.has(id));
 
     if (lastModifiedTime !== null && videoIds.some((id) => {
@@ -308,7 +334,7 @@ export async function syncYoutubeVideos({
       reachedKnownVideos = true;
     }
 
-    const videos = await mapWithConcurrency(unknownIds, DETAIL_CONCURRENCY, (id) => fetchVideo(id, options));
+    const videos = await source.videos(unknownIds);
     for (const video of videos) {
       if (!video) {
         continue;
@@ -323,11 +349,9 @@ export async function syncYoutubeVideos({
     log(`Seite ${page}: ${videoIds.length} Videos gelesen, ${videos.filter(Boolean).length} neu geladen.`);
     await saveProgress(false);
 
-    if (!continuation || reachedKnownVideos) {
+    if (reachedKnownVideos) {
       break;
     }
-    const response = await postInnertube("browse", { continuation }, options);
-    pageData = response.onResponseReceivedActions ?? response.continuationContents ?? null;
   }
 
   await saveProgress(true);
@@ -335,10 +359,28 @@ export async function syncYoutubeVideos({
   return readCache(cacheFile);
 }
 
-if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  const channel = process.argv[2] ?? process.env.YOUTUBE_CHANNEL ?? "PrettyOldPixel";
-  await syncYoutubeVideos({ channel }).catch((error) => {
-    console.error(error.message);
+export async function startYoutubeCli(task, {
+  channel = process.argv[2] ?? process.env.YOUTUBE_CHANNEL ?? "PrettyOldPixel",
+  resolveKey = resolveYoutubeApiKey,
+  log = console.log,
+  logError = console.error,
+} = {}) {
+  try {
+    parseChannelHandle(channel);
+    const { apiKey, origin } = resolveKey();
+    log(youtubeAccessMessage(origin));
+    return await task({ channel, apiKey });
+  } catch (error) {
+    logError(error.message);
     process.exitCode = 1;
-  });
+    return null;
+  }
+}
+
+export async function runCli() {
+  await startYoutubeCli(syncYoutubeVideos);
+}
+
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  await runCli();
 }

@@ -2,6 +2,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { readJson, writeJson } from "../shared/archive-cache.mjs";
 import {
+  createYoutubeSource,
   extractJsonAssignment,
   fetchHtml,
   findClientVersion,
@@ -9,6 +10,8 @@ import {
   mapWithConcurrency,
   parseChannelHandle,
   postInnertube,
+  sourceLabel,
+  startYoutubeCli,
 } from "./fetch-youtube-videos.mjs";
 
 const projectRoot = fileURLToPath(new URL("../../", import.meta.url));
@@ -179,9 +182,53 @@ function playlistData({ checkedAt, lastModified, ...data }) {
   return data;
 }
 
+function playlistUrl(id) {
+  return `${YOUTUBE_URL}/playlist?list=${encodeURIComponent(id)}`;
+}
+
+function scraperPlaylists(options) {
+  return {
+    async channelPlaylists(handle) {
+      const html = await fetchHtml(`${YOUTUBE_URL}/@${encodeURIComponent(handle)}/playlists`, options);
+      const data = extractJsonAssignment(html, "ytInitialData");
+      checkResponse(data);
+      const metadata = data.metadata?.channelMetadataRenderer;
+      if (!metadata?.externalId) throw new Error(`YouTube-Kanal nicht gefunden: @${handle}`);
+      options.clientVersion = findClientVersion(html);
+      const pages = await allPages(primaryContent(data), extractChannelPlaylistsPage, options);
+      return {
+        channel: { id: metadata.externalId, title: metadata.title ?? handle },
+        entries: pages.flatMap((page) => page.playlists),
+      };
+    },
+    playlist: (entry) => fetchPlaylist(entry, options),
+  };
+}
+
+function apiPlaylists(api) {
+  return {
+    async channelPlaylists(handle) {
+      const channel = await api.channel(handle);
+      return { channel, entries: await api.channelPlaylists(channel.id) };
+    },
+    async playlist(entry) {
+      const videos = (await api.playlistItems(entry.id)).map((video, index) => ({ position: index + 1, ...video }));
+      return {
+        id: entry.id,
+        title: entry.title,
+        description: entry.description ?? "",
+        url: playlistUrl(entry.id),
+        videoCount: videos.length,
+        videos,
+      };
+    },
+  };
+}
+
 export async function syncYoutubePlaylists({
   channel,
   cacheFile = defaultCacheFile,
+  apiKey = null,
   fetchImpl = fetch,
   log = console.log,
   sleep = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds)),
@@ -191,21 +238,17 @@ export async function syncYoutubePlaylists({
   const cached = await readJson(cacheFile);
   const previous = cached?.channel?.handle?.toLowerCase() === handle.toLowerCase() ? cached : null;
   const checkedAt = now();
-  const options = { fetchImpl, sleep, log };
-  const html = await fetchHtml(`${YOUTUBE_URL}/@${encodeURIComponent(handle)}/playlists`, options);
-  const data = extractJsonAssignment(html, "ytInitialData");
-  checkResponse(data);
-  const metadata = data.metadata?.channelMetadataRenderer;
-  if (!metadata?.externalId) throw new Error(`YouTube-Kanal nicht gefunden: @${handle}`);
-  options.clientVersion = findClientVersion(html);
-  const pages = await allPages(primaryContent(data), extractChannelPlaylistsPage, options);
-  const entries = [...new Map(pages.flatMap((page) => page.playlists).map((entry) => [entry.id, entry])).values()];
+  const youtube = createYoutubeSource({ apiKey, fetchImpl, log, sleep });
+  log(`Playlists über ${sourceLabel(youtube)}.`);
+  const source = youtube.mode === "api" ? apiPlaylists(youtube) : scraperPlaylists({ fetchImpl, sleep, log });
+  const { channel: channelData, entries: listed } = await source.channelPlaylists(handle);
+  const entries = [...new Map(listed.map((entry) => [entry.id, entry])).values()];
   const oldById = new Map((previous?.playlists ?? []).map((playlist) => [playlist.id, playlist]));
   const byId = new Map(oldById);
   const channelInfo = {
-    id: metadata.externalId,
+    id: channelData.id,
     handle,
-    title: metadata.title ?? handle,
+    title: channelData.title,
     url: `${YOUTUBE_URL}/@${handle}`,
   };
   let added = 0;
@@ -228,7 +271,7 @@ export async function syncYoutubePlaylists({
   const failures = [];
   await mapWithConcurrency(entries, PLAYLIST_CONCURRENCY, async (entry) => {
     try {
-      const fresh = await fetchPlaylist(entry, options);
+      const fresh = await source.playlist(entry);
       const old = oldById.get(entry.id);
       const changed = !old || JSON.stringify(playlistData(old)) !== JSON.stringify(fresh);
       if (!old) added += 1;
@@ -257,10 +300,10 @@ export async function syncYoutubePlaylists({
   return readJson(cacheFile);
 }
 
+export async function runCli() {
+  await startYoutubeCli(syncYoutubePlaylists);
+}
+
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  const channel = process.argv[2] ?? process.env.YOUTUBE_CHANNEL ?? "PrettyOldPixel";
-  await syncYoutubePlaylists({ channel }).catch((error) => {
-    console.error(error.message);
-    process.exitCode = 1;
-  });
+  await runCli();
 }

@@ -2,7 +2,8 @@ name: Update YouTube caches
 
 on:
   schedule:
-    - cron: "0 6 * * *"
+    # Minute 17 avoids the top-of-hour load peak, when GitHub delays or drops scheduled runs.
+    - cron: "17 6 * * *"
       timezone: Europe/Berlin
   workflow_dispatch:
 
@@ -28,8 +29,13 @@ jobs:
           node-version: 22
       - name: Fetch videos
         run: npm run fetch:videos
+        env:
+          # Optional secret; without it the fetchers use the anonymous public pages.
+          GOOGLE_YT_DATA_API_KEY: ${{ secrets.GOOGLE_YT_DATA_API_KEY }}
       - name: Fetch playlists
         run: npm run fetch:playlists
+        env:
+          GOOGLE_YT_DATA_API_KEY: ${{ secrets.GOOGLE_YT_DATA_API_KEY }}
       - name: Commit and push updated caches
         run: |
           git add -- cache/youtube-videos.json cache/youtube-playlists.json

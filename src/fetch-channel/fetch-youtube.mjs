@@ -1,10 +1,10 @@
-import { syncYoutubeVideos } from "./fetch-youtube-videos.mjs";
+import { startYoutubeCli, syncYoutubeVideos } from "./fetch-youtube-videos.mjs";
 import { syncYoutubePlaylists } from "./fetch-youtube-playlists.mjs";
 
-export async function syncYoutube({ channel, log = console.log }) {
+export async function syncYoutube({ channel, apiKey = null, log = console.log }) {
   const results = await Promise.allSettled([
-    syncYoutubeVideos({ channel, log }),
-    syncYoutubePlaylists({ channel, log }),
+    syncYoutubeVideos({ channel, apiKey, log }),
+    syncYoutubePlaylists({ channel, apiKey, log }),
   ]);
   const errors = results.filter((result) => result.status === "rejected").map((result) => result.reason);
   if (errors.length) {
@@ -14,9 +14,5 @@ export async function syncYoutube({ channel, log = console.log }) {
 }
 
 export async function runCli() {
-  const channel = process.argv[2] ?? process.env.YOUTUBE_CHANNEL ?? "PrettyOldPixel";
-  await syncYoutube({ channel }).catch((error) => {
-    console.error(error.message);
-    process.exitCode = 1;
-  });
+  await startYoutubeCli(syncYoutube);
 }

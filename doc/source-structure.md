@@ -49,7 +49,7 @@ src/
 | Verzeichnis | Zuständigkeit und wichtige Dateien |
 |---|---|
 | [`site-generation/`](../src/site-generation/) | Offline-Build, Datenmodell, Konfiguration, Rendering und Formatierung. `widget/` enthält die gemeinsamen HTML-Komponenten; Styles, Browser-Skripte, Bilder und vendiertes Pico CSS einschließlich Lizenz liegen beim Generator. |
-| [`fetch-channel/`](../src/fetch-channel/) | YouTube-Videos und Playlists sowie deren gemeinsamer Abruf. Die Implementierungen heißen weiterhin `fetch-youtube-videos.mjs`, `fetch-youtube-playlists.mjs` und `fetch-youtube.mjs`. |
+| [`fetch-channel/`](../src/fetch-channel/) | YouTube-Videos und Playlists sowie deren gemeinsamer Abruf. Die Implementierungen heißen weiterhin `fetch-youtube-videos.mjs`, `fetch-youtube-playlists.mjs` und `fetch-youtube.mjs`; `youtube-data-api.mjs` kapselt die YouTube Data API v3, die bei gesetztem `GOOGLE_YT_DATA_API_KEY` statt des anonymen Abrufs verwendet wird. |
 | [`fetch-magazine/`](../src/fetch-magazine/) | Zeitschriftenarchive von Kultmags, Reetroz, PC Games Database und AMR, gemeinsamer Archivabruf und Logoverarbeitung. PC Games Database gehört hierher, weil das Modul den GameStar-Heftkatalog verarbeitet. |
 | [`fetch-game/`](../src/fetch-game/) | Lokale Spielemetadaten-Pipeline: SQL-Dump importieren, Titel und Plattformen abgleichen, Firmennamen vereinheitlichen, Ergebnisse verifizieren, nutzbare Metadaten und Prüfberichte erzeugen. Der Ordnername bedeutet keinen automatischen Internetabruf. |
 | [`extra-data/`](../src/extra-data/) | Transkripte abrufen, Spielebesprechungen daraus analysieren und Blätterabend-Zuordnungen aus lokalen Caches erzeugen. |
