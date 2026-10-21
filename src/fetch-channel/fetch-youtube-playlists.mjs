@@ -225,6 +225,11 @@ function apiPlaylists(api) {
   };
 }
 
+export async function playlistCacheReady(channel, cacheFile = defaultCacheFile) {
+  const cached = await readJson(cacheFile);
+  return Boolean(cached?.complete) && cached.channel?.handle?.toLowerCase() === parseChannelHandle(channel).toLowerCase();
+}
+
 export async function syncYoutubePlaylists({
   channel,
   cacheFile = defaultCacheFile,

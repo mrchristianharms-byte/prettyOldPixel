@@ -3,9 +3,14 @@ name: Update YouTube caches
 on:
   schedule:
     # Minute 17 avoids the top-of-hour load peak, when GitHub delays or drops scheduled runs.
-    - cron: "17 6 * * *"
+    - cron: "17 20 * * *"
       timezone: Europe/Berlin
   workflow_dispatch:
+    inputs:
+      force_playlists:
+        description: Playlists auch ohne neue Videos abrufen
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -28,11 +33,14 @@ jobs:
         with:
           node-version: 22
       - name: Fetch videos
+        id: videos
         run: npm run fetch:videos
         env:
           # Optional secret; without it the fetchers use the anonymous public pages.
           GOOGLE_YT_DATA_API_KEY: ${{ secrets.GOOGLE_YT_DATA_API_KEY }}
       - name: Fetch playlists
+        # Playlists only change with new uploads; a missing output (unexpected) still fetches them.
+        if: steps.videos.outputs.new-videos != '0' || inputs.force_playlists
         run: npm run fetch:playlists
         env:
           GOOGLE_YT_DATA_API_KEY: ${{ secrets.GOOGLE_YT_DATA_API_KEY }}

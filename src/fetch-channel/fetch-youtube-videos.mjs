@@ -1,4 +1,4 @@
-import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
+import { appendFile, mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { createYoutubeDataApi, resolveYoutubeApiKey, secondsToIsoDuration, youtubeAccessMessage } from "./youtube-data-api.mjs";
@@ -356,7 +356,7 @@ export async function syncYoutubeVideos({
 
   await saveProgress(true);
   log(`${newVideos} neue Videos gespeichert, insgesamt ${videosById.size}: ${cacheFile}`);
-  return readCache(cacheFile);
+  return { ...(await readCache(cacheFile)), newVideos };
 }
 
 export async function startYoutubeCli(task, {
@@ -377,8 +377,18 @@ export async function startYoutubeCli(task, {
   }
 }
 
+// Lets the Actions workflow skip the playlist step when no video was added.
+export async function writeNewVideosOutput(result, outputFile = process.env.GITHUB_OUTPUT) {
+  if (!outputFile || !Number.isInteger(result?.newVideos)) return;
+  await appendFile(outputFile, `new-videos=${result.newVideos}\n`);
+}
+
 export async function runCli() {
-  await startYoutubeCli(syncYoutubeVideos);
+  await startYoutubeCli(async (options) => {
+    const result = await syncYoutubeVideos(options);
+    await writeNewVideosOutput(result);
+    return result;
+  });
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

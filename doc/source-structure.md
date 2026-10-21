@@ -123,7 +123,8 @@ Der Offline-Build ersetzt den vorangehenden Abruf nicht, sondern verwendet
 dessen Ergebnisse. Vorhandene Caches können für mehrere Builds wiederverwendet
 werden.
 
-Lokal erledigt `npm run fetch:all` die beiden Abrufe parallel; danach kann
+Lokal erledigt `npm run fetch:all` die beiden Abrufe nacheinander und lässt
+die Playlists ohne neue Videos aus; danach kann
 `npm run generate:site` folgen. In GitHub Actions laufen sie im
 YouTube-Workflow nacheinander **vor** einem späteren Pages-Build.
 Die Workflows sind weiterhin getrennt: Der YouTube-Workflow speichert die
@@ -188,8 +189,8 @@ nicht den gesamten Actions-Job.
 
 | Targets | Lokal | GitHub Actions | Netzwerk während der Aufgabe |
 |---|---|---|---|
-| `fetch:all` | Ja | Nein | YouTube; startet Videos und Playlists parallel. |
-| `fetch:videos`, `fetch:playlists` | Ja | YouTube-Workflow, nacheinander | YouTube |
+| `fetch:all` | Ja | Nein | YouTube; lädt Videos und danach nur bei neuen Videos die Playlists. |
+| `fetch:videos`, `fetch:playlists` | Ja | YouTube-Workflow, nacheinander; Playlists nur bei neuen Videos | YouTube |
 | `dev:fetch:archives`, `dev:fetch:archives:refresh`, `dev:fetch:gamestar`, `dev:fetch:amiga-action` | Ja | Nein | Archivseiten und Logos; Caches werden berücksichtigt. |
 | `dev:fetch:transcripts` | Ja | Nein | YouTube über `yt-dlp` und HTTP |
 | `dev:generate:blaetterabend` | Ja | Nein | Keines; lokale Caches |

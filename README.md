@@ -251,12 +251,14 @@ Browser oder Modelle und ruft keine Fetch- oder LLM-Schritte auf.
 Checkout, Actions-Cache und Pages-Deployment benötigen unabhängig davon
 die GitHub-Dienste.
 
-Der zweite Workflow `Update YouTube caches` startet täglich um 06:17 Uhr
+Der zweite Workflow `Update YouTube caches` startet täglich um 20:17 Uhr
 in `Europe/Berlin` (einschließlich Sommer-/Winterzeit), zusätzlich manuell
 über `workflow_dispatch`. Die Minute 17 statt der vollen Stunde verringert
 Verzögerungen und ausgelassene Läufe, die GitHub bei hoher Last zur vollen
-Stunde verursacht. Er führt ausschließlich `fetch:videos` und
-`fetch:playlists` aus und committet Änderungen an `cache/youtube-videos.json`
+Stunde verursacht. Er führt ausschließlich `fetch:videos` und danach
+`fetch:playlists` aus. Den Playlist-Schritt überspringt er, wenn
+`fetch:videos` keine neuen Videos gefunden hat; bei einem manuellen Start
+erzwingt die Option `force_playlists` den Playlist-Abruf. Er committet Änderungen an `cache/youtube-videos.json`
 und `cache/youtube-playlists.json` nach `main`. Ohne Änderungen entsteht
 kein Commit; bei einem fehlgeschlagenen Abruf werden keine Teilstände eingecheckt.
 Er benötigt keine npm-Installation und führt keine lokalen `dev:`-Aufgaben aus.
@@ -332,9 +334,10 @@ Die beiden Workflows haben getrennte Aufgaben:
   Er führt die Produktionstests aus, generiert die Website aus den vorhandenen
   Caches und veröffentlicht `docs/` als Pages-Artefakt. Es werden weder Daten
   abgerufen noch Entwicklungsabhängigkeiten wie `sharp` installiert.
-- **Update YouTube caches** startet täglich um **06:17 Uhr deutscher Zeit**
+- **Update YouTube caches** startet täglich um **20:17 Uhr deutscher Zeit**
   (`Europe/Berlin`, einschließlich Sommer-/Winterzeit) oder manuell.
-  Er ruft `fetch:videos` und `fetch:playlists` auf und committet ausschließlich
+  Er ruft `fetch:videos` und nur bei neuen Videos danach `fetch:playlists` auf
+  (manuell erzwingbar mit `force_playlists`) und committet ausschließlich
   die beiden aktualisierten Cache-Dateien nach `main`. Der Workflow
   veröffentlicht selbst keine Website; sein erfolgreicher Abschluss startet
   den Pages-Workflow automatisch.

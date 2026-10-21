@@ -1035,7 +1035,7 @@ bisher bei jedem Abruf überprüft; sie sind keine unveränderlichen Videodetail
 ## YouTube-Playlists cachen
 
 ```sh
-# Videos und Playlists gleichzeitig aktualisieren:
+# Videos und danach – nur bei neuen Videos – Playlists aktualisieren:
 npm run fetch:all
 
 # Nur Playlists aktualisieren:
@@ -1049,8 +1049,18 @@ npm run fetch:playlists -- https://www.youtube.com/@PrettyOldPixel
 [Abrufweg](#abrufweg-youtube-data-api-v3-oder-anonym)) die öffentlichen Playlists
 des Kanals und alle Seiten ihrer Mitgliederlisten. Bis zu drei Playlists werden
 parallel geladen; innerhalb einer Playlist werden Fortsetzungen nacheinander
-abgefragt. Der gemeinsame Task wartet auf beide Scripts und endet bei einem
-Fehler mit einem Fehlerstatus. Die Scripts schreiben getrennte Cache-Dateien.
+abgefragt. Der gemeinsame Task `fetch:all` lädt zuerst die Videos und danach
+die Playlists. Findet er keine neuen Videos und ist der Playlist-Cache
+vollständig, überspringt er den Playlist-Abruf. Bei einem Fehler endet er mit
+einem Fehlerstatus; schlägt der Videoabruf fehl, werden keine Playlists geladen.
+`npm run fetch:playlists` lädt die Playlists immer. Die Scripts schreiben
+getrennte Cache-Dateien.
+
+In GitHub Actions schreibt `fetch:videos` die Zahl neuer Videos als
+Step-Output `new-videos`; der Playlist-Schritt läuft nur bei einem Wert
+ungleich `0` oder bei manuellem Start mit `force_playlists`. Playlist-Änderungen
+ohne neues Video (z. B. Umsortierungen) werden dadurch erst mit dem nächsten
+neuen Video oder einem erzwungenen Lauf übernommen.
 
 Das Ergebnis liegt in `cache/youtube-playlists.json`:
 
