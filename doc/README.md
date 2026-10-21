@@ -120,7 +120,8 @@ Umgesetzt sind Startseite, News mit den 20 neuesten veröffentlichten Videos,
 Zeitschriftenindex mit Zeitschriften-, Jahrgangs- und Ausgabenseiten,
 Spieleindex und Spieleseiten, Hardware, Retrospektiven sowie Interviews und Gespräche,
 Datenschutz, Sitemap, Robots-Datei und 404-Seite. Alle Inhalte stehen direkt im
-HTML. Alle Seiten laden ein kleines lokales Skript für den Hell-/Dunkel-Schalter.
+HTML. Alle Seiten enthalten ein minifiziertes Inline-Skript für den Hell-/Dunkel-Schalter
+vor dem Stylesheet; dafür wird keine zusätzliche Ressource geladen.
 Ohne manuelle Auswahl folgt die Darstellung `prefers-color-scheme` im Browser,
 auch bei Änderungen und ohne JavaScript. Eine manuelle Auswahl wird unter
 `pretty-old-pixel:theme` im Local Storage gespeichert und hat Vorrang.
@@ -615,6 +616,9 @@ gemeinsame interne Video- und Themenlinks aus `src/site-generation/site-video-li
 nicht den Seitengenerator; so entstehen keine zyklischen Abhängigkeiten.
 Styles bleiben in `src/site-generation/site.css`, Browserinteraktion in `src/site-generation/video-series.js`
 und der globale Hell-/Dunkel-Schalter in `src/site-generation/theme.js`.
+Der Seitengenerator minifiziert das Theme-Skript beim Build mit Terser und
+bettet es direkt ins HTML ein; eine separate Theme-JavaScript-Datei entfällt.
+Das Inline-Skript zählt weiterhin zum JavaScript-Budget der jeweiligen Seite.
 Die Widget-Module werden nur beim Build ausgeführt, nicht zusätzlich im Browser.
 
 Alle eingebetteten Videos verwenden das gemeinsame `videoWidget`:

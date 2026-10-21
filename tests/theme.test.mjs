@@ -1,9 +1,20 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
 import test from "node:test";
 import { runInNewContext } from "node:vm";
+import { createSiteConfig } from "../src/site-generation/site-config.mjs";
+import { normalizeSources } from "../src/site-generation/site-data.mjs";
+import { renderSite } from "../src/site-generation/site-render.mjs";
 
-const script = await readFile(new URL("../src/site-generation/theme.js", import.meta.url), "utf8");
+const channel = { id: "UC-theme", title: "Pretty Old Pixel" };
+const model = normalizeSources({
+  videos: { channel, complete: true, videos: [{
+    id: "t0000000000", title: "Theme-Test", durationSeconds: 60, publishedAt: "2020-01-01T00:00:00Z",
+  }] },
+  playlists: { channel, complete: true, playlists: [] },
+  magazines: { channel, videos: [] },
+});
+const html = renderSite(model, createSiteConfig(), "assets/site.css").get("index.html").html;
+const script = html.match(/<script>([\s\S]*?)<\/script>/u)[1];
 const key = "pretty-old-pixel:theme";
 
 function setup({ dark = false, saved = null, blocked = false } = {}) {

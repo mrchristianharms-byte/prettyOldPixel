@@ -38,11 +38,12 @@ export function validateSite(pages, assets, config) {
     }
     const scripts = [...page.html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gu)];
     if (scripts[0]?.[1] !== ' type="application/ld+json"' || scripts.length < 2 || scripts.length > 3
-      || !/^ src="[^"]+"$/u.test(scripts[1]?.[1] ?? "") || scripts[1]?.[2] !== ""
+      || scripts[1]?.[1] !== "" || !scripts[1]?.[2].trim()
       || (scripts.length === 3 && !/^ (?:type="module"|defer) src="[^"]+"$/u.test(scripts[2][1]))) {
-      throw new Error(`${file}: Nur JSON-LD, ein lokales Darstellungs-Skript und ein lokales Interaktions-Skript sind erlaubt.`);
+      throw new Error(`${file}: Nur JSON-LD, ein Inline-Darstellungs-Skript und ein lokales Interaktions-Skript sind erlaubt.`);
     }
     const pageJsGzip = scripts.slice(1).reduce((sum, script) => {
+      if (script[1] === "") return sum + gzipSync(script[2]).length;
       const url = new URL(/\bsrc="([^"]+)"/u.exec(script[1])[1], config.absolute(page.route));
       const asset = url.pathname.slice(config.basePath.length);
       const content = assets.get(asset);
@@ -159,13 +160,12 @@ export async function generateSite({
   const model = await loadSiteData(cache, { now });
   for (const warning of model.warnings) logger.warn(`Build-Hinweis: ${warning}`);
 
-  const [pico, customCss, license, seriesJs, favicon, themeJs, touchIcon, tableJs] = await Promise.all([
+  const [pico, customCss, license, seriesJs, favicon, touchIcon, tableJs] = await Promise.all([
     readFile(new URL("./vendor/pico-2.1.1.site.min.css", import.meta.url), "utf8"),
     readFile(new URL("./site.css", import.meta.url), "utf8"),
     readFile(new URL("./vendor/pico-LICENSE.md", import.meta.url), "utf8"),
     readFile(new URL("./video-series.js", import.meta.url), "utf8"),
     readFile(new URL("./favicon.webp", import.meta.url)),
-    readFile(new URL("./theme.js", import.meta.url), "utf8"),
     readFile(new URL("./apple-touch-icon.png", import.meta.url)),
     readFile(new URL("./game-table.js", import.meta.url), "utf8"),
   ]);
@@ -176,10 +176,9 @@ export async function generateSite({
   }
   const cssFile = `assets/site.${hash(css).slice(0, 12)}.css`;
   const jsFile = `assets/video-series.${hash(seriesJs).slice(0, 12)}.js`;
-  const themeFile = `assets/theme.${hash(themeJs).slice(0, 12)}.js`;
   const tableFile = `assets/game-table.${hash(tableJs).slice(0, 12)}.js`;
-  const assets = new Map([[cssFile, css], [jsFile, seriesJs], [themeFile, themeJs], [tableFile, tableJs], ["favicon.webp", favicon], ["apple-touch-icon.png", touchIcon], ["assets/pico-LICENSE.txt", license], [".nojekyll", ""], ...model.magazineLogoAssets]);
-  const pages = renderSite(model, config, cssFile, jsFile, themeFile, tableFile);
+  const assets = new Map([[cssFile, css], [jsFile, seriesJs], [tableFile, tableJs], ["favicon.webp", favicon], ["apple-touch-icon.png", touchIcon], ["assets/pico-LICENSE.txt", license], [".nojekyll", ""], ...model.magazineLogoAssets]);
+  const pages = renderSite(model, config, cssFile, jsFile, tableFile);
   const budgets = validateSite(pages, assets, config);
   const manifest = {
     version: 2, baseUrl: config.baseUrl,

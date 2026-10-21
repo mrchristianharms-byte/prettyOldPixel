@@ -27,7 +27,7 @@ function fixture(count = 53) {
 function render(input = fixture(), baseUrl) {
   const config = createSiteConfig(baseUrl);
   const pages = renderSite(normalizeSources(input), config, config.href("assets/site.css"));
-  return { pages, config, assets: new Map([["assets/site.css", "body{}"], ["assets/video-series.js", ""], ["assets/theme.js", ""], ["favicon.webp", "image"], ["apple-touch-icon.png", "image"]]) };
+  return { pages, config, assets: new Map([["assets/site.css", "body{}"], ["assets/video-series.js", ""], ["favicon.webp", "image"], ["apple-touch-icon.png", "image"]]) };
 }
 
 function issueFixture() {
@@ -392,12 +392,16 @@ test("lehnt absolute interne JSON-LD-URLs und Skriptpfade ab", () => {
   assert.throws(() => validateSite(pages, assets, config), /seitenrelativ/u);
 });
 
-test("bindet den zugänglichen Darstellungs-Schalter und sein lokales Skript vor dem CSS auf jeder Seite ein", () => {
+test("bindet den zugänglichen Darstellungs-Schalter und sein minifiziertes Inline-Skript vor dem CSS auf jeder Seite ein", async () => {
   const { pages, config, assets } = render(issueFixture());
+  const source = await readFile(new URL("../src/site-generation/theme.js", import.meta.url), "utf8");
   for (const page of pages.values()) {
-    assert.ok(page.html.includes(`src="${config.href("assets/theme.js", page.route)}"`));
-    assert.ok(page.html.indexOf('src="' + config.href("assets/theme.js", page.route))
-      < page.html.indexOf('rel="stylesheet"'));
+    const inline = page.html.match(/<script>([\s\S]*?)<\/script>/u);
+    assert.ok(inline);
+    assert.ok(inline.index < page.html.indexOf('rel="stylesheet"'));
+    assert.ok(inline[1].length < source.length * 0.7);
+    assert.doesNotMatch(inline[1], /[\r\n]/u);
+    assert.doesNotMatch(page.html, /<script[^>]+src="[^"]*theme[^"]*"/u);
     const header = page.html.match(/<header[\s\S]*?<\/header>/u)[0];
     assert.ok(header.includes('type="button" class="theme-toggle" data-theme-toggle hidden'));
     assert.ok(header.includes('aria-label="Darstellungsmodus wechseln"'));
@@ -475,7 +479,7 @@ test("prüft das JavaScript-Budget pro Seite statt unverbundene Interaktionsskri
   const news = pages.get("news/index.html");
   news.html = news.html.replace("</head>", '<script defer src="../assets/game-table.js"></script></head>');
   assert.ok(validateSite(pages, assets, config).jsGzip < 5 * 1024);
-  assets.set("assets/theme.js", script);
+  news.html = news.html.replace(/<script>[\s\S]*?<\/script>/u, `<script>${script}</script>`);
   assert.throws(() => validateSite(pages, assets, config), /JavaScript überschreitet/u);
 });
 
@@ -648,7 +652,7 @@ test("erhält alte Assets nur für Deployments und bereinigt sie bei lokalen Bui
   const currentAssets = await readdir(assetsPath);
   assert.equal(currentAssets.filter((file) => /^site\..*\.css$/u.test(file)).length, 1);
   assert.equal(currentAssets.filter((file) => /^video-series\..*\.js$/u.test(file)).length, 1);
-  assert.equal(currentAssets.filter((file) => /^theme\..*\.js$/u.test(file)).length, 1);
+  assert.equal(currentAssets.filter((file) => /^theme\..*\.js$/u.test(file)).length, 0);
 });
 
 test("verweigert beschädigte oder verlinkte historische Assets und erhält den bisherigen Build", async (t) => {

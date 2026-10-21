@@ -1,3 +1,5 @@
+import { readFile } from "node:fs/promises";
+import { minify } from "terser";
 import { paginatedRoute, slugify } from "./site-config.mjs";
 import { escapeHtml, externalLink } from "./site-html.mjs";
 import { videoHref } from "./site-video-links.mjs";
@@ -14,6 +16,9 @@ import { magazineLogo } from "./widget/magazine-logo.mjs";
 import { videoPanel } from "./widget/video-panel.mjs";
 import { navigation } from "./widget/navigation.mjs";
 import { themeToggle } from "./widget/theme-toggle.mjs";
+
+const { code: themeScript } = await minify(await readFile(new URL("./theme.js", import.meta.url), "utf8"));
+if (!themeScript) throw new Error("Minifiziertes Darstellungs-Skript ist leer.");
 
 export { escapeHtml, externalLink } from "./site-html.mjs";
 export { videoHref } from "./site-video-links.mjs";
@@ -126,7 +131,7 @@ function breadcrumbsMarkup(crumbs, config) {
     : `<a href="${config.href(crumb.route)}">${escapeHtml(crumb.name)}</a>`}</li>`).join("")}</ol></nav>`;
 }
 
-function layout({ route, title, description, body, schema, crumbs, image, imageAlt, noindex = false, previous, next, interactive = false, sortableGames = false }, config, cssHref, hasMagazines, jsHref, hasGames, sections, themeHref, tableHref) {
+function layout({ route, title, description, body, schema, crumbs, image, imageAlt, noindex = false, previous, next, interactive = false, sortableGames = false }, config, cssHref, hasMagazines, jsHref, hasGames, sections, tableHref) {
   const canonical = config.absolute(route);
   const fullTitle = `${title} | ${config.name}`;
   const breadcrumbSchema = {
@@ -171,7 +176,7 @@ ${image ? `<meta property="og:image" content="${escapeHtml(image)}"><meta proper
 ${previous ? `<link rel="prev" href="${config.href(previous)}">` : ""}
 ${next ? `<link rel="next" href="${config.href(next)}">` : ""}
 <script type="application/ld+json">${jsonLd({ "@context": "https://schema.org", "@graph": [...(Array.isArray(schema) ? schema : [schema]), breadcrumbSchema] })}</script>
-<script src="${config.href(themeHref)}"></script>
+<script>${themeScript}</script>
 <link rel="stylesheet" href="${config.href(cssHref)}">
 ${interactive ? `<script type="module" src="${config.href(jsHref)}"></script>` : ""}
 ${sortableGames ? `<script defer src="${config.href(tableHref)}"></script>` : ""}
@@ -734,7 +739,7 @@ ${section.id === "sonstiges" ? "" : pagination(section.route, page, count, confi
   }
 }
 
-export function renderSite(model, config, cssHref, jsHref = "assets/video-series.js", themeHref = "assets/theme.js", tableHref = "assets/game-table.js") {
+export function renderSite(model, config, cssHref, jsHref = "assets/video-series.js", tableHref = "assets/game-table.js") {
   const pages = new Map();
   const filters = gameMetadataFilters(model.games);
   const hasMagazines = model.magazines.length > 0 || model.unresolvedMagazines.length > 0;
@@ -748,7 +753,7 @@ export function renderSite(model, config, cssHref, jsHref = "assets/video-series
       imageAlt: options.imageAlt ?? `Vorschaubild: ${previewVideo.title}`,
     } : options;
     pages.set(file, {
-      html: layout(pageOptions, config.forPage(options.route), cssHref, hasMagazines, jsHref, model.games.length > 0, model.sections, themeHref, tableHref),
+      html: layout(pageOptions, config.forPage(options.route), cssHref, hasMagazines, jsHref, model.games.length > 0, model.sections, tableHref),
       route: options.route, indexable: !options.noindex,
       contentPublishedAt: latestPublication(videos),
     });
