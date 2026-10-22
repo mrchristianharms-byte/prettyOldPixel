@@ -12,3 +12,4 @@ node_modules/
 /cache/gdb.sql
 /gdb.sql
 /cache/gdb.sqlite*
+.rusty/*
