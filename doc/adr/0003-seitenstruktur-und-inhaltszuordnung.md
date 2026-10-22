@@ -22,6 +22,16 @@ sie Jahrgangsseiten und Regeln für Spielereihen. Die Anforderungen an statische
 HTML, SEO, echte Links, lokale Assets und die Ausnahme für YouTube-Medien
 gelten unverändert.
 
+### Erweiterte Übersichtsseiten
+
+[ADR 0007: Katalogübersichten und erweiterte Navigation](0007-kataloguebersichten-und-erweiterte-navigation.md)
+dokumentiert die inzwischen umgesetzte Erweiterung dieser Struktur:
+Zeitschriftenkacheln mit Statistikwerten und einen zusätzlichen Einstieg nach
+Gast, die Kalendernavigation bei mehr als 30 Videos pro Zeitschrift sowie
+den paginierten Spielekatalog mit ergänzender sortier- und filterbarer
+Gesamttabelle. Die hier beschriebenen Inhaltszuordnungen und Detailpfade
+bleiben deren Grundlage.
+
 ## Bestandsaufnahme und verfügbare Daten
 
 Untersucht wurde der lokale Cache `cache/youtube-videos.json` mit 2.159 Videos

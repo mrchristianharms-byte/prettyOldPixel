@@ -673,6 +673,14 @@ Zeitschriften mit mehr als 30 unterschiedlichen Videos zeigen auf ihrer Übersic
 statt der Jahrgangsliste einen Kalender mit den Jahrgängen als Spalten und den
 Ausgabennummern 1 bis 12 als Zeilen. Die Jahreszahlen führen zur lokalen
 Jahrgangsseite; jede gefundene Ausgabe verlinkt direkt zum zugehörigen Video.
+Unter 768 Pixel Breite erscheint statt des Kalenders eine gut antippbare
+Jahrgangsliste. In der Seitenüberschrift des Zeitschriftenindex führt der Sprunglink
+„Gäste“ direkt zum Gästebereich, auch über Seitengrenzen.
+Alle Spiele-Katalogseiten bieten den Einstieg „Spiele suchen und filtern“.
+Die Gesamttabelle kombiniert eine Titelsuche mit System- und Genrefiltern;
+„Filter zurücksetzen“ leert die Filter ohne Änderung der Sortierung.
+„Erstes Video“, „Erscheinungsjahr“ und „Videolaufzeit“ unterscheiden
+Videoveröffentlichung, Spieljahr und summierte Videolängen.
 
 - `/zeitschriften/` zeigt die erkannten Zeitschriften alphabetisch sowie eine
   Gruppe „Weitere Blätterabende“ für nicht sicher zugeordnete Blätterabend-Videos.
@@ -1786,6 +1794,7 @@ Architecture Decision Records liegen in `doc/adr/`:
 - [ADR 0004: Detailseiten, Videonavigation und fortlaufende Wiedergabe](adr/0004-detailseiten-und-videonavigation.md)
 - [ADR 0005: Wiederverwendbare Widgets und Komponenten](adr/0005-wiederverwendbare-widgets-und-komponenten.md)
 - [ADR 0006: Spielemetadaten ausschließlich aus lokalem Games-Dump (angenommen)](adr/0006-spielemetadaten-aus-lokalem-games-dump.md)
+- [ADR 0007: Katalogübersichten und erweiterte Navigation](adr/0007-kataloguebersichten-und-erweiterte-navigation.md)
 
 ## GitHub Pages veröffentlichen
 

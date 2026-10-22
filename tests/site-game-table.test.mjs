@@ -25,15 +25,15 @@ function setup() {
     value,
     get selectedOptions() {
       const labels = {
-        video: "Videoveröffentlichung", release: "Erscheinungsjahr des Spiels",
-        title: "Titel (Alphabet)", duration: "Spielzeit",
+        video: "Erstes Video", release: "Erscheinungsjahr des Spiels",
+        title: "Titel (Alphabet)", duration: "Videolaufzeit",
       };
       return [{ textContent: labels[this.value] ?? this.value }];
     },
   });
   const buttons = Object.entries({
-    video: "Videoveröffentlichung", release: "Erscheinungsjahr des Spiels",
-    title: "Titel (Alphabet)", duration: "Spielzeit",
+    video: "Erstes Video", release: "Erscheinungsjahr des Spiels",
+    title: "Titel (Alphabet)", duration: "Videolaufzeit",
   }).map(([key, label]) => {
     const button = new EventTarget();
     button.dataset = { gameSort: key, sortLabel: label };
@@ -51,6 +51,9 @@ function setup() {
   });
   const platform = control("");
   const genre = control("");
+  const search = new EventTarget();
+  search.value = "";
+  const reset = new EventTarget();
   const controls = new EventTarget();
   controls.hidden = true;
   const body = {
@@ -69,6 +72,8 @@ function setup() {
     "[data-game-table-controls]": controls,
     "[data-game-platform]": platform,
     "[data-game-genre]": genre,
+    "[data-game-search]": search,
+    "[data-game-reset]": reset,
     "[data-game-table-count]": count,
     "[data-game-table-filters]": filters,
     "[data-game-table-sort]": sorting,
@@ -80,7 +85,7 @@ function setup() {
     querySelector: (selector) => nodes[selector], querySelectorAll: () => buttons,
   }) } });
   return {
-    controls, buttons, platform, genre, count, filters, sorting, empty, caption,
+    controls, buttons, platform, genre, search, reset, count, filters, sorting, empty, caption,
     sortBy(field, direction) {
       const button = buttons.find((entry) => entry.dataset.gameSort === field);
       if (button.parentElement.attributes["aria-sort"] !== (direction === "asc" ? "ascending" : "descending")) {
@@ -132,7 +137,7 @@ test("kombiniert System und Genre mit UND, erhält Sortierung und meldet leere T
   assert.deepEqual(app.visible(), ["Alpha", "Beta", "Teilweise"]);
   assert.equal(app.count.textContent, "3 von 5 Spielen");
   assert.equal(app.filters.textContent, "Filter: DOS · Adventure");
-  assert.equal(app.sorting.textContent, "Sortierung: Videoveröffentlichung: neueste zuerst");
+  assert.equal(app.sorting.textContent, "Sortierung: Erstes Video: neueste zuerst");
   app.sortBy("title", "asc");
   app.genre.value = "Action";
   app.update();
@@ -170,6 +175,28 @@ test("Kopf-Schaltflächen wechseln die Richtung und deaktivieren den vorherigen 
   title.dispatchEvent(new Event("click"));
   assert.equal(title.icon.textContent, "↓");
   assert.match(title.attributes["aria-label"], /aufsteigend sortieren$/u);
+});
+
+test("kombiniert Titelsuche mit Filtern und setzt alle Filter ohne Sortieränderung zurück", () => {
+  const app = setup();
+  app.platform.value = "DOS";
+  app.genre.value = "Adventure";
+  app.search.value = "  ALP  ";
+  app.search.dispatchEvent(new Event("input"));
+  assert.deepEqual(app.visible(), ["Alpha"]);
+  assert.equal(app.count.textContent, "1 von 5 Spielen");
+  assert.equal(app.filters.textContent, "Filter: DOS · Adventure · Titel: ALP");
+  app.search.value = "Gamma";
+  app.search.dispatchEvent(new Event("input"));
+  assert.deepEqual(app.visible(), []);
+  assert.equal(app.empty.hidden, false);
+  app.sortBy("title", "desc");
+  app.reset.dispatchEvent(new Event("click"));
+  assert.equal(app.search.value, "");
+  assert.equal(app.platform.value, "");
+  assert.equal(app.genre.value, "");
+  assert.deepEqual(app.visible(), ["Unbekannt", "Teilweise", "Gamma", "Beta", "Alpha"]);
+  assert.equal(app.empty.hidden, true);
 });
 
 test("filtert unbekannte Metadaten ausdrücklich und ändert sonstige Seiten nicht", () => {

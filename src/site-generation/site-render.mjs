@@ -60,13 +60,13 @@ function latestPublication(videos) {
 
 function catalogDuration(videoIds, model, compact = false) {
   const durations = videoIds.map((id) => model.videoById.get(id).durationSeconds).filter((seconds) => seconds !== null);
-  if (!durations.length) return compact ? "Spielzeit unbekannt" : "Gesamtlaufzeit unbekannt";
+  if (!durations.length) return compact ? "Videolaufzeit unbekannt" : "Gesamtlaufzeit unbekannt";
   const minutes = Math.round(durations.reduce((sum, seconds) => sum + seconds, 0) / 60);
   const hours = Math.floor(minutes / 60);
   const total = `${hours}:${String(minutes % 60).padStart(2, "0")}${compact ? "" : " "}h`;
   return durations.length === videoIds.length
     ? compact ? total : `Gesamtlaufzeit: ${total}`
-    : `Bekannte ${compact ? "Spielzeit" : "Laufzeit"}: ${total} (${durations.length} von ${videoCount(videoIds.length)})`;
+    : `Bekannte ${compact ? "Videolaufzeit" : "Laufzeit"}: ${total} (${durations.length} von ${videoCount(videoIds.length)})`;
 }
 
 function homeOverview(model, config, filters) {
@@ -318,6 +318,7 @@ function renderMagazinePages(model, siteConfig, add) {
   const root = { route: "", name: "Startseite" };
   const index = { route: "zeitschriften/", name: "Zeitschriften" };
   function magazineCalendar(magazine, config) {
+    const yearHref = (year) => magazine.years.length > 1 ? config.href(year.route) : "#ausgaben";
     const cells = new Map();
     for (const issue of magazine.issues.values()) {
       if (issue.year === null || issue.special || !issue.videos.length) continue;
@@ -331,7 +332,7 @@ function renderMagazinePages(model, siteConfig, add) {
     }
     return `<div class="magazine-calendar-scroll"><table class="magazine-calendar">
 <caption>Ausgaben nach Jahr und Nummer; Jahreszahlen öffnen den jeweiligen Jahrgang.</caption>
-<thead><tr><th scope="col">Ausgabe</th>${magazine.years.map((year) => `<th scope="col"><a href="${escapeHtml(config.href(year.route))}">${year.year}</a></th>`).join("")}</tr></thead>
+<thead><tr><th scope="col">Ausgabe</th>${magazine.years.map((year) => `<th scope="col"><a href="${escapeHtml(yearHref(year))}">${year.year}</a></th>`).join("")}</tr></thead>
 <tbody>${Array.from({ length: 12 }, (_, index) => {
       const month = index + 1;
       return `<tr><th scope="row">${month}</th>${magazine.years.map((year) => {
@@ -339,7 +340,7 @@ function renderMagazinePages(model, siteConfig, add) {
         return `<td>${links.join(" · ")}</td>`;
       }).join("")}</tr>`;
     }).join("")}</tbody>
-</table></div>`;
+</table></div><nav class="magazine-calendar-mobile" aria-label="Jahrgänge von ${escapeHtml(magazine.name)}"><ul class="year-list">${magazine.years.map((year) => `<li><a href="${escapeHtml(yearHref(year))}">${year.year}</a></li>`).join("")}</ul></nav>`;
   }
   function addPaginated({ route: baseRoute, entries, title, headingHtml, description, crumbs, intro, render, schema = () => [], items }) {
     const pageCount = Math.ceil(entries.length / siteConfig.pageSize);
@@ -361,7 +362,7 @@ function renderMagazinePages(model, siteConfig, add) {
         }, ...pageSchema],
         previous: page > 1 ? paginatedRoute(baseRoute, page - 1) : null,
         next: page < pageCount ? paginatedRoute(baseRoute, page + 1) : null,
-        body: `<h1>${headingHtml ?? escapeHtml(title)}${page > 1 ? ` – Seite ${page}` : ""}</h1>${typeof intro === "function" ? intro(config) : intro}${page > 1 ? `<p>Seite ${page} von ${pageCount}: weitere Einträge zu ${escapeHtml(title)}.</p>` : ""}${pagination(baseRoute, page, pageCount, config)}${render(subset, config)}${pagination(baseRoute, page, pageCount, config)}`,
+        body: `<h1>${typeof headingHtml === "function" ? headingHtml(config) : headingHtml ?? escapeHtml(title)}${page > 1 ? ` – Seite ${page}` : ""}</h1>${typeof intro === "function" ? intro(config) : intro}${page > 1 ? `<p>Seite ${page} von ${pageCount}: weitere Einträge zu ${escapeHtml(title)}.</p>` : ""}${pagination(baseRoute, page, pageCount, config)}${render(subset, config)}${pagination(baseRoute, page, pageCount, config)}`,
       }, videos);
     }
   }
@@ -371,23 +372,24 @@ function renderMagazinePages(model, siteConfig, add) {
     ...model.unresolvedMagazines.map((video) => ({ videoId: video.id })),
   ];
   addPaginated({
-    route: index.route, entries: indexEntries, title: "Blätterabend – Zeitschriften",
+    route: index.route, entries: indexEntries, title: "Blätterabend – Zeitschriften und Gäste",
+    headingHtml: (config) => `Blätterabend – Zeitschriften und ${model.magazineGuests.length ? `<a href="${config.href(paginatedRoute(index.route, Math.floor(model.magazines.length / config.pageSize) + 1))}#gaeste">Gäste</a>` : "Gäste"}`,
     description: (entries) => `Entdecke ${previewList(magazineEntryHighlights(entries, model))} – mit Videos zu klassischen Computerzeitschriften und ihren Ausgaben.`,
     crumbs: [root, index],
     items: (entries) => entries.map((entry) => entry.magazine
       ? { title: entry.magazine.name, route: entry.magazine.route }
       : entry.guest ? { title: entry.guest.name, route: entry.guest.route } : model.videoById.get(entry.videoId)),
-    intro: `<p>${countLabel(model.magazines.length, "Computerzeitschrift", "Computerzeitschriften")} im Blätterabend: Zeitschriften, Heftausgaben und Jahrgänge mit Videos und Archivlinks.</p>`,
+    intro: `<p>${countLabel(model.magazines.length, "Computerzeitschrift", "Computerzeitschriften")} im Blätterabend: Zeitschriften, Gäste, Heftausgaben und Jahrgänge mit Videos und Archivlinks.</p>`,
     render: (entries, config) => {
       const magazines = entries.filter((entry) => entry.magazine).map((entry) => entry.magazine);
       const guests = entries.filter((entry) => entry.guest).map((entry) => entry.guest);
       const unresolved = entries.filter((entry) => entry.videoId);
-      return `${magazines.length ? catalogGrid(magazines.map((magazine) => ({
+      return `${magazines.length ? `<section aria-labelledby="zeitschriften"><h2 id="zeitschriften">Zeitschriften</h2>${catalogGrid(magazines.map((magazine) => ({
         ...magazine, facts: [
           ...(magazine.years.length ? [countLabel(magazine.years.length, "Jahrgang", "Jahrgänge")] : []),
           videoCount(magazine.videos.length), catalogDuration(magazine.videos, model),
         ],
-      })), config) : ""}
+      })), config)}</section>` : ""}
 ${guests.length ? `<section aria-labelledby="gaeste"><h2 id="gaeste">Blätterabend mit Gast</h2>${catalogGrid(guests.map((guest) => ({
         ...guest, facts: [
           ...(guest.issueCount ? [countLabel(guest.issueCount, "bekannte Ausgabe", "bekannte Ausgaben")] : ["Ausgabe ungeklärt"]),
@@ -431,7 +433,7 @@ ${unresolved.length ? `<section><h2>Weitere Blätterabende</h2><p>Weitere Streif
       description: (entries) => `Entdecke ${previewList(magazineEntryHighlights(entries, model))} – historische Ausgaben im Video.`,
       crumbs: [root, index, magazineCrumb], schema: (config) => [periodicalSchema(magazine, config)],
       intro: (config) => `${magazineLogo(magazine, config)}<p>Blätterabend-Videos zu ${escapeHtml(magazine.name)}: ${videoCount(magazine.videos.length)}.</p>${years(config)}${unknownLink(config)}`,
-      render: (entries, config) => groupedEntries(entries, model, config),
+      render: (entries, config) => `<div id="ausgaben">${groupedEntries(entries, model, config)}</div>`,
     });
     for (const year of magazine.years.length > 1 ? magazine.years : []) {
       addPaginated({
@@ -659,6 +661,7 @@ function renderGamePages(model, siteConfig, add, filters) {
     schema: collectionSchema(rows.map((game) => ({ title: game.name, route: game.route })), overviewConfig, overview.route),
     body: `<h1>${overview.name}</h1>
 <p><a href="${overviewConfig.href(index.route)}">Zur Spiele-Kachelübersicht</a></p>
+<p>„Erstes Video“ nennt das Jahr der ersten Videoveröffentlichung zum Spiel. „Videolaufzeit“ summiert die Laufzeiten der zugeordneten Videos.</p>
 ${gameTable(rows, overviewConfig)}`,
   }, [...new Set(rows.flatMap((game) => game.videos))].map((id) => model.videoById.get(id)));
   const listings = [
@@ -697,7 +700,7 @@ ${gameTable(rows, overviewConfig)}`,
         previous: page > 1 ? paginatedRoute(listing.route, page - 1) : null,
         next: page < pageCount ? paginatedRoute(listing.route, page + 1) : null,
         body: `<h1>${escapeHtml(heading)}${page > 1 ? ` – Seite ${page}` : ""}</h1><p>${filtered ? `${escapeHtml(heading)}: ` : ""}${countLabel(listing.games.length, "Retrospiel", "Retrospiele")}, alphabetisch geordnet. Entdecken Sie Spielverläufe, Unboxings und Gespräche rund um die Spiele.</p>
-${filtered ? `<p><a href="${config.href(index.route)}">Alle Spiele anzeigen</a></p>` : `<p><a href="${config.href(overview.route)}">${overview.name}</a></p>`}
+${filtered ? `<p><a href="${config.href(index.route)}">Alle Spiele anzeigen</a></p>` : ""}<p><a href="${config.href(overview.route)}">Spiele suchen und filtern</a></p>
 ${pagination(listing.route, page, pageCount, config)}
 <div class="game-catalog">${catalogGrid(games.map((game) => ({
           ...game, facts: [

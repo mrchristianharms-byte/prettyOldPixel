@@ -26,6 +26,8 @@ body { overflow-wrap: anywhere; }
 .game-table-control-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; }
 .game-table-control-pair label { min-width: 0; }
 .game-table-controls select { width: 100%; font-size: .85rem; }
+.game-table-controls input { width: 100%; min-width: 0; }
+.game-table-controls button[data-game-reset] { margin: .5rem 0 0; padding: .4rem .6rem; }
 .game-table tr[hidden], .game-table-controls[hidden] { display: none; }
 @media (max-width: 767px) { .game-table-toolbar { grid-template-columns: minmax(0, 1fr); } }
 .container { max-width: 76rem; padding-inline: clamp(1rem, 3vw, 2rem); }
@@ -81,6 +83,13 @@ h1, h2, h3, h4, h5, h6 { font-size: clamp(1.05rem, 1.8vw, 1.25rem); line-height:
 .magazine-calendar caption { padding: .25rem .4rem; font-size: .7rem; }
 .magazine-calendar th, .magazine-calendar td { padding: .15rem .4rem; text-align: center; white-space: nowrap; }
 .magazine-calendar td:empty::after { color: var(--pico-muted-color); content: "—"; }
+.magazine-calendar a { display: inline-flex; align-items: center; justify-content: center; min-width: 1.5rem; min-height: 1.5rem; }
+.magazine-calendar-mobile { display: none; }
+@media (max-width: 767px) {
+  .magazine-calendar-scroll { display: none; }
+  .magazine-calendar-mobile { display: block; }
+  .magazine-calendar-mobile a { display: inline-flex; align-items: center; min-height: 2.75rem; padding-inline: .5rem; }
+}
 .magazine-logo { margin: 0 0 1rem; }
 .magazine-logo img { display: block; max-width: min(100%, 28rem); max-height: 9rem; width: auto; height: auto; object-fit: contain; }
 .magazine-logo figcaption { margin-top: .25rem; font-size: .75rem; }

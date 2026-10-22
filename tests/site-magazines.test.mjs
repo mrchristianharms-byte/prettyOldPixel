@@ -245,6 +245,15 @@ test("paginiert Gäste im Blätterabendindex und deren Ausgaben mit relativen Li
   const { model, pages, config } = render(input, 2);
   assert.ok(pages.get("zeitschriften/index.html").html.includes('href="gaeste/anna/"'));
   assert.ok(pages.get("zeitschriften/seite/2/index.html").html.includes('href="../../gaeste/ben/"'));
+  assert.ok(pages.get("zeitschriften/index.html").html.includes('href="./#gaeste">Gäste</a>'));
+  assert.ok(pages.get("zeitschriften/index.html").html.includes('<h1>Blätterabend – Zeitschriften und <a href="./#gaeste">Gäste</a></h1>'));
+  assert.ok(!pages.get("zeitschriften/index.html").html.includes('aria-label="Blätterabend entdecken"'));
+  assert.ok(pages.get("zeitschriften/seite/2/index.html").html.includes('href="../../#gaeste">Gäste</a>'));
+  assert.ok(!pages.get("zeitschriften/seite/2/index.html").html.includes('#zeitschriften">Zeitschriften</a>'));
+  const singleEntryPages = render(input, 1).pages;
+  assert.ok(singleEntryPages.get("zeitschriften/index.html").html.includes('href="seite/2/#gaeste">Gäste</a>'));
+  assert.ok(singleEntryPages.get("zeitschriften/seite/3/index.html").html.includes('href="../2/#gaeste">Gäste</a>'));
+  assert.ok(singleEntryPages.get("zeitschriften/seite/2/index.html").html.includes('id="gaeste"'));
   const guest = model.magazineGuests.find((item) => item.name === "Anna");
   const nextRoute = `${guest.route}seite/2/`;
   const first = pages.get(`${guest.route}index.html`).html;
@@ -604,7 +613,7 @@ test("zeigt für Zeitschriften mit mehr als 30 Videos einen verlinkten Jahreskal
   assert.ok(table.includes('<a href="1991/">1991</a>'));
   assert.ok(table.includes('<a href="1992/">1992</a>'));
   assert.ok(table.includes('<a href="ausgaben/pc-games-1-1990/#video-m0000000000" aria-label="PC Games 1/1990: Video ansehen">1</a>'));
-  assert.ok(!overview.includes('class="year-list"'));
+  assert.ok(overview.includes('class="magazine-calendar-mobile"'));
 });
 
 test("entscheidet an der Grenze von 30 Videos unabhängig von der Ausgabenanzahl", () => {
@@ -617,8 +626,16 @@ test("entscheidet an der Grenze von 30 Videos unabhängig von der Ausgabenanzahl
     assert.equal(model.magazines[0].issues.size, 2);
     const html = pages.get("zeitschriften/pc-games/index.html").html;
     assert.equal(html.includes('class="magazine-calendar"'), count > 30);
-    assert.equal(html.includes('class="year-list"'), count <= 30);
+    assert.equal(html.includes('class="magazine-calendar-mobile"'), count > 30);
   }
+});
+
+test("verlinkt bei einem einzigen Kalenderjahr die Ausgaben auf derselben Seite", () => {
+  const { pages } = render(fixture(31));
+  const html = pages.get("zeitschriften/pc-games/index.html").html;
+  assert.ok(html.includes('href="#ausgaben">1992</a>'));
+  assert.ok(html.includes('id="ausgaben"'));
+  assert.ok(!pages.has("zeitschriften/pc-games/1992/index.html"));
 });
 
 test("erhält den chronologischen Platz unnummerierter Videos und sortiert bekannte Teile relativ zueinander", () => {

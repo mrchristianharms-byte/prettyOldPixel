@@ -92,7 +92,7 @@ test("zeigt alle Spiele in einer zusätzlichen Tabelle nach erstem Videojahr und
   assert.ok(rows[0].includes(`src="https://i.ytimg.com/vi/${videoId(0)}/mqdefault.jpg"`));
   assert.match(rows[0], /href="\.\.\/spiel-0\/"/u);
   for (const file of ["spiele/index.html", "spiele/seite/2/index.html"]) {
-    assert.ok(pages.get(file).html.includes(">Alle Spiele als Tabelle</a>"));
+    assert.ok(pages.get(file).html.includes(">Spiele suchen und filtern</a>"));
   }
   assert.ok(!pages.has("spiele/uebersicht/seite/2/index.html"));
   assert.ok(!html.includes('class="detail-player"'));
@@ -115,7 +115,7 @@ test("escaped Tabelleninhalte und nutzt belegte Metadaten ohne Ersatzjahre", () 
   assert.match(body, /<td>Unbekannt<\/td>/u);
   assert.ok(body.includes('width="320" height="180" loading="lazy" decoding="async" referrerpolicy="no-referrer"'));
   assert.doesNotMatch(html, /Standardmäßig stehen|„Gespielt“ entspricht|„Spielzeit“ summiert|Sortierung und Filter benötigen/u);
-  assert.match(html, /Alle Systeme · Alle Genres · Videoveröffentlichung: neueste zuerst/u);
+  assert.match(html, /Alle Systeme · Alle Genres · Erstes Video: neueste zuerst/u);
   assert.ok(pages.get("datenschutz/index.html").html.includes("tabellarischen Spiele-Gesamtübersicht"));
 });
 
@@ -143,12 +143,15 @@ test("liefert Sortierdaten, Filter und belegte externe Links ausschließlich in 
   input.videos.videos.forEach((video) => { video.durationSeconds = 3600; });
   const { pages } = render(input);
   const html = pages.get("spiele/uebersicht/index.html").html;
-  assert.match(html, /<th scope="col" aria-sort="descending">Gespielt <button/u);
-  assert.match(html, /<th scope="col">Spielzeit <button/u);
+  assert.match(html, /<th scope="col" aria-sort="descending">Erstes Video <button/u);
+  assert.match(html, /<th scope="col">Videolaufzeit <button/u);
   assert.ok(html.includes("<td>2:00h</td>"));
   assert.ok(html.includes('<script defer src="../../assets/game-table.js"></script>'));
   assert.ok(html.includes('<div class="game-table-controls" data-game-table-controls hidden>'));
-  assert.match(html, /<div class="game-table-toolbar">\s*<p class="game-table-summary" role="status" aria-live="polite"><span data-game-table-count>1 von 1 Spiel<\/span>\s*<span data-game-table-filters>Filter: Alle Systeme · Alle Genres<\/span>\s*<span data-game-table-sort>Sortierung: Videoveröffentlichung: neueste zuerst<\/span><\/p>\s*<div class="game-table-controls"/u);
+  assert.match(html, /<div class="game-table-toolbar">\s*<p class="game-table-summary" role="status" aria-live="polite"><span data-game-table-count>1 von 1 Spiel<\/span>\s*<span data-game-table-filters>Filter: Alle Systeme · Alle Genres<\/span>\s*<span data-game-table-sort>Sortierung: Erstes Video: neueste zuerst<\/span><\/p>\s*<div class="game-table-controls"/u);
+  assert.ok(html.includes('type="search" id="game-search" data-game-search'));
+  assert.ok(html.includes('data-game-reset>Filter zurücksetzen'));
+  assert.ok(html.includes('>Erscheinungsjahr <button'));
   assert.ok(html.includes('data-duration="7200"'));
   for (const value of ["video", "release", "title", "duration"]) {
     assert.ok(html.includes(`data-game-sort="${value}"`), value);
@@ -982,8 +985,8 @@ test("Spielkatalog enthält keine manuell oder extern gepflegten Erscheinungsjah
 test("summiert Spiel-Laufzeiten über 24 Stunden und kennzeichnet fehlende Werte", () => {
   for (const [durations, expected, compact] of [
     [[3661, 90000], "Gesamtlaufzeit: 26:01 h", "26:01h"],
-    [[3661, null], "Bekannte Laufzeit: 1:01 h (1 von 2 Videos)", "Bekannte Spielzeit: 1:01h (1 von 2 Videos)"],
-    [[null, null], "Gesamtlaufzeit unbekannt", "Spielzeit unbekannt"],
+    [[3661, null], "Bekannte Laufzeit: 1:01 h (1 von 2 Videos)", "Bekannte Videolaufzeit: 1:01h (1 von 2 Videos)"],
+    [[null, null], "Gesamtlaufzeit unbekannt", "Videolaufzeit unbekannt"],
     [[0, 0], "Gesamtlaufzeit: 0:00 h", "0:00h"],
     [[14, 15], "Gesamtlaufzeit: 0:00 h", "0:00h"],
     [[15, 15], "Gesamtlaufzeit: 0:01 h", "0:01h"],
