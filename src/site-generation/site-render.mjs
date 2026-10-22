@@ -317,6 +317,30 @@ function renderMagazinePages(model, siteConfig, add) {
   if (!model.magazines.length && !model.unresolvedMagazines.length) return;
   const root = { route: "", name: "Startseite" };
   const index = { route: "zeitschriften/", name: "Zeitschriften" };
+  function magazineCalendar(magazine, config) {
+    const cells = new Map();
+    for (const issue of magazine.issues.values()) {
+      if (issue.year === null || issue.special || !issue.videos.length) continue;
+      const month = issue.months[0] ?? (issue.number >= 1 && issue.number <= 12 ? issue.number : null);
+      if (month === null) continue;
+      const key = `${issue.year}:${month}`;
+      if (!cells.has(key)) cells.set(key, []);
+      const issueNumber = issue.number === null ? issue.months.join("+") : `#${issue.number}`;
+      const videoId = issue.videos[0];
+      cells.get(key).push(`<a href="${escapeHtml(`${config.href(issue.route)}#video-${videoId}`)}" aria-label="${escapeHtml(`${magazine.name} ${issue.label}: Video ansehen`)}">${escapeHtml(issueNumber)}</a>`);
+    }
+    return `<div class="magazine-calendar-scroll"><table class="magazine-calendar">
+<caption>Ausgaben nach Jahr und Nummer; Jahreszahlen öffnen den jeweiligen Jahrgang.</caption>
+<thead><tr><th scope="col">Ausgabe</th>${magazine.years.map((year) => `<th scope="col"><a href="${escapeHtml(config.href(year.route))}">${year.year}</a></th>`).join("")}</tr></thead>
+<tbody>${Array.from({ length: 12 }, (_, index) => {
+      const month = index + 1;
+      return `<tr><th scope="row">${month}</th>${magazine.years.map((year) => {
+        const links = cells.get(`${year.year}:${month}`) ?? [];
+        return `<td>${links.join(" · ")}</td>`;
+      }).join("")}</tr>`;
+    }).join("")}</tbody>
+</table></div>`;
+  }
   function addPaginated({ route: baseRoute, entries, title, headingHtml, description, crumbs, intro, render, schema = () => [], items }) {
     const pageCount = Math.ceil(entries.length / siteConfig.pageSize);
     for (let page = 1; page <= pageCount; page += 1) {
@@ -394,7 +418,11 @@ ${unresolved.length ? `<section><h2>Weitere Blätterabende</h2><p>Weitere Streif
   }
   for (const magazine of model.magazines) {
     const magazineCrumb = { route: magazine.route, name: magazine.name };
-    const years = (config) => magazine.years.length > 1 ? `<nav aria-label="Jahrgänge von ${escapeHtml(magazine.name)}"><ul class="year-list">${magazine.years.map((year) => `<li><a href="${config.href(year.route)}">${year.year}</a> (${videoCount(year.entries.length)})</li>`).join("")}</ul></nav>` : "";
+    const years = (config) => new Set(magazine.videos).size > 30
+      ? magazineCalendar(magazine, config)
+      : magazine.years.length > 1
+        ? `<nav aria-label="Jahrgänge von ${escapeHtml(magazine.name)}"><ul class="year-list">${magazine.years.map((year) => `<li><a href="${config.href(year.route)}">${year.year}</a> (${videoCount(year.entries.length)})</li>`).join("")}</ul></nav>`
+        : "";
     const unknownIndex = magazine.entries.findIndex((entry) => entry.mention.issue?.year === null || !entry.mention.issue);
     const unknownLink = (config) => unknownIndex < 0 ? "" : `<p><a href="${config.href(paginatedRoute(magazine.route, Math.floor(unknownIndex / config.pageSize) + 1))}">Jahrgang unbekannt</a>: ${videoCount(magazine.entries.filter((entry) => !entry.mention.issue || entry.mention.issue.year === null).length)} ohne bekanntes Heftjahr.</p>`;
     addPaginated({
@@ -402,7 +430,7 @@ ${unresolved.length ? `<section><h2>Weitere Blätterabende</h2><p>Weitere Streif
       title: `${magazine.name} – Blätterabend-Videos`,
       description: (entries) => `Entdecke ${previewList(magazineEntryHighlights(entries, model))} – historische Ausgaben im Video.`,
       crumbs: [root, index, magazineCrumb], schema: (config) => [periodicalSchema(magazine, config)],
-      intro: (config) => `${magazineLogo(magazine, config)}<p>Blätterabend-Videos zu ${escapeHtml(magazine.name)}: ${videoCount(magazine.videos.length)}. ${magazine.years.length > 1 ? "Wählen Sie einen Jahrgang oder eine Ausgabe." : "Wählen Sie eine Ausgabe."}</p>${years(config)}${unknownLink(config)}`,
+      intro: (config) => `${magazineLogo(magazine, config)}<p>Blätterabend-Videos zu ${escapeHtml(magazine.name)}: ${videoCount(magazine.videos.length)}.</p>${years(config)}${unknownLink(config)}`,
       render: (entries, config) => groupedEntries(entries, model, config),
     });
     for (const year of magazine.years.length > 1 ? magazine.years : []) {

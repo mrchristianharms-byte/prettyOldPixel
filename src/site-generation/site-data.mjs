@@ -81,10 +81,9 @@ function issueOrder(a, b) {
 function finalizeMagazines(magazineById, videoById, warnings) {
   for (const magazine of magazineById.values()) {
     const issueCandidates = new Map();
-    const entries = magazine.videos.map((videoId) => {
-      const mention = videoById.get(videoId).magazines.find((item) => item.id === magazine.id);
-      return { videoId, mention };
-    });
+    const entries = magazine.videos.flatMap((videoId) => videoById.get(videoId).magazines
+      .filter((item) => item.id === magazine.id)
+      .map((mention) => ({ videoId, mention })));
     const archiveIssues = new Map();
     for (const { mention } of entries) {
       const key = archiveIdentity(mention.archives);
@@ -467,14 +466,12 @@ export function normalizeSources({ videos: videoCache, playlists: playlistCache,
       const id = slugify(name);
       requireValue(id.length > 0, `Kein stabiler Zeitschriften-Slug für ${name}.`);
       requireValue(id !== "seite", `Reservierter Zeitschriften-Slug: ${id}`);
-      requireValue(!video.magazines.some((item) => item.id === id), `${raw.id}: Doppelte Zeitschrift ${name}.`);
       let magazine = magazineById.get(id);
       requireValue(!magazine || magazine.name === name, `Kollidierende Zeitschriftennamen: ${name} / ${magazine?.name}`);
       if (!magazine) {
         magazine = { id, name, route: `zeitschriften/${id}/`, videos: [], issues: new Map() };
         magazineById.set(id, magazine);
       }
-      if (!magazine.videos.includes(video.id)) magazine.videos.push(video.id);
       let issue = null;
       if (mention.issue !== null && mention.issue !== undefined) {
         object(mention.issue, `${name}: Ausgabe`);
@@ -486,6 +483,9 @@ export function normalizeSources({ videos: videoCache, playlists: playlistCache,
         requireValue(typeof data.special === "boolean", `${name}: Sonderheftkennzeichen fehlt.`);
         issue = { year: data.year, number: data.number, months: [...new Set(data.months)].sort((a, b) => a - b), special: data.special, label };
       }
+      requireValue(!video.magazines.some((item) => item.id === id && item.issue?.label === issue?.label),
+        `${raw.id}: Doppelte Zeitschriftenausgabe ${name}${issue ? ` ${issue.label}` : ""}.`);
+      if (!magazine.videos.includes(video.id)) magazine.videos.push(video.id);
       const archives = [];
       for (const provider of ["kultmags", "reetroz", "pcgamesdatabase", "amr"]) {
         const archive = mention[provider];

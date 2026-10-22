@@ -587,6 +587,40 @@ test("benennt Jahrgänge neutral und zeigt Einträge ohne Heftjahr erst nach bek
   assert.ok(knownYearOnly.includes("<h3>PC Games 1993</h3>"));
 });
 
+test("zeigt für Zeitschriften mit mehr als 30 Videos einen verlinkten Jahreskalender", () => {
+  const input = fixture(36);
+  input.magazines.videos.forEach((entry, index) => {
+    const month = index % 12 + 1;
+    const year = 1990 + Math.floor(index / 12);
+    entry.magazines = [mention(issue(year, [month]))];
+  });
+  const { pages } = render(input);
+  const overview = pages.get("zeitschriften/pc-games/index.html").html;
+  const table = overview.match(/<table class="magazine-calendar">[\s\S]*?<\/table>/u)?.[0];
+
+  assert.ok(table);
+  assert.equal((table.match(/<tr>/gu) ?? []).length, 13);
+  assert.ok(table.includes('<a href="1990/">1990</a>'));
+  assert.ok(table.includes('<a href="1991/">1991</a>'));
+  assert.ok(table.includes('<a href="1992/">1992</a>'));
+  assert.ok(table.includes('<a href="ausgaben/pc-games-1-1990/#video-m0000000000" aria-label="PC Games 1/1990: Video ansehen">1</a>'));
+  assert.ok(!overview.includes('class="year-list"'));
+});
+
+test("entscheidet an der Grenze von 30 Videos unabhängig von der Ausgabenanzahl", () => {
+  for (const count of [30, 31]) {
+    const input = fixture(count);
+    input.magazines.videos.forEach((entry, index) => {
+      entry.magazines = [mention(issue(1990 + index % 2, [1]))];
+    });
+    const { model, pages } = render(input);
+    assert.equal(model.magazines[0].issues.size, 2);
+    const html = pages.get("zeitschriften/pc-games/index.html").html;
+    assert.equal(html.includes('class="magazine-calendar"'), count > 30);
+    assert.equal(html.includes('class="year-list"'), count <= 30);
+  }
+});
+
 test("erhält den chronologischen Platz unnummerierter Videos und sortiert bekannte Teile relativ zueinander", () => {
   const input = fixture(4);
   input.magazines.videos[1].part = 3;
@@ -849,6 +883,23 @@ test("zeigt bei fehlenden Daten keine leeren Zeitschriftenseiten und übernimmt 
   malformed.magazines.videos[0].part = null;
   malformed.magazines.videos[0].magazines.push(mention());
   assert.throws(() => normalizeSources(malformed), /Doppelte Zeitschrift/u);
+});
+
+test("ordnet dasselbe Video mehreren Ausgaben derselben Zeitschrift zu", () => {
+  const input = fixture(1);
+  input.magazines.videos[0].magazines = [
+    { ...mention(issue(1994, [5]), "PC Gamer UK"), part: 2 },
+    { ...mention(issue(1994, [4]), "PC Gamer UK"), part: 2 },
+  ];
+  const { model } = render(input);
+  const video = model.videoById.get(videoId(0));
+  const magazine = model.magazines.find((item) => item.name === "PC Gamer UK");
+
+  assert.equal(video.magazines.length, 2);
+  assert.deepEqual([...magazine.issues.values()]
+    .filter((item) => item.videos.includes(videoId(0)))
+    .map((item) => item.label)
+    .sort(), ["4/1994", "5/1994"]);
 });
 
 test("aktualisiert betroffene Seiten bei neuen Heften und Links, entfernt alte Ausgaben und erhält fremde Jahrgänge", async (t) => {

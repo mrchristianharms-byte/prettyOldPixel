@@ -102,6 +102,17 @@ test("wendet bestätigte Heftzuordnungen nur auf die konkrete Video-ID an und er
   assert.deepEqual(videos[1].magazines, []);
 });
 
+test("ordnet Stream II ausschließlich PC Gamer UK 5/1994 zu", () => {
+  const title = "Blätterabend - PC Gamer 5/94 - Top 50 Games Of All Time - Stream II";
+  const [video] = extractBlaetterabendVideos([{ id: "wcxhTV2oA5U", title }]);
+
+  assert.equal(video.title, title);
+  assert.equal(video.part, 2);
+  assert.deepEqual(video.magazines.map(({ name, issue }) => [name, issue.label]), [
+    ["PC Gamer UK", "5/1994"],
+  ]);
+});
+
 test("erfasst im echten Cache zusätzliche Zeitschriftenvideos ohne Ace-of-Aces-Fehltreffer", async () => {
   const source = JSON.parse(await readFile(new URL("../cache/youtube-videos.json", import.meta.url), "utf8"));
   const videos = extractBlaetterabendVideos(source.videos);

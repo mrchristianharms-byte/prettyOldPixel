@@ -669,6 +669,10 @@ Sonderhefte stehen separat unter „Jahrgang 1996 – Sonderhefte“.
 Einträge ohne bekanntes Heftjahr folgen am Ende unter „Jahrgang unbekannt“.
 Ein bekanntes Heftjahr kann auch bei noch ungeklärter Einzelheftnummer
 erhalten bleiben; die Jahrgangsüberschrift macht hierzu keine Aussage.
+Zeitschriften mit mehr als 30 unterschiedlichen Videos zeigen auf ihrer Übersichtsseite
+statt der Jahrgangsliste einen Kalender mit den Jahrgängen als Spalten und den
+Ausgabennummern 1 bis 12 als Zeilen. Die Jahreszahlen führen zur lokalen
+Jahrgangsseite; jede gefundene Ausgabe verlinkt direkt zum zugehörigen Video.
 
 - `/zeitschriften/` zeigt die erkannten Zeitschriften alphabetisch sowie eine
   Gruppe „Weitere Blätterabende“ für nicht sicher zugeordnete Blätterabend-Videos.
@@ -1182,8 +1186,10 @@ Bei unbekannter Ausgabe weist die Logmeldung gegebenenfalls auf die
 verlinkte Archiv-Übersichtsseite hin.
 Explizit bestätigte Heftzuordnungen stehen nach Video-ID in
 `CONFIRMED_MAGAZINE_TITLES`: `6R6Go1LhCMI` („Nach Zuschauerabstimmung“)
-ist vom Nutzer als Power Play 10/1990 bestätigt. Der Originaltitel bleibt
-unverändert; die Zuordnung gilt nicht für andere gleichlautende Titel.
+ist vom Nutzer als Power Play 10/1990 bestätigt. Für
+`wcxhTV2oA5U` („PC Gamer 5/94 … Stream II“) ist ausschließlich PC Gamer UK
+5/1994 bestätigt. Der Originaltitel bleibt unverändert; die Zuordnung gilt
+nicht für andere gleichlautende Titel.
 
 ### Links auf kultmags.com
 

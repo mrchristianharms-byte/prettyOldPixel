@@ -76,6 +76,11 @@ h1, h2, h3, h4, h5, h6 { font-size: clamp(1.05rem, 1.8vw, 1.25rem); line-height:
 .topics { font-size: .95rem; }
 .year-list { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; padding: 0; }
 .year-list li { list-style: none; }
+.magazine-calendar-scroll { width: fit-content; max-width: 100%; overflow-x: auto; margin-block: .75rem; border: 1px solid var(--pico-muted-border-color); border-radius: var(--pico-border-radius); }
+.magazine-calendar { width: auto; margin: 0; font-size: .75rem; line-height: 1.25; font-variant-numeric: tabular-nums; }
+.magazine-calendar caption { padding: .25rem .4rem; font-size: .7rem; }
+.magazine-calendar th, .magazine-calendar td { padding: .15rem .4rem; text-align: center; white-space: nowrap; }
+.magazine-calendar td:empty::after { color: var(--pico-muted-color); content: "—"; }
 .magazine-logo { margin: 0 0 1rem; }
 .magazine-logo img { display: block; max-width: min(100%, 28rem); max-height: 9rem; width: auto; height: auto; object-fit: contain; }
 .magazine-logo figcaption { margin-top: .25rem; font-size: .75rem; }

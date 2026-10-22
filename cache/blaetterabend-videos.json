@@ -6,7 +6,7 @@
     "title": "Pretty Old Pixel",
     "url": "https://www.youtube.com/@PrettyOldPixel"
   },
-  "generatedAt": "2026-10-19T22:35:25.068Z",
+  "generatedAt": "2026-10-22T10:52:03.192Z",
   "count": 248,
   "videos": [
     {
@@ -1408,7 +1408,7 @@
       "durationSeconds": 8604,
       "magazines": [
         {
-          "name": "PC Gamer",
+          "name": "PC Gamer UK",
           "issue": {
             "label": "5/1994",
             "number": null,
@@ -1419,15 +1419,7 @@
             "special": false
           },
           "kultmags": null,
-          "reetroz": {
-            "match": "issue",
-            "matchedBy": "month",
-            "title": "PC Gamer (US) #1 (May/June 1994)",
-            "pageUrl": "https://reetroz.com/issue/pc-gamer-us-1-6",
-            "readerUrl": "https://reetroz.com/issue/pc-gamer-us-1-6",
-            "downloadUrl": null,
-            "coverUrl": "https://assets.reetroz.com/covers/pc-gamer-us-1-6.jpg"
-          }
+          "reetroz": null
         }
       ],
       "part": 2

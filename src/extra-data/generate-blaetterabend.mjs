@@ -13,7 +13,8 @@ const defaultTargetFile = path.join(projectRoot, "cache", "blaetterabend-videos.
 const BLAETTERABEND_PATTERN = /bl(?:ä|ae)tterabend/i;
 // Vom Nutzer bestätigte Heftzuordnung bei nicht aussagekräftigem Originaltitel.
 const CONFIRMED_MAGAZINE_TITLES = new Map([
-  ["6R6Go1LhCMI", "Power Play 10/1990"],
+  ["6R6Go1LhCMI", ["Power Play 10/1990"]],
+  ["wcxhTV2oA5U", ["PC Gamer UK 5/94"]],
 ]);
 
 // Longer names must come first so "Amiga Joker" wins over "Amiga".
@@ -254,7 +255,8 @@ export function extractBlaetterabendVideos(videos) {
       durationSeconds: video.durationSeconds,
       ...parseBlaetterabendTitle(video.title),
       ...(CONFIRMED_MAGAZINE_TITLES.has(video.id) ? {
-        magazines: parseBlaetterabendTitle(CONFIRMED_MAGAZINE_TITLES.get(video.id)).magazines,
+        magazines: CONFIRMED_MAGAZINE_TITLES.get(video.id)
+          .flatMap((title) => parseBlaetterabendTitle(title).magazines),
       } : {}),
     }));
 }
