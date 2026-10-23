@@ -7,7 +7,7 @@ import { updatePreview } from "./preview.mjs";
 
 const main = document.querySelector("main");
 const release = new URL(document.body.dataset.release, location.href);
-const notices = document.querySelector("#offline-status");
+const notices = document.querySelector("#offline-message");
 const report = (message) => { notices.textContent = message; };
 const showError = (error) => {
   console.error(error);
@@ -39,9 +39,17 @@ const preferences = {
 const theme = preferences.get("theme");
 if (["light", "dark"].includes(theme)) document.documentElement.dataset.theme = theme;
 else document.documentElement.dataset.theme = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-document.querySelector("#app-theme").addEventListener("click", () => {
+const themeButton = document.querySelector("#app-theme");
+function updateThemeButton() {
+  const label = document.documentElement.dataset.theme === "dark" ? "Hellen Modus aktivieren" : "Dunklen Modus aktivieren";
+  themeButton.setAttribute("aria-label", label);
+  themeButton.title = label;
+}
+updateThemeButton();
+themeButton.addEventListener("click", () => {
   const value = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
   document.documentElement.dataset.theme = value;
+  updateThemeButton();
   preferences.set("theme", value);
 });
 

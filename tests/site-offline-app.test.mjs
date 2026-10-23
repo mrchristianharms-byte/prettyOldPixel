@@ -106,6 +106,9 @@ test("Spielefilter und Sortierung funktionieren auf demselben Datenstand", () =>
   const html = gameTableBody(sample, data, "release", -1);
   assert.ok(html.indexOf(">A</a>") < html.indexOf(">M</a>"));
   assert.ok(html.indexOf(">M</a>") < html.indexOf(">Z</a>"));
+  const tableView = renderView(data, { route: "spiele/uebersicht/" });
+  assert.match(tableView.body, /<table class="app-game-table"><thead><tr>/u);
+  assert.match(tableView.body, /<th scope="col" aria-sort="descending"><button data-sort="video">Erstvideo ↕<\/button><\/th>/u);
   const hostile = { ...game, name: '<script>alert("x")</script>' };
   assert.doesNotMatch(gameTableBody([hostile], data), /<script>/u);
 });
@@ -114,6 +117,10 @@ test("App-Build ist deterministisch, vollständig gehasht und separat budgetiert
   const app = await generateApp(model, config, images);
   const again = await generateApp(model, config, images);
   assert.deepEqual(app, again);
+  const index = app.files.get("app/index.html");
+  assert.match(index, /<span id="offline-status" role="status"/u);
+  assert.match(index, /<button type="button" id="app-theme"[^>]*>[\s\S]*?class="theme-sun"[\s\S]*?class="theme-moon"/u);
+  assert.match(index, /<p id="offline-message" role="status"/u);
   const manifest = JSON.parse(app.files.get("app/offline-manifest.json"));
   assert.equal(manifest.version, app.version);
   assert.deepEqual(manifest.thumbnails, model.videos.map((video) => video.thumbnailUrl));

@@ -85,7 +85,7 @@ function gamesView(games, model, table = false) {
 <label>Genre<select name="genre">${options(games.flatMap((game) => gameData(game).genres ?? []), "Alle Genres")}<option value="__unknown__">Genre unbekannt</option></select></label>
 <label>Spieletitel<input type="search" name="search" placeholder="Spiel suchen"></label><button type="reset" aria-label="Filter zurücksetzen" title="Filter zurücksetzen">↺</button></form>
 <p id="app-game-count" role="status">${games.length} von ${games.length} Spielen</p>
-${table ? `<div class="overflow-auto" role="region" aria-label="Spieletabelle" tabindex="0"><table><thead><tr>
+${table ? `<div class="overflow-auto" role="region" aria-label="Spieletabelle" tabindex="0"><table class="app-game-table"><thead><tr>
 ${[["video", "Erstvideo"], ["title", "Titel"], ["release", "Release"]].map(([key, label]) => `<th scope="col" aria-sort="${key === "video" ? "descending" : "none"}"><button data-sort="${key}">${label} ↕</button></th>`).join("")}
 <th scope="col">Plattform</th><th scope="col">Genre</th><th scope="col">Videovorschau</th><th scope="col" aria-sort="none"><button data-sort="duration">Länge ↕</button></th><th scope="col">Weiteres</th></tr></thead><tbody id="app-game-results">${gameTableBody(games, model)}</tbody></table></div>`
     : `<div class="app-grid" id="app-game-results">${gameCards(games, model)}</div>`}`;

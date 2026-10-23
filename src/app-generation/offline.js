@@ -1,9 +1,10 @@
 export async function setupOffline(version, report) {
   const status = document.querySelector("#offline-status");
+  const message = document.querySelector("#offline-message");
   const retry = document.querySelector("#offline-retry");
   const update = document.querySelector("#offline-update");
   const prefix = `pretty-old-pixel:app:${new URL("./", location.href).href}:`;
-  const say = (message) => { status.textContent = message; };
+  const say = (text) => { message.textContent = text; };
   const fail = (error) => {
     console.error(error);
     say(`Offline-Speicherung nicht bereit: ${error.message}`);
@@ -65,9 +66,18 @@ export async function setupOffline(version, report) {
     }
     if (data.type === "STATUS") {
       statusRequests.get(data.requestId)?.(data);
-      say(data.ready ? `Offline bereit · Datenstand ${data.version}${updateFailed ? " · Updateprüfung nicht erreichbar; lokaler Stand bleibt erhalten." : ""}` : "Offline-Daten fehlen oder sind unvollständig. Bitte mit Internet erneut laden.");
+      if (data.ready) {
+        status.textContent = "📴";
+        message.textContent = "";
+        status.setAttribute("aria-label", updateFailed
+          ? "Offline bereit. Updateprüfung nicht erreichbar; lokaler Stand bleibt erhalten."
+          : "Offline bereit");
+      } else {
+        status.textContent = "";
+        status.removeAttribute("aria-label");
+        say("Offline-Daten fehlen oder sind unvollständig. Bitte mit Internet erneut laden.");
+      }
       const missingThumbnails = data.thumbnails && data.thumbnails.completed < data.thumbnails.total;
-      if (data.ready && data.thumbnails?.total) say(`${status.textContent} · Vorschaubilder ${data.thumbnails.completed}/${data.thumbnails.total}${missingThumbnails ? " – mit Internet erneut versuchen." : ""}`);
       retry.hidden = data.ready && !missingThumbnails;
       if (data.ready && missingThumbnails && !checking && !thumbnailsRequested && navigator.onLine) {
         const worker = navigator.serviceWorker.controller;

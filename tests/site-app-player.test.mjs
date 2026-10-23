@@ -21,6 +21,9 @@ class Element extends EventTarget {
   checked = false;
   textContent = "";
   innerHTML = "";
+  attributes = new Map();
+  setAttribute(name, value) { this.attributes.set(name, value); }
+  removeAttribute(name) { this.attributes.delete(name); }
   querySelector() { return null; }
 }
 
@@ -60,12 +63,12 @@ test("App-Player startet nicht beim Seitenaufruf und setzt Folgen erst nach Wied
 });
 
 test("Offline-Kaltstart prüft vorhandenen Cache ohne eine Netz-Updateprüfung vorauszusetzen", async () => {
-  const status = new Element(), retry = new Element(), update = new Element();
+  const status = new Element(), message = new Element(), retry = new Element(), update = new Element();
   const listeners = new Map(), messages = [];
   let registers = 0;
   const scope = "https://example.com/project/app/";
   const restore = globals({
-    document: { querySelector: (selector) => ({ "#offline-status": status, "#offline-retry": retry, "#offline-update": update })[selector] },
+    document: { querySelector: (selector) => ({ "#offline-status": status, "#offline-message": message, "#offline-retry": retry, "#offline-update": update })[selector] },
     location: { href: scope },
     navigator: {
       onLine: false,
@@ -84,10 +87,13 @@ test("Offline-Kaltstart prüft vorhandenen Cache ohne eine Netz-Updateprüfung v
     assert.equal(registers, 0);
     assert.ok(messages.some((message) => message.type === "STATUS"));
     listeners.get("message")({ data: { type: "STATUS", version: "v1", ready: true } });
-    assert.match(status.textContent, /Offline bereit/u);
+    assert.equal(status.textContent, "📴");
+    assert.equal(status.attributes.get("aria-label"), "Offline bereit");
+    assert.equal(message.textContent, "");
     assert.equal(retry.hidden, true);
     listeners.get("message")({ data: { type: "STATUS", version: "v1", ready: true, thumbnails: { completed: 1, total: 2 } } });
-    assert.match(status.textContent, /Vorschaubilder 1\/2/u);
+    assert.equal(status.textContent, "📴");
+    assert.equal(status.attributes.get("aria-label"), "Offline bereit");
     assert.equal(retry.hidden, false);
     assert.equal(messages.some((message) => message.type === "REPAIR"), false);
     navigator.onLine = true;
@@ -127,7 +133,7 @@ test("Player-Vorschau bleibt offline lokal und fällt bei Bildfehlern auf densel
   });
 
 test("Reparatur wartet auf eine verzögerte Cache-Prüfung statt auf die schnelle Updateprüfung", async () => {
-    const status = new Element(), retry = new Element(), update = new Element();
+  const status = new Element(), message = new Element(), retry = new Element(), update = new Element();
     const listeners = new Map(), messages = [];
     let reply;
     let updateFinished = false;
@@ -146,7 +152,7 @@ test("Reparatur wartet auf eine verzögerte Cache-Prüfung statt auf die schnell
       async update() { updateFinished = true; },
     };
     const restore = globals({
-      document: { querySelector: (selector) => ({ "#offline-status": status, "#offline-retry": retry, "#offline-update": update })[selector] },
+      document: { querySelector: (selector) => ({ "#offline-status": status, "#offline-message": message, "#offline-retry": retry, "#offline-update": update })[selector] },
       location: { href: "https://example.com/project/app/" },
       navigator: { onLine: true, serviceWorker: {
         controller: worker,
