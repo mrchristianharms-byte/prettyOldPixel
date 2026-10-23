@@ -40,7 +40,8 @@ function issueFixture() {
   return input;
 }
 
-const issuePage = (pages) => [...pages].find(([file]) => file.includes("/ausgaben/"))[1].html;
+const issueFile = /^zeitschriften\/(?!gaeste\/|videos\/)[^/]+\/(?!seite\/)[^/]+\/index\.html$/u;
+const issuePage = (pages) => [...pages].find(([file]) => issueFile.test(file))[1].html;
 
 test("enthält auf allen Seiten und in eingebetteten Player-Vorschauen nicht leere Bild-Alt-Texte", async () => {
   const model = await loadSiteData(new URL("../cache/", import.meta.url).pathname);
@@ -530,13 +531,13 @@ test("baut offline mit Projektpfad, Sitemap und Inhalts-Manifest; übernimmt unv
   assert.ok(first.cssGzip < 10 * 1024);
   assert.ok(first.jsGzip <= 5 * 1024);
   const favicon = await readFile(path.join(options.outputDirectory, "favicon.webp"));
-  assert.deepEqual(favicon, await readFile(new URL("../src/site-generation/favicon.webp", import.meta.url)));
+  assert.deepEqual(favicon, await readFile(new URL("../src/site-generation/assets/favicon.webp", import.meta.url)));
   assert.equal(favicon.subarray(0, 4).toString("ascii"), "RIFF");
   assert.equal(favicon.subarray(8, 12).toString("ascii"), "WEBP");
   assert.ok(favicon.length < 1.5 * 1024);
   await assert.rejects(stat(path.join(options.outputDirectory, "favicon.jpg")), { code: "ENOENT" });
   const touchIcon = await readFile(path.join(options.outputDirectory, "apple-touch-icon.png"));
-  assert.deepEqual(touchIcon, await readFile(new URL("../src/site-generation/apple-touch-icon.png", import.meta.url)));
+  assert.deepEqual(touchIcon, await readFile(new URL("../src/site-generation/assets/apple-touch-icon.png", import.meta.url)));
   assert.deepEqual(touchIcon.subarray(0, 8), Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]));
   assert.equal(touchIcon.readUInt32BE(16), 180);
   assert.equal(touchIcon.readUInt32BE(20), 180);

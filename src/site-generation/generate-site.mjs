@@ -6,6 +6,7 @@ import path from "node:path";
 import { createSiteConfig } from "./site-config.mjs";
 import { loadSiteData } from "./site-data.mjs";
 import { escapeHtml, renderSite } from "./site-render.mjs";
+import { unreviewedPreviewVariable } from "./site-game-discussions.mjs";
 
 const projectRoot = path.resolve(fileURLToPath(new URL("../../", import.meta.url)));
 const hash = (content) => createHash("sha256").update(content).digest("hex");
@@ -165,8 +166,8 @@ export async function generateSite({
     readFile(new URL("./site.css", import.meta.url), "utf8"),
     readFile(new URL("./vendor/pico-LICENSE.md", import.meta.url), "utf8"),
     readFile(new URL("./video-series.js", import.meta.url), "utf8"),
-    readFile(new URL("./favicon.webp", import.meta.url)),
-    readFile(new URL("./apple-touch-icon.png", import.meta.url)),
+    readFile(new URL("./assets/favicon.webp", import.meta.url)),
+    readFile(new URL("./assets/apple-touch-icon.png", import.meta.url)),
     readFile(new URL("./game-table.js", import.meta.url), "utf8"),
   ]);
   const css = `${pico.replace(/\/\*# sourceMappingURL=[\s\S]*?\*\//gu, "")}\n${customCss}`;
@@ -252,9 +253,39 @@ export async function generateSite({
   } finally {
     await rm(staging, { recursive: true, force: true });
   }
-  const result = { pages: pages.size, files: content.size, reused, warnings: model.warnings, ...budgets };
+  const unreviewedPages = unreviewedDiscussionPages(pages, model);
+  const result = { pages: pages.size, files: content.size, reused, warnings: model.warnings, unreviewedPages, ...budgets };
   logger.log(`Statische Website erstellt: ${output}\n${result.pages} Seiten, ${reused}/${result.files} Dateien unverändert übernommen. CSS: ${budgets.cssGzip} Bytes gzip, JavaScript: ${budgets.jsGzip} Bytes gzip, größtes HTML: ${budgets.maxHtmlGzip} Bytes gzip.`);
+  if (process.env[unreviewedPreviewVariable] === "1" || unreviewedPages.length) logger.log(unreviewedReport(unreviewedPages));
   return result;
+}
+
+export function unreviewedDiscussionPages(pages, model) {
+  const result = [];
+  for (const [file, page] of pages) {
+    const counts = new Map();
+    for (const [, videoId] of page.html.matchAll(/data-unreviewed-video="([^"]+)"/gu)) {
+      counts.set(videoId, (counts.get(videoId) ?? 0) + 1);
+    }
+    if (!counts.size) continue;
+    result.push({ file, route: page.route, videos: [...counts].map(([id, count]) => ({
+      id, count, title: model.videoById.get(id)?.title ?? id,
+    })) });
+  }
+  return result.sort((a, b) => a.route.localeCompare(b.route));
+}
+
+function unreviewedReport(entries) {
+  if (!entries.length) return `${unreviewedPreviewVariable}=1: keine ungeprüften Spielebesprechungen gefunden.`;
+  const total = entries.reduce((sum, entry) => sum + entry.videos.reduce((count, video) => count + video.count, 0), 0);
+  return [
+    `${unreviewedPreviewVariable}=1: ${total} ungeprüfte Sprungmarken auf ${entries.length} ${entries.length === 1 ? "Seite" : "Seiten"} (Vorschau mit npm run dev):`,
+    ...entries.flatMap((entry) => [
+      `  http://127.0.0.1:8000/${entry.route}`,
+      ...entry.videos.map((video) => `    ${video.id}: ${video.count} ungeprüft · ${video.title}`),
+    ]),
+    "Nicht veröffentlichen: ohne Schalter erneut bauen; nur Analysen mit status: \"reviewed\" erscheinen.",
+  ].join("\n");
 }
 
 export async function runCli() {

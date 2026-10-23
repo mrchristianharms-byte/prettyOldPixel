@@ -39,10 +39,10 @@ identischen Bedienelementen; Übersichtsseiten bleiben ohne Player.
 |---|---|
 | `/spiele/<slug>/` | Spielinformationen, vollständige Videoliste, Player und Beschreibungen |
 | `/spiele/<slug>/#video-<youtube-id>` | Auswahl eines Videos auf derselben Spieleseite |
-| `/zeitschriften/<slug>/` | Zeitschrift, Jahrgänge und Videos |
-| `/zeitschriften/<slug>/<jahr>/` | Jahrgang, Ausgaben und zugeordnete Videos |
-| `/zeitschriften/<slug>/ausgaben/<hefttitel-slug>/` | Heftinformationen, Player und sämtliche Videoteile |
-| `/zeitschriften/<slug>/ausgaben/<hefttitel-slug>/#video-<youtube-id>` | Auswahl eines Videoteils auf derselben Ausgabenseite |
+| `/zeitschriften/<slug>/` | Zeitschrift mit allen Ausgaben und Videos auf einer Seite |
+| `/zeitschriften/<slug>/#jahr-<jahr>` | Sprung zum Jahrgang auf derselben Zeitschriftenseite |
+| `/zeitschriften/<slug>/<hefttitel-slug>/` | Heftinformationen, Player und sämtliche Videoteile |
+| `/zeitschriften/<slug>/<hefttitel-slug>/#video-<youtube-id>` | Auswahl eines Videoteils auf derselben Ausgabenseite |
 
 Die Zwei-Video-Schwelle für Spiele bleibt bestehen. Unklare Ausgaben erzeugen
 keine spekulative Seite. Solange ein Video keine vorhandene sichere Detailseite
@@ -169,7 +169,8 @@ die normale Navigation zu den vollständigen Beschreibungen erhalten.
 Die Positionsanzeige `Video 1/10` ist die einsbasierte Position in der
 deduplizierten Liste, nicht die Originalnummer im YouTube-Titel.
 Alle Videos eines Spiels bzw. einer Ausgabe bleiben auf derselben Seite,
-auch bei mehr als 60 Videos. Übersichten dürfen weiterhin paginiert sein.
+auch bei mehr als 60 Videos. Das gilt auch für Zeitschriftenseiten (alle
+Ausgaben auf einer Seite); andere Übersichten dürfen weiterhin paginiert sein.
 Die HTML-Größenbudgets gelten unverändert; Überschreitungen führen zum klaren
 Build-Fehler statt einer stillen Aufteilung in Videoseiten.
 

@@ -1,12 +1,13 @@
 {
   "version": 1,
   "provider": "mobygames-local-dump",
-  "importedAt": "2026-10-20T10:20:48.836Z",
+  "importedAt": "2026-10-23T08:08:31.717Z",
   "source": {
     "fileName": "gdb.sql",
     "sha256": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
     "bytes": 498001626,
-    "note": "Lokaler SQL-Dump; Importdatum ist kein Abrufdatum bei MobyGames. Keine automatische Faktenfreigabe."
+    "titleIndex": "game-title-index.json",
+    "note": "Lokaler SQL-Dump über den Titelindex; Importdatum ist kein Abrufdatum bei MobyGames. Keine automatische Faktenfreigabe."
   },
   "importedRows": {
     "mobygames": 179466,
@@ -29,14 +30,6 @@
         {
           "mobyid": 1209,
           "title": "Wizardry: Proving Grounds of the Mad Overlord",
-          "mobylink": "https://www.mobygames.com/game/1209/wizardry-proving-grounds-of-the-mad-overlord",
-          "genre": "Role-playing (RPG)",
-          "perspective": "1st-person",
-          "gameplay": "",
-          "interface": "",
-          "setting": "Fantasy",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/1209/",
           "genres": [
             "Role-playing (RPG)"
@@ -232,14 +225,6 @@
         {
           "mobyid": 208642,
           "title": "Wizardry: Proving Grounds of the Mad Overlord",
-          "mobylink": "https://www.mobygames.com/game/208642/wizardry-proving-grounds-of-the-mad-overlord",
-          "genre": "Role-playing (RPG)",
-          "perspective": "1st-person",
-          "gameplay": "",
-          "interface": "",
-          "setting": "Fantasy",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/208642/",
           "genres": [
             "Role-playing (RPG)"
@@ -375,14 +360,6 @@
         {
           "mobyid": 1651,
           "title": "Mission Critical",
-          "mobylink": "https://www.mobygames.com/game/1651/mission-critical",
-          "genre": "Adventure",
-          "perspective": "1st-person",
-          "gameplay": "Graphic adventure",
-          "interface": "Point and select",
-          "setting": "Post-apocalyptic; Sci-fi / futuristic",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/1651/",
           "genres": [
             "Adventure"
@@ -534,14 +511,6 @@
         {
           "mobyid": 7390,
           "title": "Ports of Call",
-          "mobylink": "https://www.mobygames.com/game/7390/ports-of-call",
-          "genre": "Simulation",
-          "perspective": "Top-down",
-          "gameplay": "Managerial / business simulation",
-          "interface": "Menu structures",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/7390/",
           "genres": [
             "Simulation"
@@ -675,14 +644,6 @@
         {
           "mobyid": 12175,
           "title": "Labyrinth",
-          "mobylink": "https://www.mobygames.com/game/12175/labyrinth",
-          "genre": "Action; Adventure",
-          "perspective": "Side view",
-          "gameplay": "",
-          "interface": "",
-          "setting": "Fantasy",
-          "sport": "",
-          "misc": "Licensed",
           "sourceUrl": "https://www.mobygames.com/game/12175/",
           "genres": [
             "Action",
@@ -755,14 +716,6 @@
         {
           "mobyid": 21514,
           "title": "Labyrinth",
-          "mobylink": "https://www.mobygames.com/game/21514/labyrinth",
-          "genre": "Action; Puzzle; Racing / Driving",
-          "perspective": "Top-down",
-          "gameplay": "Arcade",
-          "interface": "Direct control",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/21514/",
           "genres": [
             "Action",
@@ -823,14 +776,6 @@
         {
           "mobyid": 27830,
           "title": "Escape from the Mindmaster",
-          "mobylink": "https://www.mobygames.com/game/27830/escape-from-the-mindmaster",
-          "genre": "Puzzle",
-          "perspective": "1st-person",
-          "gameplay": "",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/27830/",
           "genres": [
             "Puzzle"
@@ -869,14 +814,6 @@
         {
           "mobyid": 38223,
           "title": "Labyrinth",
-          "mobylink": "https://www.mobygames.com/game/38223/labyrinth",
-          "genre": "Action",
-          "perspective": "Diagonal-down",
-          "gameplay": "Puzzle elements; Shooter",
-          "interface": "",
-          "setting": "Fantasy",
-          "sport": "",
-          "misc": "Licensed",
           "sourceUrl": "https://www.mobygames.com/game/38223/",
           "genres": [
             "Action"
@@ -905,14 +842,6 @@
         {
           "mobyid": 44462,
           "title": "Labyrinth",
-          "mobylink": "https://www.mobygames.com/game/44462/labyrinth",
-          "genre": "Action; Puzzle",
-          "perspective": "Top-down",
-          "gameplay": "",
-          "interface": "Motion control",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/44462/",
           "genres": [
             "Action",
@@ -967,14 +896,6 @@
         {
           "mobyid": 50163,
           "title": "Labyrinth",
-          "mobylink": "https://www.mobygames.com/game/50163/labyrinth",
-          "genre": "Puzzle",
-          "perspective": "1st-person; Top-down",
-          "gameplay": "",
-          "interface": "Direct control",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/50163/",
           "genres": [
             "Puzzle"
@@ -1042,14 +963,6 @@
         {
           "mobyid": 52836,
           "title": "Labyrinth",
-          "mobylink": "https://www.mobygames.com/game/52836/labyrinth",
-          "genre": "Action; Puzzle",
-          "perspective": "Top-down",
-          "gameplay": "",
-          "interface": "Direct control",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/52836/",
           "genres": [
             "Action",
@@ -1075,14 +988,6 @@
         {
           "mobyid": 54258,
           "title": "Labyrinth",
-          "mobylink": "https://www.mobygames.com/game/54258/labyrinth",
-          "genre": "Action",
-          "perspective": "Top-down",
-          "gameplay": "Arcade",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/54258/",
           "genres": [
             "Action"
@@ -1118,14 +1023,6 @@
         {
           "mobyid": 56451,
           "title": "Labyrinth",
-          "mobylink": "https://www.mobygames.com/game/56451/labyrinth",
-          "genre": "Action; Strategy / tactics",
-          "perspective": "Top-down",
-          "gameplay": "",
-          "interface": "Direct control",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/56451/",
           "genres": [
             "Action",
@@ -1152,14 +1049,6 @@
         {
           "mobyid": 62858,
           "title": "Labyrinth",
-          "mobylink": "https://www.mobygames.com/game/62858/labyrinth",
-          "genre": "Action",
-          "perspective": "Top-down",
-          "gameplay": "Arcade; Shooter",
-          "interface": "",
-          "setting": "Fantasy; Sci-fi / futuristic",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/62858/",
           "genres": [
             "Action"
@@ -1193,14 +1082,6 @@
         {
           "mobyid": 70164,
           "title": "Labyrinth",
-          "mobylink": "https://www.mobygames.com/game/70164/labyrinth",
-          "genre": "Puzzle",
-          "perspective": "Top-down",
-          "gameplay": "",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/70164/",
           "genres": [
             "Puzzle"
@@ -1226,14 +1107,6 @@
         {
           "mobyid": 79694,
           "title": "Labyrinth",
-          "mobylink": "https://www.mobygames.com/game/79694/labyrinth",
-          "genre": "Action; Puzzle",
-          "perspective": "Top-down",
-          "gameplay": "",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/79694/",
           "genres": [
             "Action",
@@ -1259,14 +1132,6 @@
         {
           "mobyid": 83908,
           "title": "Labyrinth",
-          "mobylink": "https://www.mobygames.com/game/83908/labyrinth",
-          "genre": "Adventure",
-          "perspective": "1st-person",
-          "gameplay": "Game show / trivia / quiz",
-          "interface": "Point and select",
-          "setting": "Egypt (Ancient)",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/83908/",
           "genres": [
             "Adventure"
@@ -1291,14 +1156,6 @@
         {
           "mobyid": 86355,
           "title": "Labyrinth",
-          "mobylink": "https://www.mobygames.com/game/86355/labyrinth",
-          "genre": "Action",
-          "perspective": "Top-down",
-          "gameplay": "Arcade",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/86355/",
           "genres": [
             "Action"
@@ -1334,14 +1191,6 @@
         {
           "mobyid": 120918,
           "title": "Labyrinth",
-          "mobylink": "https://www.mobygames.com/game/120918/labyrinth",
-          "genre": "Action",
-          "perspective": "1st-person",
-          "gameplay": "Shooter",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/120918/",
           "genres": [
             "Action"
@@ -1377,14 +1226,6 @@
         {
           "mobyid": 146375,
           "title": "Labyrinth",
-          "mobylink": "https://www.mobygames.com/game/146375/labyrinth",
-          "genre": "Adventure",
-          "perspective": "1st-person",
-          "gameplay": "Graphic adventure",
-          "interface": "Text parser",
-          "setting": "Classical antiquity",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/146375/",
           "genres": [
             "Adventure"
@@ -1420,14 +1261,6 @@
         {
           "mobyid": 154805,
           "title": "labyrinth",
-          "mobylink": "https://www.mobygames.com/game/154805/labyrinth",
-          "genre": "Puzzle",
-          "perspective": "Diagonal-down",
-          "gameplay": "",
-          "interface": "Direct control",
-          "setting": "Fantasy",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/154805/",
           "genres": [
             "Puzzle"
@@ -1461,14 +1294,6 @@
         {
           "mobyid": 163247,
           "title": "Labyrinth",
-          "mobylink": "https://www.mobygames.com/game/163247/labyrinth",
-          "genre": "Puzzle",
-          "perspective": "Top-down",
-          "gameplay": "",
-          "interface": "Direct control",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/163247/",
           "genres": [
             "Puzzle"
@@ -1493,14 +1318,6 @@
         {
           "mobyid": 195512,
           "title": "Labyrinth",
-          "mobylink": "https://www.mobygames.com/game/195512/labyrinth",
-          "genre": "Action",
-          "perspective": "Top-down",
-          "gameplay": "",
-          "interface": "Direct control",
-          "setting": "Fantasy",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/195512/",
           "genres": [
             "Action"
@@ -1525,14 +1342,6 @@
         {
           "mobyid": 195677,
           "title": "Labyrinth",
-          "mobylink": "https://www.mobygames.com/game/195677/labyrinth",
-          "genre": "Action",
-          "perspective": "Top-down",
-          "gameplay": "",
-          "interface": "Direct control",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/195677/",
           "genres": [
             "Action"
@@ -1557,14 +1366,6 @@
         {
           "mobyid": 196049,
           "title": "Labyrinth",
-          "mobylink": "https://www.mobygames.com/game/196049/labyrinth",
-          "genre": "Strategy / tactics",
-          "perspective": "Top-down",
-          "gameplay": "Cards / tiles; Turn-based strategy (TBS)",
-          "interface": "Point and select",
-          "setting": "Fantasy",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/196049/",
           "genres": [
             "Strategy / tactics"
@@ -1598,14 +1399,6 @@
         {
           "mobyid": 204527,
           "title": "Labyrinth",
-          "mobylink": "https://www.mobygames.com/game/204527/labyrinth",
-          "genre": "Action",
-          "perspective": "",
-          "gameplay": "",
-          "interface": "",
-          "setting": "Fantasy",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/204527/",
           "genres": [
             "Action"
@@ -1630,14 +1423,6 @@
         {
           "mobyid": 208837,
           "title": "Labyrinth",
-          "mobylink": "https://www.mobygames.com/game/208837/labyrinth",
-          "genre": "Puzzle",
-          "perspective": "1st-person",
-          "gameplay": "",
-          "interface": "Direct control",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/208837/",
           "genres": [
             "Puzzle"
@@ -1672,14 +1457,6 @@
         {
           "mobyid": 823,
           "title": "Wing Commander II: Vengeance of the Kilrathi",
-          "mobylink": "https://www.mobygames.com/game/823/wing-commander-ii-vengeance-of-the-kilrathi",
-          "genre": "Action; Simulation",
-          "perspective": "1st-person",
-          "gameplay": "",
-          "interface": "",
-          "setting": "Sci-fi / futuristic",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/823/",
           "genres": [
             "Action",
@@ -1780,14 +1557,6 @@
         {
           "mobyid": 39531,
           "title": "Tom Clancy's EndWar",
-          "mobylink": "https://www.mobygames.com/game/39531/tom-clancys-endwar",
-          "genre": "Strategy / tactics",
-          "perspective": "Diagonal-down",
-          "gameplay": "",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "Licensed",
           "sourceUrl": "https://www.mobygames.com/game/39531/",
           "genres": [
             "Strategy / tactics"
@@ -1944,14 +1713,6 @@
         {
           "mobyid": 49906,
           "title": "Tom Clancy's EndWar",
-          "mobylink": "https://www.mobygames.com/game/49906/tom-clancys-endwar",
-          "genre": "Strategy / tactics",
-          "perspective": "Top-down",
-          "gameplay": "",
-          "interface": "",
-          "setting": "Sci-fi / futuristic",
-          "sport": "",
-          "misc": "Licensed",
           "sourceUrl": "https://www.mobygames.com/game/49906/",
           "genres": [
             "Strategy / tactics"
@@ -1997,14 +1758,6 @@
         {
           "mobyid": 681,
           "title": "System Shock",
-          "mobylink": "https://www.mobygames.com/game/681/system-shock",
-          "genre": "Action",
-          "perspective": "1st-person",
-          "gameplay": "Puzzle elements; RPG elements; Shooter",
-          "interface": "Direct control",
-          "setting": "Cyberpunk / dark sci-fi",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/681/",
           "genres": [
             "Action"
@@ -2180,14 +1933,6 @@
         {
           "mobyid": 203800,
           "title": "System Shock",
-          "mobylink": "https://www.mobygames.com/game/203800/system-shock",
-          "genre": "Action",
-          "perspective": "1st-person",
-          "gameplay": "RPG elements; Shooter; Stealth",
-          "interface": "Direct control",
-          "setting": "Cyberpunk / dark sci-fi",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/203800/",
           "genres": [
             "Action"
@@ -2317,14 +2062,6 @@
         {
           "mobyid": 1558,
           "title": "Mega Man 3",
-          "mobylink": "https://www.mobygames.com/game/1558/mega-man-3",
-          "genre": "Action",
-          "perspective": "Side view",
-          "gameplay": "Platform; Shooter",
-          "interface": "",
-          "setting": "Sci-fi / futuristic",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/1558/",
           "genres": [
             "Action"
@@ -2658,14 +2395,6 @@
         {
           "mobyid": 178850,
           "title": "Mega Man 3",
-          "mobylink": "https://www.mobygames.com/game/178850/mega-man-3",
-          "genre": "Action",
-          "perspective": "Side view",
-          "gameplay": "Shooter",
-          "interface": "Direct control",
-          "setting": "Sci-fi / futuristic",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/178850/",
           "genres": [
             "Action"
@@ -2704,14 +2433,6 @@
         {
           "mobyid": 1812,
           "title": "Silent Service",
-          "mobylink": "https://www.mobygames.com/game/1812/silent-service",
-          "genre": "Simulation",
-          "perspective": "1st-person",
-          "gameplay": "",
-          "interface": "",
-          "setting": "Historical events; Oceania; World War II",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/1812/",
           "genres": [
             "Simulation"
@@ -3150,14 +2871,6 @@
         {
           "mobyid": 2510,
           "title": "Black Gold",
-          "mobylink": "https://www.mobygames.com/game/2510/black-gold",
-          "genre": "Simulation; Strategy / tactics",
-          "perspective": "",
-          "gameplay": "Managerial / business simulation",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/2510/",
           "genres": [
             "Simulation",
@@ -3259,14 +2972,6 @@
         {
           "mobyid": 1743,
           "title": "Rogue",
-          "mobylink": "https://www.mobygames.com/game/1743/rogue",
-          "genre": "Role-playing (RPG)",
-          "perspective": "Top-down",
-          "gameplay": "Roguelike",
-          "interface": "Direct control",
-          "setting": "Fantasy",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/1743/",
           "genres": [
             "Role-playing (RPG)"
@@ -3578,14 +3283,6 @@
         {
           "mobyid": 27657,
           "title": "Rogue Clone",
-          "mobylink": "https://www.mobygames.com/game/27657/rogue-clone",
-          "genre": "Role-playing (RPG)",
-          "perspective": "Top-down",
-          "gameplay": "Roguelike",
-          "interface": "",
-          "setting": "Fantasy",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/27657/",
           "genres": [
             "Role-playing (RPG)"
@@ -3765,14 +3462,6 @@
         {
           "mobyid": 3420,
           "title": "Battle Isle 2200",
-          "mobylink": "https://www.mobygames.com/game/3420/battle-isle-2200",
-          "genre": "Strategy / tactics",
-          "perspective": "Top-down",
-          "gameplay": "",
-          "interface": "Point and select",
-          "setting": "Sci-fi / futuristic",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/3420/",
           "genres": [
             "Strategy / tactics"
@@ -3866,14 +3555,6 @@
         {
           "mobyid": 2336,
           "title": "ATAC: The Secret War Against Drugs",
-          "mobylink": "https://www.mobygames.com/game/2336/atac-the-secret-war-against-drugs",
-          "genre": "Simulation; Strategy / tactics",
-          "perspective": "1st-person",
-          "gameplay": "",
-          "interface": "",
-          "setting": "South America",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/2336/",
           "genres": [
             "Simulation",
@@ -3961,14 +3642,6 @@
         {
           "mobyid": 7501,
           "title": "R.C. Pro-Am",
-          "mobylink": "https://www.mobygames.com/game/7501/rc-pro-am",
-          "genre": "Action; Racing / Driving",
-          "perspective": "Diagonal-down",
-          "gameplay": "Arcade",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/7501/",
           "genres": [
             "Action",
@@ -4055,14 +3728,6 @@
         {
           "mobyid": 2637,
           "title": "Flight of the Intruder",
-          "mobylink": "https://www.mobygames.com/game/2637/flight-of-the-intruder",
-          "genre": "Simulation",
-          "perspective": "1st-person",
-          "gameplay": "",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "Licensed",
           "sourceUrl": "https://www.mobygames.com/game/2637/",
           "genres": [
             "Simulation"
@@ -4173,14 +3838,6 @@
         {
           "mobyid": 185135,
           "title": "Flight of the Intruder",
-          "mobylink": "https://www.mobygames.com/game/185135/flight-of-the-intruder",
-          "genre": "Simulation",
-          "perspective": "1st-person",
-          "gameplay": "",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "Licensed",
           "sourceUrl": "https://www.mobygames.com/game/185135/",
           "genres": [
             "Simulation"
@@ -4222,14 +3879,6 @@
         {
           "mobyid": 10260,
           "title": "Mortal Coil: Adrenalin Intelligence",
-          "mobylink": "https://www.mobygames.com/game/10260/mortal-coil-adrenalin-intelligence",
-          "genre": "Action",
-          "perspective": "1st-person",
-          "gameplay": "Puzzle elements; Shooter; Tactical shooter",
-          "interface": "",
-          "setting": "Sci-fi / futuristic",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/10260/",
           "genres": [
             "Action"
@@ -4280,14 +3929,6 @@
         {
           "mobyid": 1419,
           "title": "Aces of the Pacific",
-          "mobylink": "https://www.mobygames.com/game/1419/aces-of-the-pacific",
-          "genre": "Simulation",
-          "perspective": "1st-person; 3rd-person (Other)",
-          "gameplay": "",
-          "interface": "",
-          "setting": "Historical events; Oceania; World War II",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/1419/",
           "genres": [
             "Simulation"
@@ -4383,14 +4024,6 @@
         {
           "mobyid": 707,
           "title": "The Ultimate Doom",
-          "mobylink": "https://www.mobygames.com/game/707/the-ultimate-doom",
-          "genre": "Action",
-          "perspective": "1st-person",
-          "gameplay": "Shooter",
-          "interface": "Direct control",
-          "setting": "Sci-fi / futuristic",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/707/",
           "genres": [
             "Action"
@@ -4663,14 +4296,6 @@
         {
           "mobyid": 1068,
           "title": "Doom",
-          "mobylink": "https://www.mobygames.com/game/1068/doom",
-          "genre": "Action",
-          "perspective": "1st-person",
-          "gameplay": "Shooter",
-          "interface": "Direct control",
-          "setting": "Sci-fi / futuristic",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/1068/",
           "genres": [
             "Action"
@@ -4974,14 +4599,6 @@
         {
           "mobyid": 30997,
           "title": "Doom",
-          "mobylink": "https://www.mobygames.com/game/30997/doom",
-          "genre": "Action; Compilation",
-          "perspective": "1st-person",
-          "gameplay": "Shooter",
-          "interface": "Direct control",
-          "setting": "Sci-fi / futuristic",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/30997/",
           "genres": [
             "Action",
@@ -5098,14 +4715,6 @@
         {
           "mobyid": 78860,
           "title": "Doom",
-          "mobylink": "https://www.mobygames.com/game/78860/doom",
-          "genre": "Action",
-          "perspective": "1st-person",
-          "gameplay": "Shooter",
-          "interface": "Direct control",
-          "setting": "Sci-fi / futuristic",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/78860/",
           "genres": [
             "Action"
@@ -5260,14 +4869,6 @@
         {
           "mobyid": 91777,
           "title": "Doomsday 2000",
-          "mobylink": "https://www.mobygames.com/game/91777/doomsday-2000",
-          "genre": "Role-playing (RPG)",
-          "perspective": "Top-down",
-          "gameplay": "Roguelike",
-          "interface": "",
-          "setting": "Sci-fi / futuristic",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/91777/",
           "genres": [
             "Role-playing (RPG)"
@@ -5298,14 +4899,6 @@
         {
           "mobyid": 144023,
           "title": "Doom",
-          "mobylink": "https://www.mobygames.com/game/144023/doom",
-          "genre": "Compilation",
-          "perspective": "",
-          "gameplay": "",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/144023/",
           "genres": [
             "Compilation"
@@ -5338,14 +4931,6 @@
         {
           "mobyid": 6257,
           "title": "Lost Patrol",
-          "mobylink": "https://www.mobygames.com/game/6257/lost-patrol",
-          "genre": "Action; Strategy / tactics",
-          "perspective": "1st-person; Top-down",
-          "gameplay": "Arcade",
-          "interface": "",
-          "setting": "Historical events",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/6257/",
           "genres": [
             "Action",
@@ -5425,14 +5010,6 @@
         {
           "mobyid": 1418,
           "title": "Realms of the Haunting",
-          "mobylink": "https://www.mobygames.com/game/1418/realms-of-the-haunting",
-          "genre": "Action; Adventure",
-          "perspective": "1st-person",
-          "gameplay": "Puzzle elements; Survival horror",
-          "interface": "",
-          "setting": "Fantasy",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/1418/",
           "genres": [
             "Action",
@@ -5605,14 +5182,6 @@
         {
           "mobyid": 5108,
           "title": "Mega Man 5",
-          "mobylink": "https://www.mobygames.com/game/5108/mega-man-5",
-          "genre": "Action",
-          "perspective": "Side view",
-          "gameplay": "Platform; Shooter",
-          "interface": "",
-          "setting": "Sci-fi / futuristic",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/5108/",
           "genres": [
             "Action"
@@ -5887,14 +5456,6 @@
         {
           "mobyid": 10573,
           "title": "Bucky O'Hare",
-          "mobylink": "https://www.mobygames.com/game/10573/bucky-ohare",
-          "genre": "Action",
-          "perspective": "Side view",
-          "gameplay": "Platform; Shooter",
-          "interface": "",
-          "setting": "Sci-fi / futuristic",
-          "sport": "",
-          "misc": "Licensed",
           "sourceUrl": "https://www.mobygames.com/game/10573/",
           "genres": [
             "Action"
@@ -5971,14 +5532,6 @@
         {
           "mobyid": 64449,
           "title": "Bucky O'Hare",
-          "mobylink": "https://www.mobygames.com/game/64449/bucky-ohare",
-          "genre": "Action",
-          "perspective": "Side view",
-          "gameplay": "Beat 'em up / brawler",
-          "interface": "Direct control",
-          "setting": "Sci-fi / futuristic",
-          "sport": "",
-          "misc": "Licensed",
           "sourceUrl": "https://www.mobygames.com/game/64449/",
           "genres": [
             "Action"
@@ -6016,14 +5569,6 @@
         {
           "mobyid": 195056,
           "title": "Bucky O'Hare",
-          "mobylink": "https://www.mobygames.com/game/195056/bucky-ohare",
-          "genre": "Action",
-          "perspective": "Side view",
-          "gameplay": "Shooter",
-          "interface": "Direct control",
-          "setting": "Sci-fi / futuristic",
-          "sport": "",
-          "misc": "Licensed",
           "sourceUrl": "https://www.mobygames.com/game/195056/",
           "genres": [
             "Action"
@@ -6058,14 +5603,6 @@
         {
           "mobyid": 512,
           "title": "F-19 Stealth Fighter",
-          "mobylink": "https://www.mobygames.com/game/512/f-19-stealth-fighter",
-          "genre": "Simulation",
-          "perspective": "1st-person",
-          "gameplay": "",
-          "interface": "",
-          "setting": "Contemporary",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/512/",
           "genres": [
             "Simulation"
@@ -6326,14 +5863,6 @@
         {
           "mobyid": 109307,
           "title": "Project Stealth Fighter",
-          "mobylink": "https://www.mobygames.com/game/109307/project-stealth-fighter",
-          "genre": "Simulation",
-          "perspective": "1st-person",
-          "gameplay": "",
-          "interface": "Direct control",
-          "setting": "Africa; Cold War; Contemporary; Europe; Middle East",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/109307/",
           "genres": [
             "Simulation"
@@ -6433,14 +5962,6 @@
         {
           "mobyid": 11270,
           "title": "Snake Rattle N Roll",
-          "mobylink": "https://www.mobygames.com/game/11270/snake-rattle-n-roll",
-          "genre": "Action",
-          "perspective": "Diagonal-down",
-          "gameplay": "Arcade",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/11270/",
           "genres": [
             "Action"
@@ -6512,14 +6033,6 @@
         {
           "mobyid": 688,
           "title": "Millennia: Altered Destinies",
-          "mobylink": "https://www.mobygames.com/game/688/millennia-altered-destinies",
-          "genre": "Simulation; Strategy / tactics",
-          "perspective": "1st-person",
-          "gameplay": "",
-          "interface": "",
-          "setting": "Post-apocalyptic; Sci-fi / futuristic",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/688/",
           "genres": [
             "Simulation",
@@ -6605,14 +6118,6 @@
         {
           "mobyid": 181,
           "title": "Defender of the Crown",
-          "mobylink": "https://www.mobygames.com/game/181/defender-of-the-crown",
-          "genre": "Action; Strategy / tactics",
-          "perspective": "1st-person; Side view",
-          "gameplay": "",
-          "interface": "",
-          "setting": "Europe; Historical events; Medieval",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/181/",
           "genres": [
             "Action",
@@ -6999,14 +6504,6 @@
         {
           "mobyid": 340,
           "title": "Worms",
-          "mobylink": "https://www.mobygames.com/game/340/worms",
-          "genre": "Strategy / tactics",
-          "perspective": "Side view",
-          "gameplay": "Artillery",
-          "interface": "Direct control; Multiple units/characters control",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/340/",
           "genres": [
             "Strategy / tactics"
@@ -7318,14 +6815,6 @@
         {
           "mobyid": 1142,
           "title": "Worms: Reinforcements",
-          "mobylink": "https://www.mobygames.com/game/1142/worms-reinforcements",
-          "genre": "Add-on",
-          "perspective": "",
-          "gameplay": "",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/1142/",
           "genres": [
             "Add-on"
@@ -7369,14 +6858,6 @@
         {
           "mobyid": 7407,
           "title": "Worms: The Director's Cut",
-          "mobylink": "https://www.mobygames.com/game/7407/worms-the-directors-cut",
-          "genre": "Strategy / tactics",
-          "perspective": "Side view",
-          "gameplay": "Artillery",
-          "interface": "Direct control; Multiple units/characters control",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/7407/",
           "genres": [
             "Strategy / tactics"
@@ -7441,14 +6922,6 @@
         {
           "mobyid": 15504,
           "title": "Worms United",
-          "mobylink": "https://www.mobygames.com/game/15504/worms-united",
-          "genre": "Compilation",
-          "perspective": "",
-          "gameplay": "",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/15504/",
           "genres": [
             "Compilation"
@@ -7580,14 +7053,6 @@
         {
           "mobyid": 21171,
           "title": "Worms",
-          "mobylink": "https://www.mobygames.com/game/21171/worms",
-          "genre": "Strategy / tactics",
-          "perspective": "Side view",
-          "gameplay": "Artillery",
-          "interface": "Direct control; Multiple units/characters control",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/21171/",
           "genres": [
             "Strategy / tactics"
@@ -7621,14 +7086,6 @@
         {
           "mobyid": 24815,
           "title": "Worms",
-          "mobylink": "https://www.mobygames.com/game/24815/worms",
-          "genre": "Strategy / tactics",
-          "perspective": "Side view",
-          "gameplay": "Artillery",
-          "interface": "Direct control; Multiple units/characters control",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/24815/",
           "genres": [
             "Strategy / tactics"
@@ -7652,14 +7109,6 @@
         {
           "mobyid": 35109,
           "title": "Worms",
-          "mobylink": "https://www.mobygames.com/game/35109/worms",
-          "genre": "Strategy / tactics",
-          "perspective": "Side view",
-          "gameplay": "Artillery",
-          "interface": "Direct control; Multiple units/characters control",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/35109/",
           "genres": [
             "Strategy / tactics"
@@ -7728,14 +7177,6 @@
         {
           "mobyid": 65383,
           "title": "Worms?",
-          "mobylink": "https://www.mobygames.com/game/65383/worms",
-          "genre": "Action; Strategy / tactics",
-          "perspective": "Top-down",
-          "gameplay": "",
-          "interface": "",
-          "setting": "Sci-fi / futuristic",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/65383/",
           "genres": [
             "Action",
@@ -7777,14 +7218,6 @@
         {
           "mobyid": 136873,
           "title": "Worms",
-          "mobylink": "https://www.mobygames.com/game/136873/worms",
-          "genre": "Strategy / tactics",
-          "perspective": "Side view",
-          "gameplay": "Artillery; Turn-based strategy (TBS)",
-          "interface": "Direct control",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/136873/",
           "genres": [
             "Strategy / tactics"
@@ -7818,14 +7251,6 @@
         {
           "mobyid": 1324,
           "title": "Elite",
-          "mobylink": "https://www.mobygames.com/game/1324/elite",
-          "genre": "Action; Simulation",
-          "perspective": "1st-person",
-          "gameplay": "Managerial / business simulation",
-          "interface": "Direct control",
-          "setting": "Sci-fi / futuristic",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/1324/",
           "genres": [
             "Action",
@@ -8085,14 +7510,6 @@
         {
           "mobyid": 3433,
           "title": "Elite Plus",
-          "mobylink": "https://www.mobygames.com/game/3433/elite-plus",
-          "genre": "Action; Simulation",
-          "perspective": "1st-person",
-          "gameplay": "",
-          "interface": "",
-          "setting": "Sci-fi / futuristic",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/3433/",
           "genres": [
             "Action",
@@ -8196,14 +7613,6 @@
         {
           "mobyid": 1169,
           "title": "Al-Qadim: The Genie's Curse",
-          "mobylink": "https://www.mobygames.com/game/1169/al-qadim-the-genies-curse",
-          "genre": "Role-playing (RPG)",
-          "perspective": "Diagonal-down",
-          "gameplay": "Action RPG",
-          "interface": "",
-          "setting": "Fantasy; Middle East",
-          "sport": "",
-          "misc": "Licensed",
           "sourceUrl": "https://www.mobygames.com/game/1169/",
           "genres": [
             "Role-playing (RPG)"
@@ -8311,14 +7720,6 @@
         {
           "mobyid": 3066,
           "title": "Spacewrecked: 14 Billion Light Years From Earth",
-          "mobylink": "https://www.mobygames.com/game/3066/spacewrecked-14-billion-light-years-from-earth",
-          "genre": "Role-playing (RPG)",
-          "perspective": "1st-person",
-          "gameplay": "",
-          "interface": "",
-          "setting": "Sci-fi / futuristic",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/3066/",
           "genres": [
             "Role-playing (RPG)"
@@ -8419,14 +7820,6 @@
         {
           "mobyid": 3244,
           "title": "Bedlam",
-          "mobylink": "https://www.mobygames.com/game/3244/bedlam",
-          "genre": "Action",
-          "perspective": "Diagonal-down",
-          "gameplay": "Shooter",
-          "interface": "",
-          "setting": "Sci-fi / futuristic",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/3244/",
           "genres": [
             "Action"
@@ -8497,14 +7890,6 @@
         {
           "mobyid": 17932,
           "title": "Bedlam",
-          "mobylink": "https://www.mobygames.com/game/17932/bedlam",
-          "genre": "Action",
-          "perspective": "",
-          "gameplay": "Shooter",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/17932/",
           "genres": [
             "Action"
@@ -8528,14 +7913,6 @@
         {
           "mobyid": 19426,
           "title": "Bedlam",
-          "mobylink": "https://www.mobygames.com/game/19426/bedlam",
-          "genre": "Action",
-          "perspective": "Top-down",
-          "gameplay": "Shooter",
-          "interface": "",
-          "setting": "Sci-fi / futuristic",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/19426/",
           "genres": [
             "Action"
@@ -8591,14 +7968,6 @@
         {
           "mobyid": 38078,
           "title": "Bedlam",
-          "mobylink": "https://www.mobygames.com/game/38078/bedlam",
-          "genre": "Action",
-          "perspective": "Top-down",
-          "gameplay": "Shooter",
-          "interface": "",
-          "setting": "Sci-fi / futuristic",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/38078/",
           "genres": [
             "Action"
@@ -8632,14 +8001,6 @@
         {
           "mobyid": 42779,
           "title": "Bedlam",
-          "mobylink": "https://www.mobygames.com/game/42779/bedlam",
-          "genre": "Adventure",
-          "perspective": "",
-          "gameplay": "Interactive fiction / text adventure; Puzzle elements",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/42779/",
           "genres": [
             "Adventure"
@@ -8673,14 +8034,6 @@
         {
           "mobyid": 82468,
           "title": "Bedlam",
-          "mobylink": "https://www.mobygames.com/game/82468/bedlam",
-          "genre": "Action",
-          "perspective": "1st-person",
-          "gameplay": "Shooter",
-          "interface": "",
-          "setting": "Sci-fi / futuristic",
-          "sport": "",
-          "misc": "Licensed",
           "sourceUrl": "https://www.mobygames.com/game/82468/",
           "genres": [
             "Action"
@@ -8783,14 +8136,6 @@
         {
           "mobyid": 598,
           "title": "The Settlers II: Veni, Vidi, Vici",
-          "mobylink": "https://www.mobygames.com/game/598/the-settlers-ii-veni-vidi-vici",
-          "genre": "Simulation; Strategy / tactics",
-          "perspective": "Diagonal-down",
-          "gameplay": "City building / construction simulation; Managerial / business simulation; Real-time strategy (RTS)",
-          "interface": "Point and select",
-          "setting": "Classical antiquity",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/598/",
           "genres": [
             "Simulation",
@@ -8935,14 +8280,6 @@
         {
           "mobyid": 2071,
           "title": "World Circuit",
-          "mobylink": "https://www.mobygames.com/game/2071/world-circuit",
-          "genre": "Racing / Driving; Simulation",
-          "perspective": "1st-person",
-          "gameplay": "",
-          "interface": "",
-          "setting": "Oceania",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/2071/",
           "genres": [
             "Racing / Driving",
@@ -9149,14 +8486,6 @@
         {
           "mobyid": 1993,
           "title": "PowerMonger",
-          "mobylink": "https://www.mobygames.com/game/1993/powermonger",
-          "genre": "Strategy / tactics",
-          "perspective": "Diagonal-down",
-          "gameplay": "Real-time strategy (RTS)",
-          "interface": "",
-          "setting": "Fantasy",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/1993/",
           "genres": [
             "Strategy / tactics"
@@ -9408,14 +8737,6 @@
         {
           "mobyid": 1256,
           "title": "Akalabeth: World of Doom",
-          "mobylink": "https://www.mobygames.com/game/1256/akalabeth-world-of-doom",
-          "genre": "Role-playing (RPG)",
-          "perspective": "1st-person; Top-down",
-          "gameplay": "",
-          "interface": "Direct control",
-          "setting": "Fantasy; Medieval",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/1256/",
           "genres": [
             "Role-playing (RPG)"
@@ -9647,14 +8968,6 @@
         {
           "mobyid": 10072,
           "title": "Kid Icarus",
-          "mobylink": "https://www.mobygames.com/game/10072/kid-icarus",
-          "genre": "Action",
-          "perspective": "Side view",
-          "gameplay": "Platform",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/10072/",
           "genres": [
             "Action"
@@ -9958,14 +9271,6 @@
         {
           "mobyid": 636,
           "title": "Need for Speed III: Hot Pursuit",
-          "mobylink": "https://www.mobygames.com/game/636/need-for-speed-iii-hot-pursuit",
-          "genre": "Racing / Driving",
-          "perspective": "1st-person; Behind view",
-          "gameplay": "",
-          "interface": "Direct control",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/636/",
           "genres": [
             "Racing / Driving"
@@ -10154,14 +9459,6 @@
         {
           "mobyid": 7470,
           "title": "Teenage Mutant Ninja Turtles",
-          "mobylink": "https://www.mobygames.com/game/7470/teenage-mutant-ninja-turtles",
-          "genre": "Action",
-          "perspective": "Side view",
-          "gameplay": "Arcade; Beat 'em up / brawler; Fighting",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "Licensed",
           "sourceUrl": "https://www.mobygames.com/game/7470/",
           "genres": [
             "Action"
@@ -10405,14 +9702,6 @@
         {
           "mobyid": 891,
           "title": "Gunship 2000",
-          "mobylink": "https://www.mobygames.com/game/891/gunship-2000",
-          "genre": "Simulation",
-          "perspective": "1st-person; 3rd-person (Other)",
-          "gameplay": "",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/891/",
           "genres": [
             "Simulation"
@@ -10655,14 +9944,6 @@
         {
           "mobyid": 1655,
           "title": "Red Storm Rising",
-          "mobylink": "https://www.mobygames.com/game/1655/red-storm-rising",
-          "genre": "Simulation; Strategy / tactics",
-          "perspective": "1st-person; Top-down",
-          "gameplay": "Wargame",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "Licensed",
           "sourceUrl": "https://www.mobygames.com/game/1655/",
           "genres": [
             "Simulation",
@@ -10798,14 +10079,6 @@
         {
           "mobyid": 23891,
           "title": "Dunjonquest: Temple of Apshai",
-          "mobylink": "https://www.mobygames.com/game/23891/dunjonquest-temple-of-apshai",
-          "genre": "Role-playing (RPG)",
-          "perspective": "Top-down",
-          "gameplay": "",
-          "interface": "Direct control; Text parser",
-          "setting": "Fantasy; Medieval",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/23891/",
           "genres": [
             "Role-playing (RPG)"
@@ -10966,14 +10239,6 @@
         {
           "mobyid": 5786,
           "title": "Tiny Toon Adventures",
-          "mobylink": "https://www.mobygames.com/game/5786/tiny-toon-adventures",
-          "genre": "Action",
-          "perspective": "Side view",
-          "gameplay": "Platform",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "Licensed",
           "sourceUrl": "https://www.mobygames.com/game/5786/",
           "genres": [
             "Action"
@@ -11014,14 +10279,6 @@
         {
           "mobyid": 24168,
           "title": "Tiny Toon Adventures: Buster's Hidden Treasure",
-          "mobylink": "https://www.mobygames.com/game/24168/tiny-toon-adventures-busters-hidden-treasure",
-          "genre": "Action",
-          "perspective": "Side view",
-          "gameplay": "Arcade; Platform; Puzzle elements",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "Licensed",
           "sourceUrl": "https://www.mobygames.com/game/24168/",
           "genres": [
             "Action"
@@ -11052,14 +10309,6 @@
         {
           "mobyid": 30821,
           "title": "Tiny Toon Adventures: Babs' Big Break",
-          "mobylink": "https://www.mobygames.com/game/30821/tiny-toon-adventures-babs-big-break",
-          "genre": "Action",
-          "perspective": "Side view",
-          "gameplay": "Platform",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "Licensed",
           "sourceUrl": "https://www.mobygames.com/game/30821/",
           "genres": [
             "Action"
@@ -11113,14 +10362,6 @@
         {
           "mobyid": 181268,
           "title": "Tiny Toon Adventures",
-          "mobylink": "https://www.mobygames.com/game/181268/tiny-toon-adventures",
-          "genre": "Action",
-          "perspective": "Side view",
-          "gameplay": "Arcade",
-          "interface": "Direct control",
-          "setting": "",
-          "sport": "",
-          "misc": "Licensed",
           "sourceUrl": "https://www.mobygames.com/game/181268/",
           "genres": [
             "Action"
@@ -11154,14 +10395,6 @@
         {
           "mobyid": 521,
           "title": "X-COM: UFO Defense",
-          "mobylink": "https://www.mobygames.com/game/521/x-com-ufo-defense",
-          "genre": "Strategy / tactics",
-          "perspective": "Diagonal-down",
-          "gameplay": "RPG elements; Turn-based tactics (TBT)",
-          "interface": "",
-          "setting": "Sci-fi / futuristic",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/521/",
           "genres": [
             "Strategy / tactics"
@@ -11572,14 +10805,6 @@
         {
           "mobyid": 2906,
           "title": "Abrams Battle Tank",
-          "mobylink": "https://www.mobygames.com/game/2906/abrams-battle-tank",
-          "genre": "Simulation",
-          "perspective": "1st-person",
-          "gameplay": "",
-          "interface": "Direct control",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/2906/",
           "genres": [
             "Simulation"
@@ -11646,14 +10871,6 @@
         {
           "mobyid": 5078,
           "title": "Comanche: Maximum Overkill",
-          "mobylink": "https://www.mobygames.com/game/5078/comanche-maximum-overkill",
-          "genre": "Action; Simulation",
-          "perspective": "1st-person",
-          "gameplay": "Shooter",
-          "interface": "Direct control",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/5078/",
           "genres": [
             "Action",
@@ -11731,14 +10948,6 @@
         {
           "mobyid": 835,
           "title": "Eye of the Beholder",
-          "mobylink": "https://www.mobygames.com/game/835/eye-of-the-beholder",
-          "genre": "Role-playing (RPG)",
-          "perspective": "1st-person",
-          "gameplay": "Puzzle elements",
-          "interface": "Point and select",
-          "setting": "Fantasy",
-          "sport": "",
-          "misc": "Licensed",
           "sourceUrl": "https://www.mobygames.com/game/835/",
           "genres": [
             "Role-playing (RPG)"
@@ -11887,14 +11096,6 @@
         {
           "mobyid": 4934,
           "title": "Tau Ceti: The Lost Star Colony",
-          "mobylink": "https://www.mobygames.com/game/4934/tau-ceti-the-lost-star-colony",
-          "genre": "Action; Simulation",
-          "perspective": "1st-person",
-          "gameplay": "Shooter",
-          "interface": "",
-          "setting": "Sci-fi / futuristic",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/4934/",
           "genres": [
             "Action",
@@ -12083,14 +11284,6 @@
         {
           "mobyid": 128956,
           "title": "Tau Ceti",
-          "mobylink": "https://www.mobygames.com/game/128956/tau-ceti",
-          "genre": "Strategy / tactics",
-          "perspective": "Diagonal-down",
-          "gameplay": "Cards / tiles; Tower defense",
-          "interface": "Point and select",
-          "setting": "Sci-fi / futuristic",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/128956/",
           "genres": [
             "Strategy / tactics"
@@ -12144,14 +11337,6 @@
         {
           "mobyid": 585,
           "title": "Sid Meier's Civilization",
-          "mobylink": "https://www.mobygames.com/game/585/sid-meiers-civilization",
-          "genre": "Strategy / tactics",
-          "perspective": "Top-down",
-          "gameplay": "4X; Managerial / business simulation; Turn-based strategy (TBS)",
-          "interface": "Multiple units/characters control",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/585/",
           "genres": [
             "Strategy / tactics"
@@ -12487,14 +11672,6 @@
         {
           "mobyid": 78026,
           "title": "Civilization",
-          "mobylink": "https://www.mobygames.com/game/78026/civilization",
-          "genre": "Strategy / tactics",
-          "perspective": "Diagonal-down",
-          "gameplay": "4X; Managerial / business simulation; Turn-based strategy (TBS)",
-          "interface": "Multiple units/characters control",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/78026/",
           "genres": [
             "Strategy / tactics"
@@ -12529,14 +11706,6 @@
         {
           "mobyid": 401,
           "title": "Task Force 1942",
-          "mobylink": "https://www.mobygames.com/game/401/task-force-1942",
-          "genre": "Action; Simulation; Strategy / tactics",
-          "perspective": "1st-person; 3rd-person (Other)",
-          "gameplay": "",
-          "interface": "",
-          "setting": "Historical events; Oceania; World War II",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/401/",
           "genres": [
             "Action",
@@ -12676,14 +11845,6 @@
         {
           "mobyid": 5084,
           "title": "Mega Man 2",
-          "mobylink": "https://www.mobygames.com/game/5084/mega-man-2",
-          "genre": "Action",
-          "perspective": "Side view",
-          "gameplay": "Platform; Shooter",
-          "interface": "",
-          "setting": "Sci-fi / futuristic",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/5084/",
           "genres": [
             "Action"
@@ -12990,14 +12151,6 @@
         {
           "mobyid": 178849,
           "title": "Mega Man 2",
-          "mobylink": "https://www.mobygames.com/game/178849/mega-man-2",
-          "genre": "Action",
-          "perspective": "Side view",
-          "gameplay": "Shooter",
-          "interface": "Direct control",
-          "setting": "Sci-fi / futuristic",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/178849/",
           "genres": [
             "Action"
@@ -13031,14 +12184,6 @@
         {
           "mobyid": 3,
           "title": "Wing Commander",
-          "mobylink": "https://www.mobygames.com/game/3/wing-commander",
-          "genre": "Action; Simulation",
-          "perspective": "1st-person",
-          "gameplay": "",
-          "interface": "",
-          "setting": "Sci-fi / futuristic",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/3/",
           "genres": [
             "Action",
@@ -13236,14 +12381,6 @@
         {
           "mobyid": 63394,
           "title": "Wing Commander",
-          "mobylink": "https://www.mobygames.com/game/63394/wing-commander",
-          "genre": "Simulation",
-          "perspective": "1st-person",
-          "gameplay": "",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/63394/",
           "genres": [
             "Simulation"
@@ -13289,14 +12426,6 @@
         {
           "mobyid": 29107,
           "title": "Falcon Patrol",
-          "mobylink": "https://www.mobygames.com/game/29107/falcon-patrol",
-          "genre": "Action",
-          "perspective": "Side view",
-          "gameplay": "Shooter",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/29107/",
           "genres": [
             "Action"
@@ -13404,14 +12533,6 @@
         {
           "mobyid": 214,
           "title": "Sid Meier's Pirates!",
-          "mobylink": "https://www.mobygames.com/game/214/sid-meiers-pirates",
-          "genre": "Action; Strategy / tactics",
-          "perspective": "Top-down",
-          "gameplay": "",
-          "interface": "",
-          "setting": "Age of Discovery / Enlightenment; Sea pirates / Caribbean",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/214/",
           "genres": [
             "Action",
@@ -13793,14 +12914,6 @@
         {
           "mobyid": 82869,
           "title": "Pirates",
-          "mobylink": "https://www.mobygames.com/game/82869/pirates",
-          "genre": "Strategy / tactics",
-          "perspective": "Side view",
-          "gameplay": "",
-          "interface": "Text parser",
-          "setting": "Sea pirates / Caribbean",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/82869/",
           "genres": [
             "Strategy / tactics"
@@ -13825,14 +12938,6 @@
         {
           "mobyid": 177086,
           "title": "Pirates",
-          "mobylink": "https://www.mobygames.com/game/177086/pirates",
-          "genre": "Action",
-          "perspective": "3rd-person (Other)",
-          "gameplay": "Shooter",
-          "interface": "Direct control",
-          "setting": "Sea pirates / Caribbean",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/177086/",
           "genres": [
             "Action"
@@ -13856,14 +12961,6 @@
         {
           "mobyid": 194540,
           "title": "KeepUp Pirates: RPG",
-          "mobylink": "https://www.mobygames.com/game/194540/keepup-pirates-rpg",
-          "genre": "Action",
-          "perspective": "Behind view",
-          "gameplay": "RPG elements",
-          "interface": "Direct control",
-          "setting": "Sea pirates / Caribbean",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/194540/",
           "genres": [
             "Action"
@@ -13902,14 +12999,6 @@
         {
           "mobyid": 11293,
           "title": "Wario Blast featuring Bomberman!",
-          "mobylink": "https://www.mobygames.com/game/11293/wario-blast-featuring-bomberman",
-          "genre": "Action",
-          "perspective": "Top-down",
-          "gameplay": "Arcade",
-          "interface": "Direct control",
-          "setting": "Fantasy",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/11293/",
           "genres": [
             "Action"
@@ -13956,14 +13045,6 @@
         {
           "mobyid": 11726,
           "title": "Rescue on Fractalus!",
-          "mobylink": "https://www.mobygames.com/game/11726/rescue-on-fractalus",
-          "genre": "Action",
-          "perspective": "1st-person",
-          "gameplay": "",
-          "interface": "",
-          "setting": "Sci-fi / futuristic",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/11726/",
           "genres": [
             "Action"
@@ -14147,14 +13228,6 @@
         {
           "mobyid": 1537,
           "title": "1942: The Pacific Air War Gold",
-          "mobylink": "https://www.mobygames.com/game/1537/1942-the-pacific-air-war-gold",
-          "genre": "Compilation",
-          "perspective": "",
-          "gameplay": "",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/1537/",
           "genres": [
             "Compilation"
@@ -14281,14 +13354,6 @@
         {
           "mobyid": 610,
           "title": "It Came from the Desert",
-          "mobylink": "https://www.mobygames.com/game/610/it-came-from-the-desert",
-          "genre": "Action; Adventure",
-          "perspective": "1st-person; Top-down",
-          "gameplay": "Mini-games; Shooter",
-          "interface": "Direct control",
-          "setting": "North America; Sci-fi / futuristic",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/610/",
           "genres": [
             "Action",
@@ -14366,14 +13431,6 @@
         {
           "mobyid": 47806,
           "title": "It Came from the Desert",
-          "mobylink": "https://www.mobygames.com/game/47806/it-came-from-the-desert",
-          "genre": "Action",
-          "perspective": "1st-person; Side view; Top-down",
-          "gameplay": "Mini-games",
-          "interface": "Direct control",
-          "setting": "North America",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/47806/",
           "genres": [
             "Action"
@@ -14408,14 +13465,6 @@
         {
           "mobyid": 2123,
           "title": "Pacific Strike",
-          "mobylink": "https://www.mobygames.com/game/2123/pacific-strike",
-          "genre": "Simulation",
-          "perspective": "1st-person; Behind view",
-          "gameplay": "",
-          "interface": "",
-          "setting": "Historical events; Oceania; World War II",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/2123/",
           "genres": [
             "Simulation"
@@ -14501,14 +13550,6 @@
         {
           "mobyid": 10070,
           "title": "Disney's Chip 'n Dale: Rescue Rangers",
-          "mobylink": "https://www.mobygames.com/game/10070/disneys-chip-n-dale-rescue-rangers",
-          "genre": "Action",
-          "perspective": "Side view",
-          "gameplay": "Arcade; Platform",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "Licensed",
           "sourceUrl": "https://www.mobygames.com/game/10070/",
           "genres": [
             "Action"
@@ -14590,14 +13631,6 @@
         {
           "mobyid": 180843,
           "title": "Disney's Chip 'n Dale: Rescue Rangers",
-          "mobylink": "https://www.mobygames.com/game/180843/disneys-chip-n-dale-rescue-rangers",
-          "genre": "Action",
-          "perspective": "Side view",
-          "gameplay": "",
-          "interface": "Direct control",
-          "setting": "North America",
-          "sport": "",
-          "misc": "Licensed",
           "sourceUrl": "https://www.mobygames.com/game/180843/",
           "genres": [
             "Action"
@@ -14631,14 +13664,6 @@
         {
           "mobyid": 1038,
           "title": "Jagged Alliance",
-          "mobylink": "https://www.mobygames.com/game/1038/jagged-alliance",
-          "genre": "Role-playing (RPG); Strategy / tactics",
-          "perspective": "Top-down",
-          "gameplay": "Tactical RPG; Turn-based tactics (TBT)",
-          "interface": "Multiple units/characters control; Point and select",
-          "setting": "Contemporary",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/1038/",
           "genres": [
             "Role-playing (RPG)",
@@ -14856,14 +13881,6 @@
         {
           "mobyid": 5241,
           "title": "Great Naval Battles: North Atlantic 1939-43",
-          "mobylink": "https://www.mobygames.com/game/5241/great-naval-battles-north-atlantic-1939-43",
-          "genre": "Simulation; Strategy / tactics",
-          "perspective": "1st-person",
-          "gameplay": "Real-time strategy (RTS); Wargame",
-          "interface": "",
-          "setting": "Historical events; World War II",
-          "sport": "",
-          "misc": "Regional differences",
           "sourceUrl": "https://www.mobygames.com/game/5241/",
           "genres": [
             "Simulation",
@@ -14937,14 +13954,6 @@
         {
           "mobyid": 200,
           "title": "Master of Magic",
-          "mobylink": "https://www.mobygames.com/game/200/master-of-magic",
-          "genre": "Strategy / tactics",
-          "perspective": "Diagonal-down",
-          "gameplay": "4X; Managerial / business simulation; RPG elements; Turn-based strategy (TBS)",
-          "interface": "Point and select",
-          "setting": "Fantasy",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/200/",
           "genres": [
             "Strategy / tactics"
@@ -15084,14 +14093,6 @@
         {
           "mobyid": 16961,
           "title": "Master of Magic",
-          "mobylink": "https://www.mobygames.com/game/16961/master-of-magic",
-          "genre": "Action; Adventure",
-          "perspective": "Side view; Top-down",
-          "gameplay": "Puzzle elements; Shooter",
-          "interface": "",
-          "setting": "Fantasy",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/16961/",
           "genres": [
             "Action",
@@ -15133,14 +14134,6 @@
         {
           "mobyid": 196362,
           "title": "Master of Magic",
-          "mobylink": "https://www.mobygames.com/game/196362/master-of-magic",
-          "genre": "Strategy / tactics",
-          "perspective": "Diagonal-down",
-          "gameplay": "RPG elements; Turn-based strategy (TBS)",
-          "interface": "Point and select",
-          "setting": "Fantasy",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/196362/",
           "genres": [
             "Strategy / tactics"
@@ -15197,14 +14190,6 @@
         {
           "mobyid": 482,
           "title": "Stronghold",
-          "mobylink": "https://www.mobygames.com/game/482/stronghold",
-          "genre": "Role-playing (RPG); Strategy / tactics",
-          "perspective": "3rd-person (Other)",
-          "gameplay": "Managerial / business simulation",
-          "interface": "",
-          "setting": "Fantasy",
-          "sport": "",
-          "misc": "Licensed",
           "sourceUrl": "https://www.mobygames.com/game/482/",
           "genres": [
             "Role-playing (RPG)",
@@ -15328,14 +14313,6 @@
         {
           "mobyid": 5212,
           "title": "FireFly Studios' Stronghold",
-          "mobylink": "https://www.mobygames.com/game/5212/firefly-studios-stronghold",
-          "genre": "Simulation; Strategy / tactics",
-          "perspective": "Diagonal-down",
-          "gameplay": "City building / construction simulation; Managerial / business simulation; Real-time strategy (RTS)",
-          "interface": "Multiple units/characters control; Point and select",
-          "setting": "Europe; Medieval",
-          "sport": "",
-          "misc": "Regional differences",
           "sourceUrl": "https://www.mobygames.com/game/5212/",
           "genres": [
             "Simulation",
@@ -15481,14 +14458,6 @@
         {
           "mobyid": 24078,
           "title": "Stronghold",
-          "mobylink": "https://www.mobygames.com/game/24078/stronghold",
-          "genre": "Action",
-          "perspective": "Side view",
-          "gameplay": "Arcade; Shooter",
-          "interface": "",
-          "setting": "Sci-fi / futuristic",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/24078/",
           "genres": [
             "Action"
@@ -15512,14 +14481,6 @@
         {
           "mobyid": 146134,
           "title": "Stronghold",
-          "mobylink": "https://www.mobygames.com/game/146134/stronghold",
-          "genre": "Action",
-          "perspective": "",
-          "gameplay": "Arcade",
-          "interface": "Direct control",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/146134/",
           "genres": [
             "Action"
@@ -15565,14 +14526,6 @@
         {
           "mobyid": 70876,
           "title": "The Complete Carriers at War: Fleet Carrier Operations in World War II",
-          "mobylink": "https://www.mobygames.com/game/70876/the-complete-carriers-at-war-fleet-carrier-operations-in-world-w",
-          "genre": "Compilation",
-          "perspective": "",
-          "gameplay": "",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/70876/",
           "genres": [
             "Compilation"
@@ -15609,14 +14562,6 @@
         {
           "mobyid": 307,
           "title": "Eye of the Beholder II: The Legend of Darkmoon",
-          "mobylink": "https://www.mobygames.com/game/307/eye-of-the-beholder-ii-the-legend-of-darkmoon",
-          "genre": "Role-playing (RPG)",
-          "perspective": "1st-person",
-          "gameplay": "",
-          "interface": "Point and select",
-          "setting": "Fantasy",
-          "sport": "",
-          "misc": "Licensed",
           "sourceUrl": "https://www.mobygames.com/game/307/",
           "genres": [
             "Role-playing (RPG)"
@@ -15719,14 +14664,6 @@
         {
           "mobyid": 1365,
           "title": "Strike Commander",
-          "mobylink": "https://www.mobygames.com/game/1365/strike-commander",
-          "genre": "Action; Simulation",
-          "perspective": "1st-person",
-          "gameplay": "",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/1365/",
           "genres": [
             "Action",
@@ -15808,14 +14745,6 @@
         {
           "mobyid": 34390,
           "title": "Strike Commander: CD-ROM Edition",
-          "mobylink": "https://www.mobygames.com/game/34390/strike-commander-cd-rom-edition",
-          "genre": "Compilation; Simulation",
-          "perspective": "",
-          "gameplay": "",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/34390/",
           "genres": [
             "Compilation",
@@ -15960,14 +14889,6 @@
         {
           "mobyid": 13708,
           "title": "K240",
-          "mobylink": "https://www.mobygames.com/game/13708/k240",
-          "genre": "Strategy / tactics",
-          "perspective": "",
-          "gameplay": "Managerial / business simulation",
-          "interface": "",
-          "setting": "Sci-fi / futuristic",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/13708/",
           "genres": [
             "Strategy / tactics"
@@ -16015,14 +14936,6 @@
         {
           "mobyid": 14618,
           "title": "David Crane's A Boy and His Blob: Trouble on Blobolonia",
-          "mobylink": "https://www.mobygames.com/game/14618/david-cranes-a-boy-and-his-blob-trouble-on-blobolonia",
-          "genre": "Action",
-          "perspective": "Side view",
-          "gameplay": "Platform; Puzzle elements",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/14618/",
           "genres": [
             "Action"
@@ -16096,14 +15009,6 @@
         {
           "mobyid": 44061,
           "title": "A Boy and His Blob",
-          "mobylink": "https://www.mobygames.com/game/44061/a-boy-and-his-blob",
-          "genre": "Action",
-          "perspective": "Side view",
-          "gameplay": "Platform; Puzzle elements",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/44061/",
           "genres": [
             "Action"
@@ -16405,14 +15310,6 @@
         {
           "mobyid": 495,
           "title": "Simon the Sorcerer",
-          "mobylink": "https://www.mobygames.com/game/495/simon-the-sorcerer",
-          "genre": "Adventure",
-          "perspective": "3rd-person (Other)",
-          "gameplay": "Graphic adventure; Puzzle elements",
-          "interface": "Point and select",
-          "setting": "Fantasy",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/495/",
           "genres": [
             "Adventure"
@@ -16651,14 +15548,6 @@
         {
           "mobyid": 490,
           "title": "Sid Meier's Covert Action",
-          "mobylink": "https://www.mobygames.com/game/490/sid-meiers-covert-action",
-          "genre": "Action; Simulation",
-          "perspective": "Top-down",
-          "gameplay": "Puzzle elements",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/490/",
           "genres": [
             "Action",
@@ -16870,14 +15759,6 @@
         {
           "mobyid": 7879,
           "title": "Little Nemo: The Dream Master",
-          "mobylink": "https://www.mobygames.com/game/7879/little-nemo-the-dream-master",
-          "genre": "Action",
-          "perspective": "Side view",
-          "gameplay": "Platform",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "Licensed",
           "sourceUrl": "https://www.mobygames.com/game/7879/",
           "genres": [
             "Action"
@@ -16951,14 +15832,6 @@
         {
           "mobyid": 10545,
           "title": "Whale's Voyage",
-          "mobylink": "https://www.mobygames.com/game/10545/whales-voyage",
-          "genre": "Role-playing (RPG)",
-          "perspective": "1st-person",
-          "gameplay": "",
-          "interface": "",
-          "setting": "Sci-fi / futuristic",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/10545/",
           "genres": [
             "Role-playing (RPG)"
@@ -17074,14 +15947,6 @@
         {
           "mobyid": 10921,
           "title": "Gunboat",
-          "mobylink": "https://www.mobygames.com/game/10921/gunboat",
-          "genre": "Action; Simulation",
-          "perspective": "1st-person",
-          "gameplay": "",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/10921/",
           "genres": [
             "Action",
@@ -17186,14 +16051,6 @@
         {
           "mobyid": 56107,
           "title": "Gunboat",
-          "mobylink": "https://www.mobygames.com/game/56107/gunboat",
-          "genre": "Action",
-          "perspective": "Side view",
-          "gameplay": "Shooter",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/56107/",
           "genres": [
             "Action"
@@ -17257,14 +16114,6 @@
         {
           "mobyid": 1171,
           "title": "Aces of the Deep",
-          "mobylink": "https://www.mobygames.com/game/1171/aces-of-the-deep",
-          "genre": "Simulation",
-          "perspective": "",
-          "gameplay": "",
-          "interface": "",
-          "setting": "Historical events; World War II",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/1171/",
           "genres": [
             "Simulation"
@@ -17350,14 +16199,6 @@
         {
           "mobyid": 9272,
           "title": "Paradroid",
-          "mobylink": "https://www.mobygames.com/game/9272/paradroid",
-          "genre": "Action",
-          "perspective": "Top-down",
-          "gameplay": "Shooter",
-          "interface": "",
-          "setting": "Sci-fi / futuristic",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/9272/",
           "genres": [
             "Action"
@@ -17461,14 +16302,6 @@
         {
           "mobyid": 5505,
           "title": "Batman: Return of the Joker",
-          "mobylink": "https://www.mobygames.com/game/5505/batman-return-of-the-joker",
-          "genre": "Action",
-          "perspective": "Side view",
-          "gameplay": "Platform",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "Licensed",
           "sourceUrl": "https://www.mobygames.com/game/5505/",
           "genres": [
             "Action"
@@ -17611,14 +16444,6 @@
         {
           "mobyid": 57692,
           "title": "Batman: Return of the Joker",
-          "mobylink": "https://www.mobygames.com/game/57692/batman-return-of-the-joker",
-          "genre": "Action",
-          "perspective": "Side view",
-          "gameplay": "Platform",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "Licensed",
           "sourceUrl": "https://www.mobygames.com/game/57692/",
           "genres": [
             "Action"
@@ -17690,14 +16515,6 @@
         {
           "mobyid": 56113,
           "title": "Cash",
-          "mobylink": "https://www.mobygames.com/game/56113/cash",
-          "genre": "Simulation; Strategy / tactics",
-          "perspective": "",
-          "gameplay": "Managerial / business simulation",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/56113/",
           "genres": [
             "Simulation",
@@ -17734,14 +16551,6 @@
         {
           "mobyid": 992,
           "title": "Dungeon Hack",
-          "mobylink": "https://www.mobygames.com/game/992/dungeon-hack",
-          "genre": "Role-playing (RPG)",
-          "perspective": "1st-person",
-          "gameplay": "Puzzle elements; Roguelike",
-          "interface": "Direct control",
-          "setting": "Fantasy",
-          "sport": "",
-          "misc": "Licensed",
           "sourceUrl": "https://www.mobygames.com/game/992/",
           "genres": [
             "Role-playing (RPG)"
@@ -17808,14 +16617,6 @@
         {
           "mobyid": 543,
           "title": "X-COM: Terror from the Deep",
-          "mobylink": "https://www.mobygames.com/game/543/x-com-terror-from-the-deep",
-          "genre": "Strategy / tactics",
-          "perspective": "Diagonal-down",
-          "gameplay": "Turn-based tactics (TBT)",
-          "interface": "Multiple units/characters control",
-          "setting": "Sci-fi / futuristic",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/543/",
           "genres": [
             "Strategy / tactics"
@@ -18002,14 +16803,6 @@
         {
           "mobyid": 51858,
           "title": "'Nam 1965-1975",
-          "mobylink": "https://www.mobygames.com/game/51858/nam-1965-1975",
-          "genre": "Strategy / tactics",
-          "perspective": "Top-down",
-          "gameplay": "Managerial / business simulation",
-          "interface": "",
-          "setting": "Historical events",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/51858/",
           "genres": [
             "Strategy / tactics"
@@ -18076,14 +16869,6 @@
         {
           "mobyid": 394,
           "title": "Fables & Fiends: The Legend of Kyrandia - Book One",
-          "mobylink": "https://www.mobygames.com/game/394/fables-fiends-the-legend-of-kyrandia-book-one",
-          "genre": "Adventure",
-          "perspective": "3rd-person (Other)",
-          "gameplay": "Graphic adventure; Puzzle elements",
-          "interface": "Point and select",
-          "setting": "Fantasy",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/394/",
           "genres": [
             "Adventure"
@@ -18337,14 +17122,6 @@
         {
           "mobyid": 745,
           "title": "Sam & Max: Hit the Road",
-          "mobylink": "https://www.mobygames.com/game/745/sam-max-hit-the-road",
-          "genre": "Adventure",
-          "perspective": "Side view",
-          "gameplay": "Graphic adventure; Mini-games; Puzzle elements",
-          "interface": "Point and select",
-          "setting": "Fantasy; North America",
-          "sport": "",
-          "misc": "Licensed",
           "sourceUrl": "https://www.mobygames.com/game/745/",
           "genres": [
             "Adventure"
@@ -18588,14 +17365,6 @@
         {
           "mobyid": 17105,
           "title": "Ghettoblaster",
-          "mobylink": "https://www.mobygames.com/game/17105/ghettoblaster",
-          "genre": "Action",
-          "perspective": "Side view",
-          "gameplay": "Puzzle elements",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/17105/",
           "genres": [
             "Action"
@@ -18650,14 +17419,6 @@
         {
           "mobyid": 14566,
           "title": "Sherman M4",
-          "mobylink": "https://www.mobygames.com/game/14566/sherman-m4",
-          "genre": "Action; Simulation; Strategy / tactics",
-          "perspective": "1st-person",
-          "gameplay": "",
-          "interface": "",
-          "setting": "Africa; Europe; World War II",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/14566/",
           "genres": [
             "Action",
@@ -18730,14 +17491,6 @@
         {
           "mobyid": 511,
           "title": "Raptor: Call of the Shadows",
-          "mobylink": "https://www.mobygames.com/game/511/raptor-call-of-the-shadows",
-          "genre": "Action",
-          "perspective": "Top-down",
-          "gameplay": "Arcade; Shooter",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/511/",
           "genres": [
             "Action"
@@ -18918,14 +17671,6 @@
         {
           "mobyid": 1929,
           "title": "Heretic: Shadow of the Serpent Riders",
-          "mobylink": "https://www.mobygames.com/game/1929/heretic-shadow-of-the-serpent-riders",
-          "genre": "Action",
-          "perspective": "1st-person",
-          "gameplay": "Shooter",
-          "interface": "Direct control",
-          "setting": "Fantasy",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/1929/",
           "genres": [
             "Action"
@@ -19010,14 +17755,6 @@
         {
           "mobyid": 10090,
           "title": "Ace of Aces",
-          "mobylink": "https://www.mobygames.com/game/10090/ace-of-aces",
-          "genre": "Action; Simulation",
-          "perspective": "1st-person",
-          "gameplay": "",
-          "interface": "",
-          "setting": "World War II",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/10090/",
           "genres": [
             "Action",
@@ -19239,14 +17976,6 @@
         {
           "mobyid": 28,
           "title": "Knights of the Sky",
-          "mobylink": "https://www.mobygames.com/game/28/knights-of-the-sky",
-          "genre": "Simulation",
-          "perspective": "1st-person; 3rd-person (Other)",
-          "gameplay": "",
-          "interface": "",
-          "setting": "Historical events; World War I",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/28/",
           "genres": [
             "Simulation"
@@ -19407,14 +18136,6 @@
         {
           "mobyid": 386,
           "title": "Beneath a Steel Sky",
-          "mobylink": "https://www.mobygames.com/game/386/beneath-a-steel-sky",
-          "genre": "Adventure",
-          "perspective": "3rd-person (Other)",
-          "gameplay": "Graphic adventure; Puzzle elements",
-          "interface": "Point and select",
-          "setting": "Cyberpunk / dark sci-fi; Oceania",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/386/",
           "genres": [
             "Adventure"
@@ -19724,14 +18445,6 @@
         {
           "mobyid": 8606,
           "title": "Disney's DuckTales",
-          "mobylink": "https://www.mobygames.com/game/8606/disneys-ducktales",
-          "genre": "Action",
-          "perspective": "Side view",
-          "gameplay": "Platform",
-          "interface": "",
-          "setting": "Africa; South America",
-          "sport": "",
-          "misc": "Licensed; Regional differences",
           "sourceUrl": "https://www.mobygames.com/game/8606/",
           "genres": [
             "Action"
@@ -19842,14 +18555,6 @@
         {
           "mobyid": 181116,
           "title": "Disney's DuckTales",
-          "mobylink": "https://www.mobygames.com/game/181116/disneys-ducktales",
-          "genre": "Action",
-          "perspective": "Side view",
-          "gameplay": "Arcade",
-          "interface": "Direct control",
-          "setting": "",
-          "sport": "",
-          "misc": "Licensed",
           "sourceUrl": "https://www.mobygames.com/game/181116/",
           "genres": [
             "Action"
@@ -19883,14 +18588,6 @@
         {
           "mobyid": 7299,
           "title": "Super Mario Bros. 2",
-          "mobylink": "https://www.mobygames.com/game/7299/super-mario-bros-2",
-          "genre": "Action",
-          "perspective": "Side view",
-          "gameplay": "Platform",
-          "interface": "Direct control",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/7299/",
           "genres": [
             "Action"
@@ -20097,14 +18794,6 @@
         {
           "mobyid": 27861,
           "title": "Super Mario Bros. 2",
-          "mobylink": "https://www.mobygames.com/game/27861/super-mario-bros-2",
-          "genre": "Action",
-          "perspective": "Side view",
-          "gameplay": "Platform",
-          "interface": "Direct control",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/27861/",
           "genres": [
             "Action"
@@ -20245,14 +18934,6 @@
         {
           "mobyid": 361,
           "title": "Magic Carpet",
-          "mobylink": "https://www.mobygames.com/game/361/magic-carpet",
-          "genre": "Action",
-          "perspective": "1st-person",
-          "gameplay": "Shooter",
-          "interface": "",
-          "setting": "Fantasy; Middle East",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/361/",
           "genres": [
             "Action"
@@ -20331,14 +19012,6 @@
         {
           "mobyid": 15665,
           "title": "Magic Carpet Plus",
-          "mobylink": "https://www.mobygames.com/game/15665/magic-carpet-plus",
-          "genre": "Action; Compilation",
-          "perspective": "1st-person",
-          "gameplay": "Shooter",
-          "interface": "",
-          "setting": "Middle East",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/15665/",
           "genres": [
             "Action",
@@ -20509,14 +19182,6 @@
         {
           "mobyid": 35298,
           "title": "Magic Carpet",
-          "mobylink": "https://www.mobygames.com/game/35298/magic-carpet",
-          "genre": "Action",
-          "perspective": "Side view",
-          "gameplay": "",
-          "interface": "",
-          "setting": "Middle East",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/35298/",
           "genres": [
             "Action"
@@ -20552,14 +19217,6 @@
         {
           "mobyid": 141721,
           "title": "Magic Carpet",
-          "mobylink": "https://www.mobygames.com/game/141721/magic-carpet",
-          "genre": "Adventure",
-          "perspective": "Text-based / Spreadsheet",
-          "gameplay": "Interactive fiction / text adventure",
-          "interface": "Menu structures",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/141721/",
           "genres": [
             "Adventure"
@@ -20593,14 +19250,6 @@
         {
           "mobyid": 5481,
           "title": "F-14 Tomcat",
-          "mobylink": "https://www.mobygames.com/game/5481/f-14-tomcat",
-          "genre": "Action; Simulation",
-          "perspective": "1st-person",
-          "gameplay": "Arcade",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/5481/",
           "genres": [
             "Action",
@@ -20666,14 +19315,6 @@
         {
           "mobyid": 45708,
           "title": "F-14 Tomcat",
-          "mobylink": "https://www.mobygames.com/game/45708/f-14-tomcat",
-          "genre": "Action; Simulation",
-          "perspective": "1st-person",
-          "gameplay": "Shooter",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "Licensed",
           "sourceUrl": "https://www.mobygames.com/game/45708/",
           "genres": [
             "Action",
@@ -20699,14 +19340,6 @@
         {
           "mobyid": 59771,
           "title": "F-14 Tomcat",
-          "mobylink": "https://www.mobygames.com/game/59771/f-14-tomcat",
-          "genre": "Action; Simulation",
-          "perspective": "1st-person",
-          "gameplay": "",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/59771/",
           "genres": [
             "Action",
@@ -20741,14 +19374,6 @@
         {
           "mobyid": 2165,
           "title": "Hacker",
-          "mobylink": "https://www.mobygames.com/game/2165/hacker",
-          "genre": "Adventure; Strategy / tactics",
-          "perspective": "",
-          "gameplay": "",
-          "interface": "",
-          "setting": "Cyberpunk / dark sci-fi",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/2165/",
           "genres": [
             "Adventure",
@@ -20930,14 +19555,6 @@
         {
           "mobyid": 3024,
           "title": "Hacker",
-          "mobylink": "https://www.mobygames.com/game/3024/hacker",
-          "genre": "Simulation",
-          "perspective": "",
-          "gameplay": "",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/3024/",
           "genres": [
             "Simulation"
@@ -20971,14 +19588,6 @@
         {
           "mobyid": 1876,
           "title": "Stonekeep",
-          "mobylink": "https://www.mobygames.com/game/1876/stonekeep",
-          "genre": "Role-playing (RPG)",
-          "perspective": "1st-person",
-          "gameplay": "Action RPG",
-          "interface": "Direct control; Point and select",
-          "setting": "Fantasy",
-          "sport": "",
-          "misc": "Regional differences",
           "sourceUrl": "https://www.mobygames.com/game/1876/",
           "genres": [
             "Role-playing (RPG)"
@@ -21179,14 +19788,6 @@
         {
           "mobyid": 308,
           "title": "Battle Bugs",
-          "mobylink": "https://www.mobygames.com/game/308/battle-bugs",
-          "genre": "Strategy / tactics",
-          "perspective": "Diagonal-down",
-          "gameplay": "Real-time strategy (RTS)",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/308/",
           "genres": [
             "Strategy / tactics"
@@ -21294,14 +19895,6 @@
         {
           "mobyid": 862,
           "title": "Wetlands",
-          "mobylink": "https://www.mobygames.com/game/862/wetlands",
-          "genre": "Action",
-          "perspective": "1st-person",
-          "gameplay": "Rail shooter",
-          "interface": "",
-          "setting": "Sci-fi / futuristic",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/862/",
           "genres": [
             "Action"
@@ -21424,14 +20017,6 @@
         {
           "mobyid": 1499,
           "title": "M1 Tank Platoon",
-          "mobylink": "https://www.mobygames.com/game/1499/m1-tank-platoon",
-          "genre": "Simulation; Strategy / tactics",
-          "perspective": "1st-person; Top-down",
-          "gameplay": "",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/1499/",
           "genres": [
             "Simulation",
@@ -21718,14 +20303,6 @@
         {
           "mobyid": 53055,
           "title": "Hanse",
-          "mobylink": "https://www.mobygames.com/game/53055/hanse",
-          "genre": "Strategy / tactics",
-          "perspective": "",
-          "gameplay": "Managerial / business simulation",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/53055/",
           "genres": [
             "Strategy / tactics"
@@ -21806,14 +20383,6 @@
         {
           "mobyid": 1595,
           "title": "The Ancient Art of War in the Skies",
-          "mobylink": "https://www.mobygames.com/game/1595/the-ancient-art-of-war-in-the-skies",
-          "genre": "Action; Simulation; Strategy / tactics",
-          "perspective": "Side view; Top-down",
-          "gameplay": "Real-time strategy (RTS); Wargame",
-          "interface": "",
-          "setting": "Historical events; World War I",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/1595/",
           "genres": [
             "Action",
@@ -21905,14 +20474,6 @@
         {
           "mobyid": 425,
           "title": "Serf City: Life is Feudal",
-          "mobylink": "https://www.mobygames.com/game/425/serf-city-life-is-feudal",
-          "genre": "Simulation; Strategy / tactics",
-          "perspective": "Diagonal-down",
-          "gameplay": "City building / construction simulation; Managerial / business simulation; Real-time strategy (RTS)",
-          "interface": "Point and select",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/425/",
           "genres": [
             "Simulation",
@@ -22078,14 +20639,6 @@
         {
           "mobyid": 30771,
           "title": "The Settlers",
-          "mobylink": "https://www.mobygames.com/game/30771/the-settlers",
-          "genre": "Strategy / tactics",
-          "perspective": "",
-          "gameplay": "City building / construction simulation; Managerial / business simulation",
-          "interface": "",
-          "setting": "Fantasy",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/30771/",
           "genres": [
             "Strategy / tactics"
@@ -22142,14 +20695,6 @@
         {
           "mobyid": 8276,
           "title": "Buzz Aldrin's Race into Space",
-          "mobylink": "https://www.mobygames.com/game/8276/buzz-aldrins-race-into-space",
-          "genre": "Simulation; Strategy / tactics",
-          "perspective": "",
-          "gameplay": "Managerial / business simulation",
-          "interface": "Menu structures",
-          "setting": "Cold War; Contemporary",
-          "sport": "",
-          "misc": "Licensed",
           "sourceUrl": "https://www.mobygames.com/game/8276/",
           "genres": [
             "Simulation",
@@ -22248,14 +20793,6 @@
         {
           "mobyid": 19932,
           "title": "Beach-Head",
-          "mobylink": "https://www.mobygames.com/game/19932/beach-head",
-          "genre": "Action",
-          "perspective": "Side view",
-          "gameplay": "Arcade; Shooter",
-          "interface": "",
-          "setting": "World War II",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/19932/",
           "genres": [
             "Action"
@@ -22477,14 +21014,6 @@
         {
           "mobyid": 1980,
           "title": "Cadaver",
-          "mobylink": "https://www.mobygames.com/game/1980/cadaver",
-          "genre": "Action",
-          "perspective": "Diagonal-down",
-          "gameplay": "Puzzle elements",
-          "interface": "",
-          "setting": "Fantasy",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/1980/",
           "genres": [
             "Action"
@@ -22570,14 +21099,6 @@
         {
           "mobyid": 13607,
           "title": "The Goonies",
-          "mobylink": "https://www.mobygames.com/game/13607/the-goonies",
-          "genre": "Action",
-          "perspective": "Side view",
-          "gameplay": "Arcade; Platform",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "Licensed",
           "sourceUrl": "https://www.mobygames.com/game/13607/",
           "genres": [
             "Action"
@@ -22641,14 +21162,6 @@
         {
           "mobyid": 23779,
           "title": "The Goonies",
-          "mobylink": "https://www.mobygames.com/game/23779/the-goonies",
-          "genre": "Action",
-          "perspective": "",
-          "gameplay": "Platform; Puzzle elements",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "Licensed",
           "sourceUrl": "https://www.mobygames.com/game/23779/",
           "genres": [
             "Action"
@@ -22760,14 +21273,6 @@
         {
           "mobyid": 48792,
           "title": "The Goonies",
-          "mobylink": "https://www.mobygames.com/game/48792/the-goonies",
-          "genre": "Action",
-          "perspective": "3rd-person (Other)",
-          "gameplay": "Platform; Puzzle elements",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "Fangame",
           "sourceUrl": "https://www.mobygames.com/game/48792/",
           "genres": [
             "Action"
@@ -22801,14 +21306,6 @@
         {
           "mobyid": 63992,
           "title": "The Goonies",
-          "mobylink": "https://www.mobygames.com/game/63992/the-goonies",
-          "genre": "Action",
-          "perspective": "",
-          "gameplay": "Platform",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "Licensed",
           "sourceUrl": "https://www.mobygames.com/game/63992/",
           "genres": [
             "Action"
@@ -22842,14 +21339,6 @@
         {
           "mobyid": 9241,
           "title": "Little Computer People",
-          "mobylink": "https://www.mobygames.com/game/9241/little-computer-people",
-          "genre": "Simulation",
-          "perspective": "Side view",
-          "gameplay": "Life / social simulation",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/9241/",
           "genres": [
             "Simulation"
@@ -22997,14 +21486,6 @@
         {
           "mobyid": 952,
           "title": "Star Trek: 25th Anniversary",
-          "mobylink": "https://www.mobygames.com/game/952/star-trek-25th-anniversary",
-          "genre": "Adventure; Simulation",
-          "perspective": "3rd-person (Other)",
-          "gameplay": "Graphic adventure; Puzzle elements",
-          "interface": "",
-          "setting": "Sci-fi / futuristic",
-          "sport": "",
-          "misc": "Licensed",
           "sourceUrl": "https://www.mobygames.com/game/952/",
           "genres": [
             "Adventure",
@@ -23227,14 +21708,6 @@
         {
           "mobyid": 5322,
           "title": "Star Trek: 25th Anniversary",
-          "mobylink": "https://www.mobygames.com/game/5322/star-trek-25th-anniversary",
-          "genre": "Action",
-          "perspective": "Side view; Top-down",
-          "gameplay": "Shooter",
-          "interface": "",
-          "setting": "Sci-fi / futuristic",
-          "sport": "",
-          "misc": "Licensed",
           "sourceUrl": "https://www.mobygames.com/game/5322/",
           "genres": [
             "Action"
@@ -23273,14 +21746,6 @@
         {
           "mobyid": 15788,
           "title": "Star Trek: 25th Anniversary",
-          "mobylink": "https://www.mobygames.com/game/15788/star-trek-25th-anniversary",
-          "genre": "Action",
-          "perspective": "1st-person; Top-down",
-          "gameplay": "Puzzle elements",
-          "interface": "",
-          "setting": "Sci-fi / futuristic",
-          "sport": "",
-          "misc": "Licensed",
           "sourceUrl": "https://www.mobygames.com/game/15788/",
           "genres": [
             "Action"
@@ -23305,14 +21770,6 @@
         {
           "mobyid": 195690,
           "title": "Star Trek: 25th Anniversary",
-          "mobylink": "https://www.mobygames.com/game/195690/star-trek-25th-anniversary",
-          "genre": "Action",
-          "perspective": "Top-down",
-          "gameplay": "Shooter",
-          "interface": "Direct control",
-          "setting": "Sci-fi / futuristic",
-          "sport": "",
-          "misc": "Licensed",
           "sourceUrl": "https://www.mobygames.com/game/195690/",
           "genres": [
             "Action"
@@ -23347,14 +21804,6 @@
         {
           "mobyid": 687,
           "title": "Neuromancer",
-          "mobylink": "https://www.mobygames.com/game/687/neuromancer",
-          "genre": "Adventure",
-          "perspective": "Side view",
-          "gameplay": "",
-          "interface": "Menu structures; Point and select",
-          "setting": "Cyberpunk / dark sci-fi",
-          "sport": "",
-          "misc": "Licensed",
           "sourceUrl": "https://www.mobygames.com/game/687/",
           "genres": [
             "Adventure"
@@ -23498,14 +21947,6 @@
         {
           "mobyid": 24845,
           "title": "Murder on the Mississippi",
-          "mobylink": "https://www.mobygames.com/game/24845/murder-on-the-mississippi",
-          "genre": "Adventure",
-          "perspective": "Side view",
-          "gameplay": "Graphic adventure; Puzzle elements",
-          "interface": "Menu structures",
-          "setting": "North America",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/24845/",
           "genres": [
             "Adventure"
@@ -23580,14 +22021,6 @@
         {
           "mobyid": 179,
           "title": "Star Control II",
-          "mobylink": "https://www.mobygames.com/game/179/star-control-ii",
-          "genre": "Action",
-          "perspective": "Top-down",
-          "gameplay": "Arcade; Mini-games; RPG elements",
-          "interface": "Direct control",
-          "setting": "Sci-fi / futuristic",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/179/",
           "genres": [
             "Action"
@@ -23788,14 +22221,6 @@
         {
           "mobyid": 50,
           "title": "Zork: The Great Underground Empire",
-          "mobylink": "https://www.mobygames.com/game/50/zork-the-great-underground-empire",
-          "genre": "Adventure",
-          "perspective": "Text-based / Spreadsheet",
-          "gameplay": "Interactive fiction / text adventure; Puzzle elements",
-          "interface": "Text parser",
-          "setting": "Fantasy",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/50/",
           "genres": [
             "Adventure"
@@ -24219,14 +22644,6 @@
         {
           "mobyid": 241,
           "title": "Dune II: The Building of a Dynasty",
-          "mobylink": "https://www.mobygames.com/game/241/dune-ii-the-building-of-a-dynasty",
-          "genre": "Strategy / tactics",
-          "perspective": "Top-down",
-          "gameplay": "Real-time strategy (RTS)",
-          "interface": "Point and select",
-          "setting": "Sci-fi / futuristic",
-          "sport": "",
-          "misc": "Licensed",
           "sourceUrl": "https://www.mobygames.com/game/241/",
           "genres": [
             "Strategy / tactics"
@@ -24423,14 +22840,6 @@
         {
           "mobyid": 21773,
           "title": "They $tole a Million",
-          "mobylink": "https://www.mobygames.com/game/21773/they-tole-a-million",
-          "genre": "Strategy / tactics",
-          "perspective": "Top-down",
-          "gameplay": "Puzzle elements; Stealth",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/21773/",
           "genres": [
             "Strategy / tactics"
@@ -24486,14 +22895,6 @@
         {
           "mobyid": 1071,
           "title": "Uninvited",
-          "mobylink": "https://www.mobygames.com/game/1071/uninvited",
-          "genre": "Adventure",
-          "perspective": "1st-person",
-          "gameplay": "Graphic adventure",
-          "interface": "Point and select",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/1071/",
           "genres": [
             "Adventure"
@@ -24645,14 +23046,6 @@
         {
           "mobyid": 191414,
           "title": "Uninvited",
-          "mobylink": "https://www.mobygames.com/game/191414/uninvited",
-          "genre": "Action",
-          "perspective": "1st-person",
-          "gameplay": "Survival horror",
-          "interface": "Direct control",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/191414/",
           "genres": [
             "Action"
@@ -24693,14 +23086,6 @@
         {
           "mobyid": 8623,
           "title": "Disney's Darkwing Duck",
-          "mobylink": "https://www.mobygames.com/game/8623/disneys-darkwing-duck",
-          "genre": "Action",
-          "perspective": "Side view",
-          "gameplay": "Platform",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "Licensed",
           "sourceUrl": "https://www.mobygames.com/game/8623/",
           "genres": [
             "Action"
@@ -24746,14 +23131,6 @@
         {
           "mobyid": 17609,
           "title": "Disney's Darkwing Duck",
-          "mobylink": "https://www.mobygames.com/game/17609/disneys-darkwing-duck",
-          "genre": "Action",
-          "perspective": "Side view",
-          "gameplay": "Puzzle elements",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "Licensed",
           "sourceUrl": "https://www.mobygames.com/game/17609/",
           "genres": [
             "Action"
@@ -24778,14 +23155,6 @@
         {
           "mobyid": 198359,
           "title": "Disney's Darkwing Duck",
-          "mobylink": "https://www.mobygames.com/game/198359/disneys-darkwing-duck/covers/",
-          "genre": null,
-          "perspective": null,
-          "gameplay": null,
-          "interface": null,
-          "setting": null,
-          "sport": null,
-          "misc": null,
           "sourceUrl": "https://www.mobygames.com/game/198359/",
           "genres": [],
           "alternativeTitles": [],
@@ -24806,14 +23175,6 @@
         {
           "mobyid": 675,
           "title": "Theme Park",
-          "mobylink": "https://www.mobygames.com/game/675/theme-park",
-          "genre": "Strategy / tactics",
-          "perspective": "Diagonal-down",
-          "gameplay": "City building / construction simulation; Managerial / business simulation",
-          "interface": "Point and select",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/675/",
           "genres": [
             "Strategy / tactics"
@@ -25294,14 +23655,6 @@
         {
           "mobyid": 58670,
           "title": "Theme Park",
-          "mobylink": "https://www.mobygames.com/game/58670/theme-park",
-          "genre": "Simulation",
-          "perspective": "Diagonal-down",
-          "gameplay": "Managerial / business simulation",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/58670/",
           "genres": [
             "Simulation"
@@ -25355,14 +23708,6 @@
         {
           "mobyid": 13022,
           "title": "Summer Games",
-          "mobylink": "https://www.mobygames.com/game/13022/summer-games",
-          "genre": "Action; Sports",
-          "perspective": "1st-person; Side view",
-          "gameplay": "",
-          "interface": "",
-          "setting": "",
-          "sport": "Olympiad / mixed sports",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/13022/",
           "genres": [
             "Action",
@@ -25605,14 +23950,6 @@
         {
           "mobyid": 42935,
           "title": "Sommerspiele",
-          "mobylink": "https://www.mobygames.com/game/42935/sommerspiele",
-          "genre": "Sports",
-          "perspective": "3rd-person (Other)",
-          "gameplay": "",
-          "interface": "",
-          "setting": "",
-          "sport": "Olympiad / mixed sports",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/42935/",
           "genres": [
             "Sports"
@@ -25651,14 +23988,6 @@
         {
           "mobyid": 129749,
           "title": "Summer Games",
-          "mobylink": "https://www.mobygames.com/game/129749/summer-games",
-          "genre": "Action; Sports",
-          "perspective": "Side view",
-          "gameplay": "Mini-games",
-          "interface": "",
-          "setting": "",
-          "sport": "Athletics",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/129749/",
           "genres": [
             "Action",
@@ -25713,14 +24042,6 @@
         {
           "mobyid": 27730,
           "title": "Iron Assault",
-          "mobylink": "https://www.mobygames.com/game/27730/iron-assault",
-          "genre": "Action; Simulation",
-          "perspective": "1st-person",
-          "gameplay": "",
-          "interface": "",
-          "setting": "Sci-fi / futuristic",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/27730/",
           "genres": [
             "Action",
@@ -25792,14 +24113,6 @@
         {
           "mobyid": 8085,
           "title": "Uniracers",
-          "mobylink": "https://www.mobygames.com/game/8085/uniracers",
-          "genre": "Racing / Driving",
-          "perspective": "Side view",
-          "gameplay": "",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/8085/",
           "genres": [
             "Racing / Driving"
@@ -25866,14 +24179,6 @@
         {
           "mobyid": 466,
           "title": "Marble Madness",
-          "mobylink": "https://www.mobygames.com/game/466/marble-madness",
-          "genre": "Action; Puzzle",
-          "perspective": "Diagonal-down",
-          "gameplay": "Arcade",
-          "interface": "Direct control",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/466/",
           "genres": [
             "Action",
@@ -26152,14 +24457,6 @@
         {
           "mobyid": 202893,
           "title": "Marble Madness",
-          "mobylink": "https://www.mobygames.com/game/202893/marble-madness",
-          "genre": "Action",
-          "perspective": "Top-down",
-          "gameplay": "Arcade",
-          "interface": "Direct control",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/202893/",
           "genres": [
             "Action"
@@ -26193,14 +24490,6 @@
         {
           "mobyid": 765,
           "title": "Planet's Edge: The Point of no Return",
-          "mobylink": "https://www.mobygames.com/game/765/planets-edge-the-point-of-no-return",
-          "genre": "Role-playing (RPG)",
-          "perspective": "Top-down",
-          "gameplay": "",
-          "interface": "",
-          "setting": "Sci-fi / futuristic",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/765/",
           "genres": [
             "Role-playing (RPG)"
@@ -26347,14 +24636,6 @@
         {
           "mobyid": 6166,
           "title": "Burntime",
-          "mobylink": "https://www.mobygames.com/game/6166/burntime",
-          "genre": "Role-playing (RPG); Strategy / tactics",
-          "perspective": "Top-down",
-          "gameplay": "",
-          "interface": "",
-          "setting": "Post-apocalyptic",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/6166/",
           "genres": [
             "Role-playing (RPG)",
@@ -26434,14 +24715,6 @@
         {
           "mobyid": 519,
           "title": "Aces Over Europe",
-          "mobylink": "https://www.mobygames.com/game/519/aces-over-europe",
-          "genre": "Simulation",
-          "perspective": "1st-person",
-          "gameplay": "",
-          "interface": "",
-          "setting": "Historical events; World War II",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/519/",
           "genres": [
             "Simulation"
@@ -26527,14 +24800,6 @@
         {
           "mobyid": 4037,
           "title": "Sid Meier's Railroad Tycoon Deluxe",
-          "mobylink": "https://www.mobygames.com/game/4037/sid-meiers-railroad-tycoon-deluxe",
-          "genre": "Strategy / tactics",
-          "perspective": "Top-down",
-          "gameplay": "Managerial / business simulation",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/4037/",
           "genres": [
             "Strategy / tactics"
@@ -26664,14 +24929,6 @@
         {
           "mobyid": 11980,
           "title": "Kabuki: Quantum Fighter",
-          "mobylink": "https://www.mobygames.com/game/11980/kabuki-quantum-fighter",
-          "genre": "Action",
-          "perspective": "",
-          "gameplay": "Platform",
-          "interface": "",
-          "setting": "Cyberpunk / dark sci-fi; Sci-fi / futuristic",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/11980/",
           "genres": [
             "Action"
@@ -26730,14 +24987,6 @@
         {
           "mobyid": 258,
           "title": "Darklands",
-          "mobylink": "https://www.mobygames.com/game/258/darklands",
-          "genre": "Role-playing (RPG)",
-          "perspective": "Diagonal-down",
-          "gameplay": "",
-          "interface": "",
-          "setting": "Europe; Fantasy; Medieval",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/258/",
           "genres": [
             "Role-playing (RPG)"
@@ -26971,14 +25220,6 @@
         {
           "mobyid": 4223,
           "title": "Exploration",
-          "mobylink": "https://www.mobygames.com/game/4223/exploration",
-          "genre": "Simulation; Strategy / tactics",
-          "perspective": "Top-down",
-          "gameplay": "Managerial / business simulation",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/4223/",
           "genres": [
             "Simulation",
@@ -27069,14 +25310,6 @@
         {
           "mobyid": 1215,
           "title": "Winter Games",
-          "mobylink": "https://www.mobygames.com/game/1215/winter-games",
-          "genre": "Sports",
-          "perspective": "Side view",
-          "gameplay": "",
-          "interface": "Direct control",
-          "setting": "",
-          "sport": "Olympiad / mixed sports",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/1215/",
           "genres": [
             "Sports"
@@ -27396,14 +25629,6 @@
         {
           "mobyid": 109715,
           "title": "Winter Games",
-          "mobylink": "https://www.mobygames.com/game/109715/winter-games",
-          "genre": "Compilation",
-          "perspective": "",
-          "gameplay": "",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/109715/",
           "genres": [
             "Compilation"
@@ -27428,14 +25653,6 @@
         {
           "mobyid": 130767,
           "title": "Winter Games",
-          "mobylink": "https://www.mobygames.com/game/130767/winter-games",
-          "genre": "Action; Sports",
-          "perspective": "Side view",
-          "gameplay": "Mini-games",
-          "interface": "",
-          "setting": "",
-          "sport": "Athletics; Snowboarding / skiing",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/130767/",
           "genres": [
             "Action",
@@ -27490,14 +25707,6 @@
         {
           "mobyid": 613,
           "title": "Populous",
-          "mobylink": "https://www.mobygames.com/game/613/populous",
-          "genre": "Strategy / tactics",
-          "perspective": "Diagonal-down",
-          "gameplay": "Managerial / business simulation; Real-time strategy (RTS)",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/613/",
           "genres": [
             "Strategy / tactics"
@@ -27752,14 +25961,6 @@
         {
           "mobyid": 16151,
           "title": "Populous / Populous: The Promised Lands",
-          "mobylink": "https://www.mobygames.com/game/16151/populous-populous-the-promised-lands",
-          "genre": "Compilation",
-          "perspective": "",
-          "gameplay": "",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/16151/",
           "genres": [
             "Compilation"
@@ -27888,14 +26089,6 @@
         {
           "mobyid": 848,
           "title": "SimCity",
-          "mobylink": "https://www.mobygames.com/game/848/simcity",
-          "genre": "Simulation",
-          "perspective": "Top-down",
-          "gameplay": "City building / construction simulation; Managerial / business simulation",
-          "interface": "",
-          "setting": "Contemporary",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/848/",
           "genres": [
             "Simulation"
@@ -28307,14 +26500,6 @@
         {
           "mobyid": 44593,
           "title": "SimCity",
-          "mobylink": "https://www.mobygames.com/game/44593/simcity",
-          "genre": "Simulation; Strategy / tactics",
-          "perspective": "Diagonal-down",
-          "gameplay": "City building / construction simulation; Managerial / business simulation",
-          "interface": "Point and select",
-          "setting": "Contemporary",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/44593/",
           "genres": [
             "Simulation",
@@ -28349,14 +26534,6 @@
         {
           "mobyid": 65566,
           "title": "SimCity",
-          "mobylink": "https://www.mobygames.com/game/65566/simcity",
-          "genre": "Simulation; Strategy / tactics",
-          "perspective": "Diagonal-down",
-          "gameplay": "City building / construction simulation; Managerial / business simulation",
-          "interface": "Point and select",
-          "setting": "Contemporary",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/65566/",
           "genres": [
             "Simulation",
@@ -28441,14 +26618,6 @@
         {
           "mobyid": 10123,
           "title": "Thunderhawk",
-          "mobylink": "https://www.mobygames.com/game/10123/thunderhawk",
-          "genre": "Action; Simulation",
-          "perspective": "1st-person; 3rd-person (Other)",
-          "gameplay": "",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/10123/",
           "genres": [
             "Action",
@@ -28558,14 +26727,6 @@
         {
           "mobyid": 1488,
           "title": "SEAL Team",
-          "mobylink": "https://www.mobygames.com/game/1488/seal-team",
-          "genre": "Simulation",
-          "perspective": "1st-person; 3rd-person (Other); Top-down",
-          "gameplay": "",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/1488/",
           "genres": [
             "Simulation"
@@ -28615,14 +26776,6 @@
         {
           "mobyid": 1681,
           "title": "Lightspeed",
-          "mobylink": "https://www.mobygames.com/game/1681/lightspeed",
-          "genre": "Simulation",
-          "perspective": "1st-person",
-          "gameplay": "Shooter",
-          "interface": "",
-          "setting": "Sci-fi / futuristic",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/1681/",
           "genres": [
             "Simulation"
@@ -28690,14 +26843,6 @@
         {
           "mobyid": 14182,
           "title": "Lightspeed",
-          "mobylink": "https://www.mobygames.com/game/14182/lightspeed",
-          "genre": "Puzzle",
-          "perspective": "Top-down",
-          "gameplay": "",
-          "interface": "Point and select",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/14182/",
           "genres": [
             "Puzzle"
@@ -28761,14 +26906,6 @@
         {
           "mobyid": 4226,
           "title": "Air Duel: 80 Years of Dogfighting",
-          "mobylink": "https://www.mobygames.com/game/4226/air-duel-80-years-of-dogfighting",
-          "genre": "Simulation",
-          "perspective": "1st-person; 3rd-person (Other)",
-          "gameplay": "",
-          "interface": "",
-          "setting": "Historical events; Middle East; World War I; World War II",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/4226/",
           "genres": [
             "Simulation"
@@ -28880,14 +27017,6 @@
         {
           "mobyid": 697,
           "title": "The Legacy: Realm of Terror",
-          "mobylink": "https://www.mobygames.com/game/697/the-legacy-realm-of-terror",
-          "genre": "Adventure; Role-playing (RPG)",
-          "perspective": "1st-person",
-          "gameplay": "Puzzle elements",
-          "interface": "",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/697/",
           "genres": [
             "Adventure",
@@ -29049,14 +27178,6 @@
         {
           "mobyid": 11591,
           "title": "Law of the West",
-          "mobylink": "https://www.mobygames.com/game/11591/law-of-the-west",
-          "genre": "Action; Adventure",
-          "perspective": "Behind view",
-          "gameplay": "",
-          "interface": "Menu structures",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/11591/",
           "genres": [
             "Action",
@@ -29168,14 +27289,6 @@
         {
           "mobyid": 39651,
           "title": "Highnoon",
-          "mobylink": "https://www.mobygames.com/game/39651/highnoon",
-          "genre": "Action",
-          "perspective": "Side view",
-          "gameplay": "",
-          "interface": "",
-          "setting": "Western",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/39651/",
           "genres": [
             "Action"
@@ -29224,14 +27337,6 @@
         {
           "mobyid": 1511,
           "title": "Noctropolis",
-          "mobylink": "https://www.mobygames.com/game/1511/noctropolis",
-          "genre": "Adventure",
-          "perspective": "3rd-person (Other)",
-          "gameplay": "Graphic adventure; Puzzle elements",
-          "interface": "Point and select",
-          "setting": "",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/1511/",
           "genres": [
             "Adventure"
@@ -29366,14 +27471,6 @@
         {
           "mobyid": 6943,
           "title": "Carrier Command",
-          "mobylink": "https://www.mobygames.com/game/6943/carrier-command",
-          "genre": "Strategy / tactics",
-          "perspective": "1st-person; Top-down",
-          "gameplay": "Real-time strategy (RTS)",
-          "interface": "",
-          "setting": "Sci-fi / futuristic",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/6943/",
           "genres": [
             "Strategy / tactics"
@@ -29573,14 +27670,6 @@
         {
           "mobyid": 8786,
           "title": "Jupiter Lander",
-          "mobylink": "https://www.mobygames.com/game/8786/jupiter-lander",
-          "genre": "Action",
-          "perspective": "Side view",
-          "gameplay": "",
-          "interface": "",
-          "setting": "Sci-fi / futuristic",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/8786/",
           "genres": [
             "Action"
@@ -29627,14 +27716,6 @@
         {
           "mobyid": 44201,
           "title": "Jupiter Lander",
-          "mobylink": "https://www.mobygames.com/game/44201/jupiter-lander",
-          "genre": "Action",
-          "perspective": "Side view",
-          "gameplay": "Arcade",
-          "interface": "",
-          "setting": "Sci-fi / futuristic",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/44201/",
           "genres": [
             "Action"
@@ -29668,14 +27749,6 @@
         {
           "mobyid": 3146,
           "title": "Caesar",
-          "mobylink": "https://www.mobygames.com/game/3146/caesar",
-          "genre": "Simulation; Strategy / tactics",
-          "perspective": "Diagonal-down",
-          "gameplay": "City building / construction simulation; Managerial / business simulation",
-          "interface": "",
-          "setting": "Africa; Classical antiquity; Europe; Middle East",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/3146/",
           "genres": [
             "Simulation",
@@ -29800,14 +27873,6 @@
         {
           "mobyid": 36632,
           "title": "Caesar",
-          "mobylink": "https://www.mobygames.com/game/36632/caesar",
-          "genre": "Strategy / tactics",
-          "perspective": "Top-down",
-          "gameplay": "Managerial / business simulation",
-          "interface": "",
-          "setting": "Classical antiquity",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/36632/",
           "genres": [
             "Strategy / tactics"
@@ -29842,14 +27907,6 @@
         {
           "mobyid": 5091,
           "title": "Mega Man 4",
-          "mobylink": "https://www.mobygames.com/game/5091/mega-man-4",
-          "genre": "Action",
-          "perspective": "Side view",
-          "gameplay": "Platform; Shooter",
-          "interface": "",
-          "setting": "Sci-fi / futuristic",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/5091/",
           "genres": [
             "Action"
@@ -30122,14 +28179,6 @@
         {
           "mobyid": 1737,
           "title": "F-15 Strike Eagle II",
-          "mobylink": "https://www.mobygames.com/game/1737/f-15-strike-eagle-ii",
-          "genre": "Simulation",
-          "perspective": "1st-person; Behind view",
-          "gameplay": "",
-          "interface": "",
-          "setting": "Contemporary",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/1737/",
           "genres": [
             "Simulation"
@@ -30358,14 +28407,6 @@
         {
           "mobyid": 690,
           "title": "Ultima Underworld: The Stygian Abyss",
-          "mobylink": "https://www.mobygames.com/game/690/ultima-underworld-the-stygian-abyss",
-          "genre": "Role-playing (RPG)",
-          "perspective": "1st-person",
-          "gameplay": "Action RPG",
-          "interface": "Direct control",
-          "setting": "Fantasy",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/690/",
           "genres": [
             "Role-playing (RPG)"
@@ -30508,14 +28549,6 @@
         {
           "mobyid": 5949,
           "title": "The Patrician",
-          "mobylink": "https://www.mobygames.com/game/5949/the-patrician",
-          "genre": "Simulation; Strategy / tactics",
-          "perspective": "",
-          "gameplay": "Managerial / business simulation",
-          "interface": "",
-          "setting": "Age of Discovery / Enlightenment",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/5949/",
           "genres": [
             "Simulation",
@@ -30660,14 +28693,6 @@
         {
           "mobyid": 112651,
           "title": "Airships: Conquer the Skies",
-          "mobylink": "https://www.mobygames.com/game/112651/airships-conquer-the-skies",
-          "genre": "Simulation; Strategy / tactics",
-          "perspective": "Side view",
-          "gameplay": "Managerial / business simulation",
-          "interface": "",
-          "setting": "Steampunk",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/112651/",
           "genres": [
             "Simulation",
@@ -30730,14 +28755,6 @@
         {
           "mobyid": 143640,
           "title": "Hyperspace Delivery Service",
-          "mobylink": "https://www.mobygames.com/game/143640/hyperspace-delivery-service",
-          "genre": "Action; Strategy / tactics",
-          "perspective": "1st-person; 3rd-person (Other)",
-          "gameplay": "Puzzle elements; RPG elements",
-          "interface": "Direct control; Point and select",
-          "setting": "Fantasy; Sci-fi / futuristic",
-          "sport": "",
-          "misc": "",
           "sourceUrl": "https://www.mobygames.com/game/143640/",
           "genres": [
             "Action",

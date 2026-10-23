@@ -1,0 +1,494 @@
+{
+  "version": 1,
+  "analysisVersion": "3",
+  "videoId": "63foHISC8ms",
+  "transcriptHash": "80224e85c24dfb7d2c083f3922e69186dbc98813d3b5ac836f9d83b739ac3552",
+  "catalogHash": "31cec4c1e968f78b9692d3b23d44518502cb2d31e67c183273f8ab6e85aa0caa",
+  "model": "qwen3:14b",
+  "endpoint": "http://127.0.0.1:11434/v1/chat/completions",
+  "generatedAt": "2026-10-22T14:13:57.611Z",
+  "status": "needs-review",
+  "discussions": [
+    {
+      "title": "Populus",
+      "gameId": null,
+      "startMs": 659320,
+      "endMs": 698680,
+      "firstSegmentId": 194,
+      "lastSegmentId": 213,
+      "confidence": "high",
+      "reviewed": false,
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 195,
+          "startMs": 661639,
+          "text": "habe ich Populus auf der Sega Master"
+        }
+      ]
+    },
+    {
+      "title": "Labyrinth",
+      "gameId": "labyrinth",
+      "startMs": 698680,
+      "endMs": 757519,
+      "firstSegmentId": 214,
+      "lastSegmentId": 239,
+      "confidence": "high",
+      "reviewed": false,
+      "endReason": "next-game",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 215,
+          "startMs": 701720,
+          "text": "Schritte Folge von Labyrinth erschienen."
+        }
+      ]
+    },
+    {
+      "title": "Seekriegssimulator",
+      "gameId": null,
+      "startMs": 3478559,
+      "endMs": 3611839,
+      "firstSegmentId": 1303,
+      "lastSegmentId": 1363,
+      "confidence": "high",
+      "reviewed": false,
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 1303,
+          "startMs": 3478559,
+          "text": "Nein, das ist ein ein Seekriegssimulator"
+        }
+      ]
+    },
+    {
+      "title": "Tetris",
+      "gameId": null,
+      "startMs": 3774440,
+      "endMs": 3827799,
+      "firstSegmentId": 1428,
+      "lastSegmentId": 1451,
+      "confidence": "medium",
+      "reviewed": false,
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 1428,
+          "startMs": 3774440,
+          "text": "Ja, Tetris Miroft."
+        }
+      ]
+    },
+    {
+      "title": "Carrier Command",
+      "gameId": "carrier-command-amiga",
+      "startMs": 4063079,
+      "endMs": 4168120,
+      "firstSegmentId": 1562,
+      "lastSegmentId": 1611,
+      "confidence": "high",
+      "reviewed": false,
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 1562,
+          "startMs": 4063079,
+          "text": "Carrier Command. Schönes Spiel, habe ich"
+        }
+      ]
+    },
+    {
+      "title": "Wasteland 3",
+      "gameId": null,
+      "startMs": 4329040,
+      "endMs": 4366560,
+      "firstSegmentId": 1688,
+      "lastSegmentId": 1706,
+      "confidence": "high",
+      "reviewed": false,
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 1696,
+          "startMs": 4343840,
+          "text": "ich drei."
+        }
+      ]
+    },
+    {
+      "title": "The Train",
+      "gameId": null,
+      "startMs": 4982480,
+      "endMs": 5058000,
+      "firstSegmentId": 1981,
+      "lastSegmentId": 2011,
+      "confidence": "high",
+      "reviewed": false,
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 1981,
+          "startMs": 4982480,
+          "text": "Nee. Oh, the Train."
+        }
+      ]
+    },
+    {
+      "title": "Xenon",
+      "gameId": null,
+      "startMs": 5140119,
+      "endMs": 5198600,
+      "firstSegmentId": 2052,
+      "lastSegmentId": 2078,
+      "confidence": "high",
+      "reviewed": false,
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 2052,
+          "startMs": 5140119,
+          "text": "Ja. Xenon habe ich Teil 2, glaube ich."
+        }
+      ]
+    },
+    {
+      "title": "Morphous",
+      "gameId": null,
+      "startMs": 5427560,
+      "endMs": null,
+      "firstSegmentId": 2178,
+      "lastSegmentId": 2206,
+      "confidence": "medium",
+      "reviewed": false,
+      "endReason": "window-end",
+      "issues": [
+        "end-outside-window"
+      ],
+      "evidence": [
+        {
+          "segmentId": 2178,
+          "startMs": 5427560,
+          "text": "Morphous."
+        }
+      ]
+    },
+    {
+      "title": "Hunters Moon",
+      "gameId": null,
+      "startMs": 5498280,
+      "endMs": null,
+      "firstSegmentId": 2208,
+      "lastSegmentId": 2270,
+      "confidence": "high",
+      "reviewed": false,
+      "endReason": "window-end",
+      "issues": [
+        "end-outside-window"
+      ],
+      "evidence": [
+        {
+          "segmentId": 2211,
+          "startMs": 5507719,
+          "text": "Hters Moon,"
+        }
+      ]
+    },
+    {
+      "title": "Ball Raider",
+      "gameId": null,
+      "startMs": 6104280,
+      "endMs": 6172520,
+      "firstSegmentId": 2463,
+      "lastSegmentId": 2489,
+      "confidence": "high",
+      "reviewed": false,
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 2463,
+          "startMs": 6104280,
+          "text": "es ist irgendwas"
+        }
+      ]
+    },
+    {
+      "title": "Slagon",
+      "gameId": null,
+      "startMs": 6332719,
+      "endMs": 6388760,
+      "firstSegmentId": 2558,
+      "lastSegmentId": 2586,
+      "confidence": "high",
+      "reviewed": false,
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 2558,
+          "startMs": 6332719,
+          "text": "Slagon."
+        }
+      ]
+    },
+    {
+      "title": "Tour de Force",
+      "gameId": null,
+      "startMs": 6574599,
+      "endMs": 6660440,
+      "firstSegmentId": 2650,
+      "lastSegmentId": 2685,
+      "confidence": "high",
+      "reviewed": false,
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 2650,
+          "startMs": 6574599,
+          "text": "Was ist das denn?"
+        }
+      ]
+    },
+    {
+      "title": "Return to Atlantis",
+      "gameId": null,
+      "startMs": 6712679,
+      "endMs": null,
+      "firstSegmentId": 2711,
+      "lastSegmentId": 2749,
+      "confidence": "high",
+      "reviewed": false,
+      "endReason": "uncertain",
+      "issues": [
+        "conflicting-window-boundaries"
+      ],
+      "evidence": [
+        {
+          "segmentId": 2713,
+          "startMs": 6715199,
+          "text": "das ist ein Adventure."
+        }
+      ]
+    },
+    {
+      "title": "Ports of Call",
+      "gameId": "ports-of-call",
+      "startMs": 6892320,
+      "endMs": 6945040,
+      "firstSegmentId": 2790,
+      "lastSegmentId": 2813,
+      "confidence": "high",
+      "reviewed": false,
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 2799,
+          "startMs": 6913480,
+          "text": "Hanse mochte, wird Ports of Call"
+        }
+      ]
+    },
+    {
+      "title": "Police Quest",
+      "gameId": null,
+      "startMs": 7071280,
+      "endMs": 7113639,
+      "firstSegmentId": 2873,
+      "lastSegmentId": 2893,
+      "confidence": "high",
+      "reviewed": false,
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 2873,
+          "startMs": 7071280,
+          "text": "Police Quest."
+        }
+      ]
+    },
+    {
+      "title": "Shadowgate",
+      "gameId": null,
+      "startMs": 7244760,
+      "endMs": 7402199,
+      "firstSegmentId": 2949,
+      "lastSegmentId": 3025,
+      "confidence": "high",
+      "reviewed": false,
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 2949,
+          "startMs": 7244760,
+          "text": "Shadowgate, das ist das dritte Spiel und"
+        }
+      ]
+    },
+    {
+      "title": "Starcreet",
+      "gameId": null,
+      "startMs": 7501360,
+      "endMs": 7556079,
+      "firstSegmentId": 3082,
+      "lastSegmentId": 3105,
+      "confidence": "high",
+      "reviewed": false,
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 3082,
+          "startMs": 7501360,
+          "text": "Starcreet ist oberflächlich eine"
+        }
+      ]
+    },
+    {
+      "title": "Jack the Ripper",
+      "gameId": null,
+      "startMs": 7580800,
+      "endMs": 7656559,
+      "firstSegmentId": 3118,
+      "lastSegmentId": 3150,
+      "confidence": "medium",
+      "reviewed": false,
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 3148,
+          "startMs": 7647159,
+          "text": "Jack Ripper sagt: \"Oliver ist eins von"
+        }
+      ]
+    },
+    {
+      "title": "Felken",
+      "gameId": null,
+      "startMs": 8104480,
+      "endMs": 8288080,
+      "firstSegmentId": 3327,
+      "lastSegmentId": 3407,
+      "confidence": "low",
+      "reviewed": false,
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 3327,
+          "startMs": 8104480,
+          "text": "Felken für MS 1988. Langeweile am"
+        }
+      ]
+    },
+    {
+      "title": "Felken",
+      "gameId": null,
+      "startMs": 8288080,
+      "endMs": 8446840,
+      "firstSegmentId": 3408,
+      "lastSegmentId": 3470,
+      "confidence": "high",
+      "reviewed": false,
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 3409,
+          "startMs": 8289880,
+          "text": "in die Woche. Felken war damals super"
+        }
+      ]
+    },
+    {
+      "title": "Stells Mission",
+      "gameId": null,
+      "startMs": 8508960,
+      "endMs": 8642200,
+      "firstSegmentId": 3502,
+      "lastSegmentId": 3556,
+      "confidence": "high",
+      "reviewed": false,
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 3513,
+          "startMs": 8539520,
+          "text": "Stells missions flight simulator"
+        }
+      ]
+    },
+    {
+      "title": "Gunchip",
+      "gameId": null,
+      "startMs": 8876520,
+      "endMs": 8911920,
+      "firstSegmentId": 3648,
+      "lastSegmentId": 3662,
+      "confidence": "high",
+      "reviewed": false,
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 3648,
+          "startMs": 8876520,
+          "text": "Stunden lang Gunchip auf dem Atari ST"
+        }
+      ]
+    },
+    {
+      "title": "Gunchip",
+      "gameId": null,
+      "startMs": 8911920,
+      "endMs": 8992720,
+      "firstSegmentId": 3663,
+      "lastSegmentId": 3702,
+      "confidence": "high",
+      "reviewed": false,
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 3663,
+          "startMs": 8911920,
+          "text": "friedlichere Simulation suchen."
+        }
+      ]
+    },
+    {
+      "title": "Doors Paradox",
+      "gameId": null,
+      "startMs": 9090800,
+      "endMs": 9125640,
+      "firstSegmentId": 3752,
+      "lastSegmentId": 3769,
+      "confidence": "high",
+      "reviewed": false,
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 3752,
+          "startMs": 9090800,
+          "text": "Anna spielt ah dieses Doors Paradox. Das"
+        }
+      ]
+    }
+  ]
+}

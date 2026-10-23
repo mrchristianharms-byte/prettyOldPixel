@@ -12,4 +12,6 @@ node_modules/
 /cache/gdb.sql
 /gdb.sql
 /cache/gdb.sqlite*
+/cache/game-title-index.json
+/cache/game-platform-index.json
 .rusty/*

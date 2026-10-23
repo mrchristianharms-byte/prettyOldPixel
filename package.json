@@ -31,7 +31,9 @@
     "dev:fetch:amiga-action": "node src/fetch-magazine/fetch-amr.mjs",
     "dev:generate:blaetterabend": "node src/extra-data/generate-blaetterabend.mjs",
     "dev:generate:games-from-transcript": "node src/extra-data/generate-games-from-transcript.mjs",
+    "dev:evaluate:game-discussions": "node src/extra-data/evaluate-game-discussions.mjs",
     "dev:review:games": "node src/fetch-game/generate-game-metadata-review.mjs",
+    "dev:build:game-title-index": "node src/fetch-game/build-game-title-index.mjs",
     "dev:import:game-dump": "node src/fetch-game/import-game-dump.mjs",
     "dev:verify:game-dump": "node src/fetch-game/verify-game-dump.mjs",
     "dev:prepare:game-metadata": "node src/fetch-game/game-metadata-ready.mjs"

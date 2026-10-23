@@ -91,13 +91,13 @@ Externe YouTube-/Archivlinks und Schema.org-Bezeichner bleiben unverändert.
 Die generierten Dateien unter `docs/` sind Build-Artefakte und gehören nicht
 in neue Commits; GitHub Actions erzeugt und prüft sie vor dem Deployment.
 Das Kopfzeilenlogo und das Favicon verwenden dieselbe optimierte Datei
-`src/site-generation/favicon.webp` (70 × 70 Pixel für hochauflösende Displays, unter 1,5 KiB).
-`src/site-generation/favicon.jpg` bleibt die Originalvorlage; der Build kopiert das fertige
+`src/site-generation/assets/favicon.webp` (70 × 70 Pixel für hochauflösende Displays, unter 1,5 KiB).
+`src/site-generation/assets/favicon.jpg` bleibt die Originalvorlage; der Build kopiert das fertige
 WebP ohne Bildbibliothek. Das kleine Darstellungs-Skript bleibt vor dem CSS,
 damit eine gespeicherte Farbauswahl ohne Aufblitzen des falschen Modus gilt.
 Alle Seiten verweisen zusätzlich auf `apple-touch-icon.png` als
 180 × 180 Pixel großes PNG für iOS-Startbildschirm-Verknüpfungen. Der Build
-kopiert die vorbereitete Datei aus `src/site-generation/`; Logo und Browser-Favicon bleiben WebP.
+kopiert die vorbereitete Datei aus `src/site-generation/assets/`; Logo und Browser-Favicon bleiben WebP.
 Alle eingebundenen Inhaltsbilder haben einen nicht leeren Alt-Text:
 „Pretty Old Pixel – Logo“, „<Name> – Zeitschriftenlogo“ oder
 „Videovorschau: <Videotitel>“. Das gilt auch für die Vorschau im Player-Iframe.
@@ -117,7 +117,7 @@ Linkbeschriftungen „YouTube“ und „Twitch“. Auf schmalen Bildschirmen dar
 Zeile ohne horizontalen Überlauf umbrechen.
 
 Umgesetzt sind Startseite, News mit den 20 neuesten veröffentlichten Videos,
-Zeitschriftenindex mit Zeitschriften-, Jahrgangs- und Ausgabenseiten,
+Zeitschriftenindex mit Zeitschriften- und Ausgabenseiten,
 Spieleindex und Spieleseiten, Hardware, Retrospektiven sowie Interviews und Gespräche,
 Datenschutz, Sitemap, Robots-Datei und 404-Seite. Alle Inhalte stehen direkt im
 HTML. Alle Seiten enthalten ein minifiziertes Inline-Skript für den Hell-/Dunkel-Schalter
@@ -143,7 +143,7 @@ Nicht zugeordnete ältere Videos bleiben nur im vollständigen JSON-Cache erhalt
 Beim Build werden alte Katalogseiten einschließlich Sitemap-/Manifest-Einträgen entfernt.
 News und Themenübersichten führen zum
 Videoabschnitt einer vorhandenen Ausgabe bzw. eines Spiels, bei Blätterabenden
-ersatzweise zur Videodetailseite. Auch Hardware, projects (Retrospektiven),
+ersatzweise zur Videodetailseite. Auch Hardware, Projekte (Retrospektiven),
 Interviews, re.consider und Sonstiges verlinken immer intern: Ohne Spiel-
 oder Ausgabeseite wird eine Videodetailseite unter dem ersten zugeordneten
 Themenbereich erzeugt und bei Mehrfachzuordnungen gemeinsam verwendet.
@@ -266,7 +266,9 @@ keine externen Ressourcen oder Laufzeit-JavaScript.
   Zuordnungen bleiben erhalten. Die Zwei-Video-Schwelle für Spieleseiten
   wird dadurch nicht verändert.
 - `src/data/data-sections.mjs` hält explizite Video-IDs, Themen, bei Gesprächen Personen
-  und bei Retrospektiven die Reihenfolge. Titel, Beschreibungen und bestätigte
+  und bei Retrospektiven die Reihenfolge, außerdem je Bereich den Kurznamen
+  für die Hauptnavigation (`navigationName`) und die Gruppe vor bzw. nach dem
+  Trenner (`olderFormat`). Titel, Beschreibungen und bestätigte
   Playlist-Mitgliedschaften wurden hierfür geprüft. Änderungen der
   Playlist-Mitgliedschaft allein erzeugen keine ungeprüften Zuordnungen.
   Neue Titel-/Playlist-Kandidaten werden beim Build als Prüfhinweis gemeldet.
@@ -568,24 +570,30 @@ beschreibt [ADR 0005](adr/0005-wiederverwendbare-widgets-und-komponenten.md).
   Zugehörige YouTube-Playlists stehen direkt darunter in der rechten
   Seitenspalte als reine Links ohne Überschrift oder Aufzählungszeichen.
 - `catalog-grid.mjs`: gemeinsame Spiele-/Zeitschriftenkacheln.
-  Bei Zeitschriften mit nur einem bekannten Jahrgang entfallen Jahresfilter
-  und separate Jahrgangsseite; Heftjahre und Jahrgangsanzahl bleiben erhalten.
+  Bei Zeitschriften mit nur einem bekannten Jahrgang entfällt die
+  Jahrgangsliste; Heftjahre und Jahrgangsanzahl bleiben erhalten.
 - `metadata.mjs`: gemeinsame semantische Metadatenliste.
 - `pagination.mjs`: vorherige/nächste Übersichtsseite, aktuelle Seitenzahl
   und aufklappbare Liste aller Seiten.
-- `game-discussions.mjs`: erkannte Spielebesprechungen mit Zeitmarken und
-  Hinweis auf ungeprüfte Vorschläge auf Blätterabend-Ausgabenseiten.
+- `game-discussions.mjs`: erkannte Spielebesprechungen mit Zeitmarken,
+  hinter dem Link Erscheinungsjahr, Entwickler und Publisher in Klammern
+  (höchstens zwei Namen je Rolle, gleiche Firmen nur einmal), und Hinweis auf
+  ungeprüfte Vorschläge auf Blätterabend-Ausgabenseiten.
 - `magazine-logo.mjs`: lokal gespeichertes Zeitschriftenlogo mit
   Quellenlink zu Kultmags auf der jeweiligen Zeitschriftenseite.
 
 - `navigation.mjs`: gemeinsame Hauptnavigation mit relativen Links und
-  Markierung des aktiven Bereichs auch auf Unterseiten. Der Renderer
-  übergibt die vorhandenen Bereiche in ihrer festgelegten Reihenfolge.
-  Die Navigationsnamen lauten „Blätterabend“ für Zeitschriften, „re.play“
-  für Spiele und „projects“ für Retrospektiven; die bestehenden URLs bleiben erhalten.
-  Die älteren Formate folgen nach einem sichtbaren, für Screenreader
-  ausgeblendeten `|` in der Reihenfolge „re.ware“ (Hardware), „projects“,
-  „Interviews“, „Sonstiges“. „re.consider“ bleibt vor dieser Gruppe.
+  Markierung des aktiven Bereichs auch auf Unterseiten. Das Widget erhält
+  eine fertige Liste `{ route, name, separator }` und enthält keine
+  Bereichslogik. Die Liste baut `siteNavigation` in `site-data.mjs` einmal als
+  `model.navigation`; `layout` reicht sie nur weiter.
+  Feste Einstiege sind „News“, „Blätterabend“ (Zeitschriften) und „re.play“
+  (Spiele), jeweils nur bei vorhandenen Daten. Die Namen der Themenbereiche
+  stehen als `navigationName` in `src/data/data-sections.mjs`: „re.ware“
+  (Hardware), „Projekte“ (Retrospektiven), „Interviews“. Bereiche mit
+  `olderFormat: true` folgen nach einem sichtbaren, für Screenreader
+  ausgeblendeten `|`; dazu gehört auch das automatisch erzeugte „Sonstiges“.
+  „re.consider“ (`olderFormat: false`) steht davor. Die URLs bleiben unverändert.
 - `archive-links.mjs`: Archivordner-, Lese- und Downloadlinks als Inline-Gruppe
   oder Liste, einschließlich Hinweis bei fehlendem Archiv.
 - `video-panel.mjs`: Videoinformationen mit Metadaten, Kapiteln, erwähnten
@@ -671,8 +679,9 @@ Ein bekanntes Heftjahr kann auch bei noch ungeklärter Einzelheftnummer
 erhalten bleiben; die Jahrgangsüberschrift macht hierzu keine Aussage.
 Zeitschriften mit mehr als 30 unterschiedlichen Videos zeigen auf ihrer Übersichtsseite
 statt der Jahrgangsliste einen Kalender mit den Jahrgängen als Spalten und den
-Ausgabennummern 1 bis 12 als Zeilen. Die Jahreszahlen führen zur lokalen
-Jahrgangsseite; jede gefundene Ausgabe verlinkt direkt zum zugehörigen Video.
+Ausgabennummern 1 bis 12 als Zeilen. Die Jahreszahlen springen zum Anker
+`#jahr-<jahr>` auf derselben Seite; jede gefundene Ausgabe verlinkt direkt zum
+zugehörigen Video.
 Unter 768 Pixel Breite erscheint statt des Kalenders eine gut antippbare
 Jahrgangsliste. In der Seitenüberschrift des Zeitschriftenindex führt der Sprunglink
 „Gäste“ direkt zum Gästebereich, auch über Seitengrenzen.
@@ -717,19 +726,24 @@ Videoveröffentlichung, Spieljahr und summierte Videolängen.
   zusammengelegt. Mehrere ausdrücklich mit „und“ oder „&“ verbundene Gäste
   werden einzeln erfasst. Neue oder geänderte Titel aktualisieren Gästekacheln,
   Unterseiten, Sitemap und Manifest beim nächsten Build automatisch.
-- `/zeitschriften/<slug>/` bündelt die Jahrgänge und Videos einer Zeitschrift.
+- `/zeitschriften/<slug>/` listet alle Ausgaben und Videos einer Zeitschrift
+  auf einer einzigen, nicht paginierten Seite, gruppiert nach Jahrgang. Es gibt
+  keine separaten Jahrgangsseiten: Der erste Abschnitt eines Jahrgangs trägt
+  den Anker `#jahr-<jahr>` (bzw. `#jahr-unbekannt`), Jahrgangsliste, Kalender
+  und Links „Jahrgang <jahr>“ in Videoeinträgen springen dorthin.
   „Jahrgang unbekannt“ bleibt sichtbar; das Uploadjahr ersetzt kein Heftjahr.
-- `/zeitschriften/<slug>/<jahr>/` zeigt reguläre Ausgaben nach Monat bzw.
-  Heftnummer und Sonderhefte als getrennte Gruppe. Doppelausgaben bleiben ein
+  Je Jahrgang stehen reguläre Ausgaben nach Monat bzw. Heftnummer und
+  Sonderhefte als getrennte Gruppe. Doppelausgaben bleiben ein
   Heft; die Videos dazu stehen nach Teilnummer, anschließend Datum und ID.
   Fehlt eine Teilnummer, bleibt dieses Video an seinem chronologischen Platz;
   die bekannten Teilnummern werden relativ zueinander geordnet. Ein früheres
   unnummeriertes Video wird nicht pauschal hinter „Teil 2“ verschoben.
-- `/zeitschriften/<slug>/ausgaben/<hefttitel-slug>/` wird nur bei ausreichend eindeutigen
+- `/zeitschriften/<slug>/<hefttitel-slug>/` wird nur bei ausreichend eindeutigen
   Heftdaten erzeugt. Die Seite enthält Heftangaben, Archivlinks, einen gemeinsamen
   Player und alle Videobeschreibungen. Die Auswahl erfolgt per
-  `#video-<youtube-id>` auf derselben Seite. Nur Übersichten werden bei mehr
-  als 60 Einträgen paginiert, nicht die Videos einer einzelnen Ausgabe.
+  `#video-<youtube-id>` auf derselben Seite. Weder Zeitschriftenseiten noch
+  einzelne Ausgaben werden paginiert; nur der Zeitschriftenindex und
+  Gästeseiten teilen sich ab 60 Einträgen auf.
 - Ein Jahr allein oder ein generisches „Sonderheft 1996“ erzeugt ohne
   eindeutigen Archivtreffer bzw. Sonderheftnummer keine spekulative Detailseite.
   Diese Videos bleiben im passenden Jahrgang oder in der unbekannten Gruppe.
@@ -743,7 +757,8 @@ Videoveröffentlichung, Spieljahr und summierte Videolängen.
   eine neue Zuordnung erzeugen; alte generierte Seiten werden entfernt.
 - Der öffentliche Ausgabepfad verwendet dagegen den normalisierten
   Zeitschriftennamen plus endgültige Heftbezeichnung, beispielsweise
-  `/zeitschriften/amiga-joker/ausgaben/amiga-joker-1-1990/`.
+  `/zeitschriften/amiga-joker/amiga-joker-1-1990/`. Der Slug beginnt immer mit
+  dem Zeitschriftennamen und kollidiert so nicht mit `seite/`.
   Titelgleiche, aber unterschiedliche Sonderhefte erhalten deterministische
   `-variante-N`-Zusätze. Die Titel werden erst nach der Zusammenführung der
   Heftdaten bestimmt. Titelkorrekturen können damit den öffentlichen Pfad
@@ -1265,7 +1280,7 @@ nach tatsächlicher Dateigröße sortierten `picture`-Quellen: Der Browser
 lädt die kleinste von ihm unterstützte Datei (einschließlich Original).
 Für Browser ohne `picture` dient die kleinste Nicht-WebP-Datei als Fallback.
 Das Logo erhält einen
-Quellenlink zur Magazinübersicht auf Kultmags. Jahrgangs- und Ausgabenseiten
+Quellenlink zur Magazinübersicht auf Kultmags. Ausgabenseiten
 bleiben unverändert. Ohne Logo wird kein leerer Bildbereich ausgegeben.
 Beim Seitenaufruf wird kein Bild vom Archivserver nachgeladen.
 Vorhandene, beschädigte oder fehlende referenzierte Bilddateien werden
@@ -1584,6 +1599,19 @@ bricht es ausdrücklich ab.
   Vorhandene Fenster bleiben zur Wiederaufnahme unverändert und werden nicht
   erneut klassifiziert; der 30-Sekunden-Filter gilt auch für deren Vorschläge
   beim neuen Zusammenführen. Bereits fertige Gesamtanalysen bleiben geschützt.
+  Die Reihenfolge der Abschnitte in einer Antwort ist beliebig; sie werden
+  nach Segment-ID sortiert. Liegt das Belegsegment direkt vor bzw. hinter
+  dem genannten Abschnitt, wird der Abschnitt um dieses Segment erweitert
+  und das im Log vermerkt; weiter entfernte Belege bleiben ein Fehler. Liegt ein Erkennungsvorschlag vollständig in
+  einem anderen (etwa ein kurz erwähntes Spiel mitten in einer Besprechung),
+  wird er als Nebentreffer verworfen und im Log genannt. Bei teilweiser
+  Überschneidung endet der frühere Abschnitt vor dem Beginn des späteren
+  (`endReason: "next-game"`), sofern seine Belegstelle erhalten bleibt;
+  die Kontextprüfung kann die Grenze danach korrigieren. Sonst bleibt die
+  Überschneidung ein Fehler, und die Rückmeldung nennt beide Abschnitte.
+  Die Kontextprüfung erhält die Vorschläge als `proposals` mit
+  ausdrücklichem `candidateIndex`; fehlende Entscheidungen werden mit Index
+  zurückgemeldet.
   Ungültige JSON-Ausgaben, unbekannte IDs, überlappende Abschnitte innerhalb
   eines Fensters und abgeschnittene Antworten werden höchstens dreimal
   angefragt, mit fünf bzw. zehn Sekunden Pause. Das Modell erhält bei
@@ -1628,9 +1656,76 @@ widersprüchlichen Grenzen bleibt `endMs` ausdrücklich `null`.
 Die Modellgrenzen bleiben Schätzungen auf Untertitelgenauigkeit, keine
 framegenauen Schnitte.
 
+### Katalogkandidaten und Jahresprüfung
+
+Ein lokaler Titelindex aus dem MobyGames-Dump (`gdb.sql`, gitignored) hilft
+dem Modell bei ASR-verzerrten Titeln:
+
+```sh
+npm run dev:build:game-title-index -- --input gdb.sql
+```
+
+`src/fetch-game/build-game-title-index.mjs` schreibt
+zwei gitignorierte Dateien:
+
+- `cache/game-title-index.json` (Version 3, ca. 84 MB, rund 180.000 Spiele,
+  kompaktes JSON mit einer Zeile je Spiel): je Spiel `id` (MobyGames-`mobyid`),
+  `title`, `alternativeTitles` (`{ title, info }`), `genres`, `firstYear`,
+  `platforms` (nur Nummern aus dem Plattformindex), `publishers`,
+  `developers`, `companies` (Vereinigung beider, höchstens acht; nutzt die
+  Kandidatensuche) und `releases`. Releases sind Tupel in der Reihenfolge von
+  `releaseColumns` (`mobyreleaseid`, `year`, `platform` als Nummer,
+  `publisher`, `developer`, `countries`, `publabel`; Firmen als Rohtext).
+  Kopffelder: `source` (Dump-Hash), `importedRows`, `platformIndex`.
+  Daraus erzeugt auch `dev:import:game-dump` den Spielemetadaten-Report, ohne
+  `gdb.sql` erneut zu lesen.
+- `cache/game-platform-index.json` (329 Plattformen): `platforms` als
+  `{ id, name }`, nach Namen sortiert und ab 1 nummeriert. Der Dump enthält
+  keine Plattform-IDs, daher sind die Nummern lokal und gelten nur zusammen
+  mit dem Titelindex desselben Builds (gleicher `source.sha256`). Anderer
+  Pfad: `--platform-output datei.json`.
+
+Fehlt der Titelindex, warnt die Analyse und arbeitet ohne Kandidaten
+(`candidateSource: "none"`). Ein Index im alten Format (Version 1 oder 2) wird
+abgelehnt und muss neu gebaut werden.
+
+`src/extra-data/transcript-game-candidates.mjs` sucht ohne Sprachmodell:
+
+- Nur Spiele aus dem Heftzeitraum: drei Jahre vor bis ein Jahr nach dem
+  jüngsten Heftjahr des Videos (aus den Video–Zeitschriften-Zuordnungen).
+- Titelvarianten mit und ohne Untertitel bzw. führendes „The“; exakte
+  n-Gramm-Treffer (1–5 Wörter) und lautähnliche Treffer per Kölner Phonetik
+  (z. B. „Felken“ = Falcon, „Gunchip“ ≈ Gunship).
+- Lautähnliche Treffer nur, wenn mindestens ein Wort großgeschrieben und
+  nicht häufig ist. Häufig sind Wörter, die in mindestens 40 % (mindestens
+  drei) aller Transkripte vorkommen. Titel nur aus solchen Wörtern
+  (etwa „Mission“) werden nicht gesucht.
+- Eine Herstellernennung innerhalb von ±90 Sekunden stärkt einen Treffer.
+
+Jedes Fenster erhält die zehn bestbewerteten Kandidaten als
+`catalogCandidates` (`title`, `year`, gehörte Schreibweisen, Segment-IDs).
+Die Prompts behandeln sie als Namenshilfe, nicht als Pflichtauswahl: Ein
+Titel aus der Liste ist nur zu verwenden, wenn das Gespräch das Spiel
+tatsächlich bespricht; Spiele außerhalb der Liste bleiben möglich. Die
+Fensteraufteilung bleibt fest, damit auch Abschnitte ohne erkennbaren
+Titelanker erfasst und Läufe fortsetzbar bleiben.
+
+Nach dem Zusammenführen prüft die Analyse jeden Titel gegen den Index:
+Erschienen alle gleichnamigen Spiele erst nach Heftjahr + 1, wird der
+Abschnitt nach `discarded` verschoben (etwa Wasteland 3 in einem Heft von
+1988). Ein Titel gilt auch als gefunden, wenn er dem Haupttitel vor „:“
+entspricht (Police Quest). Titel ohne Indexeintrag bleiben erhalten,
+erhalten aber das Issue `not-in-title-index`.
+
 ### Optional: größeres Ollama-Kontextfenster
 
 `max_tokens` begrenzt nur die **Ausgabe**, nicht das Kontextfenster.
+Der Denkmodus von Modellen wie qwen3 wird per `reasoning_effort: "none"`
+(native API: `think: false`) abgeschaltet; aktuelle Ollama-Versionen
+ignorieren den Prompt-Schalter `/no_think`, und ungezeigter Denktext würde
+sonst das Ausgabelimit verbrauchen. Bei `stream: false` bricht Nodes `fetch`
+außerdem nach 300 Sekunden ohne Antwortheader ab; die Fehlerdiagnose zeigt
+dann `"cause":"UND_ERR_HEADERS_TIMEOUT"`.
 Für Ollama lässt sich das echte Kontextfenster explizit in `.env` setzen:
 
 ```dotenv
@@ -1663,13 +1758,32 @@ Nach wie vor höchstens drei Versuche je Phase, anschließend expliziter Fehler.
 Die separate Ergebnisdatei lautet
 `cache/game-discussions/<video-id>.json`. Sie enthält:
 
-- Quell- und Kataloghash, Modellname, Analyseversion und Erstellungszeit.
+- Quell- und Kataloghash, Modellname, Analyseversion (aktuell 4),
+  `candidateSource` (`<Index-SHA-256>:<von>-<bis>` oder `none`) und
+  Erstellungszeit.
 - `status: "needs-review"` und die Liste `discussions`.
 - Je Abschnitt Titel, optionale `gameId`, `startMs`, `endMs`,
   erste/letzte Segment-ID, `confidence`, `endReason` und `issues`.
 - Eine belegende Originaltextstelle mit Segment-ID und Zeitmarke.
-- `reviewed: false`; die Modell-Konfidenz ist kein kalibrierter
-  Zuverlässigkeitswert.
+- Mit Titelindex zusätzlich `titleIndexId`, `firstYear`, `developers` und
+  `publishers` je Abschnitt. Die Firmen stammen nur aus Releases des
+  Erstveröffentlichungsjahrs (keine späteren Re-Releases); im Dump
+  zusammengefasste Namen werden getrennt und bereinigt. Ältere Analysen ohne
+  Firmen ergänzt ein erneuter Aufruf über `titleIndexId`, ohne Modellaufruf
+  und ohne Titel, Zeiten oder Status zu ändern. Dazu kommt die Liste `discarded` mit wegen des Erscheinungsjahres verworfenen
+  Abschnitten (`reason: "released-after-issue"`).
+- Gesamtstatus `status: "needs-review"`; die Modell-Konfidenz ist kein
+  kalibrierter Zuverlässigkeitswert. Nach Prüfung der ganzen Liste am Video
+  `status: "reviewed"` setzen, um sie zu veröffentlichen. Ein Prüffeld je
+  Abschnitt gibt es nicht; ein veraltetes `reviewed` aus älteren Läufen wird
+  ignoriert.
+
+Beim Zusammenführen gelten Vorschläge mit derselben eindeutigen
+Katalog-ID oder demselben normalisierten Titel als dasselbe Spiel. Direkt
+aneinandergrenzende oder überlappende Abschnitte werden vereinigt;
+Wiederaufnahmen nach anderem Inhalt bleiben getrennte Sprungmarken.
+Modellantworten werden gestreamt (SSE bzw. NDJSON), damit lange
+Antworten nicht an Nodes Wartegrenze für Antwortheader scheitern.
 
 Fensterergebnisse werden als `<video-id>.window-<nummer>.json` lokal
 zwischengespeichert. Nach einem Fehler werden beim nächsten Aufruf passende
@@ -1680,15 +1794,18 @@ Zusätzlich werden gültige Erkennungsvorschläge bereits **vor** der
 Kontextprüfung als `<video-id>.candidates-window-<nummer>.json`
 gespeichert. Scheitert nur die Kontextprüfung, setzt ein Neustart direkt
 bei dieser Prüfung fort. Diese Dateien sind keine fertigen Analysen und
-werden nicht auf der Website angezeigt. Vorhandene Fensterdateien aus
-Analyseversion 3 bleiben kompatibel. Vor dem ersten Modellaufruf werden
+werden nicht auf der Website angezeigt. Fensterdateien älterer
+Analyseversionen (bis 3) oder mit anderer Kandidatenquelle passen nicht und
+führen zu einem Fehler; vor einem Neulauf archivieren. Vor dem ersten Modellaufruf werden
 alle vorhandenen Fenster geprüft und gezählt; nur fehlende Fenster werden
 analysiert, auch bei Lücken zwischen fertigen Fenstern. Quelle, Modell,
 Endpunkt und Analyseversion müssen weiterhin passen, beschädigte oder
 unpassende Zwischenstände werden nicht überschrieben.
-Ein geänderter Spielekatalog verhindert die Fortsetzung nicht: Er wird nicht
+Ein geänderter Spielekatalog der Website verhindert die Fortsetzung nicht: Er wird nicht
 an das Modell übergeben und dient erst beim abschließenden Zusammenführen
 zur Zuordnung von Spiel-IDs. Diese Änderung wird ausdrücklich gemeldet.
+Ein neu gebauter Titelindex mit anderem Dump ändert dagegen
+`candidateSource` und verhindert die Fortsetzung.
 Vorhandene Fenster- und Vorschlagsdateien bleiben bis zum erfolgreichen
 Abschluss bytegenau unverändert.
 
@@ -1734,15 +1851,26 @@ veröffentlicht selbst nichts.
 Beim nächsten Website-Build werden abgeschlossene Analysen zusammen mit
 dem passenden Transkript für Blätterabend-Ausgabenseiten eingelesen:
 Das Widget `src/site-generation/widget/game-discussions.mjs` zeigt erkannte Spielnamen
-und Zeitmarken im jeweiligen Videobereich. Ungeprüfte Vorschläge werden
-als automatisch erkannt und möglicherweise ungenau gekennzeichnet.
+und Zeitmarken im jeweiligen Videobereich. Veröffentlicht werden nur
+Analysen mit `status: "reviewed"`, dann alle ihre Abschnitte; Analysen mit
+`needs-review` werden trotzdem vollständig validiert.
+Zur lokalen Vorschau ungeprüfter Vorschläge den Build mit
+`SHOW_UNREVIEWED_GAME_DISCUSSIONS=1 npm run generate:site` starten (nur der
+Wert `1` schaltet die Vorschau ein). Enthält die Liste ungeprüfte Abschnitte,
+steht darüber „Spielnamen und Zeitmarken können ungenau sein.“
+Ungeprüfte Einträge tragen im HTML `data-unreviewed-video="<video-id>"`.
+Daran erkennt der Build die betroffenen Seiten und listet am Ende jede mit
+`http://127.0.0.1:8000/<route>`, Video-ID, Anzahl und Videotitel (auch als
+`unreviewedPages` im Rückgabewert von `generateSite`). Mit Schalter, aber
+ohne ungeprüfte Abschnitte meldet er „keine ungeprüften
+Spielebesprechungen“. Im regulären Build kommt der Marker nicht vor.
 Ein aktiver, bereiter Player springt über die bestehende Kapitelsteuerung
 zur Stelle; ohne Aktivierung, ohne JavaScript oder bei fehlender Steuerung
 führt der Link zu YouTube mit Zeitmarke. Ein nur vorbereiteter Player
 merkt die Startstelle vor, ohne automatisch abzuspielen.
 
 Nur `<video-id>.json` wird verwendet, nicht die Fenster-Zwischenstände.
-Ohne abgeschlossene Analyse bleibt der Abschnitt unsichtbar.
+Ohne abgeschlossene Analyse oder ohne Freigabe der Analyse bleibt der Bereich unsichtbar.
 Quellhash, Video-ID, Segmentverweise und Zeitgrenzen werden geprüft;
 beschädigte oder veraltete Analysen führen zu einem sichtbaren Buildfehler.
 Das Rohtranskript und Modell-Metadaten werden nicht ins HTML übernommen.
@@ -1754,6 +1882,38 @@ frischen GitHub-Actions-Build ohne Modellaufruf zur Verfügung.
 Nur Loopback-Endpunkte sind erlaubt; Weiterleitungen werden abgelehnt.
 Transkripte werden ausschließlich an das konfigurierte lokale Modell gesendet.
 
+### Vorschläge prüfen und freigeben
+
+Der Gesamtablauf mit Vorschau steht in der
+[Blätterabend-Spielebesprechungen](../blaetterabend_games.md#ablauf).
+Geprüft wird direkt in `cache/game-discussions/<video-id>.json`:
+
+- **Verwerfen:** falsche Abschnitte aus `discussions` löschen. Da die Liste
+  als Ganzes freigegeben wird, dürfen danach nur korrekte Abschnitte übrig
+  bleiben.
+- **Titel korrigieren:** `title` ändern. Die Website zeigt `title`,
+  `startMs`, `endMs` sowie `firstYear`, `developers` und `publishers`;
+  `gameId`, `titleIndexId`, `evidence`, `issues` und `confidence` sind
+  Prüfhilfen. Gehört der Indextreffer zu einem anderen Spiel, die drei
+  Metadatenfelder ebenfalls korrigieren oder entfernen.
+- **Grenzen korrigieren:** Die Segment-ID ist der nullbasierte Index in
+  `segments` von `cache/youtube-transcripts/<video-id>.json`. Beim Ändern
+  müssen gelten: `startMs` = `startMs` des Segments `firstSegmentId`;
+  `endMs` ist `null` oder höchstens Start plus Dauer des Segments
+  `lastSegmentId`; Abschnitte bleiben nach `startMs` aufsteigend sortiert.
+  Die passende Segment-ID zu einer Videozeit liefert zum Beispiel
+  `node -e 'const s=require("./cache/youtube-transcripts/<video-id>.json").segments;const t=<sekunden>*1000;console.log(s.findLastIndex((x)=>x.startMs<=t))'`.
+- **Fehlenden Abschnitt ergänzen:** möglich mit denselben Pflichtfeldern
+  (`title`, `startMs`, `endMs`, `firstSegmentId`, `lastSegmentId` und
+  `confidence`).
+- **Freigeben:** nach vollständiger Prüfung `"status": "needs-review"` →
+  `"reviewed"`. Erst dann erscheint die ganze Liste im regulären Build.
+
+Die Analysedatei darf nach der Prüfung bearbeitet bleiben: Ein erneuter
+Aufruf von `dev:generate:games-from-transcript` erkennt die vorhandene Analyse
+und ruft kein Modell auf. Ändert sich das Transkript, passt der gespeicherte
+`transcriptHash` nicht mehr, und der Build bricht mit einer Meldung ab.
+
 ### Qualität und Grenzen
 
 Der erste lokale Versuch mit einem Quizabschnitt lieferte einen falschen
@@ -1764,6 +1924,31 @@ Fenstergrenzen können Zusammenhang verlieren und beide Modellaufrufe können
 denselben Fehler machen. Vor Übernahme müssen Treffer und ausgelassene
 Besprechungen anhand einer manuell markierten Stichprobe geprüft werden.
 Das geplante Präzisionsziel von 90 Prozent ist noch nicht nachgewiesen.
+
+### Erkennung gegen eine Referenz bewerten
+
+Manuell markierte Referenzen liegen unter
+`src/data/game-discussion-references/<video-id>.json`:
+
+- `status`: `draft` (Entwurf) oder `confirmed` (am Video geprüft).
+- `discussions`: erwartete Abschnitte mit `title`, optional `aliases`
+  (z. B. ASR-Schreibweisen), `startMs` und `endMs`.
+- `unclear`: Bereiche mit offener Einschätzung; Treffer dort werden nicht gewertet.
+- `rejected`: bewusst verworfene Erwähnungen (nur zur Dokumentation).
+
+```bash
+npm run dev:evaluate:game-discussions -- 63foHISC8ms \
+  cache/game-discussions/63foHISC8ms.json doc/examples/63foHISC8ms-copilot.csv
+```
+
+Vorhersagen können Analyse-JSONs oder CSVs mit `startMs,durationMs` und
+einer Titelspalte `gameTitle`, `spieletitel` oder `title` sein. Referenz
+und Vorhersage werden eins zu eins zugeordnet, wenn sie mindestens die
+Hälfte des kürzeren Abschnitts überlappen. Ausgegeben werden Präzision
+(korrekte Titel / gewertete Vorschläge), Abdeckung (korrekte Titel /
+Referenzabschnitte) und der Anteil korrekter Treffer mit Start- und
+Endabweichung bis 15 Sekunden. Ergebnisse gegen eine `draft`-Referenz sind
+nur vorläufig.
 
 ## Lokale Sprachmodell-Konfiguration
 
@@ -1795,6 +1980,7 @@ Architecture Decision Records liegen in `doc/adr/`:
 - [ADR 0005: Wiederverwendbare Widgets und Komponenten](adr/0005-wiederverwendbare-widgets-und-komponenten.md)
 - [ADR 0006: Spielemetadaten ausschließlich aus lokalem Games-Dump (angenommen)](adr/0006-spielemetadaten-aus-lokalem-games-dump.md)
 - [ADR 0007: Katalogübersichten und erweiterte Navigation](adr/0007-kataloguebersichten-und-erweiterte-navigation.md)
+- [ADR 0008: Transkripte und Spieleabschnitte in Blätterabenden (vorgeschlagen)](adr/0008-transkripte-und-spieleabschnitte-in-blaetterabenden.md)
 
 ## GitHub Pages veröffentlichen
 

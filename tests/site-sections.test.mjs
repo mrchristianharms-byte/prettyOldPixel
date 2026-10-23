@@ -358,7 +358,7 @@ test("paginiert Bereiche und bewahrt relative Links sowie aktive Hauptnavigation
     assert.equal(graph(second)[0].mainEntity.itemListElement.length, 1);
     assert.ok(second.includes(`rel="canonical" href="${config.absolute(`${id}/seite/2/`)}"`));
     assert.ok(second.includes('href="../../" rel="prev"'));
-    assert.ok(second.includes(`href="../../" aria-current="page">${{ hardware: "re.ware", interviews: "Interviews", retrospektiven: "projects" }[id] ?? sectionDefinitions.find((section) => section.id === id).name}</a>`));
+    assert.ok(second.includes(`href="../../" aria-current="page">${sectionDefinitions.find((section) => section.id === id).navigationName}</a>`));
     if (id === "interviews") {
       assert.ok(second.includes("<h1>Interviews und Gespräche – Seite 2</h1>"));
       assert.ok(!second.match(/<nav aria-label="Hauptnavigation">[\s\S]*?<\/nav>/u)[0].includes("Interviews und Gespräche"));
@@ -454,9 +454,9 @@ test("prüft die echten kuratierten Zuordnungen und die doppelte Originalnummer 
   const navigation = html.match(/<nav aria-label="Hauptnavigation">[\s\S]*?<\/nav>/u)[0];
   assert.ok(navigation.includes('>Blätterabend</a>'));
   assert.ok(navigation.includes('>re.play</a>'));
-  assert.ok(navigation.includes('aria-current="page">projects</a>'));
+  assert.ok(navigation.includes('aria-current="page">Projekte</a>'));
   assert.deepEqual([...navigation.matchAll(/<a [^>]*>([^<]+)<\/a>/gu)].map((match) => match[1]),
-    ["News", "Blätterabend", "re.play", "re.consider", "re.ware", "projects", "Interviews", "Sonstiges"]);
+    ["News", "Blätterabend", "re.play", "re.consider", "re.ware", "Projekte", "Interviews", "Sonstiges"]);
   assert.equal((navigation.match(/class="navigation-separator" aria-hidden="true">\|/gu) ?? []).length, 1);
   assert.ok(navigation.indexOf(">re.consider</a>") < navigation.indexOf('class="navigation-separator"'));
   assert.ok(navigation.indexOf('class="navigation-separator"') < navigation.indexOf(">re.ware</a>"));

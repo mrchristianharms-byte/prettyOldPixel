@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { createHash } from "node:crypto";
-import { slugify } from "./site-config.mjs";
+import { slugify, yearAnchor } from "./site-config.mjs";
 import { secondsToIsoDuration } from "../fetch-channel/fetch-youtube-videos.mjs";
 import { gameDefinitions } from "../data/data-games.mjs";
 import { loadReadyGameMetadata } from "../fetch-game/game-metadata-ready.mjs";
@@ -135,7 +135,7 @@ function finalizeMagazines(magazineById, videoById, warnings) {
           mention.issue = { ...issue, id: null, route: null };
           warnings.push(`${magazine.name}/${videoId}: Ausgabe nicht eindeutig; verbleibt in der Übersicht.`);
         }
-        mention.yearRoute = mention.issue.year === null ? null : `${magazine.route}${mention.issue.year}/`;
+        mention.yearAnchor = mention.issue.year === null ? null : yearAnchor(mention.issue.year);
       }
     }
     for (const issue of magazine.issues.values()) {
@@ -176,7 +176,7 @@ function finalizeMagazines(magazineById, videoById, warnings) {
           do { routeSlug = `${slug}-variante-${variant++}`; } while (usedSlugs.has(routeSlug));
           usedSlugs.add(routeSlug);
         }
-        issue.route = `${magazine.route}ausgaben/${routeSlug}/`;
+        issue.route = `${magazine.route}${routeSlug}/`;
       }
     }
     function compareEntries(a, b) {
@@ -192,9 +192,9 @@ function finalizeMagazines(magazineById, videoById, warnings) {
     magazine.videos = entries.map((entry) => entry.videoId);
     magazine.years = [...new Set(entries.map((entry) => entry.mention.issue?.year).filter((year) => year !== null && year !== undefined))]
       .sort((a, b) => a - b)
-      .map((year) => ({ year, route: `${magazine.route}${year}/`, entries: entries.filter((entry) => entry.mention.issue?.year === year) }));
+      .map((year) => ({ year, anchor: yearAnchor(year), entries: entries.filter((entry) => entry.mention.issue?.year === year) }));
     if (magazine.years.length <= 1) {
-      for (const entry of entries) entry.mention.yearRoute = null;
+      for (const entry of entries) entry.mention.yearAnchor = null;
     }
     magazine.issues = new Map([...magazine.issues].sort(([, a], [, b]) =>
       (a.year ?? Infinity) - (b.year ?? Infinity) || issueOrder(a, b)));
@@ -285,10 +285,12 @@ function normalizeSections(definitions, videoById, playlists, warnings) {
   const ids = new Set();
   for (const definition of definitions) {
     object(definition, "Bereich");
-    const { id, name, description, videos, playlistIds, excludedVideoIds } = definition;
+    const { id, name, navigationName, olderFormat = false, description, videos, playlistIds, excludedVideoIds } = definition;
     requireValue(["hardware", "retrospektiven", "interviews"].includes(id) && !ids.has(id), `Ungültiger oder doppelter Bereich: ${id}`);
     ids.add(id);
     text(name, `${id}: Name`);
+    text(navigationName, `${id}: Navigationsname`);
+    requireValue(typeof olderFormat === "boolean", `${id}: olderFormat muss true oder false sein.`);
     text(description, `${id}: Beschreibung`);
     for (const [key, values] of [["playlistIds", playlistIds], ["excludedVideoIds", excludedVideoIds]]) {
       requireValue(Array.isArray(values) && values.every((value) => typeof value === "string"
@@ -358,7 +360,7 @@ function normalizeSections(definitions, videoById, playlists, warnings) {
       }
       entries.splice(0, entries.length, ...[...groups.values()].flat());
     }
-    const section = { id, name, description, route: `${id}/`, entries };
+    const section = { id, name, navigationName, olderFormat, description, route: `${id}/`, entries };
     for (const entry of entries) videoById.get(entry.videoId).sections.push({ id, name, route: section.route });
     sections.push(section);
   }
@@ -520,7 +522,7 @@ export function normalizeSources({ videos: videoCache, playlists: playlistCache,
   const reconsiderVideos = videos.filter((video) => /\bre\.consider\b/iu.test(video.title));
   if (reconsiderVideos.length) {
     const section = {
-      id: "reconsider", name: "re.consider", route: "reconsider/",
+      id: "reconsider", name: "re.consider", navigationName: "re.consider", olderFormat: false, route: "reconsider/",
       description: "re.consider: Rückblicke und persönliche Einschätzungen zu klassischen Computer- und Videospielen.",
       entries: reconsiderVideos.map((video) => ({ videoId: video.id })),
     };
@@ -532,7 +534,7 @@ export function normalizeSources({ videos: videoCache, playlists: playlistCache,
   const otherVideos = videos.filter((video) => !video.blaetterabend && !video.games.length && !video.sections.length);
   if (otherVideos.length) {
     const section = {
-      id: "sonstiges", name: "Sonstiges", route: "sonstiges/",
+      id: "sonstiges", name: "Sonstiges", navigationName: "Sonstiges", olderFormat: true, route: "sonstiges/",
       description: "Weitere Videos von Pretty Old Pixel: Fundstücke, besondere Aktionen und Gespräche rund um Retrospiele und Computerkultur.",
       entries: otherVideos.map((video) => ({ videoId: video.id })),
     };
@@ -568,14 +570,28 @@ export function normalizeSources({ videos: videoCache, playlists: playlistCache,
     usedRoutes.add(route);
   }
   const magazines = [...magazineById.values()].sort((a, b) => a.name.localeCompare(b.name, "de"));
+  const unresolvedMagazines = videos.filter((video) => video.blaetterabend && !video.magazines.length);
   return {
     channel: { id: videoCache.channel.id, title: text(videoCache.channel.title, "channel.title") },
     videos, videoById, playlists, games, sections,
+    navigation: siteNavigation({ hasMagazines: magazines.length > 0 || unresolvedMagazines.length > 0, games, sections }),
     magazines, magazineGuests: magazineGuests(videos, magazines),
-    unresolvedMagazines: videos.filter((video) => video.blaetterabend && !video.magazines.length),
+    unresolvedMagazines,
     news: videos.filter((video) => video.publishedTime !== null).slice(0, 20),
     warnings,
   };
+}
+
+// Hauptnavigation: feste Einstiege, dann aktuelle Formate, nach einem Trenner die älteren Formate.
+export function siteNavigation({ hasMagazines, games, sections }) {
+  const older = sections.filter((section) => section.olderFormat);
+  return [
+    { route: "news/", name: "News" },
+    ...(hasMagazines ? [{ route: "zeitschriften/", name: "Blätterabend" }] : []),
+    ...(games.length ? [{ route: "spiele/", name: "re.play" }] : []),
+    ...sections.filter((section) => !section.olderFormat).map((section) => ({ route: section.route, name: section.navigationName })),
+    ...older.map((section, index) => ({ route: section.route, name: section.navigationName, separator: index === 0 })),
+  ];
 }
 
 export async function loadSiteData(cacheDirectory, options) {

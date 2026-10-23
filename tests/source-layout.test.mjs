@@ -20,6 +20,8 @@ const cliModules = [
   ["generate-blaetterabend.mjs", "extra-data"],
   ["generate-game-metadata-review.mjs", "fetch-game"],
   ["generate-games-from-transcript.mjs", "extra-data"],
+  ["evaluate-game-discussions.mjs", "extra-data"],
+  ["build-game-title-index.mjs", "fetch-game"],
   ["generate-site.mjs", "site-generation"],
   ["generate-css.mjs", "site-generation"],
   ["import-game-dump.mjs", "fetch-game"],
@@ -88,7 +90,7 @@ const invalidCalls = [
   ...["fetch-amr.mjs", "fetch-archives.mjs", "fetch-pcgamesdatabase.mjs",
     "fetch-youtube-transcripts.mjs", "game-metadata-ready.mjs", "generate-blaetterabend.mjs",
     "generate-game-metadata-review.mjs", "generate-site.mjs", "generate-css.mjs",
-    "verify-game-dump.mjs"].map((file) => [file, "--invalid", /Aufruf/u]),
+    "verify-game-dump.mjs", "evaluate-game-discussions.mjs", "build-game-title-index.mjs"].map((file) => [file, "--invalid", /Aufruf/u]),
   ...["fetch-youtube-playlists.mjs", "fetch-youtube-videos.mjs", "fetch-youtube.mjs"]
     .map((file) => [file, "https://example.invalid/channel", /Keine YouTube-URL/u]),
   ["import-game-dump.mjs", "--invalid", /Spieledump: Unbekannte oder doppelte Option: --invalid/u],

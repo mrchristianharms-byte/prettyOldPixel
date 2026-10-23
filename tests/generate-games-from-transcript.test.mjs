@@ -4,7 +4,7 @@ import path from "node:path";
 import { tmpdir } from "node:os";
 import test from "node:test";
 import {
-  analyzeWindow, generateGamesFromTranscript, llmConfiguration, mergeDiscussions,
+  analyzeWindow, generateGamesFromTranscript, llmConfiguration, mergeDiscussions, readModelResponse,
   prepareSegments, transcriptWindows, validateDiscussions,
 } from "../src/extra-data/generate-games-from-transcript.mjs";
 
@@ -71,6 +71,7 @@ test("erhöht bei abgeschnittener OpenAI-Antwort das Ausgabelimit ohne Originals
   });
   assert.deepEqual(result, []);
   assert.deepEqual(requests.map((body) => body.max_tokens), [4096, 8192, 16384]);
+  assert.ok(requests.every((body) => body.reasoning_effort === "none"));
   assert.ok(requests.every((body) => JSON.stringify(body.messages) === JSON.stringify(requests[0].messages)));
   assert.ok(logs.some((message) => message.includes("8192 Tokens")));
   assert.ok(logs.some((message) => message.includes("16384 Tokens")));
@@ -88,6 +89,7 @@ test("erweitert bei Ollama-Abschneiden Kontext und Ausgabe für Erkennung und Ko
       const body = JSON.parse(request.body);
       requests.push(body);
       assert.equal(body.format, "json");
+      assert.equal(body.think, false);
       const verification = body.messages[0].content.includes("Du prüfst");
       const truncated = requests.length === 1 || requests.length === 3;
       return Response.json({
@@ -465,6 +467,29 @@ test("wiederholt JSON-, Teilantwort- und vorübergehende Verbindungsfehler begre
   assert.equal(calls, 1);
 });
 
+test("protokolliert verbrauchten Denktext und verborgene Netzwerkursache", async () => {
+  const logs = [];
+  let calls = 0;
+  await assert.rejects(analyzeWindow(transcriptWindows(segments)[0], config, {
+    log: (message) => logs.push(message), sleep: async () => {},
+    fetchImpl: async () => {
+      calls += 1;
+      if (calls === 1) {
+        return Response.json({
+          choices: [{ finish_reason: "length", message: { content: "", reasoning: "x".repeat(900) } }],
+          usage: { prompt_tokens: 5205, completion_tokens: 4096 },
+        });
+      }
+      throw new TypeError("fetch failed", { cause: Object.assign(new Error("Headers Timeout Error"), { code: "UND_ERR_HEADERS_TIMEOUT" }) });
+    },
+  }), /Nach 3 Versuchen abgebrochen/u);
+  const diagnostics = logs.filter((message) => message.includes("Fehlerdiagnose"))
+    .map((message) => JSON.parse(message.split("Fehlerdiagnose ")[1]));
+  assert.equal(diagnostics[0].reasoningCharacters, 900);
+  assert.equal(diagnostics[0].cause, undefined);
+  assert.deepEqual(diagnostics.slice(1).map((item) => item.cause), ["UND_ERR_HEADERS_TIMEOUT", "UND_ERR_HEADERS_TIMEOUT"]);
+});
+
 test("setzt nach fehlerhafter Kontextprüfung beim Prüfaufruf fort und erhält bereits fertige Fenster", async (t) => {
   const { directory, videoId } = await setup(t);
   const options = { cacheDirectory: directory, config, sleep: async () => {}, log() {} };
@@ -696,7 +721,7 @@ test("führt überlappende Besprechungen zusammen, erhält spätere Wiederaufnah
   assert.equal(merged[0].startMs, 20_000);
   assert.equal(merged[0].endMs, 262_000);
   assert.equal(merged[0].gameId, "doom");
-  assert.equal(merged[0].reviewed, false);
+  assert.equal("reviewed" in merged[0], false, "Freigabe gilt für die ganze Analyse, nicht je Abschnitt");
   assert.equal(merged[0].evidence[0].text, "Text 3");
   const conflict = mergeDiscussions([
     candidate({ lastSegmentId: 10, windowIndex: 0 }),
@@ -748,7 +773,7 @@ test("speichert separate Vorschläge, nutzt Zwischenstände und überschreibt we
   assert.equal(calls, 2);
   assert.equal(result.status, "needs-review");
   const file = path.join(directory, "game-discussions", `${videoId}.json`);
-  const reviewed = { ...result, status: "reviewed", discussions: [{ title: "Manuelle Korrektur", reviewed: true }] };
+  const reviewed = { ...result, status: "reviewed", discussions: [{ title: "Manuelle Korrektur" }] };
   await writeFile(file, JSON.stringify(reviewed));
   const existing = await generateGamesFromTranscript(videoId, {
     ...options, analyzeWindowImpl: () => { throw new Error("Kein erneuter Modellaufruf"); },
@@ -796,11 +821,30 @@ test("prüft Mindestdauer erst nach dem Zusammenführen zusammenhängender Fenst
   assert.equal(result.length, 1);
   assert.equal(result[0].startMs, 0);
   assert.equal(result[0].endMs, 42_000);
-  const separate = mergeDiscussions([
+  const adjacent = mergeDiscussions([
     candidate({ firstSegmentId: 0, lastSegmentId: 1, evidenceSegmentId: 0, windowIndex: 0 }),
     candidate({ firstSegmentId: 2, lastSegmentId: 3, evidenceSegmentId: 2, windowIndex: 1 }),
   ], segments);
+  assert.equal(adjacent.length, 1);
+  assert.equal(adjacent[0].endMs, 42_000);
+  const separate = mergeDiscussions([
+    candidate({ firstSegmentId: 0, lastSegmentId: 1, evidenceSegmentId: 0, windowIndex: 0 }),
+    candidate({ firstSegmentId: 3, lastSegmentId: 4, evidenceSegmentId: 3, windowIndex: 1 }),
+  ], segments);
   assert.deepEqual(separate, []);
+});
+
+test("führt direkt angrenzende Abschnitte desselben Katalogspiels trotz Schreibvariante zusammen", () => {
+  const games = [{ id: "falcon", name: "Falcon", aliases: ["Falcon AT"] }];
+  const result = mergeDiscussions([
+    candidate({ title: "Falcon", firstSegmentId: 0, lastSegmentId: 4, evidenceSegmentId: 0, windowIndex: 0 }),
+    candidate({ title: "Falcon AT", firstSegmentId: 5, lastSegmentId: 9, evidenceSegmentId: 5, windowIndex: 1 }),
+    candidate({ title: "Xenon", firstSegmentId: 10, lastSegmentId: 14, evidenceSegmentId: 10, windowIndex: 1 }),
+    candidate({ title: "Falcon", firstSegmentId: 15, lastSegmentId: 19, evidenceSegmentId: 15, windowIndex: 2 }),
+  ], segments, games);
+  assert.deepEqual(result.map((item) => [item.title, item.gameId, item.firstSegmentId, item.lastSegmentId]), [
+    ["Falcon", "falcon", 0, 9], ["Xenon", null, 10, 14], ["Falcon", "falcon", 15, 19],
+  ]);
 });
 
 test("speichert nach einem Modellausfall keine scheinbar erfolgreiche leere Gesamtanalyse", async (t) => {
@@ -811,4 +855,59 @@ test("speichert nach einem Modellausfall keine scheinbar erfolgreiche leere Gesa
   }), /HTTP 500/u);
   await assert.rejects(readFile(path.join(directory, "game-discussions", `${videoId}.json`)), { code: "ENOENT" });
   await assert.rejects(readFile(path.join(directory, "game-discussions", `${videoId}.json.lock`)), { code: "ENOENT" });
+});
+
+function streamResponse(type, lines) {
+  const encoder = new TextEncoder();
+  const text = lines.join("\n");
+  // Split inside a multi-byte character and inside lines to exercise buffering.
+  const cut = Math.floor(text.length / 2);
+  return new Response(new ReadableStream({
+    start(controller) {
+      controller.enqueue(encoder.encode(text).slice(0, encoder.encode(text.slice(0, cut)).length + 1));
+      controller.enqueue(encoder.encode(text).slice(encoder.encode(text.slice(0, cut)).length + 1));
+      controller.close();
+    },
+  }), { headers: { "content-type": type } });
+}
+
+test("liest gestreamte OpenAI- und Ollama-Antworten vollständig samt Endgrund und Tokenzahlen", async () => {
+  const body = JSON.stringify({ discussions: [candidate({ title: "Pac-Män" })] });
+  const sse = [...body.match(/.{1,7}/gsu)].map((content) =>
+    `data: ${JSON.stringify({ choices: [{ delta: { content }, finish_reason: null }] })}\n`);
+  const openai = await readModelResponse(streamResponse("text/event-stream", [
+    ...sse, `data: ${JSON.stringify({ choices: [{ delta: {}, finish_reason: "stop" }] })}\n`,
+    `data: ${JSON.stringify({ choices: [], usage: { prompt_tokens: 10, completion_tokens: 5 } })}\n`, "data: [DONE]", "",
+  ]), false);
+  assert.equal(openai.choices[0].message.content, body);
+  assert.equal(openai.choices[0].finish_reason, "stop");
+  assert.deepEqual(openai.usage, { prompt_tokens: 10, completion_tokens: 5 });
+
+  const ndjson = [...body.match(/.{1,5}/gsu)].map((content) => JSON.stringify({ message: { content }, done: false }));
+  const native = await readModelResponse(streamResponse("application/x-ndjson", [
+    ...ndjson, JSON.stringify({ message: { content: "" }, done: true, done_reason: "length", eval_count: 7 }),
+  ]), true);
+  assert.equal(native.message.content, body);
+  assert.equal(native.done_reason, "length");
+  assert.equal(native.eval_count, 7);
+});
+
+test("wiederholt abgebrochene Streams und Streamfehler, bevor der Lauf endet", async () => {
+  for (const lines of [
+    [JSON.stringify({ choices: [{ delta: { content: "{\"discussions\":" }, finish_reason: null }] })].map((line) => `data: ${line}`),
+    [`data: ${JSON.stringify({ error: { message: "model runner crashed" } })}`],
+  ]) {
+    let calls = 0;
+    const requests = [];
+    await assert.rejects(analyzeWindow(transcriptWindows(segments)[0], config, {
+      log() {}, sleep: async () => {},
+      fetchImpl: async (_url, request) => {
+        calls += 1;
+        requests.push(JSON.parse(request.body));
+        return streamResponse("text/event-stream", lines);
+      },
+    }), /Nach 3 Versuchen abgebrochen/u);
+    assert.equal(calls, 3);
+    assert.ok(requests.every((body) => body.stream === true && body.stream_options.include_usage === true));
+  }
 });

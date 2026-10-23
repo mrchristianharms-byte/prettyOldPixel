@@ -1,0 +1,208 @@
+{
+  "videoId": "63foHISC8ms",
+  "status": "draft",
+  "note": "Entwurf aus Transkriptprüfung; Titel anhand Kontext korrigiert, Grenzen aus lokalem bzw. Copilot-Vorschlag übernommen. Vor Verwendung als Qualitätsnachweis am Video bestätigen und status auf confirmed setzen. Abschnitte, die beide Verfahren übersehen haben, fehlen möglicherweise.",
+  "discussions": [
+    {
+      "title": "Power at Sea",
+      "aliases": [
+        "Power C"
+      ],
+      "startMs": 3478559,
+      "endMs": 3611839,
+      "boundarySource": "qwen3:14b",
+      "check": "Copilot beginnt 12 s früher; Titel im Transkript nur als „Power C das … von Electronic Arts“."
+    },
+    {
+      "title": "Tetris",
+      "startMs": 3774440,
+      "endMs": 3827799,
+      "boundarySource": "qwen3:14b"
+    },
+    {
+      "title": "Carrier Command",
+      "aliases": [
+        "Cavier Command"
+      ],
+      "startMs": 4063079,
+      "endMs": 4168120,
+      "boundarySource": "qwen3:14b"
+    },
+    {
+      "title": "The Train",
+      "aliases": [
+        "The Train: Escape to Normandy",
+        "Train"
+      ],
+      "startMs": 4982480,
+      "endMs": 5058000,
+      "boundarySource": "qwen3:14b"
+    },
+    {
+      "title": "Xenon",
+      "startMs": 5140119,
+      "endMs": 5198600,
+      "boundarySource": "qwen3:14b"
+    },
+    {
+      "title": "Morpheus",
+      "aliases": [
+        "Morphous"
+      ],
+      "startMs": 5427560,
+      "endMs": 5491960,
+      "boundarySource": "Copilot",
+      "check": "Ende nur aus Copilot-Vorschlag."
+    },
+    {
+      "title": "Hunter's Moon",
+      "aliases": [
+        "Hunters Moon"
+      ],
+      "startMs": 5498280,
+      "endMs": 5699400,
+      "boundarySource": "qwen3:14b/Copilot",
+      "check": "Ende nur aus Copilot-Vorschlag."
+    },
+    {
+      "title": "Ball Raider",
+      "startMs": 6104280,
+      "endMs": 6172520,
+      "boundarySource": "qwen3:14b",
+      "check": "Copilot beginnt 15 s früher."
+    },
+    {
+      "title": "Slaygon",
+      "aliases": [
+        "Slagon"
+      ],
+      "startMs": 6332719,
+      "endMs": 6388760,
+      "boundarySource": "qwen3:14b",
+      "check": "Transkript „Slagon“; Dungeon Crawler 1988."
+    },
+    {
+      "title": "Tour de Force",
+      "startMs": 6574599,
+      "endMs": 6660440,
+      "boundarySource": "qwen3:14b"
+    },
+    {
+      "title": "Return to Atlantis",
+      "aliases": [
+        "Atlantis"
+      ],
+      "startMs": 6712679,
+      "endMs": 6791000,
+      "boundarySource": "qwen3:14b/Copilot",
+      "check": "Ende nur aus Copilot-Vorschlag."
+    },
+    {
+      "title": "Ports of Call",
+      "startMs": 6892320,
+      "endMs": 6945040,
+      "boundarySource": "qwen3:14b",
+      "check": "Copilot beginnt 44 s früher."
+    },
+    {
+      "title": "Police Quest",
+      "startMs": 7071280,
+      "endMs": 7113639,
+      "boundarySource": "qwen3:14b",
+      "check": "Copilot-Ende 2 Minuten später."
+    },
+    {
+      "title": "Shadowgate",
+      "aliases": [
+        "Shadow Gate"
+      ],
+      "startMs": 7244760,
+      "endMs": 7402199,
+      "boundarySource": "qwen3:14b"
+    },
+    {
+      "title": "Jack the Ripper",
+      "startMs": 7580800,
+      "endMs": 7656559,
+      "boundarySource": "qwen3:14b"
+    },
+    {
+      "title": "Falcon",
+      "aliases": [
+        "Felken"
+      ],
+      "startMs": 8104480,
+      "endMs": 8446840,
+      "boundarySource": "qwen3:14b",
+      "check": "Transkript „Felken“ (F-16, 1988); lokal in zwei angrenzende Teile gespalten."
+    },
+    {
+      "title": "Stealth Mission",
+      "aliases": [
+        "Stells Mission"
+      ],
+      "startMs": 8508960,
+      "endMs": 8642200,
+      "boundarySource": "qwen3:14b",
+      "check": "Transkript „Stells Mission“, Konkurrent zu F-19 Stealth Fighter."
+    },
+    {
+      "title": "Gunship",
+      "aliases": [
+        "Gunchip"
+      ],
+      "startMs": 8876520,
+      "endMs": 8992720,
+      "boundarySource": "qwen3:14b",
+      "check": "Transkript „Gunchip“; lokal in zwei angrenzende Teile gespalten."
+    }
+  ],
+  "unclear": [
+    {
+      "title": "Thunder Cross?",
+      "startMs": 5704719,
+      "endMs": 5776440,
+      "reason": "Nur Copilot; Transkript nennt an der Stelle „OPS … Mix aus Sideway Shooter und Plattformer“."
+    },
+    {
+      "title": "Black Lamp",
+      "startMs": 6239880,
+      "endMs": 6291520,
+      "reason": "Nur Copilot; möglicherweise nur kurze Erwähnung."
+    },
+    {
+      "title": "Mandroid",
+      "startMs": 6532840,
+      "endMs": 6567280,
+      "reason": "Nur Copilot; 34 s, Grenzfall."
+    },
+    {
+      "title": "Starcreet?",
+      "startMs": 7501360,
+      "endMs": 7556079,
+      "reason": "Nur lokal; Titel unklar, im Umfeld wird Strike Fleet genannt."
+    }
+  ],
+  "rejected": [
+    {
+      "title": "Populus",
+      "startMs": 659320,
+      "reason": "personal-update: Hinweis auf eigene Kanalfolge."
+    },
+    {
+      "title": "Labyrinth",
+      "startMs": 698680,
+      "reason": "personal-update: Hinweis auf eigene Kanalfolge."
+    },
+    {
+      "title": "Wasteland 3",
+      "startMs": 4329040,
+      "reason": "Plauderei über aktuelle Spiele, nicht im Heft."
+    },
+    {
+      "title": "Doors Paradox",
+      "startMs": 9090800,
+      "reason": "Plauderei über aktuelle Spiele, nicht im Heft."
+    }
+  ]
+}

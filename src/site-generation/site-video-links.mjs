@@ -2,8 +2,8 @@ import { httpUrl } from "./site-data.mjs";
 import { escapeHtml, externalLink } from "./site-html.mjs";
 
 export function magazineLinks(magazine, config) {
-  return `<a href="${config.href(magazine.route)}">${escapeHtml(magazine.name)}</a>${magazine.yearRoute
-    ? ` · <a href="${config.href(magazine.yearRoute)}">Jahrgang ${magazine.issue.year}</a>` : ""}${magazine.issue
+  return `<a href="${config.href(magazine.route)}">${escapeHtml(magazine.name)}</a>${magazine.yearAnchor
+    ? ` · <a href="${config.href(magazine.route)}#${magazine.yearAnchor}">Jahrgang ${magazine.issue.year}</a>` : ""}${magazine.issue
     ? ` · ${magazine.issue.route ? `<a href="${config.href(magazine.issue.route)}">${escapeHtml(magazine.issue.label)}</a>` : escapeHtml(magazine.issue.label)}` : ""}`;
 }
 

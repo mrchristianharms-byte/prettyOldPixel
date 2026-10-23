@@ -34,7 +34,8 @@ body { overflow-wrap: anywhere; }
 .site-header { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: .25rem 1rem; padding-block: .35rem; border-bottom: 1px solid var(--pico-muted-border-color); }
 .site-header nav ul { flex-wrap: wrap; margin-inline: 0; }
 .site-header nav { margin-inline-start: auto; }
-.site-header .navigation-control { display: inline-flex; align-items: center; gap: .5rem; padding-block: 0; }
+.site-header .navigation-control { display: inline-flex; align-items: center; padding: 0; }
+.navigation-control > a { margin: 0 .5rem 0 0; }
 .theme-toggle { width: 2.5rem; height: 2.5rem; padding: .5rem; margin: 0; flex-shrink: 0; line-height: 1; }
 .theme-toggle svg { display: block; margin: auto; }
 [data-theme="dark"] .theme-moon, [data-theme="light"] .theme-sun { display: none; }

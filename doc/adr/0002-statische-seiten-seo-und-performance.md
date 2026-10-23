@@ -22,8 +22,9 @@ Ein strukturierter Spielekatalog wurde auf dieser Grundlage ergänzt.
 Startseite mit Statistik, News, Datenschutzseite,
 Sitemap, Robots-Datei und 404. Gemeinsame Templates, lokale Pico-CSS-Version
 2.1.1 samt Lizenz, sichere Metadaten und Build-Budgets sind umgesetzt.
-Zeitschriftenindex, Zeitschriften-, Jahrgangs- und eindeutige Ausgabenseiten
-sind im dritten Schritt hinzugekommen; News und Videos verlinken diese Ziele.
+Zeitschriftenindex, Zeitschriften- und eindeutige Ausgabenseiten
+sind im dritten Schritt hinzugekommen (frühere Jahrgangsseiten sind inzwischen
+Anker auf der Zeitschriftenseite, siehe ADR 0003); News und Videos verlinken diese Ziele.
 Bestätigte Spieleseiten und Spieleindex sind ebenfalls umgesetzt.
 Statische Kapitel-Zeitlinks und erwähnte Kanäle sind ebenfalls umgesetzt.
 API-Kapitelsteuerung, `Clip`-Metadaten und die abschaltbare Folgenfortsetzung
@@ -98,14 +99,11 @@ Seitentypen, nicht jede tatsächlich vorhandene Seite:
 |-- news/                              Neueste 20 Videos
 |-- zeitschriften/                     Alphabetischer Zeitschriftenindex
 |   |-- seite/<n>/                     Weitere Indexseiten, falls noetig
+|   |-- gaeste/<gast>/                 Blaetterabende mit Gast
+|   |-- videos/<video-slug>/           Videos ohne eindeutige Ausgabe
 |   `-- <zeitschrift>/
-|       |-- index.html                 Jahrgaenge und zugeordnete Videos
-|       |-- seite/<n>/                 Weitere Zeitschriftenseiten
-|       |-- <jahr>/
-|       |   |-- index.html             Ausgaben und Videos des Heftjahrs
-|       |   `-- seite/<n>/             Weitere Jahrgangsseiten
-|       `-- ausgaben/
-|           `-- <hefttitel-slug>/       Gemeinsamer Player und Videoteile
+|       |-- index.html                 Alle Ausgaben, Jahrgaenge als #jahr-<jahr>
+|       `-- <hefttitel-slug>/           Gemeinsamer Player und Videoteile
 |-- spiele/
 |   |-- index.html                     Alphabetischer Spieleindex
 |   |-- seite/<n>/                     Weitere Indexseiten
@@ -138,9 +136,8 @@ Zeitschriftenindex, statt spekulative Detailseiten zu erhalten.
 | `/` | Kanalstatistik, belegter Beginn der Videogeschichte und verlinkte Themenkacheln; keine Liste neuer Videos |
 | `/news/` | Kanalweit höchstens 20 neueste Videos, ohne Beschränkung auf bestimmte Themen |
 | `/zeitschriften/` | Magazine alphabetisch und gegebenenfalls die Gruppe „Weitere Blätterabende“ |
-| `/zeitschriften/<slug>/` | Bekannte Jahrgänge und alle zugeordneten Videos, einschließlich unbekannter Heftdaten |
-| `/zeitschriften/<slug>/<jahr>/` | Videos nach Erscheinungsjahr des Hefts, gruppiert nach Ausgabe und Sonderheft |
-| `/zeitschriften/<slug>/ausgaben/<hefttitel-slug>/` | Eindeutig identifizierte Ausgabe, Archivlinks und sämtliche zugehörigen Videoteile |
+| `/zeitschriften/<slug>/` | Alle Ausgaben und zugeordneten Videos auf einer Seite, nach Heftjahr gruppiert (Anker `#jahr-<jahr>`), einschließlich unbekannter Heftdaten |
+| `/zeitschriften/<slug>/<hefttitel-slug>/` | Eindeutig identifizierte Ausgabe, Archivlinks und sämtliche zugehörigen Videoteile |
 | `/spiele/` | Alphabetischer Index der qualifizierten, bestätigten Spiele |
 | `/spiele/<slug>/` | Spielinformationen, vollständige chronologische Videoreihe und Abschnitts-/Reihenübersicht |
 | `/hardware/` | Geprüfte Hardwarebeiträge, neueste zuerst; keine Geräte-, Hersteller- oder Jahresunterseiten |
@@ -210,7 +207,7 @@ Ein fehlender Archivtreffer verhindert eine ansonsten eindeutige reguläre
 Ausgabenseite nicht.
 
 - Zeitschriftenseiten entstehen schon mit einem zugeordneten öffentlichen
-  Video. Jahrgangsseiten benötigen ein bekanntes Heftjahr; das Uploadjahr
+  Video. Jahrgangsabschnitte benötigen ein bekanntes Heftjahr; das Uploadjahr
   ersetzt es nicht.
 - Reguläre Ausgaben benötigen Jahr und mindestens einen Monat oder eine
   Heftnummer. Sonderhefte benötigen einen eindeutigen Archiv-Hefttreffer

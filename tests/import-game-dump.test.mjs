@@ -1,9 +1,11 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { mkdtemp, readFile, writeFile, rm, access } from "node:fs/promises";
+import { mkdtemp, readFile, writeFile, rm } from "node:fs/promises";
 import path from "node:path";
 import { tmpdir } from "node:os";
-import { importGameDump, parseDumpArguments, parseSqlValues, readSqlStatements, normalizeDumpTitle } from "../src/fetch-game/import-game-dump.mjs";
+import { buildGameTitleIndex } from "../src/fetch-game/build-game-title-index.mjs";
+import { importGameDump, parseDumpArguments, normalizeDumpTitle } from "../src/fetch-game/import-game-dump.mjs";
+import { parseSqlValues, readSqlStatements } from "../src/fetch-game/sql-dump-reader.mjs";
 
 const dump = `-- Dump with comments
 /*!40101 SET NAMES utf8mb4 */;
@@ -29,9 +31,19 @@ async function fixture(t, text = dump) {
   const dir = await mkdtemp(path.join(tmpdir(), "pixel-dump-test-"));
   t.after(() => rm(dir, { recursive: true, force: true }));
   const input = path.join(dir, "gdb.sql");
+  const index = path.join(dir, "game-title-index.json");
   const output = path.join(dir, "export.json");
   await writeFile(input, text);
-  return { input, output };
+  await buildGameTitleIndex({ input, output: index });
+  return { input, index, output };
+}
+
+async function textFixture(t, text) {
+  const dir = await mkdtemp(path.join(tmpdir(), "pixel-dump-test-"));
+  t.after(() => rm(dir, { recursive: true, force: true }));
+  const input = path.join(dir, "gdb.sql");
+  await writeFile(input, text);
+  return { input };
 }
 
 test("SQL-Werte erhalten Escaping, NULL, Satzzeichen und mehrzeilige Strings", () => {
@@ -45,7 +57,7 @@ test("SQL-Werte erhalten Escaping, NULL, Satzzeichen und mehrzeilige Strings", (
 });
 
 test("Anweisungsleser trennt nicht innerhalb von Strings und ignoriert Kommentare", async (t) => {
-  const { input } = await fixture(t, "/* comment\n; */ SET x=1; -- comment;\nINSERT INTO `a` VALUES ('a;\nb', 'c\\'d', 'e''f'); # end\n");
+  const { input } = await textFixture(t, "/* comment\n; */ SET x=1; -- comment;\nINSERT INTO `a` VALUES ('a;\nb', 'c\\'d', 'e''f'); # end\n");
   const statements = [];
   for await (const statement of readSqlStatements(input)) statements.push(statement);
   assert.equal(statements.length, 2);
@@ -54,9 +66,12 @@ test("Anweisungsleser trennt nicht innerhalb von Strings und ignoriert Kommentar
   await assert.rejects(async () => { for await (const statement of readSqlStatements(input)) void statement; }, /Unvollständiger/u);
 });
 
-test("Offline-Export enthält nur Katalogtreffer, bewahrt Releases und bestätigt keine Identität", async (t) => {
-  const options = await fixture(t);
+test("Offline-Export aus dem Titelindex enthält nur Katalogtreffer, bewahrt Releases und bestätigt keine Identität", async (t) => {
+  const { input, ...options } = await fixture(t);
   const report = await importGameDump({ ...options, games });
+  assert.equal(report.source.titleIndex, "game-title-index.json");
+  assert.match(report.source.sha256, /^[a-f0-9]{64}$/u);
+  assert.deepEqual(report.importedRows, { mobygames: 3, mobygames_alttitles: 1, mobygames_releases: 3 });
   assert.deepEqual(report.summary, { games: 4, withCandidates: 3, withoutExactMatch: 1, ambiguous: 1 });
   const wing = report.games[0];
   assert.equal(wing.status, "needs-identity-review");
@@ -66,6 +81,9 @@ test("Offline-Export enthält nur Katalogtreffer, bewahrt Releases und bestätig
   assert.equal(wing.candidates[1].platformMatch, false);
   assert.equal(wing.candidates[0].releases.length, 2);
   assert.equal(wing.candidates[0].releases[1].publisher, "Origin");
+  assert.deepEqual(wing.candidates[0].releases.map((release) => [release.mobyreleaseid, release.platform, release.countries]),
+    [[31, "Amiga", "Germany"], [30, "DOS", "United States"]]);
+  assert.deepEqual(wing.candidates[0].alternativeTitles, [{ title: "Flügelkommandant", info: "German" }]);
   assert.deepEqual(wing.candidates[0].genres, ["Action", "Simulation"]);
   assert.equal(report.games[1].candidates[0].mobyid, 3);
   assert.equal(report.games[2].candidates[0].platformMatch, null);
@@ -78,18 +96,29 @@ test("Offline-Export enthält nur Katalogtreffer, bewahrt Releases und bestätig
   assert.match(html, /keine bestätigten Identitäten/u);
   assert.match(html, /Other Publisher/u);
   assert.ok(!html.includes("Not exported"));
-  assert.equal(await readFile(options.input, "utf8"), dump);
+  assert.equal(await readFile(input, "utf8"), dump);
 });
 
-test("Metadaten sind HTML-escaped und ein fehlender Tabellenimport erhält die Eingabe", async (t) => {
+test("Import verlangt aktuellen Titelindex und passenden Plattformindex", async (t) => {
+  const options = await fixture(t);
+  const platformFile = path.join(path.dirname(options.index), "game-platform-index.json");
+  const platforms = JSON.parse(await readFile(platformFile, "utf8"));
+  await writeFile(platformFile, JSON.stringify({ ...platforms, source: { ...platforms.source, sha256: "0".repeat(64) } }));
+  await assert.rejects(importGameDump({ ...options, games }), /Plattformindex passt nicht/u);
+  await rm(platformFile);
+  await assert.rejects(importGameDump({ ...options, games }), /Plattformindex fehlt/u);
+  const index = JSON.parse(await readFile(options.index, "utf8"));
+  await writeFile(options.index, JSON.stringify({ ...index, version: 2 }));
+  await assert.rejects(importGameDump({ ...options, games }), /veraltet.*dev:build:game-title-index/u);
+  await assert.rejects(importGameDump({ ...options, output: options.index, games }), /identisch/u);
+});
+
+test("Metadaten sind HTML-escaped", async (t) => {
   const options = await fixture(t, dump.replace("'Origin'", "'<script>alert(1)</script>'"));
   await importGameDump({ ...options, games });
   const html = await readFile(options.output.replace(/\.json$/u, ".html"), "utf8");
   assert.match(html, /&lt;script&gt;/u);
   assert.ok(!html.includes("<script>"));
-  await writeFile(options.input, "SET x=1;");
-  await assert.rejects(importGameDump({ ...options, games, deleteInput: true }), /Keine Daten/u);
-  await access(options.input);
 });
 
 test("exportiert freigegebene zusätzliche Veröffentlichungen getrennt von Spielkandidaten", async (t) => {
@@ -109,34 +138,24 @@ test("exportiert freigegebene zusätzliche Veröffentlichungen getrennt von Spie
 });
 
 test("vereinheitlicht Entwickler und Publisher beim Import und erhält ursprüngliche Quellnamen", async (t) => {
-  const options = await fixture(t, dump.replace("'Origin', 'Origin'", "'Virgin Games, Inc.', 'MPS Labs'"));
+  const { input, ...options } = await fixture(t, dump.replace("'Origin', 'Origin'", "'Virgin Games, Inc.', 'MPS Labs'"));
   const report = await importGameDump({ ...options, games });
   const release = report.games[0].candidates[0].releases.find((entry) => entry.mobyreleaseid === 30);
   assert.equal(release.developer, "MicroProse");
   assert.equal(release.publisher, "Virgin");
   assert.equal(release.sourceDeveloper, "MPS Labs");
   assert.equal(release.sourcePublisher, "Virgin Games, Inc.");
-  assert.ok((await readFile(options.input, "utf8")).includes("'Virgin Games, Inc.', 'MPS Labs'"));
+  assert.ok((await readFile(input, "utf8")).includes("'Virgin Games, Inc.', 'MPS Labs'"));
 });
 
-test("Löscht ausschließlich die Eingabe nach verifiziertem Export, Fehler erhalten sie", async (t) => {
-  const options = await fixture(t);
-  await importGameDump({ ...options, games, deleteInput: true });
-  await assert.rejects(access(options.input), { code: "ENOENT" });
-  assert.ok(JSON.parse(await readFile(options.output, "utf8")).source.sha256);
-  await writeFile(options.input, dump.replace("'DOS'", "NOW()"));
-  await assert.rejects(importGameDump({ ...options, games, deleteInput: true }), /SQL-Wert/u);
-  await access(options.input);
-  await assert.rejects(importGameDump({ ...options, output: options.input, games }), /identisch/u);
-});
-
-test("Teilnummern bleiben verschieden, CLI verlangt expliziten Eingabepfad", () => {
+test("Teilnummern bleiben verschieden, CLI nimmt optional Index- und Ausgabepfad", () => {
   assert.notEqual(normalizeDumpTitle("Game II"), normalizeDumpTitle("Game III"));
   assert.equal(normalizeDumpTitle("Sid Meier’s Game"), normalizeDumpTitle("Sid Meier's Game"));
-  assert.deepEqual(parseDumpArguments(["--input", "dump.sql", "--delete-input"]), {
-    input: path.resolve("dump.sql"), deleteInput: true,
+  assert.deepEqual(parseDumpArguments([]), {});
+  assert.deepEqual(parseDumpArguments(["--index", "index.json", "--output", "out.json"]), {
+    index: path.resolve("index.json"), output: path.resolve("out.json"),
   });
-  for (const args of [[], ["--input"], ["--input", "x", "--input", "y"], ["--unknown"]]) {
+  for (const args of [["--index"], ["--index", "x", "--index", "y"], ["--input", "gdb.sql"], ["--delete-input"], ["--unknown"]]) {
     assert.throws(() => parseDumpArguments(args), /Spieledump/u);
   }
 });

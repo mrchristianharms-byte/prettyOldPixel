@@ -1,0 +1,562 @@
+{
+  "version": 1,
+  "analysisVersion": "4",
+  "videoId": "63foHISC8ms",
+  "transcriptHash": "80224e85c24dfb7d2c083f3922e69186dbc98813d3b5ac836f9d83b739ac3552",
+  "catalogHash": "31cec4c1e968f78b9692d3b23d44518502cb2d31e67c183273f8ab6e85aa0caa",
+  "model": "qwen3:14b",
+  "endpoint": "http://127.0.0.1:11434/v1/chat/completions",
+  "candidateSource": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62:1985-1989",
+  "generatedAt": "2026-10-22T21:09:57.235Z",
+  "status": "reviewed",
+  "discussions": [
+    {
+      "title": "Labyrinth",
+      "gameId": "labyrinth",
+      "startMs": 701720,
+      "endMs": 747920,
+      "firstSegmentId": 215,
+      "lastSegmentId": 235,
+      "confidence": "high",
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 215,
+          "startMs": 701720,
+          "text": "Schritte Folge von Labyrinth erschienen."
+        }
+      ],
+      "titleIndexId": 38223,
+      "firstYear": 1987,
+      "developers": [
+        "Atlus Co., Ltd."
+      ],
+      "publishers": [
+        "Tokuma Shoten Publishing Co., Ltd."
+      ]
+    },
+    {
+      "title": "Carrier Command",
+      "gameId": "carrier-command-amiga",
+      "startMs": 4063079,
+      "endMs": 4165520,
+      "firstSegmentId": 1562,
+      "lastSegmentId": 1610,
+      "confidence": "high",
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 1562,
+          "startMs": 4063079,
+          "text": "Carrier Command. Schönes Spiel, habe ich"
+        }
+      ],
+      "titleIndexId": 6943,
+      "firstYear": 1988,
+      "developers": [
+        "Realtime Games Software Ltd."
+      ],
+      "publishers": [
+        "Rainbird Software"
+      ]
+    },
+    {
+      "title": "Wasteland",
+      "gameId": null,
+      "startMs": 4329040,
+      "endMs": 4371440,
+      "firstSegmentId": 1688,
+      "lastSegmentId": 1709,
+      "confidence": "high",
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 1695,
+          "startMs": 4342320,
+          "text": "gibt kein Wasteland 4. Okay, dann meine"
+        }
+      ],
+      "titleIndexId": 287,
+      "firstYear": 1988,
+      "developers": [
+        "Interplay Productions, Inc."
+      ],
+      "publishers": [
+        "Electronic Arts, Inc."
+      ]
+    },
+    {
+      "title": "The Train: Escape to Normandy",
+      "gameId": null,
+      "startMs": 4982480,
+      "endMs": 5063880,
+      "firstSegmentId": 1981,
+      "lastSegmentId": 2014,
+      "confidence": "high",
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 1981,
+          "startMs": 4982480,
+          "text": "Nee. Oh, the Train."
+        }
+      ],
+      "titleIndexId": 2276,
+      "firstYear": 1988,
+      "developers": [
+        "Artech Digital Entertainments, Inc."
+      ],
+      "publishers": [
+        "Accolade, Inc."
+      ]
+    },
+    {
+      "title": "Xenon",
+      "gameId": null,
+      "startMs": 5140119,
+      "endMs": null,
+      "firstSegmentId": 2052,
+      "lastSegmentId": 2091,
+      "confidence": "high",
+      "endReason": "window-end",
+      "issues": [
+        "end-outside-window"
+      ],
+      "evidence": [
+        {
+          "segmentId": 2052,
+          "startMs": 5140119,
+          "text": "Ja. Xenon habe ich Teil 2, glaube ich."
+        }
+      ],
+      "titleIndexId": 1553,
+      "firstYear": 1988,
+      "developers": [
+        "Bitmap Brothers, The"
+      ],
+      "publishers": [
+        "Melbourne House",
+        "Arcadia Systems, Inc."
+      ]
+    },
+    {
+      "title": "Hunters Moon",
+      "gameId": null,
+      "startMs": 5507719,
+      "endMs": null,
+      "firstSegmentId": 2211,
+      "lastSegmentId": 2275,
+      "confidence": "high",
+      "endReason": "uncertain",
+      "issues": [
+        "conflicting-window-boundaries"
+      ],
+      "evidence": [
+        {
+          "segmentId": 2216,
+          "startMs": 5520520,
+          "text": "Hunters Moon so schlecht steuern lässt."
+        }
+      ],
+      "titleIndexId": 23329,
+      "firstYear": 1987,
+      "developers": [],
+      "publishers": [
+        "Thalamus Ltd"
+      ]
+    },
+    {
+      "title": "Morpheus",
+      "gameId": null,
+      "startMs": 5630639,
+      "endMs": null,
+      "firstSegmentId": 2262,
+      "lastSegmentId": 2322,
+      "confidence": "high",
+      "endReason": "uncertain",
+      "issues": [
+        "conflicting-window-boundaries"
+      ],
+      "evidence": [
+        {
+          "segmentId": 2262,
+          "startMs": 5630639,
+          "text": "das noch? Morphous,"
+        }
+      ],
+      "titleIndexId": 56141,
+      "firstYear": 1987,
+      "developers": [
+        "Graftgold Ltd."
+      ],
+      "publishers": [
+        "Rainbird Software"
+      ]
+    },
+    {
+      "title": "Breakout",
+      "gameId": null,
+      "startMs": 6002199,
+      "endMs": null,
+      "firstSegmentId": 2422,
+      "lastSegmentId": 2473,
+      "confidence": "high",
+      "endReason": "uncertain",
+      "issues": [
+        "conflicting-window-boundaries",
+        "end-outside-window"
+      ],
+      "evidence": [
+        {
+          "segmentId": 2422,
+          "startMs": 6002199,
+          "text": "das ein Breakout"
+        }
+      ],
+      "titleIndexId": 69270,
+      "firstYear": 1986,
+      "developers": [],
+      "publishers": []
+    },
+    {
+      "title": "Ball Raider",
+      "gameId": null,
+      "startMs": 6116920,
+      "endMs": null,
+      "firstSegmentId": 2467,
+      "lastSegmentId": 2487,
+      "confidence": "high",
+      "endReason": "uncertain",
+      "issues": [
+        "conflicting-window-boundaries"
+      ],
+      "evidence": [
+        {
+          "segmentId": 2467,
+          "startMs": 6116920,
+          "text": "Ball Raider ist das auch."
+        }
+      ],
+      "titleIndexId": 57752,
+      "firstYear": 1987,
+      "developers": [
+        "Golden Gate Crew"
+      ],
+      "publishers": [
+        "Diamond Software"
+      ]
+    },
+    {
+      "title": "Jet Bike Simulator",
+      "gameId": null,
+      "startMs": 6174920,
+      "endMs": 6215920,
+      "firstSegmentId": 2493,
+      "lastSegmentId": 2507,
+      "confidence": "high",
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 2493,
+          "startMs": 6174920,
+          "text": "nie. Geht gleich weiter. Jetbike"
+        }
+      ],
+      "titleIndexId": 57812,
+      "firstYear": 1988,
+      "developers": [],
+      "publishers": [
+        "Codemasters"
+      ]
+    },
+    {
+      "title": "Slagon",
+      "gameId": null,
+      "startMs": 6332719,
+      "endMs": 6398960,
+      "firstSegmentId": 2558,
+      "lastSegmentId": 2589,
+      "confidence": "high",
+      "endReason": "topic-change",
+      "issues": [
+        "not-in-title-index"
+      ],
+      "evidence": [
+        {
+          "segmentId": 2565,
+          "startMs": 6343320,
+          "text": "Slagon sieht auf den ersten Moment recht"
+        }
+      ]
+    },
+    {
+      "title": "Mandroid",
+      "gameId": null,
+      "startMs": 6532840,
+      "endMs": 6670880,
+      "firstSegmentId": 2639,
+      "lastSegmentId": 2689,
+      "confidence": "high",
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 2645,
+          "startMs": 6558560,
+          "text": "Mandroid die Stadt. Ja, okay."
+        }
+      ],
+      "titleIndexId": 35876,
+      "firstYear": 1987,
+      "developers": [],
+      "publishers": [
+        "CRL Group PLC"
+      ]
+    },
+    {
+      "title": "Return to Atlantis",
+      "gameId": null,
+      "startMs": 6715199,
+      "endMs": 6804119,
+      "firstSegmentId": 2713,
+      "lastSegmentId": 2749,
+      "confidence": "high",
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 2731,
+          "startMs": 6757599,
+          "text": "ausnutzt und dann so etwas. Return to"
+        }
+      ],
+      "titleIndexId": 26126,
+      "firstYear": 1988,
+      "developers": [
+        "ISD"
+      ],
+      "publishers": [
+        "Electronic Arts, Inc."
+      ]
+    },
+    {
+      "title": "Ports of Call",
+      "gameId": "ports-of-call",
+      "startMs": 6913480,
+      "endMs": 6968520,
+      "firstSegmentId": 2799,
+      "lastSegmentId": 2823,
+      "confidence": "high",
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 2799,
+          "startMs": 6913480,
+          "text": "Hanse mochte, wird Ports of Call"
+        }
+      ],
+      "titleIndexId": 7390,
+      "firstYear": 1987,
+      "developers": [],
+      "publishers": [
+        "Aegis Development, Inc.",
+        "Aegis Interactive Entertainment"
+      ]
+    },
+    {
+      "title": "Police Quest",
+      "gameId": null,
+      "startMs": 7071280,
+      "endMs": 7109639,
+      "firstSegmentId": 2873,
+      "lastSegmentId": 2891,
+      "confidence": "high",
+      "endReason": "topic-change",
+      "issues": [
+        "not-in-title-index"
+      ],
+      "evidence": [
+        {
+          "segmentId": 2873,
+          "startMs": 7071280,
+          "text": "Police Quest."
+        }
+      ]
+    },
+    {
+      "title": "Shadowgate",
+      "gameId": null,
+      "startMs": 7386800,
+      "endMs": 7459719,
+      "firstSegmentId": 3020,
+      "lastSegmentId": 3058,
+      "confidence": "high",
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 3023,
+          "startMs": 7392239,
+          "text": "wirklich Death Gate."
+        }
+      ],
+      "titleIndexId": 1070,
+      "firstYear": 1987,
+      "developers": [
+        "ICOM Simulations, Inc."
+      ],
+      "publishers": [
+        "Mindscape, Inc."
+      ]
+    },
+    {
+      "title": "Strike Fleet",
+      "gameId": null,
+      "startMs": 7482159,
+      "endMs": null,
+      "firstSegmentId": 3074,
+      "lastSegmentId": 3102,
+      "confidence": "high",
+      "endReason": "uncertain",
+      "issues": [
+        "conflicting-window-boundaries",
+        "end-outside-window"
+      ],
+      "evidence": [
+        {
+          "segmentId": 3074,
+          "startMs": 7482159,
+          "text": "Strike Fleet, da ist es doch."
+        }
+      ],
+      "titleIndexId": 6859,
+      "firstYear": 1988,
+      "developers": [
+        "Lucasfilm Games LLC"
+      ],
+      "publishers": [
+        "Electronic Arts, Inc."
+      ]
+    },
+    {
+      "title": "PHM Pegasus",
+      "gameId": null,
+      "startMs": 7488119,
+      "endMs": null,
+      "firstSegmentId": 3076,
+      "lastSegmentId": 3105,
+      "confidence": "high",
+      "endReason": "uncertain",
+      "issues": [
+        "conflicting-window-boundaries"
+      ],
+      "evidence": [
+        {
+          "segmentId": 3076,
+          "startMs": 7488119,
+          "text": "PHM Pegasus. Das war das eine. Das habe"
+        }
+      ],
+      "titleIndexId": 6847,
+      "firstYear": 1987,
+      "developers": [
+        "Lucasfilm Games LLC"
+      ],
+      "publishers": [
+        "Electronic Arts, Inc."
+      ]
+    },
+    {
+      "title": "Falcon",
+      "gameId": null,
+      "startMs": 8104480,
+      "endMs": 8393240,
+      "firstSegmentId": 3327,
+      "lastSegmentId": 3447,
+      "confidence": "medium",
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 3327,
+          "startMs": 8104480,
+          "text": "Felken für MS 1988. Langeweile am"
+        }
+      ],
+      "titleIndexId": 1627,
+      "firstYear": 1987,
+      "developers": [
+        "Sphere, Inc."
+      ],
+      "publishers": [
+        "Spectrum Holobyte, Inc."
+      ]
+    },
+    {
+      "title": "Stealth Mission",
+      "gameId": null,
+      "startMs": 8508960,
+      "endMs": 8642200,
+      "firstSegmentId": 3502,
+      "lastSegmentId": 3555,
+      "confidence": "high",
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 3502,
+          "startMs": 8508960,
+          "text": "Stells Mission. Ist das so die"
+        }
+      ],
+      "titleIndexId": 56566,
+      "firstYear": 1988,
+      "developers": [
+        "subLOGIC"
+      ],
+      "publishers": [
+        "subLOGIC"
+      ]
+    },
+    {
+      "title": "Gunship",
+      "gameId": null,
+      "startMs": 8861520,
+      "endMs": 8915479,
+      "firstSegmentId": 3641,
+      "lastSegmentId": 3663,
+      "confidence": "high",
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 3641,
+          "startMs": 8861520,
+          "text": "für Anfänger. Gunchip wohl er nicht."
+        }
+      ],
+      "titleIndexId": 335,
+      "firstYear": 1986,
+      "developers": [
+        "MicroProse Software, Inc."
+      ],
+      "publishers": [
+        "MicroProse Software, Inc."
+      ]
+    }
+  ],
+  "discarded": [
+    {
+      "title": "Doors Paradox",
+      "startMs": 9090800,
+      "reason": "released-after-issue",
+      "firstYear": 2021
+    }
+  ]
+}

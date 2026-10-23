@@ -37,7 +37,7 @@ src/
 │   ├── site.css
 │   ├── theme.js
 │   ├── video-series.js
-│   └── Bilddateien
+│   └── assets/          # Favicon, Apple-Touch-Icon, Logovorlage
 ├── fetch-channel/
 ├── fetch-magazine/
 ├── fetch-game/
@@ -48,10 +48,10 @@ src/
 
 | Verzeichnis | Zuständigkeit und wichtige Dateien |
 |---|---|
-| [`site-generation/`](../src/site-generation/) | Offline-Build, Datenmodell, Konfiguration, Rendering und Formatierung. `widget/` enthält die gemeinsamen HTML-Komponenten; Styles, Browser-Skripte, Bilder und vendiertes Pico CSS einschließlich Lizenz liegen beim Generator. |
+| [`site-generation/`](../src/site-generation/) | Offline-Build, Datenmodell, Konfiguration, Rendering und Formatierung. `widget/` enthält die gemeinsamen HTML-Komponenten; Styles, Browser-Skripte und vendiertes Pico CSS einschließlich Lizenz liegen beim Generator, Bilder in `assets/`. |
 | [`fetch-channel/`](../src/fetch-channel/) | YouTube-Videos und Playlists sowie deren gemeinsamer Abruf. Die Implementierungen heißen weiterhin `fetch-youtube-videos.mjs`, `fetch-youtube-playlists.mjs` und `fetch-youtube.mjs`; `youtube-data-api.mjs` kapselt die YouTube Data API v3, die bei gesetztem `GOOGLE_YT_DATA_API_KEY` statt des anonymen Abrufs verwendet wird. |
 | [`fetch-magazine/`](../src/fetch-magazine/) | Zeitschriftenarchive von Kultmags, Reetroz, PC Games Database und AMR, gemeinsamer Archivabruf und Logoverarbeitung. PC Games Database gehört hierher, weil das Modul den GameStar-Heftkatalog verarbeitet. |
-| [`fetch-game/`](../src/fetch-game/) | Lokale Spielemetadaten-Pipeline: SQL-Dump importieren, Titel und Plattformen abgleichen, Firmennamen vereinheitlichen, Ergebnisse verifizieren, nutzbare Metadaten und Prüfberichte erzeugen. Der Ordnername bedeutet keinen automatischen Internetabruf. |
+| [`fetch-game/`](../src/fetch-game/) | Lokale Spielemetadaten-Pipeline: SQL-Dump einmal in den Titelindex lesen, Katalog daraus importieren, Titel und Plattformen abgleichen, Firmennamen vereinheitlichen, Ergebnisse verifizieren, nutzbare Metadaten und Prüfberichte erzeugen. Der Ordnername bedeutet keinen automatischen Internetabruf. |
 | [`extra-data/`](../src/extra-data/) | Transkripte abrufen, Spielebesprechungen daraus analysieren und Blätterabend-Zuordnungen aus lokalen Caches erzeugen. |
 | [`data/`](../src/data/) | Dauerhaft gepflegte Spiel- und Themenkataloge, Gastkanäle sowie JSON-Entscheidungen und Auswahlregeln für den Spiele-Dump. Keine generierten Caches. |
 | [`shared/`](../src/shared/) | `archive-cache.mjs` mit gemeinsam genutzten Cache-, JSON-, HTTP- und Wiederholungshilfen. |
@@ -77,6 +77,7 @@ Scriptpfade haben sich geändert.
 | `dev:fetch:transcripts` | `src/extra-data/fetch-youtube-transcripts.mjs` |
 | `dev:generate:blaetterabend` | `src/extra-data/generate-blaetterabend.mjs` |
 | `dev:generate:games-from-transcript` | `src/extra-data/generate-games-from-transcript.mjs` |
+| `dev:build:game-title-index` | `src/fetch-game/build-game-title-index.mjs` |
 | `dev:import:game-dump` | `src/fetch-game/import-game-dump.mjs` |
 | `dev:verify:game-dump` | `src/fetch-game/verify-game-dump.mjs` |
 | `dev:prepare:game-metadata` | `src/fetch-game/game-metadata-ready.mjs` |

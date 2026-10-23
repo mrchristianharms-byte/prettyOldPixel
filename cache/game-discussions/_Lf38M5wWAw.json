@@ -1,101 +1,23 @@
 {
   "version": 1,
-  "analysisVersion": "3",
+  "analysisVersion": "4",
   "videoId": "_Lf38M5wWAw",
   "transcriptHash": "f51a961de24922aace942304db9d641625d9fcae4c528d1be5b63d58886a6731",
-  "catalogHash": "729b640bf67ad5dcd9b0cc8379f84868798998fe09a55ae80ae228a219f9006c",
+  "catalogHash": "31cec4c1e968f78b9692d3b23d44518502cb2d31e67c183273f8ab6e85aa0caa",
   "model": "qwen3:14b",
   "endpoint": "http://127.0.0.1:11434/v1/chat/completions",
-  "generatedAt": "2026-10-18T11:06:08.340Z",
-  "status": "needs-review",
+  "candidateSource": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62:1991-1995",
+  "generatedAt": "2026-10-23T09:21:31.520Z",
+  "status": "reviewed",
   "discussions": [
-    {
-      "title": "Selma",
-      "gameId": null,
-      "startMs": 498479,
-      "endMs": 605279,
-      "firstSegmentId": 103,
-      "lastSegmentId": 155,
-      "confidence": "medium",
-      "reviewed": false,
-      "endReason": "next-game",
-      "issues": [],
-      "evidence": [
-        {
-          "segmentId": 103,
-          "startMs": 498479,
-          "text": "NES Version und Selma"
-        }
-      ]
-    },
-    {
-      "title": "Schneider CPC Version",
-      "gameId": null,
-      "startMs": 689120,
-      "endMs": 745279,
-      "firstSegmentId": 198,
-      "lastSegmentId": 226,
-      "confidence": "medium",
-      "reviewed": false,
-      "endReason": "next-game",
-      "issues": [],
-      "evidence": [
-        {
-          "segmentId": 213,
-          "startMs": 716040,
-          "text": "Die Schneider CPC Version."
-        }
-      ]
-    },
-    {
-      "title": "Wintergames",
-      "gameId": "winter-games",
-      "startMs": 819040,
-      "endMs": 862639,
-      "firstSegmentId": 265,
-      "lastSegmentId": 280,
-      "confidence": "high",
-      "reviewed": false,
-      "endReason": "topic-change",
-      "issues": [],
-      "evidence": [
-        {
-          "segmentId": 265,
-          "startMs": 819040,
-          "text": "So. Und zwar ist hier die Besonderheit,"
-        }
-      ]
-    },
-    {
-      "title": "Outer Worlds",
-      "gameId": null,
-      "startMs": 1243960,
-      "endMs": null,
-      "firstSegmentId": 463,
-      "lastSegmentId": 494,
-      "confidence": "high",
-      "reviewed": false,
-      "endReason": "window-end",
-      "issues": [
-        "end-outside-window"
-      ],
-      "evidence": [
-        {
-          "segmentId": 463,
-          "startMs": 1243960,
-          "text": "Ja, bitte. Und zwar spiele ich ja Outer"
-        }
-      ]
-    },
     {
       "title": "Reunion",
       "gameId": null,
       "startMs": 1547679,
-      "endMs": 1596600,
+      "endMs": 1588240,
       "firstSegmentId": 602,
-      "lastSegmentId": 625,
+      "lastSegmentId": 621,
       "confidence": "high",
-      "reviewed": false,
       "endReason": "topic-change",
       "issues": [],
       "evidence": [
@@ -104,6 +26,43 @@
           "startMs": 1547679,
           "text": "Was war Reunion? Reunion war so eine Art"
         }
+      ],
+      "titleIndexId": 597,
+      "firstYear": 1994,
+      "developers": [
+        "Amnesty Design"
+      ],
+      "publishers": [
+        "Grandslam Video Ltd.",
+        "Merit Studios, Inc."
+      ]
+    },
+    {
+      "title": "Jack Nicklaus Golf",
+      "gameId": null,
+      "startMs": 1691039,
+      "endMs": null,
+      "firstSegmentId": 675,
+      "lastSegmentId": 699,
+      "confidence": "high",
+      "endReason": "window-end",
+      "issues": [
+        "end-outside-window"
+      ],
+      "evidence": [
+        {
+          "segmentId": 675,
+          "startMs": 1691039,
+          "text": "Ähm, Jack Nicholas Golf"
+        }
+      ],
+      "titleIndexId": 74673,
+      "firstYear": 1992,
+      "developers": [
+        "Sculptured Software, Inc."
+      ],
+      "publishers": [
+        "Tradewest, Inc."
       ]
     },
     {
@@ -114,7 +73,6 @@
       "firstSegmentId": 780,
       "lastSegmentId": 803,
       "confidence": "high",
-      "reviewed": false,
       "endReason": "topic-change",
       "issues": [],
       "evidence": [
@@ -123,76 +81,52 @@
           "startMs": 1957440,
           "text": "System Shock"
         }
-      ]
-    },
-    {
-      "title": "Elite 3",
-      "gameId": null,
-      "startMs": 3415200,
-      "endMs": 3507880,
-      "firstSegmentId": 1403,
-      "lastSegmentId": 1443,
-      "confidence": "high",
-      "reviewed": false,
-      "endReason": "topic-change",
-      "issues": [],
-      "evidence": [
-        {
-          "segmentId": 1403,
-          "startMs": 3415200,
-          "text": "3 Gametech hat angekündigt, dass"
-        }
-      ]
-    },
-    {
-      "title": "Siedler",
-      "gameId": null,
-      "startMs": 3989200,
-      "endMs": null,
-      "firstSegmentId": 1655,
-      "lastSegmentId": 1698,
-      "confidence": "high",
-      "reviewed": false,
-      "endReason": "window-end",
-      "issues": [
-        "end-outside-window"
       ],
-      "evidence": [
-        {
-          "segmentId": 1661,
-          "startMs": 4002839,
-          "text": "Also, ich freue mich auf alle drei"
-        }
+      "titleIndexId": 681,
+      "firstYear": 1994,
+      "developers": [
+        "Looking Glass Technologies, Inc."
+      ],
+      "publishers": [
+        "Electronic Arts, Inc.",
+        "Dong Seo Interactive"
       ]
     },
     {
-      "title": "Hell",
+      "title": "Frontier: First Encounters",
       "gameId": null,
-      "startMs": 4397920,
-      "endMs": 4468840,
-      "firstSegmentId": 1828,
-      "lastSegmentId": 1854,
-      "confidence": "medium",
-      "reviewed": false,
+      "startMs": 3416880,
+      "endMs": 3463839,
+      "firstSegmentId": 1404,
+      "lastSegmentId": 1423,
+      "confidence": "high",
       "endReason": "topic-change",
       "issues": [],
       "evidence": [
         {
-          "segmentId": 1828,
-          "startMs": 4397920,
-          "text": "Die Moral dieser Geschichte könnte sein,"
+          "segmentId": 1404,
+          "startMs": 3416880,
+          "text": "Frontier Nachfolger Frontier First"
         }
+      ],
+      "titleIndexId": 351,
+      "firstYear": 1995,
+      "developers": [
+        "Frontier Developments Ltd."
+      ],
+      "publishers": [
+        "GameTek, Inc.",
+        "GameTek (FL), Inc."
       ]
     },
     {
       "title": "Rise of the Robots",
       "gameId": null,
       "startMs": 4583280,
-      "endMs": 4674400,
+      "endMs": 4695560,
       "firstSegmentId": 1898,
-      "lastSegmentId": 1935,
-      "confidence": "medium",
-      "reviewed": false,
+      "lastSegmentId": 1943,
+      "confidence": "high",
       "endReason": "topic-change",
       "issues": [],
       "evidence": [
@@ -201,57 +135,55 @@
           "startMs": 4660639,
           "text": "hiermit widersprochen. Rise of the"
         }
-      ]
-    },
-    {
-      "title": "Magic Carpet",
-      "gameId": "magic-carpet-ms-dos",
-      "startMs": 4801679,
-      "endMs": null,
-      "firstSegmentId": 1997,
-      "lastSegmentId": 2018,
-      "confidence": "high",
-      "reviewed": false,
-      "endReason": "window-end",
-      "issues": [
-        "end-outside-window"
       ],
-      "evidence": [
-        {
-          "segmentId": 1997,
-          "startMs": 4801679,
-          "text": "Immer noch toll Spiel. Ich habe, ich"
-        }
+      "titleIndexId": 1533,
+      "firstYear": 1994,
+      "developers": [
+        "Instinct Design",
+        "Mirage Technologies (Multimedia) Ltd."
+      ],
+      "publishers": [
+        "Absolute Entertainment, Inc.",
+        "Time Warner Interactive Inc.",
+        "Philips Interactive Media, Inc.",
+        "Time Warner Interactive Ltd.",
+        "Acclaim Entertainment, Inc.",
+        "Acclaim Entertainment Ltd.",
+        "T&E Soft, Inc."
       ]
     },
     {
       "title": "Magic Carpet",
       "gameId": "magic-carpet-ms-dos",
-      "startMs": 4853639,
+      "startMs": 4803880,
       "endMs": 4912080,
-      "firstSegmentId": 2019,
+      "firstSegmentId": 1998,
       "lastSegmentId": 2044,
       "confidence": "high",
-      "reviewed": false,
       "endReason": "topic-change",
       "issues": [],
       "evidence": [
         {
-          "segmentId": 2025,
-          "startMs": 4865960,
-          "text": "Man hört diese Bienen und so. Es ist"
+          "segmentId": 1998,
+          "startMs": 4803880,
+          "text": "magic Carpet. Es ist leider, finde ich,"
         }
+      ],
+      "titleIndexId": 15665,
+      "firstYear": 1995,
+      "developers": [],
+      "publishers": [
+        "Electronic Arts, Inc."
       ]
     },
     {
       "title": "Novastorm",
       "gameId": null,
-      "startMs": 5134960,
+      "startMs": 5000520,
       "endMs": 5245400,
-      "firstSegmentId": 2138,
+      "firstSegmentId": 2083,
       "lastSegmentId": 2183,
-      "confidence": "medium",
-      "reviewed": false,
+      "confidence": "high",
       "endReason": "topic-change",
       "issues": [],
       "evidence": [
@@ -260,78 +192,103 @@
           "startMs": 5134960,
           "text": "Novastorm hat fast alles, was ein gutes"
         }
+      ],
+      "titleIndexId": 271,
+      "firstYear": 1993,
+      "developers": [
+        "Psygnosis Limited"
+      ],
+      "publishers": [
+        "Fujitsu Limited"
       ]
     },
     {
-      "title": "Colonization",
+      "title": "Soloflight",
       "gameId": null,
-      "startMs": 5610920,
-      "endMs": 5643920,
-      "firstSegmentId": 2342,
-      "lastSegmentId": 2357,
+      "startMs": 5484920,
+      "endMs": 5529000,
+      "firstSegmentId": 2286,
+      "lastSegmentId": 2303,
       "confidence": "high",
-      "reviewed": false,
       "endReason": "topic-change",
       "issues": [],
       "evidence": [
         {
-          "segmentId": 2342,
-          "startMs": 5610920,
-          "text": "Was planen Sie nach Colonization? Im"
+          "segmentId": 2286,
+          "startMs": 5484920,
+          "text": "und Soloflight war ja das erste Spiel"
         }
+      ],
+      "titleIndexId": 63874,
+      "firstYear": 1985,
+      "developers": [
+        "MicroProse Software, Inc."
+      ],
+      "publishers": [
+        "MicroProse Software, Inc.",
+        "U.S. Gold Ltd."
       ]
     },
     {
       "title": "Quarantine",
       "gameId": null,
       "startMs": 5920639,
-      "endMs": null,
+      "endMs": 6005440,
       "firstSegmentId": 2493,
-      "lastSegmentId": 2520,
+      "lastSegmentId": 2526,
       "confidence": "high",
-      "reviewed": false,
-      "endReason": "window-end",
-      "issues": [
-        "end-outside-window"
-      ],
+      "endReason": "topic-change",
+      "issues": [],
       "evidence": [
         {
           "segmentId": 2493,
           "startMs": 5920639,
           "text": "Kennst du Quarantine?"
         }
+      ],
+      "titleIndexId": 96,
+      "firstYear": 1994,
+      "developers": [
+        "Imagexcel"
+      ],
+      "publishers": [
+        "GameTek, Inc."
       ]
     },
     {
-      "title": "US Navy Fighters",
+      "title": "U.S. Navy Fighters",
       "gameId": null,
       "startMs": 6331159,
-      "endMs": null,
+      "endMs": 6414960,
       "firstSegmentId": 2663,
-      "lastSegmentId": 2712,
+      "lastSegmentId": 2706,
       "confidence": "high",
-      "reviewed": false,
-      "endReason": "uncertain",
-      "issues": [
-        "conflicting-window-boundaries"
-      ],
+      "endReason": "topic-change",
+      "issues": [],
       "evidence": [
         {
           "segmentId": 2663,
           "startMs": 6331159,
           "text": "ist es ja noch Electronic Arts US Navy"
         }
+      ],
+      "titleIndexId": 1562,
+      "firstYear": 1994,
+      "developers": [
+        "Electronic Arts, Inc."
+      ],
+      "publishers": [
+        "Electronic Arts, Inc."
       ]
     },
     {
-      "title": "Little Big Adventure",
+      "title": "Relentless: Twinsen's Adventure",
       "gameId": null,
       "startMs": 6472840,
-      "endMs": 6562320,
+      "endMs": 6568760,
       "firstSegmentId": 2734,
-      "lastSegmentId": 2769,
-      "confidence": "medium",
-      "reviewed": false,
+      "lastSegmentId": 2773,
+      "confidence": "high",
       "endReason": "topic-change",
       "issues": [],
       "evidence": [
@@ -340,38 +297,28 @@
           "startMs": 6472840,
           "text": "Erinnerungen zusammenzusammeln an Little"
         }
+      ],
+      "titleIndexId": 748,
+      "firstYear": 1994,
+      "developers": [
+        "Adeline Software International"
+      ],
+      "publishers": [
+        "Electronic Arts, Inc."
       ]
     },
     {
-      "title": "Syndicate",
-      "gameId": null,
-      "startMs": 6562320,
-      "endMs": 6698800,
-      "firstSegmentId": 2770,
-      "lastSegmentId": 2831,
-      "confidence": "high",
-      "reviewed": false,
-      "endReason": "topic-change",
-      "issues": [],
-      "evidence": [
-        {
-          "segmentId": 2812,
-          "startMs": 6643159,
-          "text": "Da steht Kreuzung aus Syndicate und"
-        }
-      ]
-    },
-    {
-      "title": "Dragon Law",
+      "title": "Dragon Lore",
       "gameId": null,
       "startMs": 6823920,
-      "endMs": 6975840,
+      "endMs": 6964400,
       "firstSegmentId": 2891,
-      "lastSegmentId": 2958,
+      "lastSegmentId": 2955,
       "confidence": "high",
-      "reviewed": false,
       "endReason": "topic-change",
-      "issues": [],
+      "issues": [
+        "not-in-title-index"
+      ],
       "evidence": [
         {
           "segmentId": 2891,
@@ -381,60 +328,82 @@
       ]
     },
     {
-      "title": "Rone",
-      "gameId": null,
-      "startMs": 6985239,
-      "endMs": 7120440,
-      "firstSegmentId": 2964,
-      "lastSegmentId": 3019,
-      "confidence": "high",
-      "reviewed": false,
-      "endReason": "topic-change",
-      "issues": [],
-      "evidence": [
-        {
-          "segmentId": 2964,
-          "startMs": 6985239,
-          "text": "Rone ist ja mit Operation Overlord Day"
-        }
-      ]
-    },
-    {
       "title": "Dawn Patrol",
       "gameId": null,
-      "startMs": 7251800,
-      "endMs": 7289639,
-      "firstSegmentId": 3082,
-      "lastSegmentId": 3094,
+      "startMs": 7022280,
+      "endMs": 7284599,
+      "firstSegmentId": 2978,
+      "lastSegmentId": 3093,
       "confidence": "high",
-      "reviewed": false,
       "endReason": "topic-change",
       "issues": [],
       "evidence": [
         {
-          "segmentId": 3082,
-          "startMs": 7251800,
-          "text": "unterschiedliche Einsätze. Das stimmt"
+          "segmentId": 2978,
+          "startMs": 7022280,
+          "text": "und das war bei Dawn Patrol nicht"
         }
+      ],
+      "titleIndexId": 1935,
+      "firstYear": 1994,
+      "developers": [
+        "Rowan Software Ltd."
+      ],
+      "publishers": [
+        "Empire Interactive Entertainment"
       ]
     },
     {
-      "title": "Captain Blatt",
+      "title": "Ecstatica",
       "gameId": null,
-      "startMs": 7990280,
-      "endMs": 8121079,
-      "firstSegmentId": 3399,
-      "lastSegmentId": 3463,
-      "confidence": "low",
-      "reviewed": false,
+      "startMs": 7306679,
+      "endMs": 7429000,
+      "firstSegmentId": 3105,
+      "lastSegmentId": 3161,
+      "confidence": "high",
       "endReason": "topic-change",
       "issues": [],
       "evidence": [
         {
-          "segmentId": 3403,
-          "startMs": 7997599,
-          "text": "SuperG sagt Super Grau sagt Captain"
+          "segmentId": 3105,
+          "startMs": 7306679,
+          "text": "Ecstatica."
         }
+      ],
+      "titleIndexId": 325,
+      "firstYear": 1992,
+      "developers": [
+        "Infogrames Europe SA"
+      ],
+      "publishers": [
+        "Infogrames Europe SA"
+      ]
+    },
+    {
+      "title": "Commander Blood",
+      "gameId": null,
+      "startMs": 7687559,
+      "endMs": 7991480,
+      "firstSegmentId": 3277,
+      "lastSegmentId": 3398,
+      "confidence": "medium",
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 3277,
+          "startMs": 7687559,
+          "text": "Commander Blood. Ich kenne noch nicht"
+        }
+      ],
+      "titleIndexId": 1046,
+      "firstYear": 1994,
+      "developers": [
+        "Cryo Interactive Entertainment"
+      ],
+      "publishers": [
+        "Mindscape, Inc.",
+        "Microfolie's Editions"
       ]
     }
   ]

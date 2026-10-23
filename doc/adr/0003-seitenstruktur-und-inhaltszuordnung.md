@@ -18,7 +18,7 @@ Nach Prüfung der vorhandenen Videodaten wurden zusätzlich Retrospektiven sowie
 Interviews und Gespräche als eigene Bereiche ausgewählt.
 
 Diese ADR konkretisiert die Seitenstruktur aus ADR 0002. Insbesondere ergänzt
-sie Jahrgangsseiten und Regeln für Spielereihen. Die Anforderungen an statisches
+sie die Jahrgangsgliederung und Regeln für Spielereihen. Die Anforderungen an statisches
 HTML, SEO, echte Links, lokale Assets und die Ausnahme für YouTube-Medien
 gelten unverändert.
 
@@ -141,8 +141,8 @@ Ohne sichere vorhandene Detailseite führen Videolinks direkt zu YouTube.
 | `/` | Einstieg mit News-Verweis und den fünf Inhaltsbereichen |
 | `/news/` | Die 20 neuesten veröffentlichten Videos mit Links zu ihren Inhaltsbereichen |
 | `/zeitschriften/` | Blätterabend-Übersicht nach Zeitschrift |
-| `/zeitschriften/<slug>/` | Zeitschrift mit Jahrgängen und zugehörigen Videos |
-| `/zeitschriften/<slug>/<jahr>/` | Blätterabend-Videos eines Jahrgangs, nach Ausgabe |
+| `/zeitschriften/<slug>/` | Zeitschrift mit allen Ausgaben und Videos, nach Jahrgang gruppiert (`#jahr-<jahr>`) |
+| `/zeitschriften/<slug>/<hefttitel-slug>/` | Eindeutig identifizierte Ausgabe mit allen Videoteilen |
 | `/spiele/` | Alphabetischer Index qualifizierter Spieletitel |
 | `/spiele/<slug>/` | Zusammengehörige Videoreihe zu einem konkreten Spiel |
 | `/hardware/` | Flache, bei Bedarf paginierte Videoliste |
@@ -152,8 +152,8 @@ Ohne sichere vorhandene Detailseite führen Videolinks direkt zu YouTube.
 
 [ADR 0004](0004-detailseiten-und-videonavigation.md) konkretisiert die
 Detailansichten: Eindeutig identifizierte Ausgaben mit zugehörigen Videos erhalten
-eine eigene Informations- und Einstiegsseite. Jahrgangsseiten bleiben der
-übergeordnete Zugang. Unklare Ausgaben erzeugen keine spekulative Detailseite.
+eine eigene Informations- und Einstiegsseite. Die Zeitschriftenseite mit ihren
+Jahrgangsabschnitten bleibt der übergeordnete Zugang. Unklare Ausgaben erzeugen keine spekulative Detailseite.
 Spiel-/Heftinformationen, Player und sämtliche Videobeschreibungen stehen auf
 derselben Detailseite; es gibt keine separate Videoseite.
 Kapitelsteuerung und fortlaufende Wiedergabe sind ebenfalls dort beschrieben.
@@ -161,9 +161,9 @@ Kapitelsteuerung und fortlaufende Wiedergabe sind ebenfalls dort beschrieben.
 Paginierung ist keine zusätzliche thematische Unterstruktur. Allgemeine Listen
 mit mehr als 60 Einträgen werden entsprechend ADR 0002 über echte Links aufgeteilt.
 Spieleseiten und einzelne Ausgabenseiten zeigen dagegen die vollständige Folgenliste,
-auch bei mehr als 60 Videos. Blätterabend wird nach Zeitschrift und Jahrgang
-aufgeteilt; nur bei weiterhin zu großen Teilübersichten ist zusätzliche
-Paginierung nötig.
+auch bei mehr als 60 Videos. Das gilt ebenso für Zeitschriftenseiten: Sie
+listen alle Ausgaben auf einer Seite, damit Jahrgangslinks reine Sprungmarken
+auf derselben Seite bleiben.
 Ein Video ist ein Abschnitt auf einer vorhandenen Entitätsseite und darf in
 mehreren passenden Bereichen verlinkt werden. Canonical und Sitemap gehören
 zur Seite, nicht zu einzelnen Video-Fragmenten.
@@ -175,9 +175,12 @@ Zeitschriften, Ausgaben, Teilen und Archivlinks.
 
 - Der Zeitschriftenindex ist alphabetisch nach kanonischem Zeitschriftennamen
   sortiert. Abweichende Schreibweisen werden zusammengeführt.
-- Jede Zeitschriftenseite zeigt die vorhandenen Jahrgänge mit Links und die
-  zugehörigen Videos. Umfangreiche Listen werden paginiert.
-- Jahrgangsseiten zeigen die Ausgaben in aufsteigender Monats- bzw.
+- Jede Zeitschriftenseite zeigt alle Ausgaben und zugehörigen Videos auf einer
+  einzigen, nicht paginierten Seite. Die Jahrgangsliste bzw. der Kalender
+  verlinkt per Sprungmarke `#jahr-<jahr>` auf den jeweiligen Abschnitt;
+  eigene Jahrgangsseiten gibt es nicht (geändert am 2026-10-23, vorher
+  `/zeitschriften/<slug>/<jahr>/` und `/zeitschriften/<slug>/ausgaben/<heft>/`).
+- Jahrgangsabschnitte zeigen die Ausgaben in aufsteigender Monats- bzw.
   Ausgabenreihenfolge. Sonderhefte werden deutlich als solche gekennzeichnet
   und erhalten eine eigene Gruppe innerhalb des Jahrgangs.
 - Mehrere Videos derselben Ausgabe stehen zusammen, zuerst nach bekanntem
@@ -194,7 +197,7 @@ Zeitschriften, Ausgaben, Teilen und Archivlinks.
 
 **Jahrgang bedeutet das Erscheinungsjahr der Zeitschrift**, nicht das
 Veröffentlichungsjahr des YouTube-Videos. Ein 2026 veröffentlichtes Video zu
-PC Games 12/1992 gehört nach `/zeitschriften/pc-games/1992/`.
+PC Games 12/1992 gehört nach `/zeitschriften/pc-games/#jahr-1992`.
 
 Ein Jahr darf nur aus einer erkannten Ausgabe oder einer eindeutig
 abgeglichenen Archiv-Ausgabe stammen. Ist kein Jahr bekannt, bleibt das Video
@@ -203,9 +206,9 @@ Es wird nicht dem Aufnahmejahr zugeordnet. Videos ohne erkannte Zeitschrift
 stehen in einer Gruppe „Zeitschrift ungeklärt“ in der Blätterabend-Übersicht.
 Unbekannte Angaben bleiben auch in den Metadaten unbekannt.
 
-**Umgesetzt:** Zeitschriftenindex, Zeitschriften- und Jahrgangsübersichten mit
-bis zu 60 Einträgen pro Seite sowie eindeutig belegte Ausgabenseiten mit
-vollständigen Folgenlisten. News und
+**Umgesetzt:** Zeitschriftenindex (bis zu 60 Einträge pro Seite),
+Zeitschriftenseiten mit allen Ausgaben und Jahrgangsankern sowie eindeutig
+belegte Ausgabenseiten mit vollständigen Folgenlisten. News und
 Themenlinks führen zu den vorhandenen Zielen. Reguläre Hefte werden über Jahr
 und Monate bzw. Heftnummer identifiziert; Sonderhefte über einen eindeutigen
 Archivtreffer bzw. Jahr und Sonderheftnummer. Ein Jahr allein oder eine
@@ -217,7 +220,7 @@ die Ausgaben-ID nicht.
 
 Öffentliche Ausgabepfade werden davon getrennt aus Zeitschriftenname und
 finaler Heftbezeichnung gebildet, zum Beispiel
-`/zeitschriften/amiga-joker/ausgaben/amiga-joker-1-1990/`.
+`/zeitschriften/amiga-joker/amiga-joker-1-1990/`.
 Erst nach der Zusammenführung aller Heftdaten wird der lesbare Slug festgelegt.
 Unterschiedliche Hefte mit demselben Slug erhalten deterministische
 `-variante-N`-Zusätze; Quellreihenfolge und Abrufzeit spielen keine Rolle.
@@ -481,8 +484,8 @@ Entitätsname gespeichert.
 
 JSON-LD verwendet die in ADR 0002 festgelegten Entitäten: `Periodical`,
 `PublicationIssue`, `VideoGame`, `VideoObject`, `ItemList` und `BreadcrumbList`.
-Jahrgangsseiten sind Sammlungen von Ausgaben und Videos, keine erfundene einzelne
-`PublicationIssue`. Beschreibungen, Themen und Beziehungen entsprechen dem
+Zeitschriftenseiten mit ihren Jahrgangsabschnitten sind Sammlungen von Ausgaben
+und Videos, keine erfundene einzelne `PublicationIssue`. Beschreibungen, Themen und Beziehungen entsprechen dem
 sichtbaren Seiteninhalt. Hardware, Retrospektiven und Interviews erhalten
 ebenfalls aussagekräftige Übersichtsmetadaten.
 

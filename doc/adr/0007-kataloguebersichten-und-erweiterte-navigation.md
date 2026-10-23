@@ -68,8 +68,9 @@ bisherige Jahrgangsnavigation bestehen.
 
 Der Kalender hat folgende Struktur:
 
-- Eine Spalte pro bekanntem Heftjahr; die Jahreszahl verlinkt auf die lokale
-  Jahrgangsseite, nicht auf ein externes Archiv.
+- Eine Spalte pro bekanntem Heftjahr; die Jahreszahl ist eine Sprungmarke
+  `#jahr-<jahr>` zum Jahrgangsabschnitt auf derselben Zeitschriftenseite,
+  nicht auf ein externes Archiv.
 - Zwölf Zeilen für die Ausgaben 1 bis 12.
 - In belegten Zellen steht die Ausgabennummer als Link auf die Ausgabenseite
   mit dem Fragment des ersten zugehörigen Videos.

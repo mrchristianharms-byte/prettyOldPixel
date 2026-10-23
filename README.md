@@ -111,16 +111,10 @@ Externe Programme, Modellserver und deren Modelle werden nicht von npm verwaltet
 | npm-Target | Programme / Dienste zusätzlich zu Node.js und npm | Netzwerk und lokale Daten |
 |---|---|---|
 | `dev:review:games` | Keine | Offline-Prüfübersicht aus dem fertigen Dump-Cache: nutzbare/gesperrte Spiele, Plattformumfang und Kandidaten. |
-| `dev:import:game-dump -- --input gdb.sql` | Node mit eingebautem `node:sqlite` (ab 22.13 ohne Startflag) | Exportiert Katalogkandidaten aus dem lokalen SQL-Dump; keine SQL-Ausführung. |
+| `dev:build:game-title-index -- --input gdb.sql` | Keine | Liest den lokalen MobyGames-SQL-Dump als Daten (keine SQL-Ausführung) und schreibt `cache/game-title-index.json` mit Titeln, Alternativtiteln, Genres, Releases, Publishern, Developern und Plattformnummern sowie `cache/game-platform-index.json` (beide Git-ignoriert). Einzige Stelle, die `gdb.sql` liest; `--delete-input` löscht den Dump nach geprüftem Indexbau. |
+| `dev:import:game-dump` | Keine | Exportiert Katalogkandidaten ausschließlich aus dem Titelindex (optional `--index datei.json`); bricht bei veraltetem Index oder unpassendem Plattformindex ab. |
 | `dev:verify:game-dump` | Keine | Validiert offline Katalogabdeckung, Titel/Aliasse, IDs und Veröffentlichungen des lokalen Dump-Reports. Schreibt `local-dump/verification.json`; keine anderen Referenzquellen. |
 | `dev:prepare:game-metadata` | Keine | Erzeugt `cache/game-metadata/ready.json` aus Report, Katalog und gespeicherten Freigaben. Alle 147 Spiele zugeordnet. |
-
-### Lokal: Transkripte und Spielebesprechungen verarbeiten
-
-| npm-Target | Programme / Dienste zusätzlich zu Node.js und npm | Netzwerk und lokale Daten |
-|---|---|---|
-| `dev:fetch:transcripts` | Aktuelles `yt-dlp` als ausführbares Programm im `PATH` | Lokale Katalogdaten zur Videoauswahl; YouTube-Metadaten über `yt-dlp`, Untertitel anschließend per Node-HTTP-Abruf. Kein Audio-/Videodownload. |
-| `dev:generate:games-from-transcript` | Laufender lokaler OpenAI-kompatibler Modellserver, derzeit Ollama mit `qwen3:14b` | Bereits gecachtes Transkript und lokale Modellgewichte; Analyse ausschließlich über einen Loopback-Endpunkt. Internet nur für die vorherige Installation bzw. den Modelldownload nötig. |
 
 ### Lokal: Vorschau und vollständige Tests
 
@@ -142,7 +136,8 @@ ist ein lokaler Datenpflegeschritt; der Seitenbuild verwendet ihren fertigen Cac
 ### Spielemetadaten aus dem lokalen Dump
 
 ```sh
-npm run dev:import:game-dump -- --input gdb.sql
+npm run dev:build:game-title-index -- --input gdb.sql
+npm run dev:import:game-dump
 npm run dev:verify:game-dump
 npm run dev:prepare:game-metadata
 npm run dev:review:games
@@ -157,47 +152,12 @@ brechen die Aufbereitung ab.
 
 Der Build liest nur `cache/game-metadata/ready.json`: plattformbezogene Genres,
 Firmen und Jahre aus dem Dump, keine Designer-Credits. Die erzeugten Caches
-werden neu geschrieben und versioniert. Der ignorierte SQL-Dump bleibt lokal;
-nur `--delete-input` löscht ihn nach geprüftem Export.
+werden neu geschrieben und versioniert. Nur der Titelindex liest den
+ignorierten SQL-Dump; der Import arbeitet danach allein mit
+`cache/game-title-index.json` und `cache/game-platform-index.json`. Der Dump
+bleibt lokal; nur `dev:build:game-title-index -- --input gdb.sql --delete-input`
+löscht ihn nach geprüftem Indexbau.
 [Umsetzungsstand und Grenzen](doc/game-metadata-implementation.md).
-
-### Transkript-Downloader installieren
-
-`yt-dlp` ist eine **System-/CLI-Abhängigkeit**, kein npm-Paket. Zum Beispiel
-unter macOS mit bereits installiertem Homebrew:
-
-```sh
-brew install yt-dlp
-yt-dlp --version
-npm run dev:fetch:transcripts
-```
-
-Andere Plattformen und die je nach Installationsart benötigte Laufzeit
-beschreibt die [yt-dlp-Installationsanleitung](https://github.com/yt-dlp/yt-dlp#installation).
-Auch zusätzliche YouTube-Anforderungen, etwa an eine unterstützte
-JavaScript-Laufzeit, richten sich nach der verwendeten yt-dlp-Version;
-das Projekt installiert oder konfiguriert diese nicht selbst.
-
-### Ollama und Modell vorbereiten
-
-[Ollama](https://ollama.com/) separat installieren, starten und das konfigurierte
-Modell einmalig herunterladen. Beispiel für die bisher verwendete Konfiguration:
-
-```sh
-ollama serve
-# In einem zweiten Terminal:
-ollama pull qwen3:14b
-```
-
-```dotenv
-OPENAI_BASE_URL=http://127.0.0.1:11434/v1
-OPENAI_MODEL=qwen3:14b
-```
-
-Optional vergrößert `OLLAMA_NUM_CTX=32768` das Ollama-Kontextfenster über
-die native lokale API; bei abgeschnittenen Antworten erhöht das Skript
-für den nächsten Versuch Kontext- und Ausgabelimit.
-[Konfiguration und Grenzen](doc/README.md#optional-größeres-ollama-kontextfenster).
 
 ## Daten aktualisieren
 
@@ -217,20 +177,12 @@ offizielle YouTube Data API v3, sonst anonym über die öffentlichen Webseiten
 ([Details](doc/README.md#abrufweg-youtube-data-api-v3-oder-anonym)).
 Zum Bauen der Website sind keine erneuten Internetabrufe nötig.
 
-Optional: `npm run dev:fetch:transcripts` speichert öffentliche Untertitel mit
-Zeitmarken ausschließlich für Blätterabend-/Zeitschriftenvideos dauerhaft
-lokal. Dafür muss `yt-dlp` installiert sein. Erfolgreich geprüfte Videos
-werden nie automatisch erneut angefragt, auch wenn keine Untertitel
-verfügbar sind. [Details und Cacheformat](doc/README.md#youtube-transkripte-einmalig-cachen).
+## Spielebesprechungen in Blätterabenden
 
-`npm run dev:generate:games-from-transcript -- <video-id>` erstellt daraus lokal
-Vorschläge für Spielebesprechungen mit Zeitbereichen. Es verwendet das in
-`.env` konfigurierte Ollama-Modell; Ergebnisse müssen geprüft werden.
-Nach erfolgreichem Speichern der Gesamtanalyse werden ihre temporären
-Fensterdateien gelöscht; bei einem Abbruch bleiben sie zur Wiederaufnahme
-erhalten. Fertige Transkripte und Gesamtanalysen werden in Git versioniert,
-Fensterzwischenstände, Sperren und temporäre Schreibdateien nicht.
-[Analyse und Grenzen](doc/README.md#spielebesprechungen-aus-transkripten).
+Transkript-Abruf, Erkennung der Spielebesprechungen mit einem lokalen Modell
+und die manuelle Freigabe der Spieltitel laufen ausschließlich lokal. Werkzeuge
+(`yt-dlp`, Ollama), Befehle und der vollständige Ablauf stehen in
+[blaetterabend_games.md](blaetterabend_games.md).
 
 ## Tests
 
@@ -304,7 +256,7 @@ ungestylter Inhalte und keine JavaScript-Abhängigkeit beim Laden der Styles.
 - `src/`: nur die dünnen Hauptstarter `fetch-youtube.mjs` (`fetch:all`) und
   `generate-site.mjs` (`generate:site`); alle weiteren npm-Aufgaben starten
   ihre Implementierung direkt aus dem passenden Fachordner.
-  - `site-generation/`: Websitegenerator, Renderer, Widgets, Browser-Skripte, Styles, Bilder und vendiertes CSS.
+  - `site-generation/`: Websitegenerator, Renderer, Widgets, Browser-Skripte, Styles, Bilder (`assets/`) und vendiertes CSS.
   - `fetch-channel/`: Abruf von YouTube-Kanalvideos und Playlists.
   - `fetch-magazine/`: Zeitschriftenarchive, Archivabrufe und lokale Zeitschriftenlogos.
   - `fetch-game/`: lokale Spielemetadaten-Pipeline einschließlich Import, Abgleich, Prüfung und Prüfbericht.
@@ -366,4 +318,5 @@ Website: https://mrchristianharms-byte.github.io/prettyOldPixel/
 [Funktionen, Datenformate und weitere Befehle](doc/README.md) ·
 [Quellstruktur und Verzeichnisumbau](doc/source-structure.md) ·
 [Neue Videos, Titel und fehlende Metadaten](doc/README.md#recherchierte-daten-pflegen) ·
+[Blätterabend: Transkripte, Spielerkennung, Freigabe](blaetterabend_games.md) ·
 [Architekturentscheidungen](doc/adr/)

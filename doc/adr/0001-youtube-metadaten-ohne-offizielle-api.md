@@ -151,6 +151,9 @@ Cache-Format:
 
 ## Folgeentscheidungen
 
+- [ADR 0008: Transkripte und Spieleabschnitte in Blätterabenden](0008-transkripte-und-spieleabschnitte-in-blaetterabenden.md)
+  erweitert die Datenerfassung um öffentliche Untertitel und bewertet die
+  getrennte Analyse und Veröffentlichung von Spiele-Sprungmarken.
 - **Speicherformat:** JSON im Verzeichnis `cache/`. SQLite erst, wenn Abfragen oder Datenmenge es erfordern.
 - **Detailtiefe:** Einzelabruf pro Video ist Pflicht, da die Beschreibung zwingend benötigt wird.
 - **Betriebsmodus:** CLI-Job (`npm run fetch:videos`) oder geplanter lokaler Task, kein dauerhaft laufender Dienst.

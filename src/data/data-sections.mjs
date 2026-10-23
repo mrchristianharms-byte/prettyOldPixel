@@ -2,7 +2,7 @@
 // Vorgehen: doc/README.md#recherchierte-daten-pflegen
 export const sectionDefinitions = [
   {
-    id: "hardware", name: "Hardware",
+    id: "hardware", name: "Hardware", navigationName: "re.ware", olderFormat: true,
     description: "Retro-Hardware, Restaurationsprojekte und Computergrundlagen von Pretty Old Pixel.",
     playlistIds: ["PLZW5k3rtbudpYvBYzcMjUkG6ekcZB5yZB", "PLZW5k3rtbudofBuRooZLI_UGpUAkdzFDm"],
     excludedVideoIds: [],
@@ -25,7 +25,7 @@ export const sectionDefinitions = [
     ],
   },
   {
-    id: "retrospektiven", name: "Retrospektiven",
+    id: "retrospektiven", name: "Retrospektiven", navigationName: "Projekte", olderFormat: true,
     description: "re.trospektive: Rückblicke auf die Geschichte der Video- und Computerspiele, nach Themen und Folgen geordnet.",
     playlistIds: ["PLZW5k3rtbudpDHb2W2T8EvJ_swSXp7At_"],
     excludedVideoIds: [],
@@ -45,7 +45,7 @@ export const sectionDefinitions = [
     ],
   },
   {
-    id: "interviews", name: "Interviews und Gespräche",
+    id: "interviews", name: "Interviews und Gespräche", navigationName: "Interviews", olderFormat: true,
     description: "Gespräche mit Entwicklern, Grafikern und Retro-Akteuren über Computerspiele, Technik und ihre Geschichte.",
     playlistIds: ["PLZW5k3rtbudo6N-5_hqEaNlkH2x2pQLrm"],
     excludedVideoIds: [],

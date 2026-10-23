@@ -34,7 +34,9 @@ Jahr unbekannt; datierte einzelne Veröffentlichungen bleiben als solche sichtba
 - Nicht eindeutig zugeordnete Spiele behalten ihre Seiten und Videos, aber
   erhalten keine spekulativen Metadaten.
 - Der Originaldump bleibt standardmäßig lokal erhalten und wird nicht
-  eingecheckt; `--delete-input` erlaubt die Löschung nach geprüftem Export.
+  eingecheckt. Seit dem gemeinsamen Titelindex (ADR 0008) liest nur
+  `dev:build:game-title-index` den Dump; der Import nutzt den Index.
+  `--delete-input` beim Indexbau erlaubt die Löschung nach geprüftem Export.
   Neue Katalogspiele können einen erneuten lokalen Import erfordern.
 - Cache-Reader prüft Schema, Integrität, Katalog und Freigaben; ein neuer Report
   muss ausdrücklich erneut zum fertigen Cache aufbereitet werden.

@@ -5,13 +5,18 @@
 Spielemetadaten einschließlich Erscheinungsjahren stammen ausschließlich aus dem
 lokal exportierten Games-Dump.
 
-1. [`import-game-dump.mjs`](../src/fetch-game/import-game-dump.mjs) liest einen lokalen
-   MariaDB-Dump als Daten, führt dessen SQL nicht aus und verwendet eine temporäre
-   SQLite-Datenbank. Nur Kandidaten für Katalogspiele werden exportiert.
-2. [`local-dump/report.json`](../cache/game-metadata/local-dump/report.json)
-   enthält die zurückbehaltenen Titel, Aliasse, Genres und Veröffentlichungen.
-   Der SQL-Dump bleibt standardmäßig lokal erhalten; die temporäre Datenbank
-   wird nach dem Import entfernt.
+1. [`build-game-title-index.mjs`](../src/fetch-game/build-game-title-index.mjs) liest
+   einen lokalen MariaDB-Dump als Daten und führt dessen SQL nicht aus. Er schreibt
+   `cache/game-title-index.json` (alle Spiele mit Titeln, Alternativtiteln, Genres
+   und Veröffentlichungen) und `cache/game-platform-index.json`. Nur dieser
+   Schritt liest `gdb.sql`.
+2. [`import-game-dump.mjs`](../src/fetch-game/import-game-dump.mjs) gleicht den
+   Katalog ausschließlich mit diesem Index ab und schreibt
+   [`local-dump/report.json`](../cache/game-metadata/local-dump/report.json) mit
+   den zurückbehaltenen Titeln, Aliassen, Genres und Veröffentlichungen. Der
+   Report nennt Dump-Hash und Titelindex als Quelle. Ein veralteter Index oder
+   ein Plattformindex aus einem anderen Dump bricht den Import ab. Die übrigen
+   Spalten des Dumps (Perspektive, Setting usw.) werden nicht übernommen.
 3. `npm run dev:verify:game-dump` prüft Katalogabdeckung, Titel/Aliasse, eindeutige
    IDs und Veröffentlichungsfelder ausschließlich innerhalb dieses Reports.
    Das ist eine Konsistenzprüfung, keine unabhängige Bestätigung durch Dritte.
@@ -105,6 +110,6 @@ umgebrochen; auf schmalen Bildschirmen ist die Tabelle horizontal scrollbar.
 Neue Spielidentitäten werden im [Katalog](../src/data/data-games.mjs) gepflegt. Fehlen
 sie im zurückbehaltenen Dump-Report, bleiben sie unverifiziert, bis ein neuer
 lokaler Import passende Titel exportiert. Fehlende Originaldumps nicht
-aus den reduzierten Exporten rekonstruieren. SQL-Dumps und temporäre
-SQLite-Dateien nicht einchecken; `--delete-input` löscht die Eingabe erst nach
-geprüftem JSON-/HTML-Export.
+aus den reduzierten Exporten rekonstruieren. SQL-Dumps und den
+Titelindex nicht einchecken; `dev:build:game-title-index -- --input gdb.sql
+--delete-input` löscht den Dump erst nach geprüftem Indexbau.

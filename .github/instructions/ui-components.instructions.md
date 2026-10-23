@@ -82,10 +82,12 @@ applyTo: "src/site-generation/**/*.mjs,src/site-generation/site.css,src/generate
   oberhalb des Werts; lange Inhalte innerhalb ihrer Spalte umbrechen lassen.
   Keine zusaetzliche Uebersicht „Abschnitte und Reihen“ anzeigen; die
   Videoliste und die Metadaten der einzelnen Folge reichen zur Orientierung.
-- Archivlinks auf Zeitschriften- und Jahrgangsseiten in Klammern neben dem
+- Archivlinks auf Zeitschriftenseiten (in den Jahrgangsabschnitten) in Klammern neben dem
   Zeitschriften-/Ausgabentitel anzeigen, einmal pro Ausgabe, nicht an jedem
   Videolink. Zugängliche Beschriftungen und externe Linkkennzeichnung erhalten.
-- Jahrgangsgruppen neutral als `Jahrgang 1996 – Ausgaben` beschriften;
+- Jahrgangsgruppen neutral als `Jahrgang 1996 – Ausgaben` beschriften; der
+  erste Abschnitt eines Jahrgangs trägt `id="jahr-1996"` als Sprungziel
+  (keine eigenen Jahrgangsseiten);
   Sonderhefte separat als `Jahrgang 1996 – Sonderhefte`.
   Keine pauschale Bezeichnung als ungeklaerte Ausgaben. Eintraege ohne
   bekanntes Heftjahr bleiben unter `Jahrgang unbekannt` am Ende einsortiert.

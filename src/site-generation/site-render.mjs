@@ -1,6 +1,6 @@
 import { readFile } from "node:fs/promises";
 import { minify } from "terser";
-import { paginatedRoute, slugify } from "./site-config.mjs";
+import { paginatedRoute, slugify, yearAnchor } from "./site-config.mjs";
 import { escapeHtml, externalLink } from "./site-html.mjs";
 import { videoHref } from "./site-video-links.mjs";
 import { videoWidget } from "./widget/video.mjs";
@@ -131,7 +131,7 @@ function breadcrumbsMarkup(crumbs, config) {
     : `<a href="${config.href(crumb.route)}">${escapeHtml(crumb.name)}</a>`}</li>`).join("")}</ol></nav>`;
 }
 
-function layout({ route, title, description, body, schema, crumbs, image, imageAlt, noindex = false, previous, next, interactive = false, sortableGames = false }, config, cssHref, hasMagazines, jsHref, hasGames, sections, tableHref) {
+function layout({ route, title, description, body, schema, crumbs, image, imageAlt, noindex = false, previous, next, interactive = false, sortableGames = false }, config, cssHref, jsHref, navigationEntries, tableHref) {
   const canonical = config.absolute(route);
   const fullTitle = `${title} | ${config.name}`;
   const breadcrumbSchema = {
@@ -141,18 +141,6 @@ function layout({ route, title, description, body, schema, crumbs, image, imageA
       "@type": "ListItem", position: index + 1, name: crumb.name, item: config.href(crumb.route),
     })),
   };
-  const legacySections = ["hardware", "retrospektiven", "interviews", "sonstiges"]
-    .flatMap((id) => sections.filter((section) => section.id === id));
-  const navigationEntries = [
-    ["news/", "News"],
-    ...(hasMagazines ? [["zeitschriften/", "Blätterabend"]] : []),
-    ...(hasGames ? [["spiele/", "re.play"]] : []),
-    ...sections.filter((section) => !legacySections.includes(section)).map((section) => [section.route, section.name]),
-    ...legacySections.map((section, index) => [
-      section.route, { hardware: "re.ware", retrospektiven: "projects", interviews: "Interviews" }[section.id] ?? section.name,
-      index === 0,
-    ]),
-  ];
   return `<!doctype html>
 <html lang="de">
 <head>
@@ -284,13 +272,18 @@ function groupedEntries(entries, model, config) {
     const issue = entry.mention.issue;
     const year = issue?.year ?? null;
     const title = `${year === null ? "Jahrgang unbekannt" : `Jahrgang ${year}`} – ${issue?.special ? "Sonderhefte" : "Ausgaben"}`;
-    if (!sections.has(title)) sections.set(title, new Map());
+    if (!sections.has(title)) sections.set(title, Object.assign(new Map(), { year }));
     const groups = sections.get(title);
     const key = `${entry.mention.id ?? ""}/${issue?.id ?? entry.videoId}`;
     if (!groups.has(key)) groups.set(key, []);
     groups.get(key).push(entry);
   }
-  return [...sections].map(([title, groups]) => `<section><h2>${title}</h2>${[...groups.values()].map((group) => {
+  const anchored = new Set();
+  return [...sections].map(([title, groups]) => {
+    const anchor = yearAnchor(groups.year);
+    const id = anchored.has(anchor) ? "" : ` id="${anchor}"`;
+    anchored.add(anchor);
+    return `<section${id}><h2>${title}</h2>${[...groups.values()].map((group) => {
     const mention = group[0].mention;
     const issue = mention.issue;
     const archives = issue?.route ? issue.archives : mention.archives;
@@ -300,7 +293,8 @@ function groupedEntries(entries, model, config) {
 ${entryVideoList(group, model, config)}
 ${!archives.length ? archiveLinks([]) : ""}
 </section>`;
-  }).join("")}</section>`).join("");
+  }).join("")}</section>`;
+  }).join("");
 }
 
 function magazineEntryHighlights(entries, model) {
@@ -318,7 +312,7 @@ function renderMagazinePages(model, siteConfig, add) {
   const root = { route: "", name: "Startseite" };
   const index = { route: "zeitschriften/", name: "Zeitschriften" };
   function magazineCalendar(magazine, config) {
-    const yearHref = (year) => magazine.years.length > 1 ? config.href(year.route) : "#ausgaben";
+    const yearHref = (year) => `#${year.anchor}`;
     const cells = new Map();
     for (const issue of magazine.issues.values()) {
       if (issue.year === null || issue.special || !issue.videos.length) continue;
@@ -331,7 +325,7 @@ function renderMagazinePages(model, siteConfig, add) {
       cells.get(key).push(`<a href="${escapeHtml(`${config.href(issue.route)}#video-${videoId}`)}" aria-label="${escapeHtml(`${magazine.name} ${issue.label}: Video ansehen`)}">${escapeHtml(issueNumber)}</a>`);
     }
     return `<div class="magazine-calendar-scroll"><table class="magazine-calendar">
-<caption>Ausgaben nach Jahr und Nummer; Jahreszahlen öffnen den jeweiligen Jahrgang.</caption>
+<caption>Ausgaben nach Jahr und Nummer; Jahreszahlen springen zum jeweiligen Jahrgang.</caption>
 <thead><tr><th scope="col">Ausgabe</th>${magazine.years.map((year) => `<th scope="col"><a href="${escapeHtml(yearHref(year))}">${year.year}</a></th>`).join("")}</tr></thead>
 <tbody>${Array.from({ length: 12 }, (_, index) => {
       const month = index + 1;
@@ -342,13 +336,13 @@ function renderMagazinePages(model, siteConfig, add) {
     }).join("")}</tbody>
 </table></div><nav class="magazine-calendar-mobile" aria-label="Jahrgänge von ${escapeHtml(magazine.name)}"><ul class="year-list">${magazine.years.map((year) => `<li><a href="${escapeHtml(yearHref(year))}">${year.year}</a></li>`).join("")}</ul></nav>`;
   }
-  function addPaginated({ route: baseRoute, entries, title, headingHtml, description, crumbs, intro, render, schema = () => [], items }) {
-    const pageCount = Math.ceil(entries.length / siteConfig.pageSize);
+  function addPaginated({ route: baseRoute, entries, title, headingHtml, description, crumbs, intro, render, schema = () => [], items, pageSize = siteConfig.pageSize }) {
+    const pageCount = entries.length ? Math.max(1, Math.ceil(entries.length / pageSize)) : 0;
     for (let page = 1; page <= pageCount; page += 1) {
       const route = paginatedRoute(baseRoute, page);
       const config = siteConfig.forPage(route);
       const pageSchema = schema(config);
-      const subset = entries.slice((page - 1) * config.pageSize, page * config.pageSize);
+      const subset = entries.slice((page - 1) * pageSize, page * pageSize);
       const videos = [...new Set(subset.flatMap((entry) => entry.videoId
         ? [entry.videoId] : entry.videoIds ?? []))].map((id) => model.videoById.get(id));
       const pageTitle = `${title}${page > 1 ? ` – Seite ${page}` : ""}`;
@@ -423,29 +417,20 @@ ${unresolved.length ? `<section><h2>Weitere Blätterabende</h2><p>Weitere Streif
     const years = (config) => new Set(magazine.videos).size > 30
       ? magazineCalendar(magazine, config)
       : magazine.years.length > 1
-        ? `<nav aria-label="Jahrgänge von ${escapeHtml(magazine.name)}"><ul class="year-list">${magazine.years.map((year) => `<li><a href="${config.href(year.route)}">${year.year}</a> (${videoCount(year.entries.length)})</li>`).join("")}</ul></nav>`
+        ? `<nav aria-label="Jahrgänge von ${escapeHtml(magazine.name)}"><ul class="year-list">${magazine.years.map((year) => `<li><a href="#${year.anchor}">${year.year}</a> (${videoCount(year.entries.length)})</li>`).join("")}</ul></nav>`
         : "";
     const unknownIndex = magazine.entries.findIndex((entry) => entry.mention.issue?.year === null || !entry.mention.issue);
-    const unknownLink = (config) => unknownIndex < 0 ? "" : `<p><a href="${config.href(paginatedRoute(magazine.route, Math.floor(unknownIndex / config.pageSize) + 1))}">Jahrgang unbekannt</a>: ${videoCount(magazine.entries.filter((entry) => !entry.mention.issue || entry.mention.issue.year === null).length)} ohne bekanntes Heftjahr.</p>`;
+    const unknownLink = () => unknownIndex < 0 ? "" : `<p><a href="#${yearAnchor(null)}">Jahrgang unbekannt</a>: ${videoCount(magazine.entries.filter((entry) => !entry.mention.issue || entry.mention.issue.year === null).length)} ohne bekanntes Heftjahr.</p>`;
     addPaginated({
       route: magazine.route, entries: magazine.entries,
       title: `${magazine.name} – Blätterabend-Videos`,
       description: (entries) => `Entdecke ${previewList(magazineEntryHighlights(entries, model))} – historische Ausgaben im Video.`,
       crumbs: [root, index, magazineCrumb], schema: (config) => [periodicalSchema(magazine, config)],
-      intro: (config) => `${magazineLogo(magazine, config)}<p>Blätterabend-Videos zu ${escapeHtml(magazine.name)}: ${videoCount(magazine.videos.length)}.</p>${years(config)}${unknownLink(config)}`,
+      intro: (config) => `${magazineLogo(magazine, config)}<p>Blätterabend-Videos zu ${escapeHtml(magazine.name)}: ${videoCount(magazine.videos.length)}.</p>${years(config)}${unknownLink()}`,
+      // One page per magazine so that year links stay same-page anchors.
+      pageSize: Infinity,
       render: (entries, config) => `<div id="ausgaben">${groupedEntries(entries, model, config)}</div>`,
     });
-    for (const year of magazine.years.length > 1 ? magazine.years : []) {
-      addPaginated({
-        route: year.route, entries: year.entries,
-        title: `${magazine.name} ${year.year} – Ausgaben und Blätterabend-Videos`,
-        description: (entries) => `Entdecke ${previewList(magazineEntryHighlights(entries, model))} – historische Heftausgaben im Video.`,
-        crumbs: [root, index, magazineCrumb, { route: year.route, name: String(year.year) }],
-        schema: (config) => [periodicalSchema(magazine, config)],
-        intro: `<p>Ausgaben und Blätterabend-Videos zu ${escapeHtml(magazine.name)} aus ${year.year}: Blättern Sie durch die Hefte oder wählen Sie einen Videoteil.</p>`,
-        render: (entries, config) => groupedEntries(entries, model, config),
-      });
-    }
     for (const issue of magazine.issues.values()) {
       const config = siteConfig.forPage(issue.route);
       const videos = issue.videos.map((videoId) => model.videoById.get(videoId));
@@ -773,7 +758,6 @@ ${section.id === "sonstiges" ? "" : pagination(section.route, page, count, confi
 export function renderSite(model, config, cssHref, jsHref = "assets/video-series.js", tableHref = "assets/game-table.js") {
   const pages = new Map();
   const filters = gameMetadataFilters(model.games);
-  const hasMagazines = model.magazines.length > 0 || model.unresolvedMagazines.length > 0;
   function add(options, videos = []) {
     const file = options.file ?? `${options.route}index.html`;
     if (pages.has(file)) throw new Error(`Kollidierender Ausgabepfad: ${file}`);
@@ -784,7 +768,7 @@ export function renderSite(model, config, cssHref, jsHref = "assets/video-series
       imageAlt: options.imageAlt ?? `Vorschaubild: ${previewVideo.title}`,
     } : options;
     pages.set(file, {
-      html: layout(pageOptions, config.forPage(options.route), cssHref, hasMagazines, jsHref, model.games.length > 0, model.sections, tableHref),
+      html: layout(pageOptions, config.forPage(options.route), cssHref, jsHref, model.navigation, tableHref),
       route: options.route, indexable: !options.noindex,
       contentPublishedAt: latestPublication(videos),
     });

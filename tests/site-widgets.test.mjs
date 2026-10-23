@@ -25,19 +25,19 @@ const video = {
 };
 
 test("Hauptnavigation erhält Reihenfolge, relative Links, sichere Namen und aktive Bereiche auf Unterseiten", () => {
-  const entries = [["news/", "News"], ["spiele/", "Spiele & <Demo>"], ["sonstiges/", "Sonstiges"]];
+  const entries = [{ route: "news/", name: "News" }, { route: "spiele/", name: "Spiele & <Demo>" }, { route: "sonstiges/", name: "Sonstiges" }];
   for (const route of ["", "news/", "spiele/demo/", "sonstiges/seite/2/", "datenschutz/"]) {
     const config = createSiteConfig().forPage(route);
     const html = navigation(entries, route, config);
     assert.ok(html.startsWith('<nav aria-label="Hauptnavigation"><ul>'));
     assert.equal((html.match(/<li>/gu) ?? []).length, entries.length);
     assert.ok(html.includes("Spiele &amp; &lt;Demo&gt;"));
-    for (const [target] of entries) {
+    for (const { route: target } of entries) {
       const active = route.startsWith(target);
       assert.ok(html.includes(`href="${config.href(target)}"${active ? ' aria-current="page"' : ""}>`));
     }
     assert.equal((html.match(/aria-current="page"/gu) ?? []).length,
-      entries.some(([target]) => route.startsWith(target)) ? 1 : 0);
+      entries.some((entry) => route.startsWith(entry.route)) ? 1 : 0);
     assert.ok(html.indexOf(">News</a>") < html.indexOf(">Spiele &amp;"));
   }
 });
@@ -50,9 +50,10 @@ test("alle generierten Seiten verwenden das Hauptnavigations-Widget mit den vorh
     magazines: { channel, videos: [] },
   }, { games: [], sections: [] });
   const config = createSiteConfig();
-  const entries = [["news/", "News"], ...model.sections.map((section) => [section.route, section.name, true])];
+  assert.deepEqual(model.navigation, [{ route: "news/", name: "News" },
+    ...model.sections.map((section) => ({ route: section.route, name: section.navigationName, separator: true }))]);
   for (const { html, route } of renderSite(model, config, "assets/site.css").values()) {
-    assert.ok(html.includes(navigation(entries, route, config.forPage(route), themeToggle())), route);
+    assert.ok(html.includes(navigation(model.navigation, route, config.forPage(route), themeToggle())), route);
     assert.equal((html.match(/aria-label="Hauptnavigation"/gu) ?? []).length, 1);
   }
 });
@@ -220,14 +221,14 @@ test("Listen-Eintrag kombiniert sichere Titel, kompakte Metadaten und redaktione
       ...video, description: "x".repeat(221), blaetterabend: true,
       games: [{ name: "Spiel", route: "spiele/demo/" }],
       sections: [{ name: "Hardware", route: "hardware/" }],
-      magazines: [{ name: "Magazin", route: "zeitschriften/demo/", yearRoute: "zeitschriften/demo/1996/",
-        issue: { year: 1996, label: "1/1996", route: "zeitschriften/demo/ausgaben/1-1996/" } }],
+      magazines: [{ name: "Magazin", route: "zeitschriften/demo/", yearAnchor: "jahr-1996",
+        issue: { year: 1996, label: "1/1996", route: "zeitschriften/demo/1-1996/" } }],
     }, config);
-    assert.ok(html.includes('href="../zeitschriften/demo/ausgaben/1-1996/#video-a0000000000"'));
-    assert.ok(html.includes('class="video-entry-thumbnail" href="../zeitschriften/demo/ausgaben/1-1996/#video-a0000000000" aria-label="Spiel &amp; &lt;Demo&gt;"'));
+    assert.ok(html.includes('href="../zeitschriften/demo/1-1996/#video-a0000000000"'));
+    assert.ok(html.includes('class="video-entry-thumbnail" href="../zeitschriften/demo/1-1996/#video-a0000000000" aria-label="Spiel &amp; &lt;Demo&gt;"'));
     assert.ok(html.includes('href="../spiele/demo/">Spiel</a>'));
     assert.ok(html.includes('href="../hardware/">Hardware</a>'));
-    assert.ok(html.includes('href="../zeitschriften/demo/1996/">Jahrgang 1996</a>'));
+    assert.ok(html.includes('href="../zeitschriften/demo/#jahr-1996">Jahrgang 1996</a>'));
     assert.ok(html.includes(`<p>${"x".repeat(219)}…</p>`));
     assert.equal(videoList([], config), "<p>Noch keine Videos mit bekanntem Veröffentlichungsdatum.</p>");
     assert.equal(videoList([video], config), `<ol class="video-list">${videoListEntry(video, config)}</ol>`);
@@ -236,14 +237,14 @@ test("Listen-Eintrag kombiniert sichere Titel, kompakte Metadaten und redaktione
   test("Listen-Eintrag verlinkt Titel und Thumbnail im ausdrücklich übergebenen Ausgabenkontext", () => {
     const config = createSiteConfig().forPage("zeitschriften/zweites/");
     const html = videoListEntry({
-      ...video, magazines: [{ issue: { route: "zeitschriften/erstes/ausgaben/1/" } }],
+      ...video, magazines: [{ issue: { route: "zeitschriften/erstes/1/" } }],
     }, config, undefined, 4, {
-      label: "Teil 2: Spiel & <Demo>", issueRoute: "zeitschriften/zweites/ausgaben/2/",
+      label: "Teil 2: Spiel & <Demo>", issueRoute: "zeitschriften/zweites/2/",
     });
-    const href = "ausgaben/2/#video-a0000000000";
+    const href = "2/#video-a0000000000";
     assert.ok(html.includes(`<h4><a href="${href}">Teil 2: Spiel &amp; &lt;Demo&gt;</a></h4>`));
     assert.ok(html.includes(`class="video-entry-thumbnail" href="${href}" aria-label="Teil 2: Spiel &amp; &lt;Demo&gt;"`));
-    assert.ok(!html.includes("erstes/ausgaben"));
+    assert.ok(!html.includes("erstes/1"));
   });
 
   test("News und alle Themenbereiche verwenden dasselbe Eintrags-Widget und interne Detailziele", () => {
@@ -257,7 +258,7 @@ test("Listen-Eintrag kombiniert sichere Titel, kompakte Metadaten und redaktione
       magazines: { channel, videos: [] },
     };
     const sections = ["hardware", "retrospektiven", "interviews"].map((id) => ({
-      id, name: id, description: "Beschreibung", playlistIds: [], excludedVideoIds: [],
+      id, name: id, navigationName: id, olderFormat: true, description: "Beschreibung", playlistIds: [], excludedVideoIds: [],
       videos: [{ id: video.id, topic: "Thema", order: 0, people: ["Gast"], note: "Hinweis" }],
     }));
     const model = normalizeSources(input, { games: [], sections });

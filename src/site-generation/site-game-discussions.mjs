@@ -15,7 +15,11 @@ function requireValue(condition, message) {
   if (!condition) throw new Error(message);
 }
 
-export async function loadGameDiscussions(model, cacheDirectory) {
+export const unreviewedPreviewVariable = "SHOW_UNREVIEWED_GAME_DISCUSSIONS";
+
+export async function loadGameDiscussions(model, cacheDirectory, {
+  includeUnreviewed = process.env[unreviewedPreviewVariable] === "1",
+} = {}) {
   for (const video of model.videos) {
     if (!video.blaetterabend && !video.magazines.length) continue;
     const file = path.join(cacheDirectory, "game-discussions", `${video.id}.json`);
@@ -34,13 +38,15 @@ export async function loadGameDiscussions(model, cacheDirectory) {
       "Kein verfügbares Transkript.");
       requireValue(data.transcriptHash === createHash("sha256").update(transcriptSource).digest("hex"),
         "Analyse gehört nicht zum aktuellen Transkript.");
+      // Review is one decision for the whole list; a legacy per-entry "reviewed" field is ignored.
+      const reviewed = data.status === "reviewed";
       let previousStart = -1;
-      video.gameDiscussions = data.discussions.map((discussion) => {
+      const discussions = data.discussions.map((discussion) => {
         requireValue(discussion && typeof discussion.title === "string" && discussion.title.trim().length > 0
           && Number.isSafeInteger(discussion.startMs) && discussion.startMs >= previousStart
           && discussion.startMs >= 0
           && (discussion.endMs === null || (Number.isSafeInteger(discussion.endMs) && discussion.endMs > discussion.startMs))
-          && ["high", "medium", "low"].includes(discussion.confidence) && typeof discussion.reviewed === "boolean",
+          && ["high", "medium", "low"].includes(discussion.confidence),
         "Ungültiger Besprechungsabschnitt.");
         const first = transcript.segments[discussion.firstSegmentId];
         const last = transcript.segments[discussion.lastSegmentId];
@@ -52,12 +58,21 @@ export async function loadGameDiscussions(model, cacheDirectory) {
           && (video.durationSeconds === null || (discussion.startMs < video.durationSeconds * 1000
             && (discussion.endMs === null || discussion.endMs <= video.durationSeconds * 1000))),
         "Besprechungszeit liegt außerhalb der Transkriptsegmente oder Videolaufzeit.");
+        const names = (key) => {
+          const value = discussion[key] ?? [];
+          requireValue(Array.isArray(value) && value.every((name) => typeof name === "string" && name.trim()), `Ungültige Angabe ${key}.`);
+          return value.map((name) => name.trim());
+        };
+        requireValue(discussion.firstYear === undefined || Number.isInteger(discussion.firstYear), "Ungültiges Erscheinungsjahr.");
         previousStart = discussion.startMs;
         return {
           title: discussion.title.trim(), startMs: discussion.startMs, endMs: discussion.endMs,
-          reviewed: discussion.reviewed, confidence: discussion.confidence,
+          reviewed, confidence: discussion.confidence,
+          firstYear: discussion.firstYear ?? null, developers: names("developers"), publishers: names("publishers"),
         };
       });
+      // Unreviewed model proposals are validated, but only published in an explicit local preview.
+      if (discussions.length && (reviewed || includeUnreviewed)) video.gameDiscussions = discussions;
     } catch (error) {
       throw new Error(`${file}: ${error.message}`, { cause: error });
     }

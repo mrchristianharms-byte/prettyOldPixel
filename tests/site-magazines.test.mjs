@@ -11,6 +11,8 @@ import { loadSiteData } from "../src/site-generation/site-data.mjs";
 import { cacheMagazineLogo } from "../src/fetch-magazine/kultmags-logos.mjs";
 import { magazineGuestChannels } from "../src/data/data-magazine-guest-channels.mjs";
 
+const issueFile = /^zeitschriften\/(?!gaeste\/|videos\/)[^/]+\/(?!seite\/)[^/]+\/index\.html$/u;
+
 const channel = { id: "UC-magazines", title: "Pretty Old Pixel" };
 const videoId = (index) => `m${String(index).padStart(10, "0")}`;
 const issue = (year = 1992, months = [11], options = {}) => ({
@@ -385,7 +387,7 @@ test("zeigt Zeitschriften als Kachelliste mit Titel, Videos und Jahrgängen", ()
   assert.ok(grid.indexOf(">Amiga Joker</a>") < grid.indexOf(">PC Games</a>"));
 });
 
-test("entfernt frühere Jahrgangsseiten beim Wechsel zu nur einem Jahrgang", async (t) => {
+test("erzeugt keine Jahrgangsseiten und entfernt alte Jahrgangs- und Ausgabenpfade", async (t) => {
   const directory = await mkdtemp(path.join(tmpdir(), "pixel-single-year-"));
   t.after(() => rm(directory, { recursive: true, force: true }));
   const cacheDirectory = path.join(directory, "cache");
@@ -400,16 +402,25 @@ test("entfernt frühere Jahrgangsseiten beim Wechsel zu nur einem Jahrgang", asy
     await generateSite({ cacheDirectory, outputDirectory, logger: { log() {}, warn() {} } });
   }
   await build();
+  const overview = await readFile(path.join(outputDirectory, "zeitschriften/pc-games/index.html"), "utf8");
   for (const year of [1992, 1993]) {
-    assert.ok(await stat(path.join(outputDirectory, `zeitschriften/pc-games/${year}/index.html`)));
+    await assert.rejects(stat(path.join(outputDirectory, `zeitschriften/pc-games/${year}/index.html`)), { code: "ENOENT" });
+    assert.ok(overview.includes(`<a href="#jahr-${year}">${year}</a>`));
+    assert.ok(overview.includes(`<section id="jahr-${year}">`));
+  }
+  const legacy = ["zeitschriften/pc-games/1992/index.html", "zeitschriften/pc-games/ausgaben/pc-games-11-1992/index.html"];
+  for (const file of legacy) {
+    await mkdir(path.dirname(path.join(outputDirectory, file)), { recursive: true });
+    await writeFile(path.join(outputDirectory, file), "Veralteter Pfad");
   }
   input.magazines.videos[1].magazines[0].issue = issue(1992, [12]);
   await build();
-  for (const year of [1992, 1993]) {
-    await assert.rejects(stat(path.join(outputDirectory, `zeitschriften/pc-games/${year}/index.html`)), { code: "ENOENT" });
+  for (const file of legacy) {
+    await assert.rejects(stat(path.join(outputDirectory, file)), { code: "ENOENT" });
   }
+  assert.ok(await stat(path.join(outputDirectory, "zeitschriften/pc-games/pc-games-11-1992/index.html")));
   const sitemap = await readFile(path.join(outputDirectory, "sitemap.xml"), "utf8");
-  assert.ok(!/zeitschriften\/pc-games\/199[23]\//u.test(sitemap));
+  assert.ok(!/zeitschriften\/pc-games\/(?:199[23]|ausgaben)\//u.test(sitemap));
 });
 
 test("verlinkt unbekannte Ausgaben mehrerer Zeitschriften auf eine gemeinsame Videodetailseite", () => {
@@ -459,7 +470,7 @@ test("erhält unbekannte und uneindeutige Heftdaten auf Videodetailseiten ohne e
 
 test("zeigt Archivlinks als dritte Metadatenspalte unter dem Player mit sichtbaren Texten statt separater Sektion", () => {
   const { pages } = render();
-  const html = [...pages].find(([file, page]) => file.includes("/ausgaben/") && page.html.includes("PC Games 11/1992"))[1].html;
+  const html = [...pages].find(([file, page]) => issueFile.test(file) && page.html.includes("PC Games 11/1992"))[1].html;
   const fields = html.match(/<dl class="detail-meta">([\s\S]*?)<\/dl>/u)[1];
   assert.deepEqual([...fields.matchAll(/<dt>(.*?)<\/dt>/gu)].map((match) => match[1]),
     ["Zeitschrift", "Ausgabe", "Archivlinks"]);
@@ -467,7 +478,7 @@ test("zeigt Archivlinks als dritte Metadatenspalte unter dem Player mit sichtbar
   assert.ok(!html.includes("<h2>Archivlinks</h2>"));
   const input = fixture(1);
   input.magazines.videos[0].magazines[0].kultmags = archive("1992-11");
-  const linked = [...render(input).pages].find(([file]) => file.includes("/ausgaben/"))[1].html;
+  const linked = [...render(input).pages].find(([file]) => issueFile.test(file))[1].html;
   assert.ok(linked.includes('<span>kultmags: Heft lesen</span>'));
   assert.ok(linked.indexOf('class="detail-player"') < linked.indexOf("<dt>Archivlinks</dt>"));
 });
@@ -481,7 +492,7 @@ test("behält Heftjahr, Nummer und Monate intern, ohne sie als zusätzliche Meta
   assert.equal(entity.number, 1);
   assert.deepEqual(entity.months, [10]);
   assert.ok(!pages.has("zeitschriften/pc-games/1997/index.html"));
-  assert.equal(model.videoById.get(videoId(0)).magazines[0].yearRoute, null);
+  assert.equal(model.videoById.get(videoId(0)).magazines[0].yearAnchor, null);
   const html = pages.get(`${entity.route}index.html`).html;
   for (const label of ["Erscheinungsjahr", "Heftnummer", "Monat(e)"]) {
     assert.ok(!html.includes(`<dt>${label}</dt>`));
@@ -519,11 +530,11 @@ test("lässt die Jahrgangsanzahl bei ACE mit bekannter Heftnummer ohne Heftjahr 
   const entity = [...model.magazines[0].issues.values()][0];
   assert.equal(entity.year, null);
   assert.equal(entity.label, "#49");
-  assert.equal(entity.route, "zeitschriften/ace/ausgaben/ace-49/");
+  assert.equal(entity.route, "zeitschriften/ace/ace-49/");
   const overview = pages.get("zeitschriften/ace/index.html").html;
-  assert.ok(overview.includes('href="ausgaben/ace-49/">ACE #49</a>'));
-  assert.ok(overview.includes(`href="ausgaben/ace-49/#video-${videoId(0)}"`));
-  assert.ok(overview.includes(`class="video-entry-thumbnail" href="ausgaben/ace-49/#video-${videoId(0)}"`));
+  assert.ok(overview.includes('href="ace-49/">ACE #49</a>'));
+  assert.ok(overview.includes(`href="ace-49/#video-${videoId(0)}"`));
+  assert.ok(overview.includes(`class="video-entry-thumbnail" href="ace-49/#video-${videoId(0)}"`));
   const detail = pages.get(`${entity.route}index.html`).html;
   assert.ok(detail.includes(`id="video-${videoId(0)}"`));
   assert.ok(detail.includes("Kein passender Archivlink vorhanden."));
@@ -571,7 +582,7 @@ test("unterscheidet Sonderhefte und erstellt keine spekulativen Seiten aus Jahr 
   for (const index of [5, 6, 10]) {
     assert.ok(!model.videoById.get(videoId(index)).magazines[0].issue?.route);
   }
-  assert.ok(pages.get("zeitschriften/pc-games/1993/index.html").html.includes("<h3>PC Games 1993</h3>"));
+  assert.ok(pages.get("zeitschriften/pc-games/index.html").html.includes("<h3>PC Games 1993</h3>"));
   assert.ok(pages.get("zeitschriften/pc-games/index.html").html.includes("Jahrgang unbekannt"));
   assert.ok(pages.get("zeitschriften/index.html").html.includes("Weitere Blätterabende"));
 });
@@ -586,14 +597,13 @@ test("benennt Jahrgänge neutral und zeigt Einträge ohne Heftjahr erst nach bek
     "Jahrgang 1993 – Ausgaben",
     "Jahrgang unbekannt – Ausgaben",
   ]);
-  const year = pages.get("zeitschriften/pc-games/1992/index.html").html;
-  assert.ok(year.includes("<h2>Jahrgang 1992 – Ausgaben</h2>"));
-  assert.ok(year.includes("<h2>Jahrgang 1992 – Sonderhefte</h2>"));
-  assert.ok(!year.includes("Jahrgang unbekannt"));
+  assert.deepEqual([...overview.matchAll(/<section id="(jahr-[^"]+)"><h2>/gu)].map((match) => match[1]),
+    ["jahr-1992", "jahr-1993", "jahr-unbekannt"], "Anker nur am ersten Abschnitt eines Jahrgangs");
+  assert.ok(overview.includes('<a href="#jahr-1992">1992</a>'));
+  assert.ok(overview.includes('<a href="#jahr-unbekannt">Jahrgang unbekannt</a>'));
   assert.ok(!overview.includes("Reguläre und ungeklärte Ausgaben"));
-  const knownYearOnly = pages.get("zeitschriften/pc-games/1993/index.html").html;
-  assert.ok(knownYearOnly.includes("<h2>Jahrgang 1993 – Ausgaben</h2>"));
-  assert.ok(knownYearOnly.includes("<h3>PC Games 1993</h3>"));
+  assert.ok(overview.includes("<h3>PC Games 1993</h3>"));
+  assert.ok(![...pages.keys()].some((file) => /^zeitschriften\/pc-games\/\d{4}\//u.test(file)));
 });
 
 test("zeigt für Zeitschriften mit mehr als 30 Videos einen verlinkten Jahreskalender", () => {
@@ -609,10 +619,11 @@ test("zeigt für Zeitschriften mit mehr als 30 Videos einen verlinkten Jahreskal
 
   assert.ok(table);
   assert.equal((table.match(/<tr>/gu) ?? []).length, 13);
-  assert.ok(table.includes('<a href="1990/">1990</a>'));
-  assert.ok(table.includes('<a href="1991/">1991</a>'));
-  assert.ok(table.includes('<a href="1992/">1992</a>'));
-  assert.ok(table.includes('<a href="ausgaben/pc-games-1-1990/#video-m0000000000" aria-label="PC Games 1/1990: Video ansehen">1</a>'));
+  for (const year of [1990, 1991, 1992]) {
+    assert.ok(table.includes(`<a href="#jahr-${year}">${year}</a>`));
+    assert.ok(overview.includes(`<section id="jahr-${year}">`));
+  }
+  assert.ok(table.includes('<a href="pc-games-1-1990/#video-m0000000000" aria-label="PC Games 1/1990: Video ansehen">1</a>'));
   assert.ok(overview.includes('class="magazine-calendar-mobile"'));
 });
 
@@ -633,8 +644,8 @@ test("entscheidet an der Grenze von 30 Videos unabhängig von der Ausgabenanzahl
 test("verlinkt bei einem einzigen Kalenderjahr die Ausgaben auf derselben Seite", () => {
   const { pages } = render(fixture(31));
   const html = pages.get("zeitschriften/pc-games/index.html").html;
-  assert.ok(html.includes('href="#ausgaben">1992</a>'));
-  assert.ok(html.includes('id="ausgaben"'));
+  assert.ok(html.includes('href="#jahr-1992">1992</a>'));
+  assert.ok(html.includes('<section id="jahr-1992">'));
   assert.ok(!pages.has("zeitschriften/pc-games/1992/index.html"));
 });
 
@@ -677,12 +688,12 @@ test("meldet widersprüchliche Archivdaten statt unterschiedliche Hefte zu versc
   assert.ok(model.warnings.some((warning) => warning.includes("Widersprüchliche Heftdaten")));
 });
 
-test("erzeugt Zeitschriften-/Jahrgangs-/Ausgabenseiten mit sichtbaren Links und passendem JSON-LD", () => {
+test("erzeugt Zeitschriften- und Ausgabenseiten mit sichtbaren Links und passendem JSON-LD", () => {
   const { model, pages, config } = render();
   const magazine = model.magazines.find((item) => item.id === "pc-games");
   const november = [...magazine.issues.values()].find((item) => item.months[0] === 11);
   const index = pages.get("zeitschriften/index.html").html;
-  const year = pages.get("zeitschriften/pc-games/1992/index.html").html;
+  const year = pages.get("zeitschriften/pc-games/index.html").html;
   const detail = pages.get(`${november.route}index.html`).html;
   assert.ok(index.indexOf(">Amiga Joker</a>") < index.indexOf(">PC Games</a>"));
   assert.deepEqual(graph(index)[0].mainEntity.itemListElement.slice(0, 3).map((item) => item.name), ["Amiga Joker", "Computer Gaming World", "PC Games"]);
@@ -695,7 +706,7 @@ test("erzeugt Zeitschriften-/Jahrgangs-/Ausgabenseiten mit sichtbaren Links und 
   assert.deepEqual(graph(detail).find((item) => item["@type"] === "CollectionPage").mainEntity.itemListElement.map((item) => item.url),
     november.videos.map((id) => `./#video-${id}`));
   assert.equal(schema.datePublished, undefined);
-  assert.ok(detail.includes(`href="${config.href("zeitschriften/pc-games/1992/", november.route)}"`));
+  assert.ok(detail.includes(`href="${config.href("zeitschriften/pc-games/", november.route)}#jahr-1992"`));
   assert.ok(!detail.includes("Mit Video 1/3 beginnen"));
   const menu = detail.match(/<details class="episode-menu"[\s\S]*?<\/details>/u)[0];
   assert.ok(menu.indexOf('href="#video-m0000000001"') < menu.indexOf('href="#video-m0000000000"'));
@@ -711,9 +722,10 @@ test("verlinkt News direkt auf die Ausgabe mit Video-Fragment statt separater Vi
   const { model, pages, config } = render();
   const mention = model.videoById.get(videoId(0)).magazines[0];
   const news = pages.get("news/index.html").html;
-  for (const route of ["zeitschriften/", mention.route, mention.yearRoute, mention.issue.route, "zeitschriften/amiga-joker/"]) {
+  for (const route of ["zeitschriften/", mention.route, mention.issue.route, "zeitschriften/amiga-joker/"]) {
     assert.ok(news.includes(`href="${config.href(route, "news/")}"`), route);
   }
+  assert.ok(news.includes(`href="${config.href(mention.route, "news/")}#${mention.yearAnchor}">Jahrgang 1992</a>`));
   assert.ok(news.includes(`href="${config.href(mention.issue.route, "news/")}#video-${videoId(0)}"`));
   const html = pages.get(`${mention.issue.route}index.html`).html;
   assert.ok(html.includes("Video 2/3: Blätterabend"));
@@ -785,22 +797,17 @@ test("zeigt bei bloßem Archivordner keine Lese- oder Downloadsymbole", () => {
   assert.ok(!html.includes("Heft lesen"));
 });
 
-test("paginiert Übersichten mit 60 Videos, behält jedoch alle Videoteile auf einer Ausgabenseite", () => {
+test("zeigt alle Ausgaben einer Zeitschrift auf einer Seite und alle Videoteile auf einer Ausgabenseite", () => {
   const input = fixture(126);
   input.magazines.videos[125].magazines[0].issue = issue(1993, [1]);
-  const { model, pages, config } = render(input);
+  const { model, pages } = render(input);
   const magazine = model.magazines[0];
   const entity = [...magazine.issues.values()][0];
-  for (const route of [magazine.route, `${magazine.route}1992/`]) {
-    const first = pages.get(`${route}index.html`).html;
-    const second = pages.get(`${route}seite/2/index.html`).html;
-    const third = pages.get(`${route}seite/3/index.html`).html;
-    assert.equal((first.match(/<li><article>/gu) ?? []).length, 60);
-    assert.equal((second.match(/<li><article>/gu) ?? []).length, 60);
-    assert.equal((third.match(/<li><article>/gu) ?? []).length, route === magazine.route ? 6 : 5);
-    assert.ok(second.includes(`rel="canonical" href="${config.absolute(`${route}seite/2/`)}"`));
-    assert.ok(second.includes('href="../../" rel="prev"'));
-  }
+  const overview = pages.get(`${magazine.route}index.html`).html;
+  assert.equal((overview.match(/<li><article>/gu) ?? []).length, 126);
+  assert.ok(!pages.has(`${magazine.route}seite/2/index.html`));
+  assert.ok(!overview.includes('rel="next"'));
+  assert.ok(overview.includes('<section id="jahr-1993">'));
   const video = pages.get(`${entity.route}index.html`).html;
   assert.ok(video.includes("Video 52/125"));
   assert.equal((video.match(/data-video-panel /gu) ?? []).length, 125);
@@ -834,14 +841,15 @@ test("benennt Ausgabepfade nach Zeitschrift und finalem Hefttitel statt technisc
   const { model, pages } = render();
   const magazine = model.magazines.find((item) => item.id === "pc-games");
   const november = [...magazine.issues.values()].find((item) => item.months[0] === 11);
-  assert.equal(november.route, "zeitschriften/pc-games/ausgaben/pc-games-11-1992/");
+  assert.equal(november.route, "zeitschriften/pc-games/pc-games-11-1992/");
   const double = [...magazine.issues.values()].find((item) => item.months.length === 2);
-  assert.equal(double.route, "zeitschriften/pc-games/ausgaben/pc-games-8-9-1992/");
+  assert.equal(double.route, "zeitschriften/pc-games/pc-games-8-9-1992/");
   const cgw = [...model.magazines.find((item) => item.id === "computer-gaming-world").issues.values()][0];
-  assert.equal(cgw.route, "zeitschriften/computer-gaming-world/ausgaben/computer-gaming-world-148-11-1996/");
+  assert.equal(cgw.route, "zeitschriften/computer-gaming-world/computer-gaming-world-148-11-1996/");
   assert.ok(!november.route.includes(november.id));
   assert.ok(pages.has(`${november.route}index.html`));
-  assert.ok(!pages.has(`zeitschriften/pc-games/ausgaben/${november.id}/index.html`));
+  assert.ok(!pages.has(`zeitschriften/pc-games/${november.id}/index.html`));
+  assert.ok(![...pages.keys()].some((file) => file.includes("/ausgaben/")));
   for (const id of november.videos) assert.equal(model.videoById.get(id).magazines.find((item) => item.id === magazine.id).issue.route, november.route);
 });
 
@@ -874,7 +882,7 @@ test("stellt Heft- und Videometadaten als kompaktes semantisches Raster dar", ()
   assert.ok(html.indexOf('class="detail-player"') < html.indexOf('class="episode-menu"'));
   assert.ok(html.indexOf('class="detail-player"') < html.indexOf('<dl class="detail-meta">'));
   assert.equal((html.match(/<dl class="detail-meta">/gu) ?? []).length, 3);
-  assert.ok(html.includes('<div><dt>Zeitschrift</dt><dd><a href="../../">PC Games</a></dd></div>'));
+  assert.ok(html.includes('<div><dt>Zeitschrift</dt><dd><a href="../">PC Games</a></dd></div>'));
   assert.ok(html.includes("<div><dt>Ausgabe</dt><dd>11/1992</dd></div>"));
   assert.ok(html.includes("<div><dt>Veröffentlicht</dt><dd><time datetime="));
   assert.ok(html.includes("<div><dt>Länge</dt><dd>2:00</dd></div>"));
@@ -883,7 +891,7 @@ test("stellt Heft- und Videometadaten als kompaktes semantisches Raster dar", ()
   input.videos.videos[0].publishedAt = null;
   input.videos.videos[0].durationSeconds = null;
   const unknown = render(input);
-  const detail = [...unknown.pages.values()].find((page) => page.route.includes("/ausgaben/")).html;
+  const detail = [...unknown.pages].find(([file]) => issueFile.test(file))[1].html;
   assert.ok(detail.includes("<dt>Veröffentlicht</dt><dd>Veröffentlichungsdatum unbekannt</dd>"));
   assert.ok(!detail.includes("<dt>Länge</dt>"));
 });
@@ -951,7 +959,8 @@ test("aktualisiert betroffene Seiten bei neuen Heften und Links, entfernt alte A
   assert.equal(initial.pages[untouched].fingerprint, changed.pages[untouched].fingerprint);
   assert.notEqual(initial.pages["zeitschriften/pc-games/index.html"].fingerprint, changed.pages["zeitschriften/pc-games/index.html"].fingerprint);
   await assert.rejects(stat(path.join(outputDirectory, `${removedIssue.route}index.html`)), { code: "ENOENT" });
-  assert.ok(changed.pages["zeitschriften/pc-games/1994/index.html"]);
+  assert.ok(!changed.pages["zeitschriften/pc-games/1994/index.html"]);
+  assert.ok((await readFile(path.join(outputDirectory, "zeitschriften/pc-games/index.html"), "utf8")).includes('<section id="jahr-1994">'));
   const news = changed.pages["news/index.html"];
   input.magazines.videos[3].magazines[0].kultmags.downloadUrl = "https://www.kultmags.com/added.pdf";
   await save();

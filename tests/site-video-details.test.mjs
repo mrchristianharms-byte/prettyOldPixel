@@ -174,7 +174,7 @@ function rendered(description, durationSeconds = 600) {
 
 test("rendert Kapitel und Kanäle in Spiel- und Ausgabepanels ohne neue Skripte oder Player", () => {
   const { pages } = rendered("00:00 Intro\n01:30 <Gameplay>\n\nhttps://youtube.com/@Guest");
-  for (const file of ["spiele/ein-spiel/index.html", "zeitschriften/power-play/ausgaben/power-play-10-1990/index.html"]) {
+  for (const file of ["spiele/ein-spiel/index.html", "zeitschriften/power-play/power-play-10-1990/index.html"]) {
     const html = pages.get(file).html;
     assert.ok(html.includes('<body class="detail-page">'));
     assert.ok(html.includes('class="detail-layout">\n<div class="detail-main">\n<h1 class="detail-heading"'));
@@ -207,7 +207,7 @@ test("rendert Kapitel und Kanäle in Spiel- und Ausgabepanels ohne neue Skripte 
 
 test("veröffentlicht Clip-Metadaten mit echten Zeitlinks, Grenzen und sichtbaren Beschriftungen", () => {
   const { pages } = rendered("00:00 Intro\n01:30 <Gameplay>\n10:00 Ungültig");
-  for (const file of ["spiele/ein-spiel/index.html", "zeitschriften/power-play/ausgaben/power-play-10-1990/index.html"]) {
+  for (const file of ["spiele/ein-spiel/index.html", "zeitschriften/power-play/power-play-10-1990/index.html"]) {
     const html = pages.get(file).html;
     const schema = JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/u)[1]);
     const videos = schema["@graph"].filter((item) => item["@type"] === "VideoObject");
