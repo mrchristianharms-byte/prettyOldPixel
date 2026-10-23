@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { extractMagazineGuests, magazineGuests } from "../src/site-generation/site-magazine-guests.mjs";
+import { extractMagazineGuests, magazineGuests } from "../src/content-data/site-magazine-guests.mjs";
 
 test("liest Gäste aus Namens-, Handle- und kombinierten Titelvarianten ohne Heft- oder Streamzusätze", () => {
   const cases = [

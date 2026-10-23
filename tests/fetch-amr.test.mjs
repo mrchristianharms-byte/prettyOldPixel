@@ -4,7 +4,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
 import { AMIGA_ACTION_LOGO, AMIGA_ACTION_URL, addAmrLinks, findAmrIssue, loadAmrCatalog, parseAmigaActionArchive } from "../src/fetch-magazine/fetch-amr.mjs";
-import { loadSiteData } from "../src/site-generation/site-data.mjs";
+import { loadContentData } from "../src/content-data/content-data.mjs";
 import { generateSite } from "../src/site-generation/generate-site.mjs";
 import { generateBlaetterabendList } from "../src/extra-data/generate-blaetterabend.mjs";
 
@@ -106,7 +106,7 @@ test("erzeugt lokale Logoassets und AMR-Heftlinks offline, erhält bestehende Ar
       reetroz: { match: "folder", title: "Amiga Action", pageUrl: "https://reetroz.com/magazines/amiga-action" },
     }] }] }],
   ]) await writeFile(path.join(cacheDirectory, `${name}.json`), JSON.stringify(data));
-  const model = await loadSiteData(cacheDirectory);
+  const model = await loadContentData(cacheDirectory);
   const mention = model.videoById.get(id).magazines[0];
   assert.ok(mention.archives.some((archive) => archive.provider === "reetroz"));
   assert.ok(mention.archives.some((archive) => archive.provider === "amr" && archive.match === "issue"));
@@ -127,5 +127,5 @@ test("erzeugt lokale Logoassets und AMR-Heftlinks offline, erhält bestehende Ar
   });
   assert.equal(generated.videos[0].magazines[0].amr.pageUrl, "https://amr.abime.net/issue_98");
   await rm(path.join(cacheDir, "logos", magazine.logo.file));
-  await assert.rejects(loadSiteData(cacheDirectory), { code: "ENOENT" });
+  await assert.rejects(loadContentData(cacheDirectory), { code: "ENOENT" });
 });

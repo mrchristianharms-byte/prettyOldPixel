@@ -1,7 +1,7 @@
 import { escapeHtml } from "../site-html.mjs";
 import { durationLabel, videoDate } from "../site-format.mjs";
 import { magazineLinks, sectionLinks, videoHref, videoLink } from "../site-video-links.mjs";
-import { httpUrl } from "../site-data.mjs";
+import { httpUrl } from "../../shared/http-url.mjs";
 
 function excerpt(text, length = 220) {
   const normalized = text.replace(/\s+/gu, " ").trim();

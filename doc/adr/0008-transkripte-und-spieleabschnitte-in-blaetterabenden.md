@@ -83,7 +83,7 @@ ein externer OpenAI-Dienst oder API-Key dagegen nicht zwingend.
 
 ### 3. Ergebnisse beim statischen Build einbinden
 
-[`site-game-discussions.mjs`](../../src/site-generation/site-game-discussions.mjs)
+[`site-game-discussions.mjs`](../../src/content-data/site-game-discussions.mjs)
 liest abgeschlossene Analysedateien aus
 `cache/game-discussions/<video-id>.json`, prüft Transkriptbindung und
 Zeit-/Segmentverweise und ergänzt das Videomodell.

@@ -1,4 +1,4 @@
-import { httpUrl } from "./site-data.mjs";
+import { httpUrl } from "../shared/http-url.mjs";
 
 export function escapeHtml(value) {
   return String(value).replace(/[&<>"']/gu, (character) => ({

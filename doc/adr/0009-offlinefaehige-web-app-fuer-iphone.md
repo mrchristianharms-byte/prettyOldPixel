@@ -1,6 +1,6 @@
 # ADR 0009: Offlinefähige Web-App für das iPhone
 
-**Status:** Angenommen; Umsetzung ausstehend
+**Status:** Angenommen; implementiert, Abnahme auf echtem iPhone ausstehend
 **Datum:** 2026-10-23
 **Entscheider:** Christian Harms
 **Kontext:** Eine separate Offline-App erzeugt ihre Ansichten lokal aus JSON;
@@ -166,7 +166,8 @@ registriert, unabhängig von der gerade dargestellten Ansicht.
   Fingerprints der 608 HTML-Seiten müssen nicht heruntergeladen werden.
 - Gemeinsame lokale Ressourcen können direkt aus ihren bisherigen
   Asset-URLs geladen und im App-Cache gespeichert werden. Ihre Einträge
-  stehen explizit im Offline-Manifest. Fremde Hosts gehören nicht dazu.
+  stehen explizit im Offline-Manifest. Nur diese Dateien werden per Hash geprüft;
+  externe Vorschaubilder stehen in einer separaten URL-Liste.
 - Beim bewussten ersten App-Aufruf werden die vollständigen App-Daten
   geladen. Fortschritt und Fehler werden angezeigt; „Offline bereit“
   erscheint erst nach vollständig geprüfter Speicherung. Eine Installation
@@ -189,16 +190,32 @@ registriert, unabhängig von der gerade dargestellten Ansicht.
 ### 4. Medien und Grenzen von Offline
 
 Die Lockerung betrifft den JavaScript-Einsatz, nicht die bisherige
-Medienpolitik: keine Spiegelung oder Vorabdownloads von YouTube-Inhalten.
+Medienpolitik: keine Spiegelung oder Vorabdownloads von YouTube-Videos.
+Nur die separate Offline-App speichert Vorschaubilder auf dem Gerät.
 
 - Eigene lokale Logos und Icons gehören zum Offline-Paket.
-- YouTube-Thumbnails bleiben direkte Online-Ressourcen. Es gibt zunächst
-  auch keinen eigenen Thumbnail-Laufzeitcache. Der in der ersten Fassung
-  vorgeschlagene Cache entfällt; seine Größe und opaque Responses wären
-  nicht zuverlässig durch die Bild-Nutzdaten begrenzt.
-- Offline zeigt die App lokale Platzhalter statt fehlender Thumbnails
-  und weist auf die erforderliche Verbindung für Videos hin. Die oben
-  genannten 5–6 MB versprechen deshalb keinen Offline-Medienkatalog.
+- Auf ausdrücklichen Nutzerwunsch lädt das Gerät bei der Einrichtung alle
+  Video-Thumbnails direkt von YouTube in einen separaten, versionsübergreifenden
+  Cache. Der Build liefert nur die URL-Liste, keine Bildkopien. Vier parallele
+  Abrufe verwenden keine Zugangsdaten oder Referrer und haben je 15 Sekunden
+  Zeitlimit. Dies überträgt IP-Adresse und technische Request-Daten an Google.
+- Der Worker beantwortet ausschließlich die gelisteten Thumbnail-URLs aus
+  dem lokalen Cache. Vorhandene Bilder bleiben bei Updates erhalten.
+  Fehler werden protokolliert, fehlende Bilder im Bildzähler sichtbar und
+  mit „Erneut versuchen“ nachgeladen. Katalog und Bilder haben getrennte
+  Bereitschaftsanzeigen; Bildfehler zerstören nicht den gespeicherten Katalog.
+  Der Bilddownload startet nach der Kataloginstallation und blockiert weder
+  die Aktivierung noch den Start der App.
+- Der Bildserver erlaubt CORS (`Access-Control-Allow-Origin: *`, geprüft am
+  23.10.2026). Die App verwendet lesbare CORS-Antworten, prüft HTTP-Erfolg und
+  Bild-Content-Type und lehnt opaque Antworten ab, um deren möglicherweise
+  überhöhte Speicheranrechnung zu vermeiden. Entfällt die CORS-Freigabe,
+  bleiben Bilder sichtbar unvollständig statt unbemerkt opaque gespeichert
+  zu werden. Es gibt keine Build-Hashes für Laufzeitbilder. Die genannten
+  Paketgrößen enthalten diesen Cache nicht; seine Größe ist am iPhone zu messen.
+- Offline zeigt die App gespeicherte Thumbnails; nur fehlende oder nicht
+  darstellbare Bilder erhalten den lokalen Platzhalter. Videos bleiben online.
+  „App-Daten löschen“ entfernt auch den gesamten Thumbnail-Cache.
 - YouTube-Player, Kapitelsteuerung und Folgenfortsetzung werden nur online
   und gemäß den bestehenden Aktivierungsregeln genutzt. `navigator.onLine`
   allein beweist keine Erreichbarkeit; Verbindungsfehler brauchen eine
@@ -263,7 +280,7 @@ Die Umsetzung wird anhand folgender Prüfungen abgenommen:
 | Separate JSON-App | **Gewählt:** ca. 5–6 MB Nutzdaten bei gleicher Inhaltsbasis. JavaScript-Rendering ist für diese App ausdrücklich erlaubt. |
 | Öffentliche Website durch eine SPA ersetzen | Verworfen: unnötiger Verlust der HTML-/SEO-/No-JavaScript-Eigenschaften der öffentlichen Website. |
 | Nativer Wrapper für die JSON-App | Optional bei späterem Bedarf an nativer Verteilung oder gebündelten Daten; erfordert einen zusätzlichen iOS-Build- und Verteilungsweg. Für das aktuelle Ziel nicht nötig. |
-| YouTube-Medien lokal spiegeln | Nicht Bestandteil der Entscheidung. Zusätzliche Speicher- und Rechtefragen; Videos würden die Paketgröße wesentlich bestimmen. |
+| YouTube-Videos lokal spiegeln | Nicht Bestandteil der Entscheidung. Nur Vorschaubilder werden auf Nutzerwunsch im Laufzeitcache der App gespeichert. Videos bleiben onlineabhängig. |
 | ZIP-Export in die Dateien-App | Kein verlässlicher Ersatz für Web-App-Hosting und Service Worker auf iOS. |
 
 ## Konsequenzen
@@ -279,6 +296,71 @@ Aufwand, ersetzt aber keine Tests auf funktionale Gleichheit. Die App
 benötigt JavaScript; dies ist eine bewusste, nur für die App geltende
 Entscheidung. Eine PWA bietet keine Garantie für dauerhaft unverlierbare
 lokale Daten.
+
+## Umsetzungsstand
+
+Die gemeinsame Build-Pipeline ist umgesetzt:
+
+- `loadContentData` unter `src/content-data/` ist der einzige Inhalts-Loader.
+  Der bisherige Website-Loader und die gemeinsame Anreicherung sind
+  dorthin verschoben. Der Build übergibt dasselbe Modell an beide Ziele.
+- `src/app-generation/` erzeugt den JSON-Export und die Browser-Module.
+  Die vorhandenen Formatierungen und mehrere Widgets werden direkt
+  wiederverwendet; die öffentliche Website benötigt keine App-Skripte.
+- `npm run generate:site` erzeugt zusätzlich `docs/app/` im selben
+  Staging-Durchlauf. Der vorhandene GitHub-Pages-Workflow veröffentlicht
+  beide Ausgaben unverändert mit einem Deployment.
+- Manifest, Icons, Hash-Routing, Inhaltsansichten, Filter, Kapitel,
+  Player-Aktivierung, Offline-Status, Datenlöschung und versionierte
+  Updates sind implementiert. Das Offline-Manifest wird beim Build in
+  den Worker eingebettet; die native Service-Worker-Updateprüfung erkennt
+  neue Stände, ohne einen weiteren vollständigen Katalogabruf.
+- Jede ausgelieferte App-Datei wird beim Download per SHA-256 geprüft. Fehlende
+  Dateien können erneut geladen werden; unveränderte Update-Dateien
+  werden über ihren Hash aus vorherigen App-Caches übernommen.
+- Die Bereinigung berücksichtigt nur alte Caches, die bei Aktivierung des
+  Workers bereits vorhanden waren. Neu vorbereitete Updates werden nicht
+  versehentlich vom noch laufenden alten Worker entfernt. Mehrere offene
+  App-Clients müssen weiterhin den passenden Renderer melden.
+- Vor dem Löschen der App-Daten bestätigt der aktive Worker den Abbruch
+  laufender Thumbnail-Downloads, damit sie den Bildcache nicht neu befüllen.
+- Katalog- und Routenabgleich mit allen öffentlichen Inhaltsseiten sowie
+  Worker-Tests für Offline-Navigation, Hashfehler, Update-Abbruch,
+  Wiederverwendung, Reparatur und verzögerte Bereinigung sind umgesetzt.
+
+Der Build misst bei diesem Datenbestand rund **5,85 MB Nutzdaten** und
+**2,56 MB gzip**, davon **3,36 MB unkomprimiertes JSON**. Der zusätzliche
+Laufzeitcache für 2.164 Video-Vorschaubilder ist darin nicht enthalten. Interne
+Auswahlentscheidungen und Dump-/Prüfbericht-Hashes werden nicht exportiert.
+Diese Werte sind Paketmessungen, keine Messung des iOS-Speicherverbrauchs.
+Der Größenbericht trennt JSON-Daten, Renderer einschließlich Service Worker
+und importierter Browser-Module, Stylesheets, Medien sowie sonstige Dateien.
+Jede Kategorie nennt Nutzdaten und die Summe der einzeln gzip-komprimierten
+Dateien; die Kategorien ergeben zusammen die gesamte Paketgröße.
+
+Die Reparaturentscheidung wartet auf eine per Anfrage-ID zugeordnete
+Cache-Prüfung des aktiven Workers, statt den zuletzt bekannten Status
+auszuwerten. Bei fehlenden oder fehlgeschlagenen Thumbnail-Abrufen erscheint
+ein gebündelter SVG-Platzhalter in Listen, Tabellen und der Player-Vorschau.
+Der Platzhalter ist gehasht und Bestandteil des vollständigen Offline-Pakets.
+
+Review vom 23.10.2026: 488 automatisierte Tests und der gemeinsame Build mit
+608 öffentlichen Seiten plus App sind erfolgreich. Regressionstests decken
+zusätzlich das Erhalten vorbereiteter Updates, mehrere offene Clients und
+den Abbruch laufender Bilddownloads vor dem Löschen ab. Ein echter
+CORS-Bildabruf einschließlich Speicherung und Lesen aus Cache Storage wurde
+im Browser bestätigt. Der abschließende vollständige Installationslauf im
+integrierten Browser ist dagegen wegen eines Timeouts bei der
+Service-Worker-Registrierung nicht bestätigt; es wurde dabei kein Worker-Fehler
+gemeldet. Die Ursache ist offen. Dieser Stand ist keine vollständige Abnahme
+nach Abschnitt 6.
+
+Im integrierten Chromium-Browser wurden der erste Offline-Download, ein
+Neustart ohne Netz, die Spielesuche sowie ein vollständiges Update mit
+bestätigtem Neustart und Cache-Bereinigung geprüft. Das ersetzt nicht die
+Abnahme auf echtem iPhone: Installation, WebKit-Speicherverhalten,
+tatsächliche Speicher-/Startzeitmessung und YouTube-Wiedergabe bleiben
+auf dem Gerät zu prüfen.
 
 ## Umsetzungsschritte
 

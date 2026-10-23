@@ -5,9 +5,9 @@ import { tmpdir } from "node:os";
 import test from "node:test";
 import { generateSite, validateSite } from "../src/site-generation/generate-site.mjs";
 import { createSiteConfig, slugify } from "../src/site-generation/site-config.mjs";
-import { normalizeSources } from "../src/site-generation/site-data.mjs";
+import { normalizeSources } from "../src/content-data/content-data.mjs";
 import { renderSite } from "../src/site-generation/site-render.mjs";
-import { loadSiteData } from "../src/site-generation/site-data.mjs";
+import { loadContentData } from "../src/content-data/content-data.mjs";
 import { cacheMagazineLogo } from "../src/fetch-magazine/kultmags-logos.mjs";
 import { magazineGuestChannels } from "../src/data/data-magazine-guest-channels.mjs";
 
@@ -79,7 +79,7 @@ test("entfernt redundante Zeitschriften-Linklisten nur aus Zeitschriftenseiten u
 });
 
 test("stimmt Zeitschriften-H1, Fließtext und Meta-Beschreibung auch auf Folgeseiten aufeinander ab", async () => {
-  const realModel = await loadSiteData(new URL("../cache/", import.meta.url).pathname);
+  const realModel = await loadContentData(new URL("../cache/", import.meta.url).pathname);
   const guestInput = fixture(5);
   guestInput.videos.videos.forEach((video) => { video.title = "Blätterabend mit Anna"; });
   const models = [
@@ -114,7 +114,7 @@ test("stimmt Zeitschriften-H1, Fließtext und Meta-Beschreibung auch auf Folgese
 });
 
 test("ergänzt den Steinwallen-Blätterabend ohne mit-Zusatz samt Ausgabe und aktualisierten Kachelzahlen", async () => {
-  const model = await loadSiteData("cache");
+  const model = await loadContentData("cache");
   const guest = model.magazineGuests.find((item) => item.key === "@steinwallen");
   assert.ok(guest.videoIds.includes("GMF5SxCxE6M"));
   assert.equal(guest.videoIds.length, new Set(guest.videoIds).size);
@@ -340,7 +340,7 @@ test("übernimmt Kultmags-Logos offline als lokale Bildassets nur auf Zeitschrif
   const result = await generateSite({ cacheDirectory, outputDirectory, logger: { log() {}, warn() {} } });
   assert.ok(result.pages > 0);
   const detail = await readFile(path.join(outputDirectory, "zeitschriften/pc-games/index.html"), "utf8");
-  const model = await loadSiteData(cacheDirectory);
+  const model = await loadContentData(cacheDirectory);
   const attachedLogo = model.magazines.find((magazine) => magazine.name === "PC Games").logo;
   assert.ok(detail.includes(`src="../../${attachedLogo.asset}"`));
   for (const candidate of attachedLogo.candidates) {
@@ -356,7 +356,7 @@ test("übernimmt Kultmags-Logos offline als lokale Bildassets nur auf Zeitschrif
     assert.ok(!page.html.includes('class="magazine-logo"'), file);
   }
   await writeFile(path.join(cacheDir, "logos", logo.file), "beschädigt");
-  await assert.rejects(loadSiteData(cacheDirectory), /Bildformat|Logo-Inhalt/u);
+  await assert.rejects(loadContentData(cacheDirectory), /Bildformat|Logo-Inhalt/u);
 });
 
 test("lehnt nicht-bildliche und übergroße Kultmags-Logoantworten ab", async (t) => {

@@ -17,6 +17,15 @@ Videobeschreibungen stehen vor den Kapitel-Links und erhalten ihre Absätze und
 Zeilenumbrüche. YouTube-Handles sind direkt verlinkt; bekannte Playlist-URLs
 zeigen den Playlistnamen. Eine zusätzliche Spiel-/Playlistzeile pro Video entfällt.
 
+Eine separate **Offline-App** unter `app/` wird mit demselben Aufruf
+`npm run generate:site` erzeugt. Sie lädt öffentliche Katalogdaten einmal
+als JSON und rendert ihre Ansichten lokal mit JavaScript. Die normale
+HTML-Website bleibt erhalten. Auf dem iPhone lässt sich die App über Safari
+zum Home-Bildschirm hinzufügen; vor der Offline-Nutzung auf „Offline bereit“
+warten und den vollständigen Bildzähler prüfen. Vorschaubilder werden auf
+dem Gerät gespeichert; nur Videos benötigen weiterhin Internet.
+[Installation, Updates und Speicher](doc/README.md#offline-app-für-das-iphone).
+
 Unter `spiele/uebersicht/` gibt es zusätzlich eine aus der Spieleübersicht
 verlinkte Tabelle mit allen Spielen: erstes Videojahr, Titel, Erscheinungsjahr,
 Plattform und Genre (jeweils ein Wert pro Zeile), YouTube-Vorschaubild und

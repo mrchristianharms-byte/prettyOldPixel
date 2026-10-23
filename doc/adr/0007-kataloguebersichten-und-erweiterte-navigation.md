@@ -160,7 +160,7 @@ ausgeblendet. Spielemetadaten folgen unverändert
 ## Umsetzung
 
 - [Seitengenerierung und Katalogstrukturen](../../src/site-generation/site-render.mjs)
-- [Normalisierung, Ausgabezuordnung und Statistikgrundlagen](../../src/site-generation/site-data.mjs)
+- [Normalisierung, Ausgabezuordnung und Statistikgrundlagen](../../src/content-data/content-data.mjs)
 - [Gemeinsames Kachel-Widget](../../src/site-generation/widget/catalog-grid.mjs)
 - [Spieltabelle](../../src/site-generation/widget/game-table.mjs)
 - [Clientseitige Sortierung und Filter](../../src/site-generation/game-table.js)

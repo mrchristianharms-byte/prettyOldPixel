@@ -11,6 +11,7 @@ Dateipfade im Text beziehen sich auf dessen Wurzel.
 - [Quellstruktur und Verzeichnisumbau](source-structure.md)
 - [Ausführung: lokal und GitHub Actions](source-structure.md#ausführung-lokal-und-github-actions)
 - [Generierung und lokale Vorschau](#lokal-bauen)
+- [Offline-App für das iPhone](#offline-app-für-das-iphone)
 - [Kanalstatistik](#startseite-kanal-und-themen-in-zahlen)
 - [Hardware, Retrospektiven und Gespräche](#hardware-retrospektiven-und-gespräche)
 - [Spiele und Reihen](#spiele-und-bestätigte-playlist-zuordnungen)
@@ -46,6 +47,11 @@ npm ci
 npm run generate:site
 ```
 
+Der Aufruf erzeugt sowohl die öffentliche HTML-Website als auch die
+separate JSON-App unter `docs/app/`. `loadContentData` in
+`src/content-data/content-data.mjs` lädt den Datenstand einmal für beide
+Generatoren; die App hat keinen eigenen Cache-Loader.
+
 Die Namenskonvention trennt Internetabrufe (`fetch-*` bzw. `fetch:*`) von
 lokaler Generierung (`generate-*` bzw. `generate:*`). Der Websitegenerator
 heißt `src/generate-site.mjs`, das npm-Ziel `generate:site`; das bisherige
@@ -54,7 +60,8 @@ Hauptstarter `fetch-youtube.mjs` (`fetch:all`) und `generate-site.mjs`
 (`generate:site`), die `runCli()` aus ihren Implementierungen aufrufen.
 Alle weiteren npm-Aufgaben starten das jeweilige Fachmodul direkt,
 ohne zusätzlichen Wrapper in `src/`.
-Die Fachordner trennen Websitegenerierung (`src/site-generation/`),
+Die Fachordner trennen gemeinsame Inhaltsaufbereitung (`src/content-data/`),
+Websitegenerierung (`src/site-generation/`), Offline-App (`src/app-generation/`),
 YouTube-Kanaldaten (`src/fetch-channel/`), Zeitschriftenarchive und Logos
 (`src/fetch-magazine/`), die lokale Spielemetadaten-Pipeline
 (`src/fetch-game/`) sowie Transkripte und abgeleitete Zusatzdaten
@@ -305,6 +312,66 @@ keine externen Ressourcen oder Laufzeit-JavaScript.
   Nach Player-Freigabe ergänzt die offizielle YouTube-IFrame-API Kapitelsprünge
   und eine optionale Folgenfortsetzung auf Spiel- und Heftausgabenseiten.
 
+## Offline-App für das iPhone
+
+`npm run generate:site` erzeugt zusätzlich `docs/app/`. Derselbe
+GitHub-Pages-Workflow veröffentlicht diesen Ordner zusammen mit der Website;
+ein zweites Deployment oder ein Backend ist nicht erforderlich.
+Ein Footer-Link öffnet die App bewusst. Normale Website-Besuche laden weder
+App-Code noch App-JSON und registrieren keinen Service Worker.
+
+Lokal: `npm run generate:site`, danach `npm run dev`, dann
+`http://127.0.0.1:8000/app/` öffnen. Nicht per `file://` aufrufen:
+Service Worker benötigen HTTPS oder einen Localhost-Testserver.
+Auf dem iPhone die veröffentlichte HTTPS-App in Safari öffnen und über
+Teilen → „Zum Home-Bildschirm“ installieren. Die installierte App mit
+Internet öffnen und auf **„Offline bereit“** warten. Danach muss ein
+Neustart im Flugmodus funktionieren; die Installation allein bestätigt
+keinen abgeschlossenen Download.
+
+Die App erzeugt ihre Ansichten mit JavaScript aus versioniertem JSON.
+Sie bietet Kataloge, Suche, Filter, Sortierung, Ausgaben, Kapitel,
+Spieleabschnitte und Quellen. Der gewählte Film und die Kapitelzeit stehen
+in der Hash-Route. „Auf Website öffnen / Link teilen“ liefert stattdessen
+den entsprechenden öffentlichen Seitenlink. Video-Vorschaubilder werden bei
+der Einrichtung direkt auf dem Gerät von YouTube heruntergeladen und in einem
+separaten, versionsübergreifenden App-Cache gespeichert. Ein zusätzlicher
+Bildzähler zeigt den Fortschritt; „Erneut versuchen“ lädt fehlende Bilder nach.
+Diese Abrufe übertragen technische Daten einschließlich der IP-Adresse an
+YouTube/Google, aber keine Zugangsdaten oder Referrer. Videos, Streams und
+externe Archive bleiben onlineabhängig und werden nicht vorab geladen.
+Der Bildserver erlaubt CORS: Die App prüft HTTP-Erfolg und Bild-Content-Type
+und lehnt opaque Antworten ab. Damit vermeidet sie deren möglicherweise
+erheblich überhöhte Speicheranrechnung. Die Build-Größen enthalten diesen
+zusätzlichen Laufzeitcache nicht; der reale Speicherbedarf ist am Gerät zu messen.
+
+Der Build meldet gesamte Nutzdaten und die Summe der einzeln
+gzip-komprimierten Dateien. Zusätzlich weist er Daten, Renderer (inklusive
+Worker und importierter Browser-Module), Styles, Medien und sonstige Dateien
+getrennt mit beiden Größen aus. Offline oder bei nicht erreichbaren
+YouTube-Vorschaubildern verwendet die App einen gebündelten lokalen
+Platzhalter. Aktuelle Größen und die Architektur stehen in
+[ADR 0009](adr/0009-offlinefaehige-web-app-fuer-iphone.md). Browser-Verwaltung
+und vorübergehend doppelte Update-Caches sind darin nicht enthalten.
+
+Das Offline-Manifest enthält Inhalts-Hashes für alle benötigten Dateien.
+Der App-Service-Worker kontrolliert nur `app/`, prüft jeden Download und
+speichert einen neuen Stand getrennt. Unveränderte Inhalte werden aus dem
+vorhandenen App-Cache übernommen. Ein Update wird erst nach vollständigem
+Download zum Neustart angeboten. Alte Stände werden erst gelöscht, wenn
+alle offenen App-Fenster den neuen Renderer verwenden.
+
+Unter „Installation und Speicher“ lassen sich Updates prüfen, dauerhafte
+Speicherung beim Browser anfragen und ausschließlich App-Caches und
+App-Einstellungen löschen. Eine Speicherzusage ist keine Datensicherung;
+iOS kann Daten entfernen. Bei unvollständigem Speicher bietet die App einen
+erneuten Download an. Das Löschen des Home-Bildschirm-Icons garantiert nicht
+das Entfernen aller Website-Daten.
+
+Automatisierte Tests decken Daten-/Routenabgleich und Worker-Fehlerfälle ab.
+Installation, tatsächliche Speicherbelegung und Medienwiedergabe müssen vor
+einer iPhone-Freigabe zusätzlich auf einem echten Gerät geprüft werden.
+
 ## Recherchierte Daten pflegen
 
 Die Dateien mit Präfix `data-` sind der dauerhaft gepflegte Datenbestand,
@@ -483,7 +550,7 @@ erfordert zugleich aktualisierte Imports und Dokumentationsverweise.
   ausgewählten Video. Die Reihenfolge bleibt chronologisch, auch wenn nach
   einem Abschlussgespräch noch weitere Spielvideos erscheinen. Eine zusätzliche
   Übersicht „Abschnitte und Reihen“ wird nicht angezeigt.
-- `src/site-generation/site-game-series.mjs` erkennt Abschnitte nur aus ausdrücklichen
+- `src/content-data/site-game-series.mjs` erkennt Abschnitte nur aus ausdrücklichen
   Titelmerkmalen und bestätigtem Playlist-Kontext. Eine Folgenummer `#0` oder
   `#1` allein ist kein Intro; „Abschluss Level 1“ ist kein Abschlussgespräch.
   Bei widersprüchlichem oder fehlendem Formatkontext bleibt der Beitrag als
@@ -514,7 +581,7 @@ Zeitlinks zum eigenen Video werden in der sichtbaren Videobeschreibung
 nicht erneut ausgegeben. Begleittexte, ungültige Zeitangaben und Links
 zu anderen Videos bleiben erhalten; die Originalbeschreibung im Cache
 und in den strukturierten Daten bleibt unverändert.
-`src/site-generation/site-video-details.mjs` bereitet diese Daten rein offline auf:
+`src/content-data/site-video-details.mjs` bereitet diese Daten rein offline auf:
 
 - Kapitelzeilen verwenden `MM:SS` oder `HH:MM:SS` mit Beschriftung. Ein
   aufsteigender Block ab `00:00` braucht mindestens zwei Einträge; ohne
@@ -586,7 +653,7 @@ beschreibt [ADR 0005](adr/0005-wiederverwendbare-widgets-und-komponenten.md).
 - `navigation.mjs`: gemeinsame Hauptnavigation mit relativen Links und
   Markierung des aktiven Bereichs auch auf Unterseiten. Das Widget erhält
   eine fertige Liste `{ route, name, separator }` und enthält keine
-  Bereichslogik. Die Liste baut `siteNavigation` in `site-data.mjs` einmal als
+  Bereichslogik. Die Liste baut `siteNavigation` in `content-data.mjs` einmal als
   `model.navigation`; `layout` reicht sie nur weiter.
   Feste Einstiege sind „News“, „Blätterabend“ (Zeitschriften) und „re.play“
   (Spiele), jeweils nur bei vorhandenen Daten. Die Namen der Themenbereiche
@@ -1997,7 +2064,7 @@ Architecture Decision Records liegen in `doc/adr/`:
 - [ADR 0006: Spielemetadaten ausschließlich aus lokalem Games-Dump (angenommen)](adr/0006-spielemetadaten-aus-lokalem-games-dump.md)
 - [ADR 0007: Katalogübersichten und erweiterte Navigation](adr/0007-kataloguebersichten-und-erweiterte-navigation.md)
 - [ADR 0008: Transkripte und Spieleabschnitte in Blätterabenden (vorgeschlagen)](adr/0008-transkripte-und-spieleabschnitte-in-blaetterabenden.md)
-- [ADR 0009: Offlinefähige Web-App für das iPhone (angenommen; separate JSON-App, Umsetzung ausstehend)](adr/0009-offlinefaehige-web-app-fuer-iphone.md)
+- [ADR 0009: Offlinefähige Web-App für das iPhone (implementiert; iPhone-Abnahme ausstehend)](adr/0009-offlinefaehige-web-app-fuer-iphone.md)
 
 ## GitHub Pages veröffentlichen
 

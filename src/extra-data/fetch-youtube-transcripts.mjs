@@ -4,7 +4,7 @@ import path from "node:path";
 import { promisify } from "node:util";
 import { fileURLToPath } from "node:url";
 import { writeJson, defaultSleep } from "../shared/archive-cache.mjs";
-import { loadSiteData } from "../site-generation/site-data.mjs";
+import { loadContentData } from "../content-data/content-data.mjs";
 
 const projectRoot = fileURLToPath(new URL("../../", import.meta.url));
 const execute = promisify(execFile);
@@ -157,7 +157,7 @@ export async function fetchYoutubeTranscripts({
   targetDirectory = path.join(cacheDirectory, "youtube-transcripts"),
   fetchTranscriptImpl = fetchTranscript, log = console.log, sleep = defaultSleep,
 } = {}) {
-  const model = await loadSiteData(cacheDirectory);
+  const model = await loadContentData(cacheDirectory);
   const videos = model.videos.filter((video) => video.blaetterabend || video.magazines.length);
   await mkdir(targetDirectory, { recursive: true });
   const result = { selected: videos.length, fetched: 0, unavailable: 0, skipped: 0, failed: 0 };

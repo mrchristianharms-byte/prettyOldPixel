@@ -300,7 +300,7 @@ vorhandene Folgenummern nicht vermischt werden.
 Beschreibung. Die zusätzliche Übersicht „Abschnitte und Reihen“ entfällt,
 um die Videoauswahl nicht durch eine zweite Navigation zu verkomplizieren.
 Es entstehen weder neue Videoseiten noch leere Phasen. Die Erkennung steht in
-[`src/site-generation/site-game-series.mjs`](../../src/site-generation/site-game-series.mjs).
+[`src/content-data/site-game-series.mjs`](../../src/content-data/site-game-series.mjs).
 
 Ausdrückliche Titelmerkmale belegen Intro/Unboxing, Abschlussgespräch/Fazit
 und Interview. re.consider und re.minder bleiben eigene Beitragsarten, auch

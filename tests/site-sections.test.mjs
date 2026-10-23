@@ -4,7 +4,7 @@ import path from "node:path";
 import { tmpdir } from "node:os";
 import test from "node:test";
 import { sectionDefinitions } from "../src/data/data-sections.mjs";
-import { normalizeSources, loadSiteData } from "../src/site-generation/site-data.mjs";
+import { normalizeSources, loadContentData } from "../src/content-data/content-data.mjs";
 import { createSiteConfig, slugify } from "../src/site-generation/site-config.mjs";
 import { renderSite } from "../src/site-generation/site-render.mjs";
 import { generateSite, validateSite } from "../src/site-generation/generate-site.mjs";
@@ -426,7 +426,7 @@ test("prüft ungültige Zuordnungen, doppelte IDs und fehlende Personen oder Rei
 
 test("prüft die echten kuratierten Zuordnungen und die doppelte Originalnummer der Flugsimulationen", async () => {
   const cache = path.resolve(import.meta.dirname, "../cache");
-  const model = await loadSiteData(cache);
+  const model = await loadContentData(cache);
   assert.deepEqual(model.sections.filter((section) => ["hardware", "retrospektiven", "interviews"].includes(section.id)).map((section) => [section.id, section.entries.length]),
     [["hardware", 15], ["retrospektiven", 21], ["interviews", 8]]);
   const other = model.sections.find((section) => section.id === "sonstiges");

@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { runInNewContext } from "node:vm";
 import { createSiteConfig } from "../src/site-generation/site-config.mjs";
-import { normalizeSources } from "../src/site-generation/site-data.mjs";
+import { normalizeSources } from "../src/content-data/content-data.mjs";
 import { renderSite } from "../src/site-generation/site-render.mjs";
 
 const channel = { id: "UC-theme", title: "Pretty Old Pixel" };

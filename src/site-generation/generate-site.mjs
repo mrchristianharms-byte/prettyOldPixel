@@ -4,9 +4,10 @@ import { gzipSync } from "node:zlib";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 import { createSiteConfig } from "./site-config.mjs";
-import { loadSiteData } from "./site-data.mjs";
+import { loadContentData } from "../content-data/content-data.mjs";
 import { escapeHtml, renderSite } from "./site-render.mjs";
-import { unreviewedPreviewVariable } from "./site-game-discussions.mjs";
+import { unreviewedPreviewVariable } from "../content-data/site-game-discussions.mjs";
+import { generateApp } from "../app-generation/generate-app.mjs";
 
 const projectRoot = path.resolve(fileURLToPath(new URL("../../", import.meta.url)));
 const hash = (content) => createHash("sha256").update(content).digest("hex");
@@ -23,7 +24,7 @@ async function optionalStat(file) {
 export function validateSite(pages, assets, config) {
   const files = new Set([...pages.keys(), ...assets.keys()]);
   let maxHtmlGzip = 0;
-  const cssGzip = [...assets.entries()].filter(([file]) => file.endsWith(".css"))
+  const cssGzip = [...assets.entries()].filter(([file]) => !file.startsWith("app/") && file.endsWith(".css"))
     .reduce((sum, [, content]) => sum + gzipSync(content).length, 0);
   let jsGzip = 0;
   if (cssGzip > 20 * 1024) throw new Error(`CSS überschreitet 20 KiB gzip: ${cssGzip} Bytes.`);
@@ -139,6 +140,7 @@ export async function generateSite({
   if (!Number.isFinite(now) || !Number.isFinite(new Date(now).getTime())) throw new Error("Ungültiger Build-Zeitpunkt.");
   const changedAt = new Date(now).toISOString();
   const config = createSiteConfig(baseUrl);
+  config.offlineApp = true;
   const manifestFile = path.join(output, "build-manifest.json");
   const manifestStat = await optionalStat(manifestFile);
   let previousManifest;
@@ -158,7 +160,7 @@ export async function generateSite({
       }
     }
   }
-  const model = await loadSiteData(cache, { now });
+  const model = await loadContentData(cache, { now });
   for (const warning of model.warnings) logger.warn(`Build-Hinweis: ${warning}`);
 
   const [pico, customCss, license, seriesJs, favicon, touchIcon, tableJs] = await Promise.all([
@@ -179,6 +181,8 @@ export async function generateSite({
   const jsFile = `assets/video-series.${hash(seriesJs).slice(0, 12)}.js`;
   const tableFile = `assets/game-table.${hash(tableJs).slice(0, 12)}.js`;
   const assets = new Map([[cssFile, css], [jsFile, seriesJs], [tableFile, tableJs], ["favicon.webp", favicon], ["apple-touch-icon.png", touchIcon], ["assets/pico-LICENSE.txt", license], [".nojekyll", ""], ...model.magazineLogoAssets]);
+  const app = await generateApp(model, config, assets);
+  for (const [file, value] of app.files) assets.set(file, value);
   const pages = renderSite(model, config, cssFile, jsFile, tableFile);
   const budgets = validateSite(pages, assets, config);
   const manifest = {
@@ -254,8 +258,10 @@ export async function generateSite({
     await rm(staging, { recursive: true, force: true });
   }
   const unreviewedPages = unreviewedDiscussionPages(pages, model);
-  const result = { pages: pages.size, files: content.size, reused, warnings: model.warnings, unreviewedPages, ...budgets };
+  const result = { pages: pages.size, files: content.size, reused, warnings: model.warnings, unreviewedPages, app: { version: app.version, bytes: app.bytes, gzip: app.gzip, dataBytes: app.dataBytes, sizes: app.sizes }, ...budgets };
   logger.log(`Statische Website erstellt: ${output}\n${result.pages} Seiten, ${reused}/${result.files} Dateien unverändert übernommen. CSS: ${budgets.cssGzip} Bytes gzip, JavaScript: ${budgets.jsGzip} Bytes gzip, größtes HTML: ${budgets.maxHtmlGzip} Bytes gzip.`);
+  logger.log(`Offline-App: ${(app.bytes / 1e6).toFixed(2)} MB Nutzdaten, ${(app.gzip / 1e6).toFixed(2)} MB gzip; JSON: ${(app.dataBytes / 1e6).toFixed(2)} MB.`);
+  for (const [category, size] of Object.entries(app.sizes)) logger.log(`  ${category}: ${size.bytes} Bytes, ${size.gzip} Bytes gzip.`);
   if (process.env[unreviewedPreviewVariable] === "1" || unreviewedPages.length) logger.log(unreviewedReport(unreviewedPages));
   return result;
 }

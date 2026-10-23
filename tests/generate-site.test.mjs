@@ -7,7 +7,7 @@ import test from "node:test";
 import { gzipSync } from "node:zlib";
 import { generateSite, validateSite } from "../src/site-generation/generate-site.mjs";
 import { createSiteConfig } from "../src/site-generation/site-config.mjs";
-import { normalizeSources, loadSiteData } from "../src/site-generation/site-data.mjs";
+import { normalizeSources, loadContentData } from "../src/content-data/content-data.mjs";
 import { descriptionHtml, jsonLd, renderSite } from "../src/site-generation/site-render.mjs";
 
 const channel = { id: "UC-build", title: "Pretty Old Pixel" };
@@ -44,7 +44,7 @@ const issueFile = /^zeitschriften\/(?!gaeste\/|videos\/)[^/]+\/(?!seite\/)[^/]+\
 const issuePage = (pages) => [...pages].find(([file]) => issueFile.test(file))[1].html;
 
 test("enthält auf allen Seiten und in eingebetteten Player-Vorschauen nicht leere Bild-Alt-Texte", async () => {
-  const model = await loadSiteData(new URL("../cache/", import.meta.url).pathname);
+  const model = await loadContentData(new URL("../cache/", import.meta.url).pathname);
   const pages = renderSite(model, createSiteConfig(), "assets/site.css");
   const entities = { "&amp;": "&", "&lt;": "<", "&gt;": ">", "&quot;": '"', "&#39;": "'" };
   const decode = (value) => value.replace(/&(?:amp|lt|gt|quot|#39);/gu, (entity) => entities[entity]);

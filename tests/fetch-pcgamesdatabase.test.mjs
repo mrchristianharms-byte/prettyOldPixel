@@ -7,7 +7,7 @@ import {
   GAMESTAR_ARCHIVE_URL, GAMESTAR_LOGO_URL, addPcgamesdatabaseLinks, findPcgamesdatabaseIssue,
   loadPcgamesdatabaseCatalog, parseGameStarArchive,
 } from "../src/fetch-magazine/fetch-pcgamesdatabase.mjs";
-import { loadSiteData } from "../src/site-generation/site-data.mjs";
+import { loadContentData } from "../src/content-data/content-data.mjs";
 import { generateSite } from "../src/site-generation/generate-site.mjs";
 import { generateBlaetterabendList } from "../src/extra-data/generate-blaetterabend.mjs";
 
@@ -125,7 +125,7 @@ test("integriert neue Heftlinks auch ohne erneute Blätterabend-Generierung in d
       },
     }] }] }],
   ]) await writeFile(path.join(cacheDirectory, `${name}.json`), JSON.stringify(data));
-  const model = await loadSiteData(cacheDirectory);
+  const model = await loadContentData(cacheDirectory);
   const mention = model.videoById.get(id).magazines[0];
   assert.ok(mention.archives.some((archive) => archive.provider === "pcgamesdatabase"));
   assert.ok(mention.archives.some((archive) => archive.provider === "kultmags"));

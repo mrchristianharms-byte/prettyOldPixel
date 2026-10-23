@@ -1,4 +1,4 @@
-import { httpUrl } from "./site-data.mjs";
+import { httpUrl } from "../shared/http-url.mjs";
 import { escapeHtml, externalLink } from "./site-html.mjs";
 
 export function magazineLinks(magazine, config) {

@@ -1,8 +1,8 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
-import { extractVideoDetails } from "../src/site-generation/site-video-details.mjs";
-import { normalizeSources } from "../src/site-generation/site-data.mjs";
+import { extractVideoDetails } from "../src/content-data/site-video-details.mjs";
+import { normalizeSources } from "../src/content-data/content-data.mjs";
 import { createSiteConfig } from "../src/site-generation/site-config.mjs";
 import { renderSite } from "../src/site-generation/site-render.mjs";
 import { validateSite } from "../src/site-generation/generate-site.mjs";

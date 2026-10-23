@@ -49,7 +49,7 @@ test("Pages-Jobs installieren Build-Abhängigkeiten vor Tests und Seitengenerier
 test("src enthält nur Fachordner und die beiden Hauptaufgaben-Starter", async () => {
   const entries = await readdir(source, { withFileTypes: true });
   assert.deepEqual(entries.filter((entry) => entry.isDirectory()).map((entry) => entry.name).sort(), [
-    "data", "extra-data", "fetch-channel", "fetch-game", "fetch-magazine", "shared", "site-generation",
+    "app-generation", "content-data", "data", "extra-data", "fetch-channel", "fetch-game", "fetch-magazine", "shared", "site-generation",
   ]);
   assert.deepEqual(entries.filter((entry) => !entry.isDirectory()).map((entry) => entry.name).sort(),
     starters.map(([file]) => file).sort());

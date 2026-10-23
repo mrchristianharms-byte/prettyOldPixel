@@ -1,3 +1,4 @@
+import { gameMetadataFilters } from "../content-data/game-filters.mjs";
 import { readFile } from "node:fs/promises";
 import { minify } from "terser";
 import { paginatedRoute, slugify, yearAnchor } from "./site-config.mjs";
@@ -179,7 +180,7 @@ ${navigation(navigationEntries, route, config, themeToggle())}
 ${breadcrumbsMarkup(crumbs, config)}
 ${body}
 </main>
-<footer class="container site-footer"><p>${config.name} · Privates, nicht kommerzielles Projekt. · <a href="${config.href("datenschutz/")}">${interactive ? "YouTube-Einbindung und Datenschutz" : "Datenschutz und Hinweise"}</a> · Videos und Vorschaubilder von YouTube. · ${externalLink("https://www.youtube.com/prettyoldpixel", "YouTube")} · ${externalLink("https://www.twitch.tv/prettyoldpixel", "Twitch")}</p></footer>
+<footer class="container site-footer"><p>${config.name} · Privates, nicht kommerzielles Projekt. · <a href="${config.href("datenschutz/")}">${interactive ? "YouTube-Einbindung und Datenschutz" : "Datenschutz und Hinweise"}</a>${config.offlineApp ? ` · <a href="${config.href("app/")}">Offline-App</a>` : ""} · Videos und Vorschaubilder von YouTube. · ${externalLink("https://www.youtube.com/prettyoldpixel", "YouTube")} · ${externalLink("https://www.twitch.tv/prettyoldpixel", "Twitch")}</p></footer>
 </body>
 </html>
 `;
@@ -233,6 +234,7 @@ ${externalLink("https://docs.github.com/en/site-policy/privacy-policies/github-g
 <p>Gespeichert werden nur die Player-Aktivierung und die Einstellung zur automatischen Folgenfortsetzung, kein Wiedergabeverlauf. Das ausgewählte Video bleibt in der Seitenadresse erhalten. Ohne JavaScript werden die Einstellungen nicht gemerkt; Kapitel öffnen YouTube, und die Folgenfortsetzung ist nicht verfügbar. Sie können den Player weiterhin einzeln aktivieren, alle Beschreibungen lesen und den YouTube-Links folgen.</p>
 <p>${externalLink("https://policies.google.com/privacy?hl=de", "Datenschutzerklärung von Google")} · ${externalLink("https://www.youtube.com/t/terms", "Nutzungsbedingungen von YouTube")}</p>
 <h2>Externe Links und eigene Speicherung</h2>
+${config.offlineApp ? `<h3>Separate Offline-App</h3><p>Die <a href="${config.href("app/")}">Offline-App</a> lädt erst beim bewussten Öffnen ihren Katalog und einen eigenen Service Worker. Sie speichert öffentliche Katalogdaten, App-Code, Logos und Icons lokal im Cache Storage. „Offline bereit“ bestätigt den vollständigen Katalog; der zusätzliche Bildzähler zeigt die gespeicherten Vorschaubilder. Die App lädt alle Video-Vorschaubilder beim Einrichten und Ergänzen direkt von i.ytimg.com ohne Zugangsdaten und Referrer in einen lokalen Cache. Dabei werden insbesondere Ihre IP-Adresse und technische Request-Daten an YouTube/Google übertragen. Gespeicherte Bilder sind danach offline verfügbar und bleiben bei App-Updates erhalten. Videos bleiben onlineabhängig und werden nicht im App-Cache gespeichert. Beim Öffnen mit Internet kann die App auf Updates prüfen; es gibt kein eigenes Tracking.</p><p>App-Einstellungen für Darstellung, Player und Folgenfortsetzung liegen getrennt unter „pretty-old-pixel:app:*“. Die App-Hilfe erklärt Installation und gezieltes Löschen ihrer Daten einschließlich der Vorschaubilder. Das Entfernen des Home-Bildschirm-Icons garantiert nicht, dass alle Website-Daten gelöscht werden. Das Betriebssystem kann gespeicherte Daten entfernen; eine erneute Einrichtung braucht Internet.</p>` : ""}
 <p>Die Darstellung folgt zunächst dem im Browser eingestellten hellen oder dunklen Modus. Mit dem Symbol im Seitenkopf können Sie umschalten. Ihre manuelle Auswahl wird als „light“ oder „dark“ unter „pretty-old-pixel:theme“ im Local Storage gespeichert. Nach Löschen dieser Browserdaten gilt wieder die Browsereinstellung. Ohne JavaScript folgt die Darstellung weiterhin dem Browsermodus.</p>
 <p>Externe Links sind mit ↗ und einem zugänglichen Hinweis gekennzeichnet. Erst beim Aufrufen wird das jeweilige Ziel besucht; Vorschaubilder und bereits aktivierte Player sind davon ausgenommen. Diese Website setzt selbst keine Tracking-Cookies ein und verwendet keine Analytics-Dienste. Im Local Storage stehen ausschließlich Ihre Player-Aktivierung, die Einstellung zur automatischen Folgenfortsetzung und eine manuelle Auswahl des Darstellungsmodus; Session Storage wird nicht verwendet.</p>
 <p><a href="${config.href()}">Zur Startseite und den Themen</a></p>`;
@@ -492,50 +494,6 @@ function gameReleaseSource(url, iconOnly = false) {
     : externalLink(url, label);
 }
 
-function gameMetadataFilters(games) {
-  const filters = new Map();
-  for (const [field, label, segment] of [
-    ["genre", "Genre", "genre"],
-    ["developer", "Entwickler", "entwickler"],
-    ["publisher", "Publisher", "publisher"],
-    ["platform", "Spieleplattformen", "plattform"],
-  ]) {
-    const byName = new Map();
-    for (const game of games) {
-      if (game.metadata?.status !== "ready") continue;
-      const { genres = [], releases = [] } = game.metadata.data;
-      const values = field === "platform" ? (game.platforms.length ? game.platforms : game.metadata.data.scope?.platforms ?? [])
-        : field === "genre" ? genres : releases.map((release) => release[field]);
-      for (const name of new Set(values.filter(Boolean))) {
-        if (!byName.has(name)) byName.set(name, []);
-        byName.get(name).push(game);
-      }
-    }
-    const bySlug = new Map();
-    for (const name of [...byName.keys()].sort()) {
-      const matches = byName.get(name);
-      if (matches.length < 2) continue;
-      const slug = slugify(name) || "wert";
-      if (!bySlug.has(slug)) bySlug.set(slug, []);
-      bySlug.get(slug).push({ name, label, games: matches });
-    }
-    const entries = new Map();
-    const usedSlugs = new Set(bySlug.keys());
-    for (const [slug, values] of bySlug) {
-      let variant = 1;
-      for (const entry of values) {
-        let routeSlug = slug;
-        if (values.length > 1) {
-          do { routeSlug = `${slug}-variante-${variant++}`; } while (usedSlugs.has(routeSlug));
-          usedSlugs.add(routeSlug);
-        }
-        entries.set(entry.name, { ...entry, route: `spiele/${segment}/${routeSlug}/` });
-      }
-    }
-    filters.set(field, entries);
-  }
-  return filters;
-}
 
 function renderGameMetadata(game, config, filters) {
   const record = game.metadata;

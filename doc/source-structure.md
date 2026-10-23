@@ -1,6 +1,6 @@
 # Quellstruktur: Umbau in Fachverzeichnisse
 
-Stand: 20.10.2026.
+Stand: 23.10.2026.
 
 Zurück zum [Projekteinstieg](../README.md) oder zur
 [Funktionsreferenz](README.md).
@@ -29,6 +29,8 @@ CLI-Teil nicht ausgeführt.
 src/
 ├── fetch-youtube.mjs
 ├── generate-site.mjs
+├── content-data/       # einziger Loader fuer Website und Offline-App
+├── app-generation/    # JSON-Export, Browser-Ansichten und Service Worker
 ├── site-generation/
 │   ├── generate-site.mjs
 │   ├── site-*.mjs
@@ -48,7 +50,9 @@ src/
 
 | Verzeichnis | Zuständigkeit und wichtige Dateien |
 |---|---|
-| [`site-generation/`](../src/site-generation/) | Offline-Build, Datenmodell, Konfiguration, Rendering und Formatierung. `widget/` enthält die gemeinsamen HTML-Komponenten; Styles, Browser-Skripte und vendiertes Pico CSS einschließlich Lizenz liegen beim Generator, Bilder in `assets/`. |
+| [`content-data/`](../src/content-data/) | Gemeinsamer Einstieg `loadContentData` liest Caches und Bestandsdaten, validiert und normalisiert sie einschließlich Spielemetadaten, Abschnitten, Gästen und Logos. Keine Abhängigkeit von einem der beiden Renderer. |
+| [`app-generation/`](../src/app-generation/) | Kompakter JSON-Export, App-Hülle und browserfähige Ansichten, Hash-Routing, Offline-Speicherung und Updates. Liest keine Inhalts-Caches selbst. |
+| [`site-generation/`](../src/site-generation/) | Gemeinsamer Build-Aufruf, Website-Konfiguration, HTML-Rendering und Formatierung. `widget/` enthält die gemeinsamen HTML-Komponenten; Styles, Browser-Skripte und vendiertes Pico CSS einschließlich Lizenz liegen beim Generator, Bilder in `assets/`. |
 | [`fetch-channel/`](../src/fetch-channel/) | YouTube-Videos und Playlists sowie deren gemeinsamer Abruf. Die Implementierungen heißen weiterhin `fetch-youtube-videos.mjs`, `fetch-youtube-playlists.mjs` und `fetch-youtube.mjs`; `youtube-data-api.mjs` kapselt die YouTube Data API v3, die bei gesetztem `GOOGLE_YT_DATA_API_KEY` statt des anonymen Abrufs verwendet wird. |
 | [`fetch-magazine/`](../src/fetch-magazine/) | Zeitschriftenarchive von Kultmags, Reetroz, PC Games Database und AMR, gemeinsamer Archivabruf und Logoverarbeitung. PC Games Database gehört hierher, weil das Modul den GameStar-Heftkatalog verarbeitet. |
 | [`fetch-game/`](../src/fetch-game/) | Lokale Spielemetadaten-Pipeline: SQL-Dump einmal in den Titelindex lesen, Katalog daraus importieren, Titel und Plattformen abgleichen, Firmennamen vereinheitlichen, Ergebnisse verifizieren, nutzbare Metadaten und Prüfberichte erzeugen. Der Ordnername bedeutet keinen automatischen Internetabruf. |
@@ -96,10 +100,15 @@ ohne zusätzlichen Starter unter `src/`.
 4. `extra-data/` erzeugt ergänzende Zuordnungen und Analysen.
    Transkripte benötigen einen eigenen Abruf; ihre Analyse ist ein separater
    Schritt und kein Bestandteil des Websitebuilds.
-5. [`loadSiteData`](../src/site-generation/site-data.mjs) liest die vorhandenen
-   Caches ein und erstellt das gemeinsame Website-Datenmodell.
-6. Der Websitegenerator rendert und validiert Seiten und Assets und schreibt
-   die fertige Website nach `docs/`.
+5. [`loadContentData`](../src/content-data/content-data.mjs) liest die vorhandenen
+   Caches und Bestandsdaten genau einmal ein und erstellt das gemeinsame
+   Inhaltsmodell.
+6. Dasselbe Modell geht an den HTML-Renderer und an
+   [`generateApp`](../src/app-generation/generate-app.mjs). Der App-Generator
+   exportiert JSON und erzeugt seine Browser-Dateien ohne eigene Inhaltsabrufe.
+7. Der gemeinsame Build schreibt Website und App in dasselbe Staging-Verzeichnis
+   und ersetzt `docs/` erst nach erfolgreicher Generierung. Die Website liegt
+   unter den bisherigen Routen, die App unter `docs/app/`.
 
 Die Nummerierung beschreibt die Zuständigkeiten, keine Pflicht zur
 erneuten Ausführung aller Schritte vor jedem Build. Der Websitebuild bleibt

@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { slugify } from "./site-config.mjs";
+import { slugify } from "./routes.mjs";
 import { magazineGuestChannels } from "../data/data-magazine-guest-channels.mjs";
 
 export function extractMagazineGuests(title) {

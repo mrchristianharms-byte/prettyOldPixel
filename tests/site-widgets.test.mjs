@@ -11,7 +11,7 @@ import { videoPanel } from "../src/site-generation/widget/video-panel.mjs";
 import { navigation } from "../src/site-generation/widget/navigation.mjs";
 import { themeToggle } from "../src/site-generation/widget/theme-toggle.mjs";
 import { magazineLogo } from "../src/site-generation/widget/magazine-logo.mjs";
-import { normalizeSources } from "../src/site-generation/site-data.mjs";
+import { normalizeSources } from "../src/content-data/content-data.mjs";
 import { createSiteConfig } from "../src/site-generation/site-config.mjs";
 import { renderSite } from "../src/site-generation/site-render.mjs";
 

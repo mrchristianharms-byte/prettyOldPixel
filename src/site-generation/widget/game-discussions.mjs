@@ -21,11 +21,11 @@ export function gameDiscussionMeta({ firstYear = null, developers = [], publishe
   return parts.length ? ` <span class="meta">(${escapeHtml(parts.join(", "))})</span>` : "";
 }
 
-export function gameDiscussions(video) {
+export function gameDiscussions(video, { timestampHref, hint = "Ohne aktivierte Player-Steuerung öffnen die Links das Video auf YouTube." } = {}) {
   if (!video.gameDiscussions?.length) return "";
   return `<section class="game-discussions"><h3>Spielebesprechungen im Video</h3>
 ${video.gameDiscussions.some((discussion) => !discussion.reviewed) ? '<p class="meta">Spielnamen und Zeitmarken können ungenau sein.</p>' : ""}
-<p class="meta" data-chapter-hint>Ohne aktivierte Player-Steuerung öffnen die Links das Video auf YouTube.</p>
+<p class="meta" data-chapter-hint>${escapeHtml(hint)}</p>
 <ol>${video.gameDiscussions.map((discussion) => {
     const seconds = Math.floor(discussion.startMs / 1000);
     const time = durationLabel(seconds);
@@ -35,6 +35,8 @@ ${video.gameDiscussions.some((discussion) => !discussion.reviewed) ? '<p class="
     url.searchParams.set("t", `${seconds}s`);
     // Marker lets the build list preview pages; reviewed entries never carry it.
     const marker = discussion.reviewed ? "" : ` data-unreviewed-video="${escapeHtml(video.id)}"`;
-    return `<li data-chapter-seconds="${seconds}"${marker}>${externalLink(url.href, `${time} · ${discussion.title}${length}`)}${gameDiscussionMeta(discussion)}</li>`;
+    const label = `${time} · ${discussion.title}${length}`;
+    const link = timestampHref ? `<a href="${escapeHtml(timestampHref(seconds))}">${escapeHtml(label)}</a>` : externalLink(url.href, label);
+    return `<li data-chapter-seconds="${seconds}"${marker}>${link}${gameDiscussionMeta(discussion)}</li>`;
   }).join("")}</ol></section>`;
 }

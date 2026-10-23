@@ -1,7 +1,9 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { createHash } from "node:crypto";
-import { slugify, yearAnchor } from "./site-config.mjs";
+import { slugify, yearAnchor } from "./routes.mjs";
+import { httpUrl } from "../shared/http-url.mjs";
+export { httpUrl } from "../shared/http-url.mjs";
 import { secondsToIsoDuration } from "../fetch-channel/fetch-youtube-videos.mjs";
 import { gameDefinitions } from "../data/data-games.mjs";
 import { loadReadyGameMetadata } from "../fetch-game/game-metadata-ready.mjs";
@@ -30,17 +32,6 @@ function text(value, label) {
 function optionalText(value, label) {
   requireValue(value === undefined || value === null || typeof value === "string", `${label}: Text erwartet.`);
   return value ?? "";
-}
-
-export function httpUrl(value) {
-  if (typeof value !== "string") return null;
-  try {
-    const url = new URL(value);
-    return ["http:", "https:"].includes(url.protocol) && !url.username && !url.password ? url.href : null;
-  } catch (error) {
-    if (error instanceof TypeError) return null;
-    throw error;
-  }
 }
 
 function publishedTime(value) {
@@ -594,7 +585,7 @@ export function siteNavigation({ hasMagazines, games, sections }) {
   ];
 }
 
-export async function loadSiteData(cacheDirectory, options) {
+export async function loadContentData(cacheDirectory, options) {
   const [videos, playlists, magazines] = await Promise.all(
     ["youtube-videos.json", "youtube-playlists.json", "blaetterabend-videos.json"].map(async (name) => {
       const file = path.join(cacheDirectory, name);

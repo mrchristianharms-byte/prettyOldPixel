@@ -1,0 +1,19 @@
+.app-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr)); gap: 1rem; }
+.app-grid article { margin: 0; }
+.app-grid p { margin: 0; }
+.app-preview { display: grid; grid-template-columns: minmax(5rem, 9rem) minmax(0, 1fr); gap: 1rem; }
+.app-preview img { aspect-ratio: 16 / 9; object-fit: contain; background: var(--pico-card-background-color); }
+.app-logo { max-height: 5rem; object-fit: contain; }
+#app-nav { display: flex; flex-wrap: wrap; gap: .75rem; }
+body > header, body > footer { padding-block: 1rem; }
+body > aside { padding-block: .5rem; }
+body > aside p { margin: 0; }
+#app-game-filters, .app-player-controls { display: flex; flex-wrap: wrap; align-items: end; gap: .5rem; }
+#app-game-filters label { width: 10rem; }
+#app-game-filters :is(input, select, button) { margin: 0; }
+.app-metadata { display: grid; grid-template-columns: auto 1fr; gap: .5rem 1rem; }
+.app-metadata dd { margin: 0; }
+#app-player iframe { width: 100%; aspect-ratio: 16 / 9; border: 0; }
+#app-player img { max-width: 20rem; aspect-ratio: 16 / 9; }
+#inhalt { min-height: 40vh; }
+@media (max-width: 500px) { .app-preview { grid-template-columns: minmax(0, 1fr); } }

@@ -4,12 +4,12 @@ import { mkdtemp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { tmpdir } from "node:os";
 import test from "node:test";
-import { loadSiteData } from "../src/site-generation/site-data.mjs";
+import { loadContentData } from "../src/content-data/content-data.mjs";
 import { createSiteConfig } from "../src/site-generation/site-config.mjs";
 import { renderSite } from "../src/site-generation/site-render.mjs";
 import { generateSite } from "../src/site-generation/generate-site.mjs";
 import { gameDiscussions } from "../src/site-generation/widget/game-discussions.mjs";
-import { unreviewedPreviewVariable } from "../src/site-generation/site-game-discussions.mjs";
+import { unreviewedPreviewVariable } from "../src/content-data/site-game-discussions.mjs";
 import { videoPanel } from "../src/site-generation/widget/video-panel.mjs";
 
 const videoId = "d0000000000";
@@ -66,7 +66,7 @@ test("lädt nur abgeschlossene Analysen mit passendem Transkript und zeigt Sprun
   previewUnreviewed(t);
   const { directory, analysis, file } = await setup(t);
   await writeFile(file, JSON.stringify(analysis));
-  const model = await loadSiteData(directory);
+  const model = await loadContentData(directory);
   assert.equal(model.videoById.get(videoId).gameDiscussions.length, 1);
   const config = createSiteConfig();
   const pages = renderSite(model, config, "assets/test.css");
@@ -96,14 +96,14 @@ test("veröffentlicht ohne Vorschau-Schalter nur geprüfte Analysen als Ganzes, 
   analysis.discussions = [discussion,
     { ...discussion, title: "Zweites Spiel", startMs: 20_000, endMs: null, firstSegmentId: 1, lastSegmentId: 1 }];
   await writeFile(file, JSON.stringify(analysis));
-  const unreviewedOnly = await loadSiteData(directory);
+  const unreviewedOnly = await loadContentData(directory);
   assert.equal(unreviewedOnly.videoById.get(videoId).gameDiscussions, undefined);
   assert.equal(gameDiscussions(unreviewedOnly.videoById.get(videoId)), "");
 
   analysis.status = "reviewed";
   analysis.discussions[1] = { ...analysis.discussions[1], reviewed: false };
   await writeFile(file, JSON.stringify(analysis));
-  const html = gameDiscussions((await loadSiteData(directory)).videoById.get(videoId));
+  const html = gameDiscussions((await loadContentData(directory)).videoById.get(videoId));
   assert.equal((html.match(/data-chapter-seconds=/gu) ?? []).length, 2, "veraltetes reviewed je Abschnitt wird ignoriert");
   assert.ok(html.includes("Zweites Spiel"));
   assert.ok(!html.includes("data-unreviewed-video"));
@@ -111,13 +111,13 @@ test("veröffentlicht ohne Vorschau-Schalter nur geprüfte Analysen als Ganzes, 
 
   analysis.discussions[1] = { ...analysis.discussions[1], startMs: 13_000 };
   await writeFile(file, JSON.stringify(analysis));
-  await assert.rejects(loadSiteData(directory), /Besprechungszeit/u);
+  await assert.rejects(loadContentData(directory), /Besprechungszeit/u);
 });
 
 test("Fensterzwischenstände und fehlende Analysen erzeugen kein Widget", async (t) => {
   const { directory, analysis } = await setup(t);
   await writeFile(path.join(directory, "game-discussions", `${videoId}.window-0.json`), JSON.stringify(analysis));
-  const model = await loadSiteData(directory);
+  const model = await loadContentData(directory);
   assert.equal(gameDiscussions(model.videoById.get(videoId)), "");
   assert.equal(gameDiscussions({}), "");
 });
@@ -138,11 +138,11 @@ test("validiert vorhandene Analysen, Quellenhash und Abschnittszeiten ausdrückl
     { ...analysis, discussions: [{ ...discussion, firstYear: "1988" }] },
   ]) {
     await writeFile(file, JSON.stringify(data));
-    await assert.rejects(loadSiteData(directory), /game-discussions/u);
+    await assert.rejects(loadContentData(directory), /game-discussions/u);
   }
   await writeFile(file, JSON.stringify(analysis));
   await rm(path.join(directory, "youtube-transcripts", `${videoId}.json`));
-  await assert.rejects(loadSiteData(directory), /Transkript fehlt/u);
+  await assert.rejects(loadContentData(directory), /Transkript fehlt/u);
 });
 
 test("zeigt geprüfte und offene Zeitbereiche ohne erfundene Endzeit oder falschen Prüfstatus", () => {
@@ -175,7 +175,7 @@ test("behält wiederholte Besprechungen desselben Spiels als einzelne Zeitmarken
     ...discussion, startMs: 20_000, endMs: null, firstSegmentId: 1, lastSegmentId: 1,
   });
   await writeFile(file, JSON.stringify(analysis));
-  const model = await loadSiteData(directory);
+  const model = await loadContentData(directory);
   const html = gameDiscussions(model.videoById.get(videoId));
   assert.equal((html.match(/data-chapter-seconds=/gu) ?? []).length, 2);
   assert.ok(html.includes('data-chapter-seconds="20"'));
@@ -188,7 +188,7 @@ test("Änderungen an Spielebesprechungen aktualisieren den offline generierten A
   const outputDirectory = path.join(path.dirname(directory), "docs");
   const options = { cacheDirectory: directory, outputDirectory, logger: { log() {}, warn() {} } };
   await generateSite(options);
-  const pages = renderSite(await loadSiteData(directory), createSiteConfig(), "assets/test.css");
+  const pages = renderSite(await loadContentData(directory), createSiteConfig(), "assets/test.css");
   const route = [...pages.keys()].find((file) => issueRoute.test(file));
   const before = await readFile(path.join(outputDirectory, route), "utf8");
   assert.ok(!before.includes("Spielebesprechungen im Video"));
@@ -212,7 +212,7 @@ test("Build listet am Ende alle Seiten mit ungeprüften Sprungmarken", async (t)
   const published = await generateSite(options);
   assert.deepEqual(published.unreviewedPages, []);
   assert.ok(!lines.join("\n").includes(unreviewedPreviewVariable), "regulärer Build ohne Vorschaubericht");
-  const pages = renderSite(await loadSiteData(directory), createSiteConfig(), "assets/test.css");
+  const pages = renderSite(await loadContentData(directory), createSiteConfig(), "assets/test.css");
   const [issueFile, issuePage] = [...pages].find(([name]) => issueRoute.test(name));
   const reviewedHtml = await readFile(path.join(options.outputDirectory, issueFile), "utf8");
   assert.ok(!reviewedHtml.includes("data-chapter-seconds"), "ungeprüfte Analyse bleibt im regulären Build unsichtbar");

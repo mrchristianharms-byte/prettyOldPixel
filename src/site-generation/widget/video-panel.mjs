@@ -1,4 +1,4 @@
-import { httpUrl } from "../site-data.mjs";
+import { httpUrl } from "../../shared/http-url.mjs";
 import { escapeHtml, externalLink } from "../site-html.mjs";
 import { durationLabel, videoDate } from "../site-format.mjs";
 import { magazineLinks, sectionLinks } from "../site-video-links.mjs";

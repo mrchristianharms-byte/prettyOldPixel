@@ -1,4 +1,5 @@
 import path from "node:path";
+export { slugify, yearAnchor } from "../content-data/routes.mjs";
 
 export const productionUrl = "https://mrchristianharms-byte.github.io/prettyOldPixel/";
 
@@ -40,11 +41,3 @@ export function createSiteConfig(baseUrl = productionUrl) {
 }
 
 export const paginatedRoute = (route, page) => page === 1 ? route : `${route}seite/${page}/`;
-
-// Years are sections of the single magazine page, not separate pages.
-export const yearAnchor = (year) => `jahr-${year ?? "unbekannt"}`;
-
-export function slugify(name) {
-  return name.toLowerCase().replaceAll("ß", "ss").normalize("NFKD")
-    .replace(/[\u0300-\u036f]/gu, "").replace(/[^a-z0-9]+/gu, "-").replace(/^-|-$/gu, "");
-}

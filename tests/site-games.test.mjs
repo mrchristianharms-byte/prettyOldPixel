@@ -6,7 +6,7 @@ import test from "node:test";
 import { generateSite, validateSite } from "../src/site-generation/generate-site.mjs";
 import { gameDefinitions } from "../src/data/data-games.mjs";
 import { createSiteConfig } from "../src/site-generation/site-config.mjs";
-import { normalizeSources, loadSiteData } from "../src/site-generation/site-data.mjs";
+import { normalizeSources, loadContentData } from "../src/content-data/content-data.mjs";
 import { renderSite } from "../src/site-generation/site-render.mjs";
 import { escapeHtml } from "../src/site-generation/site-html.mjs";
 
@@ -120,7 +120,7 @@ test("escaped Tabelleninhalte und nutzt belegte Metadaten ohne Ersatzjahre", () 
 });
 
 test("deckt mit der unpaginierten Spieletabelle den vollständigen echten Katalog ab", async () => {
-  const model = await loadSiteData(new URL("../cache/", import.meta.url).pathname);
+  const model = await loadContentData(new URL("../cache/", import.meta.url).pathname);
   const { pages, budgets } = renderModel(model);
   const html = pages.get("spiele/uebersicht/index.html").html;
   const body = html.match(/<tbody>([\s\S]*?)<\/tbody>/u)[1];
@@ -239,7 +239,7 @@ test("nutzt ein eindeutiges System aus freigegebenen Metadaten für kurze Spiel�
 });
 
 test("erzeugt für alle veröffentlichten Spiele eine H1 mit mindestens 20 Zeichen", async () => {
-  const model = await loadSiteData(new URL("../cache/", import.meta.url).pathname);
+  const model = await loadContentData(new URL("../cache/", import.meta.url).pathname);
   const pages = renderSite(model, createSiteConfig(), "assets/test.css");
   assert.ok(model.games.length > 0);
   for (const game of model.games) {
@@ -304,7 +304,7 @@ test("nennt in Spielefilter-Vorschauen konkrete Spiele statt alphabetischer Seit
 });
 
 test("haben alle veröffentlichten Spielefilter mindestens 20 Zeichen in der H1", async () => {
-  const model = await loadSiteData(new URL("../cache/", import.meta.url).pathname);
+  const model = await loadContentData(new URL("../cache/", import.meta.url).pathname);
   const pages = renderSite(model, createSiteConfig(), "assets/test.css");
   let checked = 0;
   for (const [file, { html }] of pages) {
@@ -600,7 +600,7 @@ test("schreibt Filterseiten offline in Sitemap und Manifest und entfernt sie unt
 });
 
 test("bindet konsolidierte Metadaten im echten Offline-Modell ein und zeigt Quellenumfang je Spiel", async () => {
-  const model = await loadSiteData(path.resolve(import.meta.dirname, "../cache"));
+  const model = await loadContentData(path.resolve(import.meta.dirname, "../cache"));
   const config = createSiteConfig();
   const pages = renderSite(model, config, config.href("assets/test.css"));
   const paradroid = model.games.find((game) => game.id === "paradroid-c64");
@@ -662,7 +662,7 @@ test("bindet konsolidierte Metadaten im echten Offline-Modell ein und zeigt Quel
 });
 
 test("Akalabeth behält Apple II als Hauptversion und zeigt Ultima Collection als DOS-Veröffentlichung", async () => {
-  const model = await loadSiteData(path.resolve(import.meta.dirname, "../cache"));
+  const model = await loadContentData(path.resolve(import.meta.dirname, "../cache"));
   const game = model.games.find((entry) => entry.id === "akalabeth-world-of-doom");
   assert.deepEqual(game.platforms, ["Apple II"]);
   assert.equal(game.releaseYear, 1980);
@@ -688,7 +688,7 @@ test("fehlender Metadatencache wird gemeldet; beschädigter Cache bricht das Lad
     ["youtube-videos.json", input.videos], ["youtube-playlists.json", input.playlists],
     ["blaetterabend-videos.json", input.magazines],
   ]) await writeFile(path.join(cacheDir, file), JSON.stringify(data));
-  const model = await loadSiteData(cacheDir, { games: [definition()] });
+  const model = await loadContentData(cacheDir, { games: [definition()] });
   assert.equal(model.games[0].metadata.reason, "metadata-cache-missing");
   assert.equal(model.games[0].releaseYear, null);
   assert.equal(model.games[0].releaseYearSource, null);
@@ -696,7 +696,7 @@ test("fehlender Metadatencache wird gemeldet; beschädigter Cache bricht das Lad
   assert.ok(model.warnings.some((warning) => warning.includes("Spielemetadaten-Cache fehlt")));
   await mkdir(path.join(cacheDir, "game-metadata"));
   await writeFile(path.join(cacheDir, "game-metadata/ready.json"), "{}");
-  await assert.rejects(loadSiteData(cacheDir, { games: [definition()] }), /beschädigt oder veraltet/u);
+  await assert.rejects(loadContentData(cacheDir, { games: [definition()] }), /beschädigt oder veraltet/u);
 });
 
 test("escaped konsolidierte Metadaten und behält leere Felder sowie Releaseunterschiede sichtbar", () => {
@@ -837,7 +837,7 @@ test("veröffentlicht manuell bestätigte Spielreihen ohne Playlist, aber nicht 
 });
 
 test("ergänzt fehlende re.play-Zuordnungen und die vollständige Patrizier-Reihe im echten Katalog", async () => {
-  const model = await loadSiteData(path.resolve(import.meta.dirname, "../cache"), { now: Date.parse("2026-10-18T00:00:00Z") });
+  const model = await loadContentData(path.resolve(import.meta.dirname, "../cache"), { now: Date.parse("2026-10-18T00:00:00Z") });
   const assignments = {
     "Ni3U6-W8lxw": "wing-commander-ii",
     "MWP0qizqt3M": "raptor-call-of-the-shadows-ms-dos",
@@ -886,7 +886,7 @@ test("ergänzt fehlende re.play-Zuordnungen und die vollständige Patrizier-Reih
 });
 
 test("ordnet ausschließlich die ausgewählten re.invented-Reihen manuell ihren Spielen zu", async () => {
-  const model = await loadSiteData(path.resolve(import.meta.dirname, "../cache"));
+  const model = await loadContentData(path.resolve(import.meta.dirname, "../cache"));
   const selected = [
     ["airships-conquer-the-skies", ["L5dl6cyoJOg", "_TMntZnoA2s", "FejpeWADb6Q", "s12md_R_AKY"], 2018],
     ["hyperspace-delivery-service", ["iHwHp1yIbqc", "MBY8HVQyLEQ", "5IKiUnbudhM", "UbJ2Wat9hjQ", "CyYkUIRGx68", "cNv2GumJLXs"], 2019],

@@ -90,7 +90,7 @@ werden dürfen ihre URLs und die Video-IDs für die direkte Einbindung.
 
 Die folgende Übersicht beschreibt den **implementierten Stand**, abgeglichen
 mit [`src/site-generation/site-render.mjs`](../../src/site-generation/site-render.mjs),
-[`src/site-generation/site-data.mjs`](../../src/site-generation/site-data.mjs),
+[`src/content-data/content-data.mjs`](../../src/content-data/content-data.mjs),
 [`src/extra-data/generate-blaetterabend.mjs`](../../src/extra-data/generate-blaetterabend.mjs) und den
 gepflegten Spiele-/Bereichszuordnungen. Die ausführliche fachliche Begründung
 steht in [ADR 0003](0003-seitenstruktur-und-inhaltszuordnung.md).

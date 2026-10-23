@@ -623,8 +623,8 @@ export async function loadCandidateSearch({ cacheDirectory, videoId, titleIndexF
     log(`Titelindex fehlt (${titleIndexFile}); Analyse ohne Katalogkandidaten. Erstellen: npm run dev:build:game-title-index -- --input gdb.sql`);
     return null;
   }
-  const { loadSiteData } = await import("../site-generation/site-data.mjs");
-  const model = await loadSiteData(cacheDirectory);
+  const { loadContentData } = await import("../content-data/content-data.mjs");
+  const model = await loadContentData(cacheDirectory);
   const years = (model.videos.find((video) => video.id === videoId)?.magazines ?? [])
     .map((mention) => mention.issue?.year).filter(Number.isInteger);
   if (!years.length) {
