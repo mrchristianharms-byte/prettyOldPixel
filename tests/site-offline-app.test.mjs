@@ -119,7 +119,8 @@ test("App-Build ist deterministisch, vollständig gehasht und separat budgetiert
   assert.deepEqual(app, again);
   const index = app.files.get("app/index.html");
   assert.match(index, /<span id="offline-status" role="status"/u);
-  assert.match(index, /<button type="button" id="app-theme"[^>]*>[\s\S]*?class="theme-sun"[\s\S]*?class="theme-moon"/u);
+  assert.match(index, /<button type="button" id="app-theme"[^>]*>[\s\S]*?class="theme-sun"[\s\S]*?class="theme-moon"[\s\S]*?<\/svg><\/button>/u);
+  assert.doesNotMatch(index, /Hell \/ Dunkel/u);
   assert.match(index, /<p id="offline-message" role="status"/u);
   const manifest = JSON.parse(app.files.get("app/offline-manifest.json"));
   assert.equal(manifest.version, app.version);

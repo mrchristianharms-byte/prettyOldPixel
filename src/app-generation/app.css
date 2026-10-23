@@ -10,7 +10,7 @@ body > header { display: flex; align-items: center; flex-wrap: wrap; gap: .75rem
 body > header #app-nav { flex: 1; }
 .app-header-controls { display: flex; align-items: center; gap: .5rem; }
 #offline-status { font-size: 1.5rem; line-height: 1; }
-#app-theme { display: inline-flex; align-items: center; gap: .4rem; width: auto; margin: 0; }
+#app-theme { display: inline-flex; align-items: center; justify-content: center; width: 2.5rem; height: 2.5rem; padding: .5rem; margin: 0; }
 .theme-sun, .theme-moon { display: block; flex: none; }
 [data-theme="dark"] .theme-moon, [data-theme="light"] .theme-sun { display: none; }
 body > aside { padding-block: .5rem; }

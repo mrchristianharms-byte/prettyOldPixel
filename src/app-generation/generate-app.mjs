@@ -64,8 +64,7 @@ export async function generateApp(model, config, websiteAssets) {
 <span id="offline-status" role="status" aria-live="polite"></span>
 <button type="button" id="app-theme" aria-label="Darstellungsmodus wechseln" title="Darstellungsmodus wechseln">
 <svg class="theme-sun" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l2 2m10 10 2 2M5 19l2-2M17 7l2-2"/></svg>
-<svg class="theme-moon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 15A9 9 0 0 1 9 4a9 9 0 1 0 11 11Z"/></svg>
-Hell / Dunkel</button></div></header>
+<svg class="theme-moon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 15A9 9 0 0 1 9 4a9 9 0 1 0 11 11Z"/></svg></button></div></header>
 <aside class="container" aria-label="Offline-Speicher"><p id="offline-message" role="status" aria-live="polite">Offline-Daten werden geprüft …</p>
 <button type="button" id="offline-retry" hidden>Erneut versuchen</button>
 <button type="button" id="offline-update" hidden>Update laden und neu starten</button></aside>
