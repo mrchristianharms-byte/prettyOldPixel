@@ -7,14 +7,17 @@ lokal exportierten Games-Dump.
 
 1. [`build-game-title-index.mjs`](../src/fetch-game/build-game-title-index.mjs) liest
    einen lokalen MariaDB-Dump als Daten und führt dessen SQL nicht aus. Er schreibt
-   `cache/game-title-index.json` (alle Spiele mit Titeln, Alternativtiteln, Genres
-   und Veröffentlichungen) und `cache/game-platform-index.json`. Nur dieser
+   `cache/game-title-index.json.gz` (Spiele mit Erstjahr bis 2005 oder unbekannt,
+   mit Titeln, Alternativtiteln, Genres und Veröffentlichungen) und `cache/game-platform-index.json`. Nur dieser
    Schritt liest `gdb.sql`.
 2. [`import-game-dump.mjs`](../src/fetch-game/import-game-dump.mjs) gleicht den
    Katalog ausschließlich mit diesem Index ab und schreibt
    [`local-dump/report.json`](../cache/game-metadata/local-dump/report.json) mit
    den zurückbehaltenen Titeln, Aliassen, Genres und Veröffentlichungen. Der
-   Report nennt Dump-Hash und Titelindex als Quelle. Ein veralteter Index oder
+   Report nennt Dump-Hash und Titelindex als Quelle. Katalogspiele außerhalb
+   des Index (Erstjahr nach 2005) ergänzt der Import aus
+   [`data-game-dump-manual.json`](../src/data/data-game-dump-manual.json) als
+   Kandidaten mit `manual: true`; enthält der Index die MobyGames-ID, gilt er. Ein veralteter Index oder
    ein Plattformindex aus einem anderen Dump bricht den Import ab. Die übrigen
    Spalten des Dumps (Perspektive, Setting usw.) werden nicht übernommen.
 3. `npm run dev:verify:game-dump` prüft Katalogabdeckung, Titel/Aliasse, eindeutige

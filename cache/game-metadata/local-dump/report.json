@@ -1,12 +1,12 @@
 {
   "version": 1,
   "provider": "mobygames-local-dump",
-  "importedAt": "2026-10-23T08:08:31.717Z",
+  "importedAt": "2026-10-23T09:59:20.771Z",
   "source": {
     "fileName": "gdb.sql",
     "sha256": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
     "bytes": 498001626,
-    "titleIndex": "game-title-index.json",
+    "titleIndex": "game-title-index.json.gz",
     "note": "Lokaler SQL-Dump über den Titelindex; Importdatum ist kein Abrufdatum bei MobyGames. Keine automatische Faktenfreigabe."
   },
   "importedRows": {
@@ -18,7 +18,7 @@
     "games": 147,
     "withCandidates": 147,
     "withoutExactMatch": 0,
-    "ambiguous": 46
+    "ambiguous": 34
   },
   "games": [
     {
@@ -218,133 +218,6 @@
               "publisher": "Bandai Co., Ltd.",
               "developer": "Sir-tech Software, Inc.",
               "countries": "Japan",
-              "publabel": ""
-            }
-          ]
-        },
-        {
-          "mobyid": 208642,
-          "title": "Wizardry: Proving Grounds of the Mad Overlord",
-          "sourceUrl": "https://www.mobygames.com/game/208642/",
-          "genres": [
-            "Role-playing (RPG)"
-          ],
-          "alternativeTitles": [],
-          "platformMatch": null,
-          "matchingReleaseIds": [],
-          "releases": [
-            {
-              "mobyid": 208642,
-              "mobyreleaseid": 619822,
-              "year": 2024,
-              "platform": "Nintendo Switch",
-              "publisher": "Digital Eclipse Entertainment Partners Co.",
-              "developer": "Digital Eclipse Entertainment Partners Co.",
-              "countries": "United States",
-              "publabel": ""
-            },
-            {
-              "mobyid": 208642,
-              "mobyreleaseid": 619823,
-              "year": 2024,
-              "platform": "PlayStation 4",
-              "publisher": null,
-              "developer": null,
-              "countries": "United States,  Argentina,  Brazil,  Canada,  Chile,  Mexico",
-              "publabel": "",
-              "sourceDeveloper": "",
-              "sourcePublisher": ""
-            },
-            {
-              "mobyid": 208642,
-              "mobyreleaseid": 619824,
-              "year": 2024,
-              "platform": "PlayStation 4",
-              "publisher": "Digital Eclipse Entertainment Partners Co.",
-              "developer": "Digital Eclipse Entertainment Partners Co.",
-              "countries": "Australia,  Austria,  Belgium,  Bulgaria,  Croatia,  Cyprus,  Czechia,  Denmark,  Finland,  France,  Germany,  Greece,  Hungary,  Iceland,  Ireland,  Italy,  Luxembourg,  Malta,  The Netherlands,  New Zealand,  Norway,  Poland,  Portugal,  Romania,  Slovakia,  Slovenia,  South Africa,  Spain,  Sweden,  Switzerland,  Ukraine,  United Kingdom",
-              "publabel": ""
-            },
-            {
-              "mobyid": 208642,
-              "mobyreleaseid": 619825,
-              "year": 2024,
-              "platform": "PlayStation 5",
-              "publisher": null,
-              "developer": null,
-              "countries": "United States,  Argentina,  Brazil,  Canada,  Chile,  Mexico",
-              "publabel": "",
-              "sourceDeveloper": "",
-              "sourcePublisher": ""
-            },
-            {
-              "mobyid": 208642,
-              "mobyreleaseid": 619826,
-              "year": 2024,
-              "platform": "PlayStation 5",
-              "publisher": "Digital Eclipse Entertainment Partners Co.",
-              "developer": "Digital Eclipse Entertainment Partners Co.",
-              "countries": "Australia,  Austria,  Belgium,  Bulgaria,  Croatia,  Cyprus,  Czechia,  Denmark,  Finland,  France,  Germany,  Greece,  Hungary,  Iceland,  Ireland,  Italy,  Luxembourg,  Malta,  The Netherlands,  New Zealand,  Norway,  Poland,  Portugal,  Romania,  Slovakia,  Slovenia,  South Africa,  Spain,  Sweden,  Switzerland,  Ukraine,  United Kingdom",
-              "publabel": ""
-            },
-            {
-              "mobyid": 208642,
-              "mobyreleaseid": 572984,
-              "year": 2023,
-              "platform": "Windows",
-              "publisher": "Digital Eclipse Entertainment Partners Co.",
-              "developer": "Digital Eclipse Entertainment Partners Co.",
-              "countries": "Worldwide",
-              "publabel": ""
-            },
-            {
-              "mobyid": 208642,
-              "mobyreleaseid": 572985,
-              "year": 2023,
-              "platform": "Windows",
-              "publisher": "Digital Eclipse Entertainment Partners Co.",
-              "developer": "Digital Eclipse Entertainment Partners Co.",
-              "countries": "Worldwide",
-              "publabel": ""
-            },
-            {
-              "mobyid": 208642,
-              "mobyreleaseid": 619816,
-              "year": 2024,
-              "platform": "Windows",
-              "publisher": "Digital Eclipse Entertainment Partners Co.",
-              "developer": "Digital Eclipse Entertainment Partners Co.",
-              "countries": "Worldwide",
-              "publabel": ""
-            },
-            {
-              "mobyid": 208642,
-              "mobyreleaseid": 619817,
-              "year": 2024,
-              "platform": "Windows",
-              "publisher": "Digital Eclipse Entertainment Partners Co.",
-              "developer": "Digital Eclipse Entertainment Partners Co.",
-              "countries": "Worldwide",
-              "publabel": ""
-            },
-            {
-              "mobyid": 208642,
-              "mobyreleaseid": 619819,
-              "year": 2024,
-              "platform": "Xbox One",
-              "publisher": "Digital Eclipse Entertainment Partners Co.",
-              "developer": "Digital Eclipse Entertainment Partners Co.",
-              "countries": "Worldwide",
-              "publabel": ""
-            },
-            {
-              "mobyid": 208642,
-              "mobyreleaseid": 619821,
-              "year": 2024,
-              "platform": "Xbox Series",
-              "publisher": "Digital Eclipse Entertainment Partners Co.",
-              "developer": "Digital Eclipse Entertainment Partners Co.",
-              "countries": "Worldwide",
               "publabel": ""
             }
           ]
@@ -840,60 +713,6 @@
           ]
         },
         {
-          "mobyid": 44462,
-          "title": "Labyrinth",
-          "sourceUrl": "https://www.mobygames.com/game/44462/",
-          "genres": [
-            "Action",
-            "Puzzle"
-          ],
-          "alternativeTitles": [],
-          "platformMatch": false,
-          "matchingReleaseIds": [],
-          "releases": [
-            {
-              "mobyid": 44462,
-              "mobyreleaseid": 121976,
-              "year": 2009,
-              "platform": "Android",
-              "publisher": "Illusion Labs AB",
-              "developer": "Illusion Labs AB",
-              "countries": "Worldwide",
-              "publabel": ""
-            },
-            {
-              "mobyid": 44462,
-              "mobyreleaseid": 149412,
-              "year": 2010,
-              "platform": "iPad",
-              "publisher": "Codify AB",
-              "developer": "Illusion Labs AB",
-              "countries": "Worldwide",
-              "publabel": ""
-            },
-            {
-              "mobyid": 44462,
-              "mobyreleaseid": 121895,
-              "year": 2008,
-              "platform": "iPhone",
-              "publisher": "Codify AB",
-              "developer": "Illusion Labs AB",
-              "countries": "Worldwide",
-              "publabel": ""
-            },
-            {
-              "mobyid": 44462,
-              "mobyreleaseid": 271023,
-              "year": 2015,
-              "platform": "tvOS",
-              "publisher": "Codify AB",
-              "developer": "Illusion Labs AB",
-              "countries": "Worldwide",
-              "publabel": ""
-            }
-          ]
-        },
-        {
           "mobyid": 50163,
           "title": "Labyrinth",
           "sourceUrl": "https://www.mobygames.com/game/50163/",
@@ -1154,41 +973,6 @@
           ]
         },
         {
-          "mobyid": 86355,
-          "title": "Labyrinth",
-          "sourceUrl": "https://www.mobygames.com/game/86355/",
-          "genres": [
-            "Action"
-          ],
-          "alternativeTitles": [],
-          "platformMatch": false,
-          "matchingReleaseIds": [],
-          "releases": [
-            {
-              "mobyid": 86355,
-              "mobyreleaseid": 246105,
-              "year": 2011,
-              "platform": "PSP",
-              "publisher": "Bigben Interactive S.A.",
-              "developer": null,
-              "countries": "United States",
-              "publabel": "",
-              "sourceDeveloper": ""
-            },
-            {
-              "mobyid": 86355,
-              "mobyreleaseid": 246106,
-              "year": 2011,
-              "platform": "PlayStation 3",
-              "publisher": "Bigben Interactive S.A.",
-              "developer": null,
-              "countries": "United States",
-              "publabel": "",
-              "sourceDeveloper": ""
-            }
-          ]
-        },
-        {
           "mobyid": 120918,
           "title": "Labyrinth",
           "sourceUrl": "https://www.mobygames.com/game/120918/",
@@ -1255,39 +1039,6 @@
               "countries": "United States",
               "publabel": "",
               "sourceDeveloper": ""
-            }
-          ]
-        },
-        {
-          "mobyid": 154805,
-          "title": "labyrinth",
-          "sourceUrl": "https://www.mobygames.com/game/154805/",
-          "genres": [
-            "Puzzle"
-          ],
-          "alternativeTitles": [],
-          "platformMatch": false,
-          "matchingReleaseIds": [],
-          "releases": [
-            {
-              "mobyid": 154805,
-              "mobyreleaseid": 434641,
-              "year": 2020,
-              "platform": "Macintosh",
-              "publisher": "Sokpop Collective",
-              "developer": "Sokpop Collective",
-              "countries": "Worldwide",
-              "publabel": ""
-            },
-            {
-              "mobyid": 154805,
-              "mobyreleaseid": 434640,
-              "year": 2020,
-              "platform": "Windows",
-              "publisher": "Sokpop Collective",
-              "developer": "Sokpop Collective",
-              "countries": "Worldwide",
-              "publabel": ""
             }
           ]
         },
@@ -1360,39 +1111,6 @@
               "countries": "United Kingdom",
               "publabel": "",
               "sourceDeveloper": ""
-            }
-          ]
-        },
-        {
-          "mobyid": 196049,
-          "title": "Labyrinth",
-          "sourceUrl": "https://www.mobygames.com/game/196049/",
-          "genres": [
-            "Strategy / tactics"
-          ],
-          "alternativeTitles": [],
-          "platformMatch": false,
-          "matchingReleaseIds": [],
-          "releases": [
-            {
-              "mobyid": 196049,
-              "mobyreleaseid": 538373,
-              "year": 2016,
-              "platform": "Macintosh",
-              "publisher": "Free Range Games, LLC",
-              "developer": "Free Range Games, LLC",
-              "countries": "Worldwide",
-              "publabel": ""
-            },
-            {
-              "mobyid": 196049,
-              "mobyreleaseid": 538372,
-              "year": 2016,
-              "platform": "Windows",
-              "publisher": "Free Range Games, LLC",
-              "developer": "Free Range Games, LLC",
-              "countries": "Worldwide",
-              "publabel": ""
             }
           ]
         },
@@ -1555,162 +1273,6 @@
       "status": "needs-identity-review",
       "candidates": [
         {
-          "mobyid": 39531,
-          "title": "Tom Clancy's EndWar",
-          "sourceUrl": "https://www.mobygames.com/game/39531/",
-          "genres": [
-            "Strategy / tactics"
-          ],
-          "alternativeTitles": [],
-          "platformMatch": false,
-          "matchingReleaseIds": [],
-          "releases": [
-            {
-              "mobyid": 39531,
-              "mobyreleaseid": 106143,
-              "year": 2008,
-              "platform": "PlayStation 3",
-              "publisher": "Ubisoft Entertainment SA",
-              "developer": "Shanghai UBIsoft Computer Software Co., Ltd.",
-              "countries": "Germany",
-              "publabel": ""
-            },
-            {
-              "mobyid": 39531,
-              "mobyreleaseid": 106144,
-              "year": 2009,
-              "platform": "Windows",
-              "publisher": "Ubisoft Entertainment SA",
-              "developer": "Shanghai UBIsoft Computer Software Co., Ltd.",
-              "countries": "Germany",
-              "publabel": ""
-            },
-            {
-              "mobyid": 39531,
-              "mobyreleaseid": 106155,
-              "year": 2009,
-              "platform": "Windows",
-              "publisher": "Ubisoft Entertainment SA",
-              "developer": "Shanghai UBIsoft Computer Software Co., Ltd.",
-              "countries": "Worldwide",
-              "publabel": ""
-            },
-            {
-              "mobyid": 39531,
-              "mobyreleaseid": 106499,
-              "year": 2009,
-              "platform": "Windows",
-              "publisher": "Ubisoft Entertainment SA",
-              "developer": "Shanghai UBIsoft Computer Software Co., Ltd.",
-              "countries": "Austria,  Germany,  Switzerland",
-              "publabel": ""
-            },
-            {
-              "mobyid": 39531,
-              "mobyreleaseid": 106555,
-              "year": 2009,
-              "platform": "Windows",
-              "publisher": null,
-              "developer": null,
-              "countries": "Russia",
-              "publabel": "",
-              "sourceDeveloper": "",
-              "sourcePublisher": ""
-            },
-            {
-              "mobyid": 39531,
-              "mobyreleaseid": 107272,
-              "year": 2009,
-              "platform": "Windows",
-              "publisher": "Game Factory Interactive Ltd., Russobit-M",
-              "developer": "Shanghai UBIsoft Computer Software Co., Ltd.",
-              "countries": "Russia",
-              "publabel": "",
-              "sourcePublisher": "Game Factory Interactive Ltd., \n          Russobit-M"
-            },
-            {
-              "mobyid": 39531,
-              "mobyreleaseid": 124873,
-              "year": 2009,
-              "platform": "Windows",
-              "publisher": "Ubisoft Entertainment SA",
-              "developer": "Shanghai UBIsoft Computer Software Co., Ltd.",
-              "countries": "Finland",
-              "publabel": ""
-            },
-            {
-              "mobyid": 39531,
-              "mobyreleaseid": 133516,
-              "year": 2009,
-              "platform": "Windows",
-              "publisher": "Ubisoft Entertainment SA",
-              "developer": "Shanghai UBIsoft Computer Software Co., Ltd.",
-              "countries": "Germany",
-              "publabel": ""
-            },
-            {
-              "mobyid": 39531,
-              "mobyreleaseid": 599389,
-              "year": 2009,
-              "platform": "Windows",
-              "publisher": "Ubisoft Entertainment SA",
-              "developer": "Shanghai UBIsoft Computer Software Co., Ltd.",
-              "countries": "Czechia,  Slovakia",
-              "publabel": ""
-            },
-            {
-              "mobyid": 39531,
-              "mobyreleaseid": 478598,
-              "year": 2010,
-              "platform": "Windows",
-              "publisher": "Ubisoft Entertainment SA",
-              "developer": "Shanghai UBIsoft Computer Software Co., Ltd.",
-              "countries": "United Kingdom",
-              "publabel": ""
-            },
-            {
-              "mobyid": 39531,
-              "mobyreleaseid": 168367,
-              "year": 2012,
-              "platform": "Windows",
-              "publisher": "Ubisoft Entertainment SA",
-              "developer": "Shanghai UBIsoft Computer Software Co., Ltd.",
-              "countries": "Germany",
-              "publabel": ""
-            },
-            {
-              "mobyid": 39531,
-              "mobyreleaseid": 627828,
-              "year": 2023,
-              "platform": "Windows",
-              "publisher": "Ubisoft Entertainment SA",
-              "developer": "Shanghai UBIsoft Computer Software Co., Ltd.",
-              "countries": "Worldwide",
-              "publabel": ""
-            },
-            {
-              "mobyid": 39531,
-              "mobyreleaseid": 106145,
-              "year": 2008,
-              "platform": "Xbox 360",
-              "publisher": "Ubisoft Entertainment SA",
-              "developer": "Shanghai UBIsoft Computer Software Co., Ltd.",
-              "countries": "Germany",
-              "publabel": ""
-            },
-            {
-              "mobyid": 39531,
-              "mobyreleaseid": 116106,
-              "year": 2008,
-              "platform": "Xbox 360",
-              "publisher": "Ubisoft Entertainment SA",
-              "developer": "Shanghai UBIsoft Computer Software Co., Ltd.",
-              "countries": "United States,  Canada",
-              "publabel": ""
-            }
-          ]
-        },
-        {
           "mobyid": 49906,
           "title": "Tom Clancy's EndWar",
           "sourceUrl": "https://www.mobygames.com/game/49906/",
@@ -1718,6 +1280,7 @@
             "Strategy / tactics"
           ],
           "alternativeTitles": [],
+          "manual": true,
           "platformMatch": true,
           "matchingReleaseIds": [
             139304
@@ -1927,125 +1490,6 @@
               "developer": "Looking Glass Technologies, Inc.",
               "countries": "Japan",
               "publabel": ""
-            }
-          ]
-        },
-        {
-          "mobyid": 203800,
-          "title": "System Shock",
-          "sourceUrl": "https://www.mobygames.com/game/203800/",
-          "genres": [
-            "Action"
-          ],
-          "alternativeTitles": [],
-          "platformMatch": false,
-          "matchingReleaseIds": [],
-          "releases": [
-            {
-              "mobyid": 203800,
-              "mobyreleaseid": 619467,
-              "year": 2024,
-              "platform": "PlayStation 4",
-              "publisher": "Plaion GmbH (Austria)",
-              "developer": "Nightdive Studios, LLC",
-              "countries": "United States,  Argentina,  Brazil,  Canada,  Chile,  Mexico",
-              "publabel": "Prime Matter"
-            },
-            {
-              "mobyid": 203800,
-              "mobyreleaseid": 619468,
-              "year": 2024,
-              "platform": "PlayStation 4",
-              "publisher": null,
-              "developer": null,
-              "countries": "Australia,  Austria,  Belgium,  Bulgaria,  Croatia,  Cyprus,  Czechia,  Denmark,  Finland,  France,  Germany,  Greece,  Hungary,  Iceland,  Ireland,  Italy,  Luxembourg,  Malta,  The Netherlands,  New Zealand,  Norway,  Poland,  Portugal,  Romania,  Slovakia,  Slovenia,  South Africa,  Spain,  Sweden,  Switzerland,  Ukraine,  United Kingdom",
-              "publabel": "",
-              "sourceDeveloper": "",
-              "sourcePublisher": ""
-            },
-            {
-              "mobyid": 203800,
-              "mobyreleaseid": 619465,
-              "year": 2024,
-              "platform": "PlayStation 5",
-              "publisher": "Plaion GmbH (Austria)",
-              "developer": "Nightdive Studios, LLC",
-              "countries": "United States,  Argentina,  Brazil,  Canada,  Chile,  Mexico",
-              "publabel": "Prime Matter"
-            },
-            {
-              "mobyid": 203800,
-              "mobyreleaseid": 619466,
-              "year": 2024,
-              "platform": "PlayStation 5",
-              "publisher": null,
-              "developer": null,
-              "countries": "Australia,  Austria,  Belgium,  Bulgaria,  Croatia,  Cyprus,  Czechia,  Denmark,  Finland,  France,  Germany,  Greece,  Hungary,  Iceland,  Ireland,  Italy,  Luxembourg,  Malta,  The Netherlands,  New Zealand,  Norway,  Poland,  Portugal,  Romania,  Slovakia,  Slovenia,  South Africa,  Spain,  Sweden,  Switzerland,  Ukraine,  United Kingdom",
-              "publabel": "",
-              "sourceDeveloper": "",
-              "sourcePublisher": ""
-            },
-            {
-              "mobyid": 203800,
-              "mobyreleaseid": 620264,
-              "year": 2024,
-              "platform": "PlayStation 5",
-              "publisher": null,
-              "developer": null,
-              "countries": "United Kingdom",
-              "publabel": "",
-              "sourceDeveloper": "",
-              "sourcePublisher": ""
-            },
-            {
-              "mobyid": 203800,
-              "mobyreleaseid": 559389,
-              "year": 2023,
-              "platform": "Windows",
-              "publisher": "Plaion GmbH (Austria)",
-              "developer": "Nightdive Studios, LLC",
-              "countries": "Worldwide",
-              "publabel": "Prime Matter"
-            },
-            {
-              "mobyid": 203800,
-              "mobyreleaseid": 559390,
-              "year": 2023,
-              "platform": "Windows",
-              "publisher": "Plaion GmbH (Austria)",
-              "developer": "Nightdive Studios, LLC",
-              "countries": "Worldwide",
-              "publabel": "Prime Matter"
-            },
-            {
-              "mobyid": 203800,
-              "mobyreleaseid": 559391,
-              "year": 2023,
-              "platform": "Windows",
-              "publisher": "Plaion GmbH (Austria)",
-              "developer": "Nightdive Studios, LLC",
-              "countries": "Worldwide",
-              "publabel": "Prime Matter"
-            },
-            {
-              "mobyid": 203800,
-              "mobyreleaseid": 619464,
-              "year": 2024,
-              "platform": "Xbox One",
-              "publisher": "Plaion GmbH (Austria)",
-              "developer": "Nightdive Studios, LLC",
-              "countries": "Worldwide",
-              "publabel": "Prime Matter"
-            },
-            {
-              "mobyid": 203800,
-              "mobyreleaseid": 619462,
-              "year": 2024,
-              "platform": "Xbox Series",
-              "publisher": "Plaion GmbH (Austria)",
-              "developer": "Nightdive Studios, LLC",
-              "countries": "Worldwide",
-              "publabel": "Prime Matter"
             }
           ]
         }
@@ -4713,160 +4157,6 @@
           ]
         },
         {
-          "mobyid": 78860,
-          "title": "Doom",
-          "sourceUrl": "https://www.mobygames.com/game/78860/",
-          "genres": [
-            "Action"
-          ],
-          "alternativeTitles": [
-            {
-              "title": "Doom 2016",
-              "info": "Common title"
-            },
-            {
-              "title": "Doom 4",
-              "info": "working title"
-            }
-          ],
-          "platformMatch": false,
-          "matchingReleaseIds": [],
-          "releases": [
-            {
-              "mobyid": 78860,
-              "mobyreleaseid": 274771,
-              "year": 2017,
-              "platform": "Nintendo Switch",
-              "publisher": "Bethesda Softworks LLC",
-              "developer": "id Software, Inc.",
-              "countries": "United States,  Australia,  Austria,  Belgium,  Canada,  France,  Germany,  Ireland,  Italy,  The Netherlands,  New Zealand,  Portugal,  Russia,  Spain,  Switzerland,  United Kingdom",
-              "publabel": ""
-            },
-            {
-              "mobyid": 78860,
-              "mobyreleaseid": 275966,
-              "year": 2017,
-              "platform": "Nintendo Switch",
-              "publisher": null,
-              "developer": null,
-              "countries": "The Netherlands",
-              "publabel": "",
-              "sourceDeveloper": "",
-              "sourcePublisher": ""
-            },
-            {
-              "mobyid": 78860,
-              "mobyreleaseid": 379938,
-              "year": 2018,
-              "platform": "Nintendo Switch",
-              "publisher": "Bethesda Softworks LLC",
-              "developer": "id Software, Inc.",
-              "countries": "Japan",
-              "publabel": ""
-            },
-            {
-              "mobyid": 78860,
-              "mobyreleaseid": 226298,
-              "year": 2016,
-              "platform": "PlayStation 4",
-              "publisher": "Bethesda Softworks LLC",
-              "developer": "id Software, Inc.",
-              "countries": "United States",
-              "publabel": ""
-            },
-            {
-              "mobyid": 78860,
-              "mobyreleaseid": 226412,
-              "year": 2016,
-              "platform": "PlayStation 4",
-              "publisher": "Bethesda Softworks LLC",
-              "developer": "id Software, Inc.",
-              "countries": "Austria,  Germany,  Switzerland",
-              "publabel": ""
-            },
-            {
-              "mobyid": 78860,
-              "mobyreleaseid": 246417,
-              "year": 2017,
-              "platform": "PlayStation 4",
-              "publisher": "ak tronic Software & Services GmbH",
-              "developer": "id Software, Inc.",
-              "countries": "Germany",
-              "publabel": ""
-            },
-            {
-              "mobyid": 78860,
-              "mobyreleaseid": 421416,
-              "year": 2020,
-              "platform": "Stadia",
-              "publisher": "Bethesda Softworks LLC",
-              "developer": "id Software, Inc.",
-              "countries": "Worldwide",
-              "publabel": ""
-            },
-            {
-              "mobyid": 78860,
-              "mobyreleaseid": 226297,
-              "year": 2016,
-              "platform": "Windows",
-              "publisher": "Bethesda Softworks LLC",
-              "developer": "id Software, Inc.",
-              "countries": "Worldwide",
-              "publabel": ""
-            },
-            {
-              "mobyid": 78860,
-              "mobyreleaseid": 575958,
-              "year": 2016,
-              "platform": "Windows",
-              "publisher": "1C-SoftClub",
-              "developer": "id Software, Inc.",
-              "countries": "Russia,  Worldwide",
-              "publabel": ""
-            },
-            {
-              "mobyid": 78860,
-              "mobyreleaseid": 246423,
-              "year": 2017,
-              "platform": "Windows",
-              "publisher": "ak tronic Software & Services GmbH",
-              "developer": "id Software, Inc.",
-              "countries": "Germany",
-              "publabel": ""
-            },
-            {
-              "mobyid": 78860,
-              "mobyreleaseid": 670105,
-              "year": 2025,
-              "platform": "Windows",
-              "publisher": "Bethesda Softworks LLC",
-              "developer": "id Software, Inc.",
-              "countries": "Worldwide",
-              "publabel": ""
-            },
-            {
-              "mobyid": 78860,
-              "mobyreleaseid": 226299,
-              "year": 2016,
-              "platform": "Xbox One",
-              "publisher": "Bethesda Softworks LLC",
-              "developer": "id Software, Inc.",
-              "countries": "Worldwide",
-              "publabel": ""
-            },
-            {
-              "mobyid": 78860,
-              "mobyreleaseid": 246412,
-              "year": 2017,
-              "platform": "Xbox One",
-              "publisher": "ak tronic Software & Services GmbH",
-              "developer": "id Software, Inc.",
-              "countries": "Germany",
-              "publabel": ""
-            }
-          ]
-        },
-        {
           "mobyid": 91777,
           "title": "Doomsday 2000",
           "sourceUrl": "https://www.mobygames.com/game/91777/",
@@ -4893,30 +4183,6 @@
               "publabel": "",
               "sourceDeveloper": "",
               "sourcePublisher": ""
-            }
-          ]
-        },
-        {
-          "mobyid": 144023,
-          "title": "Doom",
-          "sourceUrl": "https://www.mobygames.com/game/144023/",
-          "genres": [
-            "Compilation"
-          ],
-          "alternativeTitles": [],
-          "platformMatch": false,
-          "matchingReleaseIds": [],
-          "releases": [
-            {
-              "mobyid": 144023,
-              "mobyreleaseid": 403760,
-              "year": 2017,
-              "platform": "PlayStation 4",
-              "publisher": "Bethesda Softworks LLC",
-              "developer": null,
-              "countries": "United States",
-              "publabel": "",
-              "sourceDeveloper": ""
             }
           ]
         }
@@ -7084,97 +6350,6 @@
           ]
         },
         {
-          "mobyid": 24815,
-          "title": "Worms",
-          "sourceUrl": "https://www.mobygames.com/game/24815/",
-          "genres": [
-            "Strategy / tactics"
-          ],
-          "alternativeTitles": [],
-          "platformMatch": false,
-          "matchingReleaseIds": [],
-          "releases": [
-            {
-              "mobyid": 24815,
-              "mobyreleaseid": 66989,
-              "year": 2006,
-              "platform": "J2ME",
-              "publisher": "THQ Wireless Inc.",
-              "developer": "Rockpool Games Ltd.",
-              "countries": "United Kingdom",
-              "publabel": ""
-            }
-          ]
-        },
-        {
-          "mobyid": 35109,
-          "title": "Worms",
-          "sourceUrl": "https://www.mobygames.com/game/35109/",
-          "genres": [
-            "Strategy / tactics"
-          ],
-          "alternativeTitles": [
-            {
-              "title": "Worms HD",
-              "info": "Working title"
-            }
-          ],
-          "platformMatch": false,
-          "matchingReleaseIds": [],
-          "releases": [
-            {
-              "mobyid": 35109,
-              "mobyreleaseid": 140614,
-              "year": 2011,
-              "platform": "Android",
-              "publisher": "Electronic Arts, Inc.",
-              "developer": "Team17 Software Limited",
-              "countries": "Worldwide",
-              "publabel": "EA Mobile"
-            },
-            {
-              "mobyid": 35109,
-              "mobyreleaseid": 139757,
-              "year": 2009,
-              "platform": "PlayStation 3",
-              "publisher": "Team17 Software Limited",
-              "developer": "Team17 Software Limited",
-              "countries": "United States",
-              "publabel": ""
-            },
-            {
-              "mobyid": 35109,
-              "mobyreleaseid": 169931,
-              "year": 2011,
-              "platform": "Symbian",
-              "publisher": "Electronic Arts, Inc.",
-              "developer": "Team17 Software Limited",
-              "countries": "Worldwide",
-              "publabel": "EA Mobile"
-            },
-            {
-              "mobyid": 35109,
-              "mobyreleaseid": 151339,
-              "year": 2011,
-              "platform": "bada",
-              "publisher": "Electronic Arts, Inc.",
-              "developer": "Team17 Software Limited",
-              "countries": "Worldwide",
-              "publabel": "EA Mobile"
-            },
-            {
-              "mobyid": 35109,
-              "mobyreleaseid": 120975,
-              "year": 2009,
-              "platform": "iPhone",
-              "publisher": "Team17 Software Limited",
-              "developer": "Team17 Software Limited",
-              "countries": "Worldwide",
-              "publabel": ""
-            }
-          ]
-        },
-        {
           "mobyid": 65383,
           "title": "Worms?",
           "sourceUrl": "https://www.mobygames.com/game/65383/",
@@ -7212,29 +6387,6 @@
               "countries": "United Kingdom",
               "publabel": "",
               "sourceDeveloper": ""
-            }
-          ]
-        },
-        {
-          "mobyid": 136873,
-          "title": "Worms",
-          "sourceUrl": "https://www.mobygames.com/game/136873/",
-          "genres": [
-            "Strategy / tactics"
-          ],
-          "alternativeTitles": [],
-          "platformMatch": false,
-          "matchingReleaseIds": [],
-          "releases": [
-            {
-              "mobyid": 136873,
-              "mobyreleaseid": 381107,
-              "year": 2013,
-              "platform": "Browser",
-              "publisher": "Team17 Software Limited",
-              "developer": "Team17 Software Limited",
-              "countries": "Worldwide",
-              "publabel": ""
             }
           ]
         }
@@ -8027,98 +7179,6 @@
               "publisher": "Tandy Corporation",
               "developer": "Device Oriented Games, Inc.",
               "countries": "United States",
-              "publabel": ""
-            }
-          ]
-        },
-        {
-          "mobyid": 82468,
-          "title": "Bedlam",
-          "sourceUrl": "https://www.mobygames.com/game/82468/",
-          "genres": [
-            "Action"
-          ],
-          "alternativeTitles": [
-            {
-              "title": "Bedlam: The Game by Christopher Brookmyre",
-              "info": "Tag-lined title"
-            }
-          ],
-          "platformMatch": false,
-          "matchingReleaseIds": [],
-          "releases": [
-            {
-              "mobyid": 82468,
-              "mobyreleaseid": 506806,
-              "year": 2014,
-              "platform": "Macintosh",
-              "publisher": "Kingstill International Software Services Ltd., Vision Games Publishing Limited",
-              "developer": "RedBedlam Ltd.",
-              "countries": "Worldwide",
-              "publabel": "",
-              "sourcePublisher": "Kingstill International Software Services Ltd., \n          Vision Games Publishing Limited"
-            },
-            {
-              "mobyid": 82468,
-              "mobyreleaseid": 237305,
-              "year": 2015,
-              "platform": "Macintosh",
-              "publisher": "Kingstill International Software Services Ltd., Vision Games Publishing Limited",
-              "developer": "RedBedlam Ltd.",
-              "countries": "Worldwide",
-              "publabel": "",
-              "sourcePublisher": "Kingstill International Software Services Ltd., \n          Vision Games Publishing Limited"
-            },
-            {
-              "mobyid": 82468,
-              "mobyreleaseid": 240756,
-              "year": 2015,
-              "platform": "PlayStation 4",
-              "publisher": "Vision Games Publishing Limited",
-              "developer": "RedBedlam Ltd.",
-              "countries": "United States",
-              "publabel": ""
-            },
-            {
-              "mobyid": 82468,
-              "mobyreleaseid": 412076,
-              "year": 2015,
-              "platform": "PlayStation 4",
-              "publisher": "Vision Games Publishing Limited",
-              "developer": "RedBedlam Ltd.",
-              "countries": "United Kingdom",
-              "publabel": ""
-            },
-            {
-              "mobyid": 82468,
-              "mobyreleaseid": 506805,
-              "year": 2014,
-              "platform": "Windows",
-              "publisher": "Kingstill International Software Services Ltd., Vision Games Publishing Limited",
-              "developer": "RedBedlam Ltd.",
-              "countries": "Worldwide",
-              "publabel": "",
-              "sourcePublisher": "Kingstill International Software Services Ltd., \n          Vision Games Publishing Limited"
-            },
-            {
-              "mobyid": 82468,
-              "mobyreleaseid": 237304,
-              "year": 2015,
-              "platform": "Windows",
-              "publisher": "Kingstill International Software Services Ltd., Vision Games Publishing Limited",
-              "developer": "RedBedlam Ltd.",
-              "countries": "Worldwide",
-              "publabel": "",
-              "sourcePublisher": "Kingstill International Software Services Ltd., \n          Vision Games Publishing Limited"
-            },
-            {
-              "mobyid": 82468,
-              "mobyreleaseid": 412077,
-              "year": 2015,
-              "platform": "Xbox One",
-              "publisher": "Vision Games Publishing Limited",
-              "developer": "RedBedlam Ltd.",
-              "countries": "United States,  United Kingdom",
               "publabel": ""
             }
           ]
@@ -11280,49 +10340,6 @@
               "sourceDeveloper": ""
             }
           ]
-        },
-        {
-          "mobyid": 128956,
-          "title": "Tau Ceti",
-          "sourceUrl": "https://www.mobygames.com/game/128956/",
-          "genres": [
-            "Strategy / tactics"
-          ],
-          "alternativeTitles": [],
-          "platformMatch": null,
-          "matchingReleaseIds": [],
-          "releases": [
-            {
-              "mobyid": 128956,
-              "mobyreleaseid": 357600,
-              "year": 2014,
-              "platform": "Android",
-              "publisher": "Advanced Mobile Applications Ltd",
-              "developer": "Mando Productions",
-              "countries": "Worldwide",
-              "publabel": ""
-            },
-            {
-              "mobyid": 128956,
-              "mobyreleaseid": 357598,
-              "year": 2014,
-              "platform": "iPad",
-              "publisher": "Advanced Mobile Applications Ltd",
-              "developer": "Mando Productions",
-              "countries": "Worldwide",
-              "publabel": ""
-            },
-            {
-              "mobyid": 128956,
-              "mobyreleaseid": 357597,
-              "year": 2014,
-              "platform": "iPhone",
-              "publisher": "Advanced Mobile Applications Ltd",
-              "developer": "Mando Productions",
-              "countries": "Worldwide",
-              "publabel": ""
-            }
-          ]
         }
       ]
     },
@@ -11666,30 +10683,6 @@
               "publabel": "",
               "sourceDeveloper": "MPS Labs",
               "sourcePublisher": "MicroProse Software, Inc."
-            }
-          ]
-        },
-        {
-          "mobyid": 78026,
-          "title": "Civilization",
-          "sourceUrl": "https://www.mobygames.com/game/78026/",
-          "genres": [
-            "Strategy / tactics"
-          ],
-          "alternativeTitles": [],
-          "platformMatch": false,
-          "matchingReleaseIds": [],
-          "releases": [
-            {
-              "mobyid": 78026,
-              "mobyreleaseid": 224293,
-              "year": 2006,
-              "platform": "N-Gage",
-              "publisher": "Nokia Oyj",
-              "developer": "Gryphondale Studios, Kenjitsu LLC, Nikitova LLC",
-              "countries": "United States",
-              "publabel": "",
-              "sourceDeveloper": "Gryphondale Studios, \n          Kenjitsu LLC, \n          Nikitova LLC"
             }
           ]
         }
@@ -12957,34 +11950,6 @@
               "publabel": ""
             }
           ]
-        },
-        {
-          "mobyid": 194540,
-          "title": "KeepUp Pirates: RPG",
-          "sourceUrl": "https://www.mobygames.com/game/194540/",
-          "genres": [
-            "Action"
-          ],
-          "alternativeTitles": [
-            {
-              "title": "Pirates",
-              "info": "Steam title"
-            }
-          ],
-          "platformMatch": null,
-          "matchingReleaseIds": [],
-          "releases": [
-            {
-              "mobyid": 194540,
-              "mobyreleaseid": 534929,
-              "year": 2021,
-              "platform": "Windows",
-              "publisher": "Witte´s Studio",
-              "developer": "Witte´s Studio",
-              "countries": "Worldwide",
-              "publabel": ""
-            }
-          ]
         }
       ]
     },
@@ -14130,52 +13095,6 @@
               "sourceDeveloper": ""
             }
           ]
-        },
-        {
-          "mobyid": 196362,
-          "title": "Master of Magic",
-          "sourceUrl": "https://www.mobygames.com/game/196362/",
-          "genres": [
-            "Strategy / tactics"
-          ],
-          "alternativeTitles": [],
-          "platformMatch": false,
-          "matchingReleaseIds": [],
-          "releases": [
-            {
-              "mobyid": 196362,
-              "mobyreleaseid": 539119,
-              "year": 2022,
-              "platform": "Windows",
-              "publisher": "Slitherine Ltd.",
-              "developer": "MuHa Games, Eerie Forest Studio",
-              "countries": "Worldwide",
-              "publabel": "",
-              "sourceDeveloper": "MuHa Games, \n          Eerie Forest Studio"
-            },
-            {
-              "mobyid": 196362,
-              "mobyreleaseid": 539120,
-              "year": 2022,
-              "platform": "Windows",
-              "publisher": "Slitherine Ltd.",
-              "developer": "Eerie Forest Studio, MuHa Games",
-              "countries": "Worldwide",
-              "publabel": "",
-              "sourceDeveloper": "Eerie Forest Studio, \n          MuHa Games"
-            },
-            {
-              "mobyid": 196362,
-              "mobyreleaseid": 669356,
-              "year": 2022,
-              "platform": "Windows",
-              "publisher": "Slitherine Ltd.",
-              "developer": "MuHa Games, Eerie Forest Studio",
-              "countries": "Worldwide",
-              "publabel": "",
-              "sourceDeveloper": "MuHa Games, \n          Eerie Forest Studio"
-            }
-          ]
         }
       ]
     },
@@ -15003,297 +13922,6 @@
               "publabel": "",
               "sourceDeveloper": "",
               "sourcePublisher": ""
-            }
-          ]
-        },
-        {
-          "mobyid": 44061,
-          "title": "A Boy and His Blob",
-          "sourceUrl": "https://www.mobygames.com/game/44061/",
-          "genres": [
-            "Action"
-          ],
-          "alternativeTitles": [],
-          "platformMatch": false,
-          "matchingReleaseIds": [],
-          "releases": [
-            {
-              "mobyid": 44061,
-              "mobyreleaseid": 275835,
-              "year": 2017,
-              "platform": "Android",
-              "publisher": "Majesco Entertainment Company",
-              "developer": "WayForward Technologies, Inc.",
-              "countries": "Worldwide",
-              "publabel": ""
-            },
-            {
-              "mobyid": 44061,
-              "mobyreleaseid": 220025,
-              "year": 2016,
-              "platform": "Linux",
-              "publisher": "Midnight City, Majesco Entertainment Company",
-              "developer": "WayForward Technologies, Inc.",
-              "countries": "Worldwide",
-              "publabel": "",
-              "sourcePublisher": "Midnight City, \n          Majesco Entertainment Company"
-            },
-            {
-              "mobyid": 44061,
-              "mobyreleaseid": 228130,
-              "year": 2016,
-              "platform": "Linux",
-              "publisher": "Majesco Entertainment Company, Midnight City",
-              "developer": "WayForward Technologies, Inc.",
-              "countries": "Worldwide",
-              "publabel": "",
-              "sourcePublisher": "Majesco Entertainment Company, \n          Midnight City"
-            },
-            {
-              "mobyid": 44061,
-              "mobyreleaseid": 673948,
-              "year": 2020,
-              "platform": "Linux",
-              "publisher": "Ziggurat Interactive, Inc.",
-              "developer": "WayForward Technologies, Inc.",
-              "countries": "Worldwide",
-              "publabel": ""
-            },
-            {
-              "mobyid": 44061,
-              "mobyreleaseid": 673950,
-              "year": 2021,
-              "platform": "Linux",
-              "publisher": "Ziggurat Interactive, Inc.",
-              "developer": "WayForward Technologies, Inc.",
-              "countries": "Worldwide",
-              "publabel": ""
-            },
-            {
-              "mobyid": 44061,
-              "mobyreleaseid": 220026,
-              "year": 2016,
-              "platform": "Macintosh",
-              "publisher": "Midnight City, Majesco Entertainment Company",
-              "developer": "WayForward Technologies, Inc.",
-              "countries": "Worldwide",
-              "publabel": "",
-              "sourcePublisher": "Midnight City, \n          Majesco Entertainment Company"
-            },
-            {
-              "mobyid": 44061,
-              "mobyreleaseid": 228131,
-              "year": 2016,
-              "platform": "Macintosh",
-              "publisher": "Majesco Entertainment Company, Midnight City",
-              "developer": "WayForward Technologies, Inc.",
-              "countries": "Worldwide",
-              "publabel": "",
-              "sourcePublisher": "Majesco Entertainment Company, \n          Midnight City"
-            },
-            {
-              "mobyid": 44061,
-              "mobyreleaseid": 673946,
-              "year": 2020,
-              "platform": "Macintosh",
-              "publisher": "Ziggurat Interactive, Inc.",
-              "developer": "WayForward Technologies, Inc.",
-              "countries": "Worldwide",
-              "publabel": ""
-            },
-            {
-              "mobyid": 44061,
-              "mobyreleaseid": 673951,
-              "year": 2021,
-              "platform": "Macintosh",
-              "publisher": "Ziggurat Interactive, Inc.",
-              "developer": "WayForward Technologies, Inc.",
-              "countries": "Worldwide",
-              "publabel": ""
-            },
-            {
-              "mobyid": 44061,
-              "mobyreleaseid": 487195,
-              "year": 2021,
-              "platform": "Nintendo Switch",
-              "publisher": "Ziggurat Interactive, Inc.",
-              "developer": "WayForward Technologies, Inc.",
-              "countries": "Australia,  Japan,  New Zealand",
-              "publabel": ""
-            },
-            {
-              "mobyid": 44061,
-              "mobyreleaseid": 488338,
-              "year": 2021,
-              "platform": "Nintendo Switch",
-              "publisher": "Ziggurat Interactive, Inc.",
-              "developer": "WayForward Technologies, Inc.",
-              "countries": "United States,  Austria,  Belgium,  Canada,  France,  Germany,  Ireland,  Italy,  The Netherlands,  Portugal,  Russia,  South Africa,  Spain,  Switzerland,  United Kingdom",
-              "publabel": ""
-            },
-            {
-              "mobyid": 44061,
-              "mobyreleaseid": 220352,
-              "year": 2016,
-              "platform": "PS Vita",
-              "publisher": "Majesco Entertainment Company",
-              "developer": "WayForward Technologies, Inc.",
-              "countries": "United States",
-              "publabel": ""
-            },
-            {
-              "mobyid": 44061,
-              "mobyreleaseid": 228058,
-              "year": 2016,
-              "platform": "PlayStation 3",
-              "publisher": "Majesco Entertainment Company",
-              "developer": "WayForward Technologies, Inc.",
-              "countries": "United States",
-              "publabel": ""
-            },
-            {
-              "mobyid": 44061,
-              "mobyreleaseid": 220071,
-              "year": 2016,
-              "platform": "PlayStation 4",
-              "publisher": "Majesco Entertainment Company",
-              "developer": "WayForward Technologies, Inc.",
-              "countries": "United States",
-              "publabel": ""
-            },
-            {
-              "mobyid": 44061,
-              "mobyreleaseid": 220402,
-              "year": 2016,
-              "platform": "PlayStation 4",
-              "publisher": "Majesco Entertainment Company",
-              "developer": "WayForward Technologies, Inc.",
-              "countries": "Spain",
-              "publabel": ""
-            },
-            {
-              "mobyid": 44061,
-              "mobyreleaseid": 120947,
-              "year": 2009,
-              "platform": "Wii",
-              "publisher": "Majesco Entertainment Company",
-              "developer": "WayForward Technologies, Inc.",
-              "countries": "Australia",
-              "publabel": ""
-            },
-            {
-              "mobyid": 44061,
-              "mobyreleaseid": 123887,
-              "year": 2009,
-              "platform": "Wii",
-              "publisher": "Majesco Entertainment Company",
-              "developer": "WayForward Technologies, Inc.",
-              "countries": "United States",
-              "publabel": ""
-            },
-            {
-              "mobyid": 44061,
-              "mobyreleaseid": 143490,
-              "year": 2009,
-              "platform": "Wii",
-              "publisher": "Majesco Entertainment Company",
-              "developer": "WayForward Technologies, Inc.",
-              "countries": "Ireland,  United Kingdom",
-              "publabel": ""
-            },
-            {
-              "mobyid": 44061,
-              "mobyreleaseid": 220027,
-              "year": 2016,
-              "platform": "Windows",
-              "publisher": "Midnight City, Majesco Entertainment Company",
-              "developer": "WayForward Technologies, Inc.",
-              "countries": "Worldwide",
-              "publabel": "",
-              "sourcePublisher": "Midnight City, \n          Majesco Entertainment Company"
-            },
-            {
-              "mobyid": 44061,
-              "mobyreleaseid": 228132,
-              "year": 2016,
-              "platform": "Windows",
-              "publisher": "Majesco Entertainment Company, Midnight City",
-              "developer": "WayForward Technologies, Inc.",
-              "countries": "Worldwide",
-              "publabel": "",
-              "sourcePublisher": "Majesco Entertainment Company, \n          Midnight City"
-            },
-            {
-              "mobyid": 44061,
-              "mobyreleaseid": 280031,
-              "year": 2016,
-              "platform": "Windows",
-              "publisher": "Majesco Entertainment Company, Midnight City",
-              "developer": "WayForward Technologies, Inc.",
-              "countries": "Worldwide",
-              "publabel": "",
-              "sourcePublisher": "Majesco Entertainment Company, \n          Midnight City"
-            },
-            {
-              "mobyid": 44061,
-              "mobyreleaseid": 547471,
-              "year": 2016,
-              "platform": "Windows",
-              "publisher": "Majesco Entertainment Company, Midnight City",
-              "developer": "WayForward Technologies, Inc.",
-              "countries": "Worldwide",
-              "publabel": "",
-              "sourcePublisher": "Majesco Entertainment Company, \n          Midnight City"
-            },
-            {
-              "mobyid": 44061,
-              "mobyreleaseid": 673947,
-              "year": 2020,
-              "platform": "Windows",
-              "publisher": "Ziggurat Interactive, Inc.",
-              "developer": "WayForward Technologies, Inc.",
-              "countries": "Worldwide",
-              "publabel": ""
-            },
-            {
-              "mobyid": 44061,
-              "mobyreleaseid": 673949,
-              "year": 2021,
-              "platform": "Windows",
-              "publisher": "Ziggurat Interactive, Inc.",
-              "developer": "WayForward Technologies, Inc.",
-              "countries": "Worldwide",
-              "publabel": ""
-            },
-            {
-              "mobyid": 44061,
-              "mobyreleaseid": 220351,
-              "year": 2016,
-              "platform": "Xbox One",
-              "publisher": "Majesco Entertainment Company",
-              "developer": "WayForward Technologies, Inc.",
-              "countries": "Worldwide",
-              "publabel": ""
-            },
-            {
-              "mobyid": 44061,
-              "mobyreleaseid": 275836,
-              "year": 2017,
-              "platform": "iPad",
-              "publisher": "Majesco Entertainment Company",
-              "developer": "WayForward Technologies, Inc.",
-              "countries": "Worldwide",
-              "publabel": ""
-            },
-            {
-              "mobyid": 44061,
-              "mobyreleaseid": 275837,
-              "year": 2017,
-              "platform": "iPhone",
-              "publisher": "Majesco Entertainment Company",
-              "developer": "WayForward Technologies, Inc.",
-              "countries": "Worldwide",
-              "publabel": ""
             }
           ]
         }
@@ -20635,54 +19263,6 @@
               "sourceDeveloper": "Blue Byte Software GmbH"
             }
           ]
-        },
-        {
-          "mobyid": 30771,
-          "title": "The Settlers",
-          "sourceUrl": "https://www.mobygames.com/game/30771/",
-          "genres": [
-            "Strategy / tactics"
-          ],
-          "alternativeTitles": [
-            {
-              "title": "Die Siedler",
-              "info": "German title"
-            }
-          ],
-          "platformMatch": false,
-          "matchingReleaseIds": [],
-          "releases": [
-            {
-              "mobyid": 30771,
-              "mobyreleaseid": 82328,
-              "year": 2007,
-              "platform": "Nintendo DS",
-              "publisher": "Ubisoft Entertainment SA",
-              "developer": "Blue Byte Studio GmbH",
-              "countries": "Germany",
-              "publabel": ""
-            },
-            {
-              "mobyid": 30771,
-              "mobyreleaseid": 88430,
-              "year": 2007,
-              "platform": "Nintendo DS",
-              "publisher": "Ubisoft Entertainment SA",
-              "developer": "Blue Byte Studio GmbH",
-              "countries": "United Kingdom",
-              "publabel": ""
-            },
-            {
-              "mobyid": 30771,
-              "mobyreleaseid": 119357,
-              "year": 2009,
-              "platform": "Nintendo DS",
-              "publisher": "ak tronic Software & Services GmbH",
-              "developer": "Blue Byte Studio GmbH",
-              "countries": "Germany",
-              "publabel": ""
-            }
-          ]
         }
       ]
     },
@@ -21266,39 +19846,6 @@
               "publisher": "U.S. Gold Ltd.",
               "developer": "Datasoft, Inc.",
               "countries": "United Kingdom",
-              "publabel": ""
-            }
-          ]
-        },
-        {
-          "mobyid": 48792,
-          "title": "The Goonies",
-          "sourceUrl": "https://www.mobygames.com/game/48792/",
-          "genres": [
-            "Action"
-          ],
-          "alternativeTitles": [],
-          "platformMatch": false,
-          "matchingReleaseIds": [],
-          "releases": [
-            {
-              "mobyid": 48792,
-              "mobyreleaseid": 135772,
-              "year": 2010,
-              "platform": "Windows",
-              "publisher": "Sloth Games",
-              "developer": "Sloth Games",
-              "countries": "Worldwide",
-              "publabel": ""
-            },
-            {
-              "mobyid": 48792,
-              "mobyreleaseid": 136313,
-              "year": 2010,
-              "platform": "Windows",
-              "publisher": "Sloth Games",
-              "developer": "Sloth Games",
-              "countries": "Worldwide",
               "publabel": ""
             }
           ]
@@ -23042,36 +21589,6 @@
               "publabel": ""
             }
           ]
-        },
-        {
-          "mobyid": 191414,
-          "title": "Uninvited",
-          "sourceUrl": "https://www.mobygames.com/game/191414/",
-          "genres": [
-            "Action"
-          ],
-          "alternativeTitles": [
-            {
-              "title": "Unwelcome",
-              "info": "Re-release title"
-            }
-          ],
-          "platformMatch": false,
-          "matchingReleaseIds": [],
-          "releases": [
-            {
-              "mobyid": 191414,
-              "mobyreleaseid": 528319,
-              "year": 2022,
-              "platform": "Windows",
-              "publisher": null,
-              "developer": null,
-              "countries": "Worldwide",
-              "publabel": "",
-              "sourceDeveloper": "",
-              "sourcePublisher": ""
-            }
-          ]
         }
       ]
     },
@@ -23651,49 +22168,6 @@
               "publabel": ""
             }
           ]
-        },
-        {
-          "mobyid": 58670,
-          "title": "Theme Park",
-          "sourceUrl": "https://www.mobygames.com/game/58670/",
-          "genres": [
-            "Simulation"
-          ],
-          "alternativeTitles": [],
-          "platformMatch": false,
-          "matchingReleaseIds": [],
-          "releases": [
-            {
-              "mobyid": 58670,
-              "mobyreleaseid": 166895,
-              "year": 2012,
-              "platform": "Android",
-              "publisher": "Electronic Arts, Inc.",
-              "developer": "Progressive Media ApS",
-              "countries": "Worldwide",
-              "publabel": "EA Mobile"
-            },
-            {
-              "mobyid": 58670,
-              "mobyreleaseid": 166896,
-              "year": 2011,
-              "platform": "iPad",
-              "publisher": "Electronic Arts, Inc.",
-              "developer": "Progressive Media ApS",
-              "countries": "Worldwide",
-              "publabel": "EA Mobile"
-            },
-            {
-              "mobyid": 58670,
-              "mobyreleaseid": 166897,
-              "year": 2011,
-              "platform": "iPhone",
-              "publisher": "Electronic Arts, Inc.",
-              "developer": "Progressive Media ApS",
-              "countries": "Worldwide",
-              "publabel": "EA Mobile"
-            }
-          ]
         }
       ]
     },
@@ -23981,50 +22455,6 @@
               "publisher": "GOST Publishing SPRL",
               "developer": "Independent Arts Software GmbH",
               "countries": "France",
-              "publabel": ""
-            }
-          ]
-        },
-        {
-          "mobyid": 129749,
-          "title": "Summer Games",
-          "sourceUrl": "https://www.mobygames.com/game/129749/",
-          "genres": [
-            "Action",
-            "Sports"
-          ],
-          "alternativeTitles": [],
-          "platformMatch": false,
-          "matchingReleaseIds": [],
-          "releases": [
-            {
-              "mobyid": 129749,
-              "mobyreleaseid": 366283,
-              "year": 2014,
-              "platform": "Android",
-              "publisher": "Epyx Deutschland",
-              "developer": "magnussoft Deutschland GmbH",
-              "countries": "Worldwide",
-              "publabel": ""
-            },
-            {
-              "mobyid": 129749,
-              "mobyreleaseid": 360271,
-              "year": 2010,
-              "platform": "Macintosh",
-              "publisher": "Epyx Deutschland",
-              "developer": "magnussoft Deutschland GmbH",
-              "countries": "Germany",
-              "publabel": ""
-            },
-            {
-              "mobyid": 129749,
-              "mobyreleaseid": 360272,
-              "year": 2009,
-              "platform": "Windows",
-              "publisher": "Epyx Deutschland",
-              "developer": "magnussoft Deutschland GmbH",
-              "countries": "Germany",
               "publabel": ""
             }
           ]
@@ -25625,74 +24055,6 @@
               "publabel": "Kixx"
             }
           ]
-        },
-        {
-          "mobyid": 109715,
-          "title": "Winter Games",
-          "sourceUrl": "https://www.mobygames.com/game/109715/",
-          "genres": [
-            "Compilation"
-          ],
-          "alternativeTitles": [],
-          "platformMatch": null,
-          "matchingReleaseIds": [],
-          "releases": [
-            {
-              "mobyid": 109715,
-              "mobyreleaseid": 304238,
-              "year": 2015,
-              "platform": "Windows",
-              "publisher": "INTENIUM GmbH",
-              "developer": null,
-              "countries": "Germany",
-              "publabel": "",
-              "sourceDeveloper": ""
-            }
-          ]
-        },
-        {
-          "mobyid": 130767,
-          "title": "Winter Games",
-          "sourceUrl": "https://www.mobygames.com/game/130767/",
-          "genres": [
-            "Action",
-            "Sports"
-          ],
-          "alternativeTitles": [],
-          "platformMatch": null,
-          "matchingReleaseIds": [],
-          "releases": [
-            {
-              "mobyid": 130767,
-              "mobyreleaseid": 366280,
-              "year": 2014,
-              "platform": "Android",
-              "publisher": "Epyx Deutschland",
-              "developer": "magnussoft Deutschland GmbH",
-              "countries": "Worldwide",
-              "publabel": ""
-            },
-            {
-              "mobyid": 130767,
-              "mobyreleaseid": 366281,
-              "year": 2010,
-              "platform": "Macintosh",
-              "publisher": "Epyx Deutschland",
-              "developer": "magnussoft Deutschland GmbH",
-              "countries": "Germany",
-              "publabel": ""
-            },
-            {
-              "mobyid": 130767,
-              "mobyreleaseid": 363128,
-              "year": 2009,
-              "platform": "Windows",
-              "publisher": "Epyx Deutschland",
-              "developer": "magnussoft Deutschland GmbH",
-              "countries": "Germany",
-              "publabel": ""
-            }
-          ]
         }
       ]
     },
@@ -26493,114 +24855,6 @@
               "publisher": "Erbe Software, S.A.",
               "developer": "Maxis Software Inc.",
               "countries": "Spain",
-              "publabel": ""
-            }
-          ]
-        },
-        {
-          "mobyid": 44593,
-          "title": "SimCity",
-          "sourceUrl": "https://www.mobygames.com/game/44593/",
-          "genres": [
-            "Simulation",
-            "Strategy / tactics"
-          ],
-          "alternativeTitles": [],
-          "platformMatch": false,
-          "matchingReleaseIds": [],
-          "releases": [
-            {
-              "mobyid": 44593,
-              "mobyreleaseid": 122381,
-              "year": 2008,
-              "platform": "iPhone",
-              "publisher": "Electronic Arts, Inc.",
-              "developer": "Maxis Software Inc.",
-              "countries": "Germany,  The Netherlands,  United Kingdom",
-              "publabel": "EA Mobile"
-            },
-            {
-              "mobyid": 44593,
-              "mobyreleaseid": 497859,
-              "year": 2008,
-              "platform": "iPhone",
-              "publisher": "Electronic Arts, Inc.",
-              "developer": "Maxis Software Inc.",
-              "countries": "United States",
-              "publabel": "EA Mobile"
-            }
-          ]
-        },
-        {
-          "mobyid": 65566,
-          "title": "SimCity",
-          "sourceUrl": "https://www.mobygames.com/game/65566/",
-          "genres": [
-            "Simulation",
-            "Strategy / tactics"
-          ],
-          "alternativeTitles": [],
-          "platformMatch": false,
-          "matchingReleaseIds": [],
-          "releases": [
-            {
-              "mobyid": 65566,
-              "mobyreleaseid": 189805,
-              "year": 2013,
-              "platform": "Macintosh",
-              "publisher": "Electronic Arts, Inc.",
-              "developer": "Maxis Software Inc.",
-              "countries": "Worldwide",
-              "publabel": ""
-            },
-            {
-              "mobyid": 65566,
-              "mobyreleaseid": 189806,
-              "year": 2013,
-              "platform": "Windows",
-              "publisher": "Electronic Arts, Inc.",
-              "developer": "Maxis Software Inc.",
-              "countries": "United States,  Canada",
-              "publabel": ""
-            },
-            {
-              "mobyid": 65566,
-              "mobyreleaseid": 556060,
-              "year": 2013,
-              "platform": "Windows",
-              "publisher": "Electronic Arts, Inc.",
-              "developer": "Maxis Software Inc.",
-              "countries": "Germany",
-              "publabel": ""
-            },
-            {
-              "mobyid": 65566,
-              "mobyreleaseid": 556061,
-              "year": 2013,
-              "platform": "Windows",
-              "publisher": "Electronic Arts, Inc.",
-              "developer": "Maxis Software Inc.",
-              "countries": "Austria,  Switzerland",
-              "publabel": ""
-            },
-            {
-              "mobyid": 65566,
-              "mobyreleaseid": 597549,
-              "year": 2013,
-              "platform": "Windows",
-              "publisher": "Electronic Arts, Inc.",
-              "developer": "Maxis Software Inc.",
-              "countries": "Czechia,  Slovakia",
-              "publabel": ""
-            },
-            {
-              "mobyid": 65566,
-              "mobyreleaseid": 208248,
-              "year": 2015,
-              "platform": "Windows",
-              "publisher": "ak tronic Software & Services GmbH",
-              "developer": "Maxis Software Inc.",
-              "countries": "Germany",
               "publabel": ""
             }
           ]
@@ -27712,29 +25966,6 @@
               "publabel": ""
             }
           ]
-        },
-        {
-          "mobyid": 44201,
-          "title": "Jupiter Lander",
-          "sourceUrl": "https://www.mobygames.com/game/44201/",
-          "genres": [
-            "Action"
-          ],
-          "alternativeTitles": [],
-          "platformMatch": null,
-          "matchingReleaseIds": [],
-          "releases": [
-            {
-              "mobyid": 44201,
-              "mobyreleaseid": 121283,
-              "year": 2008,
-              "platform": "J2ME",
-              "publisher": "Eidos Interactive Limited",
-              "developer": "Kiloo ApS",
-              "countries": "Worldwide",
-              "publabel": "Eidos Mobile"
-            }
-          ]
         }
       ]
     },
@@ -28699,6 +26930,7 @@
             "Strategy / tactics"
           ],
           "alternativeTitles": [],
+          "manual": true,
           "platformMatch": true,
           "matchingReleaseIds": [
             312862
@@ -28761,6 +26993,7 @@
             "Strategy / tactics"
           ],
           "alternativeTitles": [],
+          "manual": true,
           "platformMatch": true,
           "matchingReleaseIds": [
             401920

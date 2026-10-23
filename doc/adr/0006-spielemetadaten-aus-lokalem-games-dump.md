@@ -38,6 +38,10 @@ Jahr unbekannt; datierte einzelne Veröffentlichungen bleiben als solche sichtba
   `dev:build:game-title-index` den Dump; der Import nutzt den Index.
   `--delete-input` beim Indexbau erlaubt die Löschung nach geprüftem Export.
   Neue Katalogspiele können einen erneuten lokalen Import erfordern.
+  Der Index enthält nur Spiele mit Erstjahr bis 2005 (`--max-year`);
+  neuere Katalogspiele erhalten ihre Dump-Daten aus der handgepflegten Datei
+  `src/data/data-game-dump-manual.json` (Kandidaten mit `manual: true`), sonst
+  blieben sie `blocked`.
 - Cache-Reader prüft Schema, Integrität, Katalog und Freigaben; ein neuer Report
   muss ausdrücklich erneut zum fertigen Cache aufbereitet werden.
 

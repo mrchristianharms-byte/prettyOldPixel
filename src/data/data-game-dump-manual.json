@@ -1,0 +1,136 @@
+{
+  "note": "Manuell gepflegte Dump-Daten für Katalogspiele außerhalb des Titelindex (Erstjahr nach dessen Grenze). Werte aus dem MobyGames-Dump übernommen; der Import nutzt sie nur, wenn der Index die mobyid nicht enthält.",
+  "games": {
+    "tom-clancy-s-endwar": {
+      "mobyid": 49906,
+      "title": "Tom Clancy's EndWar",
+      "genres": [
+        "Strategy / tactics"
+      ],
+      "alternativeTitles": [],
+      "releases": [
+        {
+          "mobyreleaseid": 139303,
+          "year": 2008,
+          "platform": "Nintendo DS",
+          "publisher": "Ubisoft Entertainment SA",
+          "developer": "Funatics Software GmbH",
+          "countries": "United Kingdom",
+          "publabel": ""
+        },
+        {
+          "mobyreleaseid": 139304,
+          "year": 2008,
+          "platform": "PSP",
+          "publisher": "Ubisoft Entertainment SA",
+          "developer": "Funatics Software GmbH",
+          "countries": "United Kingdom",
+          "publabel": ""
+        }
+      ]
+    },
+    "airships-conquer-the-skies": {
+      "mobyid": 112651,
+      "title": "Airships: Conquer the Skies",
+      "genres": [
+        "Simulation",
+        "Strategy / tactics"
+      ],
+      "alternativeTitles": [],
+      "releases": [
+        {
+          "mobyreleaseid": 312864,
+          "year": 2018,
+          "platform": "Linux",
+          "publisher": "",
+          "developer": "",
+          "countries": "Worldwide",
+          "publabel": ""
+        },
+        {
+          "mobyreleaseid": 312863,
+          "year": 2018,
+          "platform": "Macintosh",
+          "publisher": "",
+          "developer": "",
+          "countries": "Worldwide",
+          "publabel": ""
+        },
+        {
+          "mobyreleaseid": 312862,
+          "year": 2018,
+          "platform": "Windows",
+          "publisher": "",
+          "developer": "",
+          "countries": "Worldwide",
+          "publabel": ""
+        }
+      ]
+    },
+    "hyperspace-delivery-service": {
+      "mobyid": 143640,
+      "title": "Hyperspace Delivery Service",
+      "genres": [
+        "Action",
+        "Strategy / tactics"
+      ],
+      "alternativeTitles": [],
+      "releases": [
+        {
+          "mobyreleaseid": 402286,
+          "year": 2019,
+          "platform": "Android",
+          "publisher": "Zotnip LLC",
+          "developer": "Zotnip LLC",
+          "countries": "Worldwide",
+          "publabel": ""
+        },
+        {
+          "mobyreleaseid": 401922,
+          "year": 2019,
+          "platform": "Linux",
+          "publisher": "Zotnip LLC",
+          "developer": "Zotnip LLC",
+          "countries": "Worldwide",
+          "publabel": ""
+        },
+        {
+          "mobyreleaseid": 401921,
+          "year": 2019,
+          "platform": "Macintosh",
+          "publisher": "Zotnip LLC",
+          "developer": "Zotnip LLC",
+          "countries": "Worldwide",
+          "publabel": ""
+        },
+        {
+          "mobyreleaseid": 401923,
+          "year": 2020,
+          "platform": "Nintendo Switch",
+          "publisher": "Zotnip LLC",
+          "developer": "Zotnip LLC",
+          "countries": "United States,  Austria,  Belgium,  Canada,  France,  Germany,  Ireland,  Italy,  The Netherlands,  Portugal,  Russia,  Spain,  Switzerland,  United Kingdom",
+          "publabel": ""
+        },
+        {
+          "mobyreleaseid": 401924,
+          "year": 2020,
+          "platform": "Nintendo Switch",
+          "publisher": "Zotnip LLC",
+          "developer": "Zotnip LLC",
+          "countries": "Australia,  New Zealand",
+          "publabel": ""
+        },
+        {
+          "mobyreleaseid": 401920,
+          "year": 2019,
+          "platform": "Windows",
+          "publisher": "Zotnip LLC",
+          "developer": "Zotnip LLC",
+          "countries": "Worldwide",
+          "publabel": ""
+        }
+      ]
+    }
+  }
+}

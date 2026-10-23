@@ -111,7 +111,7 @@ Externe Programme, Modellserver und deren Modelle werden nicht von npm verwaltet
 | npm-Target | Programme / Dienste zusätzlich zu Node.js und npm | Netzwerk und lokale Daten |
 |---|---|---|
 | `dev:review:games` | Keine | Offline-Prüfübersicht aus dem fertigen Dump-Cache: nutzbare/gesperrte Spiele, Plattformumfang und Kandidaten. |
-| `dev:build:game-title-index -- --input gdb.sql` | Keine | Liest den lokalen MobyGames-SQL-Dump als Daten (keine SQL-Ausführung) und schreibt `cache/game-title-index.json` mit Titeln, Alternativtiteln, Genres, Releases, Publishern, Developern und Plattformnummern sowie `cache/game-platform-index.json` (beide Git-ignoriert). Einzige Stelle, die `gdb.sql` liest; `--delete-input` löscht den Dump nach geprüftem Indexbau. |
+| `dev:build:game-title-index -- --input gdb.sql` | Keine | Liest den lokalen MobyGames-SQL-Dump als Daten (keine SQL-Ausführung) und schreibt `cache/game-title-index.json.gz` (gzip, Spiele mit Erstjahr bis 2005, änderbar mit `--max-year`) mit Titeln, Alternativtiteln, Genres und Releases sowie `cache/game-platform-index.json` (beide Git-ignoriert). Einzige Stelle, die `gdb.sql` liest; `--delete-input` löscht den Dump nach geprüftem Indexbau. |
 | `dev:import:game-dump` | Keine | Exportiert Katalogkandidaten ausschließlich aus dem Titelindex (optional `--index datei.json`); bricht bei veraltetem Index oder unpassendem Plattformindex ab. |
 | `dev:verify:game-dump` | Keine | Validiert offline Katalogabdeckung, Titel/Aliasse, IDs und Veröffentlichungen des lokalen Dump-Reports. Schreibt `local-dump/verification.json`; keine anderen Referenzquellen. |
 | `dev:prepare:game-metadata` | Keine | Erzeugt `cache/game-metadata/ready.json` aus Report, Katalog und gespeicherten Freigaben. Alle 147 Spiele zugeordnet. |
@@ -145,7 +145,8 @@ npm run generate:site
 ```
 
 Titelaliase und Plattformen stehen in `src/data/data-games.mjs`, manuelle Freigaben
-in `src/data/data-game-dump-decisions.json`. Beide werden bei jedem Lauf beachtet,
+in `src/data/data-game-dump-decisions.json`, Dump-Daten für Katalogspiele nach 2005
+(außerhalb des Titelindex) in `src/data/data-game-dump-manual.json`. Alle werden bei jedem Lauf beachtet,
 nicht überschrieben. Ohne feste Plattform gilt DOS → Amiga → C64 → NES → SNES;
 unaufgelöste Mehrdeutigkeiten bleiben gesperrt. Nicht mehr belegte Freigaben
 brechen die Aufbereitung ab.
@@ -154,7 +155,7 @@ Der Build liest nur `cache/game-metadata/ready.json`: plattformbezogene Genres,
 Firmen und Jahre aus dem Dump, keine Designer-Credits. Die erzeugten Caches
 werden neu geschrieben und versioniert. Nur der Titelindex liest den
 ignorierten SQL-Dump; der Import arbeitet danach allein mit
-`cache/game-title-index.json` und `cache/game-platform-index.json`. Der Dump
+`cache/game-title-index.json.gz` und `cache/game-platform-index.json`. Der Dump
 bleibt lokal; nur `dev:build:game-title-index -- --input gdb.sql --delete-input`
 löscht ihn nach geprüftem Indexbau.
 [Umsetzungsstand und Grenzen](doc/game-metadata-implementation.md).

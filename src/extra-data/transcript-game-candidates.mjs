@@ -1,7 +1,7 @@
 import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import { normalizeDumpTitle } from "../fetch-game/game-dump-matching.mjs";
-import { gameTitles, loadTitleIndex } from "../fetch-game/game-title-index.mjs";
+import { gameCompanies, gameTitles, loadTitleIndex } from "../fetch-game/game-title-index.mjs";
 
 export { loadTitleIndex };
 
@@ -118,7 +118,7 @@ export function buildCandidateMatcher(index, { fromYear, toYear, vocabulary = { 
   }
   const companies = new Map();
   for (const game of games.values()) {
-    for (const company of game.companies ?? []) {
+    for (const company of gameCompanies(game)) {
       const tokens = normalizeDumpTitle(company).split(" ").filter((token) => token && !companyNoise.has(token));
       const key = tokens.slice(0, 2).join("");
       if (key.length >= 5 && !vocabulary.common.has(tokens[0])) add(companies, key, game.id);

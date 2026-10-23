@@ -402,12 +402,17 @@ Umgesetzt:
   Analyse-JSONs und CSVs mit einer Referenz.
 
 - **Titelindex:** `npm run dev:build:game-title-index -- --input gdb.sql`
-  erzeugt aus dem MobyGames-Dump `cache/game-title-index.json` (ca. 180.000
-  Spiele mit MobyGames-ID, Alternativtitel, Genres, erstes Erscheinungsjahr,
-  Plattformnummern, Publisher, Developer und Releases) und
+  erzeugt aus dem MobyGames-Dump `cache/game-title-index.json.gz` (gzip,
+  rund 61.000 Spiele mit Erstjahr bis 2005 oder unbekannt; MobyGames-ID,
+  Alternativtitel, Genres, erstes Erscheinungsjahr und Releases; Plattformen
+  und Firmen werden aus den Releases abgeleitet) und
   `cache/game-platform-index.json` (Plattformnamen zu den Nummern). Derselbe
   Index ist seit Version 3 auch die einzige Quelle des Spielemetadaten-Imports
-  (ADR 0006); `gdb.sql` wird nur noch beim Indexbau gelesen.
+  (ADR 0006); `gdb.sql` wird nur noch beim Indexbau gelesen. Seit Version 4
+  fehlen neuere Spiele: Das spart rund 95 % Platz (88 MB → 4 MB), dafür
+  kann die Jahresprüfung im Video erwähnte Spiele nach 2005 nicht mehr
+  verwerfen. Katalogspiele nach 2005 bekommen ihre Dump-Daten aus
+  `src/data/data-game-dump-manual.json` (ADR 0006).
 - **Heftzeitraum:** Kandidaten stammen nur aus drei Jahren vor bis einem Jahr
   nach dem Heftjahr (63foHISC8ms, Power Play 1988: 1985–1989, rund 8.200
   Spiele). Eine Plattformeingrenzung entfällt vorerst, weil viele Hefte

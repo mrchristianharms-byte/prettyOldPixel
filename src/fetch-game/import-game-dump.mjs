@@ -2,6 +2,7 @@ import { readFile, writeFile, rename } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { gameDefinitions } from "../data/data-games.mjs";
+import manualDumpData from "../data/data-game-dump-manual.json" with { type: "json" };
 import { writeJson } from "../shared/archive-cache.mjs";
 import { escapeHtml } from "../site-generation/site-html.mjs";
 import { defaultTitleIndexFile, releaseColumns } from "./build-game-title-index.mjs";
@@ -22,7 +23,7 @@ export function renderDumpReport(report) {
     const candidates = game.candidates.map((candidate) => {
       const scoped = candidate.releases.filter((release) => candidate.matchingReleaseIds.includes(release.mobyreleaseid));
       const releases = game.platforms.length ? scoped : candidate.releases;
-      return `<section><h3><a href="${candidate.sourceUrl}">${text(candidate.title)}</a> · MobyGames ${candidate.mobyid}</h3>
+      return `<section><h3><a href="${candidate.sourceUrl}">${text(candidate.title)}</a> · MobyGames ${candidate.mobyid}${candidate.manual ? " · manuell gepflegt" : ""}</h3>
 <p>Genre: ${candidate.genres.map(text).join(", ") || "keine Angabe"}<br>
 Plattformabgleich: ${candidate.platformMatch === null ? "lokale Plattform offen" : candidate.platformMatch ? "passende Veröffentlichung vorhanden" : "keine passende Veröffentlichung im Dump"}</p>
 <table><thead><tr><th>Plattform</th><th>Jahr</th><th>Entwickler</th><th>Publisher</th><th>Länder</th></tr></thead>
@@ -51,7 +52,7 @@ SHA-256: <code>${text(report.source.sha256)}</code></p>${cards}</body></html>\n`
 export async function importGameDump({
   index: indexFile = defaultTitleIndexFile,
   output = path.join(root, "cache/game-metadata/local-dump/report.json"),
-  games = gameDefinitions,
+  games = gameDefinitions, manual = manualDumpData.games,
 }) {
   indexFile = path.resolve(indexFile);
   output = path.resolve(output);
@@ -93,17 +94,39 @@ export async function importGameDump({
     `Plattform der zusätzlichen Veröffentlichung fehlt: ${reference.title}.`);
     return { ...reference, releases };
   }
+  const catalogueIds = new Set(games.map((game) => game.id));
+  requireValue(manual && typeof manual === "object"
+    && Object.keys(manual).every((id) => catalogueIds.has(id)), "Manuelle Dump-Daten für unbekanntes Spiel.");
+  // Hand-maintained entries for catalogue games beyond the title index year limit; the index wins if it has the game.
+  function manualSource(gameId) {
+    const entry = manual[gameId];
+    if (!entry) return null;
+    requireValue(Number.isSafeInteger(entry.mobyid) && entry.mobyid > 0 && typeof entry.title === "string"
+      && Array.isArray(entry.genres) && Array.isArray(entry.alternativeTitles)
+      && Array.isArray(entry.releases) && entry.releases.length > 0,
+    `Ungültige manuelle Dump-Daten: ${gameId}.`);
+    if (byId.has(entry.mobyid)) return null;
+    return { ...entry, manual: true, releases: entry.releases.map((release) => {
+      requireValue(releaseColumns.every((column) => Object.hasOwn(release, column)),
+        `Unvollständige manuelle Veröffentlichung: ${gameId}.`);
+      return normalizeReleaseCompanies({ mobyid: entry.mobyid,
+        ...Object.fromEntries(releaseColumns.map((column) => [column, release[column]])) });
+    }) };
+  }
   const entries = games.map((game) => {
     const ids = new Set([game.name, ...(game.aliases ?? [])].flatMap((title) => [...(titleLookup.get(normalizeDumpTitle(title)) ?? [])]));
-    const candidates = [...ids].sort((a, b) => a - b).map((id) => {
-      const source = byId.get(id);
-      const releases = releasesOf(source);
+    const sources = [...ids].map((id) => ({ ...byId.get(id), mobyid: id, releases: releasesOf(byId.get(id)) }));
+    const extra = manualSource(game.id);
+    if (extra) sources.push(extra);
+    const candidates = sources.sort((a, b) => a.mobyid - b.mobyid).map((source) => {
+      const { releases } = source;
       const matchedReleases = releases.filter((release) => platformMatches(game.platforms, release.platform));
       return {
-        mobyid: id, title: source.title,
-        sourceUrl: `https://www.mobygames.com/game/${id}/`,
+        mobyid: source.mobyid, title: source.title,
+        sourceUrl: `https://www.mobygames.com/game/${source.mobyid}/`,
         genres: source.genres,
         alternativeTitles: (source.alternativeTitles ?? []).map((title) => ({ ...title })),
+        ...(source.manual ? { manual: true } : {}),
         platformMatch: game.platforms.length ? matchedReleases.length > 0 : null,
         matchingReleaseIds: matchedReleases.map((release) => release.mobyreleaseid),
         releases,

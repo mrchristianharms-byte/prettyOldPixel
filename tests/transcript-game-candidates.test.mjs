@@ -3,7 +3,9 @@ import { access, mkdtemp, mkdir, readFile, rm, writeFile } from "node:fs/promise
 import path from "node:path";
 import { tmpdir } from "node:os";
 import test from "node:test";
+import { gunzipSync } from "node:zlib";
 import { buildGameTitleIndex, parseIndexArguments } from "../src/fetch-game/build-game-title-index.mjs";
+import { gameCompanies, loadTitleIndex } from "../src/fetch-game/game-title-index.mjs";
 import {
   buildCandidateMatcher, colognePhonetic, findTitleMentions, titleIndexLookup, transcriptVocabulary, windowCandidates,
 } from "../src/extra-data/transcript-game-candidates.mjs";
@@ -11,11 +13,11 @@ import {
   analyzeWindow, checkReleaseYears, releaseCompanies, validateDiscussions, generateGamesFromTranscript, llmConfiguration, prepareSegments,
 } from "../src/extra-data/generate-games-from-transcript.mjs";
 
-const game = (id, title, firstYear, extra = {}) => ({ id, title, firstYear, platforms: ["DOS"], companies: [], ...extra });
+const game = (id, title, firstYear, extra = {}) => ({ id, title, firstYear, releases: [], ...extra });
 const index = {
   version: 3, source: { sha256: "abc" },
   games: [
-    game(1, "Falcon", 1987, { companies: ["Spectrum HoloByte"], alternativeTitles: [{ title: "Falcon F-16", info: "US" }] }),
+    game(1, "Falcon", 1987, { releases: [[1, 1987, 1, null, "Spectrum HoloByte", null, null]], alternativeTitles: [{ title: "Falcon F-16", info: "US" }] }),
     game(2, "Gunship", 1986),
     game(3, "Stealth Mission", 1988),
     game(4, "Wasteland 3", 2020),
@@ -103,36 +105,41 @@ test("Titelindex entsteht aus dem SQL-Dump mit Alternativtiteln, Releases, Erstj
   t.after(() => rm(directory, { recursive: true, force: true }));
   const input = path.join(directory, "gdb.sql");
   await writeFile(input, `-- Testdump
-INSERT INTO \`mobygames\` (\`mobyid\`, \`title\`, \`genre\`) VALUES (1,'Falcon','Simulation'),(2,'Gunship',NULL);
+INSERT INTO \`mobygames\` (\`mobyid\`, \`title\`, \`genre\`) VALUES (1,'Falcon','Simulation'),(2,'Gunship',NULL),(3,'Modern',NULL);
 INSERT INTO \`mobygames_alttitles\` (\`mobyid\`, \`title\`, \`info\`) VALUES (1,'Falcon F-16','US');
 INSERT INTO \`mobygames_releases\` (\`mobyid\`, \`mobyreleaseid\`, \`year\`, \`platform\`, \`publisher\`, \`developer\`, \`countries\`, \`publabel\`) VALUES
-(1,11,1987,'DOS','Accolade, Inc.',NULL,'United States',NULL),(1,10,1988,'Amiga','Mirrorsoft Ltd.','Spectrum HoloByte','Germany','Image Works'),(2,20,NULL,'C64',NULL,NULL,NULL,NULL);
+(1,11,1987,'DOS','Accolade, Inc.',NULL,'United States',NULL),(1,10,1988,'Amiga','Mirrorsoft Ltd.','Spectrum HoloByte','Germany','Image Works'),(2,20,NULL,'C64',NULL,NULL,NULL,NULL),(3,30,2006,'Windows','Neu GmbH',NULL,NULL,NULL);
 `);
   const output = path.join(directory, "index.json");
   const { index: result, platformIndex } = await buildGameTitleIndex({ input, output });
-  assert.deepEqual(JSON.parse(await readFile(output, "utf8")), result);
+  const stored = gunzipSync(await readFile(output)).toString("utf8");
+  assert.deepEqual(JSON.parse(stored), result);
+  assert.deepEqual(await loadTitleIndex(output), result);
   const platformFile = path.join(directory, "game-platform-index.json");
   assert.deepEqual(JSON.parse(await readFile(platformFile, "utf8")), platformIndex);
-  assert.equal(result.version, 3);
-  assert.deepEqual(result.importedRows, { mobygames: 2, mobygames_alttitles: 1, mobygames_releases: 3 });
+  assert.equal(result.version, 4);
+  assert.equal(result.maxFirstYear, 2005);
+  assert.deepEqual(result.importedRows, { mobygames: 3, mobygames_alttitles: 1, mobygames_releases: 4 });
   assert.deepEqual(result.releaseColumns, ["mobyreleaseid", "year", "platform", "publisher", "developer", "countries", "publabel"]);
   assert.equal(result.platformIndex, "game-platform-index.json");
   assert.deepEqual(platformIndex.source, result.source);
-  assert.deepEqual(platformIndex.platforms, [{ id: 1, name: "Amiga" }, { id: 2, name: "C64" }, { id: 3, name: "DOS" }]);
+  assert.deepEqual(platformIndex.platforms,
+    [{ id: 1, name: "Amiga" }, { id: 2, name: "C64" }, { id: 3, name: "DOS" }, { id: 4, name: "Windows" }]);
   assert.deepEqual(result.games, [
     { id: 1, title: "Falcon", alternativeTitles: [{ title: "Falcon F-16", info: "US" }], genres: ["Simulation"],
-      firstYear: 1987, platforms: [1, 3],
-      publishers: ["Mirrorsoft Ltd.", "Accolade, Inc."], developers: ["Spectrum HoloByte"],
-      companies: ["Mirrorsoft Ltd.", "Accolade, Inc.", "Spectrum HoloByte"],
+      firstYear: 1987,
       releases: [[10, 1988, 1, "Mirrorsoft Ltd.", "Spectrum HoloByte", "Germany", "Image Works"],
         [11, 1987, 3, "Accolade, Inc.", null, "United States", null]] },
-    { id: 2, title: "Gunship", genres: [], firstYear: null, platforms: [2], publishers: [], developers: [], companies: [],
-      releases: [[20, null, 2, null, null, null, null]] },
-  ]);
-  assert.equal((await readFile(output, "utf8")).split("\n").length, 5, "Kopf, eine Zeile je Spiel, Abschluss");
+    { id: 2, title: "Gunship", genres: [], firstYear: null, releases: [[20, null, 2, null, null, null, null]] },
+  ], "Spiele nach dem Grenzjahr fehlen, Spiele ohne Jahr bleiben");
+  assert.deepEqual(gameCompanies(result.games[0]), ["Mirrorsoft Ltd.", "Accolade, Inc.", "Spectrum HoloByte"]);
+  assert.deepEqual((await buildGameTitleIndex({ input, output, maxFirstYear: 2006 })).index.games.map((entry) => entry.id), [1, 2, 3]);
+  assert.equal(parseIndexArguments(["--input", input, "--max-year", "1999"]).maxFirstYear, 1999);
+  assert.throws(() => parseIndexArguments(["--input", input, "--max-year", "neu"]), /Jahreszahl/u);
+  assert.equal(stored.split("\n").length, 5, "Kopf, eine Zeile je Spiel, Abschluss");
   const custom = path.join(directory, "platforms.json");
   await buildGameTitleIndex({ input, output, platformOutput: custom });
-  assert.equal(JSON.parse(await readFile(output, "utf8")).platformIndex, "platforms.json");
+  assert.equal((await loadTitleIndex(output)).platformIndex, "platforms.json");
   assert.deepEqual(parseIndexArguments(["--input", input, "--platform-output", custom]).platformOutput, custom);
   assert.throws(() => parseIndexArguments(["--invalid"]), /Aufruf/u);
   assert.equal(parseIndexArguments(["--input", input, "--delete-input"]).deleteInput, true);

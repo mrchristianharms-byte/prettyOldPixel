@@ -1,13 +1,18 @@
-import { lstat, mkdir, rename, rm, writeFile } from "node:fs/promises";
+import { createWriteStream } from "node:fs";
+import { lstat, mkdir, rename, rm } from "node:fs/promises";
 import path from "node:path";
+import { Readable } from "node:stream";
+import { pipeline } from "node:stream/promises";
 import { fileURLToPath } from "node:url";
+import { createGzip } from "node:zlib";
 import { writeJson } from "../shared/archive-cache.mjs";
 import { hashFile, parseSqlValues, readSqlStatements } from "./sql-dump-reader.mjs";
-import { normalizeCompanyName } from "./game-company-names.mjs";
 
 const root = fileURLToPath(new URL("../../", import.meta.url));
-export const defaultTitleIndexFile = path.join(root, "cache/game-title-index.json");
-export const titleIndexVersion = 3;
+export const defaultTitleIndexFile = path.join(root, "cache/game-title-index.json.gz");
+export const titleIndexVersion = 4;
+// Retro scope: later games are dropped to keep the index small (see doc/README.md, Titelindex).
+export const defaultMaxFirstYear = 2005;
 export const releaseColumns = ["mobyreleaseid", "year", "platform", "publisher", "developer", "countries", "publabel"];
 const platformIndexName = "game-platform-index.json";
 const columns = {
@@ -15,7 +20,7 @@ const columns = {
   mobygames_alttitles: ["mobyid", "title", "info"],
   mobygames_releases: ["mobyid", ...releaseColumns],
 };
-const usage = "Aufruf: node src/fetch-game/build-game-title-index.mjs --input gdb.sql [--output datei.json] [--platform-output datei.json] [--delete-input]";
+const usage = "Aufruf: node src/fetch-game/build-game-title-index.mjs --input gdb.sql [--output datei.json] [--platform-output datei.json] [--max-year 2005] [--delete-input]";
 
 function requireValue(condition, message) {
   if (!condition) throw new Error(`Titelindex: ${message}`);
@@ -29,10 +34,15 @@ export function parseIndexArguments(args) {
       options.deleteInput = true;
       continue;
     }
-    const key = { "--input": "input", "--output": "output", "--platform-output": "platformOutput" }[args[index]];
+    const key = { "--input": "input", "--output": "output", "--platform-output": "platformOutput",
+      "--max-year": "maxFirstYear" }[args[index]];
     requireValue(key && !options[key], `${usage}; unbekannte oder doppelte Option ${args[index]}.`);
-    requireValue(args[index + 1] && !args[index + 1].startsWith("--"), `Aufruf: Pfad fehlt für ${args[index]}.`);
-    options[key] = path.resolve(args[++index]);
+    requireValue(args[index + 1] && !args[index + 1].startsWith("--"), `Aufruf: Wert fehlt für ${args[index]}.`);
+    const value = args[++index];
+    if (key === "maxFirstYear") {
+      requireValue(/^\d{4}$/u.test(value), `${usage}; --max-year braucht eine Jahreszahl.`);
+      options[key] = Number(value);
+    } else options[key] = path.resolve(value);
   }
   requireValue(options.input, "Aufruf: --input ist erforderlich.");
   return options;
@@ -41,13 +51,17 @@ export function parseIndexArguments(args) {
 // SQLite ORDER BY semantics of the former import: NULL first, then binary text/number order.
 const compareNullable = (a, b) => (a === b ? 0 : a === null ? -1 : b === null ? 1 : a < b ? -1 : 1);
 
-// One game per line keeps the >100 MB index compact and still greppable.
+// Gzip with one game per line: small on disk and still searchable with zgrep.
 async function writeIndex(file, index) {
   const { games, ...header } = index;
   const head = JSON.stringify(header);
-  const text = `${head.slice(0, -1)},"games":[\n${games.map((game) => JSON.stringify(game)).join(",\n")}\n]}\n`;
+  function* lines() {
+    yield `${head.slice(0, -1)},"games":[\n`;
+    for (const [position, game] of games.entries()) yield `${position ? ",\n" : ""}${JSON.stringify(game)}`;
+    yield "\n]}\n";
+  }
   await mkdir(path.dirname(file), { recursive: true });
-  await writeFile(`${file}.tmp`, text);
+  await pipeline(Readable.from(lines()), createGzip({ level: 9 }), createWriteStream(`${file}.tmp`));
   await rename(`${file}.tmp`, file);
 }
 
@@ -55,8 +69,9 @@ async function writeIndex(file, index) {
 // Game ids are MobyGames ids (mobyid); platform ids are local numbers from the platform index.
 export async function buildGameTitleIndex({
   input, output = defaultTitleIndexFile, platformOutput = path.join(path.dirname(output), platformIndexName),
-  deleteInput = false,
+  maxFirstYear = defaultMaxFirstYear, deleteInput = false,
 }) {
+  requireValue(Number.isInteger(maxFirstYear), "Grenzjahr muss eine ganze Zahl sein.");
   input = path.resolve(input);
   requireValue(![output, platformOutput].map((file) => path.resolve(file)).includes(input),
     "Eingabe und Ausgabe dürfen nicht identisch sein.");
@@ -107,18 +122,15 @@ export async function buildGameTitleIndex({
     version: 1, provider: "mobygames-local-dump", source,
     platforms: platformNames.map((name) => ({ id: platformIds.get(name), name })),
   };
-  const companies = (releases, column) => [...new Set(releases.flatMap((release) =>
-    (release[column]?.split(/,\s*\r?\n\s*/u) ?? []).map(normalizeCompanyName).filter(Boolean)))];
   const index = {
     version: titleIndexVersion, provider: "mobygames-local-dump", source,
     platformIndex: path.basename(platformOutput),
     importedRows: counts,
+    maxFirstYear,
     releaseColumns,
     games: listed.map((entry) => {
       const releases = entry.releases.sort((a, b) =>
         compareNullable(a[2], b[2]) || compareNullable(a[1], b[1]) || a[0] - b[0]);
-      const publishers = companies(releases, 3);
-      const developers = companies(releases, 4);
       const years = releases.map((release) => release[1]).filter((year) => Number.isInteger(year) && year > 1950);
       return {
         id: entry.id, title: entry.title,
@@ -128,13 +140,9 @@ export async function buildGameTitleIndex({
         } : {}),
         genres: (entry.genre ?? "").split(";").map((value) => value.trim()).filter(Boolean),
         firstYear: years.length ? Math.min(...years) : null,
-        platforms: [...new Set(releases.map((release) => platformIds.get(release[2]?.trim())).filter(Boolean))]
-          .sort((a, b) => a - b),
-        publishers, developers,
-        companies: [...new Set([...publishers, ...developers])].slice(0, 8),
         releases: releases.map(([id, year, platform, ...rest]) => [id, year, platformIds.get(platform?.trim()) ?? null, ...rest]),
       };
-    }),
+    }).filter((entry) => entry.firstYear === null || entry.firstYear <= maxFirstYear),
   };
   await writeJson(platformOutput, platformIndex);
   await writeIndex(output, index);
@@ -150,7 +158,7 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
     const options = parseIndexArguments(process.argv.slice(2));
     const { index, platformIndex } = await buildGameTitleIndex(options);
     const output = options.output ?? defaultTitleIndexFile;
-    console.log(`Titelindex mit ${index.games.length} Spielen erstellt: ${output}`);
+    console.log(`Titelindex mit ${index.games.length} Spielen (Erstjahr bis ${index.maxFirstYear} oder unbekannt) erstellt: ${output}`);
     console.log(`Plattformindex mit ${platformIndex.platforms.length} Plattformen erstellt: ${options.platformOutput ?? path.join(path.dirname(output), platformIndexName)}`);
     if (options.deleteInput) console.log("SQL-Eingabe nach erfolgreichem Indexbau gelöscht.");
   } catch (error) {

@@ -314,6 +314,7 @@ nicht automatisch erzeugte Caches:
 | --- | --- |
 | [`src/data/data-games.mjs`](../src/data/data-games.mjs) | Geprüfte Spieltitel, Plattformen, Playlist-IDs, Aliasse, zusätzliche und ausgeschlossene Video-IDs; einfache Muster zur Bildung der Spielidentität. |
 | [`src/data/data-game-dump-decisions.json`](../src/data/data-game-dump-decisions.json) | Explizit geprüfte Games-Dump-Zuordnungen für bekannte mehrdeutige Titel. |
+| [`src/data/data-game-dump-manual.json`](../src/data/data-game-dump-manual.json) | Handgepflegte Dump-Daten für Katalogspiele mit Erstjahr nach der Grenze des Titelindex (2005). |
 | [`src/data/data-game-dump-policy.json`](../src/data/data-game-dump-policy.json) | Plattformregel für die ausschließlich dumpbasierte Metadatenaufbereitung. |
 | [`src/data/data-sections.mjs`](../src/data/data-sections.mjs) | Geprüfte Videozuordnungen für Hardware, Retrospektiven und Gespräche mit Themen, Personen und Folgenreihenfolge. |
 
@@ -1668,15 +1669,19 @@ npm run dev:build:game-title-index -- --input gdb.sql
 `src/fetch-game/build-game-title-index.mjs` schreibt
 zwei gitignorierte Dateien:
 
-- `cache/game-title-index.json` (Version 3, ca. 84 MB, rund 180.000 Spiele,
-  kompaktes JSON mit einer Zeile je Spiel): je Spiel `id` (MobyGames-`mobyid`),
-  `title`, `alternativeTitles` (`{ title, info }`), `genres`, `firstYear`,
-  `platforms` (nur Nummern aus dem Plattformindex), `publishers`,
-  `developers`, `companies` (Vereinigung beider, höchstens acht; nutzt die
-  Kandidatensuche) und `releases`. Releases sind Tupel in der Reihenfolge von
-  `releaseColumns` (`mobyreleaseid`, `year`, `platform` als Nummer,
-  `publisher`, `developer`, `countries`, `publabel`; Firmen als Rohtext).
-  Kopffelder: `source` (Dump-Hash), `importedRows`, `platformIndex`.
+- `cache/game-title-index.json.gz` (Version 4, gzip, ca. 4 MB, entpackt
+  21 MB, rund 61.000 Spiele; JSON mit einer Zeile je Spiel, durchsuchbar mit
+  `zgrep`): nur Spiele mit Erstjahr bis `--max-year` (Standard 2005) oder
+  ohne bekanntes Jahr. Je Spiel `id` (MobyGames-`mobyid`), `title`,
+  `alternativeTitles` (`{ title, info }`), `genres`, `firstYear` und
+  `releases`. Releases sind Tupel in der Reihenfolge von `releaseColumns`
+  (`mobyreleaseid`, `year`, `platform` als Nummer, `publisher`, `developer`,
+  `countries`, `publabel`; Firmen als Rohtext). Plattformen und Firmen je
+  Spiel werden nicht gespeichert, sondern bei Bedarf aus den Releases
+  abgeleitet (`gameCompanies` in `game-title-index.mjs` für die
+  Kandidatensuche). Kopffelder: `source` (Dump-Hash), `importedRows` (Zeilen
+  im Dump vor der Jahresgrenze), `maxFirstYear`, `platformIndex`. Der Loader
+  erkennt gzip am Inhalt und liest auch unkomprimierte Indexdateien.
   Daraus erzeugt auch `dev:import:game-dump` den Spielemetadaten-Report, ohne
   `gdb.sql` erneut zu lesen.
 - `cache/game-platform-index.json` (329 Plattformen): `platforms` als
@@ -1686,8 +1691,19 @@ zwei gitignorierte Dateien:
   Pfad: `--platform-output datei.json`.
 
 Fehlt der Titelindex, warnt die Analyse und arbeitet ohne Kandidaten
-(`candidateSource: "none"`). Ein Index im alten Format (Version 1 oder 2) wird
+(`candidateSource: "none"`). Ein Index im alten Format (Version 1 bis 3) wird
 abgelehnt und muss neu gebaut werden.
+
+Spiele mit Erstjahr nach 2005 (Standard von `--max-year`) fehlen im Index:
+Ihre Titel werden nicht als Kandidaten erkannt, die Jahresprüfung kann sie
+nicht verwerfen, und der Spielemetadaten-Import findet sie nicht im Index.
+Für die Katalogspiele Tom Clancy's EndWar (2008), Airships: Conquer the
+Skies (2018) und Hyperspace Delivery Service (2019) stehen die Dump-Daten
+(MobyGames-ID, Titel, Genres, Veröffentlichungen) deshalb von Hand in
+`src/data/data-game-dump-manual.json`. Der Import übernimmt sie als Kandidaten mit
+`manual: true`, solange der Index die MobyGames-ID nicht enthält; sonst hat
+der Index Vorrang. Neue Katalogspiele nach 2005 brauchen dort einen Eintrag,
+sonst bleiben sie `blocked`.
 
 `src/extra-data/transcript-game-candidates.mjs` sucht ohne Sprachmodell:
 

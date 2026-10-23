@@ -101,10 +101,12 @@ npm run dev
    Auch „keine Untertitel“ wird dauerhaft gespeichert; geprüfte Videos werden
    nie erneut angefragt.
    [Details und Cacheformat](doc/README.md#youtube-transkripte-einmalig-cachen).
-2. **Titelindex (optional):** Mit `cache/game-title-index.json` erhält das
+2. **Titelindex (optional):** Mit `cache/game-title-index.json.gz` erhält das
    Modell je Abschnitt bis zu zehn Spieltitel aus dem Heftzeitraum als
    Namenshilfe (etwa „Felken“ → Falcon), und Spiele, die erst nach dem Heft
-   erschienen sind, werden verworfen. Ohne Index läuft die Erkennung mit
+   erschienen sind, werden verworfen. Der Index enthält nur Spiele bis
+   Erstjahr 2005; neuere Titel werden weder vorgeschlagen noch verworfen.
+   Ohne Index läuft die Erkennung mit
    Warnung weiter.
    [Kandidaten und Jahresprüfung](doc/README.md#katalogkandidaten-und-jahresprüfung).
 3. **Erkennung:** Das Script teilt das Transkript in Fenster von etwa drei

@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { mkdtemp, readFile, writeFile, rm } from "node:fs/promises";
 import path from "node:path";
 import { tmpdir } from "node:os";
+import { gunzipSync } from "node:zlib";
 import { buildGameTitleIndex } from "../src/fetch-game/build-game-title-index.mjs";
 import { importGameDump, parseDumpArguments, normalizeDumpTitle } from "../src/fetch-game/import-game-dump.mjs";
 import { parseSqlValues, readSqlStatements } from "../src/fetch-game/sql-dump-reader.mjs";
@@ -18,7 +19,7 @@ INSERT INTO \`mobygames_alttitles\` (\`mobyid\`, \`title\`, \`info\`) VALUES (3,
 INSERT INTO \`mobygames_releases\` (\`mobyid\`, \`mobyreleaseid\`, \`year\`, \`platform\`, \`publisher\`, \`developer\`, \`countries\`, \`publabel\`) VALUES
 (3, 30, 1990, 'DOS', 'Origin', 'Origin', 'United States', NULL),
 (3, 31, 1992, 'Amiga', 'Other Publisher', 'Other Developer', 'Germany', NULL),
-(5, 50, 2020, 'Windows', 'New Publisher', 'New Developer', NULL, NULL);
+(5, 50, 2004, 'Windows', 'New Publisher', 'New Developer', NULL, NULL);
 `;
 const games = [
   { id: "wing", name: "Wing Commander", platforms: ["MS-DOS"], aliases: [] },
@@ -31,11 +32,11 @@ async function fixture(t, text = dump) {
   const dir = await mkdtemp(path.join(tmpdir(), "pixel-dump-test-"));
   t.after(() => rm(dir, { recursive: true, force: true }));
   const input = path.join(dir, "gdb.sql");
-  const index = path.join(dir, "game-title-index.json");
+  const index = path.join(dir, "game-title-index.json.gz");
   const output = path.join(dir, "export.json");
   await writeFile(input, text);
   await buildGameTitleIndex({ input, output: index });
-  return { input, index, output };
+  return { input, index, output, manual: {} };
 }
 
 async function textFixture(t, text) {
@@ -69,7 +70,7 @@ test("Anweisungsleser trennt nicht innerhalb von Strings und ignoriert Kommentar
 test("Offline-Export aus dem Titelindex enthält nur Katalogtreffer, bewahrt Releases und bestätigt keine Identität", async (t) => {
   const { input, ...options } = await fixture(t);
   const report = await importGameDump({ ...options, games });
-  assert.equal(report.source.titleIndex, "game-title-index.json");
+  assert.equal(report.source.titleIndex, "game-title-index.json.gz");
   assert.match(report.source.sha256, /^[a-f0-9]{64}$/u);
   assert.deepEqual(report.importedRows, { mobygames: 3, mobygames_alttitles: 1, mobygames_releases: 3 });
   assert.deepEqual(report.summary, { games: 4, withCandidates: 3, withoutExactMatch: 1, ambiguous: 1 });
@@ -99,6 +100,33 @@ test("Offline-Export aus dem Titelindex enthält nur Katalogtreffer, bewahrt Rel
   assert.equal(await readFile(input, "utf8"), dump);
 });
 
+test("manuelle Dump-Daten ergänzen Katalogspiele außerhalb des Titelindex, der Index hat Vorrang", async (t) => {
+  const { input, ...options } = await fixture(t);
+  const release = { mobyreleaseid: 90, year: 2008, platform: "DOS", publisher: "Virgin Games, Inc.",
+    developer: "Origin", countries: "United States", publabel: null };
+  const manual = {
+    "wing-iii": { mobyid: 9, title: "Wing Commander III", genres: ["Action"], alternativeTitles: [], releases: [release] },
+    "wing-ii": { mobyid: 4, title: "Wing Commander II", genres: ["Ignoriert"], alternativeTitles: [], releases: [release] },
+  };
+  const report = await importGameDump({ ...options, games, manual });
+  const [wingII, wingIII] = [report.games[2], report.games[3]];
+  assert.equal(wingIII.status, "needs-identity-review");
+  assert.deepEqual(wingIII.candidates.map((candidate) => [candidate.mobyid, candidate.manual, candidate.matchingReleaseIds]),
+    [[9, true, []]]);
+  assert.equal(wingIII.candidates[0].releases[0].mobyid, 9);
+  assert.equal(wingIII.candidates[0].releases[0].sourcePublisher, "Virgin Games, Inc.");
+  assert.deepEqual(wingII.candidates.map((candidate) => [candidate.mobyid, candidate.manual, candidate.genres]),
+    [[4, undefined, ["Simulation"]]]);
+  assert.match(await readFile(options.output.replace(/\.json$/u, ".html"), "utf8"), /MobyGames 9 · manuell gepflegt/u);
+  await assert.rejects(importGameDump({ ...options, games, manual: { unbekannt: manual["wing-iii"] } }), /unbekanntes Spiel/u);
+  await assert.rejects(importGameDump({ ...options, games, manual: { "wing-iii": { ...manual["wing-iii"], releases: [] } } }),
+    /Ungültige manuelle/u);
+  const { publabel, ...incomplete } = release;
+  void publabel;
+  await assert.rejects(importGameDump({ ...options, games, manual: { "wing-iii": { ...manual["wing-iii"], releases: [incomplete] } } }),
+    /Unvollständige manuelle/u);
+});
+
 test("Import verlangt aktuellen Titelindex und passenden Plattformindex", async (t) => {
   const options = await fixture(t);
   const platformFile = path.join(path.dirname(options.index), "game-platform-index.json");
@@ -107,7 +135,7 @@ test("Import verlangt aktuellen Titelindex und passenden Plattformindex", async 
   await assert.rejects(importGameDump({ ...options, games }), /Plattformindex passt nicht/u);
   await rm(platformFile);
   await assert.rejects(importGameDump({ ...options, games }), /Plattformindex fehlt/u);
-  const index = JSON.parse(await readFile(options.index, "utf8"));
+  const index = JSON.parse(gunzipSync(await readFile(options.index)).toString("utf8"));
   await writeFile(options.index, JSON.stringify({ ...index, version: 2 }));
   await assert.rejects(importGameDump({ ...options, games }), /veraltet.*dev:build:game-title-index/u);
   await assert.rejects(importGameDump({ ...options, output: options.index, games }), /identisch/u);
