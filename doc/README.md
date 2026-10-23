@@ -687,10 +687,10 @@ Unter 768 Pixel Breite erscheint statt des Kalenders eine gut antippbare
 Jahrgangsliste. In der Seitenüberschrift des Zeitschriftenindex führt der Sprunglink
 „Gäste“ direkt zum Gästebereich, auch über Seitengrenzen.
 Alle Spiele-Katalogseiten bieten den Einstieg „Spiele suchen und filtern“.
-Die Gesamttabelle kombiniert eine Titelsuche mit System- und Genrefiltern;
-„Filter zurücksetzen“ leert die Filter ohne Änderung der Sortierung.
-„Erstes Video“, „Erscheinungsjahr“ und „Videolaufzeit“ unterscheiden
-Videoveröffentlichung, Spieljahr und summierte Videolängen.
+Die Gesamttabelle kombiniert System- und Genrefilter mit einer Titelsuche;
+der Icon-Button „↺“ („Filter zurücksetzen“) leert die Filter ohne Änderung der Sortierung.
+„Erstvideo“, „Release“ und „Länge“ unterscheiden Videoveröffentlichung,
+Spieljahr und summierte Videolängen.
 
 - `/zeitschriften/` zeigt die erkannten Zeitschriften alphabetisch sowie eine
   Gruppe „Weitere Blätterabende“ für nicht sicher zugeordnete Blätterabend-Videos.
@@ -1997,6 +1997,7 @@ Architecture Decision Records liegen in `doc/adr/`:
 - [ADR 0006: Spielemetadaten ausschließlich aus lokalem Games-Dump (angenommen)](adr/0006-spielemetadaten-aus-lokalem-games-dump.md)
 - [ADR 0007: Katalogübersichten und erweiterte Navigation](adr/0007-kataloguebersichten-und-erweiterte-navigation.md)
 - [ADR 0008: Transkripte und Spieleabschnitte in Blätterabenden (vorgeschlagen)](adr/0008-transkripte-und-spieleabschnitte-in-blaetterabenden.md)
+- [ADR 0009: Offlinefähige Web-App für das iPhone (angenommen; separate JSON-App, Umsetzung ausstehend)](adr/0009-offlinefaehige-web-app-fuer-iphone.md)
 
 ## GitHub Pages veröffentlichen
 

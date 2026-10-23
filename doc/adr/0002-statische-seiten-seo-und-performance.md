@@ -8,6 +8,13 @@
 
 ## Kontext
 
+**Geltungsbereich:** Die Vorgaben zu minimalem JavaScript, vollständigem
+HTML ohne JavaScript und Verzicht auf clientseitiges Rendering gelten für
+die öffentliche Website. Die separate Offline-App darf ihre Ansichten
+lokal mit JavaScript aus JSON erzeugen; sie erhält eigene Größen- und
+Performanceziele. [ADR 0009](0009-offlinefaehige-web-app-fuer-iphone.md)
+legt diese zusätzliche Ausgabe fest, ohne die Website-Vorgaben aufzuheben.
+
 Die Website soll Videos, Zeitschriften, einzelne Ausgaben und Spiele auffindbar
 machen. Suchmaschinen müssen Inhalte und Zusammenhänge direkt aus dem
 ausgelieferten HTML lesen können, ohne JavaScript auszuführen. Besucher sollen

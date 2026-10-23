@@ -645,9 +645,7 @@ function renderGamePages(model, siteConfig, add, filters) {
     crumbs: [root, index, overview],
     schema: collectionSchema(rows.map((game) => ({ title: game.name, route: game.route })), overviewConfig, overview.route),
     body: `<h1>${overview.name}</h1>
-<p><a href="${overviewConfig.href(index.route)}">Zur Spiele-Kachelübersicht</a></p>
-<p>„Erstes Video“ nennt das Jahr der ersten Videoveröffentlichung zum Spiel. „Videolaufzeit“ summiert die Laufzeiten der zugeordneten Videos.</p>
-${gameTable(rows, overviewConfig)}`,
+${gameTable(rows, overviewConfig, `<p><a href="${overviewConfig.href(index.route)}">Zur Spiele-Kachelübersicht</a></p>`)}`,
   }, [...new Set(rows.flatMap((game) => game.videos))].map((id) => model.videoById.get(id)));
   const listings = [
     { ...index, games: model.games },

@@ -14,20 +14,17 @@ body { overflow-wrap: anywhere; }
 .game-table-links { white-space: nowrap; }
 .game-table img { display: block; width: 8rem; max-width: none; height: auto; aspect-ratio: 16 / 9; object-fit: cover; }
 .game-table th[scope="row"] { min-width: 10rem; }
-.game-table-toolbar { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; gap: 1rem; margin-bottom: 1rem; }
-.game-table-toolbar > p { margin: 0; }
+.game-table-toolbar { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: start; gap: 1rem; margin-bottom: 1rem; }
+.game-table-toolbar p { margin: 0 0 .5rem; }
 .game-table-summary > span { display: block; }
-.game-table-controls { min-width: 0; }
 .game-table-sort { display: inline-flex; align-items: center; justify-content: center; width: 2rem; height: 2rem; padding: .2rem; margin: 0; background: transparent; border: 1px solid var(--pico-muted-border-color); color: var(--pico-muted-color); }
 .game-table th[aria-sort] .game-table-sort { background: var(--pico-primary-background); border-color: var(--pico-primary-border); color: var(--pico-primary-inverse); }
 .game-table-sort[hidden] { display: none; }
-.game-table-controls fieldset { min-width: 0; margin-bottom: 0; }
+.game-table-controls fieldset { display: flex; flex-wrap: wrap; align-items: end; gap: .5rem; margin: 0; font-size: .85rem; --pico-form-element-spacing-vertical: .25rem; --pico-form-element-spacing-horizontal: .5rem; }
 .game-table-controls legend { font-weight: 700; }
-.game-table-control-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; }
-.game-table-control-pair label { min-width: 0; }
-.game-table-controls select { width: 100%; font-size: .85rem; }
-.game-table-controls input { width: 100%; min-width: 0; }
-.game-table-controls button[data-game-reset] { margin: .5rem 0 0; padding: .4rem .6rem; }
+.game-table-controls label { display: grid; }
+.game-table-controls :is(input, select, button) { width: 9rem; margin: 0; font-size: .85rem; }
+.game-table-controls button { width: auto; }
 .game-table tr[hidden], .game-table-controls[hidden] { display: none; }
 @media (max-width: 767px) { .game-table-toolbar { grid-template-columns: minmax(0, 1fr); } }
 .container { max-width: 76rem; padding-inline: clamp(1rem, 3vw, 2rem); }

@@ -20,15 +20,15 @@ zeigen den Playlistnamen. Eine zusätzliche Spiel-/Playlistzeile pro Video entf�
 Unter `spiele/uebersicht/` gibt es zusätzlich eine aus der Spieleübersicht
 verlinkte Tabelle mit allen Spielen: erstes Videojahr, Titel, Erscheinungsjahr,
 Plattform und Genre (jeweils ein Wert pro Zeile), YouTube-Vorschaubild und
-Spielzeit. Die gemeinsame Spalte
+Videolänge. Die gemeinsame Spalte
 „Weiteres“ enthält Playlists, belegte MobyGames-Links („Moby“) und, sofern
 vorhanden, einen Link zur Spieleseite mit dem ersten zugeordneten Abschluss /
 Fazit als ausgewähltem Video („Abschlußgespräch“). Die Links bleiben jeweils
-ohne Textumbruch in einer Zeile. „Gespielt“ zeigt das erste Videojahr; „Spielzeit“ zeigt
-die summierte Videolaufzeit kompakt als Stunden und Minuten (z. B. `22:20h`).
+ohne Textumbruch in einer Zeile. „Erstvideo“ zeigt das erste Videojahr, „Release“ das
+Erscheinungsjahr des Spiels; „Länge“ zeigt die summierte Videolaufzeit kompakt als Stunden und Minuten (z. B. `22:20h`).
 Standardmäßig wird nach der frühesten bekannten
 Videoveröffentlichung sortiert (neueste zuerst). Pfeilschaltflächen in den
-Tabellenköpfen für Gespielt, Titel, Jahr und Spielzeit wechseln die Sortierung
+Tabellenköpfen für Erstvideo, Titel, Release und Länge wechseln die Sortierung
 zwischen auf- und absteigend. Nur die aktive Spalte ist hervorgehoben.
 Der dynamische Übersichtstext steht links, die kombinierbaren System- und
 Genre-Filter rechts auf gleicher Höhe; auf schmalen Bildschirmen untereinander.

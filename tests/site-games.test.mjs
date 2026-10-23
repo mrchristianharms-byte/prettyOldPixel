@@ -115,7 +115,7 @@ test("escaped Tabelleninhalte und nutzt belegte Metadaten ohne Ersatzjahre", () 
   assert.match(body, /<td>Unbekannt<\/td>/u);
   assert.ok(body.includes('width="320" height="180" loading="lazy" decoding="async" referrerpolicy="no-referrer"'));
   assert.doesNotMatch(html, /Standardmäßig stehen|„Gespielt“ entspricht|„Spielzeit“ summiert|Sortierung und Filter benötigen/u);
-  assert.match(html, /Alle Systeme · Alle Genres · Erstes Video: neueste zuerst/u);
+  assert.match(html, /Alle Systeme · Alle Genres · Erstvideo: neueste zuerst/u);
   assert.ok(pages.get("datenschutz/index.html").html.includes("tabellarischen Spiele-Gesamtübersicht"));
 });
 
@@ -143,15 +143,15 @@ test("liefert Sortierdaten, Filter und belegte externe Links ausschließlich in 
   input.videos.videos.forEach((video) => { video.durationSeconds = 3600; });
   const { pages } = render(input);
   const html = pages.get("spiele/uebersicht/index.html").html;
-  assert.match(html, /<th scope="col" aria-sort="descending">Erstes Video <button/u);
-  assert.match(html, /<th scope="col">Videolaufzeit <button/u);
+  assert.match(html, /<th scope="col" aria-sort="descending">Erstvideo <button/u);
+  assert.match(html, /<th scope="col">Länge <button/u);
   assert.ok(html.includes("<td>2:00h</td>"));
   assert.ok(html.includes('<script defer src="../../assets/game-table.js"></script>'));
   assert.ok(html.includes('<div class="game-table-controls" data-game-table-controls hidden>'));
-  assert.match(html, /<div class="game-table-toolbar">\s*<p class="game-table-summary" role="status" aria-live="polite"><span data-game-table-count>1 von 1 Spiel<\/span>\s*<span data-game-table-filters>Filter: Alle Systeme · Alle Genres<\/span>\s*<span data-game-table-sort>Sortierung: Erstes Video: neueste zuerst<\/span><\/p>\s*<div class="game-table-controls"/u);
+  assert.match(html, /<div class="game-table-toolbar">\s*<div><p><a href="\.\.\/">Zur Spiele-Kachelübersicht<\/a><\/p><p class="game-table-summary" role="status" aria-live="polite"><span data-game-table-count>1 von 1 Spiel<\/span>\s*<span data-game-table-filters>Filter: Alle Systeme · Alle Genres<\/span>\s*<span data-game-table-sort>Sortierung: Erstvideo: neueste zuerst<\/span><\/p><\/div>\s*<div class="game-table-controls"/u);
   assert.ok(html.includes('type="search" id="game-search" data-game-search'));
-  assert.ok(html.includes('data-game-reset>Filter zurücksetzen'));
-  assert.ok(html.includes('>Erscheinungsjahr <button'));
+  assert.ok(html.includes('data-game-reset aria-label="Filter zurücksetzen" title="Filter zurücksetzen"><span aria-hidden="true">↺</span>'));
+  assert.ok(html.includes('>Release <button'));
   assert.ok(html.includes('data-duration="7200"'));
   for (const value of ["video", "release", "title", "duration"]) {
     assert.ok(html.includes(`data-game-sort="${value}"`), value);

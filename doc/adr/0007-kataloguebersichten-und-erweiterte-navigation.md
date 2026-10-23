@@ -116,12 +116,12 @@ und Folgeseiten, macht „Spiele suchen und filtern“ diesen Zugang sichtbar.
 
 Die Spalten verbinden Statistikwerte, Spielemetadaten und Navigation:
 
-- „Erstes Video“: Jahr des ersten veröffentlichten Videos zum Spiel,
+- „Erstvideo“: Jahr des ersten veröffentlichten Videos zum Spiel,
 - Titel mit Link zur Spieleseite,
-- Erscheinungsjahr des Spiels,
+- „Release“: Erscheinungsjahr des Spiels,
 - Plattformen und Genres,
 - verlinkte Videovorschau,
-- summierte „Videolaufzeit“ (keine geschätzte Spieldauer),
+- „Länge“: summierte Videolaufzeit (keine geschätzte Spieldauer),
 - vorhandene Links zu Playlists, MobyGames und Abschlussgespräch.
 
 Die Standardreihenfolge richtet sich nach der Veröffentlichung des ersten
@@ -130,11 +130,11 @@ auf- und absteigende Sortierung nach Videoveröffentlichung, Titel,
 Erscheinungsjahr und Videolaufzeit. Fehlende Sortierwerte stehen am Ende.
 Eine Titelsuche berücksichtigt Teilzeichenfolgen ohne Unterscheidung von
 Groß- und Kleinschreibung. System und Genre lassen sich damit kombiniert
-filtern, einschließlich ausdrücklich unbekannter Werte. „Filter zurücksetzen“
-leert alle drei Filter, behält aber die gewählte Sortierung bei.
+filtern, einschließlich ausdrücklich unbekannter Werte. Der Icon-Button „↺“
+(„Filter zurücksetzen“) leert alle drei Filter, behält aber die gewählte Sortierung bei.
 Trefferzahl, aktive Filter und Sortierung werden angezeigt; ein leerer
-Trefferbestand erhält eine eigene Meldung. Eine Erklärung unterscheidet das
-Jahr des ersten Videos vom Erscheinungsjahr und erläutert die Videolaufzeit.
+Trefferbestand erhält eine eigene Meldung. Ein zusätzlicher Erklärtext
+entfällt zugunsten einer kompakten Darstellung.
 
 Alle Zeilen, Metadaten und Links entstehen bereits beim statischen Build.
 JavaScript sortiert und filtert nur das vorhandene HTML; es lädt keine
