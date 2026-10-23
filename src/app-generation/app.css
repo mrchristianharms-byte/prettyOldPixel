@@ -4,12 +4,10 @@
 .app-preview { display: grid; grid-template-columns: minmax(5rem, 9rem) minmax(0, 1fr); gap: 1rem; }
 .app-preview img { aspect-ratio: 16 / 9; object-fit: contain; background: var(--pico-card-background-color); }
 .app-logo { max-height: 5rem; object-fit: contain; }
-#app-nav { display: flex; flex-wrap: wrap; gap: .75rem; }
+#app-nav { display: flex; flex: 1 1 14rem; flex-wrap: wrap; gap: .35rem .75rem; min-width: 0; }
 body > header, body > footer { padding-block: 1rem; }
-body > header { display: flex; align-items: center; flex-wrap: wrap; gap: .75rem; }
-body > header #app-nav { flex: 1; }
-.app-header-controls { display: flex; align-items: center; gap: .5rem; }
-#offline-status { font-size: 1.5rem; line-height: 1; }
+body > header { display: flex; align-items: center; flex-wrap: wrap; gap: .5rem .75rem; }
+#offline-status { flex: 0 0 auto; font-size: 1.5rem; line-height: 1; }
 #app-theme { display: inline-flex; align-items: center; justify-content: center; width: 2.5rem; height: 2.5rem; padding: .5rem; margin: 0; }
 .theme-sun, .theme-moon { display: block; flex: none; }
 [data-theme="dark"] .theme-moon, [data-theme="light"] .theme-sun { display: none; }

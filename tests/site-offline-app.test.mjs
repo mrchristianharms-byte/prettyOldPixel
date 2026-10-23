@@ -118,6 +118,8 @@ test("App-Build ist deterministisch, vollständig gehasht und separat budgetiert
   const again = await generateApp(model, config, images);
   assert.deepEqual(app, again);
   const index = app.files.get("app/index.html");
+  assert.match(index, /<header class="container"><a href="#\/">PrettyOldPixel<\/a>\s*<nav[^>]*id="app-nav"><\/nav>\s*<span id="offline-status"/u);
+  assert.doesNotMatch(index, /class="app-header-controls"/u);
   assert.match(index, /<span id="offline-status" role="status"/u);
   assert.match(index, /<button type="button" id="app-theme"[^>]*>[\s\S]*?class="theme-sun"[\s\S]*?class="theme-moon"[\s\S]*?<\/svg><\/button>/u);
   assert.doesNotMatch(index, /Hell \/ Dunkel/u);
