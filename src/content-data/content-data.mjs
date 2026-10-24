@@ -480,7 +480,7 @@ export function normalizeSources({ videos: videoCache, playlists: playlistCache,
         `${raw.id}: Doppelte Zeitschriftenausgabe ${name}${issue ? ` ${issue.label}` : ""}.`);
       if (!magazine.videos.includes(video.id)) magazine.videos.push(video.id);
       const archives = [];
-      for (const provider of ["kultmags", "reetroz", "pcgamesdatabase", "amr"]) {
+      for (const provider of ["kultmags", "reetroz", "pcgamesdatabase", "amr", "retromags"]) {
         const archive = mention[provider];
         if (archive === null || archive === undefined) continue;
         object(archive, `${name}: ${provider}`);

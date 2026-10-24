@@ -11,6 +11,7 @@ const defaultSourceFile = path.join(projectRoot, "cache", "youtube-videos.json")
 const defaultTargetFile = path.join(projectRoot, "cache", "blaetterabend-videos.json");
 
 const BLAETTERABEND_PATTERN = /bl(?:ä|ae)tterabend/i;
+const RETROMAGS_ACE_49_URL = "https://www.retromags.com/gallery/image/30129-ace-49-october-1991/";
 // Vom Nutzer bestätigte Heftzuordnung bei nicht aussagekräftigem Originaltitel.
 const CONFIRMED_MAGAZINE_TITLES = new Map([
   ["6R6Go1LhCMI", ["Power Play 10/1990"]],
@@ -289,6 +290,21 @@ export function addReetrozLinks(videos, catalog) {
   return videos;
 }
 
+export function addRetromagsLinks(videos) {
+  for (const video of videos) {
+    for (const magazine of video.magazines) {
+      if (magazine.name === "ACE") {
+        magazine.retromags = {
+          match: "issue",
+          title: "ACE #49 (October 1991)",
+          pageUrl: RETROMAGS_ACE_49_URL,
+        };
+      }
+    }
+  }
+  return videos;
+}
+
 function logLinkStats(log, site, links) {
   const count = (match) => links.filter((link) => link === match).length;
   log(`  ${site}: ${count("issue")} Ausgaben verlinkt, ${count("folder")} nur Übersichtsseite, ${count("none")} nicht im Archiv`);
@@ -305,6 +321,7 @@ export async function generateBlaetterabendList({
 } = {}) {
   const source = JSON.parse(await readFile(sourceFile, "utf8"));
   const videos = extractBlaetterabendVideos(source.videos ?? []);
+  addRetromagsLinks(videos);
   if (amr) addAmrLinks(videos, await loadAmrCatalog({ log, ...amr, cachedOnly: true, optional: true }));
   if (pcgamesdatabase) {
     addPcgamesdatabaseLinks(videos, await loadPcgamesdatabaseCatalog({
@@ -350,7 +367,8 @@ export async function generateBlaetterabendList({
   }
   for (const video of withoutIssue) {
     const hasArchiveOverview = video.magazines.some((magazine) =>
-      magazine.kultmags?.match === "folder" || magazine.reetroz?.match === "folder" || magazine.pcgamesdatabase?.match === "folder" || magazine.amr?.match === "folder");
+      magazine.kultmags?.match === "folder" || magazine.reetroz?.match === "folder" || magazine.pcgamesdatabase?.match === "folder"
+      || magazine.amr?.match === "folder" || magazine.retromags?.match === "folder");
     log(`  Keine Ausgabe im Videotitel erkannt${hasArchiveOverview ? " (Archiv-Übersichtsseite verlinkt)" : ""}: ${video.title}`);
   }
   return result;

@@ -7,8 +7,12 @@ export function archiveLinks(archives, inline = false, { visibleLabel = false } 
   const reader = icon('<path d="M12 5v15M12 5C9 3 5 3 2 4v15c3-1 7-1 10 1 3-2 7-2 10-1V4c-3-1-7-1-10 1Z"/>');
   const download = icon('<path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/>');
   const links = archives.flatMap((archive) => {
-    const provider = archive.provider === "pcgamesdatabase" ? "PC Games Database" : archive.provider === "amr" ? "AMR" : archive.provider;
-    const suffix = archive.match === "issue" ? "Ausgabe" : "Zeitschriftenübersicht";
+    const provider = archive.provider === "pcgamesdatabase" ? "PC Games Database"
+      : archive.provider === "amr" ? "AMR"
+        : archive.provider === "retromags" ? "RetroMags" : archive.provider;
+    const suffix = archive.match === "issue"
+      ? archive.provider === "retromags" && archive.title ? `Ausgabe: ${archive.title}` : "Ausgabe"
+      : "Zeitschriftenübersicht";
     return [
       archive.pageUrl ? externalLink(archive.pageUrl, `${provider}: ${archive.match === "issue" && archive.provider === "kultmags" ? "Archivordner zur Ausgabe" : suffix}`, "", folder, { visibleLabel }) : "",
       archive.match === "issue" && archive.readerUrl ? externalLink(archive.readerUrl, `${provider}: Heft lesen`, "", reader, { visibleLabel }) : "",

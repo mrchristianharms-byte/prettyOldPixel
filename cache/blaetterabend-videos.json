@@ -6,7 +6,7 @@
     "title": "Pretty Old Pixel",
     "url": "https://www.youtube.com/@PrettyOldPixel"
   },
-  "generatedAt": "2026-10-22T10:52:03.192Z",
+  "generatedAt": "2026-10-23T21:32:20.532Z",
   "count": 248,
   "videos": [
     {
@@ -4684,6 +4684,11 @@
             "months": [],
             "year": null,
             "special": false
+          },
+          "retromags": {
+            "match": "issue",
+            "title": "ACE #49 (October 1991)",
+            "pageUrl": "https://www.retromags.com/gallery/image/30129-ace-49-october-1991/"
           },
           "kultmags": null,
           "reetroz": null

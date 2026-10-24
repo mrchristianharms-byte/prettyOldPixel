@@ -93,6 +93,12 @@ test("Archivlinks behalten Listen-, Inline- und Leerzustand sowie ausgabenspezif
   assert.ok(overview.includes("Zeitschriftenübersicht"));
   assert.ok(!overview.includes(archive.readerUrl));
   assert.ok(!overview.includes(archive.downloadUrl));
+  const retromags = archiveLinks([{
+    provider: "retromags", match: "issue", title: "ACE #49 (October 1991)",
+    pageUrl: "https://www.retromags.com/gallery/image/30129-ace-49-october-1991/",
+  }]);
+  assert.ok(retromags.includes("RetroMags: Ausgabe: ACE #49 (October 1991)"));
+  assert.ok(retromags.includes('href="https://www.retromags.com/gallery/image/30129-ace-49-october-1991/"'));
 });
 
 test("Videoinformationen behalten Kapitel, Partner, Beschreibung und benachbarte Teile", () => {

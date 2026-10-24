@@ -134,14 +134,19 @@ test("schreibt die Ergebnisliste als JSON-Datei", async () => {
       videos: [
         { id: "a", title: "Blätterabend - ASM 9/93", publishedAt: "2021-01-26T00:00:00Z", durationSeconds: 60 },
         { id: "YzelSZYeuFo", title: "PowerPlay 4/94 [streamstag] 29.10.2019 [German/Deutsch]" },
+        { id: "ace", title: "Blätterabend - ACE No. 49" },
       ],
     }));
-    await generateBlaetterabendList({ sourceFile, targetFile, log: () => {}, kultmags: false });
+    await generateBlaetterabendList({ sourceFile, targetFile, log: () => {}, kultmags: false, amr: false, pcgamesdatabase: false });
 
     const result = JSON.parse(await readFile(targetFile, "utf8"));
-    assert.equal(result.count, 2);
+    assert.equal(result.count, 3);
     assert.equal(result.videos[0].magazines[0].issue.label, "9/1993");
     assert.equal(result.videos[1].magazines[0].issue.label, "4/1994");
+    assert.deepEqual(result.videos[2].magazines[0].retromags, {
+      match: "issue", title: "ACE #49 (October 1991)",
+      pageUrl: "https://www.retromags.com/gallery/image/30129-ace-49-october-1991/",
+    });
   } finally {
     await rm(directory, { recursive: true, force: true });
   }
