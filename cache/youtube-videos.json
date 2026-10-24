@@ -5,10 +5,18 @@
     "title": "Pretty Old Pixel",
     "url": "https://www.youtube.com/@PrettyOldPixel"
   },
-  "lastModified": "2026-10-22T17:00:20Z",
-  "fetchedAt": "2026-10-23T21:26:33.211Z",
+  "lastModified": "2026-10-24T17:00:17Z",
+  "fetchedAt": "2026-10-24T20:52:37.241Z",
   "complete": true,
   "videos": [
+    {
+      "id": "nhRtSLbL-KA",
+      "title": "Spieleabendaufzeichnung - Mission Critical - Stream 6",
+      "description": "Live-Übertragung auf Twitch 11.09.2026 – sieh live unter https://www.twitch.tv/prettyoldpixel zu!",
+      "duration": "PT2H35M33S",
+      "durationSeconds": 9333,
+      "publishedAt": "2026-10-24T17:00:17Z"
+    },
     {
       "id": "-UBGU-GJfzY",
       "title": "Tom Clancy's EndWar [re.play - #10] Verteidigung [German]",
