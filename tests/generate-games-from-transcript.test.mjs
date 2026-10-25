@@ -2,13 +2,17 @@ import assert from "node:assert/strict";
 import { mkdtemp, mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { tmpdir } from "node:os";
+import { loadEnvFile } from "node:process";
 import test from "node:test";
 import {
   analyzeWindow, generateGamesFromTranscript, llmConfiguration, mergeDiscussions, readModelResponse,
   prepareSegments, transcriptWindows, validateDiscussions,
 } from "../src/extra-data/generate-games-from-transcript.mjs";
 
-const config = llmConfiguration({ OPENAI_BASE_URL: "http://127.0.0.1:11434/v1", OPENAI_MODEL: "qwen3:14b" });
+const config = llmConfiguration({
+  OPENAI_BASE_URL: "http://127.0.0.1:11434/v1", OPENAI_MODEL: "qwen3:14b",
+  MODEL_REASONING_EFFORT: "none", MODEL_MAX_OUTPUT_TOKENS: "4096",
+});
 const segments = prepareSegments({
   status: "available", segments: Array.from({ length: 50 }, (_, index) => ({
     startMs: index * 10_000, durationMs: 12_000, text: `Text ${index}`,
@@ -20,6 +24,22 @@ const candidate = (overrides = {}) => ({
   ...overrides,
 });
 
+test("ignoriert .env-Kommentarzeilen mit #", async () => {
+  const directory = await mkdtemp(path.join(tmpdir(), "pretty-old-pixel-env-"));
+  const variable = `PRETTY_OLD_PIXEL_ENV_COMMENT_TEST_${process.pid}`;
+  const previous = process.env[variable];
+  try {
+    await writeFile(path.join(directory, ".env"), `# comment\n${variable}=loaded\n# ${variable}=ignored\n`);
+    delete process.env[variable];
+    loadEnvFile(path.join(directory, ".env"));
+    assert.equal(process.env[variable], "loaded");
+  } finally {
+    if (previous === undefined) delete process.env[variable];
+    else process.env[variable] = previous;
+    await rm(directory, { recursive: true, force: true });
+  }
+});
+
 test("liest Modellkonfiguration und verhindert Übertragung an externe Endpunkte", () => {
   assert.equal(config.model, "qwen3:14b");
   assert.equal(config.endpoint, "http://127.0.0.1:11434/v1/chat/completions");
@@ -29,6 +49,133 @@ test("liest Modellkonfiguration und verhindert Übertragung an externe Endpunkte
   }
   assert.throws(() => llmConfiguration({}), /OPENAI_BASE_URL/u);
   assert.throws(() => llmConfiguration({ OPENAI_BASE_URL: "http://localhost/v1" }), /OPENAI_MODEL/u);
+});
+
+test("konfiguriert OpenRouter Auto nur mit API-Key und überträgt keine Ollama-Parameter", async () => {
+  const openRouter = llmConfiguration({
+    OPENAI_BASE_URL: "https://openrouter.ai/api/v1",
+    OPENAI_MODEL: "openrouter/auto",
+    OPENAI_API_KEY: "test-key",
+    MODEL_REASONING_EFFORT: "low",
+    MODEL_MAX_OUTPUT_TOKENS: "16384",
+  });
+  assert.equal(openRouter.endpoint, "https://openrouter.ai/api/v1/chat/completions");
+  assert.equal(openRouter.model, "openrouter/auto");
+  assert.equal(openRouter.reasoningEffort, "low");
+  assert.equal(openRouter.maxOutputTokens, 16384);
+  assert.throws(() => llmConfiguration({
+    OPENAI_BASE_URL: "https://openrouter.ai/api/v1", OPENAI_MODEL: "openrouter/auto",
+  }), /OPENAI_API_KEY/u);
+  assert.throws(() => llmConfiguration({
+    OPENAI_BASE_URL: "https://openrouter.ai/api/v1", OPENAI_MODEL: "openrouter/auto",
+    OPENAI_API_KEY: "test-key", MODEL_CONTEXT_TOKENS: "32768",
+  }), /MODEL_CONTEXT_TOKENS/u);
+  for (const endpoint of ["http://openrouter.ai/api/v1", "https://openrouter.ai.example/api/v1",
+    "https://openrouter.ai:8443/api/v1", "https://openrouter.ai/other",
+    "https://openrouter.ai/api/v1?redirect=elsewhere"]) {
+    assert.throws(() => llmConfiguration({
+      OPENAI_BASE_URL: endpoint, OPENAI_MODEL: "openrouter/auto", OPENAI_API_KEY: "test-key",
+    }));
+  }
+
+  const logs = [];
+  const result = await analyzeWindow(transcriptWindows(segments)[0], openRouter, {
+    sleep: async () => {}, log: (message) => logs.push(message),
+    fetchImpl: async (url, request) => {
+      assert.equal(url, openRouter.endpoint);
+      assert.equal(request.headers.authorization, "Bearer test-key");
+      const body = JSON.parse(request.body);
+      assert.equal(body.model, "openrouter/auto");
+      assert.equal(body.stream, true);
+      assert.equal(body.max_tokens, 16384);
+      assert.deepEqual(body.reasoning, { effort: "low" });
+      assert.equal(body.response_format.type, "json_object");
+      assert.ok(!("reasoning_effort" in body));
+      return Response.json({
+        model: "z-ai/glm-5.3-flash",
+        choices: [{ finish_reason: "stop", message: { content: JSON.stringify({ discussions: [] }) } }],
+      });
+    },
+  });
+  assert.deepEqual(result, []);
+  assert.ok(logs.some((message) => message.includes('OpenRouter-Modell "z-ai/glm-5.3-flash"')));
+});
+
+test("gibt Fortsetzungsstatus an Erkennung und Kontextprüfung weiter", async () => {
+  const window = transcriptWindows(segments)[0];
+  const incomingContinuations = [{
+    title: "Doom", firstSegmentId: 0, lastSegmentId: 1, confidence: "high",
+    evidenceSegmentId: 0, lastSegmentText: "Wir sprechen weiter über Doom.",
+  }];
+  let calls = 0;
+  const result = await analyzeWindow(window, config, {
+    incomingContinuations,
+    fetchImpl: async (_url, request) => {
+      const body = JSON.parse(request.body);
+      const context = JSON.parse(body.messages[1].content.split("\n")[0]);
+      assert.deepEqual(context.incomingContinuations, incomingContinuations);
+      calls += 1;
+      if (calls === 1) return answer({ discussions: [candidate({
+        firstSegmentId: 2, lastSegmentId: 5, evidenceSegmentId: 3, continuesBefore: true,
+      })] });
+      return answer({ decisions: [{
+        candidateIndex: 0, kind: "review", evidenceSegmentId: 3,
+        discussions: [candidate({
+          firstSegmentId: 2, lastSegmentId: 5, evidenceSegmentId: 3, continuesBefore: true,
+        })],
+      }], continuityDecisions: [{
+        continuationIndex: 0, status: "continues", evidenceSegmentId: 3, lastSegmentId: 5,
+      }] });
+    },
+  });
+  assert.equal(calls, 2);
+  assert.equal(result[0].continuesBefore, true);
+});
+
+test("prüft übernommenen Fortsetzungsstatus auch wenn keine Vorschläge vorliegen", async () => {
+  const window = transcriptWindows(segments)[0];
+  const incomingContinuations = [{
+    title: "Doom", firstSegmentId: 0, lastSegmentId: 1, confidence: "high",
+    evidenceSegmentId: 0, lastSegmentText: "Wir sprechen weiter über Doom.",
+  }];
+  let calls = 0;
+  const result = await analyzeWindow(window, config, {
+    candidates: [], incomingContinuations, sleep: async () => {}, log() {},
+    fetchImpl: async () => {
+      calls += 1;
+      return calls === 1 ? answer({ discussions: [] }) : answer({
+        decisions: [],
+        continuityDecisions: [{
+          continuationIndex: 0, status: "new-topic", evidenceSegmentId: 4, lastSegmentId: 3,
+        }],
+      });
+    },
+  });
+  assert.deepEqual(result, []);
+  assert.equal(calls, 2);
+});
+
+test("erhöht OpenRouter-Ausgabelimit bei Abschneiden mit begrenztem Reasoning", async () => {
+  const openRouter = llmConfiguration({
+    OPENAI_BASE_URL: "https://openrouter.ai/api/v1",
+    OPENAI_MODEL: "openrouter/auto",
+    OPENAI_API_KEY: "test-key",
+    MODEL_REASONING_EFFORT: "low",
+    MODEL_MAX_OUTPUT_TOKENS: "16384",
+  });
+  const limits = [];
+  const reasons = [];
+  await assert.rejects(analyzeWindow(transcriptWindows(segments)[0], openRouter, {
+    candidates: [candidate()], sleep: async () => {}, log() {},
+    fetchImpl: async (_url, request) => {
+      const body = JSON.parse(request.body);
+      limits.push(body.max_tokens);
+      reasons.push(body.reasoning);
+      return answer({}, "length");
+    },
+  }), /Nach 3 Versuchen/u);
+  assert.deepEqual(limits, [16384, 32768, 65536]);
+  assert.deepEqual(reasons, Array(3).fill({ effort: "low" }));
 });
 
 test("behält Quellenzeiten und vergibt eigene stabile Segment-IDs ohne Text zu erfinden", () => {
@@ -46,17 +193,27 @@ test("behält Quellenzeiten und vergibt eigene stabile Segment-IDs ohne Text zu 
   ] }));
 });
 
-test("konfiguriert Ollamas echtes Kontextfenster explizit und validiert Parameter", () => {
+test("konfiguriert Ollamas echtes Kontextfenster und modellunabhängige Parameter", () => {
   const env = { OPENAI_BASE_URL: "http://localhost:11434/v1", OPENAI_MODEL: "qwen3:14b" };
-  const configured = llmConfiguration({ ...env, OLLAMA_NUM_CTX: "32768" });
+  const configured = llmConfiguration({
+    ...env, MODEL_CONTEXT_TOKENS: "32768", MODEL_REASONING_EFFORT: "none",
+    MODEL_MAX_OUTPUT_TOKENS: "4096",
+  });
   assert.equal(configured.contextTokens, 32768);
   assert.equal(configured.ollamaEndpoint, "http://localhost:11434/api/chat");
+  assert.equal(configured.reasoningEffort, "none");
+  assert.equal(configured.maxOutputTokens, 4096);
   for (const value of ["", "0", "4095", "131073", "1.5", "abc"]) {
-    assert.throws(() => llmConfiguration({ ...env, OLLAMA_NUM_CTX: value }), /OLLAMA_NUM_CTX/u);
+    assert.throws(() => llmConfiguration({ ...env, MODEL_CONTEXT_TOKENS: value }), /MODEL_CONTEXT_TOKENS/u);
   }
   assert.throws(() => llmConfiguration({
-    ...env, OPENAI_BASE_URL: "http://localhost:11434/other", OLLAMA_NUM_CTX: "32768",
+    ...env, OPENAI_BASE_URL: "http://localhost:11434/other", MODEL_CONTEXT_TOKENS: "32768",
   }), /Basisadresse/u);
+  assert.throws(() => llmConfiguration({
+    ...env, MODEL_CONTEXT_TOKENS: "32768", OLLAMA_NUM_CTX: "32768",
+  }), /dürfen nicht gleichzeitig/u);
+  assert.throws(() => llmConfiguration({ ...env, MODEL_REASONING_EFFORT: "impossible" }), /MODEL_REASONING_EFFORT/u);
+  assert.throws(() => llmConfiguration({ ...env, MODEL_MAX_OUTPUT_TOKENS: "999999" }), /MODEL_MAX_OUTPUT_TOKENS/u);
 });
 
 test("erhöht bei abgeschnittener OpenAI-Antwort das Ausgabelimit ohne Originalsegmente zu verlieren", async () => {
@@ -79,7 +236,8 @@ test("erhöht bei abgeschnittener OpenAI-Antwort das Ausgabelimit ohne Originals
 
 test("erweitert bei Ollama-Abschneiden Kontext und Ausgabe für Erkennung und Kontextprüfung", async () => {
   const configured = llmConfiguration({
-    OPENAI_BASE_URL: "http://localhost:11434/v1", OPENAI_MODEL: "qwen3:14b", OLLAMA_NUM_CTX: "32768",
+    OPENAI_BASE_URL: "http://localhost:11434/v1", OPENAI_MODEL: "qwen3:14b",
+    MODEL_CONTEXT_TOKENS: "32768", MODEL_REASONING_EFFORT: "none", MODEL_MAX_OUTPUT_TOKENS: "4096",
   });
   const requests = [];
   const result = await analyzeWindow(transcriptWindows(segments)[0], configured, {
@@ -122,7 +280,8 @@ test("teilt alle Segmente in eindeutige Kernbereiche mit überlappendem Kontext 
 
 test("begrenzt Ollama-Kontextwachstum und bricht dauerhaft abgeschnittene Antworten nach drei Versuchen ab", async () => {
   const configured = llmConfiguration({
-    OPENAI_BASE_URL: "http://localhost:11434/v1", OPENAI_MODEL: "qwen3:14b", OLLAMA_NUM_CTX: "65536",
+    OPENAI_BASE_URL: "http://localhost:11434/v1", OPENAI_MODEL: "qwen3:14b",
+    MODEL_CONTEXT_TOKENS: "65536", MODEL_REASONING_EFFORT: "none", MODEL_MAX_OUTPUT_TOKENS: "4096",
   });
   const limits = [];
   await assert.rejects(analyzeWindow(transcriptWindows(segments)[0], configured, {
@@ -415,7 +574,8 @@ test("protokolliert verworfene Antworten samt Tokenstatistik und Endgrund auch b
     const logs = [];
     const configured = native ? llmConfiguration({
       OPENAI_BASE_URL: "http://localhost:11434/v1", OPENAI_MODEL: "qwen3:14b",
-      OLLAMA_NUM_CTX: "32768", OPENAI_API_KEY: "secret-test-key",
+      MODEL_CONTEXT_TOKENS: "32768", MODEL_REASONING_EFFORT: "none",
+      MODEL_MAX_OUTPUT_TOKENS: "4096", OPENAI_API_KEY: "secret-test-key",
     }) : { ...config, apiKey: "secret-test-key" };
     const content = `${"x".repeat(7000)}\ninvalid-json`;
     await assert.rejects(analyzeWindow(transcriptWindows(segments)[0], configured, {
@@ -760,6 +920,91 @@ async function setup(t) {
   return { directory, videoId, source };
 }
 
+test("führt bestätigte Besprechungen über viele Fenster fort und erhält den Status beim Resume", async (t) => {
+  const directory = await mkdtemp(path.join(tmpdir(), "pixel-long-discussion-"));
+  t.after(() => rm(directory, { recursive: true, force: true }));
+  await mkdir(path.join(directory, "youtube-transcripts"));
+  const videoId = "b0000000000";
+  await writeFile(path.join(directory, "youtube-transcripts", `${videoId}.json`), JSON.stringify({
+    videoId, status: "available",
+    segments: Array.from({ length: 100 }, (_, index) => ({
+      startMs: index * 10_000, durationMs: 10_000, text: `Gesprächssegment ${index}`,
+    })),
+  }));
+  const windows = transcriptWindows(prepareSegments({
+    status: "available", segments: Array.from({ length: 100 }, (_, index) => ({
+      startMs: index * 10_000, durationMs: 10_000, text: `Gesprächssegment ${index}`,
+    })),
+  }));
+  assert.ok(windows.length >= 5);
+  const options = { cacheDirectory: directory, config, log() {} };
+  const calls = [];
+  let interruptedAtThree = false;
+  let interruptedAtFive = false;
+  const analyzeWindowImpl = async (window, _config, { incomingContinuations, onContinuityDecision }) => {
+    calls.push({ index: window.index, incomingContinuations });
+    if (window.index === 3 && !interruptedAtThree) {
+      interruptedAtThree = true;
+      throw new Error("Unterbrechung Fenster 3");
+    }
+    if (window.index === 5 && !interruptedAtFive) {
+      interruptedAtFive = true;
+      throw new Error("Unterbrechung");
+    }
+    const title = window.index < 4 ? "Jurassic Park" : "Doom";
+    const previousTitle = window.index - 1 < 4 ? "Jurassic Park" : "Doom";
+    const nextTitle = window.index + 1 < 4 ? "Jurassic Park" : "Doom";
+    const continuesBefore = window.index > 0 && title === previousTitle;
+    const continuesAfter = window.index < windows.length - 1
+      && (window.index < 4 || title === nextTitle);
+    if (incomingContinuations.length) {
+      const incoming = incomingContinuations[0];
+      const status = title === incoming.title ? "continues" : "new-topic";
+      onContinuityDecision({
+        continuationIndex: 0, incoming, status, evidenceSegmentId: window.coreFirstId,
+        lastSegmentId: status === "new-topic" ? window.coreFirstId - 1 : window.coreLastId,
+      });
+    }
+    return [{
+      title, firstSegmentId: window.coreFirstId, lastSegmentId: window.coreLastId,
+      evidenceSegmentId: window.coreFirstId, confidence: "high",
+      endReason: continuesAfter ? "window-end" : "topic-change",
+      continuesBefore, continuesAfter,
+    }];
+  };
+  await assert.rejects(generateGamesFromTranscript(videoId, {
+    ...options, analyzeWindowImpl,
+  }), /Unterbrechung Fenster 3/u);
+  const interruptedWindow = calls.find((call) => call.index === 3);
+  assert.deepEqual(interruptedWindow.incomingContinuations.map((item) => item.title), ["Jurassic Park"]);
+
+  const resumedCalls = [];
+  await assert.rejects(generateGamesFromTranscript(videoId, {
+    ...options,
+    analyzeWindowImpl: async (window, currentConfig, context) => {
+      resumedCalls.push({ index: window.index, incomingContinuations: context.incomingContinuations });
+      return analyzeWindowImpl(window, currentConfig, context);
+    },
+  }), /Unterbrechung/u);
+  assert.deepEqual(resumedCalls.map((call) => call.index), [3, 4, 5]);
+  assert.deepEqual(resumedCalls.map((call) => call.incomingContinuations.map((item) => item.title)), [
+    ["Jurassic Park"], ["Jurassic Park"], ["Doom"],
+  ]);
+
+  const finalCalls = [];
+  const result = await generateGamesFromTranscript(videoId, {
+    ...options,
+    analyzeWindowImpl: async (window, currentConfig, context) => {
+      finalCalls.push({ index: window.index, incomingContinuations: context.incomingContinuations });
+      return analyzeWindowImpl(window, currentConfig, context);
+    },
+  });
+  assert.deepEqual(finalCalls.map((call) => call.index), [5]);
+  assert.deepEqual(finalCalls[0].incomingContinuations.map((item) => item.title), ["Doom"]);
+  assert.deepEqual(result.discussions.map((item) => item.title), ["Jurassic Park", "Doom"]);
+  assert.ok(result.discussions[0].endMs > 8 * 60 * 1000);
+});
+
 test("speichert separate Vorschläge, nutzt Zwischenstände und überschreibt weder manuelle Prüfung noch geänderte Quellen", async (t) => {
   const { directory, videoId, source } = await setup(t);
   const options = { cacheDirectory: directory, config, log() {} };
@@ -874,13 +1119,14 @@ function streamResponse(type, lines) {
 test("liest gestreamte OpenAI- und Ollama-Antworten vollständig samt Endgrund und Tokenzahlen", async () => {
   const body = JSON.stringify({ discussions: [candidate({ title: "Pac-Män" })] });
   const sse = [...body.match(/.{1,7}/gsu)].map((content) =>
-    `data: ${JSON.stringify({ choices: [{ delta: { content }, finish_reason: null }] })}\n`);
+    `data: ${JSON.stringify({ model: "openai/gpt-4.1", choices: [{ delta: { content }, finish_reason: null }] })}\n`);
   const openai = await readModelResponse(streamResponse("text/event-stream", [
     ...sse, `data: ${JSON.stringify({ choices: [{ delta: {}, finish_reason: "stop" }] })}\n`,
     `data: ${JSON.stringify({ choices: [], usage: { prompt_tokens: 10, completion_tokens: 5 } })}\n`, "data: [DONE]", "",
   ]), false);
   assert.equal(openai.choices[0].message.content, body);
   assert.equal(openai.choices[0].finish_reason, "stop");
+  assert.equal(openai.model, "openai/gpt-4.1");
   assert.deepEqual(openai.usage, { prompt_tokens: 10, completion_tokens: 5 });
 
   const ndjson = [...body.match(/.{1,5}/gsu)].map((content) => JSON.stringify({ message: { content }, done: false }));

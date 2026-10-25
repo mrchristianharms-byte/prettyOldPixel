@@ -1605,10 +1605,11 @@ npm run dev:generate:games-from-transcript -- _PHiFsxtF0k
 
 `src/extra-data/generate-games-from-transcript.mjs` analysiert bewusst jeweils ein
 bereits lokal gespeichertes Transkript. Es benötigt Node.js 22, eine lokale
-`.env` und einen laufenden OpenAI-kompatiblen Modellserver, aktuell Ollama
-mit `qwen3:14b`. Es lädt `.env` selbst; bereits gesetzte Prozessvariablen
-haben Vorrang. Ohne verfügbare Untertitel oder bei ungültiger Konfiguration
-bricht es ausdrücklich ab.
+`.env` und standardmäßig einen OpenRouter-API-Key für den Auto Router.
+Alternativ kann ein lokaler OpenAI-kompatibler Modellserver wie Ollama
+verwendet werden. Das Skript lädt `.env` selbst; bereits gesetzte
+Prozessvariablen haben Vorrang. Ohne verfügbare Untertitel oder bei ungültiger
+Konfiguration bricht es ausdrücklich ab.
 
 ### Verarbeitung und Modellaufgabe
 
@@ -1619,11 +1620,20 @@ bricht es ausdrücklich ab.
 - Kernfenster umfassen höchstens drei Minuten bzw. ein begrenztes
   Textbudget. Bis zu 30 Sekunden Nachbarkontext pro Seite helfen bei
   Übergängen. Jedes Originalsegment liegt in genau einem Kernfenster.
-  Kerngrenzen sind keine Gesprächsgrenzen: Beide Modellaufrufe sollen
-  Einführungen und Abschlüsse im gesamten gelieferten Kontext suchen.
+  Kerngrenzen sind keine Gesprächsgrenzen: Beide Modellaufrufe prüfen
+  Einführungen und Abschlüsse im gesamten gelieferten Kontext.
   Fortsetzungsflags beziehen sich auf die äußeren Textfenstergrenzen,
-  nicht auf den Kern. Die Fensteraufteilung bleibt für vorhandene
-  Zwischenstände unverändert.
+  nicht auf den Kern. Die Fenster werden chronologisch verarbeitet.
+  Ein bestätigter, am Fensterende offener Abschnitt wird mit Titel, Beleg und
+  letztem Textsegment an das nächste Fenster übergeben. Dort muss das Modell
+  ausdrücklich bestätigen, dass dasselbe Spiel noch Hauptthema ist, oder den
+  Status bei Abschluss/Themenwechsel beenden. Ein bestätigter Fortsetzungsstatus
+  wird über beliebig viele aufeinanderfolgende Fenster weitergereicht; er allein
+  reicht nicht als Beleg für einen neuen Abschnitt. Bei Abschluss/Themenwechsel
+  wird auch das Ende des vorherigen Abschnitts anhand des aktuellen Fensters
+  aktualisiert. Eingehende Vorschläge, Übergabestatus und Statusentscheidung
+  werden in den Fensterzwischenständen gespeichert, damit ein abgebrochener
+  Lauf korrekt fortgesetzt werden kann.
 - Das Modell erkennt Hauptbesprechungen, Einführungen und Themenwechsel
   im Kontext des chronologischen Zeitschriftenlesens. Vergleiche,
   Quizantworten, Werbung und Rückblicke auf eigene Aufnahmen sollen keine
@@ -1695,6 +1705,9 @@ bricht es ausdrücklich ab.
   Jeder fehlgeschlagene Versuch, auch der letzte, protokolliert Phase,
   Versuch, Eingabezeichen, Ausgabelimit, gegebenenfalls Kontextlimit,
   Endgrund und vom Server gelieferte Eingabe-/Ausgabetokenzahlen.
+  OpenRouter-Modellantworten protokollieren zusätzlich die tatsächlich
+  verwendete Modell-ID je Anfrage; sie kann sich mit `openrouter/auto`
+  zwischen Erkennung, Kontextprüfung und Wiederholungen unterscheiden.
   Fehlende Serverstatistiken stehen als `null` im Log. Verworfene
   Modelltexte werden JSON-escaped bis höchstens 6000 Zeichen ausgegeben,
   längere Antworten ausdrücklich als gekürzt markiert. Diese lokalen
@@ -1703,8 +1716,9 @@ bricht es ausdrücklich ab.
   Dasselbe gilt für Zeitüberschreitungen, Verbindungsfehler und HTTP
   408/429/500/502/503/504 des lokalen Modellservers. Andere HTTP-Fehler
   (etwa falsche Konfiguration oder fehlendes Modell) brechen sofort ab.
-  Bei `finish_reason: length` wird stattdessen das Ausgabelimit für den
-  nächsten Versuch erhöht: 4096, 8192, höchstens 16384 Tokens. Der vollständige
+  Bei `finish_reason: length` wird das in `MODEL_MAX_OUTPUT_TOKENS`
+  konfigurierte Ausgabelimit für den nächsten Versuch verdoppelt (höchstens
+  drei Versuche). Der vollständige
   Originaltext bleibt erhalten, abgeschnittene JSON-Teile werden nie übernommen.
   Fehlende oder anders unvollständige Antworten werden davon unterschieden.
 - Derselbe Spieltitel wird über Fenstergrenzen nur bei überlappenden
@@ -1802,32 +1816,45 @@ erhalten aber das Issue `not-in-title-index`.
 
 ### Optional: größeres Ollama-Kontextfenster
 
-`max_tokens` begrenzt nur die **Ausgabe**, nicht das Kontextfenster.
-Der Denkmodus von Modellen wie qwen3 wird per `reasoning_effort: "none"`
-(native API: `think: false`) abgeschaltet; aktuelle Ollama-Versionen
-ignorieren den Prompt-Schalter `/no_think`, und ungezeigter Denktext würde
-sonst das Ausgabelimit verbrauchen. Bei `stream: false` bricht Nodes `fetch`
-außerdem nach 300 Sekunden ohne Antwortheader ab; die Fehlerdiagnose zeigt
-dann `"cause":"UND_ERR_HEADERS_TIMEOUT"`.
-Für Ollama lässt sich das echte Kontextfenster explizit in `.env` setzen:
+`MODEL_REASONING_EFFORT` und `MODEL_MAX_OUTPUT_TOKENS` sind modellbezogene
+Einstellungen und werden je nach Endpunkt in dessen API-Parameter übersetzt.
+OpenRouter erhält `reasoning.effort` und `max_tokens`; die native Ollama-API
+erhält `think` und `options.num_predict`. Reasoning-Ausgabetokens werden bei
+OpenRouter gewöhnlich im `max_tokens`-Limit mitgezählt.
+
+`openrouter/auto` akzeptiert den Reasoning-Parameter, aber die Wirkung hängt
+vom dynamisch gewählten Modell ab: Nicht jedes mögliche Modell bietet
+Reasoning-Steuerung. Ein fester Reasoning-Modus ist für den Router daher nicht
+garantiert. Auch `MODEL_CONTEXT_TOKENS` kann OpenRouter Auto nicht setzen:
+Das Kontextfenster ist eine Eigenschaft des jeweils gewählten Modells und
+Anbieters. Das Skript weist die Kombination mit OpenRouter zurück, statt die
+Einstellung still zu ignorieren.
+
+Für Ollama lässt sich das echte Kontextfenster mit der API-unabhängigen
+Variablen `MODEL_CONTEXT_TOKENS` explizit setzen:
 
 ```dotenv
-OLLAMA_NUM_CTX=32768
+MODEL_REASONING_EFFORT=none
+MODEL_CONTEXT_TOKENS=32768
+MODEL_MAX_OUTPUT_TOKENS=4096
 ```
 
 Alternativ nur für einen Lauf:
 
 ```sh
-OLLAMA_NUM_CTX=32768 npm run dev:generate:games-from-transcript -- _PHiFsxtF0k
+MODEL_CONTEXT_TOKENS=32768 MODEL_REASONING_EFFORT=none MODEL_MAX_OUTPUT_TOKENS=4096 \
+  npm run dev:generate:games-from-transcript -- _PHiFsxtF0k
 ```
 
 Damit verwendet das Skript für Modellaufrufe Ollamas lokale native
 `/api/chat`-API statt `/v1/chat/completions`, mit `options.num_ctx` und
-`options.num_predict`. Voraussetzung ist eine lokale `OPENAI_BASE_URL`
-mit Pfad `/v1`; Modell und API-Key bleiben wie konfiguriert.
-Nach einer am Ausgabelimit abgeschnittenen Antwort werden sowohl Kontext
-als auch Ausgabe für den nächsten Versuch verdoppelt, der Kontext bis
-höchstens 131072 Tokens. Gültige Startwerte sind 4096–131072.
+`options.num_predict`. Reasoning `none` wird als `think: false` übertragen;
+andere unterstützte Effort-Werte werden an Ollama weitergereicht. Voraussetzung
+ist eine lokale `OPENAI_BASE_URL` mit Pfad `/v1`; Modell und API-Key bleiben
+wie konfiguriert. Nach einer am Ausgabelimit abgeschnittenen Antwort werden
+sowohl Kontext als auch Ausgabe für den nächsten Versuch verdoppelt, der
+Kontext bis höchstens 131072 Tokens. Gültige Kontextwerte sind 4096–131072,
+gültige Ausgabegrenzen 1024–65536 Tokens.
 Die Anpassung wird im Retry-Log angezeigt und gilt für Erkennung und
 Kontextprüfung getrennt. Ein größeres Fenster benötigt mehr RAM/VRAM und
 muss vom Modell unterstützt werden; es garantiert keine gültige Antwort.
@@ -1962,8 +1989,10 @@ publiziert, wenn die Quelldateien beim Build vorhanden sind.
 Eingecheckte Gesamtanalysen und Transkripte stehen damit auch einem
 frischen GitHub-Actions-Build ohne Modellaufruf zur Verfügung.
 
-Nur Loopback-Endpunkte sind erlaubt; Weiterleitungen werden abgelehnt.
-Transkripte werden ausschließlich an das konfigurierte lokale Modell gesendet.
+Erlaubt sind lokale Loopback-Endpunkte und `https://openrouter.ai/api/v1`;
+Weiterleitungen werden abgelehnt. Bei Verwendung von OpenRouter werden
+Transkriptinhalte an den externen Dienst übertragen und können Kosten
+verursachen.
 
 ### Vorschläge prüfen und freigeben
 
@@ -2033,22 +2062,34 @@ Referenzabschnitte) und der Anteil korrekter Treffer mit Start- und
 Endabweichung bis 15 Sekunden. Ergebnisse gegen eine `draft`-Referenz sind
 nur vorläufig.
 
-## Lokale Sprachmodell-Konfiguration
+## Sprachmodell-Konfiguration
 
-Die lokale `.env` enthält die OpenAI-kompatible Konfiguration für die
-Transkriptanalyse mit Ollama:
+Die `.env` enthält die OpenAI-kompatible Konfiguration für die
+Transkriptanalyse. Standardmäßig wird OpenRouters Auto Router verwendet:
 
 ```dotenv
-OPENAI_BASE_URL=http://127.0.0.1:11434/v1
-OPENAI_MODEL=qwen3:14b
+OPENAI_BASE_URL=https://openrouter.ai/api/v1
+OPENAI_MODEL=openrouter/auto
 OPENAI_API_KEY=
 ```
 
-`.env` ist Git-ignoriert; `.env.example` dokumentiert die Variablen ohne
-Zugangsdaten. Lokales Ollama benötigt keinen API-Key. Der Endpunkt ist
-OpenAI-kompatibel, nicht eine OpenAPI-Spezifikation.
-Node.js 22 kann die Datei ohne zusätzliche Abhängigkeit mit
-`node --env-file=.env ...` laden. Das Analysescript lädt sie bereits selbst.
+Den API-Key in der OpenRouter-Kontoverwaltung erstellen und als Wert von
+`OPENAI_API_KEY` in der lokalen `.env` eintragen. Die Datei ist Git-ignoriert;
+`.env.example` dokumentiert die Variablen ohne Zugangsdaten. Der Auto Router
+wählt für jede Anfrage ein passendes Modell; die tatsächlich verwendete
+Modell-ID erscheint in der OpenRouter-Antwort. Die Anfragen werden an
+OpenRouter übertragen und können Kosten verursachen.
+Zeilen, die mit `#` beginnen, sind Kommentare und werden beim Laden der `.env`
+ignoriert. `MODEL_REASONING_EFFORT` (Standard `low`) und
+`MODEL_MAX_OUTPUT_TOKENS` (Standard `16384`) sind unabhängig vom API-Endpunkt.
+OpenRouter-Anfragen übersetzen sie zu `reasoning.effort` und `max_tokens`;
+bei abgeschnittenen Antworten wird das Ausgabelimit für bis zu zwei
+Wiederholungen verdoppelt. Reasoning-Tokens zählen bei OpenRouter zum
+Ausgabelimit und können das JSON-Ergebnis sonst vollständig verdrängen.
+
+Die Transkriptanalyse akzeptiert als externen Endpunkt ausschließlich
+`https://openrouter.ai/api/v1`; lokale OpenAI-kompatible Endpunkte wie Ollama
+bleiben ebenfalls unterstützt. Das Analysescript lädt `.env` selbst.
 Bestehende Fetch- und Website-Buildscripts verwenden sie nicht und
 übertragen keine Transkripte.
 

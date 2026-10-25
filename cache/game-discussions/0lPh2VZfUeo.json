@@ -1,0 +1,114 @@
+{
+  "version": 1,
+  "analysisVersion": "6",
+  "videoId": "0lPh2VZfUeo",
+  "transcriptHash": "af262275b6b01dee5f4b0c5289203c45c208c8aecd1dfba5e96f337ce84d9021",
+  "catalogHash": "31cec4c1e968f78b9692d3b23d44518502cb2d31e67c183273f8ab6e85aa0caa",
+  "model": "openrouter/auto",
+  "endpoint": "https://openrouter.ai/api/v1/chat/completions",
+  "reasoningEffort": "low",
+  "contextTokens": null,
+  "maxOutputTokens": 16384,
+  "candidateSource": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62:1986-1990",
+  "generatedAt": "2026-10-25T12:58:37.576Z",
+  "status": "reviewed",
+  "discussions": [
+    {
+      "title": "Death Bringer",
+      "gameId": null,
+      "startMs": 4321239,
+      "endMs": 4451600,
+      "firstSegmentId": 1917,
+      "lastSegmentId": 1969,
+      "confidence": "medium",
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 1924,
+          "startMs": 4346360,
+          "text": "Domain Death Bringer ist der"
+        }
+      ],
+      "titleIndexId": 3799,
+      "firstYear": 1989,
+      "developers": [],
+      "publishers": [
+        "Interceptor Micro's",
+        "Cinemaware Corporation"
+      ]
+    },
+    {
+      "title": "The Rebel Universe",
+      "gameId": null,
+      "startMs": 4642080,
+      "endMs": 4768120,
+      "firstSegmentId": 2062,
+      "lastSegmentId": 2116,
+      "confidence": "medium",
+      "endReason": "topic-change",
+      "issues": [
+        "not-in-title-index"
+      ],
+      "evidence": [
+        {
+          "segmentId": 2077,
+          "startMs": 4670280,
+          "text": "The Rebel Universe. The Rebel Universe"
+        }
+      ]
+    },
+    {
+      "title": "Kennedy Approach",
+      "gameId": null,
+      "startMs": 4981120,
+      "endMs": 5191040,
+      "firstSegmentId": 2200,
+      "lastSegmentId": 2297,
+      "confidence": "high",
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 2200,
+          "startMs": 4981120,
+          "text": "Ach ja, hier ist es. Kennedy Approach."
+        }
+      ],
+      "titleIndexId": 7441,
+      "firstYear": 1985,
+      "developers": [
+        "MicroProse Software, Inc."
+      ],
+      "publishers": [
+        "MicroProse Software, Inc.",
+        "Transatlantic Simulations"
+      ]
+    },
+    {
+      "title": "Goldrunner II",
+      "gameId": null,
+      "startMs": 6990040,
+      "endMs": 7078360,
+      "firstSegmentId": 3046,
+      "lastSegmentId": 3073,
+      "confidence": "high",
+      "endReason": "next-game",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 3046,
+          "startMs": 6990040,
+          "text": "Gold Runner 2. Ich kenne nicht mal Gold"
+        }
+      ],
+      "titleIndexId": 53394,
+      "firstYear": 1988,
+      "developers": [],
+      "publishers": [
+        "MicroDeal Ltd.",
+        "MicroDeal U.S.A., Inc."
+      ]
+    }
+  ]
+}

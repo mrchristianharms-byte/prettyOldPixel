@@ -189,9 +189,10 @@ Zum Bauen der Website sind keine erneuten Internetabrufe nötig.
 
 ## Spielebesprechungen in Blätterabenden
 
-Transkript-Abruf, Erkennung der Spielebesprechungen mit einem lokalen Modell
-und die manuelle Freigabe der Spieltitel laufen ausschließlich lokal. Werkzeuge
-(`yt-dlp`, Ollama), Befehle und der vollständige Ablauf stehen in
+Transkript-Abruf und manuelle Freigabe der Spieltitel laufen lokal. Die
+Spieleerkennung verwendet standardmäßig OpenRouters Auto Router; alternativ
+kann ein lokales Ollama-Modell genutzt werden. Werkzeuge (`yt-dlp`, Ollama),
+Befehle und der vollständige Ablauf stehen in
 [blaetterabend_games.md](blaetterabend_games.md).
 
 ## Tests

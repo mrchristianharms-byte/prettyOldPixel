@@ -1,0 +1,150 @@
+{
+  "version": 1,
+  "analysisVersion": "4",
+  "videoId": "_PHiFsxtF0k",
+  "transcriptHash": "df217c04b0c8c452e55a7c70cb0116ac66de5be2288157665e76649b21e5d1b4",
+  "catalogHash": "31cec4c1e968f78b9692d3b23d44518502cb2d31e67c183273f8ab6e85aa0caa",
+  "model": "openrouter/auto",
+  "endpoint": "https://openrouter.ai/api/v1/chat/completions",
+  "candidateSource": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62:1991-1995",
+  "generatedAt": "2026-10-25T11:51:29.465Z",
+  "status": "reviewed",
+  "discussions": [
+    {
+      "title": "Globdule",
+      "gameId": null,
+      "startMs": 3823279,
+      "endMs": null,
+      "firstSegmentId": 1497,
+      "lastSegmentId": 1549,
+      "confidence": "medium",
+      "endReason": "window-end",
+      "issues": [
+        "end-outside-window"
+      ],
+      "evidence": [
+        {
+          "segmentId": 1497,
+          "startMs": 3823279,
+          "text": "Was ist das denn? Globdul"
+        }
+      ],
+      "titleIndexId": 15507,
+      "firstYear": 1993,
+      "developers": [
+        "Ex Animo Designs"
+      ],
+      "publishers": [
+        "Psygnosis Limited"
+      ]
+    },
+    {
+      "title": "Bob's Bad Day",
+      "gameId": null,
+      "startMs": 4048960,
+      "endMs": 4112847,
+      "firstSegmentId": 1580,
+      "lastSegmentId": 1604,
+      "confidence": "high",
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 1580,
+          "startMs": 4048960,
+          "text": "Bobs Bad Day"
+        }
+      ],
+      "titleIndexId": 12182,
+      "firstYear": 1993,
+      "developers": [
+        "Dome Software Developments, The"
+      ],
+      "publishers": [
+        "Psygnosis Limited"
+      ]
+    },
+    {
+      "title": "Wiz 'n' Liz",
+      "gameId": null,
+      "startMs": 4150480,
+      "endMs": 4206360,
+      "firstSegmentId": 1616,
+      "lastSegmentId": 1635,
+      "confidence": "medium",
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 1616,
+          "startMs": 4150480,
+          "text": "Zgnosis präsentiert mit Wisonless ein"
+        }
+      ],
+      "titleIndexId": 6625,
+      "firstYear": 1993,
+      "developers": [
+        "Raising Hell Software"
+      ],
+      "publishers": [
+        "Psygnosis Limited"
+      ]
+    },
+    {
+      "title": "Syndicate",
+      "gameId": null,
+      "startMs": 4860199,
+      "endMs": 4893880,
+      "firstSegmentId": 1916,
+      "lastSegmentId": 1929,
+      "confidence": "high",
+      "endReason": "topic-change",
+      "issues": [],
+      "evidence": [
+        {
+          "segmentId": 1916,
+          "startMs": 4860199,
+          "text": "Syndicate"
+        }
+      ],
+      "titleIndexId": 63839,
+      "firstYear": 1994,
+      "developers": [
+        "Bullfrog Productions, Ltd."
+      ],
+      "publishers": [
+        "Electronic Arts, Inc.",
+        "Ocean Software Ltd."
+      ]
+    },
+    {
+      "title": "Syndicate",
+      "gameId": null,
+      "startMs": 5016679,
+      "endMs": 5141480,
+      "firstSegmentId": 1988,
+      "lastSegmentId": 2040,
+      "confidence": "high",
+      "endReason": "topic-change",
+      "issues": [
+        "start-outside-window"
+      ],
+      "evidence": [
+        {
+          "segmentId": 1995,
+          "startMs": 5033639,
+          "text": "für Syndicate geschrieben,"
+        }
+      ],
+      "titleIndexId": 63839,
+      "firstYear": 1994,
+      "developers": [
+        "Bullfrog Productions, Ltd."
+      ],
+      "publishers": [
+        "Electronic Arts, Inc.",
+        "Ocean Software Ltd."
+      ]
+    }
+  ]
+}

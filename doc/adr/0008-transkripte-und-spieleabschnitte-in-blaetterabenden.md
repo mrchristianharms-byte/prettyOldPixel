@@ -73,13 +73,14 @@ analysiert ein bereits gespeichertes Transkript pro Aufruf:
   Ergebnisse und wiederaufnehmbare Zwischenstände. Manuelle Änderungen
   werden nicht automatisch überschrieben.
 
-**API-Abgrenzung:** Eine OpenAI-kompatible HTTP-Schnittstelle ist keine
-notwendige Abhängigkeit von OpenAIs externem Dienst. Der aktuelle Code erlaubt
-ausschließlich Loopback-Adressen. Standardmäßig wird der konfigurierte
-Basispfad um `/chat/completions` ergänzt, typischerweise unter `/v1`.
-Bei gesetztem `OLLAMA_NUM_CTX` wird stattdessen Ollamas native `/api/chat`
-verwendet. Ein lokal laufender Modellserver ist daher derzeit erforderlich,
-ein externer OpenAI-Dienst oder API-Key dagegen nicht zwingend.
+**API-Abgrenzung:** Modellbezogene Einstellungen (`MODEL_REASONING_EFFORT`,
+`MODEL_MAX_OUTPUT_TOKENS` und optional `MODEL_CONTEXT_TOKENS`) werden unabhängig
+vom Endpunkt konfiguriert und in API-spezifische Parameter übersetzt. Der
+Standardendpunkt ist OpenRouters Auto Router. Da Auto je Anfrage ein anderes
+Modell auswählen kann, ist Reasoning-Unterstützung nicht garantiert; ein
+festes Kontextfenster lässt sich dort nicht vorgeben. Bei einem lokalen
+`/v1`-Endpunkt mit gesetztem `MODEL_CONTEXT_TOKENS` verwendet das Skript
+Ollamas native `/api/chat`-API für `think`, `num_ctx` und `num_predict`.
 
 ### 3. Ergebnisse beim statischen Build einbinden
 
