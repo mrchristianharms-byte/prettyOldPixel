@@ -1,7 +1,8 @@
 import { startYoutubeCli, syncYoutubeVideos } from "./fetch-youtube-videos.mjs";
 import { playlistCacheReady, syncYoutubePlaylists } from "./fetch-youtube-playlists.mjs";
 
-// Playlists only change with new uploads, so a complete playlist cache is kept when no video was added.
+// Playlists only change with new uploads, so a complete playlist cache is kept when no video was added;
+// otherwise the playlist run only searches until the new videos are found.
 export async function syncYoutube({
   channel,
   apiKey = null,
@@ -15,7 +16,7 @@ export async function syncYoutube({
     log("Keine neuen Videos; Playlist-Abruf übersprungen.");
     return { videos: videoResult, playlists: null };
   }
-  return { videos: videoResult, playlists: await playlists({ channel, apiKey, log }) };
+  return { videos: videoResult, playlists: await playlists({ channel, apiKey, log, newVideoIds: videoResult.newVideoIds ?? [] }) };
 }
 
 export async function runCli() {

@@ -162,12 +162,17 @@ export function createYoutubeDataApi({
     },
 
     async channelPlaylists(channelId) {
-      const items = await all("playlists", { part: "snippet", channelId });
+      const items = await all("playlists", { part: "snippet,contentDetails", channelId });
       return items.map((item) => {
         if (!item.id || !item.snippet?.title) {
           throw new Error("YouTube Data API: Playlist ohne ID oder Titel.");
         }
-        return { id: item.id, title: item.snippet.title, description: item.snippet.description ?? "" };
+        return {
+          id: item.id,
+          title: item.snippet.title,
+          description: item.snippet.description ?? "",
+          itemCount: item.contentDetails?.itemCount ?? null,
+        };
       });
     },
 

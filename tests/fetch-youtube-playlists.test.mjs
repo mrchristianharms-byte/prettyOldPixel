@@ -6,6 +6,8 @@ import test from "node:test";
 import {
   extractChannelPlaylistsPage,
   extractPlaylistMembersPage,
+  orderByLastUpdate,
+  parseVideoIds,
   syncYoutubePlaylists,
 } from "../src/fetch-channel/fetch-youtube-playlists.mjs";
 
@@ -46,7 +48,7 @@ function mockFetch({ entries, details, continuations = {}, fail = new Set() }) {
   let maxActive = 0;
   const fetchImpl = async (url, init = {}) => {
     const target = new URL(url);
-    requests.push({ path: target.pathname, id: target.searchParams.get("list") });
+    requests.push({ path: target.pathname, search: target.search, id: target.searchParams.get("list") });
     if (target.pathname === "/@PrettyOldPixel/playlists") {
       return response({
         metadata: { channelMetadataRenderer: { externalId: CHANNEL_ID, title: "Pretty Old Pixel" } },
@@ -214,4 +216,72 @@ test("wiederholte Fortsetzungstokens führen zu einem expliziten Fehler", async 
       ...quiet, channel: "PrettyOldPixel", cacheFile, fetchImpl: mock.fetchImpl,
     }), /Wiederholtes Playlist-Fortsetzungstoken/);
   });
+});
+
+test("gezielte Suche prüft zuletzt aktualisierte Playlists und endet nach dem Fund aller neuen Videos", async () => {
+  await withCache(async (cacheFile) => {
+    const base = {
+      entries: [playlist("p"), playlist("q"), playlist("r")],
+      details: { p: { contents: [video("a")] }, q: { contents: [video("b")] }, r: { contents: [video("c")] } },
+    };
+    const run = (config, newVideoIds, time) => {
+      const mock = mockFetch(config);
+      const result = syncYoutubePlaylists({
+        ...quiet, channel: "PrettyOldPixel", cacheFile, fetchImpl: mock.fetchImpl, newVideoIds, now: () => time,
+      });
+      return result.then((value) => ({ value, requests: mock.requests }));
+    };
+    await run(base, [], "2026-10-17T10:00:00Z");
+
+    // "Last video added" order: q, p, r on the first page, more only on demand.
+    const one = await run({
+      entries: [playlist("q"), playlist("p"), continuation("more")],
+      details: { q: { contents: [video("b"), video("new1")] }, p: base.details.p },
+      continuations: {},
+    }, ["new1"], "2026-10-18T10:00:00Z");
+    assert.deepEqual(one.requests.map((request) => request.id ?? `${request.path}${request.search}`), [
+      "/@PrettyOldPixel/playlists?view=1&sort=lad", "q",
+    ]);
+    assert.equal(one.value.complete, true);
+    assert.equal(one.value.lastModified, "2026-10-18T10:00:00Z");
+    const byId = Object.fromEntries(one.value.playlists.map((entry) => [entry.id, entry]));
+    assert.deepEqual(byId.q.videos.map((entry) => entry.videoId), ["b", "new1"]);
+    assert.equal(byId.p.checkedAt, "2026-10-17T10:00:00Z");
+    assert.equal(byId.r.checkedAt, "2026-10-17T10:00:00Z");
+
+    // Two new videos: stops after the playlist with the second one, loading the next page lazily.
+    const two = await run({
+      entries: [playlist("q"), continuation("more")],
+      details: { q: { contents: [video("b"), video("new1"), video("new2")] }, r: { contents: [video("new3"), video("c")] } },
+      continuations: { more: [playlist("r"), playlist("p"), continuation("never")] },
+    }, ["new2", "new3"], "2026-10-19T10:00:00Z");
+    assert.deepEqual(two.requests.map((request) => request.id ?? request.path), [
+      "/@PrettyOldPixel/playlists", "q", "/youtubei/v1/browse", "r",
+    ]);
+    assert.equal(two.value.playlists.length, 3);
+  });
+});
+
+test("gezielte Suche ohne vollständigen Cache prüft alle Playlists", async () => {
+  await withCache(async (cacheFile) => {
+    const mock = mockFetch({ entries: [playlist("p"), playlist("q")], details: { p: { contents: [video("n")] }, q: { contents: [] } } });
+    const result = await syncYoutubePlaylists({
+      ...quiet, channel: "PrettyOldPixel", cacheFile, fetchImpl: mock.fetchImpl, newVideoIds: ["n"],
+    });
+    assert.equal(mock.requests[0].search, "");
+    assert.equal(result.playlists.length, 2);
+  });
+});
+
+test("ordnet Playlists nach neu, geänderter Videozahl und letztem Änderungsdatum", () => {
+  const old = new Map([
+    ["old", { videoCount: 1, lastModified: "2026-01-01T00:00:00Z" }],
+    ["recent", { videoCount: 1, lastModified: "2026-03-01T00:00:00Z" }],
+    ["grown", { videoCount: 1, lastModified: "2026-01-01T00:00:00Z" }],
+  ]);
+  assert.deepEqual(orderByLastUpdate([
+    { id: "old", itemCount: 1 }, { id: "recent", itemCount: 1 }, { id: "grown", itemCount: 2 }, { id: "fresh" },
+  ], old).map((entry) => entry.id), ["fresh", "grown", "recent", "old"]);
+  assert.deepEqual(parseVideoIds(" a,b  a\nc "), ["a", "b", "c"]);
+  assert.deepEqual(parseVideoIds(undefined), []);
 });

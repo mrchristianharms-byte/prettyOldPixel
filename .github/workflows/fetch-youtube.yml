@@ -44,6 +44,8 @@ jobs:
         run: npm run fetch:playlists
         env:
           GOOGLE_YT_DATA_API_KEY: ${{ secrets.GOOGLE_YT_DATA_API_KEY }}
+          # Stops after the playlists containing these videos; empty (or forced) checks all playlists.
+          YOUTUBE_NEW_VIDEO_IDS: ${{ !inputs.force_playlists && steps.videos.outputs.new-video-ids || '' }}
       - name: Commit and push updated caches
         run: |
           git add -- cache/youtube-videos.json cache/youtube-playlists.json

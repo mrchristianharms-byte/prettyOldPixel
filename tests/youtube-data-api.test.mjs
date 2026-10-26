@@ -269,3 +269,40 @@ test("lädt Playlists mit API-Key über die Data API", async () => {
     await rm(directory, { recursive: true, force: true });
   }
 });
+
+test("gezielte Playlist-Suche über die API priorisiert geänderte Videozahlen und stoppt nach dem Fund", async () => {
+  const directory = await mkdtemp(path.join(tmpdir(), "youtube-api-targeted-"));
+  try {
+    const cacheFile = path.join(directory, "playlists.json");
+    const cached = (id, videoIds, lastModified) => ({
+      id, title: id, description: "", url: `https://www.youtube.com/playlist?list=${id}`, videoCount: videoIds.length,
+      videos: videoIds.map((videoId, index) => ({ position: index + 1, videoId, title: `Titel ${videoId}`, availability: "listed" })),
+      lastModified, checkedAt: lastModified,
+    });
+    await writeFile(cacheFile, JSON.stringify({
+      channel: { id: CHANNEL_ID, handle: "PrettyOldPixel", title: "Pretty Old Pixel", url: "https://www.youtube.com/@PrettyOldPixel" },
+      fetchedAt: "2026-01-01T00:00:00.000Z", lastModified: "2026-01-01T00:00:00.000Z", complete: true,
+      playlists: [cached("PL1", ["a"], "2026-03-01T00:00:00.000Z"), cached("PL2", ["b"], "2026-01-01T00:00:00.000Z")],
+    }));
+    const item = (videoId) => ({ snippet: { title: `Titel ${videoId}`, resourceId: { videoId } }, status: { privacyStatus: "public" } });
+    const api = createApi({
+      playlists: [[
+        { id: "PL1", snippet: { title: "PL1" }, contentDetails: { itemCount: 1 } },
+        { id: "PL2", snippet: { title: "PL2" }, contentDetails: { itemCount: 2 } },
+      ]],
+      items: { PL2: [[item("b"), item("new")]] },
+    });
+    const result = await syncYoutubePlaylists({
+      ...quiet, channel: "PrettyOldPixel", cacheFile, apiKey: API_KEY, fetchImpl: api.fetchImpl,
+      newVideoIds: ["new"], now: () => "2026-04-01T00:00:00.000Z",
+    });
+    assert.deepEqual(api.requests.map((request) => [request.resource, request.params.playlistId ?? request.params.part]), [
+      ["playlists", "snippet,contentDetails"], ["playlistItems", "PL2"],
+    ]);
+    assert.equal(result.complete, true);
+    assert.deepEqual(result.playlists.find((entry) => entry.id === "PL2").videos.map((entry) => entry.videoId), ["b", "new"]);
+    assert.equal(result.playlists.find((entry) => entry.id === "PL1").checkedAt, "2026-03-01T00:00:00.000Z");
+  } finally {
+    await rm(directory, { recursive: true, force: true });
+  }
+});

@@ -139,15 +139,23 @@ function membershipContent(data, playlistId) {
   return content;
 }
 
-async function allPages(initial, extract, options) {
-  const pages = [extract(initial)];
+// Lazy, so a caller that stops early never requests the remaining continuation pages.
+async function* pageStream(initial, extract, options) {
+  let page = extract(initial);
   const seen = new Set();
-  while (pages.at(-1).continuation) {
-    const token = pages.at(-1).continuation;
+  yield page;
+  while (page.continuation) {
+    const token = page.continuation;
     if (seen.has(token)) throw new Error("YouTube: Wiederholtes Playlist-Fortsetzungstoken.");
     seen.add(token);
-    pages.push(extract(continuationContent(await postInnertube("browse", { continuation: token }, options))));
+    page = extract(continuationContent(await postInnertube("browse", { continuation: token }, options)));
+    yield page;
   }
+}
+
+async function allPages(initial, extract, options) {
+  const pages = [];
+  for await (const page of pageStream(initial, extract, options)) pages.push(page);
   return pages;
 }
 
@@ -186,20 +194,46 @@ function playlistUrl(id) {
   return `${YOUTUBE_URL}/playlist?list=${encodeURIComponent(id)}`;
 }
 
+// Newly listed playlists first, then playlists whose API item count differs from the cache,
+// then by the cached change date; equal ranks keep the listing order.
+export function orderByLastUpdate(entries, oldById) {
+  const rank = (entry) => {
+    const old = oldById.get(entry.id);
+    if (!old) return 0;
+    return Number.isInteger(entry.itemCount) && entry.itemCount !== old.videoCount ? 1 : 2;
+  };
+  const time = (entry) => Date.parse(oldById.get(entry.id)?.lastModified ?? "") || 0;
+  return entries
+    .map((entry, index) => ({ entry, index, rank: rank(entry), time: time(entry) }))
+    .sort((a, b) => (a.rank - b.rank) || (b.time - a.time) || (a.index - b.index))
+    .map(({ entry }) => entry);
+}
+
 function scraperPlaylists(options) {
+  async function channelPage(handle, query = "") {
+    const html = await fetchHtml(`${YOUTUBE_URL}/@${encodeURIComponent(handle)}/playlists${query}`, options);
+    const data = extractJsonAssignment(html, "ytInitialData");
+    checkResponse(data);
+    const metadata = data.metadata?.channelMetadataRenderer;
+    if (!metadata?.externalId) throw new Error(`YouTube-Kanal nicht gefunden: @${handle}`);
+    options.clientVersion = findClientVersion(html);
+    return { data, metadata };
+  }
   return {
     async channelPlaylists(handle) {
-      const html = await fetchHtml(`${YOUTUBE_URL}/@${encodeURIComponent(handle)}/playlists`, options);
-      const data = extractJsonAssignment(html, "ytInitialData");
-      checkResponse(data);
-      const metadata = data.metadata?.channelMetadataRenderer;
-      if (!metadata?.externalId) throw new Error(`YouTube-Kanal nicht gefunden: @${handle}`);
-      options.clientVersion = findClientVersion(html);
+      const { data, metadata } = await channelPage(handle);
       const pages = await allPages(primaryContent(data), extractChannelPlaylistsPage, options);
       return {
         channel: { id: metadata.externalId, title: metadata.title ?? handle },
         entries: pages.flatMap((page) => page.playlists),
       };
+    },
+    // YouTube's "Last video added" order; it omits empty playlists, so it only suits the targeted search.
+    async* recentPlaylists(handle) {
+      const { data } = await channelPage(handle, "?view=1&sort=lad");
+      for await (const page of pageStream(primaryContent(data), extractChannelPlaylistsPage, options)) {
+        yield* page.playlists;
+      }
     },
     playlist: (entry) => fetchPlaylist(entry, options),
   };
@@ -210,6 +244,11 @@ function apiPlaylists(api) {
     async channelPlaylists(handle) {
       const channel = await api.channel(handle);
       return { channel, entries: await api.channelPlaylists(channel.id) };
+    },
+    // The API cannot sort playlists, so the cached change dates and current item counts decide.
+    async* recentPlaylists(handle, oldById, channelId) {
+      const entries = await api.channelPlaylists(channelId ?? (await api.channel(handle)).id);
+      yield* orderByLastUpdate(entries, oldById);
     },
     async playlist(entry) {
       const videos = (await api.playlistItems(entry.id)).map((video, index) => ({ position: index + 1, ...video }));
@@ -230,10 +269,17 @@ export async function playlistCacheReady(channel, cacheFile = defaultCacheFile) 
   return Boolean(cached?.complete) && cached.channel?.handle?.toLowerCase() === parseChannelHandle(channel).toLowerCase();
 }
 
+export function parseVideoIds(value) {
+  return [...new Set(String(value ?? "").split(/[\s,]+/u).filter(Boolean))];
+}
+
+// With known new video IDs and a complete cache, playlists are checked one by one, most recently
+// updated first, and the run stops as soon as every new video was found in a playlist.
 export async function syncYoutubePlaylists({
   channel,
   cacheFile = defaultCacheFile,
   apiKey = null,
+  newVideoIds = [],
   fetchImpl = fetch,
   log = console.log,
   sleep = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds)),
@@ -242,23 +288,18 @@ export async function syncYoutubePlaylists({
   const handle = parseChannelHandle(channel);
   const cached = await readJson(cacheFile);
   const previous = cached?.channel?.handle?.toLowerCase() === handle.toLowerCase() ? cached : null;
+  const pending = new Set(newVideoIds ?? []);
+  const targeted = pending.size > 0 && Boolean(previous?.complete) && Boolean(previous.channel?.id);
   const checkedAt = now();
   const youtube = createYoutubeSource({ apiKey, fetchImpl, log, sleep });
-  log(`Playlists über ${sourceLabel(youtube)}.`);
+  log(`Playlists über ${sourceLabel(youtube)}${targeted ? `; gezielte Suche nach ${pending.size} neuen Videos` : ""}.`);
   const source = youtube.mode === "api" ? apiPlaylists(youtube) : scraperPlaylists({ fetchImpl, sleep, log });
-  const { channel: channelData, entries: listed } = await source.channelPlaylists(handle);
-  const entries = [...new Map(listed.map((entry) => [entry.id, entry])).values()];
   const oldById = new Map((previous?.playlists ?? []).map((playlist) => [playlist.id, playlist]));
   const byId = new Map(oldById);
-  const channelInfo = {
-    id: channelData.id,
-    handle,
-    title: channelData.title,
-    url: `${YOUTUBE_URL}/@${handle}`,
-  };
+  let channelInfo = previous?.channel ?? null;
   let added = 0;
   let updated = 0;
-  const removed = [...oldById.keys()].filter((id) => !entries.some((entry) => entry.id === id)).length;
+  let removed = 0;
   let writes = Promise.resolve();
   const save = (complete) => {
     const snapshot = {
@@ -272,9 +313,8 @@ export async function syncYoutubePlaylists({
     writes = writes.then(() => writeJson(cacheFile, snapshot));
     return writes;
   };
-  await save(false);
   const failures = [];
-  await mapWithConcurrency(entries, PLAYLIST_CONCURRENCY, async (entry) => {
+  const refresh = async (entry) => {
     try {
       const fresh = await source.playlist(entry);
       const old = oldById.get(entry.id);
@@ -288,25 +328,58 @@ export async function syncYoutubePlaylists({
       });
       await save(false);
       log(`Playlist: ${fresh.title} (${fresh.videoCount} Einträge, ${!old ? "neu" : changed ? "geändert" : "unverändert"}).`);
+      return fresh;
     } catch (error) {
       failures.push(new Error(`${entry.id}: ${error.message}`, { cause: error }));
       log(`Playlist-Abruf fehlgeschlagen: ${entry.id}: ${error.message}`);
+      return null;
     }
-  });
-  if (failures.length) {
-    throw new AggregateError(failures, `${failures.length} Playlists konnten nicht aktualisiert werden. Cache bleibt unvollständig; nächster Lauf prüft erneut.`);
+  };
+  const finish = async () => {
+    if (failures.length) {
+      throw new AggregateError(failures, `${failures.length} Playlists konnten nicht aktualisiert werden. Cache bleibt unvollständig; nächster Lauf prüft erneut.`);
+    }
+    await save(true);
+  };
+
+  if (targeted) {
+    const total = pending.size;
+    const visited = new Set();
+    for await (const entry of source.recentPlaylists(handle, oldById, previous.channel.id)) {
+      if (visited.has(entry.id)) continue;
+      visited.add(entry.id);
+      const fresh = await refresh(entry);
+      for (const video of fresh?.videos ?? []) pending.delete(video.videoId);
+      if (!pending.size) break;
+    }
+    await finish();
+    log(`${total - pending.size} von ${total} neuen Videos nach ${visited.size} Playlists gefunden${pending.size ? ` (ohne Playlist: ${[...pending].join(", ")})` : ""}; ${added} neue, ${updated} geänderte Playlists: ${cacheFile}`);
+    return readJson(cacheFile);
   }
+
+  const { channel: channelData, entries: listed } = await source.channelPlaylists(handle);
+  const entries = [...new Map(listed.map((entry) => [entry.id, entry])).values()];
+  channelInfo = {
+    id: channelData.id,
+    handle,
+    title: channelData.title,
+    url: `${YOUTUBE_URL}/@${handle}`,
+  };
   const currentIds = new Set(entries.map((entry) => entry.id));
+  removed = [...oldById.keys()].filter((id) => !currentIds.has(id)).length;
+  await save(false);
+  await mapWithConcurrency(entries, PLAYLIST_CONCURRENCY, refresh);
   for (const id of byId.keys()) {
     if (!currentIds.has(id)) byId.delete(id);
   }
-  await save(true);
+  await finish();
   log(`${added} neue, ${updated} geänderte, ${removed} nicht mehr gelistete Playlists; insgesamt ${byId.size}: ${cacheFile}`);
   return readJson(cacheFile);
 }
 
 export async function runCli() {
-  await startYoutubeCli(syncYoutubePlaylists);
+  const newVideoIds = parseVideoIds(process.env.YOUTUBE_NEW_VIDEO_IDS);
+  await startYoutubeCli((options) => syncYoutubePlaylists({ ...options, newVideoIds }));
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

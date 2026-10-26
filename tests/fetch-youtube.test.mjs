@@ -8,14 +8,15 @@ import { playlistCacheReady } from "../src/fetch-channel/fetch-youtube-playlists
 import { syncYoutubeVideos, writeNewVideosOutput } from "../src/fetch-channel/fetch-youtube-videos.mjs";
 
 function createRun({ newVideos, ready }) {
+  const ids = Array.from({ length: newVideos }, (_, index) => `v${index}`);
   const calls = [];
   const messages = [];
   const run = () => syncYoutube({
     channel: "PrettyOldPixel",
     apiKey: "key",
     log: (message) => messages.push(message),
-    videos: async (options) => { calls.push(["videos", options.apiKey]); return { newVideos }; },
-    playlists: async (options) => { calls.push(["playlists", options.apiKey]); return { complete: true }; },
+    videos: async (options) => { calls.push(["videos", options.apiKey]); return { newVideos, newVideoIds: ids }; },
+    playlists: async (options) => { calls.push(["playlists", options.apiKey, options.newVideoIds]); return { complete: true }; },
     playlistsReady: async () => { calls.push(["ready"]); return ready; },
   });
   return { run, calls, messages };
@@ -23,17 +24,17 @@ function createRun({ newVideos, ready }) {
 
 test("fetch:all lädt Playlists erst nach den Videos und nur bei neuen Videos", async () => {
   const withNew = createRun({ newVideos: 2, ready: true });
-  assert.deepEqual(await withNew.run(), { videos: { newVideos: 2 }, playlists: { complete: true } });
-  assert.deepEqual(withNew.calls, [["videos", "key"], ["playlists", "key"]]);
+  assert.deepEqual(await withNew.run(), { videos: { newVideos: 2, newVideoIds: ["v0", "v1"] }, playlists: { complete: true } });
+  assert.deepEqual(withNew.calls, [["videos", "key"], ["playlists", "key", ["v0", "v1"]]]);
 
   const unchanged = createRun({ newVideos: 0, ready: true });
-  assert.deepEqual(await unchanged.run(), { videos: { newVideos: 0 }, playlists: null });
+  assert.deepEqual(await unchanged.run(), { videos: { newVideos: 0, newVideoIds: [] }, playlists: null });
   assert.deepEqual(unchanged.calls, [["videos", "key"], ["ready"]]);
   assert.match(unchanged.messages.join("\n"), /Playlist-Abruf übersprungen/u);
 
   const incomplete = createRun({ newVideos: 0, ready: false });
   await incomplete.run();
-  assert.deepEqual(incomplete.calls, [["videos", "key"], ["ready"], ["playlists", "key"]]);
+  assert.deepEqual(incomplete.calls, [["videos", "key"], ["ready"], ["playlists", "key", []]]);
 });
 
 test("fetch:all startet keine Playlists, wenn der Videoabruf fehlschlägt", async () => {
@@ -68,10 +69,10 @@ test("Videoabruf meldet neue Videos als GitHub-Actions-Output", async () => {
     const outputFile = path.join(directory, "output");
     await writeFile(outputFile, "other=1\n");
     await writeNewVideosOutput({ newVideos: 0 }, outputFile);
-    await writeNewVideosOutput({ newVideos: 3 }, outputFile);
+    await writeNewVideosOutput({ newVideos: 2, newVideoIds: ["a", "b"] }, outputFile);
     await writeNewVideosOutput({}, outputFile);
     await writeNewVideosOutput({ newVideos: 1 }, undefined);
-    assert.equal(await readFile(outputFile, "utf8"), "other=1\nnew-videos=0\nnew-videos=3\n");
+    assert.equal(await readFile(outputFile, "utf8"), "other=1\nnew-videos=0\nnew-video-ids=\nnew-videos=2\nnew-video-ids=a,b\n");
   } finally {
     await rm(directory, { recursive: true, force: true });
   }
@@ -96,6 +97,7 @@ test("syncYoutubeVideos liefert die Zahl neuer Videos, ohne sie zu speichern", a
       channel: "PrettyOldPixel", cacheFile, apiKey: "key", fetchImpl, log: () => {}, sleep: async () => {},
     });
     assert.equal(result.newVideos, 0);
+    assert.deepEqual(result.newVideoIds, []);
     assert.equal("newVideos" in JSON.parse(await readFile(cacheFile, "utf8")), false);
   } finally {
     await rm(directory, { recursive: true, force: true });

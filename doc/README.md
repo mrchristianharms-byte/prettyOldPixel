@@ -1158,9 +1158,24 @@ einem Fehlerstatus; schlägt der Videoabruf fehl, werden keine Playlists geladen
 `npm run fetch:playlists` lädt die Playlists immer. Die Scripts schreiben
 getrennte Cache-Dateien.
 
-In GitHub Actions schreibt `fetch:videos` die Zahl neuer Videos als
-Step-Output `new-videos`; der Playlist-Schritt läuft nur bei einem Wert
-ungleich `0` oder bei manuellem Start mit `force_playlists`. Playlist-Änderungen
+Gezielte Suche: Hat der Videoabruf neue Videos gefunden und ist der
+Playlist-Cache vollständig, prüft der Playlist-Abruf nur so viele Playlists
+wie nötig. `fetch:all` übergibt die neuen IDs direkt, `fetch:playlists` liest
+sie aus `YOUTUBE_NEW_VIDEO_IDS` (komma- oder leerzeichengetrennt). Die
+Playlists werden nacheinander geladen, zuletzt aktualisierte zuerst: anonym
+in der YouTube-Sortierung „Last video added“ (`?view=1&sort=lad`; weitere
+Übersichtsseiten nur bei Bedarf), mit API-Key zuerst neue Playlists, dann
+solche mit geänderter Videozahl (`itemCount`), dann nach `lastModified` im
+Cache. Sobald alle neuen Videos gefunden sind (bei zwei neuen Videos also nach
+dem zweiten Fund), endet der Lauf; nicht geprüfte Playlists behalten ihren
+Cache-Stand, nicht mehr gelistete werden erst bei einem vollständigen Lauf
+entfernt. Ohne neue IDs, ohne vollständigen Cache oder mit `force_playlists`
+werden alle Playlists geprüft.
+
+In GitHub Actions schreibt `fetch:videos` die Zahl und IDs neuer Videos als
+Step-Outputs `new-videos` und `new-video-ids`; der Playlist-Schritt läuft nur
+bei einem Wert ungleich `0` oder bei manuellem Start mit `force_playlists`
+und erhält die IDs als `YOUTUBE_NEW_VIDEO_IDS`. Playlist-Änderungen
 ohne neues Video (z. B. Umsortierungen) werden dadurch erst mit dem nächsten
 neuen Video oder einem erzwungenen Lauf übernommen.
 

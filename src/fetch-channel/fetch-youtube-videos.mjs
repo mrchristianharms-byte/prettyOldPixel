@@ -320,7 +320,7 @@ export async function syncYoutubeVideos({
 
   const uploadsPlaylistId = `UU${channelData.id.slice(2)}`;
   let page = 0;
-  let newVideos = 0;
+  const newVideoIds = [];
 
   for await (const videoIds of source.playlistVideoIds(uploadsPlaylistId)) {
     page += 1;
@@ -343,7 +343,7 @@ export async function syncYoutubeVideos({
         reachedKnownVideos = true;
       }
       videosById.set(video.id, video);
-      newVideos += 1;
+      newVideoIds.push(video.id);
     }
 
     log(`Seite ${page}: ${videoIds.length} Videos gelesen, ${videos.filter(Boolean).length} neu geladen.`);
@@ -355,8 +355,8 @@ export async function syncYoutubeVideos({
   }
 
   await saveProgress(true);
-  log(`${newVideos} neue Videos gespeichert, insgesamt ${videosById.size}: ${cacheFile}`);
-  return { ...(await readCache(cacheFile)), newVideos };
+  log(`${newVideoIds.length} neue Videos gespeichert, insgesamt ${videosById.size}: ${cacheFile}`);
+  return { ...(await readCache(cacheFile)), newVideos: newVideoIds.length, newVideoIds };
 }
 
 export async function startYoutubeCli(task, {
@@ -377,10 +377,10 @@ export async function startYoutubeCli(task, {
   }
 }
 
-// Lets the Actions workflow skip the playlist step when no video was added.
+// Lets the Actions workflow skip the playlist step or limit it to the new videos.
 export async function writeNewVideosOutput(result, outputFile = process.env.GITHUB_OUTPUT) {
   if (!outputFile || !Number.isInteger(result?.newVideos)) return;
-  await appendFile(outputFile, `new-videos=${result.newVideos}\n`);
+  await appendFile(outputFile, `new-videos=${result.newVideos}\nnew-video-ids=${(result.newVideoIds ?? []).join(",")}\n`);
 }
 
 export async function runCli() {
