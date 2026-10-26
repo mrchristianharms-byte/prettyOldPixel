@@ -1,40 +1,8 @@
-import { readFileSync } from "node:fs";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
-import { parseEnv } from "node:util";
-
 export const YOUTUBE_API_KEY_VARIABLE = "GOOGLE_YT_DATA_API_KEY";
 const API_URL = "https://www.googleapis.com/youtube/v3/";
-const projectRoot = fileURLToPath(new URL("../../", import.meta.url));
-const defaultEnvFile = path.join(projectRoot, ".env");
 const PAGE_SIZE = 50;
 const MAX_RETRIES = 3;
 const RETRYABLE_REASONS = new Set(["rateLimitExceeded", "userRateLimitExceeded", "backendError"]);
-
-export function resolveYoutubeApiKey({ env = process.env, envFile = defaultEnvFile } = {}) {
-  const fromEnvironment = env[YOUTUBE_API_KEY_VARIABLE]?.trim();
-  if (fromEnvironment) return { apiKey: fromEnvironment, origin: "Umgebungsvariable" };
-  let content;
-  try {
-    content = readFileSync(envFile, "utf8");
-  } catch (error) {
-    if (error.code === "ENOENT") return { apiKey: null, origin: null };
-    throw error;
-  }
-  const fromFile = parseEnv(content)[YOUTUBE_API_KEY_VARIABLE]?.trim() || null;
-  return { apiKey: fromFile, origin: fromFile ? ".env" : null };
-}
-
-export function youtubeApiKey(options) {
-  return resolveYoutubeApiKey(options).apiKey;
-}
-
-// Only names where the key came from; the key itself must never be logged.
-export function youtubeAccessMessage(origin) {
-  return origin
-    ? `YouTube-Abruf: offizielle YouTube Data API v3 (${YOUTUBE_API_KEY_VARIABLE} aus ${origin}).`
-    : `YouTube-Abruf: anonyme Fetch-Skripte über öffentliche YouTube-Seiten (${YOUTUBE_API_KEY_VARIABLE} nicht gesetzt).`;
-}
 
 export function secondsToIsoDuration(totalSeconds) {
   if (!Number.isFinite(totalSeconds)) {

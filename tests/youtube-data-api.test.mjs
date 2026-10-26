@@ -3,14 +3,16 @@ import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
-import { syncYoutubePlaylists } from "../src/fetch-channel/fetch-youtube-playlists.mjs";
-import { startYoutubeCli, syncYoutubeVideos } from "../src/fetch-channel/fetch-youtube-videos.mjs";
+import {
+  resolveYoutubeApiKey,
+  startYoutubeCli,
+  syncYoutubePlaylists,
+  syncYoutubeVideos,
+} from "../src/fetch-channel/fetch-youtube.mjs";
 import {
   apiVideoToVideo,
   createYoutubeDataApi,
   isoDurationToSeconds,
-  resolveYoutubeApiKey,
-  youtubeApiKey,
 } from "../src/fetch-channel/youtube-data-api.mjs";
 
 const CHANNEL_ID = "UCrFoFXdc15HN5aRXpr_ic0w";
@@ -70,12 +72,12 @@ test("API-Key kommt aus der Umgebung oder ersatzweise aus der .env-Datei", async
   try {
     const envFile = path.join(directory, ".env");
     await writeFile(envFile, "OTHER=1\nGOOGLE_YT_DATA_API_KEY=from-file\n");
-    assert.equal(youtubeApiKey({ env: { GOOGLE_YT_DATA_API_KEY: "from-env" }, envFile }), "from-env");
-    assert.equal(youtubeApiKey({ env: { GOOGLE_YT_DATA_API_KEY: "  " }, envFile }), "from-file");
-    assert.equal(youtubeApiKey({ env: {}, envFile }), "from-file");
+    assert.deepEqual(resolveYoutubeApiKey({ env: { GOOGLE_YT_DATA_API_KEY: "from-env" }, envFile }), { apiKey: "from-env", origin: "Umgebungsvariable" });
+    assert.deepEqual(resolveYoutubeApiKey({ env: { GOOGLE_YT_DATA_API_KEY: "  " }, envFile }), { apiKey: "from-file", origin: ".env" });
+    assert.deepEqual(resolveYoutubeApiKey({ env: {}, envFile }), { apiKey: "from-file", origin: ".env" });
     await writeFile(envFile, "GOOGLE_YT_DATA_API_KEY=\n");
-    assert.equal(youtubeApiKey({ env: {}, envFile }), null);
-    assert.equal(youtubeApiKey({ env: {}, envFile: path.join(directory, "missing.env") }), null);
+    assert.deepEqual(resolveYoutubeApiKey({ env: {}, envFile }), { apiKey: null, origin: null });
+    assert.deepEqual(resolveYoutubeApiKey({ env: {}, envFile: path.join(directory, "missing.env") }), { apiKey: null, origin: null });
   } finally {
     await rm(directory, { recursive: true, force: true });
   }

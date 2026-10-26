@@ -60,6 +60,23 @@ src/
 | [`data/`](../src/data/) | Dauerhaft gepflegte Spiel- und Themenkataloge, Gastkanäle sowie JSON-Entscheidungen und Auswahlregeln für den Spiele-Dump. Keine generierten Caches. |
 | [`shared/`](../src/shared/) | `archive-cache.mjs` mit gemeinsam genutzten Cache-, JSON-, HTTP- und Wiederholungshilfen. |
 
+### Zentrale YouTube-Steuerung
+
+[`fetch-channel/fetch-youtube.mjs`](../src/fetch-channel/fetch-youtube.mjs)
+liest den API-Key (Umgebung vor `.env`), protokolliert ausschließlich dessen
+Herkunft und wählt für Videos und Playlists den gemeinsamen Abrufweg:
+YouTube Data API v3 mit Key, sonst die anonymen Fetch-Implementierungen.
+Diese Auswahl gilt für `fetch:all`, `fetch:videos` und `fetch:playlists`;
+API-Fehler führen nicht zu einem stillen Wechsel zum anonymen Abruf.
+
+Die Synchronisationsfunktionen in `fetch-youtube-videos.mjs` und
+`fetch-youtube-playlists.mjs` erhalten bereits konfigurierte Quellen und
+kümmern sich um Fortschritt, Cache und Abbruchbedingungen. Die Fachmodule
+behalten ihre anonymen Abrufimplementierungen und direkt ausführbaren
+CLI-Einstiege; diese delegieren erst bei Ausführung an die zentrale Steuerung.
+`youtube-data-api.mjs` enthält nur den API-Client und seine Datenkonvertierung,
+keine `.env`- oder CLI-Logik.
+
 Ein gemeinsamer Ordner `fetch-meta/` wurde bewusst nicht beibehalten:
 Zeitschriften- und Spielemetadaten sind getrennte Verantwortungsbereiche.
 

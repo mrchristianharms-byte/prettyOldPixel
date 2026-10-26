@@ -1158,6 +1158,11 @@ einem Fehlerstatus; schlägt der Videoabruf fehl, werden keine Playlists geladen
 `npm run fetch:playlists` lädt die Playlists immer. Die Scripts schreiben
 getrennte Cache-Dateien.
 
+API-Key-Auflösung, Wahl des Abrufwegs und CLI-Fehlerbehandlung sind für alle
+drei Befehle in `src/fetch-channel/fetch-youtube.mjs` zentralisiert. Die
+Video- und Playlist-Synchronisation erhält fertig konfigurierte Quellen;
+die Fachmodule entscheiden nicht erneut über API oder anonymen Abruf.
+
 Gezielte Suche: Hat der Videoabruf neue Videos gefunden und ist der
 Playlist-Cache vollständig, prüft der Playlist-Abruf nur so viele Playlists
 wie nötig. `fetch:all` übergibt die neuen IDs direkt, `fetch:playlists` liest

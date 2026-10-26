@@ -1,7 +1,7 @@
 import { appendFile, mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { createYoutubeDataApi, resolveYoutubeApiKey, secondsToIsoDuration, youtubeAccessMessage } from "./youtube-data-api.mjs";
+import { secondsToIsoDuration } from "./youtube-data-api.mjs";
 
 export { secondsToIsoDuration };
 
@@ -234,14 +234,6 @@ export function createYoutubeScraper({ fetchImpl = fetch, log = console.log, sle
   };
 }
 
-export function createYoutubeSource({ apiKey = null, fetchImpl = fetch, log = console.log, sleep }) {
-  return apiKey ? createYoutubeDataApi({ apiKey, fetchImpl, log, sleep }) : createYoutubeScraper({ fetchImpl, log, sleep });
-}
-
-export function sourceLabel(source) {
-  return source.mode === "api" ? "YouTube Data API v3" : "anonymer Abruf öffentlicher YouTube-Seiten";
-}
-
 export async function mapWithConcurrency(items, limit, mapper) {
   const results = new Array(items.length);
   let nextIndex = 0;
@@ -287,10 +279,8 @@ function sortVideos(videosById) {
 export async function syncYoutubeVideos({
   channel,
   cacheFile = defaultCacheFile,
-  apiKey = null,
-  fetchImpl = fetch,
+  source,
   log = console.log,
-  sleep = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds)),
 }) {
   const handle = parseChannelHandle(channel);
   const cache = await readCache(cacheFile);
@@ -299,8 +289,7 @@ export async function syncYoutubeVideos({
   const lastModifiedTime = lastModified ? Date.parse(lastModified) : null;
   const videosById = new Map((sameChannel ? cache.videos ?? [] : []).map((video) => [video.id, video]));
 
-  const source = createYoutubeSource({ apiKey, fetchImpl, log, sleep });
-  log(`Videos über ${sourceLabel(source)}.`);
+  log(`Videos über ${source.label}.`);
   // The channel ID never changes, so a cached one saves the channel page request.
   const channelData = sameChannel && cache.channel.id ? cache.channel : await source.channel(handle);
   const channelInfo = {
@@ -359,24 +348,6 @@ export async function syncYoutubeVideos({
   return { ...(await readCache(cacheFile)), newVideos: newVideoIds.length, newVideoIds };
 }
 
-export async function startYoutubeCli(task, {
-  channel = process.argv[2] ?? process.env.YOUTUBE_CHANNEL ?? "PrettyOldPixel",
-  resolveKey = resolveYoutubeApiKey,
-  log = console.log,
-  logError = console.error,
-} = {}) {
-  try {
-    parseChannelHandle(channel);
-    const { apiKey, origin } = resolveKey();
-    log(youtubeAccessMessage(origin));
-    return await task({ channel, apiKey });
-  } catch (error) {
-    logError(error.message);
-    process.exitCode = 1;
-    return null;
-  }
-}
-
 // Lets the Actions workflow skip the playlist step or limit it to the new videos.
 export async function writeNewVideosOutput(result, outputFile = process.env.GITHUB_OUTPUT) {
   if (!outputFile || !Number.isInteger(result?.newVideos)) return;
@@ -384,13 +355,11 @@ export async function writeNewVideosOutput(result, outputFile = process.env.GITH
 }
 
 export async function runCli() {
-  await startYoutubeCli(async (options) => {
-    const result = await syncYoutubeVideos(options);
-    await writeNewVideosOutput(result);
-    return result;
-  });
+  const { runVideosCli } = await import("./fetch-youtube.mjs");
+  await runVideosCli();
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  await runCli();
+  // The coordinator imports this module, so its CLI import must not block module evaluation.
+  runCli();
 }

@@ -2,7 +2,6 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { readJson, writeJson } from "../shared/archive-cache.mjs";
 import {
-  createYoutubeSource,
   extractJsonAssignment,
   fetchHtml,
   findClientVersion,
@@ -10,8 +9,6 @@ import {
   mapWithConcurrency,
   parseChannelHandle,
   postInnertube,
-  sourceLabel,
-  startYoutubeCli,
 } from "./fetch-youtube-videos.mjs";
 
 const projectRoot = fileURLToPath(new URL("../../", import.meta.url));
@@ -193,10 +190,6 @@ function playlistData({ checkedAt, lastModified, ...data }) {
   return data;
 }
 
-function playlistUrl(id) {
-  return `${YOUTUBE_URL}/playlist?list=${encodeURIComponent(id)}`;
-}
-
 // Newly listed playlists first, then by the cached change date; equal ranks keep the listing order.
 // The API itemCount is no signal: it already includes scheduled, not yet public entries.
 export function orderByLastUpdate(entries, oldById) {
@@ -207,7 +200,7 @@ export function orderByLastUpdate(entries, oldById) {
     .map(({ entry }) => entry);
 }
 
-function scraperPlaylists(options) {
+export function createPlaylistScraper(options) {
   async function channelPage(handle, query = "") {
     const html = await fetchHtml(`${YOUTUBE_URL}/@${encodeURIComponent(handle)}/playlists${query}`, options);
     const data = extractJsonAssignment(html, "ytInitialData");
@@ -237,31 +230,6 @@ function scraperPlaylists(options) {
   };
 }
 
-function apiPlaylists(api) {
-  return {
-    async channelPlaylists(handle) {
-      const channel = await api.channel(handle);
-      return { channel, entries: await api.channelPlaylists(channel.id) };
-    },
-    // The API cannot sort playlists, so the cached change dates decide.
-    async* recentPlaylists(handle, oldById, channelId) {
-      const entries = await api.channelPlaylists(channelId ?? (await api.channel(handle)).id);
-      yield* orderByLastUpdate(entries, oldById);
-    },
-    async playlist(entry) {
-      const videos = (await api.playlistItems(entry.id)).map((video, index) => ({ position: index + 1, ...video }));
-      return {
-        id: entry.id,
-        title: entry.title,
-        description: entry.description ?? "",
-        url: playlistUrl(entry.id),
-        videoCount: videos.length,
-        videos,
-      };
-    },
-  };
-}
-
 export async function playlistCacheReady(channel, cacheFile = defaultCacheFile) {
   const cached = await readJson(cacheFile);
   return Boolean(cached?.complete) && cached.channel?.handle?.toLowerCase() === parseChannelHandle(channel).toLowerCase();
@@ -276,11 +244,9 @@ export function parseVideoIds(value) {
 export async function syncYoutubePlaylists({
   channel,
   cacheFile = defaultCacheFile,
-  apiKey = null,
+  source,
   newVideoIds = [],
-  fetchImpl = fetch,
   log = console.log,
-  sleep = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds)),
   now = () => new Date().toISOString(),
 }) {
   const handle = parseChannelHandle(channel);
@@ -289,9 +255,7 @@ export async function syncYoutubePlaylists({
   const pending = new Set(newVideoIds ?? []);
   const targeted = pending.size > 0 && Boolean(previous?.complete) && Boolean(previous.channel?.id);
   const checkedAt = now();
-  const youtube = createYoutubeSource({ apiKey, fetchImpl, log, sleep });
-  log(`Playlists über ${sourceLabel(youtube)}${targeted ? `; gezielte Suche nach ${pending.size} neuen Videos` : ""}.`);
-  const source = youtube.mode === "api" ? apiPlaylists(youtube) : scraperPlaylists({ fetchImpl, sleep, log });
+  log(`Playlists über ${source.label}${targeted ? `; gezielte Suche nach ${pending.size} neuen Videos` : ""}.`);
   const oldById = new Map((previous?.playlists ?? []).map((playlist) => [playlist.id, playlist]));
   const byId = new Map(oldById);
   let channelInfo = previous?.channel ?? null;
@@ -376,10 +340,11 @@ export async function syncYoutubePlaylists({
 }
 
 export async function runCli() {
-  const newVideoIds = parseVideoIds(process.env.YOUTUBE_NEW_VIDEO_IDS);
-  await startYoutubeCli((options) => syncYoutubePlaylists({ ...options, newVideoIds }));
+  const { runPlaylistsCli } = await import("./fetch-youtube.mjs");
+  await runPlaylistsCli();
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  await runCli();
+  // The coordinator imports this module, so its CLI import must not block module evaluation.
+  runCli();
 }

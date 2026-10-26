@@ -8,8 +8,8 @@ import {
   extractPlaylistMembersPage,
   orderByLastUpdate,
   parseVideoIds,
-  syncYoutubePlaylists,
 } from "../src/fetch-channel/fetch-youtube-playlists.mjs";
+import { syncYoutubePlaylists } from "../src/fetch-channel/fetch-youtube.mjs";
 
 const CHANNEL_ID = "UCrFoFXdc15HN5aRXpr_ic0w";
 const continuation = (token) => ({
