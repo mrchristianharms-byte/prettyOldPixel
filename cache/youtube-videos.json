@@ -5,10 +5,18 @@
     "title": "Pretty Old Pixel",
     "url": "https://www.youtube.com/@PrettyOldPixel"
   },
-  "lastModified": "2026-10-24T17:00:17Z",
-  "fetchedAt": "2026-10-24T20:52:37.241Z",
+  "lastModified": "2026-10-25T19:00:06Z",
+  "fetchedAt": "2026-10-26T10:46:00.538Z",
   "complete": true,
   "videos": [
+    {
+      "id": "X8JwO_7Ruco",
+      "title": "Blätterabendaufzeichnung - PowerPlay 4...5/88 - Stream 2",
+      "description": "00:00:00 - Intro\n00:05:00 - Vorgespräch\n00:28:00 - Blätterabend\n\nLive-Übertragung auf Twitch vom 05.10.2026 – sieh live unter https://www.twitch.tv/prettyoldpixel zu!",
+      "duration": "PT1H54M11S",
+      "durationSeconds": 6851,
+      "publishedAt": "2026-10-25T19:00:06Z"
+    },
     {
       "id": "nhRtSLbL-KA",
       "title": "Spieleabendaufzeichnung - Mission Critical - Stream 6",
