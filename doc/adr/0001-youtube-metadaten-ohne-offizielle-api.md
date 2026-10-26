@@ -154,6 +154,9 @@ Cache-Format:
 - [ADR 0008: Transkripte und Spieleabschnitte in Blätterabenden](0008-transkripte-und-spieleabschnitte-in-blaetterabenden.md)
   erweitert die Datenerfassung um öffentliche Untertitel und bewertet die
   getrennte Analyse und Veröffentlichung von Spiele-Sprungmarken.
+- [ADR 0010: Gezielter Playlist-Abruf nach neuen Videos](0010-gezielter-playlist-abruf-nach-neuen-videos.md)
+  nutzt die hier neu gefundenen Video-IDs, um nur so viele Playlists abzurufen
+  wie nötig.
 - **Speicherformat:** JSON im Verzeichnis `cache/`. SQLite erst, wenn Abfragen oder Datenmenge es erfordern.
 - **Detailtiefe:** Einzelabruf pro Video ist Pflicht, da die Beschreibung zwingend benötigt wird.
 - **Betriebsmodus:** CLI-Job (`npm run fetch:videos`) oder geplanter lokaler Task, kein dauerhaft laufender Dienst.

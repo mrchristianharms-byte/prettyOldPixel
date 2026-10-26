@@ -2127,6 +2127,7 @@ Architecture Decision Records liegen in `doc/adr/`:
 - [ADR 0007: Katalogübersichten und erweiterte Navigation](adr/0007-kataloguebersichten-und-erweiterte-navigation.md)
 - [ADR 0008: Transkripte und Spieleabschnitte in Blätterabenden (vorgeschlagen)](adr/0008-transkripte-und-spieleabschnitte-in-blaetterabenden.md)
 - [ADR 0009: Offlinefähige Web-App für das iPhone (implementiert; iPhone-Abnahme ausstehend)](adr/0009-offlinefaehige-web-app-fuer-iphone.md)
+- [ADR 0010: Gezielter Playlist-Abruf nach neuen Videos (angenommen)](adr/0010-gezielter-playlist-abruf-nach-neuen-videos.md)
 
 ## GitHub Pages veröffentlichen
 
