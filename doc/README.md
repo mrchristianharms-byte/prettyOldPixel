@@ -1165,12 +1165,18 @@ sie aus `YOUTUBE_NEW_VIDEO_IDS` (komma- oder leerzeichengetrennt). Die
 Playlists werden nacheinander geladen, zuletzt aktualisierte zuerst: anonym
 in der YouTube-Sortierung „Last video added“ (`?view=1&sort=lad`; weitere
 Übersichtsseiten nur bei Bedarf), mit API-Key zuerst neue Playlists, dann
-solche mit geänderter Videozahl (`itemCount`), dann nach `lastModified` im
-Cache. Sobald alle neuen Videos gefunden sind (bei zwei neuen Videos also nach
+nach `lastModified` im Cache. Die `itemCount` der API taugt dafür nicht, weil
+sie geplante, noch nicht veröffentlichte Einträge mitzählt; maßgeblich sind
+nur die von `fetch:videos` gefundenen öffentlichen Videos. Sobald alle neuen Videos gefunden sind (bei zwei neuen Videos also nach
 dem zweiten Fund), endet der Lauf; nicht geprüfte Playlists behalten ihren
 Cache-Stand, nicht mehr gelistete werden erst bei einem vollständigen Lauf
 entfernt. Ohne neue IDs, ohne vollständigen Cache oder mit `force_playlists`
 werden alle Playlists geprüft.
+
+Geplante Playlist-Einträge liefern weder API noch Webseite aus. Beide
+hinterlassen dafür aber ein Fortsetzungstoken: Die API wiederholt es auf leeren
+Seiten, die Webseite antwortet darauf ohne Fortsetzungsdaten. Beides gilt als
+Ende der Mitgliederliste; nur sichtbare Einträge landen im Cache.
 
 In GitHub Actions schreibt `fetch:videos` die Zahl und IDs neuer Videos als
 Step-Outputs `new-videos` und `new-video-ids`; der Playlist-Schritt läuft nur

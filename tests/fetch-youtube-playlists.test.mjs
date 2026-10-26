@@ -273,7 +273,7 @@ test("gezielte Suche ohne vollständigen Cache prüft alle Playlists", async () 
   });
 });
 
-test("ordnet Playlists nach neu, geänderter Videozahl und letztem Änderungsdatum", () => {
+test("ordnet Playlists nach neu und letztem Änderungsdatum, nicht nach API-Videozahl", () => {
   const old = new Map([
     ["old", { videoCount: 1, lastModified: "2026-01-01T00:00:00Z" }],
     ["recent", { videoCount: 1, lastModified: "2026-03-01T00:00:00Z" }],
@@ -281,7 +281,22 @@ test("ordnet Playlists nach neu, geänderter Videozahl und letztem Änderungsdat
   ]);
   assert.deepEqual(orderByLastUpdate([
     { id: "old", itemCount: 1 }, { id: "recent", itemCount: 1 }, { id: "grown", itemCount: 2 }, { id: "fresh" },
-  ], old).map((entry) => entry.id), ["fresh", "grown", "recent", "old"]);
+  ], old).map((entry) => entry.id), ["fresh", "recent", "old", "grown"]);
   assert.deepEqual(parseVideoIds(" a,b  a\nc "), ["a", "b", "c"]);
   assert.deepEqual(parseVideoIds(undefined), []);
+});
+
+test("Fortsetzung ohne Daten beendet die Mitgliederliste (geplante Einträge)", async () => {
+  await withCache(async (cacheFile) => {
+    const mock = mockFetch({
+      entries: [playlist("p")],
+      details: { p: { contents: [video("a"), continuation("scheduled")] } },
+    });
+    const fetchImpl = async (url, init) => (new URL(url).pathname === "/youtubei/v1/browse"
+      ? response({ contents: {}, metadata: {} })
+      : mock.fetchImpl(url, init));
+    const result = await syncYoutubePlaylists({ ...quiet, channel: "PrettyOldPixel", cacheFile, fetchImpl });
+    assert.equal(result.complete, true);
+    assert.deepEqual(result.playlists[0].videos.map((entry) => entry.videoId), ["a"]);
+  });
 });

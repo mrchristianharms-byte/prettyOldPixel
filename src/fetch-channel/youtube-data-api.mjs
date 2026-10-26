@@ -118,9 +118,12 @@ export function createYoutubeDataApi({
     let pageToken;
     do {
       const data = await get(resource, { ...params, maxResults: PAGE_SIZE, pageToken });
-      yield data.items ?? [];
+      const items = data.items ?? [];
+      yield items;
       pageToken = data.nextPageToken;
       if (pageToken && seen.has(pageToken)) {
+        // Scheduled, not yet public playlist entries are never returned; YouTube then repeats the token on empty pages.
+        if (!items.length) break;
         throw new Error(`YouTube Data API: Wiederholtes Seitentoken bei ${resource}.`);
       }
       seen.add(pageToken);
@@ -162,17 +165,12 @@ export function createYoutubeDataApi({
     },
 
     async channelPlaylists(channelId) {
-      const items = await all("playlists", { part: "snippet,contentDetails", channelId });
+      const items = await all("playlists", { part: "snippet", channelId });
       return items.map((item) => {
         if (!item.id || !item.snippet?.title) {
           throw new Error("YouTube Data API: Playlist ohne ID oder Titel.");
         }
-        return {
-          id: item.id,
-          title: item.snippet.title,
-          description: item.snippet.description ?? "",
-          itemCount: item.contentDetails?.itemCount ?? null,
-        };
+        return { id: item.id, title: item.snippet.title, description: item.snippet.description ?? "" };
       });
     },
 

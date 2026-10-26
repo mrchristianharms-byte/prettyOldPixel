@@ -223,7 +223,7 @@ Stunde verursacht. Er führt ausschließlich `fetch:videos` und danach
 `fetch:videos` keine neuen Videos gefunden hat. Sonst übergibt er die IDs der
 neuen Videos (`YOUTUBE_NEW_VIDEO_IDS`): `fetch:playlists` prüft die Playlists
 dann einzeln, zuletzt aktualisierte zuerst (anonym: YouTube-Sortierung
-„Last video added“; mit API-Key: geänderte Videozahl, dann Änderungsdatum im
+„Last video added“; mit API-Key: neue Playlists, dann Änderungsdatum im
 Cache), und endet, sobald alle neuen Videos gefunden sind. Bei einem manuellen
 Start erzwingt die Option `force_playlists` den vollständigen Playlist-Abruf. Er committet Änderungen an `cache/youtube-videos.json`
 und `cache/youtube-playlists.json` nach `main`. Ohne Änderungen entsteht

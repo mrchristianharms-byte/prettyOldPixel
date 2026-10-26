@@ -270,7 +270,7 @@ test("lädt Playlists mit API-Key über die Data API", async () => {
   }
 });
 
-test("gezielte Playlist-Suche über die API priorisiert geänderte Videozahlen und stoppt nach dem Fund", async () => {
+test("gezielte Playlist-Suche über die API prüft zuletzt geänderte Playlists zuerst und stoppt nach dem Fund", async () => {
   const directory = await mkdtemp(path.join(tmpdir(), "youtube-api-targeted-"));
   try {
     const cacheFile = path.join(directory, "playlists.json");
@@ -282,13 +282,13 @@ test("gezielte Playlist-Suche über die API priorisiert geänderte Videozahlen u
     await writeFile(cacheFile, JSON.stringify({
       channel: { id: CHANNEL_ID, handle: "PrettyOldPixel", title: "Pretty Old Pixel", url: "https://www.youtube.com/@PrettyOldPixel" },
       fetchedAt: "2026-01-01T00:00:00.000Z", lastModified: "2026-01-01T00:00:00.000Z", complete: true,
-      playlists: [cached("PL1", ["a"], "2026-03-01T00:00:00.000Z"), cached("PL2", ["b"], "2026-01-01T00:00:00.000Z")],
+      playlists: [cached("PL1", ["a"], "2026-01-01T00:00:00.000Z"), cached("PL2", ["b"], "2026-03-01T00:00:00.000Z")],
     }));
     const item = (videoId) => ({ snippet: { title: `Titel ${videoId}`, resourceId: { videoId } }, status: { privacyStatus: "public" } });
     const api = createApi({
       playlists: [[
-        { id: "PL1", snippet: { title: "PL1" }, contentDetails: { itemCount: 1 } },
-        { id: "PL2", snippet: { title: "PL2" }, contentDetails: { itemCount: 2 } },
+        { id: "PL1", snippet: { title: "PL1" } },
+        { id: "PL2", snippet: { title: "PL2" } },
       ]],
       items: { PL2: [[item("b"), item("new")]] },
     });
@@ -297,12 +297,27 @@ test("gezielte Playlist-Suche über die API priorisiert geänderte Videozahlen u
       newVideoIds: ["new"], now: () => "2026-04-01T00:00:00.000Z",
     });
     assert.deepEqual(api.requests.map((request) => [request.resource, request.params.playlistId ?? request.params.part]), [
-      ["playlists", "snippet,contentDetails"], ["playlistItems", "PL2"],
+      ["playlists", "snippet"], ["playlistItems", "PL2"],
     ]);
     assert.equal(result.complete, true);
     assert.deepEqual(result.playlists.find((entry) => entry.id === "PL2").videos.map((entry) => entry.videoId), ["b", "new"]);
-    assert.equal(result.playlists.find((entry) => entry.id === "PL1").checkedAt, "2026-03-01T00:00:00.000Z");
+    assert.equal(result.playlists.find((entry) => entry.id === "PL1").checkedAt, "2026-01-01T00:00:00.000Z");
   } finally {
     await rm(directory, { recursive: true, force: true });
   }
+});
+
+test("leere Seite mit wiederholtem Token beendet die Playlist (geplante Einträge), sonst Fehler", async () => {
+  const pages = (second) => async (url) => {
+    const token = new URL(url).searchParams.get("pageToken");
+    return json(token ? second : { items: [{ contentDetails: { videoId: "a" } }], nextPageToken: "T" });
+  };
+  const ids = async (fetchImpl) => {
+    const api = createYoutubeDataApi({ apiKey: API_KEY, fetchImpl, ...quiet });
+    const result = [];
+    for await (const page of api.playlistVideoIds("PL")) result.push(...page);
+    return result;
+  };
+  assert.deepEqual(await ids(pages({ items: [], nextPageToken: "T" })), ["a"]);
+  await assert.rejects(ids(pages({ items: [{ contentDetails: { videoId: "b" } }], nextPageToken: "T" })), /Wiederholtes Seitentoken/u);
 });

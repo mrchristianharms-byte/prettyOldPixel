@@ -50,13 +50,13 @@ function checkResponse(data) {
   });
 }
 
-function continuationContent(data) {
+function continuationContent(data, optional = false) {
   checkResponse(data);
   const content = data.onResponseReceivedActions ?? data.onResponseReceivedEndpoints ?? data.continuationContents;
-  if (!content) {
+  if (!content && !optional) {
     throw new Error("YouTube: Playlist-Fortsetzung enthält keine Daten.");
   }
-  return content;
+  return content ?? null;
 }
 
 export function extractChannelPlaylistsPage(content) {
@@ -140,7 +140,8 @@ function membershipContent(data, playlistId) {
 }
 
 // Lazy, so a caller that stops early never requests the remaining continuation pages.
-async function* pageStream(initial, extract, options) {
+// endWithoutData: scheduled, not yet public playlist entries leave a continuation whose response has no items.
+async function* pageStream(initial, extract, options, endWithoutData = false) {
   let page = extract(initial);
   const seen = new Set();
   yield page;
@@ -148,14 +149,16 @@ async function* pageStream(initial, extract, options) {
     const token = page.continuation;
     if (seen.has(token)) throw new Error("YouTube: Wiederholtes Playlist-Fortsetzungstoken.");
     seen.add(token);
-    page = extract(continuationContent(await postInnertube("browse", { continuation: token }, options)));
+    const content = continuationContent(await postInnertube("browse", { continuation: token }, options), endWithoutData);
+    if (!content) return;
+    page = extract(content);
     yield page;
   }
 }
 
-async function allPages(initial, extract, options) {
+async function allPages(initial, extract, options, endWithoutData = false) {
   const pages = [];
-  for await (const page of pageStream(initial, extract, options)) pages.push(page);
+  for await (const page of pageStream(initial, extract, options, endWithoutData)) pages.push(page);
   return pages;
 }
 
@@ -166,7 +169,7 @@ async function fetchPlaylist(entry, options) {
   const metadata = data.metadata?.playlistMetadataRenderer;
   if (!metadata?.title) throw new Error(`YouTube: Playlist-Metadaten fehlen: ${entry.id}`);
   const playlistOptions = { ...options, clientVersion: findClientVersion(html) };
-  const pages = await allPages(membershipContent(data, entry.id), extractPlaylistMembersPage, playlistOptions);
+  const pages = await allPages(membershipContent(data, entry.id), extractPlaylistMembersPage, playlistOptions, true);
   let sidebar;
   visit(data.sidebar, (node) => {
     if (node.playlistSidebarPrimaryInfoRenderer) {
@@ -194,18 +197,13 @@ function playlistUrl(id) {
   return `${YOUTUBE_URL}/playlist?list=${encodeURIComponent(id)}`;
 }
 
-// Newly listed playlists first, then playlists whose API item count differs from the cache,
-// then by the cached change date; equal ranks keep the listing order.
+// Newly listed playlists first, then by the cached change date; equal ranks keep the listing order.
+// The API itemCount is no signal: it already includes scheduled, not yet public entries.
 export function orderByLastUpdate(entries, oldById) {
-  const rank = (entry) => {
-    const old = oldById.get(entry.id);
-    if (!old) return 0;
-    return Number.isInteger(entry.itemCount) && entry.itemCount !== old.videoCount ? 1 : 2;
-  };
-  const time = (entry) => Date.parse(oldById.get(entry.id)?.lastModified ?? "") || 0;
+  const time = (entry) => (oldById.has(entry.id) ? Date.parse(oldById.get(entry.id).lastModified ?? "") || 0 : Infinity);
   return entries
-    .map((entry, index) => ({ entry, index, rank: rank(entry), time: time(entry) }))
-    .sort((a, b) => (a.rank - b.rank) || (b.time - a.time) || (a.index - b.index))
+    .map((entry, index) => ({ entry, index, time: time(entry) }))
+    .sort((a, b) => (b.time - a.time) || (a.index - b.index))
     .map(({ entry }) => entry);
 }
 
@@ -245,7 +243,7 @@ function apiPlaylists(api) {
       const channel = await api.channel(handle);
       return { channel, entries: await api.channelPlaylists(channel.id) };
     },
-    // The API cannot sort playlists, so the cached change dates and current item counts decide.
+    // The API cannot sort playlists, so the cached change dates decide.
     async* recentPlaylists(handle, oldById, channelId) {
       const entries = await api.channelPlaylists(channelId ?? (await api.channel(handle)).id);
       yield* orderByLastUpdate(entries, oldById);
