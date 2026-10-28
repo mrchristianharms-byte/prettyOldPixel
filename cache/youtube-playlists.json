@@ -5,8 +5,8 @@
     "title": "Pretty Old Pixel",
     "url": "https://www.youtube.com/@PrettyOldPixel"
   },
-  "fetchedAt": "2026-10-27T22:58:11.653Z",
-  "lastModified": "2026-10-27T22:58:11.653Z",
+  "fetchedAt": "2026-10-28T23:15:04.006Z",
+  "lastModified": "2026-10-28T23:15:04.006Z",
   "complete": true,
   "playlists": [
     {
@@ -126,6 +126,23 @@
       ],
       "lastModified": "2026-10-24T20:52:37.568Z",
       "checkedAt": "2026-10-27T22:58:11.653Z"
+    },
+    {
+      "id": "PLKAk_zU7LotY",
+      "title": "re.play - Ultima Underworld II: Labyrinth of Worlds",
+      "description": "",
+      "url": "https://www.youtube.com/playlist?list=PLKAk_zU7LotY",
+      "videoCount": 1,
+      "videos": [
+        {
+          "position": 1,
+          "videoId": "g3qVlBsl_Io",
+          "title": "Ultima Underworld II: Labyrinth of Worlds [re.play - #1] Intro und Box [German]",
+          "availability": "listed"
+        }
+      ],
+      "lastModified": "2026-10-28T23:15:04.006Z",
+      "checkedAt": "2026-10-28T23:15:04.006Z"
     },
     {
       "id": "PLKPrSm4Rptws",
