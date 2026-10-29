@@ -5,8 +5,8 @@
     "title": "Pretty Old Pixel",
     "url": "https://www.youtube.com/@PrettyOldPixel"
   },
-  "fetchedAt": "2026-10-28T23:15:04.006Z",
-  "lastModified": "2026-10-28T23:15:04.006Z",
+  "fetchedAt": "2026-10-29T23:18:55.668Z",
+  "lastModified": "2026-10-29T23:18:55.668Z",
   "complete": true,
   "playlists": [
     {
@@ -125,7 +125,7 @@
         }
       ],
       "lastModified": "2026-10-24T20:52:37.568Z",
-      "checkedAt": "2026-10-27T22:58:11.653Z"
+      "checkedAt": "2026-10-29T23:18:55.668Z"
     },
     {
       "id": "PLKAk_zU7LotY",
@@ -142,7 +142,7 @@
         }
       ],
       "lastModified": "2026-10-28T23:15:04.006Z",
-      "checkedAt": "2026-10-28T23:15:04.006Z"
+      "checkedAt": "2026-10-29T23:18:55.668Z"
     },
     {
       "id": "PLKPrSm4Rptws",
@@ -332,71 +332,77 @@
       "title": "re.play - Tom Clancy's EndWar",
       "description": "",
       "url": "https://www.youtube.com/playlist?list=PLUrbqDDC9Ei0",
-      "videoCount": 10,
+      "videoCount": 11,
       "videos": [
         {
           "position": 1,
+          "videoId": "7jSdUMXO_Dk",
+          "title": "Tom Clancy's EndWar [re.play - #11] Euro-Finale [German]",
+          "availability": "listed"
+        },
+        {
+          "position": 2,
           "videoId": "-UBGU-GJfzY",
           "title": "Tom Clancy's EndWar [re.play - #10] Verteidigung [German]",
           "availability": "listed"
         },
         {
-          "position": 2,
+          "position": 3,
           "videoId": "4k91ZCis0Lk",
           "title": "Tom Clancy's EndWar [re.play - #9] Nord London [German]",
           "availability": "listed"
         },
         {
-          "position": 3,
+          "position": 4,
           "videoId": "fau1-8_knds",
           "title": "Tom Clancy's EndWar [re.play - #8] Landung in England [German]",
           "availability": "listed"
         },
         {
-          "position": 4,
+          "position": 5,
           "videoId": "aprDCfpthCQ",
           "title": "Tom Clancy's EndWar [re.play - #7] Rückeroberung Calais [German]",
           "availability": "listed"
         },
         {
-          "position": 5,
+          "position": 6,
           "videoId": "I3cnDoYwVR0",
           "title": "Tom Clancy's EndWar [re.play - #6] Brüssel Verteidigung [German]",
           "availability": "listed"
         },
         {
-          "position": 6,
+          "position": 7,
           "videoId": "rxy_jiJLxps",
           "title": "Tom Clancy's EndWar [re.play - #5] Frankreich unter Beschuss [German]",
           "availability": "listed"
         },
         {
-          "position": 7,
+          "position": 8,
           "videoId": "CgBdKt-f98U",
           "title": "Tom Clancy's EndWar [re.play - #4] Jetzt wird's ernst [German]",
           "availability": "listed"
         },
         {
-          "position": 8,
+          "position": 9,
           "videoId": "wEO2Wn9ku3c",
           "title": "Tom Clancy's EndWar [re.play - #3] Tutorialmission 2 und 3 [German]",
           "availability": "listed"
         },
         {
-          "position": 9,
+          "position": 10,
           "videoId": "BLPlaHqGqqM",
           "title": "Tom Clancy's EndWar [re.play - #2] Tutorialmission 1 [German]",
           "availability": "listed"
         },
         {
-          "position": 10,
+          "position": 11,
           "videoId": "G-i-jp6Wla0",
           "title": "Tom Clancy's EndWar [re.play - #1] Intro und Box [German]",
           "availability": "listed"
         }
       ],
-      "lastModified": "2026-10-22T19:31:06.693Z",
-      "checkedAt": "2026-10-27T22:58:11.653Z"
+      "lastModified": "2026-10-29T23:18:55.668Z",
+      "checkedAt": "2026-10-29T23:18:55.668Z"
     },
     {
       "id": "PLZW5k3rtbudo_0dIXa7DsWpwUx53PkV6l",
@@ -4891,7 +4897,7 @@
         }
       ],
       "lastModified": "2026-10-27T22:58:11.653Z",
-      "checkedAt": "2026-10-27T22:58:11.653Z"
+      "checkedAt": "2026-10-29T23:18:55.668Z"
     },
     {
       "id": "PLZW5k3rtbudpGgkzpDmKmzUQuZtmD8Oz4",
@@ -12697,7 +12703,7 @@
         }
       ],
       "lastModified": "2026-10-26T10:37:12.839Z",
-      "checkedAt": "2026-10-27T22:58:11.653Z"
+      "checkedAt": "2026-10-29T23:18:55.668Z"
     },
     {
       "id": "PLZW5k3rtbudrGsaQQM4K_wXyL5zzGiVes",
