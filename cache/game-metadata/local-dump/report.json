@@ -1,7 +1,7 @@
 {
   "version": 1,
   "provider": "mobygames-local-dump",
-  "importedAt": "2026-10-23T09:59:20.771Z",
+  "importedAt": "2026-10-30T16:26:24.107Z",
   "source": {
     "fileName": "gdb.sql",
     "sha256": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
@@ -15,8 +15,8 @@
     "mobygames_releases": 510587
   },
   "summary": {
-    "games": 147,
-    "withCandidates": 147,
+    "games": 148,
+    "withCandidates": 148,
     "withoutExactMatch": 0,
     "ambiguous": 34
   },
@@ -368,6 +368,95 @@
               "platform": "Windows",
               "publisher": "Ziggurat Interactive, Inc.",
               "developer": "Legend Entertainment Company",
+              "countries": "Worldwide",
+              "publabel": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "gameId": "ultima-underworld-ii-labyrinth-of-worlds",
+      "title": "Ultima Underworld II: Labyrinth of Worlds",
+      "platforms": [],
+      "status": "needs-identity-review",
+      "candidates": [
+        {
+          "mobyid": 691,
+          "title": "Ultima Underworld II: Labyrinth of Worlds",
+          "sourceUrl": "https://www.mobygames.com/game/691/",
+          "genres": [
+            "Action",
+            "Role-playing (RPG)"
+          ],
+          "alternativeTitles": [
+            {
+              "title": "Ultima Underworld 2",
+              "info": "Origin release"
+            }
+          ],
+          "platformMatch": null,
+          "matchingReleaseIds": [],
+          "releases": [
+            {
+              "mobyid": 691,
+              "mobyreleaseid": 26848,
+              "year": 1993,
+              "platform": "DOS",
+              "publisher": "ORIGIN Systems, Inc.",
+              "developer": "Looking Glass Technologies, Inc.",
+              "countries": "United States",
+              "publabel": ""
+            },
+            {
+              "mobyid": 691,
+              "mobyreleaseid": 107699,
+              "year": 1993,
+              "platform": "DOS",
+              "publisher": "ORIGIN Systems, Inc.",
+              "developer": "Looking Glass Technologies, Inc.",
+              "countries": "France,  Germany,  Italy,  United Kingdom",
+              "publabel": ""
+            },
+            {
+              "mobyid": 691,
+              "mobyreleaseid": 141717,
+              "year": 1995,
+              "platform": "FM Towns",
+              "publisher": "Electronic Arts Victor, Inc.",
+              "developer": "Looking Glass Technologies, Inc.",
+              "countries": "Japan",
+              "publabel": ""
+            },
+            {
+              "mobyid": 691,
+              "mobyreleaseid": 130898,
+              "year": 1995,
+              "platform": "PC-98",
+              "publisher": null,
+              "developer": null,
+              "countries": "Japan",
+              "publabel": "",
+              "sourceDeveloper": "",
+              "sourcePublisher": ""
+            },
+            {
+              "mobyid": 691,
+              "mobyreleaseid": 139924,
+              "year": 1995,
+              "platform": "PC-98",
+              "publisher": "Electronic Arts Victor, Inc.",
+              "developer": "Looking Glass Technologies, Inc.",
+              "countries": "Japan",
+              "publabel": ""
+            },
+            {
+              "mobyid": 691,
+              "mobyreleaseid": 192811,
+              "year": 2014,
+              "platform": "Windows",
+              "publisher": "Electronic Arts, Inc.",
+              "developer": "Looking Glass Technologies, Inc.",
               "countries": "Worldwide",
               "publabel": ""
             }

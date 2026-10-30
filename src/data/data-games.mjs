@@ -5,6 +5,7 @@ import { slugify } from "../site-generation/site-config.mjs";
 const playlists = [
   ["PLAvthCnzW8Bs", "Wizardry: Proving Grounds of the Mad Overlord"],
   ["PLCdHnxdZabN4", "Mission Critical"],
+  ["PLKAk_zU7LotY", "Ultima Underworld II: Labyrinth of Worlds"],
   ["PLKPrSm4Rptws", "Ports of Call"],
   ["PLNceJpv0LbXw", "Labyrinth"],
   ["PLO77B_AOBv8s", "Wing Commander II"],

@@ -88,6 +88,24 @@ test("verknüpft Quellen mit Herkunft, ohne Playlist-Titel als Spiele zu erfinde
   assert.deepEqual(input, before);
 });
 
+test("ordnet die erste aktuelle Folge von Ultima Underworld II der bestätigten Spielplaylist zu", () => {
+  const input = sources(1);
+  const video = input.videos.videos[0];
+  video.id = "g3qVlBsl_Io";
+  video.title = "Ultima Underworld II: Labyrinth of Worlds [re.play - #1] Intro und Box [German]";
+  video.publishedAt = "2026-10-28T18:00:17Z";
+  input.playlists.playlists[0].id = "PLKAk_zU7LotY";
+  input.playlists.playlists[0].title = "re.play - Ultima Underworld II: Labyrinth of Worlds";
+  input.playlists.playlists[0].videos[0].videoId = video.id;
+  input.magazines.videos = [];
+  const model = normalizeSources(input, { now: Date.parse("2026-10-30T12:00:00Z") });
+  const game = model.games.find((entry) => entry.id === "ultima-underworld-ii-labyrinth-of-worlds");
+  assert.ok(game);
+  assert.deepEqual(game.videos, [video.id]);
+  assert.equal(model.videoById.get(video.id).games[0].id, game.id);
+  assert.ok(!model.warnings.some((warning) => warning.includes("PLKAk_zU7LotY")));
+});
+
 test("sortiert News numerisch nach Zeitzonen und begrenzt auf 20 eindeutige Videos", () => {
   const input = sources(25);
   input.videos.videos[23].publishedAt = "2020-03-01T01:00:00+02:00";

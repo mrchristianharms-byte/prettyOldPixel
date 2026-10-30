@@ -52,8 +52,13 @@ Daten. Beschädigte oder veraltete fertige Caches brechen den Build ab.
 - Titel/Aliasse und Edition müssen passen. Keine erratenen Fortsetzungen oder
   weggefallenen Untertitel. 18 ausdrücklich geprüfte Dump-Entscheidungen
   lösen bekannte Mehrdeutigkeiten auf.
-- Derzeit sind alle 147 Spiele zugeordnet; keines bleibt unverifiziert.
+- Derzeit sind alle 148 Spiele zugeordnet; keines bleibt unverifiziert.
   Darunter ist nun auch `Kabuki: Quantum Fighter` für NES.
+- `Ultima Underworld II: Labyrinth of Worlds` ist über die geprüfte Playlist
+  `PLKAk_zU7LotY` katalogisiert. Der lokale Titelindex enthält das Spiel bereits
+  als MobyGames-ID 691; Import und Cache-Aufbereitung übernehmen die nach der
+  bestehenden Plattformregel ausgewählten DOS-Veröffentlichungen von 1993.
+  Die erste aktuelle Folge genügt gemäß der Ein-Video-Regel für eine Spieleseite.
 - `David Crane's A Boy and His Blob: Trouble on Blobolonia` ist dem NES-Original
   statt dem späteren gleichnamigen Spiel zugeordnet. Die NES-Veröffentlichungen
   im Dump sind mit 1990 datiert; die Nutzerangabe 1989 überschreibt diese
