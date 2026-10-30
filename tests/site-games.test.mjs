@@ -1286,6 +1286,17 @@ test("aktualisiert Spieleseiten offline und entfernt sie beim Unterschreiten der
   await save();
   const first = await generateSite(options);
   const file = path.join(outputDirectory, "spiele/cadaver/index.html");
+  const markdownFile = path.join(outputDirectory, "spiele/cadaver/index.md");
+  const markdown = await readFile(markdownFile, "utf8");
+  assert.ok(markdown.includes("## Wie wird das Spiel Cadaver gespielt?"));
+  assert.ok(markdown.includes("Cadaver \\[re.play - #0\\]"));
+  assert.ok(markdown.includes("## Seitenstruktur"));
+  assert.ok(markdown.includes("**Brotkrümelnavigation**"));
+  assert.ok(markdown.includes("**Videos zum Spiel**"));
+  assert.ok(!markdown.includes("Vorschaubild von YouTube"));
+  const html = await readFile(file, "utf8");
+  assert.ok(!html.includes("Wie wird das Spiel Cadaver gespielt?"));
+  assert.ok(!html.includes("Die Videos sind der Hauptinhalt"));
   const fixedTime = new Date("2020-02-01T12:00:00Z");
   await utimes(file, fixedTime, fixedTime);
   const mtime = (await stat(file)).mtimeMs;
@@ -1303,6 +1314,7 @@ test("aktualisiert Spieleseiten offline und entfernt sie beim Unterschreiten der
   assert.equal(after["spiele/cadaver/index.html"].contentPublishedAt, before["spiele/cadaver/index.html"].contentPublishedAt);
   assert.deepEqual(after["datenschutz/index.html"], before["datenschutz/index.html"]);
   assert.ok((await readFile(file, "utf8")).includes("<dt>Abschnitt</dt><dd>Intro / Unboxing</dd>"));
+  assert.ok((await readFile(markdownFile, "utf8")).includes("Intro und Unboxing"));
   input.videos.videos[0].description = "Aktualisierte Beschreibung";
   await save();
   await generateSite(options);
@@ -1311,5 +1323,6 @@ test("aktualisiert Spieleseiten offline und entfernt sie beim Unterschreiten der
   await save();
   await generateSite(options);
   await assert.rejects(stat(file), { code: "ENOENT" });
+  await assert.rejects(stat(markdownFile), { code: "ENOENT" });
   assert.ok(!(await readFile(path.join(outputDirectory, "sitemap.xml"), "utf8")).includes("/spiele/cadaver/"));
 });

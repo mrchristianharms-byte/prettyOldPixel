@@ -38,6 +38,32 @@ gehören in diese Dokumentation, nicht in Seiteneinleitungen. Originale
 Videobeschreibungen, Datenschutz- und Bedienhinweise sowie notwendige Hinweise
 auf fehlende oder unsichere Angaben bleiben erhalten.
 
+### Agentenzugang und Markdown
+
+Der Build erzeugt zusätzlich `llms.txt` mit Recherche-Einstiegen, Quellen
+und Grenzen sowie für jede HTML-Seite eine Markdown-Fassung des Hauptinhalts:
+`index.md` an der Wurzel, `index.md` im jeweiligen Seitenverzeichnis und
+`404.md` für die Fehlererklärung. HTML verlinkt die alternative Fassung;
+Markdown verwendet absolute Links und übernimmt auch Tabellen. Brotkrümel,
+Folgenverzeichnisse, Hauptnavigation und Fußlinks zeigen die Seitenstruktur;
+reine Player-Steuerung wird weggelassen. Anstelle des Players erläutert
+ein nur im Markdown erzeugter Text, dass die YouTube-Videos den Hauptinhalt
+bilden und Metadaten kein Transkript ersetzen. Spielseiten ergänzen
+„Wie wird das Spiel … gespielt?“ mit einer generischen Antwort und bis zu
+drei verlinkten Videotiteln als Beispiele. Daraus werden keine konkreten
+Spielmechaniken oder Lösungswege erfunden. HTML und Offline-App erhalten
+diese Zusatztexte nicht. Die Konvertierung
+mit `turndown` und `turndown-plugin-gfm` läuft ausschließlich beim Build.
+
+`ueber/` und `kontakt/` erläutern Projekt und Quellen; dieselben Texte sind
+in der Offline-App verfügbar. Die Startseite enthält eine verknüpfte
+WebSite-Identität. Details und Abnahme stehen in
+[ADR 0011](adr/0011-agentenlesbare-inhalte-und-maschinenlesbare-zugaenge.md).
+Die statischen Dateien sind keine Content-Negotiation: Eine Antwort auf
+`Accept: text/markdown` an der HTML-Adresse und eine echte Markdown-404
+benötigen weiterhin separate Edge-Logik. Cloudflare-Funktionen und
+Content-Signal-Präferenzen wurden nicht aktiviert.
+
 ## Lokal bauen
 
 Voraussetzung: Node.js 22 oder neuer.
@@ -1040,6 +1066,45 @@ Einwilligung für externe YouTube-Medien einschließlich Vorschaubildern sowie
 die dauerhafte Player-Freigabe prüfen lassen. Die Datenschutzseite nennt
 Hosting, direkte Bildabrufe, Player/API, Local Storage, Zurücksetzen und
 die nur seitenbezogene Folgenfortsetzung.
+
+### Cloudflare: Auslieferung und Datenschutzhinweise
+
+GitHub Actions baut und veröffentlicht weiterhin auf GitHub Pages.
+Cloudflare ist kein zusätzlicher Deployment-Host, sondern DNS-Anbieter und
+vorgeschalteter Proxy/CDN für `prettyoldpixel.com`. Die öffentliche
+Datenschutzseite und die Offline-App-Hinweise erläutern die Verarbeitung
+technischer Zugriffsdaten, Zwecke, mögliche Drittlandverarbeitung und die
+Abgrenzung zu YouTube. Laut Betreiberangabe vom 30.10.2026 werden keine
+Cloudflare Web Analytics, kein Turnstile und keine bewusst aktivierten
+Bot-Challenges verwendet.
+
+Der Text ist eine eigene sachliche Beschreibung anhand offizieller Quellen,
+keine übernommene Musterdatenschutzerklärung und keine Rechtsfreigabe speziell
+für deutsche private Fanpages. „Privat“ oder „nicht kommerziell“ ist keine
+pauschale Befreiung von Datenschutzpflichten für eine öffentliche Website.
+Vor rechtlicher Freigabe müssen insbesondere Verantwortlicher/Kontakt,
+konkrete Rechtsgrundlage (gegebenenfalls Art. 6 Abs. 1 lit. f DSGVO mit
+Interessenabwägung), Vertrags-/Auftragsverarbeitungsstatus, tatsächliche
+Speicherfristen, Betroffenenrechte und Übermittlungsgrundlagen geprüft
+beziehungsweise vervollständigt werden. Unbestätigte Vertragsabschlüsse oder
+Fristen werden nicht behauptet. Die Anbieterinformationen ersetzen diese
+eigenen Angaben nicht.
+
+Die Cloudflare-Cookie-Dokumentation beschreibt mögliche Funktionen,
+nicht die auf dieser Website tatsächlich gesetzten Cookies. Vor Aktivierung
+weiterer Dienste und nach Änderungen ist das reale Cookie-/Request-Verhalten
+zu prüfen; eine Einwilligungsfreiheit folgt nicht allein aus Cloudflares
+Einstufung als „strictly necessary“. Maßgeblich ist insbesondere § 25 TDDDG.
+Für später aktivierte Analytics oder Challenges sind Hinweise und gegebenenfalls
+Einwilligungsmechanismen vorher anzupassen.
+
+Offizielle Grundlagen (geprüft am 30.10.2026):
+
+- [Cloudflare-Datenschutzrichtlinie](https://www.cloudflare.com/de-de/privacypolicy/)
+- [Cloudflare: DSGVO, Datenverarbeitung und internationale Übermittlungen](https://www.cloudflare.com/de-de/trust-hub/gdpr/)
+- [Cloudflare: Data Processing Addendum](https://www.cloudflare.com/de-de/cloudflare-customer-dpa/)
+- [Cloudflare: Cookies und ihre Zwecke](https://developers.cloudflare.com/fundamentals/reference/policies-compliances/cloudflare-cookies/)
+- [§ 25 TDDDG](https://www.gesetze-im-internet.de/ttdsg/__25.html)
 
 Am 17.10.2026 wurde eine Microsoft-Defender-Browser-Protection-Warnung
 „Phishing threat“ für die Zeitschriftenübersicht gemeldet. Diese Übersicht
@@ -2135,7 +2200,8 @@ Architecture Decision Records liegen in `doc/adr/`:
 - [ADR 0008: Transkripte und Spieleabschnitte in Blätterabenden (vorgeschlagen)](adr/0008-transkripte-und-spieleabschnitte-in-blaetterabenden.md)
 - [ADR 0009: Offlinefähige Web-App für das iPhone (implementiert; iPhone-Abnahme ausstehend)](adr/0009-offlinefaehige-web-app-fuer-iphone.md)
 - [ADR 0010: Gezielter Playlist-Abruf nach neuen Videos (angenommen)](adr/0010-gezielter-playlist-abruf-nach-neuen-videos.md)
-- [ADR 0012: Eigene Domain mit Cloudflare und GitHub Pages (lokal umgesetzt und geprüft; Live-Abnahme ausstehend)](adr/0012-eigene-domain-mit-cloudflare-und-github-pages.md)
+- [ADR 0011: Agentenlesbare Inhalte und maschinenlesbare Zugänge (statische Maßnahmen lokal umgesetzt; Edge-Abnahme offen)](adr/0011-agentenlesbare-inhalte-und-maschinenlesbare-zugaenge.md)
+- [ADR 0012: Eigene Domain mit Cloudflare und GitHub Pages (Domain, Proxy und HTTPS live bestätigt; bestehendes Caching beibehalten)](adr/0012-eigene-domain-mit-cloudflare-und-github-pages.md)
 
 ## GitHub Pages veröffentlichen
 

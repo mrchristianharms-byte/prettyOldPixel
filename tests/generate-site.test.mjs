@@ -79,6 +79,31 @@ test("zeigt auf der Startseite den Markennamen nur im Kopf statt als zusätzlich
   assert.ok(html.includes('<p class="lead">Retrospiele entdecken'));
 });
 
+test("beschreibt Websiteidentität und verlinkt quellengestützte Projekt- und Kontaktseiten", () => {
+  for (const base of ["https://prettyoldpixel.com/", "https://example.org/projekt/"]) {
+    const { pages, config, assets } = render(fixture(), base);
+    validateSite(pages, assets, config);
+    const home = pages.get("index.html").html;
+    const graph = JSON.parse(home.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/u)[1])["@graph"];
+    const website = graph.find((entry) => entry["@type"] === "WebSite");
+    assert.equal(new URL(website.url, base).href, base);
+    assert.equal(graph.find((entry) => entry["@type"] === "WebPage").isPartOf["@id"], website["@id"]);
+    assert.equal(website.inLanguage, "de");
+    assert.ok(home.includes("Webseitenrepräsentation des YouTube-Kanals"));
+    for (const [route, type] of [["ueber/", "AboutPage"], ["kontakt/", "ContactPage"]]) {
+      const html = pages.get(`${route}index.html`).html;
+      const main = html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/u)[1];
+      const paragraphs = [...main.matchAll(/<p>([\s\S]*?)<\/p>/gu)].map((match) => match[1]).join(" ").replace(/<[^>]*>/gu, "");
+      assert.ok(paragraphs.length >= 500, route);
+      assert.ok(html.includes(`"@type":"${type}"`));
+      assert.ok(html.includes('href="https://prettyoldpixel.de/" rel="external"'));
+      assert.ok(!html.includes('"@type":"Organization"'));
+      assert.ok(!html.includes('"contactPoint"'));
+      for (const page of pages.values()) assert.ok(page.html.includes(`href="${config.href(route, page.route)}"`));
+    }
+  }
+});
+
 test("entfernt Startseite nur aus der Hauptnavigation und behält Markenlink und Brotkrümel", () => {
   const { pages, config } = render(issueFixture());
   for (const { html, route } of pages.values()) {
@@ -141,7 +166,7 @@ async function setup(t, input = fixture()) {
 
 test("erzeugt News mit Sonstiges-Detailseiten ohne Gesamtkatalog", () => {
   const { pages, config, assets } = render();
-  assert.equal(pages.size, 58);
+  assert.equal(pages.size, 60);
   assert.ok(![...pages.keys()].some((file) => file.startsWith("videos/")));
   assert.ok(pages.get("news/index.html").html.includes('href="../sonstiges/video-52-retrospiel/#video-b0000000052"'));
   for (const page of pages.values()) {
@@ -446,8 +471,11 @@ test("lädt vor Aktivierung keinen YouTube-Player und dokumentiert den aktuellen
   assert.equal((html.match(/data-video-panel /gu) ?? []).length, 2);
   assert.ok(html.includes("keine Beschreibung vorhanden"));
   const privacy = pages.get("datenschutz/index.html").html;
-  for (const text of ["nicht kommerziell", "GitHub Pages", "i.ytimg.com", "youtube-nocookie.com", "offizielle YouTube-IFrame-API", "Nächste Folge automatisch", "Local Storage", "YouTube-Aktivierung zurücksetzen", "Session Storage"]) {
+  for (const text of ["nicht kommerziell", "GitHub Pages", "Auslieferung und Schutz über Cloudflare", "Cloudflare, Inc.", "IP-Adresse", "Standardvertragsklauseln", "keine Cloudflare Web Analytics", "i.ytimg.com", "youtube-nocookie.com", "offizielle YouTube-IFrame-API", "Nächste Folge automatisch", "Local Storage", "YouTube-Aktivierung zurücksetzen", "Session Storage"]) {
     assert.ok(privacy.includes(text), text);
+  }
+  for (const url of ["https://www.cloudflare.com/de-de/privacypolicy/", "https://www.cloudflare.com/de-de/trust-hub/gdpr/", "https://developers.cloudflare.com/fundamentals/reference/policies-compliances/cloudflare-cookies/"]) {
+    assert.ok(privacy.includes(`href="${url}" rel="external"`), url);
   }
   for (const page of pages.values()) assert.ok(page.html.includes(`href="${createSiteConfig().href("datenschutz/", page.route)}"`));
   assert.ok(pages.get("404.html").html.includes('content="noindex, follow"'));
@@ -526,7 +554,7 @@ test("baut offline mit Produktionsdomain, Sitemap und Inhalts-Manifest; übernim
   globalThis.fetch = () => { throw new Error("Netzwerk im Build verboten"); };
   t.after(() => { globalThis.fetch = originalFetch; });
   const first = await generateSite(options);
-  assert.equal(first.pages, 58);
+  assert.equal(first.pages, 60);
   assert.equal(first.reused, 0);
   assert.ok(first.cssGzip < 10 * 1024);
   assert.ok(first.jsGzip <= 5 * 1024);
@@ -566,6 +594,19 @@ test("baut offline mit Produktionsdomain, Sitemap und Inhalts-Manifest; übernim
   assert.ok(!sitemap.includes("/videos/"));
   assert.equal((sitemap.match(/<lastmod>/gu) ?? []).length, first.pages - 1);
   assert.match(await readFile(path.join(options.outputDirectory, "robots.txt"), "utf8"), /Sitemap: https:\/\/prettyoldpixel\.com\/sitemap.xml/u);
+  const llms = await readFile(path.join(options.outputDirectory, "llms.txt"), "utf8");
+  const markdown = await readFile(path.join(options.outputDirectory, "index.md"), "utf8");
+  assert.ok(markdown.includes("# Pretty Old Pixel"));
+  assert.ok(markdown.includes("HTML-Original: <https://prettyoldpixel.com/>"));
+  const generatedHome = await readFile(path.join(options.outputDirectory, "index.html"), "utf8");
+  assert.ok(generatedHome.includes('rel="alternate" type="text/markdown" href="index.md"'));
+  const markdown404 = await readFile(path.join(options.outputDirectory, "404.md"), "utf8");
+  assert.ok(markdown404.includes("Seite nicht gefunden"));
+  for (const text of ["Wann diese Website verwenden", "Quellen und Zitieren", "Grenzen",
+    "https://prettyoldpixel.com/ueber/", "https://prettyoldpixel.com/kontakt/",
+    "https://prettyoldpixel.com/sitemap.xml"]) assert.ok(llms.includes(text), text);
+  assert.ok(sitemap.includes("https://prettyoldpixel.com/ueber/"));
+  assert.ok(sitemap.includes("https://prettyoldpixel.com/kontakt/"));
   const homePath = path.join(options.outputDirectory, "index.html");
   const preservedTime = new Date("2020-01-01T00:00:00Z");
   await utimes(homePath, preservedTime, preservedTime);

@@ -1,7 +1,7 @@
 # ADR 0012: Eigene Domain mit Cloudflare und GitHub Pages
 
-- Status: lokal umgesetzt und geprüft; GitHub-Custom-Domain und Cloudflare-DNS
-  gesetzt; Veröffentlichung, HTTPS und Live-Abnahme ausstehend.
+- Status: umgesetzt; eigene Domain, Cloudflare-Proxy und HTTPS live bestätigt.
+  Separate Betreiber- und Offline-App-Prüfungen bleiben offen.
 - Datum: 2026-10-30.
 - Ergänzt [ADR 0002](0002-statische-seiten-seo-und-performance.md) und
   [ADR 0011](0011-agentenlesbare-inhalte-und-maschinenlesbare-zugaenge.md).
@@ -51,6 +51,13 @@ Optional kann später `www` als DNS-only-CNAME auf
 Weiterleitung von `www.prettyoldpixel.com` auf die kanonische Apex-Domain
 einschließlich HTTPS zu prüfen; bis dahin wird `www` nicht als erreichbar
 beworben. Keine Wildcard-Einträge einrichten.
+
+Nach erfolgreicher Zertifikatsausstellung wurde der Proxy durch den
+Auftraggeber aktiviert; Apex und `www` werden inzwischen über Cloudflare
+ausgeliefert. DNS only beschreibt oben die Einrichtungsphase, nicht mehr
+den aktuellen Betrieb. Die Verbindung zum GitHub-Origin soll mit
+**Full (strict)** abgesichert werden; diese Dashboard-Einstellung ist
+noch nicht separat bestätigt.
 
 ### 2. Externe GitHub-Einstellungen
 
@@ -136,7 +143,7 @@ zurückbleiben. Die Domainverifizierung nicht vorschnell entfernen.
 
 ## Abnahme
 
-### Zwischenstand am 30.10.2026
+### Historischer Einrichtungsstand am 30.10.2026
 
 - Die GitHub-Pages-API bestätigt `build_type: workflow` und
   `cname: prettyoldpixel.com`.
@@ -178,7 +185,50 @@ zurückbleiben. Die Domainverifizierung nicht vorschnell entfernen.
 - Bestehende Build-Hinweise zu unbekannten Heftausgaben und nicht bestätigten
   Playlist-/Spielzuordnungen bleiben sichtbar; kein Domainfehler.
 - `git diff --check` ohne Fehler. Generierte Dateien werden nicht committed.
-  Veröffentlichung und Live-Abnahme der lokalen Domainänderungen stehen noch aus.
+  Zum Zeitpunkt dieser lokalen Erstabnahme standen Veröffentlichung und
+  Live-Abnahme noch aus; der nachfolgende Stand ersetzt diese Einschränkung.
+
+### Live- und Betriebsstand am 30.10.2026
+
+- Eigene Domain über Cloudflare-Proxy erreichbar; GitHub bleibt der
+  Hosting- und Actions-Deployment-Anbieter.
+- GitHub-Pages-API erneut um ca. 18:11 Uhr geprüft:
+  `build_type: workflow`, `cname: prettyoldpixel.com`,
+  `html_url: https://prettyoldpixel.com/`, `https_enforced: true`.
+  Zertifikat `approved`, gültig für Apex und `www` bis 28.01.2027.
+- HTTPS-Aufrufe für Startseite, Spiel, Heftausgabe, Datenschutz und Sitemap
+  erfolgreich; unbekannte Pfade liefern 404. HTTP wird auf HTTPS,
+  `www` auf Apex und alte github.io-Projekt-/Detailadressen auf passende
+  neue Ziele weitergeleitet.
+- Der neue Is-Agentic-Scan verwendet die eigene Domain und erreicht 71/100;
+  die verbliebenen Inhalts-/Markdown-Punkte behandelt ADR 0011.
+- Cloudflare-Auslieferung und Datenverarbeitung sind jetzt in den lokalen
+  Datenschutzseiten der Website und Offline-App beschrieben.
+- Persönliche GitHub-TXT-Domainverifizierung, Full-(strict)-Einstellung
+  und ein echter Offline-/Installationsversuch der App unter der neuen
+  Origin sind weiterhin separat durch den Betreiber zu bestätigen.
+  Die neuen Informationsseiten und Markdown-Ausgaben werden erst mit
+  dem nächsten Deployment veröffentlicht.
+
+### Cache-Entscheidung am 30.10.2026
+
+Die bestehenden Cache-Einstellungen bleiben auf Wunsch des Auftraggebers
+unverändert. Live-GETs um ca. 18:09 Uhr zeigen:
+
+| Inhalt | Beobachtetes Verhalten |
+|---|---|
+| Startseite und Spieleübersicht | `Cache-Control: max-age=600`; Cloudflare `DYNAMIC`, also kein Edge-HTML-Cache |
+| HTML-Validatoren | `Last-Modified` vorhanden; `If-Modified-Since` liefert 304. ETag in dieser 304-Antwort vorhanden, nicht in den geprüften HTML-200-Antworten |
+| Favicon | Cloudflare `HIT`, `Cache-Control: max-age=14400`, ETag vorhanden |
+
+`Last-Modified` und ETag sind Änderungsvalidatoren, keine Cache-Dauern.
+Für die statische Website reicht dieses Verhalten derzeit aus; keine
+zusätzliche Cache-Rule und kein Ein-Stunden-Override werden eingerichtet.
+Die beobachteten Header beweisen nicht die vollständige Dashboard-Konfiguration.
+Cloudflares expliziter Edge-TTL-Override hat im Free-Tarif laut Dokumentation
+mindestens zwei Stunden; eine Stunde Browser-TTL wäre davon unabhängig.
+Bei späterer HTML-/Markdown-Negotiation muss die Cache-Trennung gesondert
+geprüft werden. Ein Edge-Purge leert keine Browser-Caches.
 
 ### Abnahmekriterien
 
@@ -202,12 +252,14 @@ zurückbleiben. Die Domainverifizierung nicht vorschnell entfernen.
   Is-Agentic-Scan verwendet die eigene Domain. DNS-only behebt weder
   Markdown-Negotiation noch Markdown-404 aus ADR 0011.
 
-Die externe Einrichtung ist noch nicht vollständig abgenommen.
+Domain, Proxy und HTTPS sind live abgenommen. Die oben genannten
+Betreiberbestätigungen und die praktische Offline-App-Abnahme bleiben offen.
 
 ## Referenzen
 
 - [GitHub: Managing a custom domain](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site)
 - [GitHub: Verifying your custom domain](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/verifying-your-custom-domain-for-github-pages)
 - [Cloudflare: CNAME flattening](https://developers.cloudflare.com/dns/cname-flattening/)
+- [Cloudflare: Edge und Browser Cache TTL](https://developers.cloudflare.com/cache/how-to/edge-browser-cache-ttl/)
 
 Dokumentationsstand geprüft am 30.10.2026.

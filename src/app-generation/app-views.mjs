@@ -4,6 +4,7 @@ import { gameDiscussions } from "../site-generation/widget/game-discussions.mjs"
 import { archiveLinks } from "../site-generation/widget/archive-links.mjs";
 import { dateLabel, durationLabel } from "../site-generation/site-format.mjs";
 import { httpUrl } from "../shared/http-url.mjs";
+import { projectInfo } from "../content-data/project-info.mjs";
 
 export const appHref = (route = "", video, seconds) => `#/${route}${video ? `?video=${encodeURIComponent(video)}${seconds === undefined ? "" : `&t=${seconds}`}` : ""}`;
 const link = (route, label) => `<a href="${e(appHref(route))}">${e(label)}</a>`;
@@ -174,6 +175,10 @@ export function renderView(model, state) {
 ${start + 60 < videos.length ? link(`${base}seite/${page + 1}/`, "Nächste Seite →") : ""}</nav>`;
   };
   const byIds = (ids) => ids.map((id) => model.videoById.get(id));
+  const info = projectInfo.find((entry) => entry.route === route);
+  if (info) return { title: info.title, body: `${info.paragraphs.map((text) => `<p>${e(text)}</p>`).join("\n")}
+<p>${externalLink("https://prettyoldpixel.de/", "Pretty Old Pixel – Website und Kontakteinstieg")} · ${externalLink("https://www.youtube.com/@PrettyOldPixel", "YouTube-Kanal Pretty Old Pixel")}</p>
+<p>${link("datenschutz/", "Datenschutz und Hinweise")}</p>` };
   if (route === "") return { title: "Pretty Old Pixel in Zahlen", body: `<p>${videosCount(model.videos)} · ${model.games.length} Spiele · ${model.magazines.length} Zeitschriften</p>
 <div class="app-grid">${model.navigation.map((item) => `<article><h2>${link(item.route, item.name)}</h2></article>`).join("")}</div>
 <h2>Neueste Videos</h2>${videoList(model.news.slice(0, 10))}` };
@@ -182,7 +187,7 @@ ${start + 60 < videos.length ? link(`${base}seite/${page + 1}/`, "Nächste Seite
 Zusätzlich lädt die App beim Einrichten und Ergänzen alle Video-Vorschaubilder direkt von i.ytimg.com in einen lokalen Cache. Diese Abrufe und aktivierte Player übertragen insbesondere die IP-Adresse und technische Daten an YouTube/Google.
 Die Bildabrufe erfolgen ohne Zugangsdaten und ohne Referrer. Bereits gespeicherte Bilder werden bei Updates wiederverwendet. Videos werden nicht offline gespeichert. Es gibt kein eigenes Tracking.
 Eigene Einstellungen speichern Darstellungsmodus, Player-Aktivierung und Folgenfortsetzung.</p>
-<p>GitHub Pages verarbeitet beim Download möglicherweise Zugriffsdaten. Die App lädt Updates beim Öffnen mit Verbindung; der Offline-Start benötigt keine Verbindung.</p>
+<p>Die App wird bei GitHub Pages gehostet und über Cloudflare als vorgeschalteten Proxy und CDN ausgeliefert. Beim Online-Download und bei Update-Abfragen können beide Anbieter technische Zugriffsdaten einschließlich der IP-Adresse verarbeiten; bei Cloudflare ist auch eine Verarbeitung außerhalb der EU beziehungsweise des EWR möglich. Wir setzen keine Cloudflare Web Analytics, kein Turnstile und keine von uns bewusst aktivierten Bot-Challenges ein. Die App lädt Updates beim Öffnen mit Verbindung; der Offline-Start benötigt keine Verbindung.</p>
 <p>Das Entfernen des Home-Bildschirm-Icons garantiert nicht das Löschen aller Website-Daten. ${link("hilfe/", "App-Daten gezielt löschen")}.
 Weitere Hosting- und Medienhinweise: <a href="../datenschutz/">Datenschutz der öffentlichen Website</a>.</p>` };
   if (route === "news/") return { title: "News", body: listing(model.videos.filter((video) => video.publishedAt), "news/") };

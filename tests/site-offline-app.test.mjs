@@ -21,6 +21,13 @@ const images = new Map([
   ["apple-touch-icon.png", Buffer.from("touch")], ...model.magazineLogoAssets,
 ]);
 
+test("erläutert Cloudflare-Auslieferung und Online-Zugriffe in den App-Datenschutzhinweisen", () => {
+  const view = renderView(data, { route: "datenschutz/" });
+  for (const text of ["GitHub Pages", "Cloudflare", "Proxy und CDN", "IP-Adresse", "außerhalb der EU", "keine Cloudflare Web Analytics", "Offline-Start benötigt keine Verbindung", 'href="../datenschutz/"']) {
+    assert.ok(view.body.includes(text), text);
+  }
+});
+
 test("ein gemeinsamer Loader bleibt unabhängig von beiden Generatoren", async () => {
   const source = await readFile(new URL("../src/content-data/content-data.mjs", import.meta.url), "utf8");
   assert.doesNotMatch(source, /site-generation|app-generation/u);

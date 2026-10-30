@@ -1,4 +1,6 @@
 import { gameMetadataFilters } from "../content-data/game-filters.mjs";
+import { projectInfo } from "../content-data/project-info.mjs";
+import { markdownFile } from "./site-markdown.mjs";
 import { readFile } from "node:fs/promises";
 import { minify } from "terser";
 import { paginatedRoute, slugify, yearAnchor } from "./site-config.mjs";
@@ -153,6 +155,7 @@ function layout({ route, title, description, body, schema, crumbs, image, imageA
 <link rel="apple-touch-icon" sizes="180x180" href="${config.href("apple-touch-icon.png")}">
 ${noindex ? '<meta name="robots" content="noindex, follow">' : ""}
 <link rel="canonical" href="${canonical}">
+${config.markdown ? `<link rel="alternate" type="text/markdown" href="${config.href(markdownFile(route))}">` : ""}
 <meta property="og:title" content="${escapeHtml(fullTitle)}">
 <meta property="og:description" content="${escapeHtml(description)}">
 <meta property="og:url" content="${canonical}">
@@ -180,7 +183,7 @@ ${navigation(navigationEntries, route, config, themeToggle())}
 ${breadcrumbsMarkup(crumbs, config)}
 ${body}
 </main>
-<footer class="container site-footer"><p>${config.name} · Privates, nicht kommerzielles Projekt. · <a href="${config.href("datenschutz/")}">${interactive ? "YouTube-Einbindung und Datenschutz" : "Datenschutz und Hinweise"}</a>${config.offlineApp ? ` · <a href="${config.href("app/")}">Offline-App</a>` : ""} · Videos und Vorschaubilder von YouTube. · ${externalLink("https://www.youtube.com/prettyoldpixel", "YouTube")} · ${externalLink("https://www.twitch.tv/prettyoldpixel", "Twitch")}</p></footer>
+<footer class="container site-footer"><p>${config.name} · Privates, nicht kommerzielles Projekt. · <a href="${config.href("ueber/")}">Über das Projekt</a> · <a href="${config.href("kontakt/")}">Kontakt und Quellen</a> · <a href="${config.href("datenschutz/")}">${interactive ? "YouTube-Einbindung und Datenschutz" : "Datenschutz und Hinweise"}</a>${config.offlineApp ? ` · <a href="${config.href("app/")}">Offline-App</a>` : ""} · Videos und Vorschaubilder von YouTube. · ${externalLink("https://www.youtube.com/prettyoldpixel", "YouTube")} · ${externalLink("https://www.twitch.tv/prettyoldpixel", "Twitch")}</p></footer>
 </body>
 </html>
 `;
@@ -222,6 +225,11 @@ function privacyBody(config) {
 <h2>Hosting über GitHub Pages</h2>
 <p>Diese Website wird bei GitHub Pages gehostet. Beim Besuch können technische Zugriffsdaten wie IP-Adresse, Zeitpunkt und Browserinformationen beim Hosting-Anbieter verarbeitet werden.
 ${externalLink("https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement", "Datenschutzerklärung von GitHub")}</p>
+<h2>Auslieferung und Schutz über Cloudflare</h2>
+<p>Für die Domain prettyoldpixel.com verwenden wir Cloudflare als DNS-Anbieter und als vorgeschalteten Proxy mit Content Delivery Network (CDN). Anbieter ist Cloudflare, Inc., 101 Townsend St, San Francisco, CA 94107, USA. Die Website wird weiterhin bei GitHub Pages gehostet; Cloudflare übernimmt die vorgeschaltete Auslieferung, Zwischenspeicherung öffentlicher Inhalte und den Schutz vor Angriffen.</p>
+<p>Beim Online-Aufruf werden Anfragen zunächst über Cloudflare verarbeitet. Dabei können insbesondere IP-Adresse, angeforderte Adresse, Zeitpunkt, Browser- und Betriebssysteminformationen sowie sicherheitsbezogene Verbindungsdaten verarbeitet werden. Dies dient der sicheren, zuverlässigen und zügigen Bereitstellung der Website. Die Verbindung zu Cloudflare besteht bereits beim Seitenaufruf und ist unabhängig von der Aktivierung eines YouTube-Players.</p>
+<p>Cloudflare betreibt ein weltweites Netzwerk. Eine Verarbeitung personenbezogener Daten außerhalb der EU beziehungsweise des EWR, insbesondere in den USA, ist möglich. Cloudflare beschreibt die hierfür verwendeten Übermittlungsmechanismen, darunter das EU-US Data Privacy Framework und Standardvertragsklauseln, in seinen Datenschutzinformationen. Eine ausschließlich europäische Verarbeitung wird für diese Website nicht zugesichert.</p>
+<p>Wir setzen keine Cloudflare Web Analytics, kein Turnstile und keine von uns bewusst aktivierten Bot-Challenges ein. Je nach eingesetzter Schutzfunktion kann Cloudflare technisch bedingte Cookies verwenden; der Proxy allein bedeutet nicht, dass alle in der Cookie-Dokumentation genannten Cookies gesetzt werden. Weitere Informationen: ${externalLink("https://www.cloudflare.com/de-de/privacypolicy/", "Datenschutzrichtlinie von Cloudflare")}, ${externalLink("https://www.cloudflare.com/de-de/trust-hub/gdpr/", "Cloudflare und Datenschutz")} und ${externalLink("https://developers.cloudflare.com/fundamentals/reference/policies-compliances/cloudflare-cookies/", "Cloudflare-Cookies und ihre Zwecke")}.</p>
 <h2>Videoinformationen</h2>
 <p>Titel, Beschreibungen und Veröffentlichungsdaten stammen aus öffentlichen Angaben auf YouTube; Heftangaben ergänzen Informationen der Zeitschriftenarchive. Wenn Sie diese Texte lesen, wird keine Verbindung zu YouTube oder den Archiven hergestellt.</p>
 <h2>YouTube-Vorschaubilder</h2>
@@ -733,9 +741,15 @@ export function renderSite(model, config, cssHref, jsHref = "assets/video-series
   add({
     route: "", title: "Retrospiele, Computerzeitschriften und Retro-Hardware",
     description: "Retrospiele, klassische Computerzeitschriften und Retro-Hardware bei Pretty Old Pixel: Let's Plays, Blätterabende, Retrospektiven und Interviews entdecken.",
-    crumbs: [root], schema: { "@type": "WebPage", "@id": "./#page", name: "Pretty Old Pixel in Zahlen" },
+    crumbs: [root], schema: [
+      { "@type": "WebSite", "@id": "./#website", name: config.name, url: "./", inLanguage: "de",
+        description: "Webseitenrepräsentation des YouTube-Kanals Pretty Old Pixel: Retrospiele, Computerzeitschriften, Hardware und Gespräche." },
+      { "@type": "WebPage", "@id": "./#page", name: "Pretty Old Pixel in Zahlen", url: "./",
+        isPartOf: { "@id": "./#website" } },
+    ],
     body: `<h1 class="visually-hidden">Pretty Old Pixel</h1>
 <p class="lead">Retrospiele entdecken, alte Computerzeitschriften durchblättern und Videos wiederfinden.</p>
+<p>Die Webseitenrepräsentation des YouTube-Kanals Pretty Old Pixel bündelt Spielreihen, Blätterabende, Hardware und Gespräche mit Links zu den Originalquellen.</p>
 ${homeOverview(model, config, filters)}`,
   }, model.videos);
   const newsConfig = config.forPage("news/");
@@ -767,9 +781,22 @@ ${homeOverview(model, config, filters)}`,
   renderGamePages(model, config, add, filters);
   renderSectionPages(model, config, add);
 
+  for (const info of projectInfo) {
+    add({
+      route: info.route, title: info.title, description: info.description,
+      crumbs: [root, { route: info.route, name: info.title }],
+      schema: { "@type": info.route === "ueber/" ? "AboutPage" : "ContactPage",
+        "@id": "./#page", name: info.title, url: "./",
+        isPartOf: { "@id": `${config.href("", info.route)}#website` } },
+      body: `<h1>${escapeHtml(info.title)}</h1>${info.paragraphs.map((text) => `<p>${escapeHtml(text)}</p>`).join("\n")}
+<h2>Weiterführende Links</h2><p>${externalLink("https://prettyoldpixel.de/", "Pretty Old Pixel – Website und Kontakteinstieg")} · ${externalLink("https://www.youtube.com/@PrettyOldPixel", "YouTube-Kanal Pretty Old Pixel")}</p>
+<p><a href="${config.href("datenschutz/", info.route)}">Datenschutz und Hinweise</a></p>`,
+    });
+  }
+
   add({
     route: "datenschutz/", title: "Datenschutz und Hinweise",
-    description: "Hinweise zu GitHub Pages, öffentlichen Metadaten und der direkten YouTube-Einbindung auf dem privaten, nicht kommerziellen Projekt Pretty Old Pixel.",
+    description: "Hinweise zu GitHub Pages, Cloudflare, öffentlichen Metadaten und der direkten YouTube-Einbindung auf dem privaten, nicht kommerziellen Projekt Pretty Old Pixel.",
     crumbs: [root, { route: "datenschutz/", name: "Datenschutz" }],
     schema: { "@type": "WebPage", "@id": "./#page", name: "Datenschutz und Hinweise" },
     body: privacyBody(config.forPage("datenschutz/")),
