@@ -82,8 +82,10 @@ gestartet. Beide YouTube-Caches müssen vollständig sein und alle drei
 Quelldateien zum selben Kanal gehören; sonst bricht der Build mit einer
 Fehlermeldung ab und erhält die letzte erfolgreiche Ausgabe.
 
-Die Produktionsadresse lautet
-https://mrchristianharms-byte.github.io/prettyOldPixel/.
+Die konfigurierte Produktionsadresse lautet
+https://prettyoldpixel.com/ (ohne `/prettyOldPixel/`).
+Die externe Domainfreischaltung und die Abnahme beschreibt
+[ADR 0012](adr/0012-eigene-domain-mit-cloudflare-und-github-pages.md).
 Alle internen Links und Assets werden relativ zur jeweiligen Seite erzeugt,
 z. B. `../news/` oder `../../assets/site.<hash>.css`, ohne fest eingebauten
 Projektpfad. Die Brotkrümelnavigation trennt die Ebenen mit dem Unicode-Pfeil
@@ -2133,6 +2135,7 @@ Architecture Decision Records liegen in `doc/adr/`:
 - [ADR 0008: Transkripte und Spieleabschnitte in Blätterabenden (vorgeschlagen)](adr/0008-transkripte-und-spieleabschnitte-in-blaetterabenden.md)
 - [ADR 0009: Offlinefähige Web-App für das iPhone (implementiert; iPhone-Abnahme ausstehend)](adr/0009-offlinefaehige-web-app-fuer-iphone.md)
 - [ADR 0010: Gezielter Playlist-Abruf nach neuen Videos (angenommen)](adr/0010-gezielter-playlist-abruf-nach-neuen-videos.md)
+- [ADR 0012: Eigene Domain mit Cloudflare und GitHub Pages (lokal umgesetzt und geprüft; Live-Abnahme ausstehend)](adr/0012-eigene-domain-mit-cloudflare-und-github-pages.md)
 
 ## GitHub Pages veröffentlichen
 

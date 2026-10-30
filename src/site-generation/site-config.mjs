@@ -1,7 +1,7 @@
 import path from "node:path";
 export { slugify, yearAnchor } from "../content-data/routes.mjs";
 
-export const productionUrl = "https://mrchristianharms-byte.github.io/prettyOldPixel/";
+export const productionUrl = "https://prettyoldpixel.com/";
 
 export function createSiteConfig(baseUrl = productionUrl) {
   const url = new URL(baseUrl);

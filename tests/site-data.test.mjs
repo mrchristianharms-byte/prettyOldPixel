@@ -30,13 +30,16 @@ function sources(count = 3) {
   };
 }
 
-test("berücksichtigt den GitHub-Projektpfad und erstellt stabile Slugs", () => {
+test("verwendet die Produktionsdomain, unterstützt Projektpfade und erstellt stabile Slugs", () => {
   const config = createSiteConfig();
+  assert.equal(productionUrl, "https://prettyoldpixel.com/");
   assert.equal(config.baseUrl, productionUrl);
+  assert.equal(config.basePath, "/");
   assert.equal(config.pageSize, 60);
   assert.equal(config.href("news/"), "news/");
   assert.equal(config.absolute("videos/abc/"), `${productionUrl}videos/abc/`);
   assert.equal(createSiteConfig("http://localhost:8000/test").href(), "./");
+  assert.equal(createSiteConfig("https://example.org/projekt/").absolute("news/"), "https://example.org/projekt/news/");
   assert.equal(slugify("Blätterabend & Spaß"), "blatterabend-spass");
   for (const route of ["/videos/", "../oops", "videos/?q=x", "videos\\oops"]) {
     assert.throws(() => config.href(route), /Ungültiger/u);

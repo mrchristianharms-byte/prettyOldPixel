@@ -327,7 +327,12 @@ Die generierten Dateien unter `docs/` müssen nicht committed werden.
 Die lokal gepflegten Daten- und Logo-Caches hingegen gehören ins Repository,
 damit der Build ohne lokale `dev:`-Aufgaben auskommt.
 
-Website: https://mrchristianharms-byte.github.io/prettyOldPixel/
+Website (Zieladresse nach Domainfreischaltung): https://prettyoldpixel.com/
+
+Die Produktionsadresse ist zentral in `src/site-generation/site-config.mjs`
+gesetzt. Registrierung, Cloudflare-DNS, GitHub-Pages-Domain und HTTPS-Freischaltung
+beschreibt [ADR 0012](doc/adr/0012-eigene-domain-mit-cloudflare-und-github-pages.md).
+Beim Actions-Deployment ist keine `CNAME`-Datei erforderlich.
 
 ## Weiterführende Dokumentation
 

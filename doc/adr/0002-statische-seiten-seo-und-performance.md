@@ -295,10 +295,11 @@ bei einem anderen Host oder Unterpfad ist eine Neugenerierung mit passender
 Basis-URL erforderlich. Es gibt kein fest verdrahtetes `<base>`-Element.
 Sitemap-Einträge verwenden weiterhin absolute HTTPS-URLs; auch die
 `Sitemap:`-Referenz in `robots.txt` bleibt eine vollständige URL.
-Die Produktions-Basis-URL ist die öffentliche Projektseite dieses Repositorys:
-`https://mrchristianharms-byte.github.io/prettyOldPixel/`.
-Der Unterpfad `/prettyOldPixel/` ist Bestandteil der aufgelösten
-Produktionsadressen, nicht der im HTML gespeicherten relativen Verweise.
+Die Produktions-Basis-URL ist gemäß
+[ADR 0012](0012-eigene-domain-mit-cloudflare-und-github-pages.md)
+`https://prettyoldpixel.com/`, ohne Projektunterpfad.
+Andere Hosts und Projektunterpfade bleiben über die Basis-URL konfigurierbar,
+nicht über fest eingebaute Pfade im HTML.
 Externe YouTube-/Archivadressen bleiben vollständig.
 
 Thematische Übersichtslisten zeigen höchstens 60 Einträge pro Seite.

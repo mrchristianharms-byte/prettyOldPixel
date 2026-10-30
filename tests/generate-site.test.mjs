@@ -485,7 +485,7 @@ test("prüft das JavaScript-Budget pro Seite statt unverbundene Interaktionsskri
 });
 
 test("validiert defekte Links, Fragmente und HTML-/CSS-Budgets als Build-Fehler", () => {
-  const { pages, config, assets } = render(fixture(1));
+  const { pages, config, assets } = render(fixture(1), "https://example.org/prettyOldPixel/");
   const original = pages.get("index.html").html;
   pages.get("index.html").html += '<a href="fehlt/">Falsch</a>';
   assert.throws(() => validateSite(pages, assets, config), /Nicht erzeugtes Linkziel/u);
@@ -520,7 +520,7 @@ test("validiert defekte Links, Fragmente und HTML-/CSS-Budgets als Build-Fehler"
   assert.throws(() => validateSite(pages, assets, config), /HTML überschreitet/u);
 });
 
-test("baut offline mit Projektpfad, Sitemap und Inhalts-Manifest; übernimmt unveränderte Dateien", async (t) => {
+test("baut offline mit Produktionsdomain, Sitemap und Inhalts-Manifest; übernimmt unveränderte Dateien", async (t) => {
   const options = await setup(t);
   const originalFetch = globalThis.fetch;
   globalThis.fetch = () => { throw new Error("Netzwerk im Build verboten"); };
@@ -560,11 +560,12 @@ test("baut offline mit Projektpfad, Sitemap und Inhalts-Manifest; übernimmt unv
   assert.match(stylesheet, /\.detail-page \.container\s*\{[^}]*width:\s*100%;[^}]*max-width:\s*none/u);
   assert.match(stylesheet, /@media \(min-width: 768px\)\s*\{\s*\.detail-page \.video-player\s*\{[^}]*height:\s*auto;[^}]*max-height:\s*none/u);
   const sitemap = await readFile(path.join(options.outputDirectory, "sitemap.xml"), "utf8");
-  assert.ok(sitemap.includes("https://mrchristianharms-byte.github.io/prettyOldPixel/news/"));
+  assert.ok(sitemap.includes("https://prettyoldpixel.com/news/"));
+  assert.ok(!sitemap.includes("github.io"));
   assert.ok(!sitemap.includes("404.html"));
   assert.ok(!sitemap.includes("/videos/"));
   assert.equal((sitemap.match(/<lastmod>/gu) ?? []).length, first.pages - 1);
-  assert.match(await readFile(path.join(options.outputDirectory, "robots.txt"), "utf8"), /Sitemap: https:.*prettyOldPixel\/sitemap.xml/u);
+  assert.match(await readFile(path.join(options.outputDirectory, "robots.txt"), "utf8"), /Sitemap: https:\/\/prettyoldpixel\.com\/sitemap.xml/u);
   const homePath = path.join(options.outputDirectory, "index.html");
   const preservedTime = new Date("2020-01-01T00:00:00Z");
   await utimes(homePath, preservedTime, preservedTime);
