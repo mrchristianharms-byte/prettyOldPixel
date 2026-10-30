@@ -140,7 +140,7 @@ Cache-Format:
 - Wiederholung bei Status 429 und 5xx mit exponentiellem Backoff (1 s, 2 s, 4 s).
 - Begrenzte Parallelität: höchstens 4 Detailabrufe gleichzeitig.
 - Keine Anmeldung, keine privaten Inhalte. Einziges Cookie ist `SOCS=CAI`, das die EU-Zustimmungsseite überspringt; es enthält keine Nutzer- oder Sitzungsdaten.
-- Unit-Tests mit nachgebildeten YouTube-Antworten (`tests/fetch-youtube-videos.test.mjs`).
+- Unit-Tests mit nachgebildeten YouTube-Antworten (`tests/fetch-channel/fetch-youtube-videos.test.mjs`).
 
 ### Offene Punkte
 

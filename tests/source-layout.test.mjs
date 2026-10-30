@@ -63,6 +63,31 @@ test("src enthält nur Fachordner und die beiden Hauptaufgaben-Starter", async (
   }
 });
 
+test("Tests spiegeln die Quellverzeichnisse; nur übergreifende Strukturtests liegen an der Wurzel", async () => {
+  const tests = new URL("./", import.meta.url);
+  const entries = await readdir(tests, { withFileTypes: true });
+  assert.deepEqual(entries.filter((entry) => entry.isFile()).map((entry) => entry.name), ["source-layout.test.mjs"]);
+  const directories = entries.filter((entry) => entry.isDirectory() && entry.name !== "fixtures").map((entry) => entry.name).sort();
+  assert.deepEqual(directories, [
+    "ai-bot-generation", "app-generation", "content-data", "extra-data",
+    "fetch-channel", "fetch-game", "fetch-magazine", "site-generation",
+  ]);
+  async function checkDirectory(relative) {
+    const sourceEntries = await readdir(new URL(relative, source), { withFileTypes: true });
+    const testEntries = await readdir(new URL(relative, tests), { withFileTypes: true });
+    assert.ok(testEntries.length > 0, relative);
+    for (const entry of testEntries) {
+      if (entry.isDirectory()) {
+        assert.ok(sourceEntries.some((item) => item.isDirectory() && item.name === entry.name), `${relative}${entry.name}`);
+        await checkDirectory(`${relative}${entry.name}/`);
+      } else {
+        assert.ok(entry.isFile() && entry.name.endsWith(".test.mjs"), `${relative}${entry.name}`);
+      }
+    }
+  }
+  for (const directory of directories) await checkDirectory(`${directory}/`);
+});
+
 test("CLI-Module lassen sich außerhalb des Projektordners ohne Ausführung importieren", async () => {
   const imports = cliModules.map(([file]) => `await import(${JSON.stringify(new URL(cliPath(file), source).href)});`).join("\n");
   const { stdout, stderr } = await execute(process.execPath, ["--input-type=module", "-e", imports], {

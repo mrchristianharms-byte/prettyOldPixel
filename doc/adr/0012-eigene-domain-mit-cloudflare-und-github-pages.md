@@ -164,7 +164,8 @@ zurückbleiben. Die Domainverifizierung nicht vorschnell entfernen.
 ### Lokale Abnahme am 30.10.2026
 
 - Alle 237 Website-, Generator- und Offline-App-Tests erfolgreich:
-  `node --test "tests/site-*.test.mjs" tests/generate-site.test.mjs`.
+  damaliger Aufruf `node --test "tests/site-*.test.mjs" tests/generate-site.test.mjs`.
+  Die Testpfade sind inzwischen nach [Fachverzeichnissen](../source-structure.md#teststruktur) gegliedert.
 - `npm run generate:site` erfolgreich; 609 HTML-Seiten und insgesamt
   756 Dateien lokal unter `docs/` erzeugt.
 - Canonicals und `og:url` sämtlicher 609 Seiten auf die neue Domain

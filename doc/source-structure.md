@@ -1,6 +1,6 @@
 # Quellstruktur: Umbau in Fachverzeichnisse
 
-Stand: 23.10.2026.
+Stand: 30.10.2026.
 
 Zurück zum [Projekteinstieg](../README.md) oder zur
 [Funktionsreferenz](README.md).
@@ -59,6 +59,37 @@ src/
 | [`extra-data/`](../src/extra-data/) | Transkripte abrufen, Spielebesprechungen daraus analysieren und Blätterabend-Zuordnungen aus lokalen Caches erzeugen. |
 | [`data/`](../src/data/) | Dauerhaft gepflegte Spiel- und Themenkataloge, Gastkanäle sowie JSON-Entscheidungen und Auswahlregeln für den Spiele-Dump. Keine generierten Caches. |
 | [`shared/`](../src/shared/) | `archive-cache.mjs` mit gemeinsam genutzten Cache-, JSON-, HTTP- und Wiederholungshilfen. |
+
+### Teststruktur
+
+Die Testverzeichnisse spiegeln die Fachverzeichnisse unter `src/`:
+
+```text
+tests/
+├── source-layout.test.mjs
+├── ai-bot-generation/
+├── app-generation/
+├── content-data/
+├── site-generation/
+│   └── widget/
+├── fetch-channel/
+├── fetch-magazine/
+├── fetch-game/
+└── extra-data/
+```
+
+Tests werden nach dem hauptsächlich geprüften Modul zugeordnet. So liegen
+Kapitel- und Reihenanalysen unter `content-data/`, App- und Playerprüfungen
+unter `app-generation/` und HTML-/Buildprüfungen unter `site-generation/`.
+Fachübergreifende Integrationsfälle bleiben in ihrer jeweiligen Testsuite.
+Nur die übergreifenden Struktur- und CLI-Kontrakttests bleiben an der Wurzel.
+Für `data/` und `shared/` gibt es bisher keine eigenen Testsuiten; die
+vorhandenen Prüfungen dieser Module laufen in den nutzenden Fachbereichen.
+
+`npm test` behält die bisherige produktive Auswahl ohne
+Entwicklungsabhängigkeiten bei. `npm run dev:test` findet rekursiv alle
+Testdateien, einschließlich Archiv-, Spielemetadaten-, Transkript- und
+CSS-Generierungstests. Der Pages-Workflow verwendet weiterhin `npm test`.
 
 ### Zentrale YouTube-Steuerung
 

@@ -111,7 +111,7 @@ function homeOverview(model, config, filters) {
 <dl class="stats-grid">${stats.map(([label, value, note]) => `<div><dt>${label}</dt><dd>${value}</dd><dd class="stat-note">${note}</dd></div>`).join("")}</dl>
 </section>
 <section aria-labelledby="bereiche"><h2 id="bereiche">Die Themen entdecken</h2>
-<div class="theme-grid">${themes.map((theme) => `<article><h3><a href="${config.href(theme.route)}">${escapeHtml(theme.name)}</a></h3><p class="theme-count">${escapeHtml(theme.count)}</p><p>${escapeHtml(theme.description)}</p></article>`).join("")}
+<div class="theme-grid">${themes.map((theme) => `<article><h3><a href="${config.href(theme.route)}">${escapeHtml(model.navigation.find((entry) => entry.route === theme.route)?.name ?? theme.name)}</a></h3><p class="theme-count">${escapeHtml(theme.count)}</p><p>${escapeHtml(theme.description)}</p></article>`).join("")}
 ${topFilters.map((entries) => `<article><h3>${escapeHtml(entries[0].label)}</h3><ol class="theme-ranking">${entries.map((entry) => `<li><span class="theme-ranking-entry"><a href="${config.href(entry.route)}" title="${escapeHtml(entry.name)}">${escapeHtml(entry.name)}</a><span class="meta">${countLabel(entry.games.length, "Spiel", "Spiele")}</span></span></li>`).join("")}</ol></article>`).join("")}</div>
 <p class="meta">Ein Video kann zu mehreren Themen gehören; die Videozahlen der Themen sind daher nicht addierbar.</p></section>`;
 }

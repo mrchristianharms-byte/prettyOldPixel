@@ -197,6 +197,10 @@ Befehle und der vollständige Ablauf stehen in
 
 ## Tests
 
+Die Tests unter `tests/` spiegeln die Fachverzeichnisse von `src/`.
+Übergreifende Strukturprüfungen liegen direkt unter `tests/`.
+Details: [Teststruktur](doc/source-structure.md#teststruktur).
+
 ```sh
 # Actions-taugliche Tests, ohne Entwicklungsabhängigkeiten:
 npm test

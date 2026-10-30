@@ -1,6 +1,6 @@
 ---
 description: "Regeln fuer kompakte UI-Komponenten: Kacheln, Metadaten, Datumsangaben, Laufzeiten und Mengenangaben."
-applyTo: "src/site-generation/**/*.mjs,src/site-generation/site.css,src/generate-site.mjs,tests/site-*.test.mjs,tests/generate-site.test.mjs"
+applyTo: "src/site-generation/**/*.mjs,src/site-generation/site.css,src/generate-site.mjs,tests/site-generation/**/*.test.mjs,tests/content-data/site-*.test.mjs,tests/app-generation/site-*.test.mjs,tests/ai-bot-generation/site-*.test.mjs"
 ---
 
 # Kompakte UI-Komponenten

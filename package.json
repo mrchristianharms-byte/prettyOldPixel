@@ -18,7 +18,7 @@
     }
   },
   "scripts": {
-    "test": "node --test \"tests/site-*.test.mjs\" tests/generate-site.test.mjs tests/theme.test.mjs tests/video-series.test.mjs tests/fetch-youtube-videos.test.mjs tests/fetch-youtube-playlists.test.mjs tests/youtube-data-api.test.mjs tests/fetch-youtube.test.mjs tests/source-layout.test.mjs",
+    "test": "node --test \"tests/site-generation/**/site-*.test.mjs\" tests/site-generation/generate-site.test.mjs tests/site-generation/theme.test.mjs tests/site-generation/video-series.test.mjs \"tests/content-data/*.test.mjs\" \"tests/app-generation/*.test.mjs\" \"tests/ai-bot-generation/*.test.mjs\" \"tests/fetch-channel/*.test.mjs\" tests/source-layout.test.mjs",
     "fetch:all": "node src/fetch-youtube.mjs",
     "fetch:videos": "node src/fetch-channel/fetch-youtube-videos.mjs https://www.youtube.com/@PrettyOldPixel",
     "fetch:playlists": "node src/fetch-channel/fetch-youtube-playlists.mjs",

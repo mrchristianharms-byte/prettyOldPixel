@@ -1292,8 +1292,12 @@ Projekt ohne Anschrift, behauptet aber keine pauschale gesetzliche Ausnahme.
 
 ## Tests
 
-Alle Testdateien liegen in `tests/` (`*.test.mjs`). Die Actions-taugliche
-Auswahl umfasst YouTube-Abrufe, Seitenbuild, Darstellung und Browser-Skripte:
+Alle Testdateien liegen als `*.test.mjs` in den zu `src/` passenden
+Fachverzeichnissen unter `tests/`. Nur `source-layout.test.mjs` für die
+übergreifenden Struktur- und CLI-Kontrakte liegt direkt an der Wurzel.
+Die [Teststruktur](source-structure.md#teststruktur) beschreibt die Zuordnung.
+Die Actions-taugliche Auswahl umfasst YouTube-Abrufe, Inhaltsmodell,
+Website-, App- und Agentengenerierung, Darstellung und Browser-Skripte:
 
 ```sh
 npm test

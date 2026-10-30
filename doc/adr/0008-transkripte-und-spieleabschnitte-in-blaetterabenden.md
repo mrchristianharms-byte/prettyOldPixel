@@ -487,11 +487,11 @@ Fehlerursachen gerechtfertigt.
 
 ## Referenzen zur Umsetzung
 
-- [Transkript-Downloadtests](../../tests/fetch-youtube-transcripts.test.mjs)
-- [Analyse- und Zusammenführungstests](../../tests/generate-games-from-transcript.test.mjs)
-- [Einbindung und Sprungmarkentests](../../tests/site-game-discussions.test.mjs)
-- [Bewertungstests](../../tests/evaluate-game-discussions.test.mjs)
-- [Titelindex- und Kandidatentests](../../tests/transcript-game-candidates.test.mjs)
+- [Transkript-Downloadtests](../../tests/extra-data/fetch-youtube-transcripts.test.mjs)
+- [Analyse- und Zusammenführungstests](../../tests/extra-data/generate-games-from-transcript.test.mjs)
+- [Einbindung und Sprungmarkentests](../../tests/content-data/site-game-discussions.test.mjs)
+- [Bewertungstests](../../tests/extra-data/evaluate-game-discussions.test.mjs)
+- [Titelindex- und Kandidatentests](../../tests/extra-data/transcript-game-candidates.test.mjs)
 - [Katalogkandidaten und Jahresprüfung](../README.md#katalogkandidaten-und-jahresprüfung)
 - [Transkript-Abruf und Quellformat](../README.md#youtube-transkripte-einmalig-cachen)
 - [Analysebefehl und Ergebnisformat](../README.md#spielebesprechungen-aus-transkripten)
