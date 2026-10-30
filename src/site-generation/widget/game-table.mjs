@@ -28,7 +28,9 @@ export function gameTable(rows, config, intro = "") {
 <thead><tr>${sortableHeading("Erstvideo", "video", "Erstvideo")}${sortableHeading("Titel", "title", "Titel (Alphabet)")}${sortableHeading("Release", "release", "Release des Spiels")}<th scope="col">Plattform</th><th scope="col">Genre</th><th scope="col">Videovorschau</th>${sortableHeading("Länge", "duration", "Länge")}<th scope="col">Weiteres</th></tr></thead>
 <tbody>${rows.map((row) => `<tr data-video="${row.video.publishedTime ?? ""}" data-release="${row.releaseYear ?? ""}" data-title="${escapeHtml(row.name)}" data-duration="${row.durationSeconds ?? ""}" data-platforms="${escapeHtml(JSON.stringify(row.platforms))}" data-genres="${escapeHtml(JSON.stringify(row.genres))}">
 <td>${escapeHtml(row.firstYear ?? "Unbekannt")}</td>
-<th scope="row"><a href="${config.href(row.route)}">${escapeHtml(row.name)}</a></th>
+<th scope="row"><a href="${config.href(row.route)}">${escapeHtml(row.name)}</a>
+<small class="game-table-company">Publisher: ${row.publishers.map(escapeHtml).join(", ") || "Unbekannt"}</small>
+<small class="game-table-company">Entwickler: ${row.developers.map(escapeHtml).join(", ") || "Unbekannt"}</small></th>
 <td>${escapeHtml(row.releaseYear ?? "Unbekannt")}</td>
 <td>${row.platforms.map((platform) => escapeHtml(platform)).join("<br>") || "Unbekannt"}</td>
 <td>${row.genres.map((genre) => escapeHtml(genre)).join("<br>") || "Unbekannt"}</td>

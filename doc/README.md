@@ -38,6 +38,28 @@ gehören in diese Dokumentation, nicht in Seiteneinleitungen. Originale
 Videobeschreibungen, Datenschutz- und Bedienhinweise sowie notwendige Hinweise
 auf fehlende oder unsichere Angaben bleiben erhalten.
 
+### So entsteht diese Website
+
+`so-entsteht-die-seite/` dokumentiert Quellenpflege, lokale Zuordnungen,
+YouTube-Cachedateien, beide GitHub-Actions-Workflows sowie die gemeinsame
+Auslieferung von Website, App und Agentendaten über GitHub Pages/Cloudflare.
+Projekt- und Datenschutzhinweise verlinken diese Seite.
+
+Das lokale SVG zeigt GitHub-, Cloudflare-, YouTube- und Node.js-Icons
+(Simple Icons, CC0-1.0) und simuliert Besucher alle 3 Sekunden, einen
+Entwicklungs-Push nach 5 Sekunden sowie ein YouTube-Änderungsbeispiel alle
+20 Sekunden: zuerst die Fetch-Action aktivieren, dann YouTube abrufen,
+anschließend die Cachedateien schreiben. Der echte Abruf erfolgt täglich
+automatisch um 20:17 Uhr. Es führt keine Requests aus. CSS-Animationen sind pausierbar
+und respektieren reduzierte Bewegung. Mini-Play-Buttons in Entwicklung und
+Magazin-Fetch starten den jeweiligen Ablauf manuell bis zum Deployment;
+ein kleines lokales Skript wird nur auf der Prozessseite geladen und
+auch von der Offline-App genutzt. Gemeinsame Prozessdaten und Stichpunkte liegen in
+`src/content-data/site-process.mjs`, das Widget in
+`src/site-generation/widget/process-diagram.mjs`. Markdown enthält die
+Stichpunkte ohne SVG oder Steuerung; die Offline-App nutzt dieselben Inhalte.
+Details: [ADR 0013](adr/0013-statische-prozessseite-zur-entstehung-der-website.md).
+
 ### Agentenzugang und Markdown
 
 Der Build erzeugt zusätzlich `llms.txt` mit Recherche-Einstiegen, Quellen
@@ -64,6 +86,126 @@ Die statischen Dateien sind keine Content-Negotiation: Eine Antwort auf
 benötigen weiterhin separate Edge-Logik. Cloudflare-Funktionen und
 Content-Signal-Präferenzen wurden nicht aktiviert.
 
+### Öffentliche Read-only-API und API-Katalog
+
+Der Site-Build veröffentlicht seit der API-Freigabe vom 30.10.2026 einen
+eigenständigen, versionierten öffentlichen Datenvertrag, nicht die internen
+Offline-App-Dateien:
+
+- `/.well-known/api-catalog`: RFC-9727-Linkset mit einem API-Eintrag,
+  dessen `anchor` auf den Inhalts-Endpunkt zeigt.
+- `/api/v1/content.json`: vollständiger öffentlicher Snapshot mit
+  `schemaVersion: 1`, Videos, Spielen und Zeitschriften.
+- `/api/v1/openapi.json`: OpenAPI-3.1-Beschreibung (`service-desc`).
+- `/api/v1/readme.md`: Verwendung, Schema, Quellen und Grenzen (`service-doc`).
+
+Kein API-Schlüssel, keine Schreiboperationen, keine Echtzeitabfragen,
+keine serverseitige Suche/Paginierung und kein separater Health-Endpunkt.
+Deshalb enthält der Katalog keine erfundene `status`-Relation.
+Unbekannte Metadaten bleiben unbekannt. Die API benötigt keinen neuen Server.
+Bestehende Cache-Regeln und die Offline-App bleiben unverändert.
+
+#### Erforderliche manuelle Cloudflare-Regel
+
+GitHub Pages kann keinen frei konfigurierbaren Content-Type für die
+endungslose Katalogdatei setzen. Eine `_headers`-Datei würde bei diesem
+Hosting nicht helfen. Nach dem Deployment zuerst prüfen, dass der Pfad
+HTTP 200 mit gültigem JSON liefert; eine Header-Regel repariert keine 404.
+
+In Cloudflare unter **Rules → Overview → Create rule → Response Header
+Transform Rule** eine Regel für ausschließlich diesen Pfad anlegen:
+
+```text
+(http.host eq "prettyoldpixel.com" and http.request.uri.path eq "/.well-known/api-catalog")
+```
+
+Operation **Set static** (nicht Add), Header `Content-Type`,
+Wert `application/linkset+json`, anschließend **Deploy**.
+Die Regel wird durch den Betreiber eingerichtet, nicht vom Generator.
+Keine Worker, kostenpflichtigen Dienste oder neuen Cache-Regeln erforderlich.
+Falls der kostenlose Regelumfang bereits ausgeschöpft ist, zunächst
+Konfiguration prüfen, keinen Tarifwechsel auslösen.
+
+Die aktuelle `actions/upload-pages-artifact@v3` nimmt `.well-known` in
+das Pages-Artefakt auf; ein Upgrade mit geändertem Hidden-File-Verhalten
+muss diesen Pfad ausdrücklich erhalten. `.nojekyll` wird weiterhin erzeugt.
+Unter `--base-url` mit Unterpfad sind API-Links für die Vorschau konsistent;
+RFC 9727 verlangt den Katalog jedoch an der **Host-Wurzel**.
+
+Live-Abnahme nach Veröffentlichung und Header-Regel:
+
+```sh
+curl -i https://prettyoldpixel.com/.well-known/api-catalog
+curl -i https://prettyoldpixel.com/api/v1/content.json
+curl -i https://prettyoldpixel.com/api/v1/openapi.json
+curl -i https://prettyoldpixel.com/api/v1/readme.md
+curl -sS -X POST https://isitagentready.com/api/scan \
+  -H 'Content-Type: application/json' \
+  --data '{"url":"https://prettyoldpixel.com"}'
+```
+
+Erwartet: Katalog HTTP 200, `Content-Type: application/linkset+json`,
+gültiges `linkset` mit erreichbaren Links; anschließend
+`checks.discovery.apiCatalog.status` gleich `"pass"`.
+Lokale Dateitests beweisen weder den Live-MIME-Typ noch den Scannerstatus.
+
+Quellen: [RFC 9727](https://www.rfc-editor.org/rfc/rfc9727),
+[Cloudflare: Response Header Transform Rule einrichten](https://developers.cloudflare.com/rules/transform/response-header-modification/create-dashboard/).
+
+### Link-Response-Header für Agent Discovery
+
+GitHub Pages unterstützt keine eigenen Response-Header. Deshalb ergänzt
+eine zweite Cloudflare **Response Header Transform Rule** ausschließlich
+die Startseite. Die vorbereitete Regeldefinition steht unter
+[`src/ai-bot-generation/cloudflare-discovery-rule.json`](../src/ai-bot-generation/cloudflare-discovery-rule.json).
+Sie ist eine Konfigurationsvorlage für die Rulesets-API-Phase
+`http_response_headers_transform`, kein automatisch aktiviertes Deployment
+und kein vollständiger Ersatz eines bestehenden Rulesets.
+Keine vorhandenen Regeln überschreiben. Diese Datei wird nicht als
+Browsercode oder Website-Inhalt veröffentlicht.
+
+Nach Veröffentlichung der Linkziele im Dashboard unter **Rules → Overview →
+Create rule → Response Header Transform Rule**:
+
+1. Name: `Homepage agent discovery links`.
+2. Ausdruck:
+   `(http.host eq "prettyoldpixel.com" and http.request.uri.path eq "/")`.
+3. **Add static**, Header `Link`, folgender Wert (eine Zeile):
+
+```text
+</.well-known/api-catalog>; rel="api-catalog"; type="application/linkset+json", </api/v1/openapi.json>; rel="service-desc"; type="application/json"; anchor="/api/v1/content.json", </api/v1/readme.md>; rel="service-doc"; type="text/markdown"; anchor="/api/v1/content.json", </llms.txt>; rel="describedby"; type="text/plain"
+```
+
+4. **Deploy**. Bei ausgeschöpftem kostenlosen Regelumfang vor Änderungen
+   Rücksprache halten, keinen kostenpflichtigen Tarif aktivieren.
+
+Add erhält andere vorhandene `Link`-Header. Die Regel nur einmal anlegen,
+statt dieselben Werte in mehreren Regeln hinzuzufügen. Alle vier Relationen
+sind registrierte Link-Relationen. `anchor` ordnet API-Beschreibung und
+API-Dokumentation dem tatsächlichen API-Endpunkt zu, nicht fälschlich der
+HTML-Homepage. `describedby` beschreibt die Website über `llms.txt`.
+Die Katalog-Content-Type-Regel bleibt zusätzlich erforderlich.
+HTML-`<link>`-Elemente allein erfüllen die HTTP-Header-Anforderung nicht.
+Cache-Control, ETag und Last-Modified werden nicht verändert.
+
+Nach manueller Aktivierung per GET prüfen:
+
+```sh
+curl -sS -D - -o /dev/null https://prettyoldpixel.com/
+curl -sS -X POST https://isitagentready.com/api/scan \
+  -H 'Content-Type: application/json' \
+  --data '{"url":"https://prettyoldpixel.com"}'
+```
+
+Erwartet: Homepage HTTP 200 mit den vier Link-Relationen und erreichbaren
+Zielen, `checks.discoverability.linkHeaders.status` gleich `"pass"`.
+Andere Seiten dürfen die homepage-spezifische Regel nicht erhalten.
+Der lokale Konfigurationstest prüft Syntax, Scope und erzeugte Linkziele,
+nicht die Aktivierung in Cloudflare oder den Live-Scannerstatus.
+
+Grundlagen: [RFC 8288](https://www.rfc-editor.org/rfc/rfc8288),
+[RFC 9727 Abschnitt 3](https://www.rfc-editor.org/rfc/rfc9727#section-3).
+
 ## Lokal bauen
 
 Voraussetzung: Node.js 22 oder neuer.
@@ -88,6 +230,7 @@ Alle weiteren npm-Aufgaben starten das jeweilige Fachmodul direkt,
 ohne zusätzlichen Wrapper in `src/`.
 Die Fachordner trennen gemeinsame Inhaltsaufbereitung (`src/content-data/`),
 Websitegenerierung (`src/site-generation/`), Offline-App (`src/app-generation/`),
+Agenten-/Bot-Ausgaben (`src/ai-bot-generation/`),
 YouTube-Kanaldaten (`src/fetch-channel/`), Zeitschriftenarchive und Logos
 (`src/fetch-magazine/`), die lokale Spielemetadaten-Pipeline
 (`src/fetch-game/`) sowie Transkripte und abgeleitete Zusatzdaten
@@ -98,6 +241,15 @@ Fachordnern. Die Namen und Optionen der npm-Befehle sowie die Cacheorte
 bleiben unverändert; einzelne Scriptpfade liegen jetzt im Fachordner.
 Gemeinsam genutzte `site-*`-Module unter `src/site-generation/` sind
 Bausteine des Websitegenerators, keine separaten Abrufscripts.
+`src/ai-bot-generation/generate-ai-bot.mjs` bündelt Markdown-Konvertierung,
+`llms.txt` und statische API samt Katalog. Der gemeinsame Site-Build ruft
+diese Generierung nach dem HTML-Rendering auf und veröffentlicht die
+zusätzlichen Dateien im selben Ausgabeverzeichnis. Die Markdown-Fassungen
+verwenden weiterhin den gerenderten HTML-Inhalt als Quelle; keine getrennte
+redaktionelle Kopie. Generatorcode und Konvertierungsbibliotheken werden
+nicht an Browser oder Offline-App ausgeliefert. Der HTML-Renderer importiert
+nur den kleinen Markdown-Pfadhelfer für `rel="alternate"`; sichtbare
+Projekttexte und JSON-LD bleiben Teil der Websitegenerierung.
 Überwiegend recherchierte, dauerhaft gepflegte Daten und einfache
 Zuordnungsmuster erhalten den Präfix `data-`; ausführende Scraper,
 Generatoren und deren Logik behalten ihre bisherigen Präfixe.
@@ -2202,6 +2354,7 @@ Architecture Decision Records liegen in `doc/adr/`:
 - [ADR 0010: Gezielter Playlist-Abruf nach neuen Videos (angenommen)](adr/0010-gezielter-playlist-abruf-nach-neuen-videos.md)
 - [ADR 0011: Agentenlesbare Inhalte und maschinenlesbare Zugänge (statische Maßnahmen lokal umgesetzt; Edge-Abnahme offen)](adr/0011-agentenlesbare-inhalte-und-maschinenlesbare-zugaenge.md)
 - [ADR 0012: Eigene Domain mit Cloudflare und GitHub Pages (Domain, Proxy und HTTPS live bestätigt; bestehendes Caching beibehalten)](adr/0012-eigene-domain-mit-cloudflare-und-github-pages.md)
+- [ADR 0013: Statische Prozessseite zur Entstehung der Website (lokal implementiert; SVG und Animationen geprüft)](adr/0013-statische-prozessseite-zur-entstehung-der-website.md)
 
 ## GitHub Pages veröffentlichen
 

@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { markdownFile, renderMarkdown } from "../src/site-generation/site-markdown.mjs";
+import { markdownFile, renderMarkdown } from "../src/ai-bot-generation/site-markdown.mjs";
 import { createSiteConfig } from "../src/site-generation/site-config.mjs";
 
 test("bildet kollisionsfreie Markdown-Ziele für Verzeichnisse und Fehlerseite", () => {

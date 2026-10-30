@@ -17,6 +17,8 @@ function requireValue(condition, message) {
   if (!condition) throw new Error(`Spieledump: ${message}`);
 }
 
+const normalizeGenre = (genre) => genre === "Strategy / tactics" ? "Strategie" : genre;
+
 export function renderDumpReport(report) {
   const text = (value) => escapeHtml(String(value ?? "").replace(/\s+/gu, " ").trim());
   const cards = report.games.map((game) => {
@@ -124,7 +126,7 @@ export async function importGameDump({
       return {
         mobyid: source.mobyid, title: source.title,
         sourceUrl: `https://www.mobygames.com/game/${source.mobyid}/`,
-        genres: source.genres,
+        genres: [...new Set(source.genres.map(normalizeGenre))],
         alternativeTitles: (source.alternativeTitles ?? []).map((title) => ({ ...title })),
         ...(source.manual ? { manual: true } : {}),
         platformMatch: game.platforms.length ? matchedReleases.length > 0 : null,

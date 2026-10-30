@@ -9,11 +9,14 @@ body { overflow-wrap: anywhere; }
 .release-table th { white-space: nowrap; }
 .release-country { display: block; white-space: nowrap; }
 .game-table { position: relative; min-width: 44rem; font-size: .85rem; }
-.game-table th, .game-table td { vertical-align: middle; }
+.game-table th, .game-table td { padding-inline: .4rem; vertical-align: middle; }
 .game-table thead th { white-space: nowrap; }
+.game-table :is(th, td):nth-child(2) { width: 15rem; }
+.game-table :is(th, td):nth-child(5) { width: 9rem; }
 .game-table-links { white-space: nowrap; }
 .game-table img { display: block; width: 8rem; max-width: none; height: auto; aspect-ratio: 16 / 9; object-fit: cover; }
 .game-table th[scope="row"] { min-width: 10rem; }
+.game-table-company { display: block; font-size: .75rem; font-weight: 400; white-space: normal; }
 .game-table-toolbar { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: start; gap: 1rem; margin-bottom: 1rem; }
 .game-table-toolbar p { margin: 0 0 .5rem; }
 .game-table-summary > span { display: block; }

@@ -8,7 +8,7 @@ import { loadContentData } from "../content-data/content-data.mjs";
 import { escapeHtml, renderSite } from "./site-render.mjs";
 import { unreviewedPreviewVariable } from "../content-data/site-game-discussions.mjs";
 import { generateApp } from "../app-generation/generate-app.mjs";
-import { markdownFile, renderMarkdown } from "./site-markdown.mjs";
+import { generateAiBot } from "../ai-bot-generation/generate-ai-bot.mjs";
 
 const projectRoot = path.resolve(fileURLToPath(new URL("../../", import.meta.url)));
 const hash = (content) => createHash("sha256").update(content).digest("hex");
@@ -165,7 +165,7 @@ export async function generateSite({
   const model = await loadContentData(cache, { now });
   for (const warning of model.warnings) logger.warn(`Build-Hinweis: ${warning}`);
 
-  const [pico, customCss, license, seriesJs, favicon, touchIcon, tableJs] = await Promise.all([
+  const [pico, customCss, license, seriesJs, favicon, touchIcon, tableJs, processJs] = await Promise.all([
     readFile(new URL("./vendor/pico-2.1.1.site.min.css", import.meta.url), "utf8"),
     readFile(new URL("./site.css", import.meta.url), "utf8"),
     readFile(new URL("./vendor/pico-LICENSE.md", import.meta.url), "utf8"),
@@ -173,6 +173,7 @@ export async function generateSite({
     readFile(new URL("./assets/favicon.webp", import.meta.url)),
     readFile(new URL("./assets/apple-touch-icon.png", import.meta.url)),
     readFile(new URL("./game-table.js", import.meta.url), "utf8"),
+    readFile(new URL("./process-diagram.js", import.meta.url), "utf8"),
   ]);
   const css = `${pico.replace(/\/\*# sourceMappingURL=[\s\S]*?\*\//gu, "")}\n${customCss}`;
   const cssUrls = [...css.matchAll(/url\(\s*["']?([^)]*)\)/giu)].map((match) => match[1].replace(/["']$/u, "").trim());
@@ -182,16 +183,13 @@ export async function generateSite({
   const cssFile = `assets/site.${hash(css).slice(0, 12)}.css`;
   const jsFile = `assets/video-series.${hash(seriesJs).slice(0, 12)}.js`;
   const tableFile = `assets/game-table.${hash(tableJs).slice(0, 12)}.js`;
+  const processFile = `assets/process-diagram.${hash(processJs).slice(0, 12)}.js`;
   const assets = new Map([[cssFile, css], [jsFile, seriesJs], [tableFile, tableJs], ["favicon.webp", favicon], ["apple-touch-icon.png", touchIcon], ["assets/pico-LICENSE.txt", license], [".nojekyll", ""], ...model.magazineLogoAssets]);
+  assets.set(processFile, processJs);
   const app = await generateApp(model, config, assets);
   for (const [file, value] of app.files) assets.set(file, value);
-  const pages = renderSite(model, config, cssFile, jsFile, tableFile);
-  const markdownGames = new Map(model.games.map((game) => [game.route, {
-    name: game.name, videos: game.videos.map((id) => model.videoById.get(id)),
-  }]));
-  for (const page of pages.values()) {
-    assets.set(markdownFile(page.route), renderMarkdown(page, config, markdownGames.get(page.route)));
-  }
+  const pages = renderSite(model, config, cssFile, jsFile, tableFile, processFile);
+  for (const [file, content] of generateAiBot(model, config, pages)) assets.set(file, content);
   const budgets = validateSite(pages, assets, config);
   const manifest = {
     version: 2, baseUrl: config.baseUrl,
@@ -208,48 +206,6 @@ export async function generateSite({
     .filter(([, page]) => page.indexable).map(([file, page]) => `<url><loc>${escapeHtml(config.absolute(page.route))}</loc><lastmod>${manifest.pages[file].lastModified}</lastmod></url>`).join("\n")}\n</urlset>\n`;
   assets.set("sitemap.xml", sitemap);
   assets.set("robots.txt", `User-agent: *\nAllow: /\nSitemap: ${config.absolute("sitemap.xml")}\n`);
-  assets.set("llms.txt", `# ${config.name}
-
-> Deutschsprachige Webseitenrepräsentation des YouTube-Kanals Pretty Old Pixel mit Quellenlinks.
-
-## Wann diese Website verwenden
-
-Finde Retrospielreihen und ihre Folgen, Blätterabende zu Zeitschriften und Heftausgaben,
-Hardwarevideos, Retrospektiven und Gespräche. Vorhandene Kapitel verlinken Videostellen.
-
-## Einstiege
-
-- [Startseite als Markdown](${config.absolute("index.md")})
-${model.navigation.map((entry) => `- [${entry.name}](${config.absolute(entry.route)})`).join("\n")}
-- [Über das Projekt](${config.absolute("ueber/")})
-- [Kontakt und Quellen](${config.absolute("kontakt/")})
-- [Datenschutz](${config.absolute("datenschutz/")})
-- [Sitemap](${config.absolute("sitemap.xml")})
-
-## Quellen und Zitieren
-
-Zitiere die kanonische Inhaltsseite und das dort verlinkte Originalvideo.
-Kanalquelle: https://www.youtube.com/@PrettyOldPixel
-Kontaktverweis: https://prettyoldpixel.de/
-
-## Grenzen
-
-Kein vollständiges Spielelexikon, kein Videodownload- oder Tooldienst.
-Transkripte, Kapitel und Metadaten sind nicht für alle Videos vorhanden.
-Unbekannte Angaben nicht ergänzen oder aus ähnlichen Titeln ableiten.
-Dieser Hinweis erteilt keine zusätzlichen Nutzungsrechte an fremden Inhalten.
-
-## Markdown
-
-Jede HTML-Seite verlinkt ihre Markdown-Fassung mit rel="alternate".
-Für Verzeichnisadressen liegt sie unter index.md, etwa ${config.absolute("spiele/index.md")}.
-Markdown-Links verweisen auf die kanonischen HTML- und Originalquellen.
-Navigation und Brotkrümel zeigen die Seitenstruktur. Auf Videoseiten erläutert
-ein Hinweis den audiovisuellen Hauptinhalt; Spielseiten enthalten zusätzlich
-eine Frage/Antwort zur Orientierung anhand der Videotitel, keine Spielanleitung.
-Eine Fehlererklärung steht unter ${config.absolute("404.md")}; ihr direkter Abruf
-ersetzt keine HTTP-404-Antwort für unbekannte Seiten.
-`);
 
   const content = new Map([...assets, ...[...pages].map(([file, page]) => [file, page.html])]);
   content.set("build-manifest.json", `${JSON.stringify(manifest, null, 2)}\n`);

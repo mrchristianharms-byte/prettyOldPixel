@@ -1,9 +1,7 @@
 import TurndownService from "turndown";
 import { gfm } from "turndown-plugin-gfm";
-import { escapeHtml } from "./site-html.mjs";
-
-export const markdownFile = (route) => route.endsWith("/") || !route
-  ? `${route}index.md` : route.replace(/\.html$/u, ".md");
+import { escapeHtml } from "../site-generation/site-html.mjs";
+export { markdownFile } from "./markdown-path.mjs";
 
 export function renderMarkdown(page, config, game) {
   const main = page.html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/u)?.[1];
@@ -11,7 +9,11 @@ export function renderMarkdown(page, config, game) {
   const canonical = config.absolute(page.route);
   const converter = new TurndownService({ headingStyle: "atx", codeBlockStyle: "fenced" });
   converter.use(gfm);
-  converter.remove(["script", "style", "iframe", "button", "input", "select"]);
+  converter.remove(["script", "style", "iframe", "button", "input", "select", "svg"]);
+  converter.addRule("process-controls", {
+    filter: (node) => node.nodeName === "LABEL" && node.getAttribute("for") === "process-pause",
+    replacement: () => "",
+  });
   converter.addRule("navigation", {
     filter: "nav",
     replacement: (content, node) => node.getAttribute("aria-label") === "Videoteile" ? ""

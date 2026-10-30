@@ -27,7 +27,7 @@ function fixture(count = 53) {
 function render(input = fixture(), baseUrl) {
   const config = createSiteConfig(baseUrl);
   const pages = renderSite(normalizeSources(input), config, config.href("assets/site.css"));
-  return { pages, config, assets: new Map([["assets/site.css", "body{}"], ["assets/video-series.js", ""], ["favicon.webp", "image"], ["apple-touch-icon.png", "image"]]) };
+  return { pages, config, assets: new Map([["assets/site.css", "body{}"], ["assets/video-series.js", ""], ["assets/process-diagram.js", ""], ["favicon.webp", "image"], ["apple-touch-icon.png", "image"]]) };
 }
 
 function issueFixture() {
@@ -166,7 +166,7 @@ async function setup(t, input = fixture()) {
 
 test("erzeugt News mit Sonstiges-Detailseiten ohne Gesamtkatalog", () => {
   const { pages, config, assets } = render();
-  assert.equal(pages.size, 60);
+  assert.equal(pages.size, 61);
   assert.ok(![...pages.keys()].some((file) => file.startsWith("videos/")));
   assert.ok(pages.get("news/index.html").html.includes('href="../sonstiges/video-52-retrospiel/#video-b0000000052"'));
   for (const page of pages.values()) {
@@ -554,7 +554,7 @@ test("baut offline mit Produktionsdomain, Sitemap und Inhalts-Manifest; übernim
   globalThis.fetch = () => { throw new Error("Netzwerk im Build verboten"); };
   t.after(() => { globalThis.fetch = originalFetch; });
   const first = await generateSite(options);
-  assert.equal(first.pages, 60);
+  assert.equal(first.pages, 61);
   assert.equal(first.reused, 0);
   assert.ok(first.cssGzip < 10 * 1024);
   assert.ok(first.jsGzip <= 5 * 1024);
@@ -595,6 +595,16 @@ test("baut offline mit Produktionsdomain, Sitemap und Inhalts-Manifest; übernim
   assert.equal((sitemap.match(/<lastmod>/gu) ?? []).length, first.pages - 1);
   assert.match(await readFile(path.join(options.outputDirectory, "robots.txt"), "utf8"), /Sitemap: https:\/\/prettyoldpixel\.com\/sitemap.xml/u);
   const llms = await readFile(path.join(options.outputDirectory, "llms.txt"), "utf8");
+  const apiCatalog = JSON.parse(await readFile(path.join(options.outputDirectory, ".well-known/api-catalog"), "utf8"));
+  assert.equal(apiCatalog.linkset[0].anchor, "https://prettyoldpixel.com/api/v1/content.json");
+  for (const relation of ["service-desc", "service-doc"]) {
+    const url = new URL(apiCatalog.linkset[0][relation][0].href);
+    assert.ok((await readFile(path.join(options.outputDirectory, url.pathname), "utf8")).length > 0);
+  }
+  const apiContent = JSON.parse(await readFile(path.join(options.outputDirectory, "api/v1/content.json"), "utf8"));
+  assert.equal(apiContent.schemaVersion, 1);
+  assert.equal(apiContent.videos.length, 53);
+  assert.ok(llms.includes("https://prettyoldpixel.com/.well-known/api-catalog"));
   const markdown = await readFile(path.join(options.outputDirectory, "index.md"), "utf8");
   assert.ok(markdown.includes("# Pretty Old Pixel"));
   assert.ok(markdown.includes("HTML-Original: <https://prettyoldpixel.com/>"));
@@ -607,6 +617,10 @@ test("baut offline mit Produktionsdomain, Sitemap und Inhalts-Manifest; übernim
     "https://prettyoldpixel.com/sitemap.xml"]) assert.ok(llms.includes(text), text);
   assert.ok(sitemap.includes("https://prettyoldpixel.com/ueber/"));
   assert.ok(sitemap.includes("https://prettyoldpixel.com/kontakt/"));
+  assert.ok(sitemap.includes("https://prettyoldpixel.com/so-entsteht-die-seite/"));
+  const processMarkdown = await readFile(path.join(options.outputDirectory, "so-entsteht-die-seite/index.md"), "utf8");
+  assert.ok(processMarkdown.includes("F4 · Besucher und Auslieferung"));
+  assert.ok(!processMarkdown.includes("offset-path"));
   const homePath = path.join(options.outputDirectory, "index.html");
   const preservedTime = new Date("2020-01-01T00:00:00Z");
   await utimes(homePath, preservedTime, preservedTime);

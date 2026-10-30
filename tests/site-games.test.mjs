@@ -42,7 +42,7 @@ function render(input = fixture(), definitions = [definition()]) {
 
 function renderModel(model, config = createSiteConfig()) {
   const pages = renderSite(model, config, config.href("assets/test.css"));
-  const budgets = validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""], ["assets/game-table.js", ""], ["assets/theme.js", ""], ["favicon.webp", ""], ["apple-touch-icon.png", ""], ...(model.magazineLogoAssets ?? [])]), config);
+  const budgets = validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""], ["assets/game-table.js", ""], ["assets/process-diagram.js", ""], ["assets/theme.js", ""], ["favicon.webp", ""], ["apple-touch-icon.png", ""], ...(model.magazineLogoAssets ?? [])]), config);
   return { model, config, pages, budgets };
 }
 
@@ -105,12 +105,17 @@ test("escaped Tabelleninhalte und nutzt belegte Metadaten ohne Ersatzjahre", () 
   model.games[0].name = '<Spiel & "Demo">';
   model.games[0].releaseYear = null;
   model.games[0].metadata.data.scope.platforms = ["<DOS>", 'Amiga & "Demo"'];
+  model.games[0].metadata.data.releases.push(
+    { platform: "Amiga", year: 1991, developer: "<Studio & Co.>", publisher: 'Publisher "Two"' });
   model.games[1].metadata = { status: "blocked", data: null };
   const { pages } = renderModel(model);
   const html = pages.get("spiele/uebersicht/index.html").html;
   const body = html.match(/<tbody>([\s\S]*?)<\/tbody>/u)[1];
   assert.ok(body.includes("&lt;Spiel &amp; &quot;Demo&quot;&gt;"));
   assert.ok(body.includes("<td>&lt;DOS&gt;<br>Amiga &amp; &quot;Demo&quot;</td>"));
+  assert.match(body, /<th scope="row"><a href="\.\.\/game-00\/">&lt;Spiel &amp; &quot;Demo&quot;&gt;<\/a>\s*<small class="game-table-company">Publisher: Publisher, Publisher &quot;Two&quot;<\/small>\s*<small class="game-table-company">Entwickler: &lt;Studio &amp; Co\.&gt;, Studio<\/small><\/th>/u);
+  assert.doesNotMatch(body, /<small class="game-table-company">[^<]*<a\b/u);
+  assert.match(body, /<th scope="row"><a href="\.\.\/game-01\/">Spiel 01<\/a>\s*<small class="game-table-company">Publisher: Unbekannt<\/small>\s*<small class="game-table-company">Entwickler: Unbekannt<\/small><\/th>/u);
   assert.ok(!body.includes("<Spiel") && !body.includes("<DOS>"));
   assert.match(body, /<td>Unbekannt<\/td>/u);
   assert.ok(body.includes('width="320" height="180" loading="lazy" decoding="async" referrerpolicy="no-referrer"'));
@@ -713,7 +718,7 @@ test("escaped konsolidierte Metadaten und behält leere Felder sowie Releaseunte
   } };
   const config = createSiteConfig();
   const pages = renderSite(model, config, config.href("assets/test.css"));
-  validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""], ["assets/game-table.js", ""], ["assets/theme.js", ""], ["favicon.webp", ""], ["apple-touch-icon.png", ""]]), config);
+  validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""], ["assets/game-table.js", ""], ["assets/process-diagram.js", ""], ["assets/theme.js", ""], ["favicon.webp", ""], ["apple-touch-icon.png", ""]]), config);
   const html = pages.get("spiele/cadaver/index.html").html;
   assert.match(html, /&lt;script&gt;genre&lt;\/script&gt;/u);
   assert.match(html, /&lt;Studio&gt;/u);
@@ -746,7 +751,7 @@ test("fasst nur länderabweichende Releases zusammen und erhält alle anderen Un
   } };
   const config = createSiteConfig();
   const pages = renderSite(model, config, config.href("assets/test.css"));
-  validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""], ["assets/game-table.js", ""], ["assets/theme.js", ""], ["favicon.webp", ""], ["apple-touch-icon.png", ""]]), config);
+  validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""], ["assets/game-table.js", ""], ["assets/process-diagram.js", ""], ["assets/theme.js", ""], ["favicon.webp", ""], ["apple-touch-icon.png", ""]]), config);
   const html = pages.get("spiele/cadaver/index.html").html;
   const table = html.match(/<tbody>([\s\S]*?)<\/tbody>/u)[1];
   assert.equal((table.match(/<tr>/gu) ?? []).length, 5);

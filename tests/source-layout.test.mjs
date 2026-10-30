@@ -49,7 +49,7 @@ test("Pages-Jobs installieren Build-Abhängigkeiten vor Tests und Seitengenerier
 test("src enthält nur Fachordner und die beiden Hauptaufgaben-Starter", async () => {
   const entries = await readdir(source, { withFileTypes: true });
   assert.deepEqual(entries.filter((entry) => entry.isDirectory()).map((entry) => entry.name).sort(), [
-    "app-generation", "content-data", "data", "extra-data", "fetch-channel", "fetch-game", "fetch-magazine", "shared", "site-generation",
+    "ai-bot-generation", "app-generation", "content-data", "data", "extra-data", "fetch-channel", "fetch-game", "fetch-magazine", "shared", "site-generation",
   ]);
   assert.deepEqual(entries.filter((entry) => !entry.isDirectory()).map((entry) => entry.name).sort(),
     starters.map(([file]) => file).sort());
@@ -71,6 +71,23 @@ test("CLI-Module lassen sich außerhalb des Projektordners ohne Ausführung impo
 
   assert.equal(stdout, "");
   assert.doesNotMatch(stderr, /Aufruf|fehlgeschlagen|Error/u);
+});
+
+test("Agentengenerierung liegt separat und HTML lädt nur den Markdown-Pfadhelfer", async () => {
+  const modules = await readdir(new URL("ai-bot-generation/", source));
+  assert.deepEqual(modules.sort(), [
+    "cloudflare-discovery-rule.json",
+    "generate-ai-bot.mjs", "markdown-path.mjs", "site-api.mjs", "site-markdown.mjs",
+  ]);
+  const siteModules = await readdir(new URL("site-generation/", source));
+  assert.ok(!siteModules.includes("site-api.mjs"));
+  assert.ok(!siteModules.includes("site-markdown.mjs"));
+  const renderer = await readFile(new URL("site-generation/site-render.mjs", source), "utf8");
+  assert.match(renderer, /from "\.\.\/ai-bot-generation\/markdown-path\.mjs"/u);
+  assert.doesNotMatch(renderer, /from "[^"]*(?:site-markdown|site-api|generate-ai-bot|turndown)/u);
+  const generator = await readFile(new URL("site-generation/generate-site.mjs", source), "utf8");
+  assert.match(generator, /generateAiBot\(model, config, pages\)/u);
+  assert.doesNotMatch(generator, /assets\.set\("llms\.txt"/u);
 });
 
 test("npm-Aufgaben verwenden Hauptstarter oder direkt ausführbare Fachmodule", async () => {

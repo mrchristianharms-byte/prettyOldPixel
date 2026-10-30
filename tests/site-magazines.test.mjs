@@ -58,7 +58,7 @@ function render(input = variedFixture(), pageSize = createSiteConfig().pageSize)
   const model = normalizeSources(input);
   const config = { ...createSiteConfig(), pageSize };
   const pages = renderSite(model, config, config.href("assets/test.css"));
-  validateSite(pages, new Map([["assets/test.css", "body{}"], ["assets/video-series.js", ""], ["assets/theme.js", ""], ["favicon.webp", ""], ["apple-touch-icon.png", ""]]), config);
+  validateSite(pages, new Map([["assets/test.css", "body{}"], ["assets/video-series.js", ""], ["assets/process-diagram.js", ""], ["assets/theme.js", ""], ["favicon.webp", ""], ["apple-touch-icon.png", ""]]), config);
   return { model, pages, config };
 }
 

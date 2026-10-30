@@ -17,7 +17,9 @@ Die kanonische Produktionsadresse ist nun <https://prettyoldpixel.com/>.
 GitHub Actions baut und veröffentlicht die statische Website auf GitHub Pages;
 Cloudflare übernimmt DNS und laut Betreiberangabe inzwischen Proxy/CDN.
 Die Website repräsentiert den YouTube-Kanal Pretty Old Pixel mit Quellenlinks.
-Sie ist kein belegtes Unternehmen, keine Produkt-API und kein MCP-Dienst.
+Sie ist kein belegtes Unternehmen und kein MCP-Dienst. Der ursprüngliche
+Umfang enthielt keine öffentliche API; die nachfolgend separat freigegebene
+statische Inhalts-API erweitert diesen Umfang.
 
 Der neue Scan bewertet die richtige Domain mit **71/100 Punkten**:
 
@@ -159,6 +161,64 @@ Der optionale lokale Open-Graph-Bildfallback ist noch nicht umgesetzt.
 Die bestehenden Cache-Einstellungen bleiben gemäß ADR 0012 unverändert;
 eine spätere Repräsentationsauswahl darf HTML und Markdown nicht im
 gleichen Cache-Eintrag vermischen.
+
+### Erweiterung: statische Inhalts-API und RFC 9727
+
+Am 30.10.2026 wurde auf ausdrücklichen Wunsch ein API-Katalog ergänzt.
+Nach Rückfrage wurde eine eigenständige statische Read-only-Inhalts-API
+freigegeben; die internen Offline-App-Dateien werden nicht zum API-Vertrag.
+Der Build erzeugt `/api/v1/content.json` mit Videos, Spielen und
+Zeitschriften, eine OpenAPI-3.1-Beschreibung und eine Verwendungsdokumentation.
+`/.well-known/api-catalog` enthält einen Linkset-Eintrag mit dem realen
+Snapshot-Endpunkt als `anchor` sowie `service-desc` und `service-doc`.
+Kein erfundener Health-Endpunkt, keine Schreiboperationen oder Transkripte.
+
+GitHub Pages kann den geforderten MIME-Typ der endungslosen Datei nicht
+projektseitig konfigurieren. Der Betreiber richtet deshalb eine kostenlose,
+pfadgenaue Cloudflare-Response-Header-Regel für
+`Content-Type: application/linkset+json` manuell ein; kein Worker oder
+Tarifwechsel wird ausgelöst. Die Anleitung und Live-Abnahme stehen in der
+[Projektdokumentation](../README.md#öffentliche-read-only-api-und-api-katalog).
+Domain und bestehende Cache-Regeln aus ADR 0012 bleiben unverändert.
+
+Der angeforderte POST-Scan bei `https://isitagentready.com/api/scan`
+wurde vor Veröffentlichung am 30.10.2026 um ca. 18:21 Uhr ausgeführt:
+`checks.discovery.apiCatalog.status` ist noch `"fail"` mit
+`API Catalog not found`; Live-GET liefert 404 und HTML.
+Dies ist der tatsächliche Ausgangsstand, kein erfolgreicher Abschluss.
+Nach Deployment und manueller Header-Regel müssen HTTP 200, MIME-Typ,
+Linkziele und Scannerstatus `"pass"` erneut live bestätigt werden.
+
+### Trennung der Generierungsbereiche
+
+Markdown, `llms.txt` und API/Katalog werden gemeinsam unter
+`src/ai-bot-generation/` gepflegt, getrennt von HTML und Offline-App.
+Der bestehende Build-Aufruf bleibt der Orchestrator und übergibt das
+Inhaltsmodell sowie die fertig gerenderten HTML-Seiten an `generateAiBot`.
+Die Ausgabeziele und Inhalte bleiben unverändert. Im HTML-Renderer bleibt
+nur ein leichtgewichtiger Pfadhelfer für den Markdown-Alternativlink,
+nicht die Konvertierungsbibliothek. Gemeinsame öffentliche Projekttexte
+und JSON-LD sind weiterhin HTML-Inhalte und bleiben daher im bisherigen
+Inhalts-/Websitebereich.
+
+### HTTP-Link-Header für Discovery
+
+Eine separate Cloudflare-Response-Header-Transform-Regel ist unter
+`src/ai-bot-generation/cloudflare-discovery-rule.json` vorbereitet.
+Sie ergänzt ausschließlich die Apex-Homepage um einen `Link`-Header
+mit `api-catalog`, `service-desc`, `service-doc` und `describedby`.
+Die API-Relationen erhalten den Snapshot-Endpunkt als expliziten
+Link-Kontext (`anchor`); die Homepage ist selbst keine API.
+Die Regel fügt den Header hinzu, ohne andere Link-Header oder Cache-Regeln
+zu überschreiben. Die Aktivierung bleibt wie zuvor manuell beim Betreiber.
+Dashboard-Anleitung und Prüfkommandos stehen in der Projektdokumentation.
+
+Lokale Konfigurationstests prüfen die Regel und ihre realen Build-Linkziele.
+Der Live-POST-Scan vom 30.10.2026 um 17:27:48 UTC bestätigt dagegen
+noch `checks.discoverability.linkHeaders.status: "fail"` mit
+`No Link headers found on target page`. Die Homepage liefert HTTP 200,
+aber noch keinen Link-Header. Erst nach Veröffentlichung der Ziele und
+manueller Aktivierung darf dieser Punkt als live umgesetzt gelten.
 
 ### 1. Vorhandenes HTML erhalten, Identität präzisieren
 

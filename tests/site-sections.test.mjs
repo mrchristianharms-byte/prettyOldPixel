@@ -39,7 +39,7 @@ function render(input = fixture(), sections = [definition()], options = {}) {
   const config = createSiteConfig(options.baseUrl);
   if (options.pageSize !== undefined) config.pageSize = options.pageSize;
   const pages = renderSite(model, config, "assets/test.css");
-  validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""], ["assets/game-table.js", ""], ["assets/theme.js", ""], ["favicon.webp", ""], ["apple-touch-icon.png", ""]]), config);
+  validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""], ["assets/game-table.js", ""], ["assets/process-diagram.js", ""], ["assets/theme.js", ""], ["favicon.webp", ""], ["apple-touch-icon.png", ""]]), config);
   return { model, pages, config };
 }
 const graph = (html) => JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/u)[1])["@graph"];
@@ -321,7 +321,7 @@ test("verlinkt Bereiche intern auf Spiele oder eigene Detailseiten und hält Lis
 
   const config = createSiteConfig();
   const pages = renderSite(model, config, "assets/test.css");
-  validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""], ["assets/game-table.js", ""], ["assets/theme.js", ""], ["favicon.webp", ""], ["apple-touch-icon.png", ""]]), config);
+  validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""], ["assets/game-table.js", ""], ["assets/process-diagram.js", ""], ["assets/theme.js", ""], ["favicon.webp", ""], ["apple-touch-icon.png", ""]]), config);
   const html = pages.get("interviews/index.html").html;
   assert.ok(html.includes('href="../spiele/ein-spiel/#video-s0000000000"'));
   assert.ok(html.includes('href="beitrag-3/#video-s0000000003"'));

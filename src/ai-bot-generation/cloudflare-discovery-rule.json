@@ -1,0 +1,14 @@
+{
+  "description": "Homepage agent discovery links",
+  "expression": "(http.host eq \"prettyoldpixel.com\" and http.request.uri.path eq \"/\")",
+  "action": "rewrite",
+  "action_parameters": {
+    "headers": {
+      "link": {
+        "operation": "add",
+        "value": "</.well-known/api-catalog>; rel=\"api-catalog\"; type=\"application/linkset+json\", </api/v1/openapi.json>; rel=\"service-desc\"; type=\"application/json\"; anchor=\"/api/v1/content.json\", </api/v1/readme.md>; rel=\"service-doc\"; type=\"text/markdown\"; anchor=\"/api/v1/content.json\", </llms.txt>; rel=\"describedby\"; type=\"text/plain\""
+      }
+    }
+  },
+  "enabled": true
+}

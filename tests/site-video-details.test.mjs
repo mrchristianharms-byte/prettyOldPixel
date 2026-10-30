@@ -166,7 +166,7 @@ function rendered(description, durationSeconds = 600) {
     sections: [],
   });
   const config = createSiteConfig();
-  const assets = new Map([["assets/site.css", ""], ["assets/video-series.js", ""], ["assets/game-table.js", ""], ["assets/theme.js", ""], ["favicon.webp", ""], ["apple-touch-icon.png", ""]]);
+  const assets = new Map([["assets/site.css", ""], ["assets/video-series.js", ""], ["assets/game-table.js", ""], ["assets/process-diagram.js", ""], ["assets/theme.js", ""], ["favicon.webp", ""], ["apple-touch-icon.png", ""]]);
   const pages = renderSite(model, config, "assets/site.css");
   validateSite(pages, assets, config);
   return { pages, model };

@@ -12,7 +12,7 @@ const dump = `-- Dump with comments
 /*!40101 SET NAMES utf8mb4 */;
 CREATE TABLE ignored (id INTEGER);
 INSERT INTO \`mobygames\` (\`mobyid\`, \`title\`, \`mobylink\`, \`genre\`, \`description\`, \`perspective\`, \`gameplay\`, \`interface\`, \`setting\`, \`sport\`, \`misc\`) VALUES
-(3, 'Wing Commander', 'https://www.mobygames.com/game/3/', 'Action; Simulation', 'Not exported; a comma, an apostrophe \\' and newline\\n.', NULL, NULL, NULL, NULL, NULL, NULL),
+(3, 'Wing Commander', 'https://www.mobygames.com/game/3/', 'Action; Simulation; Strategy / tactics', 'Not exported; a comma, an apostrophe \\' and newline\\n.', NULL, NULL, NULL, NULL, NULL, NULL),
 (4, 'Wing Commander II', NULL, 'Simulation', 'Ignored', NULL, NULL, NULL, NULL, NULL, NULL),
 (5, 'Wing Commander', NULL, 'Action', 'A different game', NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO \`mobygames_alttitles\` (\`mobyid\`, \`title\`, \`info\`) VALUES (3, 'Flügelkommandant', 'German');
@@ -85,7 +85,7 @@ test("Offline-Export aus dem Titelindex enthält nur Katalogtreffer, bewahrt Rel
   assert.deepEqual(wing.candidates[0].releases.map((release) => [release.mobyreleaseid, release.platform, release.countries]),
     [[31, "Amiga", "Germany"], [30, "DOS", "United States"]]);
   assert.deepEqual(wing.candidates[0].alternativeTitles, [{ title: "Flügelkommandant", info: "German" }]);
-  assert.deepEqual(wing.candidates[0].genres, ["Action", "Simulation"]);
+  assert.deepEqual(wing.candidates[0].genres, ["Action", "Simulation", "Strategie"]);
   assert.equal(report.games[1].candidates[0].mobyid, 3);
   assert.equal(report.games[2].candidates[0].platformMatch, null);
   assert.equal(report.games[3].candidates.length, 0);
@@ -105,12 +105,13 @@ test("manuelle Dump-Daten ergänzen Katalogspiele außerhalb des Titelindex, der
   const release = { mobyreleaseid: 90, year: 2008, platform: "DOS", publisher: "Virgin Games, Inc.",
     developer: "Origin", countries: "United States", publabel: null };
   const manual = {
-    "wing-iii": { mobyid: 9, title: "Wing Commander III", genres: ["Action"], alternativeTitles: [], releases: [release] },
+    "wing-iii": { mobyid: 9, title: "Wing Commander III", genres: ["Strategy / tactics"], alternativeTitles: [], releases: [release] },
     "wing-ii": { mobyid: 4, title: "Wing Commander II", genres: ["Ignoriert"], alternativeTitles: [], releases: [release] },
   };
   const report = await importGameDump({ ...options, games, manual });
   const [wingII, wingIII] = [report.games[2], report.games[3]];
   assert.equal(wingIII.status, "needs-identity-review");
+  assert.deepEqual(wingIII.candidates[0].genres, ["Strategie"]);
   assert.deepEqual(wingIII.candidates.map((candidate) => [candidate.mobyid, candidate.manual, candidate.matchingReleaseIds]),
     [[9, true, []]]);
   assert.equal(wingIII.candidates[0].releases[0].mobyid, 9);

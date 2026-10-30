@@ -4,6 +4,7 @@ import { escapeHtml } from "../site-generation/site-html.mjs";
 import { setupOffline } from "./offline.js";
 import { setupPlayer } from "./player.js";
 import { updatePreview } from "./preview.mjs";
+import "../site-generation/process-diagram.js";
 
 const main = document.querySelector("main");
 const release = new URL(document.body.dataset.release, location.href);

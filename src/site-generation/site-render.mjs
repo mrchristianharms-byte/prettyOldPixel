@@ -1,6 +1,8 @@
 import { gameMetadataFilters } from "../content-data/game-filters.mjs";
 import { projectInfo } from "../content-data/project-info.mjs";
-import { markdownFile } from "./site-markdown.mjs";
+import { siteProcess } from "../content-data/site-process.mjs";
+import { processDiagram, processExplanation } from "./widget/process-diagram.mjs";
+import { markdownFile } from "../ai-bot-generation/markdown-path.mjs";
 import { readFile } from "node:fs/promises";
 import { minify } from "terser";
 import { paginatedRoute, slugify, yearAnchor } from "./site-config.mjs";
@@ -134,7 +136,7 @@ function breadcrumbsMarkup(crumbs, config) {
     : `<a href="${config.href(crumb.route)}">${escapeHtml(crumb.name)}</a>`}</li>`).join("")}</ol></nav>`;
 }
 
-function layout({ route, title, description, body, schema, crumbs, image, imageAlt, noindex = false, previous, next, interactive = false, sortableGames = false }, config, cssHref, jsHref, navigationEntries, tableHref) {
+function layout({ route, title, description, body, schema, crumbs, image, imageAlt, noindex = false, previous, next, interactive = false, sortableGames = false, processInteractive = false }, config, cssHref, jsHref, navigationEntries, tableHref, processHref) {
   const canonical = config.absolute(route);
   const fullTitle = `${title} | ${config.name}`;
   const breadcrumbSchema = {
@@ -172,6 +174,7 @@ ${next ? `<link rel="next" href="${config.href(next)}">` : ""}
 <link rel="stylesheet" href="${config.href(cssHref)}">
 ${interactive ? `<script type="module" src="${config.href(jsHref)}"></script>` : ""}
 ${sortableGames ? `<script defer src="${config.href(tableHref)}"></script>` : ""}
+${processInteractive ? `<script defer src="${config.href(processHref)}"></script>` : ""}
 </head>
 <body${interactive ? ' class="detail-page"' : ""}>
 <a class="skip-link" href="#inhalt">Zum Inhalt</a>
@@ -223,6 +226,7 @@ function privacyBody(config) {
   return `<h1>Datenschutz und Hinweise</h1>
 <p>Pretty Old Pixel ist ein privates, nicht kommerziell genutztes Projekt zur Übersicht öffentlich verfügbarer Videos.</p>
 <h2>Hosting über GitHub Pages</h2>
+<p><a href="${config.href(siteProcess.route)}">Zusammenspiel der Dienste</a>: GitHub Actions, GitHub Pages, Cloudflare und YouTube.</p>
 <p>Diese Website wird bei GitHub Pages gehostet. Beim Besuch können technische Zugriffsdaten wie IP-Adresse, Zeitpunkt und Browserinformationen beim Hosting-Anbieter verarbeitet werden.
 ${externalLink("https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement", "Datenschutzerklärung von GitHub")}</p>
 <h2>Auslieferung und Schutz über Cloudflare</h2>
@@ -591,12 +595,20 @@ function renderGamePages(model, siteConfig, add, filters) {
       (a.publishedTime ?? Infinity) - (b.publishedTime ?? Infinity) || a.id.localeCompare(b.id, "en"))[0];
     const data = game.metadata?.status === "ready" ? game.metadata.data : null;
     const source = data?.evidence?.sourceUrl ?? game.releaseYearSource;
+    const releases = [
+      ...(data?.releases ?? []),
+      ...(data?.additionalReleases ?? []).flatMap((entry) => entry.releases),
+    ];
+    const companies = (field) => [...new Set(releases.map((release) => release[field]).filter(Boolean))]
+      .sort((a, b) => a.localeCompare(b, "de"));
     return {
       ...game,
       firstYear: firstVideo.publishedAt ? Number(dateLabel(firstVideo.publishedAt, false).slice(-4)) : null,
       platforms: game.platforms.length ? game.platforms
         : game.metadata?.status === "ready" ? game.metadata.data.scope?.platforms ?? [] : [],
       genres: data?.genres ?? [],
+      publishers: companies("publisher"),
+      developers: companies("developer"),
       durationSeconds: videos.every((video) => video.durationSeconds !== null)
         ? videos.reduce((total, video) => total + video.durationSeconds, 0) : null,
       mobyGamesUrl: source && ["www.mobygames.com", "mobygames.com"].includes(new URL(source).hostname) ? source : null,
@@ -719,7 +731,7 @@ ${section.id === "sonstiges" ? "" : pagination(section.route, page, count, confi
   }
 }
 
-export function renderSite(model, config, cssHref, jsHref = "assets/video-series.js", tableHref = "assets/game-table.js") {
+export function renderSite(model, config, cssHref, jsHref = "assets/video-series.js", tableHref = "assets/game-table.js", processHref = "assets/process-diagram.js") {
   const pages = new Map();
   const filters = gameMetadataFilters(model.games);
   function add(options, videos = []) {
@@ -732,7 +744,7 @@ export function renderSite(model, config, cssHref, jsHref = "assets/video-series
       imageAlt: options.imageAlt ?? `Vorschaubild: ${previewVideo.title}`,
     } : options;
     pages.set(file, {
-      html: layout(pageOptions, config.forPage(options.route), cssHref, jsHref, model.navigation, tableHref),
+      html: layout(pageOptions, config.forPage(options.route), cssHref, jsHref, model.navigation, tableHref, processHref),
       route: options.route, indexable: !options.noindex,
       contentPublishedAt: latestPublication(videos),
     });
@@ -790,9 +802,17 @@ ${homeOverview(model, config, filters)}`,
         isPartOf: { "@id": `${config.href("", info.route)}#website` } },
       body: `<h1>${escapeHtml(info.title)}</h1>${info.paragraphs.map((text) => `<p>${escapeHtml(text)}</p>`).join("\n")}
 <h2>Weiterführende Links</h2><p>${externalLink("https://prettyoldpixel.de/", "Pretty Old Pixel – Website und Kontakteinstieg")} · ${externalLink("https://www.youtube.com/@PrettyOldPixel", "YouTube-Kanal Pretty Old Pixel")}</p>
+<p><a href="${config.href(siteProcess.route, info.route)}">So entsteht diese Website</a> · <a href="${config.href(siteProcess.route, info.route)}">Zusammenspiel der Dienste</a>: GitHub Actions, GitHub Pages, Cloudflare und YouTube.</p>
 <p><a href="${config.href("datenschutz/", info.route)}">Datenschutz und Hinweise</a></p>`,
     });
   }
+
+  add({
+    route: siteProcess.route, title: siteProcess.title, description: siteProcess.description, processInteractive: true,
+    crumbs: [root, { route: "ueber/", name: "Über das Projekt" }, { route: siteProcess.route, name: siteProcess.title }],
+    schema: { "@type": "WebPage", "@id": "./#page", name: siteProcess.title, url: "./" },
+    body: `<h1>${escapeHtml(siteProcess.title)}</h1>${processDiagram()}${processExplanation()}`,
+  });
 
   add({
     route: "datenschutz/", title: "Datenschutz und Hinweise",

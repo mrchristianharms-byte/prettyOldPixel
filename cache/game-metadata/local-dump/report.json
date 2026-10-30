@@ -1,7 +1,7 @@
 {
   "version": 1,
   "provider": "mobygames-local-dump",
-  "importedAt": "2026-10-30T16:26:24.107Z",
+  "importedAt": "2026-10-30T16:24:16.077Z",
   "source": {
     "fileName": "gdb.sql",
     "sha256": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
@@ -934,7 +934,7 @@
           "sourceUrl": "https://www.mobygames.com/game/56451/",
           "genres": [
             "Action",
-            "Strategy / tactics"
+            "Strategie"
           ],
           "alternativeTitles": [],
           "platformMatch": false,
@@ -1366,7 +1366,7 @@
           "title": "Tom Clancy's EndWar",
           "sourceUrl": "https://www.mobygames.com/game/49906/",
           "genres": [
-            "Strategy / tactics"
+            "Strategie"
           ],
           "alternativeTitles": [],
           "manual": true,
@@ -2407,7 +2407,7 @@
           "sourceUrl": "https://www.mobygames.com/game/2510/",
           "genres": [
             "Simulation",
-            "Strategy / tactics"
+            "Strategie"
           ],
           "alternativeTitles": [
             {
@@ -2997,7 +2997,7 @@
           "title": "Battle Isle 2200",
           "sourceUrl": "https://www.mobygames.com/game/3420/",
           "genres": [
-            "Strategy / tactics"
+            "Strategie"
           ],
           "alternativeTitles": [
             {
@@ -3091,7 +3091,7 @@
           "sourceUrl": "https://www.mobygames.com/game/2336/",
           "genres": [
             "Simulation",
-            "Strategy / tactics"
+            "Strategie"
           ],
           "alternativeTitles": [
             {
@@ -4289,7 +4289,7 @@
           "sourceUrl": "https://www.mobygames.com/game/6257/",
           "genres": [
             "Action",
-            "Strategy / tactics"
+            "Strategie"
           ],
           "alternativeTitles": [
             {
@@ -5391,7 +5391,7 @@
           "sourceUrl": "https://www.mobygames.com/game/688/",
           "genres": [
             "Simulation",
-            "Strategy / tactics"
+            "Strategie"
           ],
           "alternativeTitles": [],
           "platformMatch": true,
@@ -5476,7 +5476,7 @@
           "sourceUrl": "https://www.mobygames.com/game/181/",
           "genres": [
             "Action",
-            "Strategy / tactics"
+            "Strategie"
           ],
           "alternativeTitles": [
             {
@@ -5861,7 +5861,7 @@
           "title": "Worms",
           "sourceUrl": "https://www.mobygames.com/game/340/",
           "genres": [
-            "Strategy / tactics"
+            "Strategie"
           ],
           "alternativeTitles": [
             {
@@ -6215,7 +6215,7 @@
           "title": "Worms: The Director's Cut",
           "sourceUrl": "https://www.mobygames.com/game/7407/",
           "genres": [
-            "Strategy / tactics"
+            "Strategie"
           ],
           "alternativeTitles": [
             {
@@ -6410,7 +6410,7 @@
           "title": "Worms",
           "sourceUrl": "https://www.mobygames.com/game/21171/",
           "genres": [
-            "Strategy / tactics"
+            "Strategie"
           ],
           "alternativeTitles": [],
           "platformMatch": false,
@@ -6444,7 +6444,7 @@
           "sourceUrl": "https://www.mobygames.com/game/65383/",
           "genres": [
             "Action",
-            "Strategy / tactics"
+            "Strategie"
           ],
           "alternativeTitles": [
             {
@@ -7288,7 +7288,7 @@
           "sourceUrl": "https://www.mobygames.com/game/598/",
           "genres": [
             "Simulation",
-            "Strategy / tactics"
+            "Strategie"
           ],
           "alternativeTitles": [
             {
@@ -7637,7 +7637,7 @@
           "title": "PowerMonger",
           "sourceUrl": "https://www.mobygames.com/game/1993/",
           "genres": [
-            "Strategy / tactics"
+            "Strategie"
           ],
           "alternativeTitles": [
             {
@@ -9096,7 +9096,7 @@
           "sourceUrl": "https://www.mobygames.com/game/1655/",
           "genres": [
             "Simulation",
-            "Strategy / tactics"
+            "Strategie"
           ],
           "alternativeTitles": [],
           "platformMatch": true,
@@ -9546,7 +9546,7 @@
           "title": "X-COM: UFO Defense",
           "sourceUrl": "https://www.mobygames.com/game/521/",
           "genres": [
-            "Strategy / tactics"
+            "Strategie"
           ],
           "alternativeTitles": [
             {
@@ -10445,7 +10445,7 @@
           "title": "Sid Meier's Civilization",
           "sourceUrl": "https://www.mobygames.com/game/585/",
           "genres": [
-            "Strategy / tactics"
+            "Strategie"
           ],
           "alternativeTitles": [
             {
@@ -10792,7 +10792,7 @@
           "genres": [
             "Action",
             "Simulation",
-            "Strategy / tactics"
+            "Strategie"
           ],
           "alternativeTitles": [
             {
@@ -11618,7 +11618,7 @@
           "sourceUrl": "https://www.mobygames.com/game/214/",
           "genres": [
             "Action",
-            "Strategy / tactics"
+            "Strategie"
           ],
           "alternativeTitles": [
             {
@@ -11998,7 +11998,7 @@
           "title": "Pirates",
           "sourceUrl": "https://www.mobygames.com/game/82869/",
           "genres": [
-            "Strategy / tactics"
+            "Strategie"
           ],
           "alternativeTitles": [],
           "platformMatch": null,
@@ -12721,7 +12721,7 @@
           "sourceUrl": "https://www.mobygames.com/game/1038/",
           "genres": [
             "Role-playing (RPG)",
-            "Strategy / tactics"
+            "Strategie"
           ],
           "alternativeTitles": [
             {
@@ -12938,7 +12938,7 @@
           "sourceUrl": "https://www.mobygames.com/game/5241/",
           "genres": [
             "Simulation",
-            "Strategy / tactics"
+            "Strategie"
           ],
           "alternativeTitles": [
             {
@@ -13010,7 +13010,7 @@
           "title": "Master of Magic",
           "sourceUrl": "https://www.mobygames.com/game/200/",
           "genres": [
-            "Strategy / tactics"
+            "Strategie"
           ],
           "alternativeTitles": [
             {
@@ -13201,7 +13201,7 @@
           "sourceUrl": "https://www.mobygames.com/game/482/",
           "genres": [
             "Role-playing (RPG)",
-            "Strategy / tactics"
+            "Strategie"
           ],
           "alternativeTitles": [
             {
@@ -13324,7 +13324,7 @@
           "sourceUrl": "https://www.mobygames.com/game/5212/",
           "genres": [
             "Simulation",
-            "Strategy / tactics"
+            "Strategie"
           ],
           "alternativeTitles": [
             {
@@ -13899,7 +13899,7 @@
           "title": "K240",
           "sourceUrl": "https://www.mobygames.com/game/13708/",
           "genres": [
-            "Strategy / tactics"
+            "Strategie"
           ],
           "alternativeTitles": [],
           "platformMatch": true,
@@ -15235,7 +15235,7 @@
           "sourceUrl": "https://www.mobygames.com/game/56113/",
           "genres": [
             "Simulation",
-            "Strategy / tactics"
+            "Strategie"
           ],
           "alternativeTitles": [],
           "platformMatch": true,
@@ -15336,7 +15336,7 @@
           "title": "X-COM: Terror from the Deep",
           "sourceUrl": "https://www.mobygames.com/game/543/",
           "genres": [
-            "Strategy / tactics"
+            "Strategie"
           ],
           "alternativeTitles": [
             {
@@ -15522,7 +15522,7 @@
           "title": "'Nam 1965-1975",
           "sourceUrl": "https://www.mobygames.com/game/51858/",
           "genres": [
-            "Strategy / tactics"
+            "Strategie"
           ],
           "alternativeTitles": [],
           "platformMatch": true,
@@ -16140,7 +16140,7 @@
           "genres": [
             "Action",
             "Simulation",
-            "Strategy / tactics"
+            "Strategie"
           ],
           "alternativeTitles": [
             {
@@ -18094,7 +18094,7 @@
           "sourceUrl": "https://www.mobygames.com/game/2165/",
           "genres": [
             "Adventure",
-            "Strategy / tactics"
+            "Strategie"
           ],
           "alternativeTitles": [],
           "platformMatch": true,
@@ -18507,7 +18507,7 @@
           "title": "Battle Bugs",
           "sourceUrl": "https://www.mobygames.com/game/308/",
           "genres": [
-            "Strategy / tactics"
+            "Strategie"
           ],
           "alternativeTitles": [],
           "platformMatch": true,
@@ -18737,7 +18737,7 @@
           "sourceUrl": "https://www.mobygames.com/game/1499/",
           "genres": [
             "Simulation",
-            "Strategy / tactics"
+            "Strategie"
           ],
           "alternativeTitles": [
             {
@@ -19022,7 +19022,7 @@
           "title": "Hanse",
           "sourceUrl": "https://www.mobygames.com/game/53055/",
           "genres": [
-            "Strategy / tactics"
+            "Strategie"
           ],
           "alternativeTitles": [],
           "platformMatch": true,
@@ -19104,7 +19104,7 @@
           "genres": [
             "Action",
             "Simulation",
-            "Strategy / tactics"
+            "Strategie"
           ],
           "alternativeTitles": [
             {
@@ -19194,7 +19194,7 @@
           "sourceUrl": "https://www.mobygames.com/game/425/",
           "genres": [
             "Simulation",
-            "Strategy / tactics"
+            "Strategie"
           ],
           "alternativeTitles": [
             {
@@ -19367,7 +19367,7 @@
           "sourceUrl": "https://www.mobygames.com/game/8276/",
           "genres": [
             "Simulation",
-            "Strategy / tactics"
+            "Strategie"
           ],
           "alternativeTitles": [
             {
@@ -21282,7 +21282,7 @@
           "title": "Dune II: The Building of a Dynasty",
           "sourceUrl": "https://www.mobygames.com/game/241/",
           "genres": [
-            "Strategy / tactics"
+            "Strategie"
           ],
           "alternativeTitles": [
             {
@@ -21478,7 +21478,7 @@
           "title": "They $tole a Million",
           "sourceUrl": "https://www.mobygames.com/game/21773/",
           "genres": [
-            "Strategy / tactics"
+            "Strategie"
           ],
           "alternativeTitles": [],
           "platformMatch": true,
@@ -21783,7 +21783,7 @@
           "title": "Theme Park",
           "sourceUrl": "https://www.mobygames.com/game/675/",
           "genres": [
-            "Strategy / tactics"
+            "Strategie"
           ],
           "alternativeTitles": [
             {
@@ -23158,7 +23158,7 @@
           "sourceUrl": "https://www.mobygames.com/game/6166/",
           "genres": [
             "Role-playing (RPG)",
-            "Strategy / tactics"
+            "Strategie"
           ],
           "alternativeTitles": [],
           "platformMatch": true,
@@ -23321,7 +23321,7 @@
           "title": "Sid Meier's Railroad Tycoon Deluxe",
           "sourceUrl": "https://www.mobygames.com/game/4037/",
           "genres": [
-            "Strategy / tactics"
+            "Strategie"
           ],
           "alternativeTitles": [
             {
@@ -23742,7 +23742,7 @@
           "sourceUrl": "https://www.mobygames.com/game/4223/",
           "genres": [
             "Simulation",
-            "Strategy / tactics"
+            "Strategie"
           ],
           "alternativeTitles": [
             {
@@ -24160,7 +24160,7 @@
           "title": "Populous",
           "sourceUrl": "https://www.mobygames.com/game/613/",
           "genres": [
-            "Strategy / tactics"
+            "Strategie"
           ],
           "alternativeTitles": [
             {
@@ -25816,7 +25816,7 @@
           "title": "Carrier Command",
           "sourceUrl": "https://www.mobygames.com/game/6943/",
           "genres": [
-            "Strategy / tactics"
+            "Strategie"
           ],
           "alternativeTitles": [],
           "platformMatch": true,
@@ -26072,7 +26072,7 @@
           "sourceUrl": "https://www.mobygames.com/game/3146/",
           "genres": [
             "Simulation",
-            "Strategy / tactics"
+            "Strategie"
           ],
           "alternativeTitles": [
             {
@@ -26195,7 +26195,7 @@
           "title": "Caesar",
           "sourceUrl": "https://www.mobygames.com/game/36632/",
           "genres": [
-            "Strategy / tactics"
+            "Strategie"
           ],
           "alternativeTitles": [],
           "platformMatch": false,
@@ -26872,7 +26872,7 @@
           "sourceUrl": "https://www.mobygames.com/game/5949/",
           "genres": [
             "Simulation",
-            "Strategy / tactics"
+            "Strategie"
           ],
           "alternativeTitles": [
             {
@@ -27016,7 +27016,7 @@
           "sourceUrl": "https://www.mobygames.com/game/112651/",
           "genres": [
             "Simulation",
-            "Strategy / tactics"
+            "Strategie"
           ],
           "alternativeTitles": [],
           "manual": true,
@@ -27079,7 +27079,7 @@
           "sourceUrl": "https://www.mobygames.com/game/143640/",
           "genres": [
             "Action",
-            "Strategy / tactics"
+            "Strategie"
           ],
           "alternativeTitles": [],
           "manual": true,
