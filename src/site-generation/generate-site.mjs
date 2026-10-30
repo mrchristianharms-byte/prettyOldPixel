@@ -9,6 +9,7 @@ import { escapeHtml, renderSite } from "./site-render.mjs";
 import { unreviewedPreviewVariable } from "../content-data/site-game-discussions.mjs";
 import { generateApp } from "../app-generation/generate-app.mjs";
 import { generateAiBot } from "../ai-bot-generation/generate-ai-bot.mjs";
+import { generalPageAliases } from "../content-data/project-info.mjs";
 
 const projectRoot = path.resolve(fileURLToPath(new URL("../../", import.meta.url)));
 const hash = (content) => createHash("sha256").update(content).digest("hex");
@@ -190,6 +191,16 @@ export async function generateSite({
   for (const [file, value] of app.files) assets.set(file, value);
   const pages = renderSite(model, config, cssFile, jsFile, tableFile, processFile);
   for (const [file, content] of generateAiBot(model, config, pages)) assets.set(file, content);
+  for (const [legacy, target] of Object.entries(generalPageAliases)) {
+    const href = escapeHtml(config.href(target, legacy));
+    assets.set(`${legacy}index.html`, `<!doctype html>
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Seite umgezogen | Pretty Old Pixel</title><meta name="robots" content="noindex, follow">
+<link rel="canonical" href="${escapeHtml(config.absolute(target))}">
+<meta http-equiv="refresh" content="0;url=${href}"></head>
+<body><h1>Diese Seite ist umgezogen</h1><p><a href="${href}">Zur neuen Adresse</a></p></body></html>
+`);
+  }
   const budgets = validateSite(pages, assets, config);
   const manifest = {
     version: 2, baseUrl: config.baseUrl,

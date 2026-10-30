@@ -155,9 +155,13 @@ test("Prozessseite und Diensteverweise funktionieren in Website, Markdown und Of
       assert.ok(view.body.includes(item));
       assert.ok(markdown.includes(item.replace(/([_*[\]])/gu, "\\$1")) || markdown.includes(item), item);
     }
-    for (const route of ["ueber/", "kontakt/", "datenschutz/"]) {
-      assert.ok(pages.get(`${route}index.html`).html.includes(`href="${config.href(siteProcess.route, route)}"`));
-      assert.ok(renderView(model, { route }).body.includes(`href="#/${siteProcess.route}"`));
+    for (const route of ["about/", "contact/", "privacy/"]) {
+      const html = pages.get(`${route}index.html`).html;
+      const app = renderView(model, { route }).body;
+      const target = `href="${config.href(siteProcess.route, route)}"`;
+      const appTarget = `href="#/${siteProcess.route}"`;
+      assert.equal(html.split(target).length - 1, 1, route);
+      assert.equal(app.split(appTarget).length - 1, 1, route);
     }
     assert.ok(markdown.includes("F1 · Entwicklung"));
     assert.ok(markdown.includes("keine echten Anfragen gesendet"));

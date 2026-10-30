@@ -36,11 +36,11 @@ test("zeigt Seitennavigation, Brotkrümel, Folgen und Fußlinks auch unter einem
 <main><nav aria-label="Brotkrümelnavigation"><a href="../../">Startseite</a> → Testspiel</nav>
 <h1>Testspiel</h1><nav aria-label="Videos zum Spiel"><a href="#video-test">Folge 1</a></nav>
 <nav aria-label="Videoteile"><a href="#video-test">Nächster Teil</a></nav></main>
-<footer><a href="../../kontakt/">Kontakt und Quellen</a></footer>` };
+<footer><a href="../../contact/">Kontakt und Quellen</a></footer>` };
   const markdown = renderMarkdown(page, createSiteConfig("https://example.org/projekt/"));
   for (const text of ["## Seitenstruktur", "**Hauptnavigation**", "**Brotkrümelnavigation**",
     "**Videos zum Spiel**", "https://example.org/projekt/spiele/",
-    "https://example.org/projekt/spiele/test/#video-test", "https://example.org/projekt/kontakt/"]) {
+    "https://example.org/projekt/spiele/test/#video-test", "https://example.org/projekt/contact/"]) {
     assert.ok(markdown.includes(text), text);
   }
   for (const text of ["Darstellung", "Nächster Teil"]) assert.ok(!markdown.includes(text));

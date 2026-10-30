@@ -10,6 +10,7 @@ import { appHref, parseAppRoute, renderView, publicAddress, filterGames, gameTab
 import { createSiteConfig } from "../src/site-generation/site-config.mjs";
 import { renderSite } from "../src/site-generation/site-render.mjs";
 import { gameDiscussions } from "../src/site-generation/widget/game-discussions.mjs";
+import { externalContentNotice } from "../src/content-data/project-info.mjs";
 
 const model = await loadContentData(new URL("../cache/", import.meta.url).pathname);
 const config = createSiteConfig("https://example.com/project/");
@@ -22,8 +23,10 @@ const images = new Map([
 ]);
 
 test("erläutert Cloudflare-Auslieferung und Online-Zugriffe in den App-Datenschutzhinweisen", () => {
-  const view = renderView(data, { route: "datenschutz/" });
-  for (const text of ["GitHub Pages", "Cloudflare", "Proxy und CDN", "IP-Adresse", "außerhalb der EU", "keine Cloudflare Web Analytics", "Offline-Start benötigt keine Verbindung", 'href="../datenschutz/"']) {
+  const view = renderView(data, { route: "privacy/" });
+  assert.ok(view.body.includes(externalContentNotice));
+  assert.ok(renderSite(model, config, "assets/site.css").get("privacy/index.html").html.includes(externalContentNotice));
+  for (const text of ["GitHub Pages", "Cloudflare", "Proxy und CDN", "IP-Adresse", "außerhalb der EU", "keine Cloudflare Web Analytics", "Offline-Start benötigt keine Verbindung", 'href="../privacy/"']) {
     assert.ok(view.body.includes(text), text);
   }
 });
@@ -85,6 +88,13 @@ test("alle öffentlichen Inhaltsrouten haben eine lokale App-Ansicht", () => {
 });
 
 test("App-Routing erhält Video, Kapitel und öffentliche Teilen-Links", () => {
+  for (const [legacy, target] of [["ueber/", "about/"], ["kontakt/", "contact/"], ["datenschutz/", "privacy/"]]) {
+    const state = parseAppRoute(`#/${legacy}`);
+    assert.equal(state.route, target);
+    const view = renderView(data, state);
+    assert.notEqual(view.title, "Seite nicht gefunden");
+    assert.equal(publicAddress(data, state, view), `${config.baseUrl}${target}`);
+  }
   const game = data.games.find((game) => game.videos.length > 1);
   const id = game.videos[1];
   const state = parseAppRoute(appHref(game.route, id, 120));
@@ -121,6 +131,10 @@ test("Spielefilter und Sortierung funktionieren auf demselben Datenstand", () =>
 });
 
 test("App-Texte verwenden klare Spielangaben und die korrekte Einzahl", () => {
+  const about = renderView(data, { route: "about/" });
+  assert.match(about.body, /https:\/\/www\.twitch\.tv\/prettyoldpixel/u);
+  assert.match(about.body, /Livestreams von Pretty Old Pixel/u);
+  assert.doesNotMatch(about.body, /href="#\/privacy\/"/u);
   const singleGame = { ...data, games: [data.games[0]] };
   const games = renderView(singleGame, { route: "spiele/" });
   assert.match(games.body, /1 von 1 Spiel<\/p>/u);
@@ -130,7 +144,7 @@ test("App-Texte verwenden klare Spielangaben und die korrekte Einzahl", () => {
   const help = renderView(data, { route: "hilfe/" });
   assert.match(help.body, /Öffne diese App in Safari/u);
   assert.match(help.body, /Internetverbindung/u);
-  for (const route of ["ueber/", "kontakt/", "hilfe/", "datenschutz/"]) {
+  for (const route of ["about/", "contact/", "hilfe/", "privacy/"]) {
     assert.doesNotMatch(renderView(data, { route }).body, /\b(?:Ihnen|Ihre[nmrse]*)\b|Kontakteinstieg|Webseitenrepräsentation/u);
   }
 });

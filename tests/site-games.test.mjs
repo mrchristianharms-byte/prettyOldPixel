@@ -121,7 +121,7 @@ test("escaped Tabelleninhalte und nutzt belegte Metadaten ohne Ersatzjahre", () 
   assert.ok(body.includes('width="320" height="180" loading="lazy" decoding="async" referrerpolicy="no-referrer"'));
   assert.doesNotMatch(html, /Standardmäßig stehen|„Gespielt“ entspricht|„Spielzeit“ summiert|Sortierung und Filter benötigen/u);
   assert.match(html, /Alle Systeme · Alle Genres · Erstvideo: neueste zuerst/u);
-  assert.ok(pages.get("datenschutz/index.html").html.includes("tabellarischen Spieleübersicht"));
+  assert.ok(pages.get("privacy/index.html").html.includes("tabellarischen Spieleübersicht"));
 });
 
 test("deckt mit der unpaginierten Spieletabelle den vollständigen echten Katalog ab", async () => {
@@ -1317,7 +1317,7 @@ test("aktualisiert Spieleseiten offline und entfernt sie beim Unterschreiten der
   const after = JSON.parse(await readFile(manifestFile, "utf8")).pages;
   assert.equal(after["spiele/cadaver/index.html"].lastModified, "2026-01-02T00:00:00.000Z");
   assert.equal(after["spiele/cadaver/index.html"].contentPublishedAt, before["spiele/cadaver/index.html"].contentPublishedAt);
-  assert.deepEqual(after["datenschutz/index.html"], before["datenschutz/index.html"]);
+  assert.deepEqual(after["privacy/index.html"], before["privacy/index.html"]);
   assert.ok((await readFile(file, "utf8")).includes("<dt>Abschnitt</dt><dd>Intro / Unboxing</dd>"));
   assert.ok((await readFile(markdownFile, "utf8")).includes("Intro und Unboxing"));
   input.videos.videos[0].description = "Aktualisierte Beschreibung";

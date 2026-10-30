@@ -22,9 +22,9 @@ Hardwarevideos, Retrospektiven und Gespräche. Vorhandene Kapitel verlinken Vide
 
 - [Startseite als Markdown](${config.absolute("index.md")})
 ${model.navigation.map((entry) => `- [${entry.name}](${config.absolute(entry.route)})`).join("\n")}
-- [Über das Projekt](${config.absolute("ueber/")})
-- [Kontakt und Quellen](${config.absolute("kontakt/")})
-- [Datenschutz](${config.absolute("datenschutz/")})
+- [Über das Projekt](${config.absolute("about/")})
+- [Kontakt und Quellen](${config.absolute("contact/")})
+- [Datenschutz](${config.absolute("privacy/")})
 - [Sitemap](${config.absolute("sitemap.xml")})
 - [API-Katalog](${config.absolute(".well-known/api-catalog")})
 - [Read-only-Inhalts-API: Dokumentation](${config.absolute("api/v1/readme.md")})

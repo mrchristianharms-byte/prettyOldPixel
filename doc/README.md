@@ -88,7 +88,14 @@ Spielmechaniken oder Lösungswege erfunden. HTML und Offline-App erhalten
 diese Zusatztexte nicht. Die Konvertierung
 mit `turndown` und `turndown-plugin-gfm` läuft ausschließlich beim Build.
 
-`ueber/` und `kontakt/` erläutern Projekt und Quellen; dieselben Texte sind
+Die allgemeinen Seiten verwenden die Pfade `about/`, `contact/` und `privacy/`.
+Die Offline-App bleibt unter `app/` und verwendet ebenfalls die englischen
+Inhaltsrouten. Sichtbare Linktexte bleiben deutsch. Alte Website-Adressen
+`ueber/`, `kontakt/` und `datenschutz/` erhalten statische HTML-Weiterleitungen
+mit Canonical und Ersatzlink, aber keine Einträge in der Sitemap. Alte
+App-Hash-Adressen werden auf die neuen Routen abgebildet.
+
+`about/` und `contact/` erläutern Projekt und Quellen; dieselben Texte sind
 in der Offline-App verfügbar. Die Startseite enthält eine verknüpfte
 WebSite-Identität. Details und Abnahme stehen in
 [ADR 0011](adr/0011-agentenlesbare-inhalte-und-maschinenlesbare-zugaenge.md).

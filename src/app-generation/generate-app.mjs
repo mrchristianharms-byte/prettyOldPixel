@@ -69,7 +69,7 @@ export async function generateApp(model, config, websiteAssets) {
 <button type="button" id="offline-retry" hidden>Erneut versuchen</button>
 <button type="button" id="offline-update" hidden>Update aktivieren und neu starten</button></aside>
 <main class="container" id="inhalt" tabindex="-1"><h1>App wird geladen …</h1></main>
-<footer class="container"><a href="../">Öffentliche Website</a> · <a href="#/hilfe/">Installation und Speicher</a> · <a href="#/datenschutz/">Datenschutz</a></footer>
+<footer class="container"><a href="../">Öffentliche Website</a> · <a href="#/hilfe/">Installation und Speicher</a> · <a href="#/privacy/">Datenschutz</a></footer>
 <noscript><p>Diese Offline-App benötigt JavaScript. Die <a href="../">öffentliche Website</a> funktioniert auch ohne JavaScript.</p></noscript></body></html>`);
   const entries = [...files].map(([file, content]) => ({
     url: file.slice(4), hash: hash(content), bytes: Buffer.byteLength(content),

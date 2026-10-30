@@ -490,7 +490,7 @@ test("aktualisiert Bereichsinhalte offline, erhält fremde Änderungsdaten und e
   const second = await manifest();
   assert.equal(second.pages["hardware/index.html"].lastModified, "2026-01-02T00:00:00.000Z");
   assert.equal(second.pages["hardware/index.html"].contentPublishedAt, first.pages["hardware/index.html"].contentPublishedAt);
-  assert.deepEqual(second.pages["datenschutz/index.html"], first.pages["datenschutz/index.html"]);
+  assert.deepEqual(second.pages["privacy/index.html"], first.pages["privacy/index.html"]);
   assert.ok((await readFile(path.join(outputDirectory, "sitemap.xml"), "utf8")).includes("/hardware/"));
   const repeat = await generateSite(options);
   assert.equal(repeat.files, repeat.reused);

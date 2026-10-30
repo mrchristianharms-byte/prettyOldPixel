@@ -1,5 +1,5 @@
 import { gameMetadataFilters } from "../content-data/game-filters.mjs";
-import { projectInfo } from "../content-data/project-info.mjs";
+import { projectInfo, projectLinks, externalContentNotice } from "../content-data/project-info.mjs";
 import { siteProcess } from "../content-data/site-process.mjs";
 import { processDiagram, processExplanation } from "./widget/process-diagram.mjs";
 import { markdownFile } from "../ai-bot-generation/markdown-path.mjs";
@@ -186,7 +186,7 @@ ${navigation(navigationEntries, route, config, themeToggle())}
 ${breadcrumbsMarkup(crumbs, config)}
 ${body}
 </main>
-<footer class="container site-footer"><p>${config.name} · Privates, nicht kommerzielles Projekt. · <a href="${config.href("ueber/")}">Über das Projekt</a> · <a href="${config.href("kontakt/")}">Kontakt und Quellen</a> · <a href="${config.href("datenschutz/")}">${interactive ? "YouTube-Einbindung und Datenschutz" : "Datenschutz und Hinweise"}</a>${config.offlineApp ? ` · <a href="${config.href("app/")}">Offline-App</a>` : ""} · Videos und Vorschaubilder von YouTube. · ${externalLink("https://www.youtube.com/prettyoldpixel", "YouTube")} · ${externalLink("https://www.twitch.tv/prettyoldpixel", "Twitch")}</p></footer>
+<footer class="container site-footer"><p>${config.name} · Privates, nicht kommerzielles Projekt. · <a href="${config.href("about/")}">Über das Projekt</a> · <a href="${config.href("contact/")}">Kontakt und Quellen</a> · <a href="${config.href("privacy/")}">${interactive ? "YouTube-Einbindung und Datenschutz" : "Datenschutz und Hinweise"}</a>${config.offlineApp ? ` · <a href="${config.href("app/")}">Offline-App</a>` : ""} · Videos und Vorschaubilder von YouTube. · ${externalLink("https://www.youtube.com/prettyoldpixel", "YouTube")} · ${externalLink("https://www.twitch.tv/prettyoldpixel", "Twitch")}</p></footer>
 </body>
 </html>
 `;
@@ -230,7 +230,7 @@ function privacyBody(config) {
 <p>Diese Website wird bei GitHub Pages gehostet. Beim Besuch können technische Zugriffsdaten wie IP-Adresse, Zeitpunkt und Browserinformationen beim Hosting-Anbieter verarbeitet werden.
 ${externalLink("https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement", "Datenschutzerklärung von GitHub")}</p>
 <h2>Auslieferung und Schutz über Cloudflare</h2>
-<p>Für die Domain prettyoldpixel.com verwenden wir Cloudflare als DNS-Anbieter und als vorgeschalteten Proxy mit Content Delivery Network (CDN). Anbieter ist Cloudflare, Inc., 101 Townsend St, San Francisco, CA 94107, USA. Die Website wird weiterhin bei GitHub Pages gehostet; Cloudflare übernimmt die vorgeschaltete Auslieferung, Zwischenspeicherung öffentlicher Inhalte und den Schutz vor Angriffen.</p>
+<p>Für die Domain prettyoldpixel.com verwenden wir Cloudflare als DNS-Anbieter und als vorgeschalteten Proxy mit Content Delivery Network (CDN). Die Website wird weiterhin bei GitHub Pages gehostet; Cloudflare übernimmt die vorgeschaltete Auslieferung, Zwischenspeicherung öffentlicher Inhalte und den Schutz vor Angriffen.</p>
 <p>Beim Online-Aufruf werden Anfragen zunächst über Cloudflare verarbeitet. Dabei können insbesondere IP-Adresse, angeforderte Adresse, Zeitpunkt, Browser- und Betriebssysteminformationen sowie sicherheitsbezogene Verbindungsdaten verarbeitet werden. Dies dient der sicheren, zuverlässigen und zügigen Bereitstellung der Website. Die Verbindung zu Cloudflare besteht bereits beim Seitenaufruf und ist unabhängig von der Aktivierung eines YouTube-Players.</p>
 <p>Cloudflare betreibt ein weltweites Netzwerk. Eine Verarbeitung personenbezogener Daten außerhalb der EU beziehungsweise des EWR, insbesondere in den USA, ist möglich. Cloudflare beschreibt die hierfür verwendeten Übermittlungsmechanismen, darunter das EU-US Data Privacy Framework und Standardvertragsklauseln, in seinen Datenschutzinformationen. Eine ausschließlich europäische Verarbeitung wird für diese Website nicht zugesichert.</p>
 <p>Wir setzen keine Cloudflare Web Analytics, kein Turnstile und keine von uns bewusst aktivierten Bot-Challenges ein. Je nach eingesetzter Schutzfunktion kann Cloudflare technisch bedingte Cookies verwenden; der Proxy allein bedeutet nicht, dass alle in der Cookie-Dokumentation genannten Cookies gesetzt werden. Weitere Informationen: ${externalLink("https://www.cloudflare.com/de-de/privacypolicy/", "Datenschutzrichtlinie von Cloudflare")}, ${externalLink("https://www.cloudflare.com/de-de/trust-hub/gdpr/", "Cloudflare und Datenschutz")} und ${externalLink("https://developers.cloudflare.com/fundamentals/reference/policies-compliances/cloudflare-cookies/", "Cloudflare-Cookies und ihre Zwecke")}.</p>
@@ -246,9 +246,12 @@ ${externalLink("https://docs.github.com/en/site-policy/privacy-policies/github-g
 <p>Gespeichert werden nur die Player-Aktivierung und die Einstellung zur automatischen Folgenfortsetzung, kein Wiedergabeverlauf. Das ausgewählte Video bleibt in der Seitenadresse erhalten. Ohne JavaScript werden die Einstellungen nicht gespeichert. Kapitellinks öffnen YouTube, und die Folgenfortsetzung ist nicht verfügbar. Du kannst den Player weiterhin einzeln aktivieren, alle Beschreibungen lesen und den YouTube-Links folgen.</p>
 <p>${externalLink("https://policies.google.com/privacy?hl=de", "Datenschutzerklärung von Google")} · ${externalLink("https://www.youtube.com/t/terms", "Nutzungsbedingungen von YouTube")}</p>
 <h2>Externe Links und eigene Speicherung</h2>
-${config.offlineApp ? `<h3>Separate Offline-App</h3><p>Die <a href="${config.href("app/")}">Offline-App</a> lädt erst beim bewussten Öffnen ihren Katalog und einen eigenen Service Worker. Sie speichert öffentliche Katalogdaten, App-Code, Logos und Icons lokal im Cache Storage. „Offline bereit“ bestätigt den vollständigen Katalog. Der zusätzliche Bildzähler zeigt die gespeicherten Vorschaubilder. Die App lädt alle Video-Vorschaubilder beim Einrichten und Ergänzen direkt von i.ytimg.com ohne Zugangsdaten und Referrer in einen lokalen Cache. Dabei werden insbesondere deine IP-Adresse und technische Anfragedaten an YouTube/Google übertragen. Gespeicherte Bilder sind danach offline verfügbar und bleiben bei App-Updates erhalten. Videos benötigen weiterhin eine Internetverbindung und werden nicht im App-Cache gespeichert. Beim Öffnen mit Internetverbindung kann die App auf Updates prüfen. Es gibt kein eigenes Tracking.</p><p>App-Einstellungen für Darstellung, Player und Folgenfortsetzung liegen getrennt unter „pretty-old-pixel:app:*“. Die App-Hilfe erklärt die Installation und das gezielte Löschen der App-Daten einschließlich der Vorschaubilder. Das Entfernen des Home-Bildschirm-Icons garantiert nicht, dass alle Website-Daten gelöscht werden. Das Betriebssystem kann gespeicherte Daten entfernen. Für eine erneute Einrichtung ist eine Internetverbindung erforderlich.</p>` : ""}
+<h3>Externe Inhalte und Logos</h3>
+<p>${escapeHtml(externalContentNotice)}</p>
+${config.offlineApp ? `<h3>Separate Offline-App</h3><p>Die <a href="${config.href("app/")}">Offline-App</a> lädt erst beim bewussten Öffnen ihren Katalog und einen eigenen Service Worker. Sie speichert öffentliche Katalogdaten, App-Code, Logos und Icons lokal im Cache Storage. „Offline bereit“ bestätigt den vollständigen Katalog. Der zusätzliche Bildzähler zeigt die gespeicherten Vorschaubilder. Die App lädt alle Video-Vorschaubilder beim Einrichten und Ergänzen direkt von i.ytimg.com ohne Zugangsdaten und Referrer in einen lokalen Cache. Dabei werden insbesondere deine IP-Adresse und technische Anfragedaten an YouTube/Google übertragen. Gespeicherte Bilder sind danach offline verfügbar und bleiben bei App-Updates erhalten. Videos benötigen weiterhin eine Internetverbindung und werden nicht im App-Cache gespeichert. Beim Öffnen mit Internetverbindung kann die App auf Updates prüfen. Es gibt kein eigenes Tracking.</p><p>Die Offline-App unter https://prettyoldpixel.com/app/ speichert ihre Einstellungen für Darstellung, Player und Folgenfortsetzung getrennt von den Einstellungen der Website. Die App-Hilfe erklärt die Installation und das gezielte Löschen der App-Daten einschließlich der Vorschaubilder. Das Entfernen des Home-Bildschirm-Icons garantiert nicht, dass alle Website-Daten gelöscht werden. Das Betriebssystem kann gespeicherte Daten entfernen. Für eine erneute Einrichtung ist eine Internetverbindung erforderlich.</p>` : ""}
+<h3>Darstellung und Player-Einstellungen</h3>
 <p>Die Darstellung folgt zunächst dem im Browser eingestellten hellen oder dunklen Modus. Mit dem Symbol im Seitenkopf kannst du umschalten. Deine manuelle Auswahl wird als „light“ oder „dark“ unter „pretty-old-pixel:theme“ im Local Storage gespeichert. Nach dem Löschen dieser Browserdaten gilt wieder die Browsereinstellung. Ohne JavaScript folgt die Darstellung weiterhin dem Browsermodus.</p>
-<p>Externe Links sind mit ↗ und einem zugänglichen Hinweis gekennzeichnet. Erst beim Aufrufen wird das jeweilige Ziel besucht. Vorschaubilder und bereits aktivierte Player sind davon ausgenommen. Diese Website setzt selbst keine Tracking-Cookies ein und verwendet keine Analytics-Dienste. Im Local Storage stehen ausschließlich deine Player-Aktivierung, die Einstellung zur automatischen Folgenfortsetzung und deine manuelle Auswahl des Darstellungsmodus. Session Storage wird nicht verwendet.</p>
+<p>Im Local Storage stehen ausschließlich deine Player-Aktivierung, die Einstellung zur automatischen Folgenfortsetzung und deine manuelle Auswahl des Darstellungsmodus. Session Storage wird nicht verwendet. Diese Website setzt selbst keine Tracking-Cookies ein und verwendet keine Analytics-Dienste.</p>
 <p><a href="${config.href()}">Zur Startseite und den Themen</a></p>`;
 }
 
@@ -797,29 +800,29 @@ ${homeOverview(model, config, filters)}`,
     add({
       route: info.route, title: info.title, description: info.description,
       crumbs: [root, { route: info.route, name: info.title }],
-      schema: { "@type": info.route === "ueber/" ? "AboutPage" : "ContactPage",
+      schema: { "@type": info.route === "about/" ? "AboutPage" : "ContactPage",
         "@id": "./#page", name: info.title, url: "./",
         isPartOf: { "@id": `${config.href("", info.route)}#website` } },
       body: `<h1>${escapeHtml(info.title)}</h1>${info.paragraphs.map((text) => `<p>${escapeHtml(text)}</p>`).join("\n")}
-<h2>Weiterführende Links</h2><p>${externalLink("https://prettyoldpixel.de/", "Pretty Old Pixel – Website und Kontakt")} · ${externalLink("https://www.youtube.com/@PrettyOldPixel", "YouTube-Kanal Pretty Old Pixel")}</p>
-<p><a href="${config.href(siteProcess.route, info.route)}">So entsteht diese Website</a> · <a href="${config.href(siteProcess.route, info.route)}">Zusammenspiel der Dienste</a>: GitHub Actions, GitHub Pages, Cloudflare und YouTube.</p>
-<p><a href="${config.href("datenschutz/", info.route)}">Datenschutz und Hinweise</a></p>`,
+<h2>Weiterführende Links</h2>
+<ul>${projectLinks.filter((entry) => !entry.aboutOnly || info.route === "about/").map((entry) => `<li>${externalLink(entry.url, entry.label)}: ${escapeHtml(entry.description)}</li>`).join("\n")}
+<li><a href="${config.href(siteProcess.route, info.route)}">So entsteht diese Website</a>: Das Zusammenspiel von GitHub Actions, GitHub Pages, Cloudflare und YouTube.</li></ul>`,
     });
   }
 
   add({
     route: siteProcess.route, title: siteProcess.title, description: siteProcess.description, processInteractive: true,
-    crumbs: [root, { route: "ueber/", name: "Über das Projekt" }, { route: siteProcess.route, name: siteProcess.title }],
+    crumbs: [root, { route: "about/", name: "Über das Projekt" }, { route: siteProcess.route, name: siteProcess.title }],
     schema: { "@type": "WebPage", "@id": "./#page", name: siteProcess.title, url: "./" },
     body: `<h1>${escapeHtml(siteProcess.title)}</h1>${processDiagram()}${processExplanation()}`,
   });
 
   add({
-    route: "datenschutz/", title: "Datenschutz und Hinweise",
+    route: "privacy/", title: "Datenschutz und Hinweise",
     description: "Hinweise zu GitHub Pages, Cloudflare, öffentlichen Metadaten und der direkten YouTube-Einbindung auf dem privaten, nicht kommerziellen Projekt Pretty Old Pixel.",
-    crumbs: [root, { route: "datenschutz/", name: "Datenschutz" }],
+    crumbs: [root, { route: "privacy/", name: "Datenschutz" }],
     schema: { "@type": "WebPage", "@id": "./#page", name: "Datenschutz und Hinweise" },
-    body: privacyBody(config.forPage("datenschutz/")),
+    body: privacyBody(config.forPage("privacy/")),
   });
   add({
     route: "404.html", file: "404.html", title: "Seite nicht gefunden", noindex: true,

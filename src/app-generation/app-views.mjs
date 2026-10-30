@@ -4,7 +4,7 @@ import { gameDiscussions } from "../site-generation/widget/game-discussions.mjs"
 import { archiveLinks } from "../site-generation/widget/archive-links.mjs";
 import { dateLabel, durationLabel } from "../site-generation/site-format.mjs";
 import { httpUrl } from "../shared/http-url.mjs";
-import { projectInfo } from "../content-data/project-info.mjs";
+import { projectInfo, projectLinks, externalContentNotice, generalPageAliases } from "../content-data/project-info.mjs";
 import { siteProcess } from "../content-data/site-process.mjs";
 import { processDiagram, processExplanation } from "../site-generation/widget/process-diagram.mjs";
 
@@ -35,7 +35,8 @@ export function parseAppRoute(hash) {
   if (url.origin !== "https://app.invalid") throw new Error("Ungültige App-Route.");
   const seconds = url.searchParams.has("t") ? Number(url.searchParams.get("t")) : undefined;
   if (seconds !== undefined && (!Number.isInteger(seconds) || seconds < 0)) throw new Error("Ungültige Kapitelzeit.");
-  return { route: url.pathname.slice(1), videoId: url.searchParams.get("video"), seconds };
+  const route = url.pathname.slice(1);
+  return { route: Object.hasOwn(generalPageAliases, route) ? generalPageAliases[route] : route, videoId: url.searchParams.get("video"), seconds };
 }
 
 export function videoList(videos, route) {
@@ -180,21 +181,25 @@ ${start + 60 < videos.length ? link(`${base}seite/${page + 1}/`, "Nächste Seite
   if (route === siteProcess.route) return { title: siteProcess.title, body: `${processDiagram()}${processExplanation()}` };
   const info = projectInfo.find((entry) => entry.route === route);
   if (info) return { title: info.title, body: `${info.paragraphs.map((text) => `<p>${e(text)}</p>`).join("\n")}
-<p>${externalLink("https://prettyoldpixel.de/", "Pretty Old Pixel – Website und Kontakt")} · ${externalLink("https://www.youtube.com/@PrettyOldPixel", "YouTube-Kanal Pretty Old Pixel")}</p>
-<p>${link(siteProcess.route, "So entsteht diese Website")} · ${link(siteProcess.route, "Zusammenspiel der Dienste")}: GitHub Actions, GitHub Pages, Cloudflare und YouTube.</p>
-<p>${link("datenschutz/", "Datenschutz und Hinweise")}</p>` };
+<h2>Weiterführende Links</h2>
+${itemList([
+    ...projectLinks.filter((entry) => !entry.aboutOnly || info.route === "about/")
+      .map((entry) => `${externalLink(entry.url, entry.label)}: ${e(entry.description)}`),
+    `${link(siteProcess.route, "So entsteht diese Website")}: Das Zusammenspiel von GitHub Actions, GitHub Pages, Cloudflare und YouTube.`,
+  ])}` };
   if (route === "") return { title: "Pretty Old Pixel in Zahlen", body: `<p>${videosCount(model.videos)} · ${model.games.length} Spiele · ${model.magazines.length} Zeitschriften</p>
 <div class="app-grid">${model.navigation.map((item) => `<article><h2>${link(item.route, item.name)}</h2></article>`).join("")}</div>
 <h2>Neueste Videos</h2>${videoList(model.news.slice(0, 10))}` };
   if (route === "hilfe/") return { title: "Installation und Speicher", body: help };
-  if (route === "datenschutz/") return { title: "Datenschutz der Offline-App", body: `<p>Der lokale Speicher enthält veröffentlichte Katalogdaten, App-Code, Logos und Icons.
+  if (route === "privacy/") return { title: "Datenschutz der Offline-App", body: `<p>Der lokale Speicher enthält veröffentlichte Katalogdaten, App-Code, Logos und Icons.
 Zusätzlich lädt die App beim Einrichten und Ergänzen alle Video-Vorschaubilder direkt von i.ytimg.com in einen lokalen Cache. Diese Abrufe und aktivierte Player übertragen insbesondere die IP-Adresse und technische Daten an YouTube/Google.
 Die Bildabrufe erfolgen ohne Zugangsdaten und ohne Referrer. Bereits gespeicherte Bilder werden bei Updates wiederverwendet. Videos werden nicht offline gespeichert. Es gibt kein eigenes Tracking.
 Die App speichert deine Einstellungen für den Darstellungsmodus, die Player-Aktivierung und die automatische Folgenfortsetzung.</p>
+<h2>Externe Inhalte und Logos</h2><p>${e(externalContentNotice)}</p>
 <p>Die App wird bei GitHub Pages gehostet und über Cloudflare als vorgeschalteten Proxy und CDN ausgeliefert. Beim Online-Download und bei Update-Abfragen können beide Anbieter technische Zugriffsdaten einschließlich der IP-Adresse verarbeiten; bei Cloudflare ist auch eine Verarbeitung außerhalb der EU beziehungsweise des EWR möglich. Wir setzen keine Cloudflare Web Analytics, kein Turnstile und keine von uns bewusst aktivierten Bot-Challenges ein. Die App lädt Updates beim Öffnen mit Internetverbindung. Der Offline-Start benötigt keine Verbindung.</p>
 <p>${link(siteProcess.route, "Zusammenspiel der Dienste")}: GitHub Actions, GitHub Pages, Cloudflare und YouTube.</p>
 <p>Das Entfernen des Home-Bildschirm-Icons garantiert nicht das Löschen aller Website-Daten. ${link("hilfe/", "App-Daten gezielt löschen")}.
-Weitere Hosting- und Medienhinweise: <a href="../datenschutz/">Datenschutz der öffentlichen Website</a>.</p>` };
+Weitere Hosting- und Medienhinweise: <a href="../privacy/">Datenschutz der öffentlichen Website</a>.</p>` };
   if (route === "news/") return { title: "News", body: listing(model.videos.filter((video) => video.publishedAt), "news/") };
   if (route === "spiele/" || route === "spiele/uebersicht/") {
     const table = route === "spiele/uebersicht/";

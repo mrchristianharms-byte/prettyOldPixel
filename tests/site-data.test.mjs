@@ -59,7 +59,7 @@ test("berechnet seitenrelative Links für verschachtelte Seiten, Assets und einz
     ["videos/seite/2/", "videos/", "seite/2/"],
     ["spiele/cadaver/", "spiele/cadaver/", "./"],
     ["assets/site.css", "zeitschriften/pc-games/1992/ausgaben/11/", "../../../../../assets/site.css"],
-    ["datenschutz/", "404.html", "datenschutz/"],
+    ["privacy/", "404.html", "privacy/"],
     ["404.html", "404.html", "404.html"],
   ];
   for (const [target, from, expected] of cases) {

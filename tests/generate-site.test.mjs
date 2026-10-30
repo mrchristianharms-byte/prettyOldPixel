@@ -70,6 +70,27 @@ test("enthält auf allen Seiten und in eingebetteten Player-Vorschauen nicht lee
   assert.ok(posters > 0);
 });
 
+test("alte allgemeine Seiten leiten auf englische Pfade außerhalb der Sitemap weiter", async (t) => {
+  const options = await setup(t, fixture(1));
+  for (const baseUrl of ["https://prettyoldpixel.com/", "https://example.org/projekt/"]) {
+    await generateSite({ ...options, baseUrl });
+    const sitemap = await readFile(path.join(options.outputDirectory, "sitemap.xml"), "utf8");
+    const llms = await readFile(path.join(options.outputDirectory, "llms.txt"), "utf8");
+    for (const [legacy, target] of [["ueber/", "about/"], ["kontakt/", "contact/"], ["datenschutz/", "privacy/"]]) {
+      const redirect = await readFile(path.join(options.outputDirectory, legacy, "index.html"), "utf8");
+      assert.ok(redirect.includes(`<meta http-equiv="refresh" content="0;url=../${target}">`));
+      assert.ok(redirect.includes(`<link rel="canonical" href="${baseUrl}${target}">`));
+      assert.ok(redirect.includes(`<a href="../${target}">Zur neuen Adresse</a>`));
+      assert.ok(redirect.includes('content="noindex, follow"'));
+      assert.ok(!sitemap.includes(`${baseUrl}${legacy}`));
+      assert.ok(!llms.includes(`${baseUrl}${legacy}`));
+      assert.ok(sitemap.includes(`${baseUrl}${target}`));
+      const markdown = await readFile(path.join(options.outputDirectory, target, "index.md"), "utf8");
+      assert.ok(markdown.includes(`HTML-Original: <${baseUrl}${target}>`));
+    }
+  }
+});
+
 test("zeigt auf der Startseite den Markennamen nur im Kopf statt als zusätzliche Überschrift", () => {
   const { pages, config } = render();
   const html = pages.get("index.html").html;
@@ -90,13 +111,16 @@ test("beschreibt Websiteidentität und verlinkt quellengestützte Projekt- und K
     assert.equal(graph.find((entry) => entry["@type"] === "WebPage").isPartOf["@id"], website["@id"]);
     assert.equal(website.inLanguage, "de");
     assert.ok(home.includes("Videokatalog zum YouTube-Kanal"));
-    for (const [route, type] of [["ueber/", "AboutPage"], ["kontakt/", "ContactPage"]]) {
+    for (const [route, type] of [["about/", "AboutPage"], ["contact/", "ContactPage"]]) {
       const html = pages.get(`${route}index.html`).html;
       const main = html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/u)[1];
       const paragraphs = [...main.matchAll(/<p>([\s\S]*?)<\/p>/gu)].map((match) => match[1]).join(" ").replace(/<[^>]*>/gu, "");
       assert.ok(paragraphs.length >= 500, route);
       assert.ok(html.includes(`"@type":"${type}"`));
       assert.ok(html.includes('href="https://prettyoldpixel.de/" rel="external"'));
+      assert.doesNotMatch(main, /href="[^"]*privacy\//u);
+      assert.match(main, /<li><a href="https:\/\/prettyoldpixel\.de\/"[\s\S]*?<\/a>: Weitere Informationen/u);
+      if (route === "about/") assert.match(main, /<li><a href="https:\/\/www\.twitch\.tv\/prettyoldpixel"[\s\S]*?<\/a>: Livestreams von Pretty Old Pixel\.<\/li>/u);
       assert.ok(!html.includes('"@type":"Organization"'));
       assert.ok(!html.includes('"contactPoint"'));
       for (const page of pages.values()) assert.ok(page.html.includes(`href="${config.href(route, page.route)}"`));
@@ -121,7 +145,7 @@ test("eigene Seitentexte verwenden keine förmliche Ansprache oder veraltete Abs
   for (const [file, { html }] of pages) {
     assert.doesNotMatch(html, /\b(?:Ihnen|Ihre[nmrse]*)\b|(?:[Ww]ählen|[Öö]ffnen|[Ss]tarten|[Nn]utzen|[Ee]ntdecken|[Kk]önnen|[Ff]inden) Sie\b|Abschlußgespräch/u, file);
   }
-  assert.match(pages.get("datenschutz/index.html").html, /wenn du „YouTube-Player aktivieren“ wählst/u);
+  assert.match(pages.get("privacy/index.html").html, /wenn du „YouTube-Player aktivieren“ wählst/u);
   assert.match(pages.get("404.html").html, /findest du die Videos/u);
 });
 
@@ -217,7 +241,7 @@ test("beschreibt Seiteninhalte in Einleitungen und SEO-Texten statt Datenaufbere
   input.magazines.videos.push({ id: "b0000000002", magazines: [] });
   const { pages } = render(input);
   for (const [file, { html }] of pages) {
-    if (file === "datenschutz/index.html") continue;
+    if (file === "privacy/index.html") continue;
     const description = html.match(/<meta name="description" content="([^"]+)">/u)[1];
     assert.doesNotMatch(description, /Abruf|Metadaten|bestimmbar|chronologisch|Das Jahr bezeichnet/u, file);
     assert.ok(html.includes(`<meta property="og:description" content="${description}">`), file);
@@ -231,9 +255,19 @@ test("beschreibt Seiteninhalte in Einleitungen und SEO-Texten statt Datenaufbere
   const standalone = pages.get("zeitschriften/videos/blatterabend-mit-gast/index.html");
   assert.ok(standalone);
   assert.match(standalone.html, /Originalbeschreibung: Abruf der Daten bleibt unverändert\./u);
-  const privacy = pages.get("datenschutz/index.html").html;
+  const privacy = pages.get("privacy/index.html").html;
+  assert.doesNotMatch(privacy, /pretty-old-pixel:app:\*/u);
+  assert.match(privacy, /<h3>Darstellung und Player-Einstellungen<\/h3>\s*<p>Die Darstellung folgt/u);
   assert.match(privacy, /IP-Adresse/u);
   assert.match(privacy, /Local Storage/u);
+});
+
+test("nennt die öffentliche App-Adresse statt interner Speicherschlüssel", () => {
+  const config = createSiteConfig();
+  config.offlineApp = true;
+  const privacy = renderSite(normalizeSources(fixture()), config, "assets/site.css").get("privacy/index.html").html;
+  assert.ok(privacy.includes("Die Offline-App unter https://prettyoldpixel.com/app/ speichert ihre Einstellungen"));
+  assert.doesNotMatch(privacy, /pretty-old-pixel:app:\*/u);
 });
 
 test("macht Gastvorschauen mit Heftausgaben und Namen der Gäste konkret", () => {
@@ -262,7 +296,7 @@ test("verlinkt YouTube-Thumbnails als Social-Vorschaubilder auf Videoseiten", ()
   assertPreviewImage(pages.get("index.html").html);
   assertPreviewImage(pages.get("news/index.html").html);
   assertPreviewImage(issuePage(pages));
-  assert.ok(!pages.get("datenschutz/index.html").html.includes('property="og:image"'));
+  assert.ok(!pages.get("privacy/index.html").html.includes('property="og:image"'));
 });
 
 test("zeigt kompakte Videodaten in Berliner Winter- und Sommerzeit mit unverändertem ISO-Datum", () => {
@@ -480,14 +514,14 @@ test("lädt vor Aktivierung keinen YouTube-Player und dokumentiert den aktuellen
   assert.equal((html.match(/<iframe /gu) ?? []).length, 1);
   assert.equal((html.match(/data-video-panel /gu) ?? []).length, 2);
   assert.ok(html.includes("keine Beschreibung vorhanden"));
-  const privacy = pages.get("datenschutz/index.html").html;
-  for (const text of ["nicht kommerziell", "GitHub Pages", "Auslieferung und Schutz über Cloudflare", "Cloudflare, Inc.", "IP-Adresse", "Standardvertragsklauseln", "keine Cloudflare Web Analytics", "i.ytimg.com", "youtube-nocookie.com", "offizielle YouTube-IFrame-API", "Nächste Folge automatisch", "Local Storage", "YouTube-Aktivierung zurücksetzen", "Session Storage"]) {
+  const privacy = pages.get("privacy/index.html").html;
+  for (const text of ["nicht kommerziell", "GitHub Pages", "Auslieferung und Schutz über Cloudflare", "Externe Inhalte und Logos", "Symbol ↗", "statische Dateien", "Marken- und Kennzeichenrechte", "IP-Adresse", "Standardvertragsklauseln", "keine Cloudflare Web Analytics", "i.ytimg.com", "youtube-nocookie.com", "offizielle YouTube-IFrame-API", "Nächste Folge automatisch", "Local Storage", "YouTube-Aktivierung zurücksetzen", "Session Storage"]) {
     assert.ok(privacy.includes(text), text);
   }
   for (const url of ["https://www.cloudflare.com/de-de/privacypolicy/", "https://www.cloudflare.com/de-de/trust-hub/gdpr/", "https://developers.cloudflare.com/fundamentals/reference/policies-compliances/cloudflare-cookies/"]) {
     assert.ok(privacy.includes(`href="${url}" rel="external"`), url);
   }
-  for (const page of pages.values()) assert.ok(page.html.includes(`href="${createSiteConfig().href("datenschutz/", page.route)}"`));
+  for (const page of pages.values()) assert.ok(page.html.includes(`href="${createSiteConfig().href("privacy/", page.route)}"`));
   assert.ok(pages.get("404.html").html.includes('content="noindex, follow"'));
 });
 
@@ -623,10 +657,10 @@ test("baut offline mit Produktionsdomain, Sitemap und Inhalts-Manifest; übernim
   const markdown404 = await readFile(path.join(options.outputDirectory, "404.md"), "utf8");
   assert.ok(markdown404.includes("Seite nicht gefunden"));
   for (const text of ["Wann diese Website verwenden", "Quellen und Zitieren", "Grenzen",
-    "https://prettyoldpixel.com/ueber/", "https://prettyoldpixel.com/kontakt/",
+    "https://prettyoldpixel.com/about/", "https://prettyoldpixel.com/contact/",
     "https://prettyoldpixel.com/sitemap.xml"]) assert.ok(llms.includes(text), text);
-  assert.ok(sitemap.includes("https://prettyoldpixel.com/ueber/"));
-  assert.ok(sitemap.includes("https://prettyoldpixel.com/kontakt/"));
+  assert.ok(sitemap.includes("https://prettyoldpixel.com/about/"));
+  assert.ok(sitemap.includes("https://prettyoldpixel.com/contact/"));
   assert.ok(sitemap.includes("https://prettyoldpixel.com/so-entsteht-die-seite/"));
   const processMarkdown = await readFile(path.join(options.outputDirectory, "so-entsteht-die-seite/index.md"), "utf8");
   assert.ok(processMarkdown.includes("F4 · Besucher und Auslieferung"));
@@ -754,7 +788,7 @@ test("setzt Sitemap-lastmod nur bei Inhaltsänderungen und erhält Zeitpunkte au
   const first = await readManifest();
   const firstSitemap = await readFile(sitemapPath, "utf8");
   assert.equal(first.pages["news/index.html"].lastModified, new Date(firstTime).toISOString());
-  assert.equal(first.pages["datenschutz/index.html"].lastModified, new Date(firstTime).toISOString());
+  assert.equal(first.pages["privacy/index.html"].lastModified, new Date(firstTime).toISOString());
   assert.ok(!firstSitemap.includes("404.html"));
   for (const url of firstSitemap.matchAll(/<url><loc>([^<]+)<\/loc><lastmod>([^<]+)<\/lastmod><\/url>/gu)) {
     assert.equal(url[2], new Date(firstTime).toISOString());
@@ -771,7 +805,7 @@ test("setzt Sitemap-lastmod nur bei Inhaltsänderungen und erhält Zeitpunkte au
   const updated = await readManifest();
   assert.equal(updated.pages["news/index.html"].lastModified, new Date(laterTime).toISOString());
   assert.equal(updated.pages["news/index.html"].contentPublishedAt, first.pages["news/index.html"].contentPublishedAt);
-  assert.equal(updated.pages["datenschutz/index.html"].lastModified, first.pages["datenschutz/index.html"].lastModified);
+  assert.equal(updated.pages["privacy/index.html"].lastModified, first.pages["privacy/index.html"].lastModified);
   assert.ok((await readFile(sitemapPath, "utf8")).includes(`<lastmod>${new Date(laterTime).toISOString()}</lastmod>`));
 
   const restoredOutput = path.join(path.dirname(options.outputDirectory), "ci", "docs");

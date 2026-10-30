@@ -26,7 +26,7 @@ const video = {
 
 test("Hauptnavigation erhält Reihenfolge, relative Links, sichere Namen und aktive Bereiche auf Unterseiten", () => {
   const entries = [{ route: "news/", name: "News" }, { route: "spiele/", name: "Spiele & <Demo>" }, { route: "sonstiges/", name: "Sonstiges" }];
-  for (const route of ["", "news/", "spiele/demo/", "sonstiges/seite/2/", "datenschutz/"]) {
+  for (const route of ["", "news/", "spiele/demo/", "sonstiges/seite/2/", "privacy/"]) {
     const config = createSiteConfig().forPage(route);
     const html = navigation(entries, route, config);
     assert.ok(html.startsWith('<nav aria-label="Hauptnavigation"><details class="navigation-menu"><summary>Menü</summary><ul>'));
