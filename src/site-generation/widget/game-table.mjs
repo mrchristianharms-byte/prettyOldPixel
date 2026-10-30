@@ -25,7 +25,7 @@ export function gameTable(rows, config, intro = "") {
 <div class="overflow-auto" role="region" aria-label="Gesamtübersicht aller Spiele" tabindex="0">
 <table class="game-table">
 <caption class="visually-hidden">Alle Systeme · Alle Genres · Erstvideo: neueste zuerst</caption>
-<thead><tr>${sortableHeading("Erstvideo", "video", "Erstvideo")}${sortableHeading("Titel", "title", "Titel (Alphabet)")}${sortableHeading("Release", "release", "Release des Spiels")}<th scope="col">Plattform</th><th scope="col">Genre</th><th scope="col">Videovorschau</th>${sortableHeading("Länge", "duration", "Länge")}<th scope="col">Weiteres</th></tr></thead>
+<thead><tr>${sortableHeading("Erstvideo", "video", "Erstvideo")}${sortableHeading("Titel", "title", "Titel (Alphabet)")}${sortableHeading("Jahr", "release", "Erscheinungsjahr des Spiels")}<th scope="col">Plattform</th><th scope="col">Genre</th><th scope="col">Videovorschau</th>${sortableHeading("Länge", "duration", "Länge")}<th scope="col">Weiteres</th></tr></thead>
 <tbody>${rows.map((row) => `<tr data-video="${row.video.publishedTime ?? ""}" data-release="${row.releaseYear ?? ""}" data-title="${escapeHtml(row.name)}" data-duration="${row.durationSeconds ?? ""}" data-platforms="${escapeHtml(JSON.stringify(row.platforms))}" data-genres="${escapeHtml(JSON.stringify(row.genres))}">
 <td>${escapeHtml(row.firstYear ?? "Unbekannt")}</td>
 <th scope="row"><a href="${config.href(row.route)}">${escapeHtml(row.name)}</a>
@@ -39,10 +39,10 @@ export function gameTable(rows, config, intro = "") {
 <td class="game-table-links">${[
     ...row.playlists.map((playlist, index) => externalLink(playlist.url, row.playlists.length === 1 ? "Playlist" : `Playlist ${index + 1}`)),
     ...(row.mobyGamesUrl ? [externalLink(row.mobyGamesUrl, "Moby")] : []),
-    ...(row.conclusionVideo ? [videoLink(row.conclusionVideo, config, "Abschlußgespräch", row.route)] : []),
+    ...(row.conclusionVideo ? [videoLink(row.conclusionVideo, config, "Abschlussgespräch", row.route)] : []),
   ].join("<br>") || "Nicht verfügbar"}</td>
 </tr>`).join("")}</tbody>
 </table></div>
-<p data-game-table-empty hidden>Keine Spiele für diese Suche und Filter gefunden.</p>
+<p data-game-table-empty hidden>Keine Spiele für diese Suche mit den gewählten Filtern gefunden.</p>
 </section>`;
 }

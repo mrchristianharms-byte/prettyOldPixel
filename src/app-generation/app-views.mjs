@@ -79,7 +79,7 @@ export function gameTableBody(games, model, sort = "video", direction = -1) {
     ...game.playlists.map((playlist) => externalLink(playlist.url, playlist.title)),
     ...(gameData(game).evidence?.sourceUrl ? [externalLink(gameData(game).evidence.sourceUrl, "MobyGames")] : []),
     ...game.series.entries.filter((entry) => entry.phase.id === "conclusion").slice(0, 1)
-      .map((entry) => `<a href="${e(appHref(game.route, entry.videoId))}">Abschlußgespräch</a>`),
+      .map((entry) => `<a href="${e(appHref(game.route, entry.videoId))}">Abschlussgespräch</a>`),
   ].join("<br>")}</td></tr>`).join("");
 }
 
@@ -87,16 +87,16 @@ function gamesView(games, model, table = false) {
   return `<form id="app-game-filters"><label>System<select name="platform">${options(games.flatMap(platforms), "Alle Systeme")}<option value="__unknown__">System unbekannt</option></select></label>
 <label>Genre<select name="genre">${options(games.flatMap((game) => gameData(game).genres ?? []), "Alle Genres")}<option value="__unknown__">Genre unbekannt</option></select></label>
 <label>Spieletitel<input type="search" name="search" placeholder="Spiel suchen"></label><button type="reset" aria-label="Filter zurücksetzen" title="Filter zurücksetzen">↺</button></form>
-<p id="app-game-count" role="status">${games.length} von ${games.length} Spielen</p>
+<p id="app-game-count" role="status">${games.length} von ${count(games.length, "Spiel", "Spielen")}</p>
 ${table ? `<div class="overflow-auto" role="region" aria-label="Spieletabelle" tabindex="0"><table class="app-game-table"><thead><tr>
-${[["video", "Erstvideo"], ["title", "Titel"], ["release", "Release"]].map(([key, label]) => `<th scope="col" aria-sort="${key === "video" ? "descending" : "none"}"><button data-sort="${key}">${label} ↕</button></th>`).join("")}
+${[["video", "Erstvideo"], ["title", "Titel"], ["release", "Jahr"]].map(([key, label]) => `<th scope="col" aria-sort="${key === "video" ? "descending" : "none"}"><button data-sort="${key}">${label} ↕</button></th>`).join("")}
 <th scope="col">Plattform</th><th scope="col">Genre</th><th scope="col">Videovorschau</th><th scope="col" aria-sort="none"><button data-sort="duration">Länge ↕</button></th><th scope="col">Weiteres</th></tr></thead><tbody id="app-game-results">${gameTableBody(games, model)}</tbody></table></div>`
     : `<div class="app-grid" id="app-game-results">${gameCards(games, model)}</div>`}`;
 }
 
 export function gameCards(games, model) {
   return games.map((game) => `<article><h2>${link(game.route, game.name)}</h2><p>${e(platforms(game).join(", ") || "System unbekannt")}</p>
-<p>Release: ${game.releaseYear ?? "Unbekannt"}</p><p>${videosCount(game.videos)}</p>
+<p>Erscheinungsjahr: ${game.releaseYear ?? "Unbekannt"}</p><p>${videosCount(game.videos)}</p>
 <p>${e(total(game.videos.map((id) => model.videoById.get(id))))}</p></article>`).join("");
 }
 
@@ -108,7 +108,7 @@ function gameMetadata(game, model) {
   }).join(", ") || "Unbekannt";
   // Filter routes carry their field through export, not a second slug algorithm.
   return `<dl class="app-metadata"><dt>System</dt><dd>${values("platform", platforms(game))}</dd>
-<dt>Release</dt><dd>${game.releaseYear ?? "Unbekannt"}</dd><dt>Genre</dt><dd>${values("genre", data.genres ?? [])}</dd>
+<dt>Erscheinungsjahr</dt><dd>${game.releaseYear ?? "Unbekannt"}</dd><dt>Genre</dt><dd>${values("genre", data.genres ?? [])}</dd>
 <dt>Entwickler</dt><dd>${values("developer", [...new Set((data.releases ?? []).map((release) => release.developer).filter(Boolean))])}</dd>
 <dt>Publisher</dt><dd>${values("publisher", [...new Set((data.releases ?? []).map((release) => release.publisher).filter(Boolean))])}</dd></dl>
 ${data.evidence?.sourceUrl ? `<p>Quelle: ${externalLink(data.evidence.sourceUrl, "Spielemetadaten")}</p>` : ""}
@@ -137,12 +137,12 @@ ${externalLink(selected.url, "Video auf YouTube ansehen")}</div></section>
 ${entry ? `<p>${e(entry.phase.label)}${run ? ` · ${e(run.label)}` : ""}</p>` : ""}
 ${!game ? gameDiscussions(selected, {
     timestampHref: (seconds) => appHref(route, selected.id, seconds),
-    hint: "Zeitmarken wählen die Stelle in der App. Videos benötigen Internet.",
+    hint: "Zeitmarken öffnen die gewählte Stelle im App-Player. Videos benötigen eine Internetverbindung.",
   }) : ""}
 <div class="description">${descriptionHtml(selected.descriptionWithoutChapters || selected.description, selected.playlists)}</div>
 ${selected.chapters.length ? `<h3>Kapitel und Zeitmarken</h3>${itemList(selected.chapters.map((chapter) =>
     `<a href="${e(appHref(route, selected.id, chapter.seconds))}">${durationLabel(chapter.seconds)} · ${e(chapter.label)}</a> ${externalLink(chapter.url, "YouTube")}`))}` : ""}
-${selected.mentionedChannels.length ? `<h3>Erwähnte Kanäle / Partner</h3>${itemList(selected.mentionedChannels.map((channel) => externalLink(channel.url, channel.label)))}` : ""}
+${selected.mentionedChannels.length ? `<h3>Erwähnte Kanäle und Partner</h3>${itemList(selected.mentionedChannels.map((channel) => externalLink(channel.url, channel.label)))}` : ""}
 ${selected.magazines.length ? `<h3>Zeitschriften und Ausgaben</h3>${itemList(selected.magazines.map((magazine) =>
     `${link(magazine.issue?.route ?? magazine.route, `${magazine.name}${magazine.issue ? ` – ${magazine.issue.label}` : ""}`)} ${archiveLinks(magazine.archives)}`))}` : ""}
 ${selected.games.length ? `<h3>Spiele</h3>${itemList(selected.games.map((game) => link(game.route, game.name)))}` : ""}
@@ -151,17 +151,17 @@ ${index + 1 < videos.length ? `<a href="${e(appHref(route, videos[index + 1].id)
   };
 }
 
-const help = `<p>Diese App erzeugt ihre Ansichten lokal aus JSON. Die öffentliche Website bleibt unverändert.</p>
-<h2>Auf dem iPhone installieren</h2><ol><li>Diese App in Safari öffnen.</li><li>Teilen und „Zum Home-Bildschirm“ wählen.</li>
-<li>Die installierte App mit Internet öffnen und auf „Offline bereit“ warten.</li><li>Danach funktioniert der Katalog im Flugmodus.</li></ol>
-<p>Die App lädt alle Video-Vorschaubilder bei der Einrichtung direkt von YouTube in einen eigenen lokalen Cache. Der Fortschritt steht oben; fehlende Bilder lassen sich mit „Erneut versuchen“ nachladen.
-Gespeicherte Vorschaubilder sind offline verfügbar. Videos und externe Quellen benötigen weiterhin Internet. Gespeicherte Daten können vom Betriebssystem entfernt werden.
-Der Status wird in dieser App geprüft; ein Download in Safari garantiert nicht denselben Speicherstand in der installierten App.</p>
-<h2>Updates und Speicher</h2><p>Die App prüft beim Öffnen auf Updates. Ein vollständiger neuer Stand wird erst nach Bestätigung aktiviert.
+const help = `<p>Diese App erzeugt ihre Ansichten direkt auf deinem Gerät aus gespeicherten Katalogdaten. Die öffentliche Website bleibt dabei unverändert.</p>
+<h2>Auf dem iPhone installieren</h2><ol><li>Öffne diese App in Safari.</li><li>Öffne das Teilen-Menü und wähle „Zum Home-Bildschirm“.</li>
+<li>Öffne die installierte App mit Internetverbindung und warte auf „Offline bereit“.</li><li>Danach kannst du den Katalog auch im Flugmodus nutzen.</li></ol>
+<p>Die App lädt bei der Einrichtung alle Video-Vorschaubilder direkt von YouTube in einen eigenen lokalen Zwischenspeicher (Cache). Den Fortschritt siehst du oben. Fehlende Bilder kannst du mit „Erneut versuchen“ nachladen.
+Gespeicherte Vorschaubilder sind offline verfügbar. Videos und externe Quellen benötigen weiterhin eine Internetverbindung. Das Betriebssystem kann gespeicherte Daten entfernen.
+Der Speicherstatus gilt jeweils für die geöffnete App. Ein Download in Safari garantiert nicht, dass die Daten auch in der installierten App gespeichert sind.</p>
+<h2>Updates und Speicher</h2><p>Die App prüft beim Öffnen auf Updates. Ein vollständig heruntergeladenes Update wird erst nach deiner Bestätigung aktiviert.
 Ein abgebrochenes Update ersetzt den bisherigen Offline-Stand nicht. Während eines Updates wird vorübergehend mehr Platz benötigt.</p>
 <button id="app-check-update">Auf Updates prüfen</button> <button id="app-request-storage">Dauerhafte Speicherung anfragen</button>
-<details><summary>App-Daten entfernen</summary><p>Löscht nur die Offline-Caches dieser App und ihre Einstellungen, nicht die öffentliche Website.
-Anschließend ist eine erneute Einrichtung mit Internet erforderlich.</p><button id="app-clear">Offline-Daten und App-Einstellungen löschen</button></details>`;
+<details><summary>App-Daten entfernen</summary><p>Hier kannst du die Offline-Caches dieser App und ihre Einstellungen löschen. Die öffentliche Website bleibt unverändert.
+Anschließend ist eine erneute Einrichtung mit Internetverbindung erforderlich.</p><button id="app-clear">Offline-Daten und App-Einstellungen löschen</button></details>`;
 
 export function renderView(model, state) {
   let { route } = state;
@@ -180,7 +180,7 @@ ${start + 60 < videos.length ? link(`${base}seite/${page + 1}/`, "Nächste Seite
   if (route === siteProcess.route) return { title: siteProcess.title, body: `${processDiagram()}${processExplanation()}` };
   const info = projectInfo.find((entry) => entry.route === route);
   if (info) return { title: info.title, body: `${info.paragraphs.map((text) => `<p>${e(text)}</p>`).join("\n")}
-<p>${externalLink("https://prettyoldpixel.de/", "Pretty Old Pixel – Website und Kontakteinstieg")} · ${externalLink("https://www.youtube.com/@PrettyOldPixel", "YouTube-Kanal Pretty Old Pixel")}</p>
+<p>${externalLink("https://prettyoldpixel.de/", "Pretty Old Pixel – Website und Kontakt")} · ${externalLink("https://www.youtube.com/@PrettyOldPixel", "YouTube-Kanal Pretty Old Pixel")}</p>
 <p>${link(siteProcess.route, "So entsteht diese Website")} · ${link(siteProcess.route, "Zusammenspiel der Dienste")}: GitHub Actions, GitHub Pages, Cloudflare und YouTube.</p>
 <p>${link("datenschutz/", "Datenschutz und Hinweise")}</p>` };
   if (route === "") return { title: "Pretty Old Pixel in Zahlen", body: `<p>${videosCount(model.videos)} · ${model.games.length} Spiele · ${model.magazines.length} Zeitschriften</p>
@@ -190,8 +190,8 @@ ${start + 60 < videos.length ? link(`${base}seite/${page + 1}/`, "Nächste Seite
   if (route === "datenschutz/") return { title: "Datenschutz der Offline-App", body: `<p>Der lokale Speicher enthält veröffentlichte Katalogdaten, App-Code, Logos und Icons.
 Zusätzlich lädt die App beim Einrichten und Ergänzen alle Video-Vorschaubilder direkt von i.ytimg.com in einen lokalen Cache. Diese Abrufe und aktivierte Player übertragen insbesondere die IP-Adresse und technische Daten an YouTube/Google.
 Die Bildabrufe erfolgen ohne Zugangsdaten und ohne Referrer. Bereits gespeicherte Bilder werden bei Updates wiederverwendet. Videos werden nicht offline gespeichert. Es gibt kein eigenes Tracking.
-Eigene Einstellungen speichern Darstellungsmodus, Player-Aktivierung und Folgenfortsetzung.</p>
-<p>Die App wird bei GitHub Pages gehostet und über Cloudflare als vorgeschalteten Proxy und CDN ausgeliefert. Beim Online-Download und bei Update-Abfragen können beide Anbieter technische Zugriffsdaten einschließlich der IP-Adresse verarbeiten; bei Cloudflare ist auch eine Verarbeitung außerhalb der EU beziehungsweise des EWR möglich. Wir setzen keine Cloudflare Web Analytics, kein Turnstile und keine von uns bewusst aktivierten Bot-Challenges ein. Die App lädt Updates beim Öffnen mit Verbindung; der Offline-Start benötigt keine Verbindung.</p>
+Die App speichert deine Einstellungen für den Darstellungsmodus, die Player-Aktivierung und die automatische Folgenfortsetzung.</p>
+<p>Die App wird bei GitHub Pages gehostet und über Cloudflare als vorgeschalteten Proxy und CDN ausgeliefert. Beim Online-Download und bei Update-Abfragen können beide Anbieter technische Zugriffsdaten einschließlich der IP-Adresse verarbeiten; bei Cloudflare ist auch eine Verarbeitung außerhalb der EU beziehungsweise des EWR möglich. Wir setzen keine Cloudflare Web Analytics, kein Turnstile und keine von uns bewusst aktivierten Bot-Challenges ein. Die App lädt Updates beim Öffnen mit Internetverbindung. Der Offline-Start benötigt keine Verbindung.</p>
 <p>${link(siteProcess.route, "Zusammenspiel der Dienste")}: GitHub Actions, GitHub Pages, Cloudflare und YouTube.</p>
 <p>Das Entfernen des Home-Bildschirm-Icons garantiert nicht das Löschen aller Website-Daten. ${link("hilfe/", "App-Daten gezielt löschen")}.
 Weitere Hosting- und Medienhinweise: <a href="../datenschutz/">Datenschutz der öffentlichen Website</a>.</p>` };

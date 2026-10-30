@@ -90,8 +90,8 @@ export function generateApi(model, config) {
 \`GET ${endpoint}\` liefert JSON ohne API-Schlüssel oder Authentifizierung.
 Der vollständige Snapshot wird bei jedem Website-Build aus den lokalen
 öffentlichen Quellen erzeugt. Er ist keine Echtzeitabfrage von YouTube.
-Nur GET/HEAD für statische Dateien; keine Schreiboperationen, Suche,
-serverseitigen Filter oder Paginierung. Daten lokal filtern.
+Die API unterstützt nur GET und HEAD für statische Dateien. Sie bietet keine
+Schreiboperationen, Suche, serverseitigen Filter oder Paginierung. Filtere die Daten lokal.
 
 ## Datenvertrag
 
@@ -108,19 +108,19 @@ Schemaänderungen benötigen eine neue API-Hauptversion.
 
 ## Grenzen und Quellen
 
-Keine Videodateien, Player, vollständigen Transkripte oder vollständige
+Die API enthält keine Videodateien, Player, vollständigen Transkripte oder vollständige
 Spieledatenbank. Videotitel und Beschreibungen stammen aus öffentlichen
 YouTube-Angaben; sie belegen keine vollständige Spielanleitung. Zitiere
-Website-Seite und Originalvideo. Es werden keine zusätzlichen Nutzungsrechte
-an fremden Inhalten eingeräumt. Keine garantierte Verfügbarkeit oder
-Aktualisierungsfrequenz und kein separater Health-Endpunkt.
+die Inhaltsseite der Website und das Originalvideo. Es werden keine zusätzlichen Nutzungsrechte
+an fremden Inhalten eingeräumt. Verfügbarkeit und Aktualisierungsfrequenz sind nicht garantiert.
+Es gibt keinen separaten Health-Endpunkt.
 
 ## HTTP und Caching
 
 HTTP 200 mit \`application/json\` ist für den Snapshot vorgesehen.
-Hosting über GitHub Pages, Auslieferung über Cloudflare. Bestehende
-Cache-Header bleiben erhalten; Validatoren nur verwenden, wenn tatsächlich
-mitgeliefert. Nicht für jede Frage erneut den gesamten Snapshot abrufen.
+Das Hosting erfolgt über GitHub Pages, die Auslieferung über Cloudflare. Bestehende
+Cache-Header bleiben erhalten. Verwende Cache-Validatoren nur, wenn sie tatsächlich
+mitgeliefert werden. Rufe nicht für jede Frage erneut den gesamten Snapshot ab.
 Die internen Offline-App-Dateien gehören nicht zum öffentlichen API-Vertrag.
 `;
   const json = (value) => `${JSON.stringify(value, null, 2)}\n`;

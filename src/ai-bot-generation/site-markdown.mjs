@@ -22,18 +22,19 @@ export function renderMarkdown(page, config, game) {
   converter.addRule("video-purpose", {
     filter: (node) => node.hasAttribute("data-video-widget"),
     replacement: () => `\n\n${converter.turndown(`<section><h2>Die Videos sind der Hauptinhalt</h2>
-<p>Der Hauptzweck dieser Seite ist, die YouTube-Videos von Pretty Old Pixel zugänglich zu machen.
+<p>Diese Seite hilft dir, die YouTube-Videos von Pretty Old Pixel zu finden und anzusehen.
 Die Markdown-Fassung enthält keinen abspielbaren Player. Videotitel, Beschreibungen und Kapitel helfen
 beim Auffinden der Originalvideos, ersetzen aber weder deren Bild und Ton noch ein vollständiges Transkript.
 Aus Metadaten allein lassen sich keine verlässlichen Details zum gezeigten Ablauf ableiten.</p>
 ${game ? `<h2>Wie wird das Spiel ${escapeHtml(game.name)} gespielt?</h2>
-<p>Die Antwort wird in den verlinkten YouTube-Videos zur Spielreihe gezeigt.
-Die vorhandenen Videotitel geben eine Orientierung über die Folgen, zum Beispiel:</p>
+<p>Die verlinkten YouTube-Videos zur Spielreihe zeigen, wie das Spiel gespielt wird.
+Die vorhandenen Videotitel helfen dir bei der Auswahl der Folgen, zum Beispiel:</p>
 <ul>${game.videos.slice(0, 3).map((video) => `<li><a href="${escapeHtml(video.url)}">${escapeHtml(video.title)}</a></li>`).join("")}</ul>
 <p>Die Reihe zu ${escapeHtml(game.name)} lässt sich anhand dieser Folgen verfolgen.
 Alle verfügbaren Folgen mit Beschreibungen und gegebenenfalls Kapiteln stehen weiter unten.
-Dies ist eine Orientierung anhand der Videotitel, keine aus dem Videoinhalt abgeleitete Spielanleitung;
-konkrete Spielmechaniken, Steuerung oder Lösungswege werden hier nicht behauptet.</p>` : ""}
+Die Angaben dienen zur Orientierung anhand der Videotitel. Sie sind keine aus dem Videoinhalt
+abgeleitete Spielanleitung und enthalten keine Aussagen über konkrete Spielmechaniken,
+die Steuerung oder Lösungswege.</p>` : ""}
 </section>`)}\n\n`,
   });
   converter.addRule("absolute-links", {

@@ -17,20 +17,23 @@ const html = renderSite(model, createSiteConfig(), "assets/site.css").get("index
 const script = html.match(/<script>([\s\S]*?)<\/script>/u)[1];
 const key = "pretty-old-pixel:theme";
 
-function setup({ dark = false, saved = null, blocked = false } = {}) {
+function setup({ dark = false, saved = null, blocked = false, mobile = false } = {}) {
   const system = new EventTarget();
   system.matches = dark;
+  const viewport = new EventTarget();
+  viewport.matches = mobile;
+  const menu = { open: false };
   const button = new EventTarget();
   button.hidden = true;
   button.setAttribute = (name, value) => { button[name] = value; };
   const status = { textContent: "" };
   const document = new EventTarget();
   document.documentElement = { dataset: {} };
-  document.querySelector = (selector) => selector === "[data-theme-toggle]" ? button : status;
+  document.querySelector = (selector) => selector === "[data-theme-toggle]" ? button : selector === ".navigation-menu" ? menu : status;
   const values = new Map(saved === null ? [] : [[key, saved]]);
   const warnings = [];
   runInNewContext(script, {
-    document, matchMedia: () => system,
+    document, matchMedia: (query) => query === "(max-width: 1023px)" ? viewport : system,
     console: { warn: (...args) => warnings.push(args) },
     localStorage: {
       getItem(name) {
@@ -45,8 +48,20 @@ function setup({ dark = false, saved = null, blocked = false } = {}) {
   });
   const theme = () => document.documentElement.dataset.theme;
   document.dispatchEvent(new Event("DOMContentLoaded"));
-  return { system, button, status, values, warnings, theme };
+  return { system, button, status, values, warnings, theme, viewport, menu };
 }
+
+test("zeigt die Desktop-Navigation offen und klappt sie beim Wechsel auf Mobile zu", () => {
+  const app = setup();
+  assert.equal(app.menu.open, true);
+  app.viewport.matches = true;
+  app.viewport.dispatchEvent(new Event("change"));
+  assert.equal(app.menu.open, false);
+  app.viewport.matches = false;
+  app.viewport.dispatchEvent(new Event("change"));
+  assert.equal(app.menu.open, true);
+  assert.equal(setup({ mobile: true }).menu.open, false);
+});
 
 test("folgt Hell-/Dunkel-Browsereinstellung und Änderungen ohne automatisch zu speichern", () => {
   for (const dark of [false, true]) {

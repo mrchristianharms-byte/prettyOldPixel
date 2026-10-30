@@ -573,7 +573,7 @@ export function normalizeSources({ videos: videoCache, playlists: playlistCache,
   };
 }
 
-// Hauptnavigation: feste Einstiege, dann aktuelle Formate, nach einem Trenner die älteren Formate.
+// Hauptnavigation: feste Einstiege, dann aktuelle und anschließend ältere Formate.
 export function siteNavigation({ hasMagazines, games, sections }) {
   const older = sections.filter((section) => section.olderFormat);
   return [
@@ -581,7 +581,7 @@ export function siteNavigation({ hasMagazines, games, sections }) {
     ...(hasMagazines ? [{ route: "zeitschriften/", name: "Blätterabend" }] : []),
     ...(games.length ? [{ route: "spiele/", name: "re.play" }] : []),
     ...sections.filter((section) => !section.olderFormat).map((section) => ({ route: section.route, name: section.navigationName })),
-    ...older.map((section, index) => ({ route: section.route, name: section.navigationName, separator: index === 0 })),
+    ...older.map((section) => ({ route: section.route, name: section.navigationName })),
   ];
 }
 

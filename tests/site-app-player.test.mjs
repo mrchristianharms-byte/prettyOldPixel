@@ -128,7 +128,7 @@ test("Player-Vorschau bleibt offline lokal und fällt bei Bildfehlern auf densel
       image.onerror();
       image.dispatchEvent(new Event("error"));
       assert.equal(image.src, offlinePreview);
-      assert.match(elements.get("#app-player-notice").textContent, /Vorschaubild nicht erreichbar/u);
+      assert.match(elements.get("#app-player-notice").textContent, /Das Vorschaubild ist nicht erreichbar/u);
     } finally { dispose?.(); restore(); }
   });
 

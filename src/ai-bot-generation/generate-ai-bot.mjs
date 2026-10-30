@@ -11,7 +11,7 @@ export function generateAiBot(model, config, pages) {
   }
   files.set("llms.txt", `# ${config.name}
 
-> Deutschsprachige Webseitenrepräsentation des YouTube-Kanals Pretty Old Pixel mit Quellenlinks.
+> Deutschsprachiger Videokatalog zum YouTube-Kanal Pretty Old Pixel mit Quellenlinks.
 
 ## Wann diese Website verwenden
 
@@ -37,10 +37,10 @@ Kontaktverweis: https://prettyoldpixel.de/
 
 ## Grenzen
 
-Kein vollständiges Spielelexikon, kein Videodownload- oder Tooldienst.
-Die statische Inhalts-API bietet nur einen lesbaren Snapshot, keine Schreiboperationen.
+Diese Website ist kein vollständiges Spielelexikon und bietet keine Videodownloads oder ausführbaren Werkzeuge an.
+Die statische Inhalts-API liefert einen Datenstand zum Lesen, keine Schreiboperationen.
 Transkripte, Kapitel und Metadaten sind nicht für alle Videos vorhanden.
-Unbekannte Angaben nicht ergänzen oder aus ähnlichen Titeln ableiten.
+Ergänze keine unbekannten Angaben und leite sie nicht aus ähnlichen Titeln ab.
 Dieser Hinweis erteilt keine zusätzlichen Nutzungsrechte an fremden Inhalten.
 
 ## Markdown
@@ -48,9 +48,9 @@ Dieser Hinweis erteilt keine zusätzlichen Nutzungsrechte an fremden Inhalten.
 Jede HTML-Seite verlinkt ihre Markdown-Fassung mit rel="alternate".
 Für Verzeichnisadressen liegt sie unter index.md, etwa ${config.absolute("spiele/index.md")}.
 Markdown-Links verweisen auf die kanonischen HTML- und Originalquellen.
-Navigation und Brotkrümel zeigen die Seitenstruktur. Auf Videoseiten erläutert
+Navigation und Navigationspfad zeigen die Seitenstruktur. Auf Videoseiten erläutert
 ein Hinweis den audiovisuellen Hauptinhalt; Spielseiten enthalten zusätzlich
-eine Frage/Antwort zur Orientierung anhand der Videotitel, keine Spielanleitung.
+eine Frage mit Antwort zur Orientierung anhand der Videotitel, keine Spielanleitung.
 Eine Fehlererklärung steht unter ${config.absolute("404.md")}; ihr direkter Abruf
 ersetzt keine HTTP-404-Antwort für unbekannte Seiten.
 `);

@@ -13,7 +13,7 @@ async function youtubeApi() {
       else resolve(globalThis.YT);
     };
     const ready = () => { previous?.(); finish(); };
-    const timer = setTimeout(() => finish(new Error("YouTube antwortet nicht. Bitte erneut versuchen.")), 10000);
+    const timer = setTimeout(() => finish(new Error("YouTube antwortet nicht. Bitte versuche es erneut.")), 10000);
     globalThis.onYouTubeIframeAPIReady = ready;
     script.src = "https://www.youtube.com/iframe_api";
     script.onerror = () => finish(new Error("YouTube-Player konnte nicht geladen werden."));
@@ -38,11 +38,11 @@ export function setupPlayer(view, preferences, next) {
   function report(error) { console.warn(error); notice.textContent = error.message; }
   function preview() {
     root.innerHTML = '<img width="320" height="180" alt="Videovorschau">';
-    notice.textContent = navigator.onLine ? "Player erst nach Aktivierung. Videos benötigen Internet." : "Offline: Gespeicherte Vorschaubilder sind verfügbar. Videos benötigen Internet.";
+    notice.textContent = navigator.onLine ? "Der Player wird erst nach der Aktivierung geladen. Videos benötigen eine Internetverbindung." : "Du bist offline. Gespeicherte Vorschaubilder sind verfügbar. Videos benötigen eine Internetverbindung.";
     const image = root.querySelector("img");
     if (image) updatePreview(image, view.selected.thumbnailUrl);
     image?.addEventListener("error", () => {
-      notice.textContent = "Vorschaubild nicht erreichbar. Videos benötigen Internet; bitte die Verbindung prüfen.";
+      notice.textContent = "Das Vorschaubild ist nicht erreichbar. Bitte prüfe deine Internetverbindung.";
     }, { once: true });
     enable.hidden = false;
     reset.hidden = true;
@@ -78,7 +78,7 @@ export function setupPlayer(view, preferences, next) {
           onError() {
             if (disposed || request !== revision) return;
             clearTimeout(readyTimer);
-            report(new Error("Das Video konnte nicht abgespielt werden. Erneut versuchen oder den YouTube-Link verwenden."));
+            report(new Error("Das Video konnte nicht abgespielt werden. Versuche es erneut oder nutze den YouTube-Link."));
             controller?.destroy(); controller = undefined;
             enable.hidden = false;
           },
@@ -88,7 +88,7 @@ export function setupPlayer(view, preferences, next) {
         if (disposed) return;
         controller?.destroy(); controller = undefined;
         enable.hidden = false;
-        report(new Error("Zeitüberschreitung beim Starten des Players. Bitte erneut versuchen."));
+        report(new Error("Der Player konnte nicht rechtzeitig gestartet werden. Bitte versuche es erneut."));
       }, 15000);
     } catch (error) { report(error); }
     finally { busy = false; enable.disabled = false; }

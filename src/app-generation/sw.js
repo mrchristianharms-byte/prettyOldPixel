@@ -211,7 +211,7 @@ self.addEventListener("fetch", (event) => {
       return await fetch(request);
     } catch (error) {
       if (request.mode !== "navigate") throw error;
-      return new Response("<!doctype html><html lang=\"de\"><meta charset=\"utf-8\"><title>Offline-Daten fehlen</title><h1>Offline-Daten fehlen</h1><p>Bitte die App mit Internet erneut öffnen und vollständig laden.</p></html>",
+      return new Response("<!doctype html><html lang=\"de\"><meta charset=\"utf-8\"><title>Offline-Daten fehlen</title><h1>Offline-Daten fehlen</h1><p>Bitte öffne die App erneut mit Internetverbindung und lade sie vollständig.</p></html>",
         { status: 503, headers: { "Content-Type": "text/html; charset=utf-8" } });
     }
   })());

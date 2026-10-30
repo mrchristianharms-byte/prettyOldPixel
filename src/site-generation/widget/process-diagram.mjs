@@ -101,7 +101,7 @@ export function processDiagram() {
 <div class="process-scroll" tabindex="0" role="region" aria-label="Prozessdiagramm, bei Bedarf horizontal scrollen">
 <svg class="process-svg" viewBox="0 0 1280 1190" role="group" aria-labelledby="process-title process-desc">
 <title id="process-title">${escapeHtml(siteProcess.title)}</title>
-<desc id="process-desc">Links manuelle Entwicklung und Zuordnungsdaten, rechts YouTube und Cache-Aktualisierung. Beide führen über GitHub Actions zur Generierung von Site, App und Agentendaten auf GitHub Pages. Besucher greifen unten rechts über Cloudflare zu. Vollständige Stichpunkte folgen unter dem Diagramm.</desc>
+<desc id="process-desc">Links stehen die manuelle Entwicklung und die Zuordnungsdaten, rechts YouTube und die Cache-Aktualisierung. Beide Wege führen über GitHub Actions zur Generierung von Website, App und Agentendaten für GitHub Pages. Besucher greifen unten rechts über Cloudflare zu. Ausführliche Erklärungen folgen unter dem Diagramm.</desc>
 <defs>${Object.keys(processColors).map((name) => `<marker id="process-arrow-${name}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--process-${name})"/></marker>`).join("")}</defs>
 <text x="160" y="30" class="process-lane">F1 · ENTWICKLUNG / MANUELL</text>
 <text x="720" y="30" class="process-lane">F2 · YOUTUBE / AUTOMATISCH</text>

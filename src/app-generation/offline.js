@@ -35,7 +35,7 @@ export async function setupOffline(version, report) {
     let timer;
     try {
       return await Promise.race([promise, new Promise((resolve, reject) => {
-        timer = setTimeout(() => reject(new Error("Zeitüberschreitung bei der Offline-Verwaltung. Bitte die Verbindung prüfen.")), 15000);
+        timer = setTimeout(() => reject(new Error("Die Offline-Verwaltung antwortet nicht rechtzeitig. Bitte prüfe deine Verbindung.")), 15000);
       })]);
     } finally { clearTimeout(timer); }
   }
@@ -51,7 +51,7 @@ export async function setupOffline(version, report) {
   navigator.serviceWorker.addEventListener("message", ({ data }) => {
     if (data.type === "CLEARED") statusRequests.get(data.requestId)?.(data);
     if (data.type === "THUMBNAIL_ERROR") {
-      say(`Vorschaubilder konnten nicht gespeichert werden: ${data.message}. Bitte Speicher und Verbindung prüfen.`);
+      say(`Vorschaubilder konnten nicht gespeichert werden. Bitte prüfe den freien Speicherplatz und deine Verbindung. Fehler: ${data.message}`);
       retry.hidden = false;
     }
     if (data.type === "THUMBNAILS") {
@@ -70,12 +70,12 @@ export async function setupOffline(version, report) {
         status.textContent = "📴";
         message.textContent = "";
         status.setAttribute("aria-label", updateFailed
-          ? "Offline bereit. Updateprüfung nicht erreichbar; lokaler Stand bleibt erhalten."
+          ? "Offline bereit. Die Updateprüfung ist nicht erreichbar. Der gespeicherte Stand bleibt erhalten."
           : "Offline bereit");
       } else {
         status.textContent = "";
         status.removeAttribute("aria-label");
-        say("Offline-Daten fehlen oder sind unvollständig. Bitte mit Internet erneut laden.");
+        say("Offline-Daten fehlen oder sind unvollständig. Bitte lade die App erneut mit Internetverbindung.");
       }
       const missingThumbnails = data.thumbnails && data.thumbnails.completed < data.thumbnails.total;
       retry.hidden = data.ready && !missingThumbnails;
@@ -146,7 +146,7 @@ export async function setupOffline(version, report) {
     async persist() {
       if (!navigator.storage?.persist) { report("Dauerhafte Speicherung wird von diesem Browser nicht angeboten."); return; }
       const granted = await navigator.storage.persist();
-      report(granted ? "Dauerhafte Speicherung wurde erlaubt. Trotzdem ist eine Sicherung nicht garantiert." : "Dauerhafte Speicherung wurde nicht erlaubt. Die App bleibt offline nutzbar, solange die Daten vorhanden sind.");
+      report(granted ? "Dauerhafte Speicherung wurde erlaubt. Das ist keine Datensicherung und schützt nicht vor manuellem Löschen." : "Dauerhafte Speicherung wurde nicht erlaubt. Die App bleibt offline nutzbar, solange die Daten vorhanden sind.");
     },
     async clear() {
       if (!confirm("Offline-Daten und App-Einstellungen löschen? Ohne Internet kann die App danach nicht erneut eingerichtet werden.")) return;

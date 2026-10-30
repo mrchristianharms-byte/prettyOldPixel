@@ -5,6 +5,9 @@
 .app-preview img { aspect-ratio: 16 / 9; object-fit: contain; background: var(--pico-card-background-color); }
 .app-logo { max-height: 5rem; object-fit: contain; }
 #app-nav { display: flex; flex: 1 1 14rem; flex-wrap: wrap; gap: .35rem .75rem; min-width: 0; }
+.app-navigation { flex: 1; min-width: 0; margin: 0; border: 0; }
+.app-navigation > summary:not([role]) { width: max-content; margin: 0; padding: .5rem; border: 1px solid var(--pico-muted-border-color); border-radius: var(--pico-border-radius); }
+@media (min-width: 1024px) { .app-navigation[open] > summary { display: none; } }
 body > header, body > footer { padding-block: 1rem; }
 body > header { display: flex; align-items: center; flex-wrap: wrap; gap: .5rem .75rem; }
 #offline-status { flex: 0 0 auto; font-size: 1.5rem; line-height: 1; }
@@ -27,6 +30,13 @@ body > aside p { margin: 0; }
 #app-player iframe { width: 100%; aspect-ratio: 16 / 9; border: 0; }
 #app-player img { max-width: 20rem; aspect-ratio: 16 / 9; }
 #inhalt { min-height: 40vh; }
+@media (max-width: 1023px) {
+  body > header { position: relative; flex-wrap: nowrap; padding-block: .35rem; gap: .5rem; }
+  body > header > a { white-space: nowrap; }
+  .app-navigation { flex: 0 0 auto; margin-inline-start: auto; }
+  #app-nav { position: absolute; z-index: 20; inset: 100% 0 auto; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .25rem; padding: .5rem 1rem; border: 1px solid var(--pico-muted-border-color); border-radius: var(--pico-border-radius); background: var(--pico-background-color); box-shadow: var(--pico-card-box-shadow); }
+  #app-nav a { display: block; padding: .6rem .5rem; }
+}
 @media (max-width: 500px) { .app-preview { grid-template-columns: minmax(0, 1fr); } }
 @media (max-width: 767px) {
   .app-game-table { min-width: 50rem; font-size: .68rem; }

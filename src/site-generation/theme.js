@@ -21,6 +21,11 @@
   apply();
   system.addEventListener("change", apply);
   document.addEventListener("DOMContentLoaded", () => {
+    const menu = document.querySelector(".navigation-menu");
+    const mobile = matchMedia("(max-width: 1023px)");
+    const updateMenu = () => { menu.open = !mobile.matches; };
+    updateMenu();
+    mobile.addEventListener("change", updateMenu);
     const button = document.querySelector("[data-theme-toggle]");
     apply();
     button.hidden = false;

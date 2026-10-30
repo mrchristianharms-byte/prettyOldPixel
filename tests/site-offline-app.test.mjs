@@ -120,12 +120,27 @@ test("Spielefilter und Sortierung funktionieren auf demselben Datenstand", () =>
   assert.doesNotMatch(gameTableBody([hostile], data), /<script>/u);
 });
 
+test("App-Texte verwenden klare Spielangaben und die korrekte Einzahl", () => {
+  const singleGame = { ...data, games: [data.games[0]] };
+  const games = renderView(singleGame, { route: "spiele/" });
+  assert.match(games.body, /1 von 1 Spiel<\/p>/u);
+  assert.match(games.body, /Erscheinungsjahr:/u);
+  const table = renderView(singleGame, { route: "spiele/uebersicht/" });
+  assert.match(table.body, /data-sort="release">Jahr ↕/u);
+  const help = renderView(data, { route: "hilfe/" });
+  assert.match(help.body, /Öffne diese App in Safari/u);
+  assert.match(help.body, /Internetverbindung/u);
+  for (const route of ["ueber/", "kontakt/", "hilfe/", "datenschutz/"]) {
+    assert.doesNotMatch(renderView(data, { route }).body, /\b(?:Ihnen|Ihre[nmrse]*)\b|Kontakteinstieg|Webseitenrepräsentation/u);
+  }
+});
+
 test("App-Build ist deterministisch, vollständig gehasht und separat budgetiert", async () => {
   const app = await generateApp(model, config, images);
   const again = await generateApp(model, config, images);
   assert.deepEqual(app, again);
   const index = app.files.get("app/index.html");
-  assert.match(index, /<header class="container"><a href="#\/">PrettyOldPixel<\/a>\s*<nav[^>]*id="app-nav"><\/nav>\s*<span id="offline-status"/u);
+  assert.match(index, /<header class="container"><a href="#\/">PrettyOldPixel<\/a>\s*<details class="app-navigation"><summary>Menü<\/summary><nav[^>]*id="app-nav"><\/nav><\/details>\s*<span id="offline-status"/u);
   assert.doesNotMatch(index, /class="app-header-controls"/u);
   assert.match(index, /<span id="offline-status" role="status"/u);
   assert.match(index, /<button type="button" id="app-theme"[^>]*>[\s\S]*?class="theme-sun"[\s\S]*?class="theme-moon"[\s\S]*?<\/svg><\/button>/u);

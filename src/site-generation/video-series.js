@@ -86,7 +86,7 @@ for (const series of document.querySelectorAll("[data-video-series]")) {
       autoNext.checked = value && autoNextEnabled;
     }
     for (const hint of hints) hint.textContent = value
-      ? "Kapitel im Player anspringen. Mit Strg-/Befehl-Klick öffnen Sie YouTube."
+      ? "Kapitel im Player öffnen. Mit Strg-Klick oder Befehl-Klick öffnest du YouTube."
       : "Ohne aktivierte Player-Steuerung öffnen die Links das Video auf YouTube.";
   }
 
@@ -104,7 +104,7 @@ for (const series of document.querySelectorAll("[data-video-series]")) {
   function blocked() {
     if (autoNext) autoNext.checked = false;
     manualPlay.hidden = false;
-    report("Die Wiedergabe wurde vom Browser blockiert. Bitte starten Sie das Video manuell.");
+    report("Die Wiedergabe wurde vom Browser blockiert. Bitte starte das Video manuell.");
   }
 
   function attachApi(version) {
@@ -120,7 +120,7 @@ for (const series of document.querySelectorAll("[data-video-series]")) {
                 try {
                   controller.cueVideoById({ videoId: videoId(active), startSeconds: pendingSeek });
                 } catch (error) {
-                  report("Die verlinkte Zeitmarke konnte nicht angesprungen werden. Wählen Sie das Kapitel oder den externen YouTube-Link.", error);
+                  report("Die verlinkte Zeitmarke konnte nicht geöffnet werden. Wähle das Kapitel oder den externen YouTube-Link.", error);
                 }
                 pendingSeek = undefined;
               }
@@ -140,7 +140,7 @@ for (const series of document.querySelectorAll("[data-video-series]")) {
             const next = panels[panels.indexOf(active) + 1];
             if (!active.dataset.dated || !next?.dataset.dated) {
               autoNext.checked = false;
-              notice.textContent = next ? "Videos ohne Veröffentlichungsdatum wählen Sie bitte manuell." : "Sie haben das Ende dieser Videoreihe erreicht.";
+              notice.textContent = next ? "Bitte wähle Videos ohne Veröffentlichungsdatum manuell aus." : "Du hast das Ende dieser Videoreihe erreicht.";
               notice.hidden = false;
               return;
             }
@@ -155,19 +155,19 @@ for (const series of document.querySelectorAll("[data-video-series]")) {
             clearTimeout(readyTimer);
             apiAvailable(false);
             played = false;
-            report(`Der YouTube-Player meldet Fehler ${event.data}. Nutzen Sie bei Bedarf den Link „Video auf YouTube ansehen“.`);
+            report(`Der YouTube-Player meldet Fehler ${event.data}. Nutze bei Bedarf den Link „Video auf YouTube ansehen“.`);
           },
         },
       });
       readyTimer = setTimeout(() => {
         if (!enabled || version !== revision || ready) return;
         apiAvailable(false);
-        report("Der YouTube-Player antwortet nicht. Kapitel öffnen weiterhin YouTube; versuchen Sie bei Bedarf den direkten Videolink.");
+        report("Der YouTube-Player antwortet nicht. Kapitellinks öffnen weiterhin YouTube. Nutze bei Bedarf den direkten Videolink.");
       }, 10000);
     }).catch((error) => {
       if (!enabled || version !== revision) return;
       apiAvailable(false);
-      report("Die YouTube-Steuerung ist nicht verfügbar. Kapitel öffnen weiterhin YouTube; den Player können Sie manuell bedienen.", error);
+      report("Die YouTube-Steuerung ist nicht verfügbar. Kapitellinks öffnen weiterhin YouTube. Du kannst den Player manuell bedienen.", error);
     });
   }
 
@@ -180,7 +180,7 @@ for (const series of document.querySelectorAll("[data-video-series]")) {
         else controller.cueVideoById(videoId(panel));
         return;
       } catch (error) {
-        report("Das Video konnte nicht über die YouTube-Steuerung geladen werden. Bitte starten Sie es manuell.", error);
+        report("Das Video konnte nicht über die YouTube-Steuerung geladen werden. Bitte starte es manuell.", error);
       }
     }
     if (controller) replacePlayer();
@@ -246,7 +246,7 @@ for (const series of document.querySelectorAll("[data-video-series]")) {
     try {
       controller.playVideo();
     } catch (error) {
-      report("Das Video konnte nicht gestartet werden. Nutzen Sie den Startknopf im Player oder den YouTube-Link.", error);
+      report("Das Video konnte nicht gestartet werden. Nutze die Wiedergabetaste im Player oder den YouTube-Link.", error);
     }
   });
   reset.addEventListener("click", () => {

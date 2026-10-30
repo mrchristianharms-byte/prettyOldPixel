@@ -89,7 +89,7 @@ test("beschreibt Websiteidentität und verlinkt quellengestützte Projekt- und K
     assert.equal(new URL(website.url, base).href, base);
     assert.equal(graph.find((entry) => entry["@type"] === "WebPage").isPartOf["@id"], website["@id"]);
     assert.equal(website.inLanguage, "de");
-    assert.ok(home.includes("Webseitenrepräsentation des YouTube-Kanals"));
+    assert.ok(home.includes("Videokatalog zum YouTube-Kanal"));
     for (const [route, type] of [["ueber/", "AboutPage"], ["kontakt/", "ContactPage"]]) {
       const html = pages.get(`${route}index.html`).html;
       const main = html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/u)[1];
@@ -114,6 +114,15 @@ test("entfernt Startseite nur aus der Hauptnavigation und behält Markenlink und
     assert.equal((header.match(/class="brand-logo"/gu) ?? []).length, 1);
   }
   assert.ok(pages.get("zeitschriften/pc-games/index.html").html.includes('href="../../">Startseite</a>'));
+});
+
+test("eigene Seitentexte verwenden keine förmliche Ansprache oder veraltete Abschluss-Schreibweise", () => {
+  const { pages } = render(issueFixture());
+  for (const [file, { html }] of pages) {
+    assert.doesNotMatch(html, /\b(?:Ihnen|Ihre[nmrse]*)\b|(?:[Ww]ählen|[Öö]ffnen|[Ss]tarten|[Nn]utzen|[Ee]ntdecken|[Kk]önnen|[Ff]inden) Sie\b|Abschlußgespräch/u, file);
+  }
+  assert.match(pages.get("datenschutz/index.html").html, /wenn du „YouTube-Player aktivieren“ wählst/u);
+  assert.match(pages.get("404.html").html, /findest du die Videos/u);
 });
 
 test("verlinkt YouTube und Twitch als externe Kanäle in der letzten Fußzeile jeder Seite", () => {
@@ -433,6 +442,7 @@ test("bindet den zugänglichen Darstellungs-Schalter und sein minifiziertes Inli
     assert.ok(header.includes('aria-label="Darstellungsmodus wechseln"'));
     assert.ok(!header.includes("data-theme-status"));
     assert.match(header, /<li class="navigation-control"><a [^>]+>[^<]+<\/a><button/u);
+    assert.match(header, /<details class="navigation-menu"><summary>Menü<\/summary><ul>/u);
   }
   validateSite(pages, assets, config);
 });

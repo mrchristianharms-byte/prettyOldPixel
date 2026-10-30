@@ -38,6 +38,17 @@ gehören in diese Dokumentation, nicht in Seiteneinleitungen. Originale
 Videobeschreibungen, Datenschutz- und Bedienhinweise sowie notwendige Hinweise
 auf fehlende oder unsichere Angaben bleiben erhalten.
 
+Eigene UI- und Erklärungstexte sind neutral oder in der Du-Ansprache formuliert:
+klar, vollständig und freundlich, ohne flapsige oder scherzhafte Wendungen.
+Importierte Videotitel und Beschreibungen bleiben unverändert.
+
+Bis 1023 Pixel Breite zeigt der Kopf von Website und Offline-App den
+Projekttitel und einen Menü-Schalter statt mehrzeiliger Navigationslinks.
+Das native ausklappbare Menü enthält weiterhin alle Themen. Es überlagert
+den Inhalt, statt den Kopf zu verlängern. Auf der Website funktioniert der
+Schalter auch ohne JavaScript; mit JavaScript bleibt die Desktop-Navigation
+standardmäßig aufgeklappt.
+
 ### So entsteht diese Website
 
 `so-entsteht-die-seite/` dokumentiert Quellenpflege, lokale Zuordnungen,
@@ -454,8 +465,8 @@ keine externen Ressourcen oder Laufzeit-JavaScript.
   wird dadurch nicht verändert.
 - `src/data/data-sections.mjs` hält explizite Video-IDs, Themen, bei Gesprächen Personen
   und bei Retrospektiven die Reihenfolge, außerdem je Bereich den Kurznamen
-  für die Hauptnavigation (`navigationName`) und die Gruppe vor bzw. nach dem
-  Trenner (`olderFormat`). Titel, Beschreibungen und bestätigte
+  für die Hauptnavigation (`navigationName`) und die Sortierung aktueller vor
+  älteren Formaten (`olderFormat`), ohne sichtbaren Trenner. Titel, Beschreibungen und bestätigte
   Playlist-Mitgliedschaften wurden hierfür geprüft. Änderungen der
   Playlist-Mitgliedschaft allein erzeugen keine ungeprüften Zuordnungen.
   Neue Titel-/Playlist-Kandidaten werden beim Build als Prüfhinweis gemeldet.

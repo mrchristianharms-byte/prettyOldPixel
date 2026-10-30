@@ -91,7 +91,7 @@ function homeOverview(model, config, filters) {
     ...(model.magazines.length || model.unresolvedMagazines.length ? [{
       route: "zeitschriften/", name: "Zeitschriften",
       count: countLabel(model.magazines.length, "Zeitschrift", "Zeitschriften"),
-      description: "Blätterabende durch Magazine, Jahrgänge und Heftausgaben.",
+      description: "Blätterabende zu klassischen Magazinen, geordnet nach Jahrgängen und Heftausgaben.",
     }] : []),
     ...(model.games.length ? [{
       route: "spiele/", name: "Spiele",
@@ -224,7 +224,7 @@ function videoSchema(video, config, route) {
 
 function privacyBody(config) {
   return `<h1>Datenschutz und Hinweise</h1>
-<p>Pretty Old Pixel ist ein privates, nicht kommerziell genutztes Projekt zur Übersicht öffentlich verfügbarer Videos.</p>
+<p>Pretty Old Pixel ist ein privates, nicht kommerzielles Projekt. Diese Website bietet einen Überblick über öffentlich verfügbare Videos des Kanals.</p>
 <h2>Hosting über GitHub Pages</h2>
 <p><a href="${config.href(siteProcess.route)}">Zusammenspiel der Dienste</a>: GitHub Actions, GitHub Pages, Cloudflare und YouTube.</p>
 <p>Diese Website wird bei GitHub Pages gehostet. Beim Besuch können technische Zugriffsdaten wie IP-Adresse, Zeitpunkt und Browserinformationen beim Hosting-Anbieter verarbeitet werden.
@@ -235,20 +235,20 @@ ${externalLink("https://docs.github.com/en/site-policy/privacy-policies/github-g
 <p>Cloudflare betreibt ein weltweites Netzwerk. Eine Verarbeitung personenbezogener Daten außerhalb der EU beziehungsweise des EWR, insbesondere in den USA, ist möglich. Cloudflare beschreibt die hierfür verwendeten Übermittlungsmechanismen, darunter das EU-US Data Privacy Framework und Standardvertragsklauseln, in seinen Datenschutzinformationen. Eine ausschließlich europäische Verarbeitung wird für diese Website nicht zugesichert.</p>
 <p>Wir setzen keine Cloudflare Web Analytics, kein Turnstile und keine von uns bewusst aktivierten Bot-Challenges ein. Je nach eingesetzter Schutzfunktion kann Cloudflare technisch bedingte Cookies verwenden; der Proxy allein bedeutet nicht, dass alle in der Cookie-Dokumentation genannten Cookies gesetzt werden. Weitere Informationen: ${externalLink("https://www.cloudflare.com/de-de/privacypolicy/", "Datenschutzrichtlinie von Cloudflare")}, ${externalLink("https://www.cloudflare.com/de-de/trust-hub/gdpr/", "Cloudflare und Datenschutz")} und ${externalLink("https://developers.cloudflare.com/fundamentals/reference/policies-compliances/cloudflare-cookies/", "Cloudflare-Cookies und ihre Zwecke")}.</p>
 <h2>Videoinformationen</h2>
-<p>Titel, Beschreibungen und Veröffentlichungsdaten stammen aus öffentlichen Angaben auf YouTube; Heftangaben ergänzen Informationen der Zeitschriftenarchive. Wenn Sie diese Texte lesen, wird keine Verbindung zu YouTube oder den Archiven hergestellt.</p>
+<p>Titel, Beschreibungen und Veröffentlichungsdaten stammen aus öffentlichen Angaben auf YouTube. Die Heftangaben werden durch Informationen aus Zeitschriftenarchiven ergänzt. Das Laden dieser Texte allein stellt keine Verbindung zu YouTube oder den Archiven her.</p>
 <h2>YouTube-Vorschaubilder</h2>
-<p>Auf Spiel- und Ausgabenseiten, in der tabellarischen Spiele-Gesamtübersicht sowie in den Videolisten von News, Zeitschriften und Jahrgängen, Hardware, Retrospektiven, Interviews, re.consider und Sonstiges werden Vorschaubilder direkt von i.ytimg.com geladen. Seiten mit Videobezug verweisen außerdem in ihren Metadaten auf ein YouTube-Vorschaubild für Linkvorschauen; soziale Netzwerke können dieses Bild beim Teilen direkt von YouTube abrufen. Bereits solche Bildabrufe übermitteln insbesondere Ihre IP-Adresse und technische Request-Daten an den Anbieter. Die kleinen Listen- und Tabellenvorschauen werden beim Annähern an den sichtbaren Bereich geladen, unabhängig von der Player-Aktivierung. Die Spiele- und Zeitschriftenkacheln enthalten keine externen Bilder.</p>
+<p>Auf Spiel- und Ausgabenseiten, in der tabellarischen Spieleübersicht sowie in den Videolisten werden Vorschaubilder direkt von i.ytimg.com geladen. Seiten mit Videobezug verweisen außerdem in ihren Metadaten auf ein YouTube-Vorschaubild für Linkvorschauen. Soziale Netzwerke können dieses Bild beim Teilen direkt von YouTube abrufen. Bereits solche Bildabrufe übermitteln insbesondere deine IP-Adresse und technische Anfragedaten an den Anbieter. Die kleinen Listen- und Tabellenvorschauen werden geladen, sobald sie sich dem sichtbaren Bereich nähern, unabhängig von der Player-Aktivierung. Die Spiele- und Zeitschriftenkacheln enthalten keine externen Bilder.</p>
 <h2>YouTube-Player</h2>
-<p>Der eingebettete Player wird erstmals geladen, wenn Sie „YouTube-Player aktivieren“ wählen. Er verwendet youtube-nocookie.com, den erweiterten Datenschutzmodus von YouTube. Das bedeutet nicht, dass keine Daten verarbeitet werden. Nach der Aktivierung kann YouTube/Google weitere Verbindungen aufbauen und Daten im Rahmen der Wiedergabe verarbeiten. Auf einen externen Player können Sie verzichten und stattdessen einen normalen YouTube-Link verwenden.</p>
-<p>Diese Website merkt sich die Aktivierung in diesem Browser im Local Storage. Danach wird der Player auch bei weiteren Videos und Seitenbesuchen direkt geladen, ohne automatisch abzuspielen. Die Einstellung bleibt bis zum Zurücksetzen oder Löschen der Browserdaten erhalten. Mit „YouTube-Aktivierung zurücksetzen“ unter dem Player können Sie sie jederzeit löschen und wieder zum Vorschaubild wechseln.</p>
-<p>Nach der Aktivierung wird außerdem die offizielle YouTube-IFrame-API von www.youtube.com geladen. Sie ermöglicht Kapitelsprünge im Player und erkennt das Videoende. Dabei wird Ihre IP-Adresse auch an diesen Anbieter übermittelt. Wenn die Steuerung nicht verfügbar ist, bleiben die externen Kapitel-Links und der manuelle Player nutzbar.</p>
-<p>„Nächste Folge automatisch“ ist ohne bisherige Auswahl zunächst aus. Ihre Auswahl wird als eigener Ein-/Aus-Wert in diesem Browser im Local Storage gespeichert und auf weiteren Spiel- und Ausgabenseiten wiederhergestellt. Wenn Sie die Option einschalten und ein Video starten, kann am Ende die nächste datierte Folge desselben Spiels bzw. derselben Heftausgabe beginnen. Sie können die Option jederzeit ausschalten. Am Reihenende, vor Videos ohne Datum oder bei Wiedergabeproblemen stoppt die Fortsetzung, ohne Ihre gespeicherte Auswahl zu ändern. Neue Seiten starten kein Video automatisch. Das Zurücksetzen der YouTube-Aktivierung löscht nicht diese Auswahl; ausschalten können Sie sie am Kontrollkästchen oder durch Löschen der Browserdaten.</p>
-<p>Gespeichert werden nur die Player-Aktivierung und die Einstellung zur automatischen Folgenfortsetzung, kein Wiedergabeverlauf. Das ausgewählte Video bleibt in der Seitenadresse erhalten. Ohne JavaScript werden die Einstellungen nicht gemerkt; Kapitel öffnen YouTube, und die Folgenfortsetzung ist nicht verfügbar. Sie können den Player weiterhin einzeln aktivieren, alle Beschreibungen lesen und den YouTube-Links folgen.</p>
+<p>Der eingebettete Player wird erstmals geladen, wenn du „YouTube-Player aktivieren“ wählst. Er verwendet youtube-nocookie.com, den erweiterten Datenschutzmodus von YouTube. Das bedeutet nicht, dass keine Daten verarbeitet werden. Nach der Aktivierung kann YouTube/Google weitere Verbindungen aufbauen und Daten während der Wiedergabe verarbeiten. Du kannst stattdessen auch den direkten YouTube-Link verwenden.</p>
+<p>Diese Website merkt sich die Aktivierung in diesem Browser im Local Storage. Danach wird der Player auch bei weiteren Videos und Seitenbesuchen direkt geladen, ohne automatisch abzuspielen. Die Einstellung bleibt bis zum Zurücksetzen oder Löschen der Browserdaten erhalten. Mit „YouTube-Aktivierung zurücksetzen“ unter dem Player kannst du sie jederzeit löschen und wieder zum Vorschaubild wechseln.</p>
+<p>Nach der Aktivierung wird außerdem die offizielle YouTube-IFrame-API von www.youtube.com geladen. Sie ermöglicht Kapitelsprünge im Player und erkennt das Videoende. Dabei wird deine IP-Adresse auch an diesen Anbieter übermittelt. Wenn die Steuerung nicht verfügbar ist, kannst du die externen Kapitellinks verwenden und den Player manuell bedienen.</p>
+<p>„Nächste Folge automatisch“ ist zunächst ausgeschaltet. Deine Auswahl wird separat in diesem Browser im Local Storage gespeichert und auf weiteren Spiel- und Ausgabenseiten wiederhergestellt. Wenn du die Option einschaltest und ein Video startest, kann danach die nächste Folge mit bekanntem Veröffentlichungsdatum desselben Spiels oder derselben Heftausgabe beginnen. Du kannst die Option jederzeit ausschalten. Am Reihenende, vor Videos ohne Datum oder bei Wiedergabeproblemen stoppt die Fortsetzung, ohne deine gespeicherte Auswahl zu ändern. Neue Seiten starten kein Video automatisch. Das Zurücksetzen der YouTube-Aktivierung löscht diese Auswahl nicht. Du kannst sie am Kontrollkästchen ausschalten oder durch Löschen der Browserdaten entfernen.</p>
+<p>Gespeichert werden nur die Player-Aktivierung und die Einstellung zur automatischen Folgenfortsetzung, kein Wiedergabeverlauf. Das ausgewählte Video bleibt in der Seitenadresse erhalten. Ohne JavaScript werden die Einstellungen nicht gespeichert. Kapitellinks öffnen YouTube, und die Folgenfortsetzung ist nicht verfügbar. Du kannst den Player weiterhin einzeln aktivieren, alle Beschreibungen lesen und den YouTube-Links folgen.</p>
 <p>${externalLink("https://policies.google.com/privacy?hl=de", "Datenschutzerklärung von Google")} · ${externalLink("https://www.youtube.com/t/terms", "Nutzungsbedingungen von YouTube")}</p>
 <h2>Externe Links und eigene Speicherung</h2>
-${config.offlineApp ? `<h3>Separate Offline-App</h3><p>Die <a href="${config.href("app/")}">Offline-App</a> lädt erst beim bewussten Öffnen ihren Katalog und einen eigenen Service Worker. Sie speichert öffentliche Katalogdaten, App-Code, Logos und Icons lokal im Cache Storage. „Offline bereit“ bestätigt den vollständigen Katalog; der zusätzliche Bildzähler zeigt die gespeicherten Vorschaubilder. Die App lädt alle Video-Vorschaubilder beim Einrichten und Ergänzen direkt von i.ytimg.com ohne Zugangsdaten und Referrer in einen lokalen Cache. Dabei werden insbesondere Ihre IP-Adresse und technische Request-Daten an YouTube/Google übertragen. Gespeicherte Bilder sind danach offline verfügbar und bleiben bei App-Updates erhalten. Videos bleiben onlineabhängig und werden nicht im App-Cache gespeichert. Beim Öffnen mit Internet kann die App auf Updates prüfen; es gibt kein eigenes Tracking.</p><p>App-Einstellungen für Darstellung, Player und Folgenfortsetzung liegen getrennt unter „pretty-old-pixel:app:*“. Die App-Hilfe erklärt Installation und gezieltes Löschen ihrer Daten einschließlich der Vorschaubilder. Das Entfernen des Home-Bildschirm-Icons garantiert nicht, dass alle Website-Daten gelöscht werden. Das Betriebssystem kann gespeicherte Daten entfernen; eine erneute Einrichtung braucht Internet.</p>` : ""}
-<p>Die Darstellung folgt zunächst dem im Browser eingestellten hellen oder dunklen Modus. Mit dem Symbol im Seitenkopf können Sie umschalten. Ihre manuelle Auswahl wird als „light“ oder „dark“ unter „pretty-old-pixel:theme“ im Local Storage gespeichert. Nach Löschen dieser Browserdaten gilt wieder die Browsereinstellung. Ohne JavaScript folgt die Darstellung weiterhin dem Browsermodus.</p>
-<p>Externe Links sind mit ↗ und einem zugänglichen Hinweis gekennzeichnet. Erst beim Aufrufen wird das jeweilige Ziel besucht; Vorschaubilder und bereits aktivierte Player sind davon ausgenommen. Diese Website setzt selbst keine Tracking-Cookies ein und verwendet keine Analytics-Dienste. Im Local Storage stehen ausschließlich Ihre Player-Aktivierung, die Einstellung zur automatischen Folgenfortsetzung und eine manuelle Auswahl des Darstellungsmodus; Session Storage wird nicht verwendet.</p>
+${config.offlineApp ? `<h3>Separate Offline-App</h3><p>Die <a href="${config.href("app/")}">Offline-App</a> lädt erst beim bewussten Öffnen ihren Katalog und einen eigenen Service Worker. Sie speichert öffentliche Katalogdaten, App-Code, Logos und Icons lokal im Cache Storage. „Offline bereit“ bestätigt den vollständigen Katalog. Der zusätzliche Bildzähler zeigt die gespeicherten Vorschaubilder. Die App lädt alle Video-Vorschaubilder beim Einrichten und Ergänzen direkt von i.ytimg.com ohne Zugangsdaten und Referrer in einen lokalen Cache. Dabei werden insbesondere deine IP-Adresse und technische Anfragedaten an YouTube/Google übertragen. Gespeicherte Bilder sind danach offline verfügbar und bleiben bei App-Updates erhalten. Videos benötigen weiterhin eine Internetverbindung und werden nicht im App-Cache gespeichert. Beim Öffnen mit Internetverbindung kann die App auf Updates prüfen. Es gibt kein eigenes Tracking.</p><p>App-Einstellungen für Darstellung, Player und Folgenfortsetzung liegen getrennt unter „pretty-old-pixel:app:*“. Die App-Hilfe erklärt die Installation und das gezielte Löschen der App-Daten einschließlich der Vorschaubilder. Das Entfernen des Home-Bildschirm-Icons garantiert nicht, dass alle Website-Daten gelöscht werden. Das Betriebssystem kann gespeicherte Daten entfernen. Für eine erneute Einrichtung ist eine Internetverbindung erforderlich.</p>` : ""}
+<p>Die Darstellung folgt zunächst dem im Browser eingestellten hellen oder dunklen Modus. Mit dem Symbol im Seitenkopf kannst du umschalten. Deine manuelle Auswahl wird als „light“ oder „dark“ unter „pretty-old-pixel:theme“ im Local Storage gespeichert. Nach dem Löschen dieser Browserdaten gilt wieder die Browsereinstellung. Ohne JavaScript folgt die Darstellung weiterhin dem Browsermodus.</p>
+<p>Externe Links sind mit ↗ und einem zugänglichen Hinweis gekennzeichnet. Erst beim Aufrufen wird das jeweilige Ziel besucht. Vorschaubilder und bereits aktivierte Player sind davon ausgenommen. Diese Website setzt selbst keine Tracking-Cookies ein und verwendet keine Analytics-Dienste. Im Local Storage stehen ausschließlich deine Player-Aktivierung, die Einstellung zur automatischen Folgenfortsetzung und deine manuelle Auswahl des Darstellungsmodus. Session Storage wird nicht verwendet.</p>
 <p><a href="${config.href()}">Zur Startseite und den Themen</a></p>`;
 }
 
@@ -660,7 +660,7 @@ ${gameTable(rows, overviewConfig, `<p><a href="${overviewConfig.href(index.route
         schema: collectionSchema(games.map((game) => ({ title: game.name, route: game.route })), config, route),
         previous: page > 1 ? paginatedRoute(listing.route, page - 1) : null,
         next: page < pageCount ? paginatedRoute(listing.route, page + 1) : null,
-        body: `<h1>${escapeHtml(heading)}${page > 1 ? ` – Seite ${page}` : ""}</h1><p>${filtered ? `${escapeHtml(heading)}: ` : ""}${countLabel(listing.games.length, "Retrospiel", "Retrospiele")}, alphabetisch geordnet. Entdecken Sie Spielverläufe, Unboxings und Gespräche rund um die Spiele.</p>
+        body: `<h1>${escapeHtml(heading)}${page > 1 ? ` – Seite ${page}` : ""}</h1><p>${filtered ? `${escapeHtml(heading)}: ` : ""}${countLabel(listing.games.length, "Retrospiel", "Retrospiele")}, alphabetisch geordnet. Entdecke Spielverläufe, Unboxings und Gespräche rund um die Spiele.</p>
 ${filtered ? `<p><a href="${config.href(index.route)}">Alle Spiele anzeigen</a></p>` : ""}<p><a href="${config.href(overview.route)}">Spiele suchen und filtern</a></p>
 ${pagination(listing.route, page, pageCount, config)}
 <div class="game-catalog">${catalogGrid(games.map((game) => ({
@@ -723,8 +723,8 @@ function renderSectionPages(model, siteConfig, add) {
         next: page < count ? paginatedRoute(section.route, page + 1) : null,
         body: `<h1>${escapeHtml(section.name)}${page > 1 ? ` – Seite ${page}` : ""}</h1>
 <p>${escapeHtml(section.description)}</p><p>${videoCount(section.entries.length)}. ${section.id === "retrospektiven"
-  ? "Wählen Sie ein Thema und entdecken Sie die Geschichte der Spiele Folge für Folge."
-  : "Entdecken Sie die Beiträge, beginnend mit den neuesten Videos."}</p>
+  ? "Wähle ein Thema und entdecke die Geschichte der Spiele Folge für Folge."
+  : "Entdecke die Beiträge, beginnend mit den neuesten Videos."}</p>
 ${section.id === "sonstiges" ? "" : pagination(section.route, page, count, config)}${listing}${pagination(section.route, page, count, config)}`,
       }, videos);
     }
@@ -755,13 +755,13 @@ export function renderSite(model, config, cssHref, jsHref = "assets/video-series
     description: "Retrospiele, klassische Computerzeitschriften und Retro-Hardware bei Pretty Old Pixel: Let's Plays, Blätterabende, Retrospektiven und Interviews entdecken.",
     crumbs: [root], schema: [
       { "@type": "WebSite", "@id": "./#website", name: config.name, url: "./", inLanguage: "de",
-        description: "Webseitenrepräsentation des YouTube-Kanals Pretty Old Pixel: Retrospiele, Computerzeitschriften, Hardware und Gespräche." },
+        description: "Videokatalog zum YouTube-Kanal Pretty Old Pixel: Retrospiele, Computerzeitschriften, Hardware und Gespräche." },
       { "@type": "WebPage", "@id": "./#page", name: "Pretty Old Pixel in Zahlen", url: "./",
         isPartOf: { "@id": "./#website" } },
     ],
     body: `<h1 class="visually-hidden">Pretty Old Pixel</h1>
 <p class="lead">Retrospiele entdecken, alte Computerzeitschriften durchblättern und Videos wiederfinden.</p>
-<p>Die Webseitenrepräsentation des YouTube-Kanals Pretty Old Pixel bündelt Spielreihen, Blätterabende, Hardware und Gespräche mit Links zu den Originalquellen.</p>
+<p>Der Videokatalog zum YouTube-Kanal Pretty Old Pixel bündelt Spielreihen, Blätterabende, Hardware und Gespräche mit Links zu den Originalquellen.</p>
 ${homeOverview(model, config, filters)}`,
   }, model.videos);
   const newsConfig = config.forPage("news/");
@@ -801,7 +801,7 @@ ${homeOverview(model, config, filters)}`,
         "@id": "./#page", name: info.title, url: "./",
         isPartOf: { "@id": `${config.href("", info.route)}#website` } },
       body: `<h1>${escapeHtml(info.title)}</h1>${info.paragraphs.map((text) => `<p>${escapeHtml(text)}</p>`).join("\n")}
-<h2>Weiterführende Links</h2><p>${externalLink("https://prettyoldpixel.de/", "Pretty Old Pixel – Website und Kontakteinstieg")} · ${externalLink("https://www.youtube.com/@PrettyOldPixel", "YouTube-Kanal Pretty Old Pixel")}</p>
+<h2>Weiterführende Links</h2><p>${externalLink("https://prettyoldpixel.de/", "Pretty Old Pixel – Website und Kontakt")} · ${externalLink("https://www.youtube.com/@PrettyOldPixel", "YouTube-Kanal Pretty Old Pixel")}</p>
 <p><a href="${config.href(siteProcess.route, info.route)}">So entsteht diese Website</a> · <a href="${config.href(siteProcess.route, info.route)}">Zusammenspiel der Dienste</a>: GitHub Actions, GitHub Pages, Cloudflare und YouTube.</p>
 <p><a href="${config.href("datenschutz/", info.route)}">Datenschutz und Hinweise</a></p>`,
     });
@@ -823,7 +823,7 @@ ${homeOverview(model, config, filters)}`,
   });
   add({
     route: "404.html", file: "404.html", title: "Seite nicht gefunden", noindex: true,
-    description: "Diese Seite wurde nicht gefunden. Über die Startseite und die Themenbereiche finden Sie die Videos von Pretty Old Pixel.",
+    description: "Diese Seite wurde nicht gefunden. Über die Startseite und die Themenbereiche findest du die Videos von Pretty Old Pixel.",
     crumbs: [root, { route: "404.html", name: "Seite nicht gefunden" }],
     schema: { "@type": "WebPage", name: "Seite nicht gefunden" },
     body: `<h1>Seite nicht gefunden</h1><p>Unter dieser Adresse gibt es keine Seite.</p><p><a href="${config.href()}">Zur Startseite und den Themen</a></p>`,

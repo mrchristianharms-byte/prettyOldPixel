@@ -121,7 +121,7 @@ test("escaped Tabelleninhalte und nutzt belegte Metadaten ohne Ersatzjahre", () 
   assert.ok(body.includes('width="320" height="180" loading="lazy" decoding="async" referrerpolicy="no-referrer"'));
   assert.doesNotMatch(html, /Standardmäßig stehen|„Gespielt“ entspricht|„Spielzeit“ summiert|Sortierung und Filter benötigen/u);
   assert.match(html, /Alle Systeme · Alle Genres · Erstvideo: neueste zuerst/u);
-  assert.ok(pages.get("datenschutz/index.html").html.includes("tabellarischen Spiele-Gesamtübersicht"));
+  assert.ok(pages.get("datenschutz/index.html").html.includes("tabellarischen Spieleübersicht"));
 });
 
 test("deckt mit der unpaginierten Spieletabelle den vollständigen echten Katalog ab", async () => {
@@ -156,7 +156,7 @@ test("liefert Sortierdaten, Filter und belegte externe Links ausschließlich in 
   assert.match(html, /<div class="game-table-toolbar">\s*<div><p><a href="\.\.\/">Zur Spiele-Kachelübersicht<\/a><\/p><p class="game-table-summary" role="status" aria-live="polite"><span data-game-table-count>1 von 1 Spiel<\/span>\s*<span data-game-table-filters>Filter: Alle Systeme · Alle Genres<\/span>\s*<span data-game-table-sort>Sortierung: Erstvideo: neueste zuerst<\/span><\/p><\/div>\s*<div class="game-table-controls"/u);
   assert.ok(html.includes('type="search" id="game-search" data-game-search'));
   assert.ok(html.includes('data-game-reset aria-label="Filter zurücksetzen" title="Filter zurücksetzen"><span aria-hidden="true">↺</span>'));
-  assert.ok(html.includes('>Release <button'));
+  assert.ok(html.includes('>Jahr <button'));
   assert.ok(html.includes('data-duration="7200"'));
   for (const value of ["video", "release", "title", "duration"]) {
     assert.ok(html.includes(`data-game-sort="${value}"`), value);
@@ -199,11 +199,11 @@ test("verlinkt das zugeordnete Schlußgespräch unter Weiteres statt eines belie
     const body = html.match(/<tbody>([\s\S]*?)<\/tbody>/u)[1];
     const cells = [...body.matchAll(/<td\b[^>]*>([\s\S]*?)<\/td>/gu)];
     const links = cells.at(-1)[1];
-    assert.ok(links.includes(`<a href="../cadaver/#video-${videoId(1)}">Abschlußgespräch</a>`), title);
+    assert.ok(links.includes(`<a href="../cadaver/#video-${videoId(1)}">Abschlussgespräch</a>`), title);
     assert.ok(!links.includes(`watch?v=${videoId(0)}`));
     assert.ok(!links.includes(`watch?v=${videoId(2)}`));
     assert.ok(links.indexOf(">Playlist <span") < links.indexOf(">Moby <span"));
-    assert.ok(links.indexOf(">Moby <span") < links.indexOf(">Abschlußgespräch</a>"));
+    assert.ok(links.indexOf(">Moby <span") < links.indexOf(">Abschlussgespräch</a>"));
   }
 });
 

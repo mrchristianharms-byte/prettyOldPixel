@@ -457,9 +457,7 @@ test("prüft die echten kuratierten Zuordnungen und die doppelte Originalnummer 
   assert.ok(navigation.includes('aria-current="page">Projekte</a>'));
   assert.deepEqual([...navigation.matchAll(/<a [^>]*>([^<]+)<\/a>/gu)].map((match) => match[1]),
     ["News", "Blätterabend", "re.play", "re.consider", "re.ware", "Projekte", "Interviews", "Sonstiges"]);
-  assert.equal((navigation.match(/class="navigation-separator" aria-hidden="true">\|/gu) ?? []).length, 1);
-  assert.ok(navigation.indexOf(">re.consider</a>") < navigation.indexOf('class="navigation-separator"'));
-  assert.ok(navigation.indexOf('class="navigation-separator"') < navigation.indexOf(">re.ware</a>"));
+  assert.doesNotMatch(navigation, /navigation-separator|>\|</u);
   assert.ok(!/>Zeitschriften<\/a>|>Spiele<\/a>|>Retrospektiven<\/a>/u.test(navigation));
   assert.ok(html.includes("<h2>Immersion in Videospielen</h2>"));
   for (let index = 1; index < immersionIds.length; index += 1) {

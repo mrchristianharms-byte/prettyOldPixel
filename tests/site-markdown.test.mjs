@@ -61,7 +61,7 @@ test("ersetzt ausschließlich im Markdown den Player durch Zweck und titelgestü
   for (const text of ["## Die Videos sind der Hauptinhalt", "YouTube-Videos", "noch ein vollständiges Transkript",
     "Test \\[II\\] – Der Einstieg", "Test II – Das Fazit", "https://youtube.com/watch?v=2",
     "keine aus dem Videoinhalt abgeleitete Spielanleitung", "Originalvideo", "Vorhandene Beschreibung."]) {
-    assert.ok(markdown.includes(text), text);
+    assert.ok(markdown.replace(/\s+/gu, " ").includes(text), text);
   }
   for (const text of ["Vorschaubild von YouTube", "Aktivieren", "<iframe"]) assert.ok(!markdown.includes(text));
   assert.equal(page.html, html);

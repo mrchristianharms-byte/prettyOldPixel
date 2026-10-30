@@ -29,7 +29,7 @@ test("Hauptnavigation erhält Reihenfolge, relative Links, sichere Namen und akt
   for (const route of ["", "news/", "spiele/demo/", "sonstiges/seite/2/", "datenschutz/"]) {
     const config = createSiteConfig().forPage(route);
     const html = navigation(entries, route, config);
-    assert.ok(html.startsWith('<nav aria-label="Hauptnavigation"><ul>'));
+    assert.ok(html.startsWith('<nav aria-label="Hauptnavigation"><details class="navigation-menu"><summary>Menü</summary><ul>'));
     assert.equal((html.match(/<li>/gu) ?? []).length, entries.length);
     assert.ok(html.includes("Spiele &amp; &lt;Demo&gt;"));
     for (const { route: target } of entries) {
@@ -51,7 +51,7 @@ test("alle generierten Seiten verwenden das Hauptnavigations-Widget mit den vorh
   }, { games: [], sections: [] });
   const config = createSiteConfig();
   assert.deepEqual(model.navigation, [{ route: "news/", name: "News" },
-    ...model.sections.map((section) => ({ route: section.route, name: section.navigationName, separator: true }))]);
+    ...model.sections.map((section) => ({ route: section.route, name: section.navigationName }))]);
   for (const { html, route } of renderSite(model, config, "assets/site.css").values()) {
     assert.ok(html.includes(navigation(model.navigation, route, config.forPage(route), themeToggle())), route);
     assert.equal((html.match(/aria-label="Hauptnavigation"/gu) ?? []).length, 1);

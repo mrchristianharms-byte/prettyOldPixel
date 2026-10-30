@@ -47,6 +47,14 @@ function updateThemeButton() {
   themeButton.title = label;
 }
 updateThemeButton();
+const navigationMenu = document.querySelector(".app-navigation");
+const mobileNavigation = matchMedia("(max-width: 1023px)");
+const updateNavigation = () => { navigationMenu.open = !mobileNavigation.matches; };
+updateNavigation();
+mobileNavigation.addEventListener("change", updateNavigation);
+document.querySelector("#app-nav").addEventListener("click", (event) => {
+  if (mobileNavigation.matches && event.target.closest("a")) navigationMenu.open = false;
+});
 themeButton.addEventListener("click", () => {
   const value = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
   document.documentElement.dataset.theme = value;
@@ -54,7 +62,7 @@ themeButton.addEventListener("click", () => {
   preferences.set("theme", value);
 });
 
-const initializing = () => report("Offline-Verwaltung wird noch initialisiert. Bitte kurz warten.");
+const initializing = () => report("Die Offline-Speicherung wird vorbereitet. Bitte warte einen Moment.");
 let offline = { check: initializing, persist: initializing, clear: initializing };
 let dispose = () => {};
 let current;
@@ -75,7 +83,7 @@ function wireGames(view) {
   let sort = "video", direction = -1;
   function update() {
     const matches = filterGames(view.games, Object.fromEntries(new FormData(form)));
-    document.querySelector("#app-game-count").textContent = `${matches.length} von ${view.games.length} Spielen${matches.length ? "" : " – Keine Treffer"}`;
+    document.querySelector("#app-game-count").textContent = `${matches.length} von ${view.games.length} ${view.games.length === 1 ? "Spiel" : "Spielen"}${matches.length ? "" : " – Keine Treffer"}`;
     document.querySelector("#app-game-results").innerHTML = view.table ? gameTableBody(matches, model, sort, direction) : gameCards(matches, model);
     onlineImages();
     for (const button of main.querySelectorAll("[data-sort]")) button.parentElement.setAttribute("aria-sort",
@@ -102,7 +110,7 @@ function render() {
     autoStartId = undefined;
     current = view;
     document.title = `${view.title} | Pretty Old Pixel Offline`;
-    main.innerHTML = `<h1>${escapeHtml(view.title)}</h1><p><a href="${escapeHtml(publicAddress(model, state, view))}" rel="external">Auf Website öffnen / Link teilen ↗</a></p>${view.body}`;
+    main.innerHTML = `<h1>${escapeHtml(view.title)}</h1><p><a href="${escapeHtml(publicAddress(model, state, view))}" rel="external">Auf der Website öffnen und Link teilen ↗</a></p>${view.body}`;
     main.focus({ preventScroll: true });
     scrollTo(0, 0);
     for (const image of main.querySelectorAll("[data-local-src]")) {
@@ -143,7 +151,7 @@ try {
   let response;
   try { response = await fetch(new URL("data.json", release), { signal: abort.signal }); }
   finally { clearTimeout(timer); }
-  if (!response.ok) throw new Error(`Katalog konnte nicht geladen werden (HTTP ${response.status}). Bitte mit Internet erneut öffnen.`);
+  if (!response.ok) throw new Error(`Der Katalog konnte nicht geladen werden (HTTP ${response.status}). Bitte öffne die App erneut mit Internetverbindung.`);
   model = hydrateAppData(await response.json());
   document.querySelector("#app-nav").innerHTML = model.navigation.map((entry) =>
     `<a href="${escapeHtml(appHref(entry.route))}">${escapeHtml(entry.name)}</a>`).join("");

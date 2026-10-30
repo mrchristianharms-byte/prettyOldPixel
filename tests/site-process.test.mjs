@@ -160,7 +160,7 @@ test("Prozessseite und Diensteverweise funktionieren in Website, Markdown und Of
       assert.ok(renderView(model, { route }).body.includes(`href="#/${siteProcess.route}"`));
     }
     assert.ok(markdown.includes("F1 · Entwicklung"));
-    assert.ok(markdown.includes("Keine echten Anfragen"));
+    assert.ok(markdown.includes("keine echten Anfragen gesendet"));
     assert.doesNotMatch(markdown, /process-arrow|offset-path|process-pause|\nAnimation pausieren\n|<svg/u);
     assert.ok(view.body.includes('class="process-svg"'));
     assert.ok(view.body.includes(siteProcess.introduction));
