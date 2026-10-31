@@ -5,8 +5,8 @@
     "title": "Pretty Old Pixel",
     "url": "https://www.youtube.com/@PrettyOldPixel"
   },
-  "fetchedAt": "2026-10-29T23:18:55.668Z",
-  "lastModified": "2026-10-29T23:18:55.668Z",
+  "fetchedAt": "2026-10-31T22:30:22.943Z",
+  "lastModified": "2026-10-31T22:30:22.943Z",
   "complete": true,
   "playlists": [
     {
@@ -31,101 +31,107 @@
       "title": "re.play - Mission Critical",
       "description": "",
       "url": "https://www.youtube.com/playlist?list=PLCdHnxdZabN4",
-      "videoCount": 15,
+      "videoCount": 16,
       "videos": [
         {
           "position": 1,
+          "videoId": "4Dob5L4cyhI",
+          "title": "Spieleabendaufzeichnung - Mission Critical - Stream 7",
+          "availability": "listed"
+        },
+        {
+          "position": 2,
           "videoId": "nhRtSLbL-KA",
           "title": "Spieleabendaufzeichnung - Mission Critical - Stream 6",
           "availability": "listed"
         },
         {
-          "position": 2,
+          "position": 3,
           "videoId": "DNL_dv5Qjr0",
           "title": "Spieleabendaufzeichnung - Mission Critical - Stream 5",
           "availability": "listed"
         },
         {
-          "position": 3,
+          "position": 4,
           "videoId": "MwXvXWBGq5Q",
           "title": "Spieleabendaufzeichnung - Mission Critical - Stream 4",
           "availability": "listed"
         },
         {
-          "position": 4,
+          "position": 5,
           "videoId": "5tOdgJIWEzM",
           "title": "Spieleabendaufzeichnung - Mission Critical - Stream 3",
           "availability": "listed"
         },
         {
-          "position": 5,
+          "position": 6,
           "videoId": "jVb1RvGvs14",
           "title": "Spieleabendaufzeichnung - Mission Critical - Stream 2",
           "availability": "listed"
         },
         {
-          "position": 6,
+          "position": 7,
           "videoId": "3IS8bdCh4co",
           "title": "Spieleabendaufzeichnung - Mission Critical - Stream 1",
           "availability": "listed"
         },
         {
-          "position": 7,
+          "position": 8,
           "videoId": "xhH21fyQOYc",
           "title": "Mission Critical [re.play - #9] Das vierte Deck [German]",
           "availability": "listed"
         },
         {
-          "position": 8,
+          "position": 9,
           "videoId": "hsws-BtyXE4",
           "title": "Mission Critical [re.play - #8] Marry's Tagebuch [German]",
           "availability": "listed"
         },
         {
-          "position": 9,
+          "position": 10,
           "videoId": "9-_h7sWYA5I",
           "title": "Mission Critical [re.play - #7] Das dritte Deck [German]",
           "availability": "listed"
         },
         {
-          "position": 10,
+          "position": 11,
           "videoId": "nvQyzFsEk64",
           "title": "Mission Critical [re.play - #6] Was zuvor geschar [German]",
           "availability": "listed"
         },
         {
-          "position": 11,
+          "position": 12,
           "videoId": "yd52C6Ar0Ms",
           "title": "Mission Critical [re.play - #5] Auf der Brücke [German]",
           "availability": "listed"
         },
         {
-          "position": 12,
+          "position": 13,
           "videoId": "w0Yhz09HhWU",
           "title": "Mission Critical [re.play - #4] Erkundung von Deck 2 [German]",
           "availability": "listed"
         },
         {
-          "position": 13,
+          "position": 14,
           "videoId": "8cPFLvEdGtw",
           "title": "Mission Critical [re.play - #3] Hüllenreperatur [German]",
           "availability": "listed"
         },
         {
-          "position": 14,
+          "position": 15,
           "videoId": "lV0JyfgsbTY",
           "title": "Mission Critical [re.play - #2] Der letzte Überlebende [German]",
           "availability": "listed"
         },
         {
-          "position": 15,
+          "position": 16,
           "videoId": "CwDPLmViky8",
           "title": "Mission Critical [re.play - #1] Intro und Box [German]",
           "availability": "listed"
         }
       ],
-      "lastModified": "2026-10-24T20:52:37.568Z",
-      "checkedAt": "2026-10-29T23:18:55.668Z"
+      "lastModified": "2026-10-31T22:30:22.943Z",
+      "checkedAt": "2026-10-31T22:30:22.943Z"
     },
     {
       "id": "PLKAk_zU7LotY",
@@ -142,7 +148,7 @@
         }
       ],
       "lastModified": "2026-10-28T23:15:04.006Z",
-      "checkedAt": "2026-10-29T23:18:55.668Z"
+      "checkedAt": "2026-10-31T22:30:22.943Z"
     },
     {
       "id": "PLKPrSm4Rptws",
@@ -402,7 +408,7 @@
         }
       ],
       "lastModified": "2026-10-29T23:18:55.668Z",
-      "checkedAt": "2026-10-29T23:18:55.668Z"
+      "checkedAt": "2026-10-31T22:30:22.943Z"
     },
     {
       "id": "PLZW5k3rtbudo_0dIXa7DsWpwUx53PkV6l",
@@ -4897,7 +4903,7 @@
         }
       ],
       "lastModified": "2026-10-27T22:58:11.653Z",
-      "checkedAt": "2026-10-29T23:18:55.668Z"
+      "checkedAt": "2026-10-31T22:30:22.943Z"
     },
     {
       "id": "PLZW5k3rtbudpGgkzpDmKmzUQuZtmD8Oz4",
@@ -12703,7 +12709,7 @@
         }
       ],
       "lastModified": "2026-10-26T10:37:12.839Z",
-      "checkedAt": "2026-10-29T23:18:55.668Z"
+      "checkedAt": "2026-10-31T22:30:22.943Z"
     },
     {
       "id": "PLZW5k3rtbudrGsaQQM4K_wXyL5zzGiVes",

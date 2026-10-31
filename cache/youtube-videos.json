@@ -5,10 +5,18 @@
     "title": "Pretty Old Pixel",
     "url": "https://www.youtube.com/@PrettyOldPixel"
   },
-  "lastModified": "2026-10-29T18:00:14Z",
-  "fetchedAt": "2026-10-30T22:59:35.758Z",
+  "lastModified": "2026-10-31T18:00:20Z",
+  "fetchedAt": "2026-10-31T22:30:22.647Z",
   "complete": true,
   "videos": [
+    {
+      "id": "4Dob5L4cyhI",
+      "title": "Spieleabendaufzeichnung - Mission Critical - Stream 7",
+      "description": "Live-Übertragung auf Twitch 12.09.2026 – sieh live unter https://www.twitch.tv/prettyoldpixel zu!",
+      "duration": "PT3H9M7S",
+      "durationSeconds": 11347,
+      "publishedAt": "2026-10-31T18:00:20Z"
+    },
     {
       "id": "7jSdUMXO_Dk",
       "title": "Tom Clancy's EndWar [re.play - #11] Euro-Finale [German]",
