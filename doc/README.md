@@ -2377,6 +2377,7 @@ Architecture Decision Records liegen in `doc/adr/`:
 - [ADR 0011: Agentenlesbare Inhalte und maschinenlesbare Zugänge (statische Maßnahmen lokal umgesetzt; Edge-Abnahme offen)](adr/0011-agentenlesbare-inhalte-und-maschinenlesbare-zugaenge.md)
 - [ADR 0012: Eigene Domain mit Cloudflare und GitHub Pages (Domain, Proxy und HTTPS live bestätigt; bestehendes Caching beibehalten)](adr/0012-eigene-domain-mit-cloudflare-und-github-pages.md)
 - [ADR 0013: Statische Prozessseite zur Entstehung der Website (lokal implementiert; SVG und Animationen geprüft)](adr/0013-statische-prozessseite-zur-entstehung-der-website.md)
+- [ADR 0014: Spielestatistiken für re.play (vorgeschlagen; Bestandsauswertung und SVG-Konzept)](adr/0014-spielestatistiken-fuer-re-play.md)
 
 ## GitHub Pages veröffentlichen
 
