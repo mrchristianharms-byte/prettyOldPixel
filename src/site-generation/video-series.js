@@ -155,7 +155,7 @@ for (const series of document.querySelectorAll("[data-video-series]")) {
             clearTimeout(readyTimer);
             apiAvailable(false);
             played = false;
-            report(`Der YouTube-Player meldet Fehler ${event.data}. Nutze bei Bedarf den Link „Video auf YouTube ansehen“.`);
+            report(`Der YouTube-Player meldet Fehler ${event.data}. Nutze bei Bedarf den Link „Auf YouTube ansehen und liken“.`);
           },
         },
       });

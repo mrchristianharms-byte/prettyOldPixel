@@ -136,6 +136,7 @@ test("Video-Widget enthält genau einen Player und alle gemeinsamen Bedienelemen
     assert.equal((html.match(new RegExp(attribute, "gu")) ?? []).length, 1);
   }
   assert.ok(html.includes(`href="${video.url}" rel="external"`));
+  assert.ok(html.includes('>Auf YouTube ansehen und liken <span aria-hidden="true">↗</span>'));
   assert.ok(html.includes("data-auto-next disabled"));
   assert.ok(playerPoster(video).includes(`href="${video.embedUrl}" rel="external"`));
   assert.ok(playerPoster(video).includes('alt="Videovorschau: Spiel &amp; &lt;Demo&gt;"'));

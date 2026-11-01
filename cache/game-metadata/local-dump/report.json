@@ -1,7 +1,7 @@
 {
   "version": 1,
   "provider": "mobygames-local-dump",
-  "importedAt": "2026-10-30T16:24:16.077Z",
+  "importedAt": "2026-11-01T12:50:43.422Z",
   "source": {
     "fileName": "gdb.sql",
     "sha256": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
@@ -27020,6 +27020,11 @@
           ],
           "alternativeTitles": [],
           "manual": true,
+          "companySource": {
+            "url": "https://store.steampowered.com/app/342560/Airships_Conquer_the_Skies/",
+            "label": "Steam",
+            "reviewedAt": "2026-11-01"
+          },
           "platformMatch": true,
           "matchingReleaseIds": [
             312862
@@ -27030,36 +27035,30 @@
               "mobyreleaseid": 312864,
               "year": 2018,
               "platform": "Linux",
-              "publisher": null,
-              "developer": null,
+              "publisher": "David Stark",
+              "developer": "David Stark",
               "countries": "Worldwide",
-              "publabel": "",
-              "sourceDeveloper": "",
-              "sourcePublisher": ""
+              "publabel": ""
             },
             {
               "mobyid": 112651,
               "mobyreleaseid": 312863,
               "year": 2018,
               "platform": "Macintosh",
-              "publisher": null,
-              "developer": null,
+              "publisher": "David Stark",
+              "developer": "David Stark",
               "countries": "Worldwide",
-              "publabel": "",
-              "sourceDeveloper": "",
-              "sourcePublisher": ""
+              "publabel": ""
             },
             {
               "mobyid": 112651,
               "mobyreleaseid": 312862,
               "year": 2018,
               "platform": "Windows",
-              "publisher": null,
-              "developer": null,
+              "publisher": "David Stark",
+              "developer": "David Stark",
               "countries": "Worldwide",
-              "publabel": "",
-              "sourceDeveloper": "",
-              "sourcePublisher": ""
+              "publabel": ""
             }
           ]
         }

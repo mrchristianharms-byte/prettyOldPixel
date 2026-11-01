@@ -90,8 +90,13 @@ test("alle Katalogspiele sind zugeordnet; letzte drei Spiele behalten Plattform 
     assert.ok(record.data.releases.every((release) => release.platform === platform));
   }
   const airships = reader.get("airships-conquer-the-skies");
-  assert.equal(airships.data.releases[0].developer, null);
-  assert.equal(airships.data.releases[0].publisher, null);
+  assert.equal(airships.data.releases[0].developer, "David Stark");
+  assert.equal(airships.data.releases[0].publisher, "David Stark");
+  assert.equal(airships.data.quality.basis, "supplemented-source");
+  assert.deepEqual(airships.data.evidence.companySource, {
+    url: "https://store.steampowered.com/app/342560/Airships_Conquer_the_Skies/",
+    label: "Steam", reviewedAt: "2026-11-01",
+  });
 });
 
 async function fixture(t) {
@@ -141,6 +146,22 @@ test("Dump allein erzeugt Plattformdaten und Jahresauswahl; gesperrte Titel blei
   assert.match(html, /1 unverifiziert/u);
   await rm(path.join(options.cacheDir, "local-dump/report.json"));
   assert.equal((await loadReadyGameMetadata(options)).get("game").status, "ready");
+});
+
+test("belegte Firmen-Ergänzungen behalten ihre Quelle bis zur Offline-Prüfung", async (t) => {
+  const { options, report } = await fixture(t);
+  const candidate = report.games[0].candidates[0];
+  candidate.manual = true;
+  candidate.companySource = { url: "https://store.steampowered.com/app/342560/", label: "Steam", reviewedAt: "2026-11-01" };
+  await writeJson(path.join(options.cacheDir, "local-dump/report.json"), report);
+  await buildReadyGameMetadata(options);
+  const reader = await loadReadyGameMetadata(options);
+  assert.deepEqual(reader.get("game").data.evidence.companySource, candidate.companySource);
+  assert.equal(reader.get("game").data.quality.basis, "supplemented-source");
+  assert.match(renderGameMetadataReview(reader, options.games), /Quelle für Entwickler und Publisher:.*Steam/u);
+  candidate.companySource.url = "javascript:alert(1)";
+  await writeJson(path.join(options.cacheDir, "local-dump/report.json"), report);
+  await assert.rejects(buildReadyGameMetadata(options), /Ungültige Quelle/u);
 });
 
 test("Patrizier erhält das freigegebene Dump-Jahr 1992 ohne Plattformverlust", async () => {

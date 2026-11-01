@@ -14,7 +14,7 @@ export function videoWidget(video, videoCount = 1) {
 </section><div class="player-controls meta" data-player-controls>
 <button type="button" class="player-reset" data-player-reset hidden>YouTube-Aktivierung zurücksetzen</button>
 ${videoCount > 1 ? '<label><input type="checkbox" data-auto-next disabled> Nächste Folge automatisch</label>' : ""}
-<span data-player-external>${externalLink(video.url, "Video auf YouTube ansehen")}</span>
+<span data-player-external>${externalLink(video.url, "Auf YouTube ansehen und liken")}</span>
 <button type="button" data-player-play hidden>Video manuell starten</button>
 </div></div>`;
 }

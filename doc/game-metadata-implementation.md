@@ -2,8 +2,10 @@
 
 ## Entscheidung und Datenfluss
 
-Spielemetadaten einschließlich Erscheinungsjahren stammen ausschließlich aus dem
-lokal exportierten Games-Dump.
+Spielemetadaten einschließlich Erscheinungsjahren stammen aus dem
+lokal exportierten Games-Dump. Die ausdrückliche Ausnahme für Steam-belegte
+Entwickler- und Publisherangaben zu Airships dokumentiert
+[ADR 0006](adr/0006-spielemetadaten-aus-lokalem-games-dump.md#ergänzung-vom-2026-11-01-belegte-firmenangaben-für-airships).
 
 1. [`build-game-title-index.mjs`](../src/fetch-game/build-game-title-index.mjs) liest
    einen lokalen MariaDB-Dump als Daten und führt dessen SQL nicht aus. Er schreibt
@@ -17,7 +19,8 @@ lokal exportierten Games-Dump.
    Report nennt Dump-Hash und Titelindex als Quelle. Katalogspiele außerhalb
    des Index (Erstjahr nach 2005) ergänzt der Import aus
    [`data-game-dump-manual.json`](../src/data/data-game-dump-manual.json) als
-   Kandidaten mit `manual: true`; enthält der Index die MobyGames-ID, gilt er. Ein veralteter Index oder
+   Kandidaten mit `manual: true`; eine ergänzende `companySource` wird erhalten.
+   Enthält der Index die MobyGames-ID, gilt er. Ein veralteter Index oder
    ein Plattformindex aus einem anderen Dump bricht den Import ab. Die übrigen
    Spalten des Dumps (Perspektive, Setting usw.) werden nicht übernommen.
 3. `npm run dev:verify:game-dump` prüft Katalogabdeckung, Titel/Aliasse, eindeutige
@@ -74,8 +77,15 @@ Daten. Beschädigte oder veraltete fertige Caches brechen den Build ab.
   Need for Speed III: Hot Pursuit ist ausdrücklich Windows zugeordnet:
   Der Dump enthält dafür keine MS-DOS-Veröffentlichung.
 - Entwicklerfirmen und Publisher werden aus den Veröffentlichungen der
-  ausgewählten Plattform übernommen. 134 Spiele enthalten Entwicklerangaben.
-  Bei Airships fehlen Entwickler und Publisher im Dump; diese bleiben unbekannt.
+  ausgewählten Plattform übernommen. Nach der Airships-Ergänzung enthalten
+  136 Spiele Entwicklerangaben.
+  Bei Airships fehlen Entwickler und Publisher im Dump; die manuell gepflegten
+  Veröffentlichungen ergänzen beide mit „David Stark“, belegt durch die
+  [Steam-Produktseite](https://store.steampowered.com/app/342560/Airships_Conquer_the_Skies/),
+  geprüft am 2026-11-01. `companySource` wird über den Import bis zu
+  `data.evidence.companySource` im fertigen Cache erhalten und separat angezeigt.
+  Die Qualität lautet für dieses Spiel `supplemented-source`; alle übrigen
+  Daten und die ursprüngliche MobyGames-Quelle bleiben unverändert.
   Der aktuelle Dump enthält keine strukturierten Designer- oder
   Personen-Credits; diese werden nicht aus Beschreibungen abgeleitet.
 - Firmenbezeichnungen werden beim SQL-Import und bei `dev:prepare:game-metadata`

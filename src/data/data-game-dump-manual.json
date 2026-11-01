@@ -1,5 +1,5 @@
 {
-  "note": "Manuell gepflegte Dump-Daten für Katalogspiele außerhalb des Titelindex (Erstjahr nach dessen Grenze). Werte aus dem MobyGames-Dump übernommen; der Import nutzt sie nur, wenn der Index die mobyid nicht enthält.",
+  "note": "Manuell gepflegte Dump-Daten für Katalogspiele außerhalb des Titelindex (Erstjahr nach dessen Grenze). Der Import nutzt sie nur, wenn der Index die mobyid nicht enthält. Bei Airships ergänzen Steam-belegte Entwickler- und Publisherangaben die fehlenden Dump-Werte; companySource kennzeichnet diese Ausnahme.",
   "games": {
     "tom-clancy-s-endwar": {
       "mobyid": 49906,
@@ -32,6 +32,11 @@
     "airships-conquer-the-skies": {
       "mobyid": 112651,
       "title": "Airships: Conquer the Skies",
+      "companySource": {
+        "url": "https://store.steampowered.com/app/342560/Airships_Conquer_the_Skies/",
+        "label": "Steam",
+        "reviewedAt": "2026-11-01"
+      },
       "genres": [
         "Simulation",
         "Strategy / tactics"
@@ -42,8 +47,8 @@
           "mobyreleaseid": 312864,
           "year": 2018,
           "platform": "Linux",
-          "publisher": "",
-          "developer": "",
+          "publisher": "David Stark",
+          "developer": "David Stark",
           "countries": "Worldwide",
           "publabel": ""
         },
@@ -51,8 +56,8 @@
           "mobyreleaseid": 312863,
           "year": 2018,
           "platform": "Macintosh",
-          "publisher": "",
-          "developer": "",
+          "publisher": "David Stark",
+          "developer": "David Stark",
           "countries": "Worldwide",
           "publabel": ""
         },
@@ -60,8 +65,8 @@
           "mobyreleaseid": 312862,
           "year": 2018,
           "platform": "Windows",
-          "publisher": "",
-          "developer": "",
+          "publisher": "David Stark",
+          "developer": "David Stark",
           "countries": "Worldwide",
           "publabel": ""
         }

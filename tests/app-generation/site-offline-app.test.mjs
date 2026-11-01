@@ -88,6 +88,11 @@ test("alle öffentlichen Inhaltsrouten haben eine lokale App-Ansicht", () => {
 });
 
 test("App-Routing erhält Video, Kapitel und öffentliche Teilen-Links", () => {
+  const airships = data.games.find((game) => game.id === "airships-conquer-the-skies");
+  const airshipsView = renderView(data, { route: airships.route });
+  assert.ok(airshipsView.body.includes("David Stark"));
+  assert.ok(airshipsView.body.includes("Quelle für Entwickler und Publisher:"));
+  assert.ok(airshipsView.body.includes('href="https://store.steampowered.com/app/342560/Airships_Conquer_the_Skies/"'));
   for (const [legacy, target] of [["ueber/", "about/"], ["kontakt/", "contact/"], ["datenschutz/", "privacy/"]]) {
     const state = parseAppRoute(`#/${legacy}`);
     assert.equal(state.route, target);
@@ -101,6 +106,7 @@ test("App-Routing erhält Video, Kapitel und öffentliche Teilen-Links", () => {
   assert.deepEqual(state, { route: game.route, videoId: id, seconds: 120 });
   const view = renderView(data, state);
   assert.equal(view.selected.id, id);
+  assert.ok(view.body.includes(`href="${view.selected.url}" rel="external">Auf YouTube ansehen und liken <span aria-hidden="true">↗</span>`));
   assert.equal(publicAddress(data, state, view), `${config.baseUrl}${game.route}?t=120#video-${id}`);
   assert.throws(() => parseAppRoute("#/spiele/?t=-1"), /Kapitelzeit/u);
   assert.throws(() => renderView(data, { route: game.route, videoId: "missing" }), /gehört nicht/u);

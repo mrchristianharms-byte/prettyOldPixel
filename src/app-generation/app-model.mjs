@@ -15,7 +15,10 @@ export function exportAppData(model, publicUrl) {
         data: metadata?.status === "ready" ? {
           releaseYear: metadata.data.releaseYear, genres: metadata.data.genres,
           releases: metadata.data.releases, additionalReleases: metadata.data.additionalReleases,
-          scope: metadata.data.scope, evidence: { sourceUrl: metadata.data.evidence.sourceUrl },
+          scope: metadata.data.scope, evidence: {
+            sourceUrl: metadata.data.evidence.sourceUrl,
+            ...(metadata.data.evidence.companySource ? { companySource: metadata.data.evidence.companySource } : {}),
+          },
         } : null,
       },
     })),

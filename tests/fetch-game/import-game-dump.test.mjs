@@ -105,7 +105,8 @@ test("manuelle Dump-Daten ergänzen Katalogspiele außerhalb des Titelindex, der
   const release = { mobyreleaseid: 90, year: 2008, platform: "DOS", publisher: "Virgin Games, Inc.",
     developer: "Origin", countries: "United States", publabel: null };
   const manual = {
-    "wing-iii": { mobyid: 9, title: "Wing Commander III", genres: ["Strategy / tactics"], alternativeTitles: [], releases: [release] },
+    "wing-iii": { mobyid: 9, title: "Wing Commander III", genres: ["Strategy / tactics"], alternativeTitles: [], releases: [release],
+      companySource: { url: "https://store.steampowered.com/app/342560/", label: "Steam", reviewedAt: "2026-11-01" } },
     "wing-ii": { mobyid: 4, title: "Wing Commander II", genres: ["Ignoriert"], alternativeTitles: [], releases: [release] },
   };
   const report = await importGameDump({ ...options, games, manual });
@@ -116,10 +117,14 @@ test("manuelle Dump-Daten ergänzen Katalogspiele außerhalb des Titelindex, der
     [[9, true, []]]);
   assert.equal(wingIII.candidates[0].releases[0].mobyid, 9);
   assert.equal(wingIII.candidates[0].releases[0].sourcePublisher, "Virgin Games, Inc.");
+  assert.deepEqual(wingIII.candidates[0].companySource, manual["wing-iii"].companySource);
   assert.deepEqual(wingII.candidates.map((candidate) => [candidate.mobyid, candidate.manual, candidate.genres]),
     [[4, undefined, ["Simulation"]]]);
   assert.match(await readFile(options.output.replace(/\.json$/u, ".html"), "utf8"), /MobyGames 9 · manuell gepflegt/u);
   await assert.rejects(importGameDump({ ...options, games, manual: { unbekannt: manual["wing-iii"] } }), /unbekanntes Spiel/u);
+  await assert.rejects(importGameDump({ ...options, games, manual: {
+    "wing-iii": { ...manual["wing-iii"], companySource: { url: "javascript:alert(1)", label: "Steam", reviewedAt: "2026-11-01" } },
+  } }), /Ungültige Quelle/u);
   await assert.rejects(importGameDump({ ...options, games, manual: { "wing-iii": { ...manual["wing-iii"], releases: [] } } }),
     /Ungültige manuelle/u);
   const { publabel, ...incomplete } = release;

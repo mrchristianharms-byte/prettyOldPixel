@@ -46,3 +46,19 @@ Jahr unbekannt; datierte einzelne Veröffentlichungen bleiben als solche sichtba
   muss ausdrücklich erneut zum fertigen Cache aufbereitet werden.
 
 [Umsetzung, Befehle und Grenzen](../game-metadata-implementation.md)
+
+## Ergänzung vom 2026-11-01: belegte Firmenangaben für Airships
+
+Ausdrücklich freigegeben ist eine Ausnahme für „Airships: Conquer the Skies“:
+Die [Steam-Produktseite](https://store.steampowered.com/app/342560/Airships_Conquer_the_Skies/)
+nennt David Stark als Entwickler und Publisher. Diese Angaben ergänzen die
+fehlenden Dump-Werte in den manuell gepflegten Veröffentlichungen.
+Valve Corporation ist hier die Betreiberin von Steam, nicht der Publisher.
+
+`companySource` hält URL, Quellenlabel und Prüfdatum fest. Import, Report-Prüfung
+und fertiger Cache übernehmen und validieren diese Quelle; die Datenqualität
+wird als `supplemented-source` statt `single-source` gekennzeichnet.
+Website, App, Markdown und lokale Prüfübersichten weisen die Quelle für
+Entwickler und Publisher separat aus. MobyGames bleibt Quelle für Identität,
+Plattform, Genre und Erscheinungsjahr. Es gibt keinen automatischen Steam-Abruf
+oder allgemeinen Fallback auf externe Quellen.

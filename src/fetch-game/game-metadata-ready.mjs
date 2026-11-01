@@ -9,6 +9,7 @@ import { verifyGameDump } from "./verify-game-dump.mjs";
 import { writeJson } from "../shared/archive-cache.mjs";
 import { platformMatches, selectDumpCandidate } from "./game-dump-matching.mjs";
 import { companyNamesHash, normalizeReleaseCompanies } from "./game-company-names.mjs";
+import { httpUrl } from "../shared/http-url.mjs";
 
 const root = fileURLToPath(new URL("../../", import.meta.url));
 const defaultCacheDir = path.join(root, "cache/game-metadata");
@@ -81,8 +82,9 @@ export async function buildReadyGameMetadata({
           note: decision?.note ?? selectionPolicy.note },
         scope: { platforms: selection.platforms, platformBasis: selection.platformBasis },
         evidence: { sourceUrl: `https://www.mobygames.com/game/${candidate.mobyid}/`,
-          dumpHash: report.source.sha256, reportHash, importedAt: report.importedAt },
-        quality: { basis: "single-source", usage: "attributed-source-data",
+          dumpHash: report.source.sha256, reportHash, importedAt: report.importedAt,
+          ...(candidate.companySource ? { companySource: candidate.companySource } : {}) },
+        quality: { basis: candidate.companySource ? "supplemented-source" : "single-source", usage: "attributed-source-data",
           companyIdentities: "reviewed-display-aliases", credits: "not-available" },
         releaseYear: year,
         genres: [...new Set(candidate.genres)], releases,
@@ -149,7 +151,11 @@ function validateReadyCache(cache, games, reviewedDecisions, selectionPolicy) {
       && data.evidence?.sourceUrl === `https://www.mobygames.com/game/${data.identity.id}/`
       && /^[a-f0-9]{64}$/u.test(data.evidence.reportHash) && /^[a-f0-9]{64}$/u.test(data.evidence.dumpHash)
       && Number.isFinite(Date.parse(data.evidence.importedAt))
-      && data.quality?.usage === "attributed-source-data" && data.quality.basis === "single-source"
+      && data.quality?.usage === "attributed-source-data"
+      && data.quality.basis === (data.evidence.companySource ? "supplemented-source" : "single-source")
+      && (data.evidence.companySource === undefined || (httpUrl(data.evidence.companySource?.url)
+        && typeof data.evidence.companySource.label === "string" && data.evidence.companySource.label.trim()
+        && Number.isFinite(Date.parse(data.evidence.companySource.reviewedAt))))
       && Array.isArray(data.genres) && data.genres.every((genre) => typeof genre === "string" && genre.trim())
       && Array.isArray(data.releases) && data.releases.length > 0
       && new Set(data.releases.map((release) => release.sourceReleaseId)).size === data.releases.length

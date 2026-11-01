@@ -3,7 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { gameDefinitions } from "../data/data-games.mjs";
 import { loadReadyGameMetadata } from "./game-metadata-ready.mjs";
-import { escapeHtml } from "../site-generation/site-html.mjs";
+import { escapeHtml, externalLink } from "../site-generation/site-html.mjs";
 
 const root = fileURLToPath(new URL("../../", import.meta.url));
 export function renderGameMetadataReview(reader, games = gameDefinitions) {
@@ -17,6 +17,7 @@ export function renderGameMetadataReview(reader, games = gameDefinitions) {
 · Kandidaten: ${escapeHtml(selection.consideredIds.join(", ") || "keine")}</p>
 ${data ? `<p><a href="${data.evidence.sourceUrl}">MobyGames ${data.identity.id}</a> · Genre: ${escapeHtml(data.genres.join(", ") || "keine Angabe")}
 · Jahr im Plattformumfang: ${data.releaseYear ?? "unbekannt"} · ${data.releases.length} Veröffentlichungen</p>` : ""}
+${data?.evidence.companySource ? `<p>Quelle für Entwickler und Publisher: ${externalLink(data.evidence.companySource.url, data.evidence.companySource.label)}</p>` : ""}
 ${(data?.additionalReleases ?? []).map((entry) => `<p>Zusätzliche Veröffentlichung:
 <a href="${entry.sourceUrl}">${escapeHtml(entry.title)}</a> · ${escapeHtml(entry.platforms.join(", "))}
 · ${entry.releases.length} Veröffentlichungen</p>`).join("")}
@@ -27,7 +28,7 @@ ${(data?.additionalReleases ?? []).map((entry) => `<p>Zusätzliche Veröffentlic
 details{border:1px solid #aaa;padding:1rem;margin:.5rem 0}summary{cursor:pointer}[hidden]{display:none}</style></head>
 <body><h1>Spielmetadaten: Dump-Prüfung</h1>
 <p>${reader.summary.games} Spiele · ${reader.summary.ready} nutzbar · ${reader.summary.blocked} unverifiziert.</p>
-<p>Einzige Metadatenquelle: lokaler Games-Dump. Bekannte Plattformen bleiben erhalten; sonst DOS, Amiga, C64, NES, SNES. Mehrdeutige Titel bleiben gesperrt.</p>
+<p>Metadatenquelle: lokaler Games-Dump; ausdrücklich belegte Ergänzungen für Entwickler und Publisher sind separat gekennzeichnet. Bekannte Plattformen bleiben erhalten; sonst DOS, Amiga, C64, NES, SNES. Mehrdeutige Titel bleiben gesperrt.</p>
 <label>Suche <input id="search" type="search"></label>${cards}
 <script>document.querySelector("#search").addEventListener("input",event=>{const query=event.target.value.toLocaleLowerCase("de");
 for(const game of document.querySelectorAll(".game"))game.hidden=!game.dataset.search.toLocaleLowerCase("de").includes(query);});</script>

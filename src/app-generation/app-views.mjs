@@ -113,6 +113,7 @@ function gameMetadata(game, model) {
 <dt>Entwickler</dt><dd>${values("developer", [...new Set((data.releases ?? []).map((release) => release.developer).filter(Boolean))])}</dd>
 <dt>Publisher</dt><dd>${values("publisher", [...new Set((data.releases ?? []).map((release) => release.publisher).filter(Boolean))])}</dd></dl>
 ${data.evidence?.sourceUrl ? `<p>Quelle: ${externalLink(data.evidence.sourceUrl, "Spielemetadaten")}</p>` : ""}
+${data.evidence?.companySource ? `<p>Quelle für Entwickler und Publisher: ${externalLink(data.evidence.companySource.url, data.evidence.companySource.label)}</p>` : ""}
 ${data.releases?.length ? `<details><summary>Entwickler, Publisher und Veröffentlichungen</summary>${itemList(data.releases.map((release) =>
     e([release.platform, release.year, release.developer, release.publisher, release.countries].filter(Boolean).join(" · "))))}</details>` : ""}
 ${data.additionalReleases?.length ? `<details><summary>Weitere Veröffentlichungen</summary>${itemList(data.additionalReleases.map((release) =>
@@ -133,7 +134,7 @@ function detail(videos, title, route, state, prefix = "", game) {
 <p id="app-player-notice" role="status"></p><div class="app-player-controls"><button id="app-player-enable">YouTube-Player aktivieren</button>
 <button id="app-player-reset" hidden>YouTube-Aktivierung zurücksetzen</button>
 ${videos.length > 1 ? '<label><input type="checkbox" id="app-auto-next"> Nächste Folge automatisch</label>' : ""}
-${externalLink(selected.url, "Video auf YouTube ansehen")}</div></section>
+${externalLink(selected.url, "Auf YouTube ansehen und liken")}</div></section>
 <h2>${e(selected.title)}</h2><p>${e(date(selected))}${selected.durationSeconds === null ? "" : ` · ${durationLabel(selected.durationSeconds)}`}</p>
 ${entry ? `<p>${e(entry.phase.label)}${run ? ` · ${e(run.label)}` : ""}</p>` : ""}
 ${!game ? gameDiscussions(selected, {

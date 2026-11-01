@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 import { gameDefinitions } from "../data/data-games.mjs";
 import { writeJson } from "../shared/archive-cache.mjs";
 import { normalizeDumpTitle, platformMatches } from "./game-dump-matching.mjs";
+import { httpUrl } from "../shared/http-url.mjs";
 
 const root = fileURLToPath(new URL("../../", import.meta.url));
 function check(condition, message) {
@@ -51,6 +52,11 @@ export async function verifyGameDump({
         && Array.isArray(candidate.alternativeTitles) && Array.isArray(candidate.releases)
         && Array.isArray(candidate.genres) && candidate.genres.every((genre) => typeof genre === "string" && genre.trim()),
       `Ungültiger Kandidat: ${game.id}.`);
+      check(candidate.companySource === undefined || (candidate.manual === true
+        && httpUrl(candidate.companySource?.url)
+        && typeof candidate.companySource.label === "string" && candidate.companySource.label.trim()
+        && Number.isFinite(Date.parse(candidate.companySource.reviewedAt))),
+      `Ungültige Quelle für Entwickler und Publisher: ${game.id}.`);
       candidateIds.add(candidate.mobyid);
       const titles = [candidate.title, ...candidate.alternativeTitles.map((title) => title.title)];
       check(titles.every((title) => typeof title === "string")

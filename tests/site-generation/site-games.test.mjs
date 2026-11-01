@@ -659,10 +659,18 @@ test("bindet konsolidierte Metadaten im echten Offline-Modell ein und zeigt Quel
         assert.ok(/>Alle Spiele anzeigen<\/a>/u.test(pages.get(file).html));
       }
     }
-    assert.ok(externalUrls.every((url) => new URL(url).hostname === "www.mobygames.com"));
+    const companySource = game.metadata.data?.evidence.companySource;
+    assert.ok(externalUrls.every((url) => new URL(url).hostname === "www.mobygames.com"
+      || url === companySource?.url));
+    if (companySource) {
+      assert.ok(externalUrls.includes(companySource.url));
+      assert.ok(information.includes("Quelle für Entwickler und Publisher:"));
+      assert.ok(information.includes("David Stark"));
+    }
     const additionalSources = game.metadata.data?.additionalReleases ?? [];
     for (const entry of additionalSources) assert.ok(externalUrls.includes(entry.sourceUrl));
-    if (!additionalSources.length) assert.equal(externalUrls.length, game.metadata.status === "ready" ? 1 : 0);
+    if (!additionalSources.length) assert.equal(externalUrls.length,
+      game.metadata.status === "ready" ? 1 + Number(Boolean(companySource)) : 0);
   }
 });
 

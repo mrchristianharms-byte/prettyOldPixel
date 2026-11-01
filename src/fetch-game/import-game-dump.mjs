@@ -4,7 +4,8 @@ import { fileURLToPath } from "node:url";
 import { gameDefinitions } from "../data/data-games.mjs";
 import manualDumpData from "../data/data-game-dump-manual.json" with { type: "json" };
 import { writeJson } from "../shared/archive-cache.mjs";
-import { escapeHtml } from "../site-generation/site-html.mjs";
+import { escapeHtml, externalLink } from "../site-generation/site-html.mjs";
+import { httpUrl } from "../shared/http-url.mjs";
 import { defaultTitleIndexFile, releaseColumns } from "./build-game-title-index.mjs";
 import { normalizeDumpTitle, platformMatches } from "./game-dump-matching.mjs";
 import { normalizeReleaseCompanies } from "./game-company-names.mjs";
@@ -28,6 +29,7 @@ export function renderDumpReport(report) {
       return `<section><h3><a href="${candidate.sourceUrl}">${text(candidate.title)}</a> · MobyGames ${candidate.mobyid}${candidate.manual ? " · manuell gepflegt" : ""}</h3>
 <p>Genre: ${candidate.genres.map(text).join(", ") || "keine Angabe"}<br>
 Plattformabgleich: ${candidate.platformMatch === null ? "lokale Plattform offen" : candidate.platformMatch ? "passende Veröffentlichung vorhanden" : "keine passende Veröffentlichung im Dump"}</p>
+${candidate.companySource ? `<p>Quelle für Entwickler und Publisher: ${externalLink(candidate.companySource.url, candidate.companySource.label)}</p>` : ""}
 <table><thead><tr><th>Plattform</th><th>Jahr</th><th>Entwickler</th><th>Publisher</th><th>Länder</th></tr></thead>
 <tbody>${releases.map((release) => `<tr><td>${text(release.platform)}</td><td>${text(release.year)}</td><td>${text(release.developer)}</td><td>${text(release.publisher)}</td><td>${text(release.countries)}</td></tr>`).join("")}</tbody></table>
 <p>${candidate.releases.length} Veröffentlichungen insgesamt im JSON-Export; ${releases.length} hier angezeigt.</p></section>`;
@@ -107,6 +109,10 @@ export async function importGameDump({
       && Array.isArray(entry.genres) && Array.isArray(entry.alternativeTitles)
       && Array.isArray(entry.releases) && entry.releases.length > 0,
     `Ungültige manuelle Dump-Daten: ${gameId}.`);
+    requireValue(entry.companySource === undefined || (httpUrl(entry.companySource?.url)
+      && typeof entry.companySource.label === "string" && entry.companySource.label.trim()
+      && Number.isFinite(Date.parse(entry.companySource.reviewedAt))),
+    `Ungültige Quelle für Entwickler und Publisher: ${gameId}.`);
     if (byId.has(entry.mobyid)) return null;
     return { ...entry, manual: true, releases: entry.releases.map((release) => {
       requireValue(releaseColumns.every((column) => Object.hasOwn(release, column)),
@@ -129,6 +135,7 @@ export async function importGameDump({
         genres: [...new Set(source.genres.map(normalizeGenre))],
         alternativeTitles: (source.alternativeTitles ?? []).map((title) => ({ ...title })),
         ...(source.manual ? { manual: true } : {}),
+        ...(source.companySource ? { companySource: source.companySource } : {}),
         platformMatch: game.platforms.length ? matchedReleases.length > 0 : null,
         matchingReleaseIds: matchedReleases.map((release) => release.mobyreleaseid),
         releases,

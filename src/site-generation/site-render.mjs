@@ -579,6 +579,7 @@ ${metadata([
     ...(game.aliases.length ? [["Weitere Titel", escapeHtml(game.aliases.join(", "))]] : []),
   ])}
 ${!data ? "<p>Weitere Spielinformationen sind derzeit nicht verfügbar.</p>" : ""}
+${evidence?.companySource ? `<p>Quelle für Entwickler und Publisher: ${externalLink(evidence.companySource.url, evidence.companySource.label)}</p>` : ""}
 ${additional.length ? `<details><summary>Weitere Veröffentlichungen (${additional.length})</summary>
 <div class="overflow-auto"><table class="release-table"><caption>Veröffentlichungen für ${escapeHtml([...new Set([...scope.platforms, ...additionalReleases.flatMap((entry) => entry.platforms)])].join(", "))}</caption>
 <thead><tr>${supplementary.length ? '<th scope="col">Veröffentlichung</th>' : ""}<th scope="col">Plattform</th><th scope="col">Jahr</th><th scope="col">Entwickler</th><th scope="col">Publisher</th><th scope="col">Länder</th></tr></thead>
