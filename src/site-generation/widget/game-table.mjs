@@ -37,7 +37,7 @@ export function gameTable(rows, config, intro = "") {
 <td><a href="${config.href(row.route)}"><img src="${escapeHtml(row.video.thumbnailUrl)}" alt="${escapeHtml(`Videovorschau zu ${row.name}: ${row.video.title}`)}" width="320" height="180" loading="lazy" decoding="async" referrerpolicy="no-referrer"></a></td>
 <td>${escapeHtml(row.duration)}</td>
 <td class="game-table-links">${[
-    ...row.playlists.map((playlist, index) => externalLink(playlist.url, row.playlists.length === 1 ? "Playlist" : `Playlist ${index + 1}`)),
+    ...(row.playlists.length ? [`<a href="${config.href(row.route)}">Playlist</a>`] : []),
     ...(row.mobyGamesUrl ? [externalLink(row.mobyGamesUrl, "Moby")] : []),
     ...(row.conclusionVideo ? [videoLink(row.conclusionVideo, config, "Abschlussgespräch", row.route)] : []),
   ].join("<br>") || "Nicht verfügbar"}</td>

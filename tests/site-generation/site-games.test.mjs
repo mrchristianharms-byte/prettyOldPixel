@@ -194,9 +194,10 @@ test("liefert Sortierdaten, Filter und belegte externe Links ausschließlich in 
   const body = html.match(/<tbody>([\s\S]*?)<\/tbody>/u)[1];
   assert.doesNotMatch(body, /href="https:\/\/www\.youtube\.com\/watch\?/u);
   const linksCell = [...body.matchAll(/<td\b[^>]*>([\s\S]*?)<\/td>/gu)]
-    .map((match) => match[1]).find((cell) => cell.includes("youtube.com/playlist"));
+    .map((match) => match[1]).find((cell) => cell.includes(">Playlist</a>"));
   assert.ok(linksCell);
-  assert.ok(linksCell.includes(`href="https://www.youtube.com/playlist?list=${playlistId}" rel="external"`));
+  assert.ok(linksCell.includes('href="../cadaver/">Playlist</a>'));
+  assert.ok(!linksCell.includes("youtube.com/playlist"));
   assert.ok(linksCell.includes('href="https://www.mobygames.com/game/42/" rel="external"'));
   assert.ok(linksCell.includes('>Moby <span'));
   assert.ok(!linksCell.includes("Schlußgespräch"));
@@ -228,7 +229,7 @@ test("verlinkt das zugeordnete Schlußgespräch unter Weiteres statt eines belie
     assert.ok(links.includes(`<a href="../cadaver/#video-${videoId(1)}">Abschlussgespräch</a>`), title);
     assert.ok(!links.includes(`watch?v=${videoId(0)}`));
     assert.ok(!links.includes(`watch?v=${videoId(2)}`));
-    assert.ok(links.indexOf(">Playlist <span") < links.indexOf(">Moby <span"));
+    assert.ok(links.indexOf(">Playlist</a>") < links.indexOf(">Moby <span"));
     assert.ok(links.indexOf(">Moby <span") < links.indexOf(">Abschlussgespräch</a>"));
   }
 });
