@@ -219,7 +219,7 @@ dadurch nicht. Die geplante Seite verwendet immer den aktuellen Inhaltsstand.
 - Die Seite dient vor allem der Exploration: kompakte Übersichten führen
   zu weiteren Spielen und bestehenden thematischen Listen, statt sämtliche
   Metadatenzuordnungen dauerhaft auf einer langen Seite auszubreiten.
-- Abschnitte: Datengrundlage, Erscheinungsjahre, Genres, Publisher,
+- Abschnitte: Erscheinungsjahre, Genres, Publisher,
   „Gemeinsamkeiten zwischen Genre und Publisher“.
 - Gemeinsame Aggregation im Inhaltsdatenbereich, Darstellung durch den
   Seitengenerator und wiederverwendbare Diagramm-Widgets.

@@ -1,5 +1,4 @@
 import { escapeHtml } from "../site-html.mjs";
-import { metadata } from "./metadata.mjs";
 
 const number = (value) => new Intl.NumberFormat("de-DE").format(value);
 const percentage = (value, total) => total ? new Intl.NumberFormat("de-DE", {
@@ -151,15 +150,7 @@ export function gameStatisticsMarkup(stats, { href, filters, svgHref, showHeadin
 <li><a href="${href("spiele/statistik/")}" aria-current="page">Spielestatistiken</a></li>
 </ul></nav>
   ${showHeading ? "<h1>re.play – Spielestatistiken</h1>" : ""}
-<section aria-labelledby="statistik-datengrundlage"><h2 id="statistik-datengrundlage">Datengrundlage</h2>
-${metadata([
-    ["Katalogisierte Spiele", escapeHtml(number(stats.total))],
-    ["Erscheinungsjahr bekannt", escapeHtml(`${number(stats.total - stats.unknownYearGames.length)} von ${number(stats.total)}`)],
-    ["Genres mit Angaben", escapeHtml(`${number(stats.genreKnown)} von ${number(stats.total)}`)],
-    ["Publisher mit Angaben", escapeHtml(`${number(stats.publisherKnown)} von ${number(stats.total)}`)],
-  ], "statistics-summary")}
-<p>Gezählt werden eindeutige Spiele mit einer veröffentlichten Spieleseite, jeweils einmal pro Spiel-ID. Das belegt weder einen vollständigen Durchlauf noch einen Abschluss. Folgen, wiederholte Durchläufe und bloße Erwähnungen in Blätterabenden erhöhen die Spielzahlen nicht. Mehrfachgenres und mehrere Publisher je Spiel sind möglich; Kategorien und Prozentwerte sind daher nicht addierbar.</p>
-<p><a href="${href("spiele/uebersicht/")}">Alle Spiele ansehen</a></p></section>
+
 <section aria-labelledby="statistik-jahre"><h2 id="statistik-jahre">Erscheinungsjahre</h2>
 <p>${yearDescription} Die Zeitachse verwendet das freigegebene Erscheinungsjahr des Katalogs; Jahreslücken bleiben proportional erhalten.</p>
 ${stats.visibleYears.length ? `<figure class="statistics-chart"><img src="${svgHref}" alt="Balkendiagramm der Spiele je Erscheinungsjahr"></figure>

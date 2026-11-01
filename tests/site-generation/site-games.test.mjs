@@ -179,7 +179,7 @@ test("liefert Sortierdaten, Filter und belegte externe Links ausschließlich in 
   assert.ok(html.includes("<td>2:00h</td>"));
   assert.ok(html.includes('<script defer src="../../assets/game-table.js"></script>'));
   assert.ok(html.includes('<div class="game-table-controls" data-game-table-controls hidden>'));
-  assert.match(html, /<div class="game-table-toolbar">\s*<div><p><a href="\.\.\/">Zur Spiele-Kachelübersicht<\/a><\/p><p class="game-table-summary" role="status" aria-live="polite"><span data-game-table-count>1 von 1 Spiel<\/span>\s*<span data-game-table-filters>Filter: Alle Systeme · Alle Genres<\/span>\s*<span data-game-table-sort>Sortierung: Erstvideo: neueste zuerst<\/span><\/p><\/div>\s*<div class="game-table-controls"/u);
+  assert.match(html, /<div class="game-table-toolbar">\s*<div><p class="game-table-summary" role="status" aria-live="polite"><span data-game-table-count>1 von 1 Spiel<\/span>\s*<span data-game-table-filters>Filter: Alle Systeme · Alle Genres<\/span>\s*<span data-game-table-sort>Sortierung: Erstvideo: neueste zuerst<\/span><\/p><\/div>\s*<div class="game-table-controls"/u);
   assert.ok(html.includes('type="search" id="game-search" data-game-search'));
   assert.ok(html.includes('data-game-reset aria-label="Filter zurücksetzen" title="Filter zurücksetzen"><span aria-hidden="true">↺</span>'));
   assert.ok(html.includes('>Jahr <button'));

@@ -632,7 +632,7 @@ function renderGamePages(model, siteConfig, add, filters, statistics) {
     schema: collectionSchema(rows.map((game) => ({ title: game.name, route: game.route })), overviewConfig, overview.route),
     body: `${gamePageNavigation(overview.route, overviewConfig.href)}
 <h1>${overview.name}</h1>
-${gameTable(rows, overviewConfig, `<p><a href="${overviewConfig.href(index.route)}">Zur Spiele-Kachelübersicht</a></p>`)}`,
+${gameTable(rows, overviewConfig)}`,
   }, [...new Set(rows.flatMap((game) => game.videos))].map((id) => model.videoById.get(id)));
   add({
     route: statisticsPage.route, title: "re.play – Spielestatistiken",
