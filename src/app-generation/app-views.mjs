@@ -7,6 +7,9 @@ import { httpUrl } from "../shared/http-url.mjs";
 import { projectInfo, projectLinks, externalContentNotice, generalPageAliases } from "../content-data/project-info.mjs";
 import { siteProcess } from "../content-data/site-process.mjs";
 import { processDiagram, processExplanation } from "../site-generation/widget/process-diagram.mjs";
+import { gamePageNavigation } from "../site-generation/widget/navigation.mjs";
+import { gameStatisticsMarkup } from "../site-generation/widget/game-statistics.mjs";
+import { gameStatistics } from "../content-data/game-statistics.mjs";
 
 export const appHref = (route = "", video, seconds) => `#/${route}${video ? `?video=${encodeURIComponent(video)}${seconds === undefined ? "" : `&t=${seconds}`}` : ""}`;
 const link = (route, label) => `<a href="${e(appHref(route))}">${e(label)}</a>`;
@@ -84,8 +87,10 @@ export function gameTableBody(games, model, sort = "video", direction = -1) {
   ].join("<br>")}</td></tr>`).join("");
 }
 
-function gamesView(games, model, table = false) {
-  return `<form id="app-game-filters"><label>System<select name="platform">${options(games.flatMap(platforms), "Alle Systeme")}<option value="__unknown__">System unbekannt</option></select></label>
+function gamesView(games, model, table = false, route = "spiele/") {
+  return `<p>${link(table ? "spiele/" : "spiele/uebersicht/", table ? "Zur Spiele-Kachelübersicht" : "Alle Spiele als Tabelle")}</p>
+${gamePageNavigation(route, appHref)}
+<form id="app-game-filters"><label>System<select name="platform">${options(games.flatMap(platforms), "Alle Systeme")}<option value="__unknown__">System unbekannt</option></select></label>
 <label>Genre<select name="genre">${options(games.flatMap((game) => gameData(game).genres ?? []), "Alle Genres")}<option value="__unknown__">Genre unbekannt</option></select></label>
 <label>Spieletitel<input type="search" name="search" placeholder="Spiel suchen"></label><button type="reset" aria-label="Filter zurücksetzen" title="Filter zurücksetzen">↺</button></form>
 <p id="app-game-count" role="status">${games.length} von ${count(games.length, "Spiel", "Spielen")}</p>
@@ -205,7 +210,16 @@ Weitere Hosting- und Medienhinweise: <a href="../privacy/">Datenschutz der öffe
   if (route === "spiele/" || route === "spiele/uebersicht/") {
     const table = route === "spiele/uebersicht/";
     return { title: table ? "Alle Spiele als Tabelle" : "Spiele", games: model.games, table,
-      body: `<p>${link(table ? "spiele/" : "spiele/uebersicht/", table ? "Zur Spiele-Kachelübersicht" : "Alle Spiele als Tabelle")}</p>${gamesView(model.games, model, table)}` };
+      body: `${gamesView(model.games, model, table, route)}` };
+  }
+  if (route === "spiele/statistik/") {
+    const filters = model.gameFilters ?? [];
+    return {
+      title: "re.play – Spielestatistiken",
+      body: gameStatisticsMarkup(gameStatistics(model.games), {
+        href: appHref, filters, svgHref: "statistics.svg", showHeading: false,
+      }),
+    };
   }
   const game = model.games.find((game) => game.route === route);
   if (game) return detail(byIds(game.videos), game.name, route, state, gameMetadata(game, model), game);
@@ -238,7 +252,7 @@ ${Array.from({ length: 12 }, (_, index) => `<tr><th scope="row">${index + 1}</th
   const filter = model.gameFilters?.find((filter) => filter.route === route);
   if (filter) {
     const games = model.games.filter((game) => filter.games.includes(game.id));
-    return { title: `${filter.label}: ${filter.name}`, games, body: gamesView(games, model) };
+    return { title: `${filter.label}: ${filter.name}`, games, body: gamesView(games, model, false, route) };
   }
   return { title: "Seite nicht gefunden", body: `<p>Die App kennt die Adresse „${e(originalRoute)}“ nicht.</p>${link("", "Zur Startseite")}` };
 }

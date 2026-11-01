@@ -1,6 +1,6 @@
 # ADR 0014: Spielestatistiken für re.play
 
-- Status: vorgeschlagen; Bestandsauswertung durchgeführt, Seite noch nicht implementiert.
+- Status: angenommen und implementiert; Auswertungen werden beim Build dynamisch aus dem aktuellen Inhaltsmodell erzeugt.
 - Datum: 2026-11-01.
 - Ergänzt [ADR 0006](0006-spielemetadaten-aus-lokalem-games-dump.md),
   [ADR 0007](0007-kataloguebersichten-und-erweiterte-navigation.md) und
@@ -195,7 +195,7 @@ hier katalogisierten Capcom-Spiele. Das ist keine Aussage über sämtliche
 Veröffentlichungen dieser Publisher. Mehrfachgenres können denselben Titel
 in mehreren Kombinationen erscheinen lassen.
 
-## Vorgeschlagene Entscheidung
+## Entscheidung
 
 Nachtrag vom 2026-11-01: Nach dieser Bestandsauswertung wurden Entwickler und
 Publisher für Airships mit „David Stark“ ergänzt, belegt durch Steam und
@@ -257,7 +257,9 @@ dadurch nicht. Die geplante Seite verwendet immer den aktuellen Inhaltsstand.
   „Erscheinungsjahr unbekannt“ steht separat und bleibt außerhalb der Zeitachse.
 - Ein lokales, statisch erzeugtes SVG-Balkendiagramm ergänzt dieselben Werte
   und wird auch als `spiele/statistik/erscheinungsjahre.svg` bereitgestellt.
-- Die Zeitachse läuft vom kleinsten bis zum größten angezeigten Jahr.
+- Die Zeitachse läuft vom kleinsten bis zum größten angezeigten Jahr und ist
+  beidseitig um je ein Jahr verbreitert, damit die Balken vollständig
+  innerhalb des Diagramms liegen.
   Abstände bleiben proportional zu den Jahresunterschieden; ausgelassene
   Jahre werden nicht zusammengeschoben und nicht als Nullwerte ausgegeben.
   Die Y-Achse beginnt bei 0. Keine logarithmische Achse oder künstliche Jahresgrenze.
@@ -283,8 +285,9 @@ dadurch nicht. Die geplante Seite verwendet immer den aktuellen Inhaltsstand.
   regionalen Veröffentlichungen mit demselben Publisher.
 - Genre und Publisher erhalten absteigend sortierte Tabellen; bei Gleichstand
   wird nach bestehender deutscher Namenssortierung geordnet.
-- Für Genres ist ein horizontales SVG-Balkendiagramm sinnvoll. Für Publisher
-  reicht zunächst eine Top-10-Darstellung; weitere Publisher sind in einem
+- Für Genres und Publisher gibt es je ein horizontales SVG-Balkendiagramm;
+  das Publisher-Diagramm zeigt wie die Tabelle die Top 10.
+  Die Publisher-Tabelle zeigt die Top 10; weitere Publisher sind in einem
   standardmäßig geschlossenen Bereich „Weitere Publisher“ erreichbar.
   Ein nicht disjunkter „Rest“ darf nicht als Anzahl unterschiedlicher Spiele
   dargestellt werden. Kein Kreisdiagramm für Mehrfachzuordnungen.
@@ -295,16 +298,16 @@ dadurch nicht. Die geplante Seite verwendet immer den aktuellen Inhaltsstand.
 
 ### 4. Kombinationen statt unübersichtlichem Netzwerk
 
-- Die Top-20-Schnittmengen von Genre und Publisher werden als Tabelle gezeigt:
-  Genre, Publisher, gemeinsame Spielanzahl und Anteil innerhalb des Publishers.
+- Die Top-10-Schnittmengen von Genre und Publisher werden als Tabelle gezeigt:
+  Genre, Publisher, gemeinsame Spielanzahl und zugehörige Spiele.
   Berücksichtigt werden Kombinationen mit mindestens zwei Spielen.
 - Sortierung: gemeinsame Anzahl absteigend, anschließend Genre und Publisher
-  alphabetisch. Die Grenze liegt bei exakt 20 Kombinationen, auch bei
+  alphabetisch. Die Grenze liegt bei exakt 10 Kombinationen, auch bei
   Gleichstand; gibt es weniger geeignete Kombinationen, werden nur diese gezeigt.
   Die Begrenzung betrifft die Darstellung, nicht die vollständige Aggregation.
 - Jede Kombination enthält einen standardmäßig geschlossenen Bereich
   „Gemeinsame Spiele ansehen“ mit direkten Links zu allen Spielen dieser
-  Schnittmenge. So bleiben die 20 Tabellenzeilen kompakt, ohne die Auswahl
+  Schnittmenge. So bleiben die 10 Tabellenzeilen kompakt, ohne die Auswahl
   der erreichbaren Spiele zusätzlich zu beschneiden. Native `details`/`summary`
   funktionieren auf der Website ohne JavaScript und per Tastatur.
 - Die zugehörigen Spiele werden direkt verlinkt; getrennte Genre- und
@@ -335,7 +338,7 @@ Bei der Umsetzung sind mindestens folgende Prüfungen erforderlich:
 - Tabelle und SVG enthalten ausschließlich Jahre mit mindestens zwei Spielen;
   Einzeljahrgänge bleiben im Auslassungshinweis und in der Gesamtzahl berücksichtigt.
   Zeitabstände bleiben korrekt, auch bei ausgelassenen Zwischenjahren.
-- Die Kombinationstabelle enthält höchstens 20 Einträge mit mindestens zwei
+- Die Kombinationstabelle enthält höchstens 10 Einträge mit mindestens zwei
   Spielen, deterministisch sortiert; Gleichstände erweitern das Limit nicht.
 - Jede angezeigte Jahresgruppe und Kombination verlinkt genau ihre zugehörigen
   Spiele. Aufklappbereiche, breitere Filterlinks und „Alle Spiele ansehen“

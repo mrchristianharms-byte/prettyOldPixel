@@ -22,6 +22,7 @@ Hardwarevideos, Retrospektiven und Gespräche. Vorhandene Kapitel verlinken Vide
 
 - [Startseite als Markdown](${config.absolute("index.md")})
 ${model.navigation.map((entry) => `- [${entry.name}](${config.absolute(entry.route)})`).join("\n")}
+${model.games.length ? `- [Spielestatistiken](${config.absolute("spiele/statistik/")})` : ""}
 - [Über das Projekt](${config.absolute("about/")})
 - [Kontakt und Quellen](${config.absolute("contact/")})
 - [Datenschutz](${config.absolute("privacy/")})

@@ -19,8 +19,10 @@ import { pagination } from "./widget/pagination.mjs";
 import { archiveLinks } from "./widget/archive-links.mjs";
 import { magazineLogo } from "./widget/magazine-logo.mjs";
 import { videoPanel } from "./widget/video-panel.mjs";
-import { navigation } from "./widget/navigation.mjs";
+import { gamePageNavigation, navigation } from "./widget/navigation.mjs";
 import { themeToggle } from "./widget/theme-toggle.mjs";
+import { gameStatisticsMarkup } from "./widget/game-statistics.mjs";
+import { gameStatistics } from "../content-data/game-statistics.mjs";
 
 const { code: themeScript } = await minify(await readFile(new URL("./theme.js", import.meta.url), "utf8"));
 if (!themeScript) throw new Error("Minifiziertes Darstellungs-Skript ist leer.");
@@ -587,12 +589,14 @@ ${additional.length ? `<details><summary>Weitere Veröffentlichungen (${addition
 </table></div></details>` : ""}</section>`;
 }
 
-function renderGamePages(model, siteConfig, add, filters) {
+function renderGamePages(model, siteConfig, add, filters, statistics) {
   if (!model.games.length) return;
   const root = { route: "", name: "Startseite" };
   const index = { route: "spiele/", name: "Spiele" };
   const overview = { route: "spiele/uebersicht/", name: "Alle Spiele als Tabelle" };
+  const statisticsPage = { route: "spiele/statistik/", name: "Spielestatistiken" };
   const overviewConfig = siteConfig.forPage(overview.route);
+  const statisticsConfig = siteConfig.forPage(statisticsPage.route);
   const rows = model.games.map((game) => {
     const videos = game.videos.map((id) => model.videoById.get(id));
     const firstVideo = [...videos].sort((a, b) =>
@@ -626,9 +630,19 @@ function renderGamePages(model, siteConfig, add, filters) {
     description: "Alle Retrospiele von Pretty Old Pixel als Tabelle: erstes Videojahr, Titel, Erscheinungsjahr, Plattform, Videovorschau und gesamte Videolaufzeit.",
     crumbs: [root, index, overview],
     schema: collectionSchema(rows.map((game) => ({ title: game.name, route: game.route })), overviewConfig, overview.route),
-    body: `<h1>${overview.name}</h1>
+    body: `${gamePageNavigation(overview.route, overviewConfig.href)}
+<h1>${overview.name}</h1>
 ${gameTable(rows, overviewConfig, `<p><a href="${overviewConfig.href(index.route)}">Zur Spiele-Kachelübersicht</a></p>`)}`,
   }, [...new Set(rows.flatMap((game) => game.videos))].map((id) => model.videoById.get(id)));
+  add({
+    route: statisticsPage.route, title: "re.play – Spielestatistiken",
+    description: "Erscheinungsjahre, Genres, Publisher und belegte Gemeinsamkeiten der katalogisierten Spiele bei Pretty Old Pixel.",
+    crumbs: [root, index, statisticsPage],
+    schema: { "@type": "WebPage", "@id": "./#page", name: statisticsPage.name, url: "./" },
+    body: gameStatisticsMarkup(statistics, {
+      href: statisticsConfig.href, filters, svgHref: statisticsConfig.href("spiele/statistik/erscheinungsjahre.svg"),
+    }),
+  });
   const listings = [
     { ...index, games: model.games },
     ...[...filters].flatMap(([field, entries]) => [...entries.values()].map((entry) => {
@@ -664,7 +678,8 @@ ${gameTable(rows, overviewConfig, `<p><a href="${overviewConfig.href(index.route
         schema: collectionSchema(games.map((game) => ({ title: game.name, route: game.route })), config, route),
         previous: page > 1 ? paginatedRoute(listing.route, page - 1) : null,
         next: page < pageCount ? paginatedRoute(listing.route, page + 1) : null,
-        body: `<h1>${escapeHtml(heading)}${page > 1 ? ` – Seite ${page}` : ""}</h1><p>${filtered ? `${escapeHtml(heading)}: ` : ""}${countLabel(listing.games.length, "Retrospiel", "Retrospiele")}, alphabetisch geordnet. Entdecke Spielverläufe, Unboxings und Gespräche rund um die Spiele.</p>
+        body: `${gamePageNavigation(route, config.href)}
+<h1>${escapeHtml(heading)}${page > 1 ? ` – Seite ${page}` : ""}</h1><p>${filtered ? `${escapeHtml(heading)}: ` : ""}${countLabel(listing.games.length, "Retrospiel", "Retrospiele")}, alphabetisch geordnet. Entdecke Spielverläufe, Unboxings und Gespräche rund um die Spiele.</p>
 ${filtered ? `<p><a href="${config.href(index.route)}">Alle Spiele anzeigen</a></p>` : ""}<p><a href="${config.href(overview.route)}">Spiele suchen und filtern</a></p>
 ${pagination(listing.route, page, pageCount, config)}
 <div class="game-catalog">${catalogGrid(games.map((game) => ({
@@ -735,7 +750,7 @@ ${section.id === "sonstiges" ? "" : pagination(section.route, page, count, confi
   }
 }
 
-export function renderSite(model, config, cssHref, jsHref = "assets/video-series.js", tableHref = "assets/game-table.js", processHref = "assets/process-diagram.js") {
+export function renderSite(model, config, cssHref, jsHref = "assets/video-series.js", tableHref = "assets/game-table.js", processHref = "assets/process-diagram.js", statistics = gameStatistics(model.games)) {
   const pages = new Map();
   const filters = gameMetadataFilters(model.games);
   function add(options, videos = []) {
@@ -794,7 +809,7 @@ ${homeOverview(model, config, filters)}`,
         video.blaetterabend ? `<p>${escapeHtml(video.title)}: klassische Computer- und Spielezeitschriften im Blätterabend von Pretty Old Pixel.</p>` : ""),
     }, [video]);
   }
-  renderGamePages(model, config, add, filters);
+  renderGamePages(model, config, add, filters, statistics);
   renderSectionPages(model, config, add);
 
   for (const info of projectInfo) {

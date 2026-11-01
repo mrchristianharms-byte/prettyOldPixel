@@ -2,6 +2,8 @@ import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { gzipSync } from "node:zlib";
 import { exportAppData, hydrateAppData } from "./app-model.mjs";
+import { gameStatistics } from "../content-data/game-statistics.mjs";
+import { gameStatisticsYearSvg } from "../site-generation/widget/game-statistics.mjs";
 
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 const sourceRoot = new URL("../", import.meta.url);
@@ -23,7 +25,7 @@ async function browserModules() {
   return files;
 }
 
-export async function generateApp(model, config, websiteAssets) {
+export async function generateApp(model, config, websiteAssets, statistics = gameStatistics(model.games)) {
   const data = exportAppData(model, config.baseUrl);
   hydrateAppData(data);
   const modules = await browserModules();
@@ -39,6 +41,7 @@ export async function generateApp(model, config, websiteAssets) {
   const version = hash([...modules].map(([name, content]) => `${name}:${hash(content)}`).join("\n") + worker + generator).slice(0, 20);
   const release = `releases/${version}/`;
   const files = new Map([...modules].map(([name, content]) => [`app/${release}${name}`, content]));
+  files.set("app/statistics.svg", gameStatisticsYearSvg(statistics));
   const css = shared.find(([name]) => name.endsWith(".css"))?.[0];
   if (!css) throw new Error("Gemeinsames App-Stylesheet fehlt.");
   const icon = `${release}shared/apple-touch-icon.png`;

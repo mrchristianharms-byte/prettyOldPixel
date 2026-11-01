@@ -7,3 +7,13 @@ export function navigation(entries, route, config, trailingHtml = "") {
     return `<li${control ? ' class="navigation-control"' : ""}><a href="${config.href(target)}"${selected === target ? ' aria-current="page"' : ""}>${escapeHtml(name)}</a>${control ? trailingHtml : ""}</li>`;
   }).join("")}</ul></details></nav>`;
 }
+
+export function gamePageNavigation(route, href) {
+  const entries = [
+    { route: "spiele/", name: "re.play" },
+    { route: "spiele/uebersicht/", name: "Alle Spiele als Tabelle" },
+    { route: "spiele/statistik/", name: "Spielestatistiken" },
+  ];
+  return `<nav class="game-page-navigation" aria-label="Spieleübersichten"><ul>${entries.map((entry) =>
+    `<li><a href="${href(entry.route)}"${route === entry.route ? ' aria-current="page"' : ""}>${escapeHtml(entry.name)}</a></li>`).join("")}</ul></nav>`;
+}

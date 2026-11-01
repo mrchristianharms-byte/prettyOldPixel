@@ -36,7 +36,7 @@ test("ein gemeinsamer Loader bleibt unabhängig von beiden Generatoren", async (
   assert.doesNotMatch(source, /site-generation|app-generation/u);
   const build = await readFile(new URL("../../src/site-generation/generate-site.mjs", import.meta.url), "utf8");
   assert.equal((build.match(/await loadContentData\(/gu) ?? []).length, 1);
-  assert.match(build, /generateApp\(model, config, assets\)/u);
+  assert.match(build, /generateApp\(model, config, assets, statistics\)/u);
   assert.match(build, /renderSite\(model, config/u);
   for (const file of await readdir(new URL("../../src/app-generation/", import.meta.url))) {
     if (!/\.(?:mjs|js)$/u.test(file)) continue;
@@ -85,6 +85,15 @@ test("alle öffentlichen Inhaltsrouten haben eine lokale App-Ansicht", () => {
     assert.ok(view.body, page.route);
   }
   assert.equal(renderView(data, { route: "unbekannt/" }).title, "Seite nicht gefunden");
+});
+
+test("Spielestatistiken sind in der Offline-App verfügbar und verweisen auf das lokale SVG", () => {
+  const view = renderView(data, { route: "spiele/statistik/" });
+  assert.equal(view.title, "re.play – Spielestatistiken");
+  assert.match(view.body, /src="statistics\.svg"/u);
+  assert.match(view.body, /Gemeinsamkeiten zwischen Genre und Publisher/u);
+  assert.match(view.body, /aria-current="page">Spielestatistiken/u);
+  assert.ok(view.body.includes(`${model.games.length} von ${model.games.length}`));
 });
 
 test("App-Routing erhält Video, Kapitel und öffentliche Teilen-Links", () => {
@@ -170,6 +179,8 @@ test("App-Build ist deterministisch, vollständig gehasht und separat budgetiert
   assert.equal(manifest.version, app.version);
   assert.deepEqual(manifest.thumbnails, model.videos.map((video) => video.thumbnailUrl));
   assert.ok(manifest.files.some((file) => file.url.endsWith("data.json")));
+  assert.ok(manifest.files.some((file) => file.url === "statistics.svg"));
+  assert.ok(app.files.has("app/statistics.svg"));
   for (const file of manifest.files) {
     const bytes = app.files.get(`app/${file.url}`);
     assert.ok(bytes !== undefined, file.url);

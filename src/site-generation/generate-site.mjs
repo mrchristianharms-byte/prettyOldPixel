@@ -10,6 +10,8 @@ import { unreviewedPreviewVariable } from "../content-data/site-game-discussions
 import { generateApp } from "../app-generation/generate-app.mjs";
 import { generateAiBot } from "../ai-bot-generation/generate-ai-bot.mjs";
 import { generalPageAliases } from "../content-data/project-info.mjs";
+import { gameStatistics } from "../content-data/game-statistics.mjs";
+import { gameStatisticsYearSvg } from "./widget/game-statistics.mjs";
 
 const projectRoot = path.resolve(fileURLToPath(new URL("../../", import.meta.url)));
 const hash = (content) => createHash("sha256").update(content).digest("hex");
@@ -164,6 +166,7 @@ export async function generateSite({
     }
   }
   const model = await loadContentData(cache, { now });
+  const statistics = gameStatistics(model.games);
   for (const warning of model.warnings) logger.warn(`Build-Hinweis: ${warning}`);
 
   const [pico, customCss, license, seriesJs, favicon, touchIcon, tableJs, processJs] = await Promise.all([
@@ -187,9 +190,10 @@ export async function generateSite({
   const processFile = `assets/process-diagram.${hash(processJs).slice(0, 12)}.js`;
   const assets = new Map([[cssFile, css], [jsFile, seriesJs], [tableFile, tableJs], ["favicon.webp", favicon], ["apple-touch-icon.png", touchIcon], ["assets/pico-LICENSE.txt", license], [".nojekyll", ""], ...model.magazineLogoAssets]);
   assets.set(processFile, processJs);
-  const app = await generateApp(model, config, assets);
+  assets.set("spiele/statistik/erscheinungsjahre.svg", gameStatisticsYearSvg(statistics));
+  const app = await generateApp(model, config, assets, statistics);
   for (const [file, value] of app.files) assets.set(file, value);
-  const pages = renderSite(model, config, cssFile, jsFile, tableFile, processFile);
+  const pages = renderSite(model, config, cssFile, jsFile, tableFile, processFile, statistics);
   for (const [file, content] of generateAiBot(model, config, pages)) assets.set(file, content);
   for (const [legacy, target] of Object.entries(generalPageAliases)) {
     const href = escapeHtml(config.href(target, legacy));

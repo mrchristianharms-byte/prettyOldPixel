@@ -1,5 +1,13 @@
 import { slugify } from "./routes.mjs";
 
+export function gameMetadataValues(game, field) {
+  if (game.metadata?.status !== "ready") return [];
+  const { genres = [], releases = [] } = game.metadata.data;
+  const values = field === "platform" ? (game.platforms.length ? game.platforms : game.metadata.data.scope?.platforms ?? [])
+    : field === "genre" ? genres : releases.map((release) => release[field]);
+  return [...new Set(values.filter(Boolean))];
+}
+
 export function gameMetadataFilters(games) {
   const filters = new Map();
   for (const [field, label, segment] of [
@@ -10,11 +18,7 @@ export function gameMetadataFilters(games) {
   ]) {
     const byName = new Map();
     for (const game of games) {
-      if (game.metadata?.status !== "ready") continue;
-      const { genres = [], releases = [] } = game.metadata.data;
-      const values = field === "platform" ? (game.platforms.length ? game.platforms : game.metadata.data.scope?.platforms ?? [])
-        : field === "genre" ? genres : releases.map((release) => release[field]);
-      for (const name of new Set(values.filter(Boolean))) {
+      for (const name of gameMetadataValues(game, field)) {
         if (!byName.has(name)) byName.set(name, []);
         byName.get(name).push(game);
       }

@@ -9,6 +9,9 @@ import { createSiteConfig } from "../../src/site-generation/site-config.mjs";
 import { normalizeSources, loadContentData } from "../../src/content-data/content-data.mjs";
 import { renderSite } from "../../src/site-generation/site-render.mjs";
 import { escapeHtml } from "../../src/site-generation/site-html.mjs";
+import { renderMarkdown } from "../../src/ai-bot-generation/site-markdown.mjs";
+import { gameStatistics } from "../../src/content-data/game-statistics.mjs";
+import { gameStatisticsYearSvg } from "../../src/site-generation/widget/game-statistics.mjs";
 
 const channel = { id: "UC-games", title: "Pretty Old Pixel" };
 const videoId = (index) => `g${String(index).padStart(10, "0")}`;
@@ -42,7 +45,7 @@ function render(input = fixture(), definitions = [definition()]) {
 
 function renderModel(model, config = createSiteConfig()) {
   const pages = renderSite(model, config, config.href("assets/test.css"));
-  const budgets = validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""], ["assets/game-table.js", ""], ["assets/process-diagram.js", ""], ["assets/theme.js", ""], ["favicon.webp", ""], ["apple-touch-icon.png", ""], ...(model.magazineLogoAssets ?? [])]), config);
+  const budgets = validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""], ["assets/game-table.js", ""], ["assets/process-diagram.js", ""], ["assets/theme.js", ""], ["favicon.webp", ""], ["apple-touch-icon.png", ""], ["spiele/statistik/erscheinungsjahre.svg", gameStatisticsYearSvg(gameStatistics(model.games))], ...(model.magazineLogoAssets ?? [])]), config);
   return { model, config, pages, budgets };
 }
 
@@ -141,6 +144,29 @@ test("reserviert die Route der Spiele-Gesamtübersicht", () => {
   assert.throws(() => render(fixture(), [definition({ id: "uebersicht" })]),
     /Ungültige oder doppelte Spiele-ID: uebersicht/u);
   assert.ok(!render(fixture(), []).pages.has("spiele/uebersicht/index.html"));
+});
+
+test("rendert Statistikroute, Quernavigation, Markdown und das lokale Jahres-SVG", () => {
+  const model = metadataModel(2);
+  const config = createSiteConfig("https://example.org/project/");
+  const pages = renderSite(model, config, config.href("assets/test.css"));
+  const statistics = pages.get("spiele/statistik/index.html");
+  assert.ok(statistics);
+  assert.match(statistics.html, /<link rel="canonical" href="https:\/\/example\.org\/project\/spiele\/statistik\/">/u);
+  assert.match(statistics.html, /<img src="erscheinungsjahre\.svg" alt="Balkendiagramm der Spiele je Erscheinungsjahr">/u);
+  assert.match(statistics.html, /Spiele aus diesem Jahr/u);
+  assert.match(statistics.html, /<a href="\.\.\/">re\.play<\/a>/u);
+  assert.match(pages.get("spiele/index.html").html, />Spielestatistiken<\/a>/u);
+  assert.match(pages.get("spiele/uebersicht/index.html").html, />Spielestatistiken<\/a>/u);
+  const markdown = renderMarkdown(statistics, config);
+  assert.match(markdown, /Gemeinsamkeiten zwischen Genre und Publisher/u);
+  assert.match(markdown, /Spiel 00/u);
+  assert.match(markdown, /erscheinungsjahre\.svg/u);
+  validateSite(pages, new Map([
+    ["assets/test.css", ""], ["assets/video-series.js", ""], ["assets/game-table.js", ""],
+    ["assets/process-diagram.js", ""], ["assets/theme.js", ""], ["favicon.webp", ""],
+    ["apple-touch-icon.png", ""], ["spiele/statistik/erscheinungsjahre.svg", gameStatisticsYearSvg(gameStatistics(model.games))],
+  ]), config);
 });
 
 test("liefert Sortierdaten, Filter und belegte externe Links ausschließlich in der Spieletabelle", () => {
@@ -726,7 +752,7 @@ test("escaped konsolidierte Metadaten und behält leere Felder sowie Releaseunte
   } };
   const config = createSiteConfig();
   const pages = renderSite(model, config, config.href("assets/test.css"));
-  validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""], ["assets/game-table.js", ""], ["assets/process-diagram.js", ""], ["assets/theme.js", ""], ["favicon.webp", ""], ["apple-touch-icon.png", ""]]), config);
+  validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""], ["assets/game-table.js", ""], ["assets/process-diagram.js", ""], ["assets/theme.js", ""], ["favicon.webp", ""], ["apple-touch-icon.png", ""], ["spiele/statistik/erscheinungsjahre.svg", gameStatisticsYearSvg(gameStatistics(model.games))]]), config);
   const html = pages.get("spiele/cadaver/index.html").html;
   assert.match(html, /&lt;script&gt;genre&lt;\/script&gt;/u);
   assert.match(html, /&lt;Studio&gt;/u);
@@ -759,7 +785,7 @@ test("fasst nur länderabweichende Releases zusammen und erhält alle anderen Un
   } };
   const config = createSiteConfig();
   const pages = renderSite(model, config, config.href("assets/test.css"));
-  validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""], ["assets/game-table.js", ""], ["assets/process-diagram.js", ""], ["assets/theme.js", ""], ["favicon.webp", ""], ["apple-touch-icon.png", ""]]), config);
+  validateSite(pages, new Map([["assets/test.css", ""], ["assets/video-series.js", ""], ["assets/game-table.js", ""], ["assets/process-diagram.js", ""], ["assets/theme.js", ""], ["favicon.webp", ""], ["apple-touch-icon.png", ""], ["spiele/statistik/erscheinungsjahre.svg", gameStatisticsYearSvg(gameStatistics(model.games))]]), config);
   const html = pages.get("spiele/cadaver/index.html").html;
   const table = html.match(/<tbody>([\s\S]*?)<\/tbody>/u)[1];
   assert.equal((table.match(/<tr>/gu) ?? []).length, 5);

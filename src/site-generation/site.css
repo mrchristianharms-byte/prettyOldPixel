@@ -58,6 +58,13 @@ h1, h2, h3, h4, h5, h6 { font-size: clamp(1.05rem, 1.8vw, 1.25rem); line-height:
 .theme-grid article { margin: 0; box-shadow: none; border: 1px solid var(--pico-muted-border-color); }
 .theme-count { color: var(--pico-primary); font-size: 1.25rem; font-weight: 700; }
 .theme-grid article p:last-child { margin-bottom: 0; }
+.game-page-navigation ul { flex-wrap: wrap; gap: .25rem .75rem; }
+.game-page-navigation a { display: inline-block; padding: .3rem .5rem; }
+.game-page-navigation a[aria-current="page"] { color: var(--pico-primary-inverse); background: var(--pico-primary-background); }
+.statistics-summary.detail-meta { grid-auto-flow: row; grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr)); }
+.statistics-chart :is(img, svg) { width: 100%; }
+.statistics-table-scroll { overflow-x: auto; }
+.statistics-table thead th { white-space: nowrap; }
 .theme-ranking { margin: 0; padding-inline-start: 1.4rem; }
 .theme-ranking li { padding-block: .25rem; }
 .theme-ranking-entry { display: inline-flex; align-items: baseline; gap: .5rem; width: 100%; min-width: 0; vertical-align: top; }
