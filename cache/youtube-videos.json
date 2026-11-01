@@ -5,10 +5,18 @@
     "title": "Pretty Old Pixel",
     "url": "https://www.youtube.com/@PrettyOldPixel"
   },
-  "lastModified": "2026-10-31T18:00:20Z",
-  "fetchedAt": "2026-10-31T22:30:22.647Z",
+  "lastModified": "2026-11-01T18:00:30Z",
+  "fetchedAt": "2026-11-01T22:51:39.325Z",
   "complete": true,
   "videos": [
+    {
+      "id": "ayKvCb3xjtk",
+      "title": "Blätterabendaufzeichnung mit Anna  - PC Joker - Sonderheft Adventures - Teil 1",
+      "description": "00:00:00 - Intro\n00:05:00 - Vorgespräch\n00:53:30 - Blätterabend\n\nLink zu Annas Twitch: https://www.twitch.tv/annaunddiepixel\nLive-Übertragung auf Twitch – sieh live unter https://www.twitch.tv/prettyoldpixel zu!",
+      "duration": "PT2H36M13S",
+      "durationSeconds": 9373,
+      "publishedAt": "2026-11-01T18:00:30Z"
+    },
     {
       "id": "4Dob5L4cyhI",
       "title": "Spieleabendaufzeichnung - Mission Critical - Stream 7",
