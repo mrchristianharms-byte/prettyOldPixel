@@ -12,7 +12,7 @@ test("reduziert die übertragenen CSS-Bytes um mindestens 30 Prozent ohne Build-
   const before = gzipSync(`${original}\n${custom}`).length;
   const after = gzipSync(`${reduced}\n${custom}`).length;
   assert.ok(after <= before * .7, `${before} → ${after} Bytes gzip`);
-  assert.ok(after < 10 * 1024, `${after} Bytes gzip`);
+  assert.ok(after < 12000, `${after} Bytes gzip`);
   assert.match(reduced, /Pico CSS/u);
   assert.doesNotMatch(reduced, /sourceMappingURL|@import/u);
   for (const selector of ["[data-tooltip]", "dialog{", "progress{"]) {

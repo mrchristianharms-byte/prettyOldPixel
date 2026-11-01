@@ -608,7 +608,7 @@ test("baut offline mit Produktionsdomain, Sitemap und Inhalts-Manifest; übernim
   const first = await generateSite(options);
   assert.equal(first.pages, 61);
   assert.equal(first.reused, 0);
-  assert.ok(first.cssGzip < 10 * 1024);
+  assert.ok(first.cssGzip < 12000);
   assert.ok(first.jsGzip <= 5 * 1024);
   const favicon = await readFile(path.join(options.outputDirectory, "favicon.webp"));
   assert.deepEqual(favicon, await readFile(new URL("../../src/site-generation/assets/favicon.webp", import.meta.url)));

@@ -1104,9 +1104,9 @@ Spieljahr und summierte Videolängen.
   damit Layout, Darstellung und Bedienbarkeit auch ohne JavaScript erhalten bleiben.
   Nach Template- oder Browserzustandsänderungen `dev:generate:css` und `dev:test`
   ausführen; der Reproduzierbarkeitstest erkennt eine veraltete CSS-Fassung.
-  Die Produktionstests begrenzen das aktuelle Bundle auf weniger als 10 KiB gzip
-  und verlangen mindestens 30 Prozent weniger gzip-Bytes als mit dem vollständigen
-  Framework. Das allgemeine harte Build-Budget bleibt bei 20 KiB.
+  Die Produktionstests begrenzen das aktuelle Bundle auf weniger als 12.000 Bytes
+  gzip und verlangen mindestens 30 Prozent weniger gzip-Bytes als mit dem
+  vollständigen Framework. Das allgemeine harte Build-Budget bleibt bei 20 KiB.
   PurgeCSS ist ausschließlich eine lokale Entwicklungsabhängigkeit; der
   Seitenbuild führt es nicht aus. Der Parser-Override in `package.json` verwendet
   die korrigierte `postcss-selector-parser`-Version ab 7.1.6 statt der
