@@ -57,12 +57,16 @@ test("renders explored groups as linked HTML and SVG with accessible zero-based 
     ["genre", new Map([["Action", { route: "spiele/genre/action/" }]])],
     ["publisher", new Map([["Acme", { route: "spiele/publisher/acme/" }]])],
   ]);
+  const href = (route) => `/${route}`;
   const html = gameStatisticsMarkup(statistics, {
-    href: (route) => `/${route}`, filters, svgHref: "/spiele/statistik/erscheinungsjahre.svg",
+    href, filters, svgHref: "/spiele/statistik/erscheinungsjahre.svg",
   });
   assert.match(html, /aria-current="page">Spielestatistiken/u);
-  assert.match(html, /<a href="\/spiele\/genre\/action\/">Action<\/a>/u);
-  assert.match(html, /<a href="\/spiele\/d\/">Puzzle<\/a>/u);
+  assert.match(html, /<a href="\/spiele\/genre\/action\/"><text class="chart-axis-label"[^>]*>Action<\/text><\/a>/u);
+  assert.match(html, /<a href="\/spiele\/d\/"><text class="chart-axis-label"[^>]*>Puzzle<\/text><\/a>/u);
+  assert.doesNotMatch(html, /<a href=[^>]*><text class="chart-axis-label"[^>]*>Simulation<\/text>/u);
+  assert.match(html, /<a href="\/spiele\/publisher\/acme\/"><text class="chart-axis-label"[^>]*>Acme<\/text><\/a>/u);
+  assert.doesNotMatch(html, /Anteil an allen Spielen/u);
   assert.match(html, /Gemeinsame Spiele ansehen/u);
   assert.doesNotMatch(html, /Anteil innerhalb des Publishers/u);
   assert.doesNotMatch(html, /SVG direkt öffnen|Spielpaare/u);
@@ -79,6 +83,10 @@ test("renders explored groups as linked HTML and SVG with accessible zero-based 
   assert.match(genreStatisticsSvg(statistics), /Horizontales Balkendiagramm: Action: 3/u);
   assert.match(publisherStatisticsSvg(statistics),
     /<title id="publisher-chart-title">Spiele je Publisher \(Top 10\)<\/title>[\s\S]*Horizontales Balkendiagramm: Acme: 2, Rival: 2/u);
+  assert.match(genreStatisticsSvg(statistics, { filters, href }),
+    /<a href="\/spiele\/genre\/action\/"><text class="chart-axis-label"[^>]*>Action<\/text><\/a>/u);
+  assert.match(publisherStatisticsSvg(statistics, { filters, href }),
+    /<a href="\/spiele\/publisher\/acme\/"><text class="chart-axis-label"[^>]*>Acme<\/text><\/a>/u);
 });
 
 test("keeps year bars inside the plot area by padding the timeline one year on each side", () => {
@@ -112,7 +120,7 @@ test("caps sorted combinations at 10 while retaining every qualifying combinatio
   });
   const table = html.match(/<section aria-labelledby="statistik-gemeinsamkeiten">([\s\S]*?)<\/section>/u)[1];
   assert.equal((table.match(/<tr>/gu) ?? []).length, 11);
-  assert.match(html, /Weitere Publisher \(2\)/u);
+  assert.doesNotMatch(html, /Weitere Publisher/u);
   assert.ok(table.indexOf("Genre 00") < table.indexOf("Genre 01"));
   assert.ok(table.includes("Gemeinsame Spiele ansehen"));
   for (const index of Array.from({ length: 10 }, (_, value) => value)) {

@@ -1,14 +1,12 @@
 import { escapeHtml } from "../site-html.mjs";
 
 const number = (value) => new Intl.NumberFormat("de-DE").format(value);
-const percentage = (value, total) => total ? new Intl.NumberFormat("de-DE", {
-  style: "percent", maximumFractionDigits: 1,
-}).format(value / total) : "0 %";
 const xml = (value) => escapeHtml(String(value));
 const chartStyles = `<style>
 .chart-background{fill:#fff}.chart-grid{stroke:#c6cdd3;stroke-width:1}.chart-axis{stroke:#35424a;stroke-width:1.5}
 .chart-axis-label,.chart-axis-title,.chart-empty{fill:#202a33;font-family:system-ui,sans-serif;font-size:12px}
 .chart-axis-title{font-size:13px;font-weight:600}.chart-empty{font-size:15px}.chart-bar{fill:#176b87}
+a>.chart-axis-label{text-decoration:underline;cursor:pointer}
 </style>`;
 
 function filterRoute(filters, field, name) {
@@ -16,14 +14,11 @@ function filterRoute(filters, field, name) {
   return filters.find((entry) => entry.field === field && entry.name === name)?.route;
 }
 
-function categoryLink(entry, field, filters, href) {
+function categoryHref(entry, field, filters, href) {
   const route = filterRoute(filters, field, entry.name);
-  if (route) return `<a href="${href(route)}">${escapeHtml(entry.name)}</a>`;
-  if (entry.games.length === 1) {
-    const [game] = entry.games;
-    return `<a href="${href(game.route)}">${escapeHtml(entry.name)}</a>`;
-  }
-  return escapeHtml(entry.name);
+  if (route) return href(route);
+  if (entry.games.length === 1) return href(entry.games[0].route);
+  return null;
 }
 
 function gameList(games, href) {
@@ -86,7 +81,7 @@ ${yearTicks.map((year) => `<text class="chart-axis-label" x="${x(year)}" y="${he
 <text class="chart-axis-title" transform="translate(15 ${top + plotHeight / 2}) rotate(-90)" text-anchor="middle">Spiele</text></svg>`;
 }
 
-function categoryChartSvg(entries, { idPrefix, title, emptyDescription }) {
+function categoryChartSvg(entries, { idPrefix, title, emptyDescription, field, filters, href }) {
   const width = 900;
   const rowHeight = 34;
   const height = Math.max(112, 62 + entries.length * rowHeight);
@@ -97,6 +92,11 @@ function categoryChartSvg(entries, { idPrefix, title, emptyDescription }) {
   const description = entries.length
     ? `Horizontales Balkendiagramm: ${entries.map((entry) => `${entry.name}: ${entry.count}`).join(", ")}.`
     : emptyDescription;
+  const label = (entry, y) => {
+    const text = `<text class="chart-axis-label" x="${left - 10}" y="${y + 17}" text-anchor="end">${xml(entry.name)}</text>`;
+    const target = field && filters && href ? categoryHref(entry, field, filters, href) : null;
+    return target ? `<a href="${target}">${text}</a>` : text;
+  };
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" role="img" aria-labelledby="${idPrefix}-chart-title ${idPrefix}-chart-description">
 ${chartStyles}
 <title id="${idPrefix}-chart-title">${title}</title><desc id="${idPrefix}-chart-description">${escapeHtml(description)}</desc>
@@ -104,36 +104,24 @@ ${chartStyles}
 ${entries.map((entry, index) => {
     const y = 30 + index * rowHeight;
     const barWidth = (entry.count / maximumCount) * plotWidth;
-    return `<g><text class="chart-axis-label" x="${left - 10}" y="${y + 17}" text-anchor="end">${xml(entry.name)}</text>
+    return `<g>${label(entry, y)}
 <rect class="chart-bar" x="${left}" y="${y}" width="${barWidth.toFixed(2)}" height="22" rx="2"/>
 <text class="chart-axis-label" x="${Math.min(width - 8, left + barWidth + 8)}" y="${y + 17}">${entry.count}</text></g>`;
   }).join("")}</svg>`;
 }
 
-export function genreStatisticsSvg(stats) {
+export function genreStatisticsSvg(stats, { filters, href } = {}) {
   return categoryChartSvg(stats.genres, {
-    idPrefix: "genre", title: "Spiele je Genre",
+    idPrefix: "genre", title: "Spiele je Genre", field: "genre", filters, href,
     emptyDescription: "Keine freigegebenen Genreangaben vorhanden.",
   });
 }
 
-export function publisherStatisticsSvg(stats) {
+export function publisherStatisticsSvg(stats, { filters, href } = {}) {
   return categoryChartSvg(stats.publishers.slice(0, 10), {
-    idPrefix: "publisher", title: "Spiele je Publisher (Top 10)",
+    idPrefix: "publisher", title: "Spiele je Publisher (Top 10)", field: "publisher", filters, href,
     emptyDescription: "Keine freigegebenen Publisherangaben vorhanden.",
   });
-}
-
-function categoryTable(entries, field, filters, href, total, rowLimit = entries.length) {
-  const visible = entries.slice(0, rowLimit);
-  const rows = (items) => items.map((entry) => `<tr><th scope="row">${categoryLink(entry, field, filters, href)}</th>
-<td>${number(entry.count)}</td><td>${percentage(entry.count, total)}</td></tr>`).join("");
-  return `<div class="statistics-table-scroll"><table class="statistics-table">
-<thead><tr><th scope="col">${field === "genre" ? "Genre" : "Publisher"}</th><th scope="col">Spiele</th><th scope="col">Anteil an allen Spielen</th></tr></thead>
-<tbody>${rows(visible)}</tbody></table></div>${entries.length > rowLimit
-    ? `<details class="statistics-more"><summary>Weitere Publisher (${number(entries.length - rowLimit)})</summary>
-<div class="statistics-table-scroll"><table class="statistics-table"><thead><tr><th scope="col">Publisher</th><th scope="col">Spiele</th><th scope="col">Anteil an allen Spielen</th></tr></thead>
-<tbody>${rows(entries.slice(rowLimit))}</tbody></table></div></details>` : ""}`;
 }
 
 export function gameStatisticsMarkup(stats, { href, filters, svgHref, showHeading = true }) {
@@ -162,14 +150,12 @@ ${omittedGameCount ? `<p>Die Zeitachse lässt ${number(stats.omittedYears.length
 ${stats.unknownYearGames.length ? `<p>Erscheinungsjahr unbekannt: ${number(stats.unknownYearGames.length)} ${stats.unknownYearGames.length === 1 ? "Spiel" : "Spiele"} (außerhalb der Zeitachse).</p>
 <details class="statistics-more"><summary>Spiele ohne bekanntes Erscheinungsjahr ansehen</summary>${gameList(stats.unknownYearGames, href)}</details>` : ""}</section>
 <section aria-labelledby="statistik-genres"><h2 id="statistik-genres">Genres</h2>
-<p>${number(stats.genreKnown)} von ${number(stats.total)} Spielen haben Genreangaben; ${number(stats.genreUnknown)} ${stats.genreUnknown === 1 ? "Spiel bleibt" : "Spiele bleiben"} ohne bekannte Genreangabe. Prozentwerte beziehen sich auf alle katalogisierten Spiele. Ein Spiel kann mehreren Genres zugeordnet sein.</p>
+<p>${number(stats.genreKnown)} von ${number(stats.total)} Spielen haben Genreangaben; ${number(stats.genreUnknown)} ${stats.genreUnknown === 1 ? "Spiel bleibt" : "Spiele bleiben"} ohne bekannte Genreangabe. Ein Spiel kann mehreren Genres zugeordnet sein.</p>
 <p>Viele Spiele teilen sich Genreangaben mit mindestens einem weiteren Spiel.</p>
-${stats.genres.length ? `<figure class="statistics-chart">${genreStatisticsSvg(stats)}<figcaption>Jedes Spiel wird je Genre höchstens einmal gezählt.</figcaption></figure>
-${categoryTable(stats.genres, "genre", filters, href, stats.total)}` : "<p>Es liegen keine freigegebenen Genreangaben vor.</p>"}</section>
+${stats.genres.length ? `<figure class="statistics-chart">${genreStatisticsSvg(stats, { filters, href })}<figcaption>Jedes Spiel wird je Genre höchstens einmal gezählt.</figcaption></figure>` : "<p>Es liegen keine freigegebenen Genreangaben vor.</p>"}</section>
 <section aria-labelledby="statistik-publisher"><h2 id="statistik-publisher">Publisher</h2>
-<p>${number(stats.publisherKnown)} von ${number(stats.total)} Spielen haben Publisherangaben; ${number(stats.publisherUnknown)} ${stats.publisherUnknown === 1 ? "Spiel bleibt" : "Spiele bleiben"} ohne bekannte Publisherangabe. Prozentwerte beziehen sich auf alle katalogisierten Spiele.</p>
-${stats.publishers.length ? `<figure class="statistics-chart">${publisherStatisticsSvg(stats)}<figcaption>Top 10; je Publisher wird unabhängig von regionalen Doppelungen jedes Spiel nur einmal gezählt.</figcaption></figure>
-${categoryTable(stats.publishers, "publisher", filters, href, stats.total, 10)}`
+<p>${number(stats.publisherKnown)} von ${number(stats.total)} Spielen haben Publisherangaben; ${number(stats.publisherUnknown)} ${stats.publisherUnknown === 1 ? "Spiel bleibt" : "Spiele bleiben"} ohne bekannte Publisherangabe.</p>
+${stats.publishers.length ? `<figure class="statistics-chart">${publisherStatisticsSvg(stats, { filters, href })}<figcaption>Top 10; je Publisher wird unabhängig von regionalen Doppelungen jedes Spiel nur einmal gezählt.</figcaption></figure>`
       : "<p>Es liegen keine freigegebenen Publisherangaben vor.</p>"}</section>
 <section aria-labelledby="statistik-gemeinsamkeiten"><h2 id="statistik-gemeinsamkeiten">Gemeinsamkeiten zwischen Genre und Publisher</h2>
 <p>Die Tabelle zeigt gemeinsame Spiele je Genre-Publisher-Kombination. Die Zuordnung beschreibt den Katalog, nicht eine Ursache oder die Gesamtheit aller Veröffentlichungen eines Unternehmens.</p>
@@ -179,5 +165,5 @@ ${stats.combinations.slice(0, 10).map((entry) => `<tr><th scope="row">${escapeHt
 <td>${number(entry.count)}</td>
 <td><details><summary>Gemeinsame Spiele ansehen</summary>${gameList(entry.games, href)}</details></td></tr>`).join("")}
 </tbody></table></div>` : "<p>Es gibt keine Genre-Publisher-Kombination mit mindestens zwei gemeinsamen Spielen.</p>"}
-<p>Die vollständige Spieleübersicht verlinkt auf die vorhandenen Genre- und Publisherlisten; für Einzelzuordnungen führen die Kategorietabellen direkt zur jeweiligen Spieleseite.</p></section>`;
+<p>Die vollständige Spieleübersicht verlinkt auf die vorhandenen Genre- und Publisherlisten; die Beschriftungen der Genre- und Publisher-Diagramme führen direkt zu diesen Listen bzw. bei Einzelzuordnungen zur Spieleseite.</p></section>`;
 }
