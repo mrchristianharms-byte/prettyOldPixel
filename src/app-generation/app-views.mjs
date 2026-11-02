@@ -114,7 +114,8 @@ function gameMetadata(game, model) {
   }).join(", ") || "Unbekannt";
   // Filter routes carry their field through export, not a second slug algorithm.
   return `<dl class="app-metadata"><dt>System</dt><dd>${values("platform", platforms(game))}</dd>
-<dt>Erscheinungsjahr</dt><dd>${game.releaseYear ?? "Unbekannt"}</dd><dt>Genre</dt><dd>${values("genre", data.genres ?? [])}</dd>
+<dt>Erscheinungsjahr</dt><dd>${Number.isInteger(game.releaseYear)
+    ? values("year", [String(game.releaseYear)]) : "Unbekannt"}</dd><dt>Genre</dt><dd>${values("genre", data.genres ?? [])}</dd>
 <dt>Entwickler</dt><dd>${values("developer", [...new Set((data.releases ?? []).map((release) => release.developer).filter(Boolean))])}</dd>
 <dt>Publisher</dt><dd>${values("publisher", [...new Set((data.releases ?? []).map((release) => release.publisher).filter(Boolean))])}</dd></dl>
 ${data.evidence?.sourceUrl ? `<p>Quelle: ${externalLink(data.evidence.sourceUrl, "Spielemetadaten")}</p>` : ""}
@@ -217,7 +218,7 @@ Weitere Hosting- und Medienhinweise: <a href="../privacy/">Datenschutz der öffe
     return {
       title: "re.play – Spielestatistiken",
       body: gameStatisticsMarkup(gameStatistics(model.games), {
-        href: appHref, filters, svgHref: "statistics.svg", showHeading: false,
+        href: appHref, filters, yearChartHref: appHref, showHeading: false,
       }),
     };
   }

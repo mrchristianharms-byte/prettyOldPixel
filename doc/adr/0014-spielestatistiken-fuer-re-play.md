@@ -243,38 +243,26 @@ dadurch nicht. Die geplante Seite verwendet immer den aktuellen Inhaltsstand.
   Live-Abfragen, neue Datenquellen oder zusätzliche Paketabhängigkeiten.
   Der Stand dieser ADR wird nicht als statische Produktionszahl festgeschrieben.
 
-### 2. Zeitliche Übersicht als Tabelle und SVG
+### 2. Zeitliche Übersicht als verlinktes SVG
 
-- Tabelle und SVG zeigen nur Erscheinungsjahre mit mindestens zwei Spielen.
-  Jahre mit genau einem Spiel erhalten weder eine Tabellenzeile noch einen
-  Balken; Jahre ohne Spiele erhalten ebenfalls keinen eigenen Eintrag.
-  Alle Spiele bleiben Teil der vollständigen Aggregation und der Gesamtzahl.
-  Ein kurzer Hinweis nennt die Anzahl der ausgelassenen Einzeljahrgänge und
-  ihrer Spiele. Im untersuchten Bestand sind dies sieben Jahre mit sieben Spielen;
-  sichtbar bleiben 13 Jahresgruppen mit insgesamt 141 Spielen.
-- Eine Tabelle enthält Jahr, Spielanzahl und einen ausklappbaren Bereich
-  „Spiele aus diesem Jahr“ mit direkten Links zu allen zugehörigen Spielseiten.
-  „Erscheinungsjahr unbekannt“ steht separat und bleibt außerhalb der Zeitachse.
-- Ein lokales, statisch erzeugtes SVG-Balkendiagramm ergänzt dieselben Werte
-  und wird auch als `spiele/statistik/erscheinungsjahre.svg` bereitgestellt.
-- Die Zeitachse läuft vom kleinsten bis zum größten angezeigten Jahr und ist
-  beidseitig um je ein Jahr verbreitert, damit die Balken vollständig
-  innerhalb des Diagramms liegen.
-  Abstände bleiben proportional zu den Jahresunterschieden; ausgelassene
-  Jahre werden nicht zusammengeschoben und nicht als Nullwerte ausgegeben.
-  Die Y-Achse beginnt bei 0. Keine logarithmische Achse oder künstliche Jahresgrenze.
+- Das SVG zeigt ausschließlich die Jahre 1980 bis 1999, und davon nur Jahre
+  mit mindestens zwei Spielen. Einzeljahre, Jahre außerhalb des Zeitraums und
+  Jahre ohne Spiele erhalten keine Balken. Die vollständige Jahresaggregation
+  und Gesamtzahl bleiben unverändert; „Erscheinungsjahr unbekannt“ steht
+  separat außerhalb der Zeitachse.
+- Jahreszahlen und Balken für dargestellte Jahre verlinken direkt auf die
+  gefilterte Spieleübersicht unter `spiele/jahr/<jahr>/`.
+- Die Zeitachse umfasst fest 1980 bis 1999; Jahresabstände bleiben proportional,
+  ausgelassene Jahre werden nicht zusammengeschoben oder als Nullwerte
+  ausgegeben. Die Y-Achse beginnt bei 0. Keine logarithmische Achse.
 - Das SVG nutzt `viewBox`, lesbare Achsen, ganzzahlige Mengen,
   zugänglichen Titel und Beschreibung sowie ausreichende Kontraste für
   helle und dunkle Darstellung. Keine Animation und kein Diagramm-JavaScript.
-- Auf schmalen Bildschirmen bleibt die Tabelle die vollständige lesbare
-  Alternative für die angezeigten Jahresgruppen. Im Diagramm dürfen
-  Achsenbeschriftungen ausgedünnt werden; die Mindestanzahl gilt in beiden
-  Darstellungen identisch. Tabellen und Diagramm dürfen keinen Seitenüberlauf verursachen.
-- Ohne Jahre mit mindestens zwei Spielen erscheint eine ausdrückliche
-  Erklärung statt eines leeren oder erfundenen Diagramms. Dabei wird zwischen
-  fehlenden Jahresangaben und ausschließlich vorhandenen Einzeljahrgängen unterschieden.
-- Ausgelassene Titel bleiben über den Link „Alle Spiele ansehen“ zur bestehenden
-  Spieleübersicht erreichbar; es gibt keine zusätzliche vollständige Jahrestabelle.
+  Die Jahreslabels bleiben auf schmalen Bildschirmen lesbar und das Diagramm
+  darf keinen Seitenüberlauf verursachen.
+- Ohne Jahre mit mindestens zwei Spielen zwischen 1980 und 1999 zeigt das
+  Diagramm eine ausdrückliche Erklärung statt leerer Balken. Die bisherige
+  Jahrestabelle entfällt.
 
 ### 3. Genre- und Publisherstatistik
 
@@ -333,11 +321,12 @@ Spieleseiten, Zuordnungen und Quellenregeln bleiben unverändert.
 Bei der Umsetzung sind mindestens folgende Prüfungen erforderlich:
 
 - Die vollständige Jahresaggregation plus unbekannte Jahre ergibt exakt die
-  Anzahl eindeutiger Spiele. Angezeigte Jahresgruppen, ausgelassene Einzeljahrgänge
-  und unbekannte Jahre ergeben gemeinsam dieselbe Gesamtzahl.
-- Tabelle und SVG enthalten ausschließlich Jahre mit mindestens zwei Spielen;
-  Einzeljahrgänge bleiben im Auslassungshinweis und in der Gesamtzahl berücksichtigt.
-  Zeitabstände bleiben korrekt, auch bei ausgelassenen Zwischenjahren.
+  Anzahl eindeutiger Spiele. Alle bekannten Jahresgruppen und unbekannte Jahre
+  ergeben gemeinsam dieselbe Gesamtzahl.
+- Das SVG enthält nur Jahre 1980–1999 mit mindestens zwei Spielen;
+  Jahreszahlen und Balken der dargestellten Jahre führen zum passenden
+  Jahresfilter. Zeitabstände bleiben proportional und unbekannte Jahre liegen
+  außerhalb der Zeitachse.
 - Die Kombinationstabelle enthält höchstens 10 Einträge mit mindestens zwei
   Spielen, deterministisch sortiert; Gleichstände erweitern das Limit nicht.
 - Jede angezeigte Jahresgruppe und Kombination verlinkt genau ihre zugehörigen

@@ -1,5 +1,13 @@
 import { escapeHtml } from "../site-html.mjs";
 
+const FIRST_CHART_YEAR = 1980;
+const LAST_CHART_YEAR = 1999;
+const MINIMUM_GAMES_PER_YEAR = 2;
+const YEAR_RANGE_LABEL = `${FIRST_CHART_YEAR}–${LAST_CHART_YEAR}`;
+const CHART_YEARS = Array.from(
+  { length: LAST_CHART_YEAR - FIRST_CHART_YEAR + 1 },
+  (_, index) => FIRST_CHART_YEAR + index,
+);
 const number = (value) => new Intl.NumberFormat("de-DE").format(value);
 const xml = (value) => escapeHtml(String(value));
 const chartStyles = `<style>
@@ -7,6 +15,8 @@ const chartStyles = `<style>
 .chart-axis-label,.chart-axis-title,.chart-empty{fill:#202a33;font-family:system-ui,sans-serif;font-size:12px}
 .chart-axis-title{font-size:13px;font-weight:600}.chart-empty{font-size:15px}.chart-bar{fill:#176b87}
 a>.chart-axis-label{text-decoration:underline;cursor:pointer}
+.year-chart-link{cursor:pointer}.year-chart-link:hover .chart-bar,.year-chart-link:focus .chart-bar{fill:#0f4d63;stroke:#0b2733;stroke-width:2}
+.year-chart-link .chart-axis-label{font-size:10px}.year-chart-link:focus .chart-axis-label{font-weight:700}
 </style>`;
 
 function filterRoute(filters, field, name) {
@@ -26,48 +36,54 @@ function gameList(games, href) {
     `<li><a href="${href(game.route)}">${escapeHtml(game.name)}</a></li>`).join("")}</ul>`;
 }
 
-export function gameStatisticsYearSvg(stats) {
+function yearChartHref(route) {
+  if (route.startsWith("spiele/")) return `../${route.slice("spiele/".length)}`;
+  return route;
+}
+
+function yearChartEntries(stats) {
+  return stats.yearEntries.filter(({ year, count }) =>
+    year >= FIRST_CHART_YEAR && year <= LAST_CHART_YEAR && count >= MINIMUM_GAMES_PER_YEAR);
+}
+
+export function gameStatisticsYearSvg(stats, { href = yearChartHref } = {}) {
   const width = 840;
-  const height = 360;
+  const height = 420;
   const left = 58;
   const right = 22;
   const top = 28;
-  const bottom = 54;
+  const bottom = 118;
   const plotWidth = width - left - right;
   const plotHeight = height - top - bottom;
-  const entries = stats.visibleYears;
-  const years = entries.map((entry) => entry.year);
-  const minimumYear = years[0] ?? 0;
-  const maximumYear = years.at(-1) ?? minimumYear;
-  const domainStart = minimumYear - 1;
-  const range = Math.max(1, maximumYear + 1 - domainStart);
+  const entries = yearChartEntries(stats);
+  const labelRow = 14;
+  const labelBaseline = height - bottom + 20;
   const maximumCount = Math.max(2, Math.ceil(Math.max(0, ...entries.map((entry) => entry.count)) / 2) * 2);
-  const x = (year) => years.length === 1 ? left + plotWidth / 2
-    : left + ((year - domainStart) / range) * plotWidth;
+  const yearSpacing = plotWidth / (CHART_YEARS.length + 1);
+  const x = (year) => left + (year - FIRST_CHART_YEAR + 1) * yearSpacing;
   const y = (count) => top + plotHeight - (count / maximumCount) * plotHeight;
   const ticks = [...new Set([0, Math.ceil(maximumCount / 2), maximumCount])];
-  const yearTicks = [...new Set([
-    ...(years.length ? [minimumYear] : []),
-    ...Array.from({ length: Math.floor((maximumYear - minimumYear) / 5) }, (_, index) =>
-      Math.ceil((minimumYear + 1) / 5) * 5 + index * 5).filter((year) => year < maximumYear),
-    ...(years.length ? [maximumYear] : []),
-  ])];
-  const title = "Spiele nach Erscheinungsjahr";
+  const yearEntriesByYear = new Map(entries.map((entry) => [entry.year, entry]));
+  const labelRows = Math.min(5, Math.max(2, Math.ceil(CHART_YEARS.length / 14)));
+  const yearTicks = CHART_YEARS.map((year, index) => ({ year, row: index % labelRows }));
+  const title = `Erscheinungsjahre ${YEAR_RANGE_LABEL} – Jahre mit mindestens zwei Spielen`;
   const description = entries.length
-    ? `Balkendiagramm mit folgenden Werten: ${entries.map((entry) => `${entry.year}: ${entry.count} ${entry.count === 1 ? "Spiel" : "Spiele"}`).join(", ")}. Die horizontale Achse zeigt den tatsächlichen Jahresabstand; die senkrechte Achse beginnt bei null.`
-    : "Es gibt keine Erscheinungsjahre mit mindestens zwei Spielen; es werden keine Balken dargestellt.";
+    ? `Balkendiagramm für ${YEAR_RANGE_LABEL}, Jahre mit mindestens zwei Spielen: ${entries.map((entry) => `${entry.year}: ${entry.count} Spiele`).join(", ")}. Die Jahreszahlen und Balken sind anklickbar. Die senkrechte Achse beginnt bei null.`
+    : `Für ${YEAR_RANGE_LABEL} gibt es keine Jahre mit mindestens zwei Spielen; es werden keine Balken dargestellt.`;
   if (!entries.length) return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" role="img" aria-labelledby="year-chart-title year-chart-description">
 ${chartStyles}
 <title id="year-chart-title">${title}</title><desc id="year-chart-description">${escapeHtml(description)}</desc>
-<rect class="chart-background" width="${width}" height="${height}"/><text class="chart-empty" x="${width / 2}" y="${height / 2}" text-anchor="middle">Keine Jahresgruppen mit mindestens zwei Spielen</text></svg>`;
+<rect class="chart-background" width="${width}" height="${height}"/><text class="chart-empty" x="${width / 2}" y="${height / 2}" text-anchor="middle">Keine Jahre mit mindestens zwei Spielen</text></svg>`;
   const barMarkup = entries.map((entry, index) => {
     const center = x(entry.year);
     const previousGap = index ? center - x(entries[index - 1].year) : Infinity;
     const nextGap = index + 1 < entries.length ? x(entries[index + 1].year) - center : Infinity;
-    const widthForBar = entries.length === 1 ? 28 : Math.max(8, Math.min(28, Math.min(previousGap, nextGap) * 0.62));
+    const widthForBar = Math.max(8, Math.min(28, Math.min(previousGap, nextGap) * 0.62));
     const topY = y(entry.count);
-    return `<g><title>${entry.year}: ${entry.count} ${entry.count === 1 ? "Spiel" : "Spiele"}</title>
-<rect class="chart-bar" x="${(center - widthForBar / 2).toFixed(2)}" y="${topY.toFixed(2)}" width="${widthForBar.toFixed(2)}" height="${(top + plotHeight - topY).toFixed(2)}" rx="2"/></g>`;
+    const target = escapeHtml(href(`spiele/jahr/${entry.year}/`));
+    return `<a class="year-chart-link" href="${target}" aria-label="${entry.year}: ${entry.count} ${entry.count === 1 ? "Spiel" : "Spiele"} anzeigen">
+<title>${entry.year}: ${entry.count} ${entry.count === 1 ? "Spiel" : "Spiele"} — Spiele dieses Jahres anzeigen</title>
+<rect class="chart-bar" x="${(center - widthForBar / 2).toFixed(2)}" y="${topY.toFixed(2)}" width="${widthForBar.toFixed(2)}" height="${(top + plotHeight - topY).toFixed(2)}" rx="2"/></a>`;
   }).join("");
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" role="img" aria-labelledby="year-chart-title year-chart-description">
 ${chartStyles}
@@ -76,7 +92,11 @@ ${chartStyles}
 ${ticks.map((tick) => `<g><line class="chart-grid" x1="${left}" y1="${y(tick)}" x2="${width - right}" y2="${y(tick)}"/><text class="chart-axis-label" x="${left - 10}" y="${y(tick) + 4}" text-anchor="end">${tick}</text></g>`).join("")}
 <line class="chart-axis" x1="${left}" y1="${top}" x2="${left}" y2="${top + plotHeight}"/><line class="chart-axis" x1="${left}" y1="${top + plotHeight}" x2="${width - right}" y2="${top + plotHeight}"/>
 ${barMarkup}
-${yearTicks.map((year) => `<text class="chart-axis-label" x="${x(year)}" y="${height - 24}" text-anchor="middle">${year}</text>`).join("")}
+${yearTicks.map(({ year, row }) => {
+  const label = `<text class="chart-axis-label" x="${x(year).toFixed(2)}" y="${labelBaseline + row * labelRow}" text-anchor="middle">${year}</text>`;
+  if (!yearEntriesByYear.has(year)) return label;
+  return `<a class="year-chart-link" href="${escapeHtml(href(`spiele/jahr/${year}/`))}" aria-label="Spiele aus dem Erscheinungsjahr ${year} anzeigen">${label}</a>`;
+}).join("")}
 <text class="chart-axis-title" x="${width / 2}" y="${height - 4}" text-anchor="middle">Erscheinungsjahr</text>
 <text class="chart-axis-title" transform="translate(15 ${top + plotHeight / 2}) rotate(-90)" text-anchor="middle">Spiele</text></svg>`;
 }
@@ -124,14 +144,15 @@ export function publisherStatisticsSvg(stats, { filters, href } = {}) {
   });
 }
 
-export function gameStatisticsMarkup(stats, { href, filters, svgHref, showHeading = true }) {
-  const yearCount = stats.visibleYears.reduce((sum, entry) => sum + entry.count, 0);
-  const omittedGameCount = stats.omittedYears.reduce((sum, entry) => sum + entry.count, 0);
-  const yearDescription = stats.visibleYears.length
-    ? `${number(stats.visibleYears.length)} ${stats.visibleYears.length === 1 ? "Jahresgruppe" : "Jahresgruppen"} mit mindestens zwei Spielen, ${number(yearCount)} ${yearCount === 1 ? "Spiel" : "Spiele"}.`
-    : stats.yearEntries.length
-      ? "Es gibt nur Erscheinungsjahre mit jeweils einem Spiel; daher werden keine Jahresbalken oder Tabellenzeilen dargestellt."
-      : "Für keines der Spiele ist ein Erscheinungsjahr bekannt.";
+export function gameStatisticsMarkup(stats, { href, filters, yearChartHref, showHeading = true }) {
+  const chartEntries = yearChartEntries(stats);
+  const chartGameCount = chartEntries.reduce((sum, entry) => sum + entry.count, 0);
+  const yearCountLabel = `${number(chartEntries.length)} ${chartEntries.length === 1 ? "Jahr" : "Jahre"}`;
+  const yearDescription = chartEntries.length
+    ? `Im Diagramm für ${YEAR_RANGE_LABEL} werden ${yearCountLabel} mit mindestens zwei Spielen gezeigt: ${number(chartGameCount)} ${chartGameCount === 1 ? "Spiel" : "Spiele"}.`
+    : `Für ${YEAR_RANGE_LABEL} gibt es keine Jahre mit mindestens zwei Spielen.`;
+  const yearChartContext = `Die Zeitachse zeigt ${YEAR_RANGE_LABEL}; Jahreslücken bleiben proportional erhalten. Jahreszahlen und Balken der dargestellten Jahre verlinken auf die gefilterte Spieleübersicht.`;
+  const yearChart = gameStatisticsYearSvg(stats, { href: yearChartHref ?? href });
   return `<nav class="game-page-navigation" aria-label="Spieleübersichten"><ul>
 <li><a href="${href("spiele/")}">re.play</a></li>
 <li><a href="${href("spiele/uebersicht/")}">Alle Spiele als Tabelle</a></li>
@@ -140,13 +161,8 @@ export function gameStatisticsMarkup(stats, { href, filters, svgHref, showHeadin
   ${showHeading ? "<h1>re.play – Spielestatistiken</h1>" : ""}
 
 <section aria-labelledby="statistik-jahre"><h2 id="statistik-jahre">Erscheinungsjahre</h2>
-<p>${yearDescription} Die Zeitachse verwendet das freigegebene Erscheinungsjahr des Katalogs; Jahreslücken bleiben proportional erhalten.</p>
-${stats.visibleYears.length ? `<figure class="statistics-chart"><img src="${svgHref}" alt="Balkendiagramm der Spiele je Erscheinungsjahr"></figure>
-<div class="statistics-table-scroll"><table class="statistics-table year-statistics"><caption>Jahre mit mindestens zwei Spielen</caption>
-<thead><tr><th scope="col">Erscheinungsjahr</th><th scope="col">Spiele</th><th scope="col">Spiele aus diesem Jahr</th></tr></thead><tbody>
-${stats.visibleYears.map((entry) => `<tr><th scope="row">${entry.year}</th><td>${number(entry.count)}</td><td><details><summary>Spiele aus diesem Jahr</summary>${gameList(entry.games, href)}</details></td></tr>`).join("")}
-</tbody></table></div>` : `<p>Ein Diagramm und Jahresgruppen mit mindestens zwei Spielen sind nicht verfügbar, weil es keine entsprechenden Erscheinungsjahre gibt.</p>`}
-${omittedGameCount ? `<p>Die Zeitachse lässt ${number(stats.omittedYears.length)} Jahr${stats.omittedYears.length === 1 ? "gang" : "gänge"} mit je einem Spiel aus; diese ${number(omittedGameCount)} ${omittedGameCount === 1 ? "Spiel bleibt" : "Spiele bleiben"} in der Gesamtzahl enthalten.</p>` : ""}
+<p>${yearDescription} ${yearChartContext}</p>
+<figure class="statistics-chart"><div class="statistics-chart-scroll" role="region" aria-label="Erscheinungsjahre-Grafik von ${FIRST_CHART_YEAR} bis ${LAST_CHART_YEAR}; zum Erkunden horizontal verschiebbar" tabindex="0">${yearChart}</div></figure>
 ${stats.unknownYearGames.length ? `<p>Erscheinungsjahr unbekannt: ${number(stats.unknownYearGames.length)} ${stats.unknownYearGames.length === 1 ? "Spiel" : "Spiele"} (außerhalb der Zeitachse).</p>
 <details class="statistics-more"><summary>Spiele ohne bekanntes Erscheinungsjahr ansehen</summary>${gameList(stats.unknownYearGames, href)}</details>` : ""}</section>
 <section aria-labelledby="statistik-genres"><h2 id="statistik-genres">Genres</h2>

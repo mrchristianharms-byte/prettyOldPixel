@@ -87,10 +87,11 @@ test("alle öffentlichen Inhaltsrouten haben eine lokale App-Ansicht", () => {
   assert.equal(renderView(data, { route: "unbekannt/" }).title, "Seite nicht gefunden");
 });
 
-test("Spielestatistiken sind in der Offline-App verfügbar und verweisen auf das lokale SVG", () => {
+test("Spielestatistiken der Offline-App verlinken die Jahre zu den Jahresfiltern", () => {
   const view = renderView(data, { route: "spiele/statistik/" });
   assert.equal(view.title, "re.play – Spielestatistiken");
-  assert.match(view.body, /src="statistics\.svg"/u);
+  assert.match(view.body, /<svg xmlns="http:\/\/www\.w3\.org\/2000\/svg"[^>]*role="img"/u);
+  assert.match(view.body, /href="#\/spiele\/jahr\/[0-9]+\/"/u);
   assert.match(view.body, /Gemeinsamkeiten zwischen Genre und Publisher/u);
   assert.match(view.body, /aria-current="page">Spielestatistiken/u);
   assert.ok(view.body.includes(`${model.games.length} von ${model.games.length}`));
@@ -128,6 +129,18 @@ test("App-Routing erhält Video, Kapitel und öffentliche Teilen-Links", () => {
   assert.ok(discussion.includes(`href="#/${game.route}?video=abcdefghijk&amp;t=120"`));
   assert.doesNotMatch(discussion, /rel="external"/u);
   assert.match(gameDiscussions(video), /youtube\.com\/watch/u);
+});
+
+test("Jahresfilter verlinkt Spielmetadaten und zeigt die passenden Spiele", () => {
+  const akalabeth = data.games.find((game) => game.releaseYear === 1980);
+  assert.ok(akalabeth);
+  const filter = data.gameFilters.find((entry) => entry.field === "year" && entry.name === "1980");
+  assert.equal(filter.route, "spiele/jahr/1980/");
+  const detail = renderView(data, { route: akalabeth.route });
+  assert.ok(detail.body.includes('href="#/spiele/jahr/1980/">1980</a>'));
+  const yearPage = renderView(data, { route: filter.route });
+  assert.equal(yearPage.title, "Erscheinungsjahr: 1980");
+  assert.ok(yearPage.body.includes(akalabeth.name));
 });
 
 test("Spielefilter und Sortierung funktionieren auf demselben Datenstand", () => {

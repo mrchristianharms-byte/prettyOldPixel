@@ -104,7 +104,7 @@ function homeOverview(model, config, filters) {
       ...section, count: videoCount(section.entries.length),
     })),
   ];
-  const topFilters = [...filters.values()].map((entries) => [...entries.values()]
+  const topFilters = [...filters].filter(([field]) => field !== "year").map(([, entries]) => [...entries.values()]
     .sort((a, b) => b.games.length - a.games.length
       || a.name.localeCompare(b.name, "de") || a.name.localeCompare(b.name, "en"))
     .slice(0, 5)).filter((entries) => entries.length);
@@ -547,6 +547,19 @@ function renderGameMetadata(game, config, filters) {
     const filter = filters.get(field).get(value);
     return filter ? `<a href="${config.href(filter.route)}">${escapeHtml(value)}</a>` : missing(value);
   };
+  // Alle Werte aus releases wie in den Filterseiten und der Statistik, nicht nur das primäre Release.
+  const companyLinks = (field) => {
+    const labels = new Map();
+    for (const release of releases) {
+      const name = release[field];
+      if (!name) continue;
+      const label = field === "publisher" ? release.publisherLabel : null;
+      if (!labels.has(name) || (!labels.get(name) && label)) labels.set(name, label);
+    }
+    if (!labels.size) return "Keine Angabe";
+    return [...labels].map(([name, label]) =>
+      `${linked(field, name)}${label ? ` (${escapeHtml(label)})` : ""}`).join(", ");
+  };
   const primary = displayedReleases[0];
   const additional = displayedReleases.slice(1);
   const countries = (release, multiline = false) => {
@@ -560,11 +573,15 @@ function renderGameMetadata(game, config, filters) {
     ...(game.releaseYearSource ? [gameReleaseSource(game.releaseYearSource, true)] : []),
     ...(evidence ? [gameReleaseSource(evidence.sourceUrl, true)] : []),
   ])];
+  const linkedReleaseYear = Number.isInteger(game.releaseYear)
+    ? linked("year", String(game.releaseYear)) : null;
   const yearLines = [];
-  if (game.releaseYear !== null) yearLines.push(
-    `${game.releaseYear} ${gameReleaseSource(game.releaseYearSource, true)}`);
+  if (linkedReleaseYear) yearLines.push(
+    `${linkedReleaseYear} ${gameReleaseSource(game.releaseYearSource, true)}`);
   if (primary) {
-    const releaseText = `${missing(primary.year)} · ${missing(primary.platform)} · ${countries(primary)}`;
+    const releaseYear = primary.year === game.releaseYear && linkedReleaseYear
+      ? linkedReleaseYear : missing(primary.year);
+    const releaseText = `${releaseYear} · ${missing(primary.platform)} · ${countries(primary)}`;
     if (primary.year === game.releaseYear && yearLines.length) {
       yearLines[0] = `${releaseText} ${sources.join(" ")}`;
     } else yearLines.push(`${releaseText} ${gameReleaseSource(evidence.sourceUrl, true)}`);
@@ -574,8 +591,8 @@ ${metadata([
     ...(platforms.length ? [["Plattform", escapeHtml(platforms.join(", "))]] : []),
     ...(data ? [
       ["Genre", genres.length ? genres.map((genre) => linked("genre", genre)).join(", ") : "Keine Angabe"],
-      ["Entwickler", linked("developer", primary?.developer)],
-      ["Publisher", `${linked("publisher", primary?.publisher)}${primary?.publisherLabel ? ` (${escapeHtml(primary.publisherLabel)})` : ""}`],
+      ["Entwickler", companyLinks("developer")],
+      ["Publisher", companyLinks("publisher")],
     ] : []),
     ["Erscheinungsjahr", yearLines.length ? yearLines.join("<br>") : "Unbekannt"],
     ...(game.aliases.length ? [["Weitere Titel", escapeHtml(game.aliases.join(", "))]] : []),
@@ -640,7 +657,7 @@ ${gameTable(rows, overviewConfig)}`,
     crumbs: [root, index, statisticsPage],
     schema: { "@type": "WebPage", "@id": "./#page", name: statisticsPage.name, url: "./" },
     body: gameStatisticsMarkup(statistics, {
-      href: statisticsConfig.href, filters, svgHref: statisticsConfig.href("spiele/statistik/erscheinungsjahre.svg"),
+      href: statisticsConfig.href, filters, yearChartHref: (route) => statisticsConfig.href(route),
     }),
   });
   const listings = [
@@ -648,12 +665,14 @@ ${gameTable(rows, overviewConfig)}`,
     ...[...filters].flatMap(([field, entries]) => [...entries.values()].map((entry) => {
       const name = `${entry.label}: ${entry.name}`;
       const prefixes = {
+        year: "Spiele erschienen im Jahr",
         genre: "Spiele im Genre",
         developer: "Spiele des Entwicklers",
         publisher: "Spiele des Publishers",
         platform: "Spiele für die Plattform",
       };
-      let heading = [...name].length < 20 ? `${prefixes[field]} ${entry.name}` : name;
+      let heading = field === "year" ? `${prefixes.year} ${entry.name}`
+        : [...name].length < 20 ? `${prefixes[field]} ${entry.name}` : name;
       if ([...heading].length < 20) heading += " – Retrospiele und Videos";
       return { ...entry, name, heading };
     })),

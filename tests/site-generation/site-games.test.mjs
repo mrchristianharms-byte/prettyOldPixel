@@ -148,20 +148,25 @@ test("reserviert die Route der Spiele-Gesamtübersicht", () => {
 
 test("rendert Statistikroute, Quernavigation, Markdown und das lokale Jahres-SVG", () => {
   const model = metadataModel(2);
+  for (const game of model.games) game.releaseYear = 1990;
   const config = createSiteConfig("https://example.org/project/");
   const pages = renderSite(model, config, config.href("assets/test.css"));
   const statistics = pages.get("spiele/statistik/index.html");
   assert.ok(statistics);
   assert.match(statistics.html, /<link rel="canonical" href="https:\/\/example\.org\/project\/spiele\/statistik\/">/u);
-  assert.match(statistics.html, /<img src="erscheinungsjahre\.svg" alt="Balkendiagramm der Spiele je Erscheinungsjahr">/u);
-  assert.match(statistics.html, /Spiele aus diesem Jahr/u);
+  assert.match(statistics.html, /<svg xmlns="http:\/\/www\.w3\.org\/2000\/svg"[^>]*role="img"/u);
+  assert.match(statistics.html, /Im Diagramm für 1980–1999 werden 1 Jahr mit mindestens zwei Spielen gezeigt: 2 Spiele/u);
+  assert.match(statistics.html, /<a class="year-chart-link" href="\.\.\/jahr\/1990\/"/u);
+  assert.match(statistics.html, /<a class="year-chart-link" href="\.\.\/jahr\/1990\/"[^>]*><text class="chart-axis-label"[^>]*>1990<\/text><\/a>/u);
+  assert.doesNotMatch(statistics.html, /href="\.\.\/jahr\/1980\/"/u);
+  assert.doesNotMatch(statistics.html, /year-statistics/u);
   assert.match(statistics.html, /<a href="\.\.\/">re\.play<\/a>/u);
   assert.match(pages.get("spiele/index.html").html, />Spielestatistiken<\/a>/u);
   assert.match(pages.get("spiele/uebersicht/index.html").html, />Spielestatistiken<\/a>/u);
   const markdown = renderMarkdown(statistics, config);
   assert.match(markdown, /Gemeinsamkeiten zwischen Genre und Publisher/u);
   assert.match(markdown, /Spiel 00/u);
-  assert.match(markdown, /erscheinungsjahre\.svg/u);
+  assert.match(markdown, /Jahreszahlen und Balken der dargestellten Jahre verlinken auf die gefilterte Spieleübersicht/u);
   validateSite(pages, new Map([
     ["assets/test.css", ""], ["assets/video-series.js", ""], ["assets/game-table.js", ""],
     ["assets/process-diagram.js", ""], ["assets/theme.js", ""], ["favicon.webp", ""],
@@ -317,6 +322,7 @@ test("erweitert kurze Filterüberschriften und stimmt H1, Titel, Beschreibung un
     ["genre/1234567890123", "Genre: 1234567890123"],
     ["genre/123456789012", "Spiele im Genre 123456789012"],
     ["plattform/dos", "Spieleplattformen: DOS"],
+    ["jahr/1990", "Spiele erschienen im Jahr 1990"],
   ]) {
     const html = pages.get(`spiele/${route}/index.html`).html;
     assert.ok(html.includes(`<h1>${heading}</h1>`), route);
@@ -340,13 +346,17 @@ test("haben alle veröffentlichten Spielefilter mindestens 20 Zeichen in der H1"
   const pages = renderSite(model, createSiteConfig(), "assets/test.css");
   let checked = 0;
   for (const [file, { html }] of pages) {
-    if (!/^spiele\/(?:genre|entwickler|publisher|plattform)\//u.test(file)) continue;
+    if (!/^spiele\/(?:jahr|genre|entwickler|publisher|plattform)\//u.test(file)) continue;
     const heading = html.match(/<h1>(.*?)<\/h1>/u)[1];
     const entities = { "&amp;": "&", "&lt;": "<", "&gt;": ">", "&quot;": '"', "&#39;": "'" };
     const text = heading.replace(/&(?:amp|lt|gt|quot|#39);/gu, (entity) => entities[entity]);
     assert.ok([...text].length >= 20, `${file}: ${text}`);
     checked++;
   }
+  assert.ok(pages.has("spiele/jahr/1987/index.html"));
+  const year1980 = pages.get("spiele/jahr/1980/index.html").html;
+  assert.ok(year1980.includes("Akalabeth: World of Doom"));
+  assert.match(year1980, /Spiele erschienen im Jahr 1980: 1 Retrospiel/u);
   assert.ok(checked > 0);
 });
 
@@ -406,7 +416,7 @@ test("wählt Spitzenfilter bei Gleichstand alphabetisch und blendet Boxen ohne g
   const before = home();
   assert.ok(before.includes('<h3>Genre</h3><ol class="theme-ranking"><li><span class="theme-ranking-entry"><a href="spiele/genre/alpha/" title="Alpha">Alpha</a>'));
   assert.ok(before.includes('href="spiele/genre/zeta/" title="Zeta">Zeta</a>'));
-  assert.equal((before.match(/<ol class="theme-ranking">([\s\S]*?)<\/ol>/u)[1].match(/<li>/gu) ?? []).length, 2);
+  assert.equal((before.match(/<h3>Genre<\/h3><ol class="theme-ranking">([\s\S]*?)<\/ol>/u)[1].match(/<li>/gu) ?? []).length, 2);
   for (const game of model.games) game.metadata.data.genres.reverse();
   assert.equal(home(), before);
   for (const game of model.games) game.metadata.data.releases = [];
@@ -486,6 +496,7 @@ test("verlinkt gemeinsame Genres, Entwickler und Publisher nur für mindestens z
       assert.ok(pages.get(`${game.route}index.html`).html.includes(`href="${config.href(route, game.route)}"`));
     }
   }
+  assert.ok(pages.has("spiele/jahr/1990/index.html"));
   const html = pages.get("spiele/game-00/index.html").html;
   assert.match(html, /<\/a> \(Budget\)/u);
   assert.match(html, /<\/a>, Einzelgenre<\/dd>/u);
@@ -513,7 +524,10 @@ test("berücksichtigt und verlinkt Entwickler sowie Publisher zusätzlicher Ver�
     assert.ok(pages.get("spiele/game-00/index.html").html.match(/<tbody>([\s\S]*?)<\/tbody>/u)[1]
       .includes(`href="../${route}/"`));
   }
-  assert.match(pages.get("spiele/game-00/index.html").html, /<dt>Entwickler<\/dt><dd>Nur erstes Release<\/dd>/u);
+  assert.match(pages.get("spiele/game-00/index.html").html,
+    /<dt>Entwickler<\/dt><dd>Nur erstes Release, <a href="\.\.\/entwickler\/studio\/">Studio<\/a><\/dd>/u);
+  assert.match(pages.get("spiele/game-00/index.html").html,
+    /<dt>Publisher<\/dt><dd>Nur erster Publisher, <a href="\.\.\/publisher\/publisher\/">Publisher<\/a><\/dd>/u);
 });
 
 test("paginiert gefilterte Spielelisten mit eigenen Links, Breadcrumbs und JSON-LD", () => {
@@ -852,7 +866,7 @@ test("einheitlicher Steckbrief zeigt Einzelrelease ohne Tabelle und bewahrt abwe
   assert.ok(!html.includes("<dt>Videos</dt>"));
   assert.ok(!html.includes("<table"));
   assert.ok(!html.includes("Weitere Veröffentlichungen"));
-  assert.match(html, /<dt>Erscheinungsjahr<\/dt><dd>1988/u);
+  assert.match(html, /<dt>Erscheinungsjahr<\/dt><dd><a href="\.\.\/jahr\/1988\/">1988<\/a>/u);
   assert.match(html, /<\/a><br>1989 · DOS · United States/u);
   assert.ok(!html.includes("<dt>Veröffentlichung</dt>"));
   assert.ok(!html.includes("Quellen:"));
@@ -970,8 +984,10 @@ test("zeigt das gepflegte Erscheinungsjahr statt Uploadjahr oder Zahlen aus Besc
   assert.equal(model.games[0].releaseYear, 1990);
   assert.equal(model.games[0].releaseYearSource, definition().release.source);
   assert.ok(pages.get("spiele/index.html").html.includes("Erscheinungsjahr: 1990"));
+  assert.match(pages.get("spiele/jahr/1990/index.html").html,
+    /Spiele erschienen im Jahr 1990: 1 Retrospiel/u);
   const detail = pages.get("spiele/cadaver/index.html").html;
-  assert.ok(detail.includes("<dt>Erscheinungsjahr</dt><dd>1990 <a"));
+  assert.ok(detail.includes('<dt>Erscheinungsjahr</dt><dd><a href="../jahr/1990/">1990</a>'));
   assert.ok(detail.includes(`href="${definition().release.source}" rel="external"`));
   assert.ok(detail.includes('aria-label="MobyGames (externe Website)"><span aria-hidden="true">↗</span>'));
   const unknown = render(input, [definition({ release: null })]);
@@ -1002,7 +1018,7 @@ test("benennt die recherchierte Quelle auf der Spieleseite nach ihrem Anbieter",
     assert.ok(field.includes(`href="${source.replaceAll("&", "&amp;")}" rel="external"`));
     assert.ok(field.includes(`aria-label="${label} (externe Website)"`));
     assert.ok(field.includes('><span aria-hidden="true">↗</span></a>'));
-    assert.ok(field.startsWith("1990 <a"));
+    assert.ok(field.startsWith('<a href="../jahr/1990/">1990</a> <a'));
   }
 });
 

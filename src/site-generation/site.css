@@ -62,6 +62,8 @@ h1, h2, h3, h4, h5, h6 { font-size: clamp(1.05rem, 1.8vw, 1.25rem); line-height:
 .game-page-navigation a { display: inline-block; padding: .3rem .5rem; }
 .game-page-navigation a[aria-current="page"] { color: var(--pico-primary-inverse); background: var(--pico-primary-background); }
 .statistics-chart :is(img, svg) { width: 100%; }
+.statistics-chart-scroll { max-width: 100%; overflow-x: auto; }
+.statistics-chart-scroll svg { min-width: 840px; max-width: none; }
 .statistics-table-scroll { overflow-x: auto; }
 .statistics-table thead th { white-space: nowrap; }
 .theme-ranking { margin: 0; padding-inline-start: 1.4rem; }

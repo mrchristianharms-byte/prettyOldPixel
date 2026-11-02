@@ -59,7 +59,7 @@ test("renders explored groups as linked HTML and SVG with accessible zero-based 
   ]);
   const href = (route) => `/${route}`;
   const html = gameStatisticsMarkup(statistics, {
-    href, filters, svgHref: "/spiele/statistik/erscheinungsjahre.svg",
+    href, filters, yearChartHref: href,
   });
   assert.match(html, /aria-current="page">Spielestatistiken/u);
   assert.match(html, /<a href="\/spiele\/genre\/action\/"><text class="chart-axis-label"[^>]*>Action<\/text><\/a>/u);
@@ -72,14 +72,17 @@ test("renders explored groups as linked HTML and SVG with accessible zero-based 
   assert.doesNotMatch(html, /SVG direkt öffnen|Spielpaare/u);
   assert.match(html, /<title id="publisher-chart-title">Spiele je Publisher \(Top 10\)<\/title>/u);
   assert.match(html, /<figcaption>Top 10; je Publisher wird unabhängig von regionalen Doppelungen/u);
-  assert.match(html, /spiele\/statistik\/erscheinungsjahre\.svg/u);
-  assert.match(html, /Jahrgänge mit je einem Spiel/u);
-  const yearSvg = gameStatisticsYearSvg(statistics);
-  assert.match(yearSvg, /<title id="year-chart-title">Spiele nach Erscheinungsjahr<\/title>/u);
-  assert.match(yearSvg, /<desc id="year-chart-description">Balkendiagramm mit folgenden Werten: 1980: 2 Spiele/u);
-  assert.equal((yearSvg.match(/class="chart-bar"/gu) ?? []).length, statistics.visibleYears.length);
+  assert.match(html, /spiele\/jahr\/1980\//u);
+  assert.match(html, /Im Diagramm für 1980–1999 werden 1 Jahr mit mindestens zwei Spielen gezeigt: 2 Spiele/u);
+  assert.doesNotMatch(html, /year-statistics/u);
+  const yearSvg = gameStatisticsYearSvg(statistics, { href });
+  assert.match(yearSvg, /<title id="year-chart-title">Erscheinungsjahre 1980–1999 – Jahre mit mindestens zwei Spielen<\/title>/u);
+  assert.match(yearSvg, /<desc id="year-chart-description">Balkendiagramm für 1980–1999, Jahre mit mindestens zwei Spielen: 1980: 2 Spiele/u);
+  assert.equal((yearSvg.match(/class="chart-bar"/gu) ?? []).length, 1);
+  assert.match(yearSvg, /<a class="year-chart-link" href="\/spiele\/jahr\/1980\/" aria-label="Spiele aus dem Erscheinungsjahr 1980 anzeigen"><text class="chart-axis-label"[^>]*>1980<\/text><\/a>/u);
+  assert.doesNotMatch(yearSvg, /spiele\/jahr\/(?:1982|1984)\//u);
   assert.match(yearSvg, /<text class="chart-axis-label"[^>]*>0<\/text>/u);
-  assert.match(yearSvg, /<rect class="chart-bar" x="4\d\d\.\d{2}"/u);
+  assert.match(yearSvg, /<rect class="chart-bar" x="80\.19"/u);
   assert.match(genreStatisticsSvg(statistics), /Horizontales Balkendiagramm: Action: 3/u);
   assert.match(publisherStatisticsSvg(statistics),
     /<title id="publisher-chart-title">Spiele je Publisher \(Top 10\)<\/title>[\s\S]*Horizontales Balkendiagramm: Acme: 2, Rival: 2/u);
@@ -89,18 +92,28 @@ test("renders explored groups as linked HTML and SVG with accessible zero-based 
     /<a href="\/spiele\/publisher\/acme\/"><text class="chart-axis-label"[^>]*>Acme<\/text><\/a>/u);
 });
 
-test("keeps year bars inside the plot area by padding the timeline one year on each side", () => {
+test("limits the year chart to 1980–1999 and omits singleton and out-of-range years", () => {
   const statistics = gameStatistics([
-    game("a", "Alpha", 1980, [], []),
-    game("b", "Beta", 1980, [], []),
-    game("c", "Gamma", 1984, [], []),
-    game("d", "Delta", 1984, [], []),
+    game("a", "Alpha", 1979, [], []),
+    game("b", "Beta", 1979, [], []),
+    game("c", "Gamma", 1980, [], []),
+    game("d", "Delta", 1980, [], []),
+    game("e", "Epsilon", 1990, [], []),
+    game("f", "Zeta", 1999, [], []),
+    game("g", "Eta", 1999, [], []),
+    game("h", "Theta", 2000, [], []),
+    game("i", "Iota", 2000, [], []),
   ]);
   const svg = gameStatisticsYearSvg(statistics);
   const bars = [...svg.matchAll(/<rect class="chart-bar" x="([\d.]+)" y="[\d.]+" width="([\d.]+)"/gu)]
     .map((match) => ({ start: Number(match[1]), end: Number(match[1]) + Number(match[2]) }));
   assert.equal(bars.length, 2);
   assert.ok(bars.every((bar) => bar.start >= 58 && bar.end <= 818));
+  assert.match(svg, />1980<\/text>/u);
+  assert.match(svg, />1999<\/text>/u);
+  assert.match(svg, /Spiele aus dem Erscheinungsjahr 1999 anzeigen/u);
+  assert.doesNotMatch(svg, />(?:1979|2000)<|spiele\/jahr\/(?:1979|1990|2000)\//u);
+  assert.match(svg, /x="781\.81"/u);
 });
 
 test("caps sorted combinations at 10 while retaining every qualifying combination in aggregation", () => {
@@ -116,7 +129,7 @@ test("caps sorted combinations at 10 while retaining every qualifying combinatio
   assert.equal(statistics.combinations.length, 12);
   assert.equal((publisherStatisticsSvg(statistics).match(/class="chart-bar"/gu) ?? []).length, 10);
   const html = gameStatisticsMarkup(statistics, {
-    href: (route) => `/${route}`, filters: [], svgHref: "/statistics.svg",
+    href: (route) => `/${route}`, filters: [],
   });
   const table = html.match(/<section aria-labelledby="statistik-gemeinsamkeiten">([\s\S]*?)<\/section>/u)[1];
   assert.equal((table.match(/<tr>/gu) ?? []).length, 11);
@@ -131,15 +144,15 @@ test("caps sorted combinations at 10 while retaining every qualifying combinatio
   assert.ok(!table.includes("/spiele/a11/"));
 });
 
-test("states separately when there are no repeat-year groups", () => {
+test("states separately when there are no qualifying appearance years", () => {
   const statistics = gameStatistics([
-    game("a", "Alpha", 1980, [], []),
+    game("a", "Alpha", null, [], []),
     game("b", "Beta", null, [], []),
   ]);
   const html = gameStatisticsMarkup(statistics, {
-    href: (route) => `/${route}`, filters: [], svgHref: "/statistics.svg",
+    href: (route) => `/${route}`, filters: [],
   });
-  assert.doesNotMatch(html, /<figure class="statistics-chart"><img src="\/statistics\.svg"/u);
-  assert.match(html, /keine entsprechenden Erscheinungsjahre/u);
-  assert.match(gameStatisticsYearSvg(statistics), /Keine Jahresgruppen mit mindestens zwei Spielen/u);
+  assert.match(html, /<figure class="statistics-chart">[\s\S]*Keine Jahre mit mindestens zwei Spielen/u);
+  assert.match(html, /Für 1980–1999 gibt es keine Jahre mit mindestens zwei Spielen/u);
+  assert.match(gameStatisticsYearSvg(statistics), /Keine Jahre mit mindestens zwei Spielen/u);
 });
