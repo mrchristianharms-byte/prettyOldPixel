@@ -699,7 +699,6 @@ ${gameTable(rows, overviewConfig)}`,
         next: page < pageCount ? paginatedRoute(listing.route, page + 1) : null,
         body: `${gamePageNavigation(route, config.href)}
 <h1>${escapeHtml(heading)}${page > 1 ? ` – Seite ${page}` : ""}</h1><p>${filtered ? `${escapeHtml(heading)}: ` : ""}${countLabel(listing.games.length, "Retrospiel", "Retrospiele")}, alphabetisch geordnet. Entdecke Spielverläufe, Unboxings und Gespräche rund um die Spiele.</p>
-${filtered ? `<p><a href="${config.href(index.route)}">Alle Spiele anzeigen</a></p>` : ""}<p><a href="${config.href(overview.route)}">Spiele suchen und filtern</a></p>
 ${pagination(listing.route, page, pageCount, config)}
 <div class="game-catalog">${catalogGrid(games.map((game) => ({
           ...game, facts: [

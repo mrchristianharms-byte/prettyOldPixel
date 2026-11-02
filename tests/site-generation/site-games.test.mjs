@@ -95,7 +95,9 @@ test("zeigt alle Spiele in einer zusätzlichen Tabelle nach erstem Videojahr und
   assert.ok(rows[0].includes(`src="https://i.ytimg.com/vi/${videoId(0)}/mqdefault.jpg"`));
   assert.match(rows[0], /href="\.\.\/spiel-0\/"/u);
   for (const file of ["spiele/index.html", "spiele/seite/2/index.html"]) {
-    assert.ok(pages.get(file).html.includes(">Spiele suchen und filtern</a>"));
+    const page = pages.get(file).html;
+    assert.equal((page.match(/>Alle Spiele als Tabelle<\/a>/gu) ?? []).length, 1);
+    assert.doesNotMatch(page, />Spiele suchen und filtern<\/a>/u);
   }
   assert.ok(!pages.has("spiele/uebersicht/seite/2/index.html"));
   assert.ok(!html.includes('class="detail-player"'));
@@ -459,7 +461,8 @@ test("zeigt die fünf häufigsten Spieleplattformen mit eindeutigen Spielzahlen 
     const route = `spiele/plattform/${slug}/`;
     assert.ok(pages.has(`${route}index.html`), route);
     const filtered = pages.get(`${route}index.html`).html;
-    assert.match(filtered, /Alle Spiele anzeigen/u);
+    assert.doesNotMatch(filtered, /Alle Spiele anzeigen|Spiele suchen und filtern/u);
+    assert.match(filtered, /Spieleübersichten/u);
     assert.match(filtered, /Spieleplattformen:/u);
     assert.ok(graph(filtered).some((item) => item["@type"] === "BreadcrumbList"));
   }
@@ -491,7 +494,7 @@ test("verlinkt gemeinsame Genres, Entwickler und Publisher nur für mindestens z
     assert.match(page.html, /Erscheinungsjahr: 1990/u);
     assert.match(page.html, /2 Videos/u);
     assert.ok(!page.html.includes("data-video-series"));
-    assert.ok(page.html.includes(`href="${config.href("spiele/", route)}">Alle Spiele anzeigen</a>`));
+    assert.ok(page.html.includes(`href="${config.href("spiele/", route)}">re.play</a>`));
     for (const game of model.games.slice(0, 2)) {
       assert.ok(pages.get(`${game.route}index.html`).html.includes(`href="${config.href(route, game.route)}"`));
     }
@@ -697,7 +700,7 @@ test("bindet konsolidierte Metadaten im echten Offline-Modell ein und zeigt Quel
         const target = new URL(url, config.absolute(game.route));
         const file = `${target.pathname.slice(config.basePath.length)}index.html`;
         assert.ok(pages.has(file), file);
-        assert.ok(/>Alle Spiele anzeigen<\/a>/u.test(pages.get(file).html));
+        assert.ok(/>re\.play<\/a>/u.test(pages.get(file).html));
       }
     }
     const companySource = game.metadata.data?.evidence.companySource;
