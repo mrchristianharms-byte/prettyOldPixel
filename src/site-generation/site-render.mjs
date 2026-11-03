@@ -104,17 +104,17 @@ function homeOverview(model, config, filters) {
       ...section, count: videoCount(section.entries.length),
     })),
   ];
-  const topFilters = [...filters].filter(([field]) => field !== "year").map(([, entries]) => [...entries.values()]
+  const topFilters = [...filters].map(([field, entries]) => ({ field, entries: [...entries.values()]
     .sort((a, b) => b.games.length - a.games.length
       || a.name.localeCompare(b.name, "de") || a.name.localeCompare(b.name, "en"))
-    .slice(0, 5)).filter((entries) => entries.length);
+    .slice(0, 5) })).filter(({ entries }) => entries.length);
   return `<section class="home-statistics" aria-labelledby="statistik">
 <h2 id="statistik">Pretty Old Pixel in Zahlen</h2>
 <dl class="stats-grid">${stats.map(([label, value, note]) => `<div><dt>${label}</dt><dd>${value}</dd><dd class="stat-note">${note}</dd></div>`).join("")}</dl>
 </section>
 <section aria-labelledby="bereiche"><h2 id="bereiche">Die Themen entdecken</h2>
 <div class="theme-grid">${themes.map((theme) => `<article><h3><a href="${config.href(theme.route)}">${escapeHtml(model.navigation.find((entry) => entry.route === theme.route)?.name ?? theme.name)}</a></h3><p class="theme-count">${escapeHtml(theme.count)}</p><p>${escapeHtml(theme.description)}</p></article>`).join("")}
-${topFilters.map((entries) => `<article><h3>${escapeHtml(entries[0].label)}</h3><ol class="theme-ranking">${entries.map((entry) => `<li><span class="theme-ranking-entry"><a href="${config.href(entry.route)}" title="${escapeHtml(entry.name)}">${escapeHtml(entry.name)}</a><span class="meta">${countLabel(entry.games.length, "Spiel", "Spiele")}</span></span></li>`).join("")}</ol></article>`).join("")}</div>
+${topFilters.map(({ field, entries }) => `<article><h3>${escapeHtml(field === "year" ? "Erscheinungsjahre" : entries[0].label)}</h3><ol class="theme-ranking">${entries.map((entry) => `<li><span class="theme-ranking-entry"><a href="${config.href(entry.route)}" title="${escapeHtml(entry.name)}">${escapeHtml(entry.name)}</a><span class="meta">${countLabel(entry.games.length, "Spiel", "Spiele")}</span></span></li>`).join("")}</ol></article>`).join("")}</div>
 <p class="meta">Ein Video kann zu mehreren Themen gehören; die Videozahlen der Themen sind daher nicht addierbar.</p></section>`;
 }
 

@@ -404,7 +404,9 @@ test("zeigt pro Genre, Entwickler und Publisher die Top 5 als einzelne Links unt
   }
   assert.ok(section.includes('href="spiele/">re.play</a>'));
   assert.match(section, /<p class="theme-count">2 Videos<\/p>/u);
-  assert.equal((section.match(/class="theme-ranking"/gu) ?? []).length, 4);
+  assert.equal((section.match(/class="theme-ranking"/gu) ?? []).length, 5);
+  const yearRanking = section.match(/<article><h3>Erscheinungsjahre<\/h3><ol class="theme-ranking">([\s\S]*?)<\/ol><\/article>/u)[1];
+  assert.match(yearRanking, /href="spiele\/jahr\/1990\/" title="1990">1990<\/a><span class="meta">6 Spiele/u);
   model.games[4].metadata.data.genres.push("Beta");
   model.games[5].metadata.data.genres.push("Beta");
   const updated = renderModel(model).pages.get("index.html").html;
@@ -426,9 +428,11 @@ test("wählt Spitzenfilter bei Gleichstand alphabetisch und blendet Boxen ohne g
   assert.ok(genreOnly.includes('href="spiele/genre/alpha/"'));
   assert.ok(!genreOnly.includes('href="spiele/entwickler/') && !genreOnly.includes('href="spiele/publisher/'));
   model.games[1].metadata.status = "blocked";
-  assert.ok(!home().includes('class="theme-ranking"'));
+  assert.ok(!home().includes('href="spiele/genre/') && !home().includes('href="spiele/plattform/'));
   delete model.games[0].metadata;
-  assert.ok(!home().includes('class="theme-ranking"'));
+  const yearOnly = home();
+  assert.equal((yearOnly.match(/class="theme-ranking"/gu) ?? []).length, 1);
+  assert.match(yearOnly, /<h3>Erscheinungsjahre<\/h3>/u);
 });
 
 test("zeigt die fünf häufigsten Spieleplattformen mit eindeutigen Spielzahlen und Filterlinks", () => {
