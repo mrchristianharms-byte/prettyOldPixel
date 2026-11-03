@@ -253,6 +253,31 @@ export const gameDefinitions = [...playlists.map(([playlistId, name, platform]) 
   playlistIds: [],
   videoIds: ["L5dl6cyoJOg", "_TMntZnoA2s", "FejpeWADb6Q", "s12md_R_AKY"],
 }, {
+  // re.consider: bestätigte Ein-Video-Reihen (ADR 0015); Plattformen laut Entscheidungstabelle.
+  id: "knight-rider-c64", name: "Knight Rider", aliases: [], platforms: ["C64"],
+  release: null, playlistIds: [], videoIds: ["eF4Mlroykxo"], confirmedSingle: true,
+}, {
+  id: "lotus-esprit-turbo-challenge-amiga", name: "Lotus Esprit Turbo Challenge", aliases: [], platforms: ["Amiga"],
+  release: null, playlistIds: [], videoIds: ["27dsXHjbZeo"], confirmedSingle: true,
+}, {
+  id: "dragon-s-lair-ms-dos", name: "Dragon's Lair", aliases: [], platforms: ["MS-DOS"],
+  release: null, playlistIds: [], videoIds: ["NKweesBHbY0"], confirmedSingle: true,
+}, {
+  id: "highlander-c64", name: "Highlander", aliases: [], platforms: ["C64"],
+  release: null, playlistIds: [], videoIds: ["uLDJHRwoyDg"], confirmedSingle: true,
+}, {
+  id: "h-e-r-o-c64", name: "H.E.R.O.", aliases: [], platforms: ["C64"],
+  release: null, playlistIds: [], videoIds: ["SUEoiSRnxD0"], confirmedSingle: true,
+}, {
+  id: "space-taxi-c64", name: "Space Taxi", aliases: [], platforms: ["C64"],
+  release: null, playlistIds: [], videoIds: ["d4vgnGsOdu0"], confirmedSingle: true,
+}, {
+  id: "bubble-bobble-c64", name: "Bubble Bobble", aliases: [], platforms: ["C64"],
+  release: null, playlistIds: [], videoIds: ["BIuC4Qcbgsg"], confirmedSingle: true,
+}, {
+  id: "miami-vice-c64", name: "Miami Vice", aliases: [], platforms: ["C64"],
+  release: null, playlistIds: [], videoIds: ["GhpsW9qIOzw"], confirmedSingle: true,
+}, {
   id: "hyperspace-delivery-service", name: "Hyperspace Delivery Service",
   aliases: [], platforms: ["Windows"],
   release: null,

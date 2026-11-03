@@ -230,6 +230,8 @@ function normalizeGames(definitions, playlists, videoById, warnings, now) {
     requireValue(Array.isArray(excluded) && excluded.every((value) => typeof value === "string" && /^[A-Za-z0-9_-]{11}$/u.test(value)),
       `${name}: Ungültige ausgeschlossene Video-ID.`);
     requireValue(!definition.videoIds.some((videoId) => excluded.includes(videoId)), `${name}: Widersprüchliche Videozuordnung.`);
+    requireValue(definition.confirmedSingle === undefined || typeof definition.confirmedSingle === "boolean",
+      `${name}.confirmedSingle: Boolescher Wert erwartet.`);
     requireValue(definition.playlistIds.length > 0 || definition.videoIds.length > 0,
       `${name}: Bestätigte Quellplaylist oder Videozuordnung fehlt.`);
     const sources = definition.playlistIds.flatMap((playlistId) => {
@@ -242,7 +244,9 @@ function normalizeGames(definitions, playlists, videoById, warnings, now) {
     const members = new Set(sources.flatMap((playlist) => playlist.videos.map((video) => video.id)));
     for (const videoId of definition.videoIds) {
       if (videoById.has(videoId)) members.add(videoId);
-      else if (sources.length) warnings.push(`${name}/${videoId}: Bestätigter Zusatzbeitrag fehlt im öffentlichen Katalog.`);
+      else if (sources.length
+        || (definition.confirmedSingle === true && hasReviewedPlaylists)) warnings.push(
+        `${name}/${videoId}: Bestätigter Zusatzbeitrag fehlt im öffentlichen Katalog.`);
     }
     for (const videoId of excluded) members.delete(videoId);
     const isReminder = (video) => /\bre\.minder\b/iu.test(video.title);
@@ -250,7 +254,9 @@ function normalizeGames(definitions, playlists, videoById, warnings, now) {
     const recentSingle = videos.length === 1 && !isReminder(videos[0])
       && videos[0].publishedTime !== null && videos[0].publishedTime >= recentCutoff.getTime()
       && sources.some((playlist) => playlist.videos.some((video) => video.id === videos[0].id));
-    if (videos.filter((video) => !isReminder(video)).length < 2 && !recentSingle) continue;
+    const playableVideos = videos.filter((video) => !isReminder(video));
+    if (playableVideos.length < 2
+      && !(recentSingle || (definition.confirmedSingle === true && playableVideos.length === 1))) continue;
     if (release === null) warnings.push(`${name}: Erscheinungsjahr fehlt; wird als unbekannt angezeigt.`);
     const game = {
       id, name, route: `spiele/${id}/`, platforms: [...definition.platforms].sort(), aliases: [...definition.aliases].sort(),
@@ -520,6 +526,8 @@ export function normalizeSources({ videos: videoCache, playlists: playlistCache,
     sections.push(section);
     for (const video of reconsiderVideos) {
       video.sections.push({ id: section.id, name: section.name, route: section.route });
+      // Bereich und Detailseiten bleiben bestehen, auch wenn das Video einem Spiel zugeordnet ist (ADR 0015).
+      if (!video.detailRoute) video.detailRoute = section.route;
     }
   }
   const otherVideos = videos.filter((video) => !video.blaetterabend && !video.games.length && !video.sections.length);

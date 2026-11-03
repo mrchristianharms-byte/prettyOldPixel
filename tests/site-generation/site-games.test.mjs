@@ -12,6 +12,7 @@ import { escapeHtml } from "../../src/site-generation/site-html.mjs";
 import { renderMarkdown } from "../../src/ai-bot-generation/site-markdown.mjs";
 import { gameStatistics } from "../../src/content-data/game-statistics.mjs";
 import { gameStatisticsYearSvg } from "../../src/site-generation/widget/game-statistics.mjs";
+import { videoListEntry } from "../../src/site-generation/widget/video-entry.mjs";
 
 const channel = { id: "UC-games", title: "Pretty Old Pixel" };
 const videoId = (index) => `g${String(index).padStart(10, "0")}`;
@@ -1388,4 +1389,45 @@ test("aktualisiert Spieleseiten offline und entfernt sie beim Unterschreiten der
   await assert.rejects(stat(file), { code: "ENOENT" });
   await assert.rejects(stat(markdownFile), { code: "ENOENT" });
   assert.ok(!(await readFile(path.join(outputDirectory, "sitemap.xml"), "utf8")).includes("/spiele/cadaver/"));
+});
+
+test("nimmt bestätigte Ein-Video-Spiele in den Katalog auf", () => {
+  const single = {
+    id: "einzelbetrachtet", name: "Einzelbetrachtung", aliases: [], platforms: ["C64"],
+    release: null, playlistIds: [], videoIds: [videoId(1)],
+  };
+  const withFlag = render(fixture(2), [definition(), { ...single, confirmedSingle: true }]);
+  assert.ok(withFlag.pages.has("spiele/einzelbetrachtet/index.html"));
+  assert.ok(withFlag.pages.get("spiele/index.html").html
+    .includes(`href="${withFlag.config.href("spiele/einzelbetrachtet/", "spiele/")}"`));
+  assert.ok(withFlag.pages.get("spiele/einzelbetrachtet/index.html").html.includes(videoId(1)));
+  assert.ok(withFlag.model.videoById.get(videoId(1)).games.some((game) => game.id === "einzelbetrachtet"));
+  assert.throws(() => normalizeSources(fixture(2), { games: [definition(), { ...single, confirmedSingle: "ja" }] }),
+    /Boolescher Wert/u);
+  const withoutFlag = render(fixture(2), [definition(), { ...single }]);
+  assert.ok(!withoutFlag.pages.has("spiele/einzelbetrachtet/index.html"));
+  assert.ok(!withoutFlag.model.videoById.get(videoId(1)).games.some((game) => game.id === "einzelbetrachtet"));
+});
+
+test("behält re.consider-Bereich und Detailseiten bei zugeordneten Einzelspielen", () => {
+  const input = fixture(2);
+  input.videos.videos[1].title = "Einzelbetrachtung [re.consider]";
+  const { model, pages, config } = render(input, [definition(), {
+    id: "einzelbetrachtet", name: "Einzelbetrachtung", aliases: [], platforms: ["C64"],
+    release: { year: 1990, source: "https://www.mobygames.com/game/42/" },
+    playlistIds: [], videoIds: [videoId(1)], confirmedSingle: true,
+  }]);
+  const video = model.videoById.get(videoId(1));
+  assert.ok(video.games.some((game) => game.id === "einzelbetrachtet"));
+  assert.ok(video.sections.some((section) => section.id === "reconsider"));
+  assert.match(video.detailRoute, /^reconsider\//u);
+  const sectionPage = pages.get("reconsider/index.html").html;
+  assert.ok(sectionPage.includes(videoListEntry(video, config.forPage("reconsider/"))));
+  assert.match(sectionPage, /href="[^"]*spiele\/einzelbetrachtet\/">Einzelbetrachtung<\/a>/u);
+  const detailPage = pages.get(`${video.detailRoute}index.html`);
+  assert.ok(detailPage.html.includes(videoId(1)));
+  assert.ok(detailPage.html.includes('aria-label="Zusätzliche Spielinformationen"'));
+  assert.match(detailPage.html, /<dt>Plattform<\/dt><dd>C64<\/dd>/u);
+  assert.match(detailPage.html, /<dt>Erscheinungsjahr<\/dt><dd><a href="[^"]*spiele\/jahr\/1990\/">1990<\/a>/u);
+  assert.ok(pages.get("spiele/einzelbetrachtet/index.html").html.includes(videoId(1)));
 });

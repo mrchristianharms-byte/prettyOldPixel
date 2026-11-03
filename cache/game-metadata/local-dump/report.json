@@ -1,7 +1,7 @@
 {
   "version": 1,
   "provider": "mobygames-local-dump",
-  "importedAt": "2026-11-01T12:50:43.422Z",
+  "importedAt": "2026-11-03T10:52:46.924Z",
   "source": {
     "fileName": "gdb.sql",
     "sha256": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
@@ -15,10 +15,10 @@
     "mobygames_releases": 510587
   },
   "summary": {
-    "games": 148,
-    "withCandidates": 148,
+    "games": 156,
+    "withCandidates": 156,
     "withoutExactMatch": 0,
-    "ambiguous": 34
+    "ambiguous": 39
   },
   "games": [
     {
@@ -27059,6 +27059,2388 @@
               "developer": "David Stark",
               "countries": "Worldwide",
               "publabel": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "gameId": "knight-rider-c64",
+      "title": "Knight Rider",
+      "platforms": [
+        "C64"
+      ],
+      "status": "needs-identity-review",
+      "candidates": [
+        {
+          "mobyid": 12191,
+          "title": "Knight Rider",
+          "sourceUrl": "https://www.mobygames.com/game/12191/",
+          "genres": [
+            "Racing / Driving"
+          ],
+          "alternativeTitles": [],
+          "platformMatch": false,
+          "matchingReleaseIds": [],
+          "releases": [
+            {
+              "mobyid": 12191,
+              "mobyreleaseid": 24744,
+              "year": 1988,
+              "platform": "NES",
+              "publisher": "Acclaim Entertainment, Inc.",
+              "developer": "Pack-In-Video Co., Ltd",
+              "countries": "United States",
+              "publabel": ""
+            },
+            {
+              "mobyid": 12191,
+              "mobyreleaseid": 142842,
+              "year": 1988,
+              "platform": "NES",
+              "publisher": "Pack-In-Video Co., Ltd",
+              "developer": "Pack-In-Video Co., Ltd",
+              "countries": "Japan",
+              "publabel": ""
+            }
+          ]
+        },
+        {
+          "mobyid": 48091,
+          "title": "Knight Rider",
+          "sourceUrl": "https://www.mobygames.com/game/48091/",
+          "genres": [
+            "Action",
+            "Racing / Driving"
+          ],
+          "alternativeTitles": [],
+          "platformMatch": true,
+          "matchingReleaseIds": [
+            133576,
+            276673
+          ],
+          "releases": [
+            {
+              "mobyid": 48091,
+              "mobyreleaseid": 149860,
+              "year": 1986,
+              "platform": "Amstrad CPC",
+              "publisher": "Ocean Software Ltd.",
+              "developer": "Ocean Software Ltd.",
+              "countries": "United Kingdom",
+              "publabel": ""
+            },
+            {
+              "mobyid": 48091,
+              "mobyreleaseid": 133576,
+              "year": 1986,
+              "platform": "Commodore 64",
+              "publisher": null,
+              "developer": null,
+              "countries": "United Kingdom",
+              "publabel": "",
+              "sourceDeveloper": "",
+              "sourcePublisher": ""
+            },
+            {
+              "mobyid": 48091,
+              "mobyreleaseid": 276673,
+              "year": 1986,
+              "platform": "Commodore 64",
+              "publisher": "Ocean Software Ltd.",
+              "developer": "Ocean Software Ltd.",
+              "countries": "France,  Germany,  United Kingdom",
+              "publabel": ""
+            },
+            {
+              "mobyid": 48091,
+              "mobyreleaseid": 133521,
+              "year": 1986,
+              "platform": "ZX Spectrum",
+              "publisher": "Ocean Software Ltd.",
+              "developer": "Ocean Software Ltd.",
+              "countries": "United Kingdom",
+              "publabel": ""
+            }
+          ]
+        },
+        {
+          "mobyid": 203034,
+          "title": "Knight Rider",
+          "sourceUrl": "https://www.mobygames.com/game/203034/",
+          "genres": [
+            "Racing / Driving"
+          ],
+          "alternativeTitles": [],
+          "platformMatch": false,
+          "matchingReleaseIds": [],
+          "releases": [
+            {
+              "mobyid": 203034,
+              "mobyreleaseid": 557464,
+              "year": 1989,
+              "platform": "Dedicated handheld",
+              "publisher": "Acclaim Entertainment, Inc.",
+              "developer": "Acclaim Entertainment, Inc.",
+              "countries": "United States",
+              "publabel": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "gameId": "lotus-esprit-turbo-challenge-amiga",
+      "title": "Lotus Esprit Turbo Challenge",
+      "platforms": [
+        "Amiga"
+      ],
+      "status": "needs-identity-review",
+      "candidates": [
+        {
+          "mobyid": 10773,
+          "title": "Lotus Esprit Turbo Challenge",
+          "sourceUrl": "https://www.mobygames.com/game/10773/",
+          "genres": [
+            "Racing / Driving"
+          ],
+          "alternativeTitles": [
+            {
+              "title": "Lotus I",
+              "info": "Post-trilogy title"
+            }
+          ],
+          "platformMatch": true,
+          "matchingReleaseIds": [
+            23488,
+            32317
+          ],
+          "releases": [
+            {
+              "mobyid": 10773,
+              "mobyreleaseid": 23488,
+              "year": 1990,
+              "platform": "Amiga",
+              "publisher": "Gremlin",
+              "developer": "Magnetic Fields (Software Design) Ltd.",
+              "countries": "France,  Germany,  Italy,  United Kingdom",
+              "publabel": "",
+              "sourcePublisher": "Gremlin Graphics Software Limited"
+            },
+            {
+              "mobyid": 10773,
+              "mobyreleaseid": 32317,
+              "year": 1992,
+              "platform": "Amiga",
+              "publisher": "Gremlin",
+              "developer": "Magnetic Fields (Software Design) Ltd.",
+              "countries": "Germany,  Italy,  United Kingdom",
+              "publabel": "GBH Gold",
+              "sourcePublisher": "Gremlin Graphics Software Limited"
+            },
+            {
+              "mobyid": 10773,
+              "mobyreleaseid": 65623,
+              "year": 1990,
+              "platform": "Amstrad CPC",
+              "publisher": "Gremlin",
+              "developer": "Magnetic Fields (Software Design) Ltd.",
+              "countries": "Spain",
+              "publabel": "",
+              "sourcePublisher": "Gremlin Graphics Software Limited"
+            },
+            {
+              "mobyid": 10773,
+              "mobyreleaseid": 65791,
+              "year": 1990,
+              "platform": "Amstrad CPC",
+              "publisher": "Gremlin",
+              "developer": "Magnetic Fields (Software Design) Ltd.",
+              "countries": "France,  Germany,  Italy,  United Kingdom",
+              "publabel": "",
+              "sourcePublisher": "Gremlin Graphics Software Limited"
+            },
+            {
+              "mobyid": 10773,
+              "mobyreleaseid": 453254,
+              "year": 1990,
+              "platform": "Amstrad CPC",
+              "publisher": null,
+              "developer": null,
+              "countries": "France,  Germany,  Italy,  United Kingdom",
+              "publabel": "",
+              "sourceDeveloper": "",
+              "sourcePublisher": ""
+            },
+            {
+              "mobyid": 10773,
+              "mobyreleaseid": 65792,
+              "year": 1992,
+              "platform": "Amstrad CPC",
+              "publisher": "Gremlin",
+              "developer": "Magnetic Fields (Software Design) Ltd.",
+              "countries": "Germany,  Italy,  United Kingdom",
+              "publabel": "GBH",
+              "sourcePublisher": "Gremlin Graphics Software Limited"
+            },
+            {
+              "mobyid": 10773,
+              "mobyreleaseid": 21388,
+              "year": 1990,
+              "platform": "Atari ST",
+              "publisher": "Gremlin",
+              "developer": "Magnetic Fields (Software Design) Ltd.",
+              "countries": "France,  Germany,  Italy,  United Kingdom",
+              "publabel": "",
+              "sourcePublisher": "Gremlin Graphics Software Limited"
+            },
+            {
+              "mobyid": 10773,
+              "mobyreleaseid": 32318,
+              "year": 1992,
+              "platform": "Atari ST",
+              "publisher": "Gremlin",
+              "developer": "Magnetic Fields (Software Design) Ltd.",
+              "countries": "Germany,  Italy,  United Kingdom",
+              "publabel": "GBH Gold",
+              "sourcePublisher": "Gremlin Graphics Software Limited"
+            },
+            {
+              "mobyid": 10773,
+              "mobyreleaseid": 21004,
+              "year": 1990,
+              "platform": "Commodore 64",
+              "publisher": null,
+              "developer": null,
+              "countries": "France,  Germany,  Italy,  United Kingdom",
+              "publabel": "",
+              "sourceDeveloper": "",
+              "sourcePublisher": ""
+            },
+            {
+              "mobyid": 10773,
+              "mobyreleaseid": 450674,
+              "year": 1990,
+              "platform": "Commodore 64",
+              "publisher": "Gremlin",
+              "developer": "Magnetic Fields (Software Design) Ltd.",
+              "countries": "France,  Germany,  Italy,  United Kingdom",
+              "publabel": "",
+              "sourcePublisher": "Gremlin Graphics Software Limited"
+            },
+            {
+              "mobyid": 10773,
+              "mobyreleaseid": 65633,
+              "year": 1992,
+              "platform": "Commodore 64",
+              "publisher": "Gremlin",
+              "developer": "Magnetic Fields (Software Design) Ltd.",
+              "countries": "Germany,  Italy,  United Kingdom",
+              "publabel": "GBH Gold",
+              "sourcePublisher": "Gremlin Graphics Software Limited"
+            },
+            {
+              "mobyid": 10773,
+              "mobyreleaseid": 66315,
+              "year": 1992,
+              "platform": "Commodore 64",
+              "publisher": "Gremlin",
+              "developer": "Magnetic Fields (Software Design) Ltd.",
+              "countries": "Germany,  Italy,  United Kingdom",
+              "publabel": "GBH",
+              "sourcePublisher": "Gremlin Graphics Software Limited"
+            },
+            {
+              "mobyid": 10773,
+              "mobyreleaseid": 33961,
+              "year": 1990,
+              "platform": "ZX Spectrum",
+              "publisher": "Gremlin",
+              "developer": "Magnetic Fields (Software Design) Ltd.",
+              "countries": "France,  Germany,  Italy,  United Kingdom",
+              "publabel": "",
+              "sourcePublisher": "Gremlin Graphics Software Limited"
+            },
+            {
+              "mobyid": 10773,
+              "mobyreleaseid": 65634,
+              "year": 1992,
+              "platform": "ZX Spectrum",
+              "publisher": "Gremlin",
+              "developer": "Magnetic Fields (Software Design) Ltd.",
+              "countries": "Germany,  Italy,  United Kingdom",
+              "publabel": "GBH",
+              "sourcePublisher": "Gremlin Graphics Software Limited"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "gameId": "dragon-s-lair-ms-dos",
+      "title": "Dragon's Lair",
+      "platforms": [
+        "MS-DOS"
+      ],
+      "status": "needs-identity-review",
+      "candidates": [
+        {
+          "mobyid": 1503,
+          "title": "Dragon's Lair",
+          "sourceUrl": "https://www.mobygames.com/game/1503/",
+          "genres": [
+            "Action"
+          ],
+          "alternativeTitles": [
+            {
+              "title": "Dragon's Lair CD-ROM",
+              "info": "DOS title"
+            }
+          ],
+          "platformMatch": true,
+          "matchingReleaseIds": [
+            36
+          ],
+          "releases": [
+            {
+              "mobyid": 1503,
+              "mobyreleaseid": 25334,
+              "year": 1994,
+              "platform": "3DO",
+              "publisher": "ReadySoft Incorporated",
+              "developer": "Advanced Microcomputer Systems",
+              "countries": "United States",
+              "publabel": ""
+            },
+            {
+              "mobyid": 1503,
+              "mobyreleaseid": 461424,
+              "year": 1994,
+              "platform": "3DO",
+              "publisher": "T&E Soft, Inc.",
+              "developer": "Advanced Microcomputer Systems",
+              "countries": "Japan",
+              "publabel": ""
+            },
+            {
+              "mobyid": 1503,
+              "mobyreleaseid": 525694,
+              "year": 1994,
+              "platform": "3DO",
+              "publisher": "Elite Systems Ltd.",
+              "developer": "Advanced Microcomputer Systems",
+              "countries": "United Kingdom",
+              "publabel": ""
+            },
+            {
+              "mobyid": 1503,
+              "mobyreleaseid": 627623,
+              "year": 1994,
+              "platform": "3DO",
+              "publisher": "LG Electronics Inc.",
+              "developer": "Advanced Microcomputer Systems",
+              "countries": "South Korea",
+              "publabel": ""
+            },
+            {
+              "mobyid": 1503,
+              "mobyreleaseid": 151767,
+              "year": 2011,
+              "platform": "Android",
+              "publisher": "Digital Leisure Inc.",
+              "developer": "Advanced Microcomputer Systems",
+              "countries": "Worldwide",
+              "publabel": ""
+            },
+            {
+              "mobyid": 1503,
+              "mobyreleaseid": 181275,
+              "year": 1983,
+              "platform": "Arcade",
+              "publisher": "Cinematronics, Inc.",
+              "developer": "Advanced Microcomputer Systems",
+              "countries": "United States",
+              "publabel": ""
+            },
+            {
+              "mobyid": 1503,
+              "mobyreleaseid": 467464,
+              "year": 2002,
+              "platform": "Arcade",
+              "publisher": null,
+              "developer": "Advanced Microcomputer Systems",
+              "countries": "United States",
+              "publabel": "",
+              "sourcePublisher": ""
+            },
+            {
+              "mobyid": 1503,
+              "mobyreleaseid": 209139,
+              "year": 2007,
+              "platform": "Blu-ray Disc Player",
+              "publisher": "Digital Leisure Inc.",
+              "developer": "Advanced Microcomputer Systems",
+              "countries": "United States",
+              "publabel": ""
+            },
+            {
+              "mobyid": 1503,
+              "mobyreleaseid": 325337,
+              "year": 2017,
+              "platform": "Browser",
+              "publisher": "Digital Leisure Inc.",
+              "developer": "Advanced Microcomputer Systems",
+              "countries": "Worldwide",
+              "publabel": ""
+            },
+            {
+              "mobyid": 1503,
+              "mobyreleaseid": 54616,
+              "year": 1994,
+              "platform": "CD-i",
+              "publisher": "Philips Interactive Media, Inc.",
+              "developer": "Advanced Microcomputer Systems",
+              "countries": "United States",
+              "publabel": ""
+            },
+            {
+              "mobyid": 1503,
+              "mobyreleaseid": 129739,
+              "year": 1994,
+              "platform": "CD-i",
+              "publisher": "Philips Interactive Media, Inc.",
+              "developer": "Advanced Microcomputer Systems",
+              "countries": "France,  Germany,  The Netherlands,  United Kingdom",
+              "publabel": ""
+            },
+            {
+              "mobyid": 1503,
+              "mobyreleaseid": 36,
+              "year": 1993,
+              "platform": "DOS",
+              "publisher": "ReadySoft Incorporated",
+              "developer": "Advanced Microcomputer Systems",
+              "countries": "United States",
+              "publabel": ""
+            },
+            {
+              "mobyid": 1503,
+              "mobyreleaseid": 209140,
+              "year": 1998,
+              "platform": "DVD Player",
+              "publisher": "Digital Leisure Inc.",
+              "developer": "Advanced Microcomputer Systems",
+              "countries": "United States",
+              "publabel": ""
+            },
+            {
+              "mobyid": 1503,
+              "mobyreleaseid": 209141,
+              "year": 2007,
+              "platform": "HD DVD Player",
+              "publisher": "Digital Leisure Inc.",
+              "developer": "Advanced Microcomputer Systems",
+              "countries": "United States",
+              "publabel": ""
+            },
+            {
+              "mobyid": 1503,
+              "mobyreleaseid": 8459,
+              "year": 1995,
+              "platform": "Jaguar",
+              "publisher": "ReadySoft Incorporated",
+              "developer": "Advanced Microcomputer Systems",
+              "countries": "United States",
+              "publabel": ""
+            },
+            {
+              "mobyid": 1503,
+              "mobyreleaseid": 589105,
+              "year": 2013,
+              "platform": "Linux",
+              "publisher": "Digital Leisure Inc.",
+              "developer": "Advanced Microcomputer Systems",
+              "countries": "Worldwide",
+              "publabel": ""
+            },
+            {
+              "mobyid": 1503,
+              "mobyreleaseid": 106141,
+              "year": 1994,
+              "platform": "Macintosh",
+              "publisher": "ReadySoft Incorporated",
+              "developer": "Advanced Microcomputer Systems",
+              "countries": "United States",
+              "publabel": ""
+            },
+            {
+              "mobyid": 1503,
+              "mobyreleaseid": 589104,
+              "year": 2013,
+              "platform": "Macintosh",
+              "publisher": "Digital Leisure Inc.",
+              "developer": "Advanced Microcomputer Systems",
+              "countries": "Worldwide",
+              "publabel": ""
+            },
+            {
+              "mobyid": 1503,
+              "mobyreleaseid": 151770,
+              "year": 2010,
+              "platform": "Nintendo DS",
+              "publisher": "Destineer",
+              "developer": "Advanced Microcomputer Systems",
+              "countries": "United States",
+              "publabel": ""
+            },
+            {
+              "mobyid": 1503,
+              "mobyreleaseid": 124766,
+              "year": 2009,
+              "platform": "Nintendo DSi",
+              "publisher": "Digital Leisure Inc.",
+              "developer": "Advanced Microcomputer Systems",
+              "countries": "United States",
+              "publabel": ""
+            },
+            {
+              "mobyid": 1503,
+              "mobyreleaseid": 145631,
+              "year": 2011,
+              "platform": "PSP",
+              "publisher": "Digital Leisure Inc.",
+              "developer": "Advanced Microcomputer Systems",
+              "countries": "United States",
+              "publabel": ""
+            },
+            {
+              "mobyid": 1503,
+              "mobyreleaseid": 151364,
+              "year": 2010,
+              "platform": "PlayStation 3",
+              "publisher": "Digital Leisure Inc.",
+              "developer": "Advanced Microcomputer Systems",
+              "countries": "United States",
+              "publabel": ""
+            },
+            {
+              "mobyid": 1503,
+              "mobyreleaseid": 454968,
+              "year": 2014,
+              "platform": "PlayStation Now",
+              "publisher": "Digital Leisure Inc.",
+              "developer": "Advanced Microcomputer Systems",
+              "countries": "United States",
+              "publabel": ""
+            },
+            {
+              "mobyid": 1503,
+              "mobyreleaseid": 9931,
+              "year": 1993,
+              "platform": "SEGA CD",
+              "publisher": "ReadySoft Incorporated",
+              "developer": "Advanced Microcomputer Systems",
+              "countries": "United States",
+              "publabel": ""
+            },
+            {
+              "mobyid": 1503,
+              "mobyreleaseid": 114468,
+              "year": 1994,
+              "platform": "SEGA CD",
+              "publisher": "SEGA Enterprises Ltd.",
+              "developer": "Advanced Microcomputer Systems",
+              "countries": "Japan",
+              "publabel": ""
+            },
+            {
+              "mobyid": 1503,
+              "mobyreleaseid": 120631,
+              "year": 1994,
+              "platform": "SEGA CD",
+              "publisher": "SEGA Enterprises Ltd.",
+              "developer": "Advanced Microcomputer Systems",
+              "countries": "Brazil",
+              "publabel": ""
+            },
+            {
+              "mobyid": 1503,
+              "mobyreleaseid": 127702,
+              "year": 1994,
+              "platform": "SEGA CD",
+              "publisher": "SEGA Enterprises Ltd.",
+              "developer": "Advanced Microcomputer Systems",
+              "countries": "France,  Germany,  Italy,  The Netherlands,  Spain,  United Kingdom",
+              "publabel": ""
+            },
+            {
+              "mobyid": 1503,
+              "mobyreleaseid": 8458,
+              "year": 1999,
+              "platform": "Windows",
+              "publisher": "Digital Leisure Inc.",
+              "developer": "Advanced Microcomputer Systems",
+              "countries": "United States",
+              "publabel": ""
+            },
+            {
+              "mobyid": 1503,
+              "mobyreleaseid": 8460,
+              "year": 2000,
+              "platform": "Windows",
+              "publisher": "Digital Leisure Inc.",
+              "developer": "Advanced Microcomputer Systems",
+              "countries": "United States",
+              "publabel": ""
+            },
+            {
+              "mobyid": 1503,
+              "mobyreleaseid": 141584,
+              "year": 2007,
+              "platform": "Windows",
+              "publisher": "1C Company",
+              "developer": "Advanced Microcomputer Systems",
+              "countries": "Russia",
+              "publabel": ""
+            },
+            {
+              "mobyid": 1503,
+              "mobyreleaseid": 174347,
+              "year": 2013,
+              "platform": "Windows",
+              "publisher": "Digital Leisure Inc.",
+              "developer": "Advanced Microcomputer Systems",
+              "countries": "Worldwide",
+              "publabel": ""
+            },
+            {
+              "mobyid": 1503,
+              "mobyreleaseid": 206330,
+              "year": 2014,
+              "platform": "Windows Apps",
+              "publisher": "Digital Leisure Inc.",
+              "developer": "Advanced Microcomputer Systems",
+              "countries": "Worldwide",
+              "publabel": ""
+            },
+            {
+              "mobyid": 1503,
+              "mobyreleaseid": 158871,
+              "year": 2012,
+              "platform": "Xbox 360",
+              "publisher": "Microsoft Corporation",
+              "developer": "Advanced Microcomputer Systems",
+              "countries": "Worldwide",
+              "publabel": "Microsoft Studios"
+            },
+            {
+              "mobyid": 1503,
+              "mobyreleaseid": 210461,
+              "year": 2015,
+              "platform": "ZX81",
+              "publisher": null,
+              "developer": "Advanced Microcomputer Systems",
+              "countries": "United Kingdom",
+              "publabel": "",
+              "sourcePublisher": ""
+            },
+            {
+              "mobyid": 1503,
+              "mobyreleaseid": 168788,
+              "year": 2010,
+              "platform": "iPad",
+              "publisher": "Dragon's Lair LLC",
+              "developer": "Advanced Microcomputer Systems",
+              "countries": "Worldwide",
+              "publabel": ""
+            },
+            {
+              "mobyid": 1503,
+              "mobyreleaseid": 120825,
+              "year": 2009,
+              "platform": "iPhone",
+              "publisher": "Electronic Arts, Inc.",
+              "developer": "Advanced Microcomputer Systems",
+              "countries": "Worldwide",
+              "publabel": ""
+            }
+          ]
+        },
+        {
+          "mobyid": 1504,
+          "title": "Dragon's Lair",
+          "sourceUrl": "https://www.mobygames.com/game/1504/",
+          "genres": [
+            "Action"
+          ],
+          "alternativeTitles": [
+            {
+              "title": "Don Bluth's Dragon's Lair",
+              "info": "Amiga title/DOS in-game title"
+            }
+          ],
+          "platformMatch": true,
+          "matchingReleaseIds": [
+            2669,
+            113464
+          ],
+          "releases": [
+            {
+              "mobyid": 1504,
+              "mobyreleaseid": 10228,
+              "year": 1989,
+              "platform": "Amiga",
+              "publisher": "ReadySoft Incorporated",
+              "developer": "Sullivan Bluth Interactive Media, Inc.",
+              "countries": "United States,  Canada",
+              "publabel": ""
+            },
+            {
+              "mobyid": 1504,
+              "mobyreleaseid": 46431,
+              "year": 1990,
+              "platform": "Atari ST",
+              "publisher": "ReadySoft Incorporated",
+              "developer": "Sullivan Bluth Interactive Media, Inc.",
+              "countries": "United States",
+              "publabel": ""
+            },
+            {
+              "mobyid": 1504,
+              "mobyreleaseid": 2669,
+              "year": 1989,
+              "platform": "DOS",
+              "publisher": "Sullivan Bluth Interactive Media, Inc.",
+              "developer": "Sullivan Bluth Interactive Media, Inc.",
+              "countries": "United States",
+              "publabel": ""
+            },
+            {
+              "mobyid": 1504,
+              "mobyreleaseid": 113464,
+              "year": 1989,
+              "platform": "DOS",
+              "publisher": "Sullivan Bluth Interactive Media, Inc.",
+              "developer": "Sullivan Bluth Interactive Media, Inc.",
+              "countries": "Austria,  Belgium,  Denmark,  Finland,  France,  Germany,  Greece,  Ireland,  Italy,  Luxembourg,  The Netherlands,  Norway,  Portugal,  Spain,  Sweden,  Switzerland,  United Kingdom",
+              "publabel": ""
+            },
+            {
+              "mobyid": 1504,
+              "mobyreleaseid": 161797,
+              "year": 1990,
+              "platform": "Macintosh",
+              "publisher": "ReadySoft Incorporated",
+              "developer": "Sullivan Bluth Interactive Media, Inc.",
+              "countries": "United States",
+              "publabel": ""
+            }
+          ]
+        },
+        {
+          "mobyid": 5121,
+          "title": "Dragon's Lair",
+          "sourceUrl": "https://www.mobygames.com/game/5121/",
+          "genres": [
+            "Action"
+          ],
+          "alternativeTitles": [],
+          "platformMatch": false,
+          "matchingReleaseIds": [],
+          "releases": [
+            {
+              "mobyid": 5121,
+              "mobyreleaseid": 154885,
+              "year": 2000,
+              "platform": "Game Boy Color",
+              "publisher": "Capcom Co., Ltd.",
+              "developer": "Digital Eclipse Software, Inc.",
+              "countries": "France,  Germany,  United Kingdom",
+              "publabel": ""
+            },
+            {
+              "mobyid": 5121,
+              "mobyreleaseid": 9678,
+              "year": 2001,
+              "platform": "Game Boy Color",
+              "publisher": "Capcom Co., Ltd.",
+              "developer": "Digital Eclipse Software, Inc.",
+              "countries": "United States",
+              "publabel": ""
+            }
+          ]
+        },
+        {
+          "mobyid": 13639,
+          "title": "Dragon's Lair",
+          "sourceUrl": "https://www.mobygames.com/game/13639/",
+          "genres": [
+            "Action"
+          ],
+          "alternativeTitles": [
+            {
+              "title": "Dragon's Magic",
+              "info": "Japanese Title"
+            }
+          ],
+          "platformMatch": false,
+          "matchingReleaseIds": [],
+          "releases": [
+            {
+              "mobyid": 13639,
+              "mobyreleaseid": 54728,
+              "year": 1992,
+              "platform": "SNES",
+              "publisher": "Elite Systems Ltd.",
+              "developer": "Motivetime Ltd.",
+              "countries": "United Kingdom",
+              "publabel": ""
+            },
+            {
+              "mobyid": 13639,
+              "mobyreleaseid": 30937,
+              "year": 1993,
+              "platform": "SNES",
+              "publisher": "Data East Corporation",
+              "developer": "Motivetime Ltd.",
+              "countries": "United States",
+              "publabel": ""
+            },
+            {
+              "mobyid": 13639,
+              "mobyreleaseid": 30955,
+              "year": 1993,
+              "platform": "SNES",
+              "publisher": "Konami Corporation",
+              "developer": "Motivetime Ltd.",
+              "countries": "Japan",
+              "publabel": ""
+            },
+            {
+              "mobyid": 13639,
+              "mobyreleaseid": 62951,
+              "year": 1993,
+              "platform": "SNES",
+              "publisher": "Elite Systems Ltd.",
+              "developer": "Motivetime Ltd.",
+              "countries": "Sweden",
+              "publabel": ""
+            }
+          ]
+        },
+        {
+          "mobyid": 14256,
+          "title": "Dragon's Lair",
+          "sourceUrl": "https://www.mobygames.com/game/14256/",
+          "genres": [
+            "Compilation"
+          ],
+          "alternativeTitles": [
+            {
+              "title": "龙穴历险记",
+              "info": "Chinese title (simplified)"
+            }
+          ],
+          "platformMatch": false,
+          "matchingReleaseIds": [],
+          "releases": [
+            {
+              "mobyid": 14256,
+              "mobyreleaseid": 149023,
+              "year": 1987,
+              "platform": "Commodore 64",
+              "publisher": "Software Projects Ltd.",
+              "developer": null,
+              "countries": "United States",
+              "publabel": "",
+              "sourceDeveloper": ""
+            }
+          ]
+        },
+        {
+          "mobyid": 22587,
+          "title": "Dragon's Lair",
+          "sourceUrl": "https://www.mobygames.com/game/22587/",
+          "genres": [
+            "Action"
+          ],
+          "alternativeTitles": [
+            {
+              "title": "Dragon's Lair: The Return Adventure",
+              "info": "Japanese title"
+            },
+            {
+              "title": "Sullivan Bluth Presents Dragon's Lair",
+              "info": "Tag-lined title"
+            }
+          ],
+          "platformMatch": false,
+          "matchingReleaseIds": [],
+          "releases": [
+            {
+              "mobyid": 22587,
+              "mobyreleaseid": 60083,
+              "year": 1990,
+              "platform": "NES",
+              "publisher": "CSG Imagesoft Inc.",
+              "developer": "Motivetime Ltd.",
+              "countries": "United States",
+              "publabel": ""
+            },
+            {
+              "mobyid": 22587,
+              "mobyreleaseid": 134980,
+              "year": 1991,
+              "platform": "NES",
+              "publisher": "Epic/Sony Inc.",
+              "developer": "Motivetime Ltd.",
+              "countries": "Japan",
+              "publabel": ""
+            },
+            {
+              "mobyid": 22587,
+              "mobyreleaseid": 133435,
+              "year": 1992,
+              "platform": "NES",
+              "publisher": "Elite Systems Ltd.",
+              "developer": "Motivetime Ltd.",
+              "countries": "United Kingdom",
+              "publabel": ""
+            }
+          ]
+        },
+        {
+          "mobyid": 37682,
+          "title": "Dragon's Lair: The Legend",
+          "sourceUrl": "https://www.mobygames.com/game/37682/",
+          "genres": [
+            "Action"
+          ],
+          "alternativeTitles": [
+            {
+              "title": "Dragon's Lair",
+              "info": "Japanese title"
+            }
+          ],
+          "platformMatch": false,
+          "matchingReleaseIds": [],
+          "releases": [
+            {
+              "mobyid": 37682,
+              "mobyreleaseid": 101303,
+              "year": 1991,
+              "platform": "Game Boy",
+              "publisher": "CSG Imagesoft Inc.",
+              "developer": "Elite Systems Ltd.",
+              "countries": "United States",
+              "publabel": ""
+            },
+            {
+              "mobyid": 37682,
+              "mobyreleaseid": 573590,
+              "year": 1991,
+              "platform": "Game Boy",
+              "publisher": "Epic/Sony Inc.",
+              "developer": "Elite Systems Ltd.",
+              "countries": "Japan",
+              "publabel": ""
+            },
+            {
+              "mobyid": 37682,
+              "mobyreleaseid": 142741,
+              "year": 1992,
+              "platform": "Game Boy",
+              "publisher": "CSG Imagesoft Inc.",
+              "developer": "Elite Systems Ltd.",
+              "countries": "Sweden",
+              "publabel": ""
+            },
+            {
+              "mobyid": 37682,
+              "mobyreleaseid": 311781,
+              "year": 1992,
+              "platform": "Game Boy",
+              "publisher": "Elite Systems Ltd.",
+              "developer": "Elite Systems Ltd.",
+              "countries": "Germany",
+              "publabel": ""
+            }
+          ]
+        },
+        {
+          "mobyid": 52779,
+          "title": "Dragon's Lair",
+          "sourceUrl": "https://www.mobygames.com/game/52779/",
+          "genres": [
+            "Action"
+          ],
+          "alternativeTitles": [],
+          "platformMatch": false,
+          "matchingReleaseIds": [],
+          "releases": [
+            {
+              "mobyid": 52779,
+              "mobyreleaseid": 148467,
+              "year": 1986,
+              "platform": "Amstrad CPC",
+              "publisher": "Software Projects Ltd.",
+              "developer": null,
+              "countries": "United Kingdom",
+              "publabel": "",
+              "sourceDeveloper": ""
+            },
+            {
+              "mobyid": 52779,
+              "mobyreleaseid": 218459,
+              "year": 1984,
+              "platform": "Coleco Adam",
+              "publisher": "Coleco Industries, Inc.",
+              "developer": null,
+              "countries": "United States",
+              "publabel": "",
+              "sourceDeveloper": ""
+            },
+            {
+              "mobyid": 52779,
+              "mobyreleaseid": 201669,
+              "year": 1985,
+              "platform": "Coleco Adam",
+              "publisher": "Coleco Industries, Inc.",
+              "developer": null,
+              "countries": "United States",
+              "publabel": "",
+              "sourceDeveloper": ""
+            },
+            {
+              "mobyid": 52779,
+              "mobyreleaseid": 148468,
+              "year": 1986,
+              "platform": "Commodore 64",
+              "publisher": "Software Projects Ltd.",
+              "developer": null,
+              "countries": "United Kingdom",
+              "publabel": "",
+              "sourceDeveloper": ""
+            },
+            {
+              "mobyid": 52779,
+              "mobyreleaseid": 35936,
+              "year": 1988,
+              "platform": "Commodore 64",
+              "publisher": "Encore",
+              "developer": null,
+              "countries": "United Kingdom",
+              "publabel": "",
+              "sourceDeveloper": ""
+            },
+            {
+              "mobyid": 52779,
+              "mobyreleaseid": 148469,
+              "year": 1986,
+              "platform": "ZX Spectrum",
+              "publisher": "Software Projects Ltd.",
+              "developer": null,
+              "countries": "United Kingdom",
+              "publabel": "",
+              "sourceDeveloper": ""
+            },
+            {
+              "mobyid": 52779,
+              "mobyreleaseid": 247956,
+              "year": 1990,
+              "platform": "ZX Spectrum",
+              "publisher": "Encore",
+              "developer": null,
+              "countries": "United Kingdom",
+              "publabel": "",
+              "sourceDeveloper": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "gameId": "highlander-c64",
+      "title": "Highlander",
+      "platforms": [
+        "C64"
+      ],
+      "status": "needs-identity-review",
+      "candidates": [
+        {
+          "mobyid": 32135,
+          "title": "Highlander",
+          "sourceUrl": "https://www.mobygames.com/game/32135/",
+          "genres": [
+            "Action"
+          ],
+          "alternativeTitles": [],
+          "platformMatch": true,
+          "matchingReleaseIds": [
+            85770
+          ],
+          "releases": [
+            {
+              "mobyid": 32135,
+              "mobyreleaseid": 85769,
+              "year": 1986,
+              "platform": "Amstrad CPC",
+              "publisher": "Ocean Software Ltd.",
+              "developer": "Canvas Software",
+              "countries": "United Kingdom",
+              "publabel": ""
+            },
+            {
+              "mobyid": 32135,
+              "mobyreleaseid": 85770,
+              "year": 1986,
+              "platform": "Commodore 64",
+              "publisher": "Ocean Software Ltd.",
+              "developer": "Canvas Software",
+              "countries": "United Kingdom",
+              "publabel": ""
+            },
+            {
+              "mobyid": 32135,
+              "mobyreleaseid": 85771,
+              "year": 1986,
+              "platform": "ZX Spectrum",
+              "publisher": "Ocean Software Ltd.",
+              "developer": "Canvas Software",
+              "countries": "United Kingdom",
+              "publabel": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "gameId": "h-e-r-o-c64",
+      "title": "H.E.R.O.",
+      "platforms": [
+        "C64"
+      ],
+      "status": "needs-identity-review",
+      "candidates": [
+        {
+          "mobyid": 10150,
+          "title": "H.E.R.O.",
+          "sourceUrl": "https://www.mobygames.com/game/10150/",
+          "genres": [
+            "Action"
+          ],
+          "alternativeTitles": [
+            {
+              "title": "H.E.R.O.: Helicopter Emergency Rescue Operation",
+              "info": "Tag-lined title"
+            },
+            {
+              "title": "Helicopter Emergency Rescue Operation",
+              "info": "Unabbreviated title"
+            }
+          ],
+          "platformMatch": true,
+          "matchingReleaseIds": [
+            18957,
+            175493,
+            305188,
+            553534,
+            318105
+          ],
+          "releases": [
+            {
+              "mobyid": 10150,
+              "mobyreleaseid": 27124,
+              "year": 1984,
+              "platform": "Apple II",
+              "publisher": "Activision, Inc.",
+              "developer": "Activision, Inc.",
+              "countries": "United States",
+              "publabel": ""
+            },
+            {
+              "mobyid": 10150,
+              "mobyreleaseid": 18956,
+              "year": 1984,
+              "platform": "Atari 2600",
+              "publisher": "Activision, Inc.",
+              "developer": "Activision, Inc.",
+              "countries": "United States",
+              "publabel": ""
+            },
+            {
+              "mobyid": 10150,
+              "mobyreleaseid": 53772,
+              "year": 1984,
+              "platform": "Atari 2600",
+              "publisher": "Home Entertainment Suppliers Pty. Ltd.",
+              "developer": "Activision, Inc.",
+              "countries": "Australia",
+              "publabel": ""
+            },
+            {
+              "mobyid": 10150,
+              "mobyreleaseid": 81552,
+              "year": 1984,
+              "platform": "Atari 2600",
+              "publisher": "Polyvox",
+              "developer": "Activision, Inc.",
+              "countries": "Brazil",
+              "publabel": ""
+            },
+            {
+              "mobyid": 10150,
+              "mobyreleaseid": 22133,
+              "year": 1984,
+              "platform": "Atari 5200",
+              "publisher": "Activision, Inc.",
+              "developer": "Activision, Inc.",
+              "countries": "United States",
+              "publabel": ""
+            },
+            {
+              "mobyid": 10150,
+              "mobyreleaseid": 54274,
+              "year": 1984,
+              "platform": "Atari 8-bit",
+              "publisher": "Activision, Inc.",
+              "developer": "Activision, Inc.",
+              "countries": "United States",
+              "publabel": ""
+            },
+            {
+              "mobyid": 10150,
+              "mobyreleaseid": 18958,
+              "year": 1984,
+              "platform": "ColecoVision",
+              "publisher": "Activision, Inc.",
+              "developer": "Activision, Inc.",
+              "countries": "United States",
+              "publabel": ""
+            },
+            {
+              "mobyid": 10150,
+              "mobyreleaseid": 18957,
+              "year": 1984,
+              "platform": "Commodore 64",
+              "publisher": "Activision, Inc.",
+              "developer": "Activision, Inc.",
+              "countries": "United States",
+              "publabel": ""
+            },
+            {
+              "mobyid": 10150,
+              "mobyreleaseid": 175493,
+              "year": 1984,
+              "platform": "Commodore 64",
+              "publisher": "Activision, Inc.",
+              "developer": "Activision, Inc.",
+              "countries": "United States",
+              "publabel": ""
+            },
+            {
+              "mobyid": 10150,
+              "mobyreleaseid": 305188,
+              "year": 1984,
+              "platform": "Commodore 64",
+              "publisher": "Activision, Inc.",
+              "developer": "Activision, Inc.",
+              "countries": "France,  Germany,  Spain,  United Kingdom",
+              "publabel": ""
+            },
+            {
+              "mobyid": 10150,
+              "mobyreleaseid": 553534,
+              "year": 1984,
+              "platform": "Commodore 64",
+              "publisher": "Activision, Inc.",
+              "developer": "Activision, Inc.",
+              "countries": "United Kingdom",
+              "publabel": ""
+            },
+            {
+              "mobyid": 10150,
+              "mobyreleaseid": 318105,
+              "year": 1987,
+              "platform": "Commodore 64",
+              "publisher": "Firebird Software",
+              "developer": "Activision, Inc.",
+              "countries": "Denmark,  France,  Germany,  Italy,  The Netherlands,  Spain,  United Kingdom",
+              "publabel": ""
+            },
+            {
+              "mobyid": 10150,
+              "mobyreleaseid": 46110,
+              "year": 1984,
+              "platform": "MSX",
+              "publisher": "Pony Canyon, Inc.",
+              "developer": "Activision, Inc.",
+              "countries": "Japan",
+              "publabel": ""
+            },
+            {
+              "mobyid": 10150,
+              "mobyreleaseid": 51297,
+              "year": 1984,
+              "platform": "MSX",
+              "publisher": "Activision, Inc.",
+              "developer": "Activision, Inc.",
+              "countries": "United Kingdom",
+              "publabel": ""
+            },
+            {
+              "mobyid": 10150,
+              "mobyreleaseid": 51298,
+              "year": 1984,
+              "platform": "MSX",
+              "publisher": "Al Alamiah",
+              "developer": "Activision, Inc.",
+              "countries": "Kuwait",
+              "publabel": ""
+            },
+            {
+              "mobyid": 10150,
+              "mobyreleaseid": 237457,
+              "year": 1985,
+              "platform": "SG-1000",
+              "publisher": "SEGA Enterprises Ltd.",
+              "developer": "Activision, Inc.",
+              "countries": "Japan",
+              "publabel": ""
+            },
+            {
+              "mobyid": 10150,
+              "mobyreleaseid": 239788,
+              "year": 1986,
+              "platform": "SG-1000",
+              "publisher": "SEGA Enterprises Ltd.",
+              "developer": "Activision, Inc.",
+              "countries": "Taiwan",
+              "publabel": ""
+            },
+            {
+              "mobyid": 10150,
+              "mobyreleaseid": 298592,
+              "year": 2010,
+              "platform": "Windows",
+              "publisher": "Microsoft Corporation",
+              "developer": "Activision, Inc.",
+              "countries": "Worldwide",
+              "publabel": "Microsoft Game Studios"
+            },
+            {
+              "mobyid": 10150,
+              "mobyreleaseid": 298593,
+              "year": 2010,
+              "platform": "Xbox 360",
+              "publisher": "Microsoft Corporation",
+              "developer": "Activision, Inc.",
+              "countries": "Worldwide",
+              "publabel": "Microsoft Game Studios"
+            },
+            {
+              "mobyid": 10150,
+              "mobyreleaseid": 34166,
+              "year": 1984,
+              "platform": "ZX Spectrum",
+              "publisher": "Activision, Inc.",
+              "developer": "Activision, Inc.",
+              "countries": "United Kingdom",
+              "publabel": ""
+            },
+            {
+              "mobyid": 10150,
+              "mobyreleaseid": 57460,
+              "year": 1987,
+              "platform": "ZX Spectrum",
+              "publisher": "Firebird Software",
+              "developer": "Activision, Inc.",
+              "countries": "Denmark,  France,  Germany,  Italy,  The Netherlands,  Spain,  United Kingdom",
+              "publabel": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "gameId": "space-taxi-c64",
+      "title": "Space Taxi",
+      "platforms": [
+        "C64"
+      ],
+      "status": "needs-identity-review",
+      "candidates": [
+        {
+          "mobyid": 19278,
+          "title": "Space Taxi",
+          "sourceUrl": "https://www.mobygames.com/game/19278/",
+          "genres": [
+            "Action"
+          ],
+          "alternativeTitles": [],
+          "platformMatch": true,
+          "matchingReleaseIds": [
+            48377
+          ],
+          "releases": [
+            {
+              "mobyid": 19278,
+              "mobyreleaseid": 48377,
+              "year": 1984,
+              "platform": "Commodore 64",
+              "publisher": "Muse Software",
+              "developer": null,
+              "countries": "United States,  Canada",
+              "publabel": "",
+              "sourceDeveloper": ""
+            }
+          ]
+        },
+        {
+          "mobyid": 111904,
+          "title": "Space Taxi",
+          "sourceUrl": "https://www.mobygames.com/game/111904/",
+          "genres": [
+            "Action"
+          ],
+          "alternativeTitles": [],
+          "platformMatch": false,
+          "matchingReleaseIds": [],
+          "releases": [
+            {
+              "mobyid": 111904,
+              "mobyreleaseid": 310499,
+              "year": 2004,
+              "platform": "Windows",
+              "publisher": null,
+              "developer": null,
+              "countries": "Worldwide",
+              "publabel": "",
+              "sourceDeveloper": "",
+              "sourcePublisher": ""
+            }
+          ]
+        },
+        {
+          "mobyid": 176074,
+          "title": "Space Taxi",
+          "sourceUrl": "https://www.mobygames.com/game/176074/",
+          "genres": [
+            "Simulation"
+          ],
+          "alternativeTitles": [],
+          "platformMatch": false,
+          "matchingReleaseIds": [],
+          "releases": [
+            {
+              "mobyid": 176074,
+              "mobyreleaseid": 490985,
+              "year": 1978,
+              "platform": "TRS-80",
+              "publisher": "Radio Shack",
+              "developer": null,
+              "countries": "United States",
+              "publabel": "",
+              "sourceDeveloper": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "gameId": "bubble-bobble-c64",
+      "title": "Bubble Bobble",
+      "platforms": [
+        "C64"
+      ],
+      "status": "needs-identity-review",
+      "candidates": [
+        {
+          "mobyid": 787,
+          "title": "Bubble Bobble",
+          "sourceUrl": "https://www.mobygames.com/game/787/",
+          "genres": [
+            "Action"
+          ],
+          "alternativeTitles": [
+            {
+              "title": "Arcade Archives: Bubble Bobble",
+              "info": "PS4/Switch title"
+            },
+            {
+              "title": "Bubble Bobble Classic",
+              "info": "Android/iPhone/iPad title"
+            }
+          ],
+          "platformMatch": true,
+          "matchingReleaseIds": [
+            14272,
+            136563,
+            16348,
+            32339
+          ],
+          "releases": [
+            {
+              "mobyid": 787,
+              "mobyreleaseid": 56710,
+              "year": 1987,
+              "platform": "Amiga",
+              "publisher": "Firebird Software",
+              "developer": "Taito Corporation",
+              "countries": "United Kingdom",
+              "publabel": ""
+            },
+            {
+              "mobyid": 787,
+              "mobyreleaseid": 64436,
+              "year": 1989,
+              "platform": "Amiga",
+              "publisher": "Taito Software Inc.",
+              "developer": "Taito Corporation",
+              "countries": "United States,  Canada",
+              "publabel": ""
+            },
+            {
+              "mobyid": 787,
+              "mobyreleaseid": 32337,
+              "year": 1991,
+              "platform": "Amiga",
+              "publisher": "Ocean Software Ltd.",
+              "developer": "Taito Corporation",
+              "countries": "United Kingdom",
+              "publabel": "Hit Squad, The"
+            },
+            {
+              "mobyid": 787,
+              "mobyreleaseid": 46022,
+              "year": 1987,
+              "platform": "Amstrad CPC",
+              "publisher": "Firebird Software",
+              "developer": "Taito Corporation",
+              "countries": "United Kingdom",
+              "publabel": ""
+            },
+            {
+              "mobyid": 787,
+              "mobyreleaseid": 486038,
+              "year": 1987,
+              "platform": "Amstrad CPC",
+              "publisher": null,
+              "developer": null,
+              "countries": "United Kingdom",
+              "publabel": "",
+              "sourceDeveloper": "",
+              "sourcePublisher": ""
+            },
+            {
+              "mobyid": 787,
+              "mobyreleaseid": 501928,
+              "year": 2020,
+              "platform": "Android",
+              "publisher": "Mobirix Corporation",
+              "developer": "Taito Corporation",
+              "countries": "Worldwide",
+              "publabel": ""
+            },
+            {
+              "mobyid": 787,
+              "mobyreleaseid": 583666,
+              "year": 2020,
+              "platform": "Antstream",
+              "publisher": "Taito Corporation",
+              "developer": "Taito Corporation",
+              "countries": "Germany,  The Netherlands,  United Kingdom",
+              "publabel": ""
+            },
+            {
+              "mobyid": 787,
+              "mobyreleaseid": 16031,
+              "year": 1989,
+              "platform": "Apple II",
+              "publisher": "Taito Software Inc.",
+              "developer": "Taito Corporation",
+              "countries": "United States",
+              "publabel": ""
+            },
+            {
+              "mobyid": 787,
+              "mobyreleaseid": 181278,
+              "year": 1986,
+              "platform": "Arcade",
+              "publisher": "Taito Corporation",
+              "developer": "Taito Corporation",
+              "countries": "Japan",
+              "publabel": ""
+            },
+            {
+              "mobyid": 787,
+              "mobyreleaseid": 569066,
+              "year": 1986,
+              "platform": "Arcade",
+              "publisher": "Taito Corporation",
+              "developer": "Taito Corporation",
+              "countries": "United States",
+              "publabel": ""
+            },
+            {
+              "mobyid": 787,
+              "mobyreleaseid": 624214,
+              "year": 1986,
+              "platform": "Arcade",
+              "publisher": "Taito Corporation",
+              "developer": "Taito Corporation",
+              "countries": "United Kingdom",
+              "publabel": ""
+            },
+            {
+              "mobyid": 787,
+              "mobyreleaseid": 148681,
+              "year": 1987,
+              "platform": "Atari ST",
+              "publisher": "Firebird Software",
+              "developer": "Taito Corporation",
+              "countries": "United Kingdom",
+              "publabel": ""
+            },
+            {
+              "mobyid": 787,
+              "mobyreleaseid": 16001,
+              "year": 1989,
+              "platform": "Atari ST",
+              "publisher": "Taito Software Inc.",
+              "developer": "Taito Corporation",
+              "countries": "United States",
+              "publabel": ""
+            },
+            {
+              "mobyid": 787,
+              "mobyreleaseid": 32338,
+              "year": 1991,
+              "platform": "Atari ST",
+              "publisher": "Ocean Software Ltd.",
+              "developer": "Taito Corporation",
+              "countries": "United Kingdom",
+              "publabel": "Hit Squad, The"
+            },
+            {
+              "mobyid": 787,
+              "mobyreleaseid": 14272,
+              "year": 1987,
+              "platform": "Commodore 64",
+              "publisher": null,
+              "developer": null,
+              "countries": "United Kingdom",
+              "publabel": "",
+              "sourceDeveloper": "",
+              "sourcePublisher": ""
+            },
+            {
+              "mobyid": 787,
+              "mobyreleaseid": 136563,
+              "year": 1987,
+              "platform": "Commodore 64",
+              "publisher": "Firebird Software",
+              "developer": "Taito Corporation",
+              "countries": "United Kingdom",
+              "publabel": ""
+            },
+            {
+              "mobyid": 787,
+              "mobyreleaseid": 16348,
+              "year": 1988,
+              "platform": "Commodore 64",
+              "publisher": "Taito Software Inc.",
+              "developer": "Taito Corporation",
+              "countries": "United States",
+              "publabel": ""
+            },
+            {
+              "mobyid": 787,
+              "mobyreleaseid": 32339,
+              "year": 1991,
+              "platform": "Commodore 64",
+              "publisher": "Ocean Software Ltd.",
+              "developer": "Taito Corporation",
+              "countries": "United Kingdom",
+              "publabel": "Hit Squad, The"
+            },
+            {
+              "mobyid": 787,
+              "mobyreleaseid": 156324,
+              "year": 1988,
+              "platform": "DOS",
+              "publisher": "Taito Software Inc.",
+              "developer": "Taito Corporation",
+              "countries": "United States",
+              "publabel": ""
+            },
+            {
+              "mobyid": 787,
+              "mobyreleaseid": 3441,
+              "year": 1989,
+              "platform": "DOS",
+              "publisher": "Taito Software Inc.",
+              "developer": "Taito Corporation",
+              "countries": "United States",
+              "publabel": ""
+            },
+            {
+              "mobyid": 787,
+              "mobyreleaseid": 656531,
+              "year": 1990,
+              "platform": "DOS",
+              "publisher": "Soft-World International Corporation",
+              "developer": "Taito Corporation",
+              "countries": "Taiwan",
+              "publabel": ""
+            },
+            {
+              "mobyid": 787,
+              "mobyreleaseid": 141841,
+              "year": 1990,
+              "platform": "FM Towns",
+              "publisher": "Ving Co., Ltd.",
+              "developer": "Taito Corporation",
+              "countries": "Japan",
+              "publabel": ""
+            },
+            {
+              "mobyid": 787,
+              "mobyreleaseid": 215069,
+              "year": 1990,
+              "platform": "Game Boy",
+              "publisher": "Taito Corporation",
+              "developer": "Taito Corporation",
+              "countries": "Japan",
+              "publabel": ""
+            },
+            {
+              "mobyid": 787,
+              "mobyreleaseid": 19815,
+              "year": 1991,
+              "platform": "Game Boy",
+              "publisher": "Taito Corporation",
+              "developer": "Taito Corporation",
+              "countries": "United States",
+              "publabel": ""
+            },
+            {
+              "mobyid": 787,
+              "mobyreleaseid": 486045,
+              "year": 1991,
+              "platform": "Game Boy",
+              "publisher": "Taito Corporation",
+              "developer": "Taito Corporation",
+              "countries": "Australia",
+              "publabel": ""
+            },
+            {
+              "mobyid": 787,
+              "mobyreleaseid": 486046,
+              "year": 1991,
+              "platform": "Game Boy",
+              "publisher": "Taito Corporation",
+              "developer": "Taito Corporation",
+              "countries": "China",
+              "publabel": ""
+            },
+            {
+              "mobyid": 787,
+              "mobyreleaseid": 486047,
+              "year": 1991,
+              "platform": "Game Boy",
+              "publisher": "Taito Corporation",
+              "developer": "Taito Corporation",
+              "countries": "Spain",
+              "publabel": ""
+            },
+            {
+              "mobyid": 787,
+              "mobyreleaseid": 486048,
+              "year": 1991,
+              "platform": "Game Boy",
+              "publisher": "Taito Corporation",
+              "developer": "Taito Corporation",
+              "countries": "France,  United Kingdom",
+              "publabel": ""
+            },
+            {
+              "mobyid": 787,
+              "mobyreleaseid": 486049,
+              "year": 1991,
+              "platform": "Game Boy",
+              "publisher": "Taito Corporation",
+              "developer": "Taito Corporation",
+              "countries": "Italy",
+              "publabel": ""
+            },
+            {
+              "mobyid": 787,
+              "mobyreleaseid": 486044,
+              "year": 1992,
+              "platform": "Game Boy",
+              "publisher": "Taito Corporation",
+              "developer": "Taito Corporation",
+              "countries": "Germany",
+              "publabel": ""
+            },
+            {
+              "mobyid": 787,
+              "mobyreleaseid": 109725,
+              "year": 1994,
+              "platform": "Game Gear",
+              "publisher": "Taito Corporation",
+              "developer": "Taito Corporation",
+              "countries": "United States,  Canada",
+              "publabel": ""
+            },
+            {
+              "mobyid": 787,
+              "mobyreleaseid": 143999,
+              "year": 2006,
+              "platform": "J2ME",
+              "publisher": "Kaasa Solution GmbH",
+              "developer": "Taito Corporation",
+              "countries": "Germany",
+              "publabel": ""
+            },
+            {
+              "mobyid": 787,
+              "mobyreleaseid": 46023,
+              "year": 1987,
+              "platform": "MSX",
+              "publisher": "Taito Corporation",
+              "developer": "Taito Corporation",
+              "countries": "Japan",
+              "publabel": ""
+            },
+            {
+              "mobyid": 787,
+              "mobyreleaseid": 142770,
+              "year": 1987,
+              "platform": "NES",
+              "publisher": "Taito Corporation",
+              "developer": "Taito Corporation",
+              "countries": "Japan",
+              "publabel": ""
+            },
+            {
+              "mobyid": 787,
+              "mobyreleaseid": 19178,
+              "year": 1988,
+              "platform": "NES",
+              "publisher": "Taito Corporation",
+              "developer": "Taito Corporation",
+              "countries": "United States",
+              "publabel": ""
+            },
+            {
+              "mobyid": 787,
+              "mobyreleaseid": 570128,
+              "year": 1990,
+              "platform": "NES",
+              "publisher": "Taito Corporation",
+              "developer": "Taito Corporation",
+              "countries": "United Kingdom",
+              "publabel": ""
+            },
+            {
+              "mobyid": 787,
+              "mobyreleaseid": 570129,
+              "year": 1990,
+              "platform": "NES",
+              "publisher": "Taito Corporation",
+              "developer": "Taito Corporation",
+              "countries": "Australia",
+              "publabel": ""
+            },
+            {
+              "mobyid": 787,
+              "mobyreleaseid": 576369,
+              "year": 1990,
+              "platform": "NES",
+              "publisher": "Taito Corporation",
+              "developer": "Taito Corporation",
+              "countries": "Germany",
+              "publabel": ""
+            },
+            {
+              "mobyid": 787,
+              "mobyreleaseid": 576370,
+              "year": 1990,
+              "platform": "NES",
+              "publisher": "Taito Corporation",
+              "developer": "Taito Corporation",
+              "countries": "Belgium,  France,  The Netherlands",
+              "publabel": ""
+            },
+            {
+              "mobyid": 787,
+              "mobyreleaseid": 576371,
+              "year": 1990,
+              "platform": "NES",
+              "publisher": "Taito Corporation",
+              "developer": "Taito Corporation",
+              "countries": "Denmark,  Finland,  Norway,  Sweden",
+              "publabel": ""
+            },
+            {
+              "mobyid": 787,
+              "mobyreleaseid": 608221,
+              "year": 1990,
+              "platform": "NES",
+              "publisher": "Taito Corporation",
+              "developer": "Taito Corporation",
+              "countries": "Italy",
+              "publabel": ""
+            },
+            {
+              "mobyid": 787,
+              "mobyreleaseid": 576372,
+              "year": 1991,
+              "platform": "NES",
+              "publisher": "Taito Corporation",
+              "developer": "Taito Corporation",
+              "countries": "Austria,  Switzerland",
+              "publabel": ""
+            },
+            {
+              "mobyid": 787,
+              "mobyreleaseid": 182026,
+              "year": 2013,
+              "platform": "Nintendo 3DS",
+              "publisher": "Square Enix Co., Ltd.",
+              "developer": "Taito Corporation",
+              "countries": "Japan",
+              "publabel": ""
+            },
+            {
+              "mobyid": 787,
+              "mobyreleaseid": 540545,
+              "year": 2022,
+              "platform": "Nintendo Switch",
+              "publisher": "Hamster Corporation",
+              "developer": "Taito Corporation",
+              "countries": "United States",
+              "publabel": ""
+            },
+            {
+              "mobyid": 787,
+              "mobyreleaseid": 223496,
+              "year": 2016,
+              "platform": "PlayStation 4",
+              "publisher": "Hamster Corporation",
+              "developer": "Taito Corporation",
+              "countries": "United States",
+              "publabel": ""
+            },
+            {
+              "mobyid": 787,
+              "mobyreleaseid": 154131,
+              "year": 1990,
+              "platform": "Sharp X68000",
+              "publisher": "Micomsoft",
+              "developer": "Taito Corporation",
+              "countries": "Japan",
+              "publabel": ""
+            },
+            {
+              "mobyid": 787,
+              "mobyreleaseid": 85144,
+              "year": 2007,
+              "platform": "Wii",
+              "publisher": "Taito Corporation",
+              "developer": "Taito Corporation",
+              "countries": "United States",
+              "publabel": ""
+            },
+            {
+              "mobyid": 787,
+              "mobyreleaseid": 134255,
+              "year": 2007,
+              "platform": "Wii",
+              "publisher": "Taito Corporation",
+              "developer": "Taito Corporation",
+              "countries": "Germany",
+              "publabel": ""
+            },
+            {
+              "mobyid": 787,
+              "mobyreleaseid": 91601,
+              "year": 2008,
+              "platform": "Wii",
+              "publisher": "Taito Corporation",
+              "developer": "Taito Corporation",
+              "countries": "Japan",
+              "publabel": ""
+            },
+            {
+              "mobyid": 787,
+              "mobyreleaseid": 92764,
+              "year": 2008,
+              "platform": "Wii",
+              "publisher": "Taito Corporation",
+              "developer": "Taito Corporation",
+              "countries": "South Korea",
+              "publabel": ""
+            },
+            {
+              "mobyid": 787,
+              "mobyreleaseid": 199842,
+              "year": 2014,
+              "platform": "Wii U",
+              "publisher": "Square Enix Co., Ltd.",
+              "developer": "Taito Corporation",
+              "countries": "Japan",
+              "publabel": ""
+            },
+            {
+              "mobyid": 787,
+              "mobyreleaseid": 206974,
+              "year": 2004,
+              "platform": "Windows",
+              "publisher": "MediaKite Distribution Inc.",
+              "developer": "Taito Corporation",
+              "countries": "Japan",
+              "publabel": ""
+            },
+            {
+              "mobyid": 787,
+              "mobyreleaseid": 33950,
+              "year": 1987,
+              "platform": "ZX Spectrum",
+              "publisher": "Firebird Software",
+              "developer": "Taito Corporation",
+              "countries": "United Kingdom",
+              "publabel": ""
+            },
+            {
+              "mobyid": 787,
+              "mobyreleaseid": 138927,
+              "year": 1991,
+              "platform": "ZX Spectrum",
+              "publisher": "Ocean Software Ltd.",
+              "developer": "Taito Corporation",
+              "countries": "United Kingdom",
+              "publabel": "Hit Squad, The"
+            },
+            {
+              "mobyid": 787,
+              "mobyreleaseid": 501929,
+              "year": 2020,
+              "platform": "iPad",
+              "publisher": "Mobirix Corporation",
+              "developer": "Taito Corporation",
+              "countries": "Worldwide",
+              "publabel": ""
+            },
+            {
+              "mobyid": 787,
+              "mobyreleaseid": 501930,
+              "year": 2020,
+              "platform": "iPhone",
+              "publisher": "Mobirix Corporation",
+              "developer": "Taito Corporation",
+              "countries": "Worldwide",
+              "publabel": ""
+            }
+          ]
+        },
+        {
+          "mobyid": 10734,
+          "title": "Classic Bubble Bobble",
+          "sourceUrl": "https://www.mobygames.com/game/10734/",
+          "genres": [
+            "Action"
+          ],
+          "alternativeTitles": [
+            {
+              "title": "Bubble Bobble",
+              "info": "In-game title"
+            },
+            {
+              "title": "Taito Memorial: Bubble Bobble",
+              "info": "Japanese title"
+            }
+          ],
+          "platformMatch": false,
+          "matchingReleaseIds": [],
+          "releases": [
+            {
+              "mobyid": 10734,
+              "mobyreleaseid": 20919,
+              "year": 1999,
+              "platform": "Game Boy Color",
+              "publisher": "Metro3D, Inc.",
+              "developer": "Taito Corporation",
+              "countries": "United States",
+              "publabel": ""
+            },
+            {
+              "mobyid": 10734,
+              "mobyreleaseid": 486042,
+              "year": 1999,
+              "platform": "Game Boy Color",
+              "publisher": "Nekogumi",
+              "developer": "Taito Corporation",
+              "countries": "Japan",
+              "publabel": ""
+            },
+            {
+              "mobyid": 10734,
+              "mobyreleaseid": 486043,
+              "year": 1999,
+              "platform": "Game Boy Color",
+              "publisher": "Taito Corporation",
+              "developer": "Taito Corporation",
+              "countries": "France,  Germany,  United Kingdom",
+              "publabel": ""
+            }
+          ]
+        },
+        {
+          "mobyid": 141704,
+          "title": "Bubble Bobble",
+          "sourceUrl": "https://www.mobygames.com/game/141704/",
+          "genres": [
+            "Action"
+          ],
+          "alternativeTitles": [
+            {
+              "title": "Dragon Maze",
+              "info": "Brazilian SEGA Master System title"
+            },
+            {
+              "title": "Final Bubble Bobble",
+              "info": "Japanese SEGA Master System title"
+            }
+          ],
+          "platformMatch": false,
+          "matchingReleaseIds": [],
+          "releases": [
+            {
+              "mobyid": 141704,
+              "mobyreleaseid": 635014,
+              "year": 2024,
+              "platform": "Nintendo Switch",
+              "publisher": "Taito Corporation",
+              "developer": "Taito Corporation",
+              "countries": "Japan",
+              "publabel": ""
+            },
+            {
+              "mobyid": 141704,
+              "mobyreleaseid": 219157,
+              "year": 1988,
+              "platform": "SEGA Master System",
+              "publisher": "SEGA Enterprises Ltd.",
+              "developer": "Taito Corporation",
+              "countries": "Japan",
+              "publabel": ""
+            },
+            {
+              "mobyid": 141704,
+              "mobyreleaseid": 12415,
+              "year": 1991,
+              "platform": "SEGA Master System",
+              "publisher": "SEGA Enterprises Ltd.",
+              "developer": "Taito Corporation",
+              "countries": "Belgium,  Finland,  France,  Germany,  Italy,  The Netherlands,  Spain,  Sweden,  United Kingdom",
+              "publabel": ""
+            },
+            {
+              "mobyid": 141704,
+              "mobyreleaseid": 120581,
+              "year": 1992,
+              "platform": "SEGA Master System",
+              "publisher": "Tec Toy Indústria de Brinquedos S.A.",
+              "developer": "Taito Corporation",
+              "countries": "Brazil",
+              "publabel": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "gameId": "miami-vice-c64",
+      "title": "Miami Vice",
+      "platforms": [
+        "C64"
+      ],
+      "status": "needs-identity-review",
+      "candidates": [
+        {
+          "mobyid": 4036,
+          "title": "Miami Vice",
+          "sourceUrl": "https://www.mobygames.com/game/4036/",
+          "genres": [
+            "Action",
+            "Racing / Driving"
+          ],
+          "alternativeTitles": [],
+          "platformMatch": false,
+          "matchingReleaseIds": [],
+          "releases": [
+            {
+              "mobyid": 4036,
+              "mobyreleaseid": 50895,
+              "year": 1989,
+              "platform": "Atari ST",
+              "publisher": "Capstone Software",
+              "developer": "Capstone Software",
+              "countries": "United States",
+              "publabel": ""
+            },
+            {
+              "mobyid": 4036,
+              "mobyreleaseid": 4716,
+              "year": 1989,
+              "platform": "DOS",
+              "publisher": "Capstone Software",
+              "developer": "Capstone Software",
+              "countries": "United States",
+              "publabel": ""
+            }
+          ]
+        },
+        {
+          "mobyid": 27243,
+          "title": "Miami Vice",
+          "sourceUrl": "https://www.mobygames.com/game/27243/",
+          "genres": [
+            "Action"
+          ],
+          "alternativeTitles": [],
+          "platformMatch": false,
+          "matchingReleaseIds": [],
+          "releases": [
+            {
+              "mobyid": 27243,
+              "mobyreleaseid": 73220,
+              "year": 2004,
+              "platform": "PlayStation 2",
+              "publisher": "Davilex Games B.V.",
+              "developer": "Atomic Planet Entertainment Limited",
+              "countries": "United Kingdom",
+              "publabel": ""
+            },
+            {
+              "mobyid": 27243,
+              "mobyreleaseid": 73221,
+              "year": 2004,
+              "platform": "Windows",
+              "publisher": "Davilex Games B.V.",
+              "developer": "Atomic Planet Entertainment Limited",
+              "countries": "United Kingdom",
+              "publabel": ""
+            },
+            {
+              "mobyid": 27243,
+              "mobyreleaseid": 73450,
+              "year": 2005,
+              "platform": "Windows",
+              "publisher": "Davilex Games B.V.",
+              "developer": "Atomic Planet Entertainment Limited",
+              "countries": "Brazil",
+              "publabel": ""
+            },
+            {
+              "mobyid": 27243,
+              "mobyreleaseid": 90857,
+              "year": 2005,
+              "platform": "Windows",
+              "publisher": "1C Company",
+              "developer": "Atomic Planet Entertainment Limited",
+              "countries": "Russia",
+              "publabel": ""
+            },
+            {
+              "mobyid": 27243,
+              "mobyreleaseid": 73222,
+              "year": 2004,
+              "platform": "Xbox",
+              "publisher": "Davilex Games B.V.",
+              "developer": "Atomic Planet Entertainment Limited",
+              "countries": "United Kingdom",
+              "publabel": ""
+            },
+            {
+              "mobyid": 27243,
+              "mobyreleaseid": 105747,
+              "year": 2004,
+              "platform": "Xbox",
+              "publisher": "Davilex Games B.V.",
+              "developer": "Atomic Planet Entertainment Limited",
+              "countries": "France",
+              "publabel": ""
+            }
+          ]
+        },
+        {
+          "mobyid": 31581,
+          "title": "Miami Vice",
+          "sourceUrl": "https://www.mobygames.com/game/31581/",
+          "genres": [
+            "Action",
+            "Racing / Driving"
+          ],
+          "alternativeTitles": [],
+          "platformMatch": true,
+          "matchingReleaseIds": [
+            94292,
+            84287
+          ],
+          "releases": [
+            {
+              "mobyid": 31581,
+              "mobyreleaseid": 84653,
+              "year": 1986,
+              "platform": "Amstrad CPC",
+              "publisher": "Ocean Software Ltd.",
+              "developer": "Canvas Software",
+              "countries": "France,  Germany,  United Kingdom",
+              "publabel": ""
+            },
+            {
+              "mobyid": 31581,
+              "mobyreleaseid": 94292,
+              "year": 1986,
+              "platform": "Commodore 64",
+              "publisher": "Ocean Software Ltd.",
+              "developer": "Canvas Software",
+              "countries": "United Kingdom",
+              "publabel": ""
+            },
+            {
+              "mobyid": 31581,
+              "mobyreleaseid": 84287,
+              "year": 1989,
+              "platform": "Commodore 64",
+              "publisher": "Ocean Software Ltd.",
+              "developer": "Canvas Software",
+              "countries": "Germany,  Italy,  United Kingdom",
+              "publabel": "Hit Squad, The"
+            },
+            {
+              "mobyid": 31581,
+              "mobyreleaseid": 84654,
+              "year": 1986,
+              "platform": "ZX Spectrum",
+              "publisher": "Ocean Software Ltd.",
+              "developer": "Canvas Software",
+              "countries": "France,  United Kingdom",
+              "publabel": ""
+            },
+            {
+              "mobyid": 31581,
+              "mobyreleaseid": 260989,
+              "year": 1989,
+              "platform": "ZX Spectrum",
+              "publisher": "Ocean Software Ltd.",
+              "developer": "Canvas Software",
+              "countries": "United Kingdom",
+              "publabel": "Hit Squad, The"
             }
           ]
         }

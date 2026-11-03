@@ -12,7 +12,9 @@ export function sectionLinks(video, config) {
 }
 
 export function videoHref(video, config, issueRoute) {
-  const route = issueRoute ?? video.magazines.find((magazine) => magazine.issue?.route)?.issue.route ?? video.games[0]?.route ?? video.detailRoute;
+  // Eigene Detailseiten (z. B. re.consider) behalten ihre Adresse; sonst spielt die Spielseite die Videos.
+  const route = issueRoute ?? video.magazines.find((magazine) => magazine.issue?.route)?.issue.route
+    ?? video.detailRoute ?? video.games[0]?.route;
   return route ? `${config.href(route)}#video-${video.id}` : video.url;
 }
 

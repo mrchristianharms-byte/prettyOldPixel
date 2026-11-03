@@ -811,6 +811,7 @@ ${homeOverview(model, config, filters)}`,
   }, model.news);
 
   renderMagazinePages(model, config, add);
+  const gameById = new Map(model.games.map((game) => [game.id, game]));
   for (const video of model.videos.filter((video) => video.detailRoute)) {
     const pageConfig = config.forPage(video.detailRoute);
     const section = video.blaetterabend
@@ -823,8 +824,10 @@ ${homeOverview(model, config, filters)}`,
         : `${video.title}: ${section.name} bei Pretty Old Pixel.`,
       crumbs: [root, section, { route: video.detailRoute, name: video.title }],
       schema: videoSchema(video, pageConfig, video.detailRoute),
-      body: seriesVideos([video], video.title, pageConfig, null,
-        video.blaetterabend ? `<p>${escapeHtml(video.title)}: klassische Computer- und Spielezeitschriften im Blätterabend von Pretty Old Pixel.</p>` : ""),
+      body: seriesVideos([video], video.title, pageConfig, null, video.blaetterabend
+        ? `<p>${escapeHtml(video.title)}: klassische Computer- und Spielezeitschriften im Blätterabend von Pretty Old Pixel.</p>`
+        : video.games.map((entry) => gameById.get(entry.id)).filter(Boolean)
+          .map((game) => renderGameMetadata(game, pageConfig, filters)).join("")),
     }, [video]);
   }
   renderGamePages(model, config, add, filters, statistics);

@@ -18,5 +18,6 @@
   "jagged-alliance-ms-dos": { "mobyid": 1038, "reviewedAt": "2026-10-18", "note": "Erstes Einzelspiel statt Reihe; direkte ID und DOS-Releases geprüft." },
   "master-of-magic-ms-dos": { "mobyid": 200, "reviewedAt": "2026-10-18", "note": "Originalspiel von SimTex statt Remake; direkte ID und DOS-Releases geprüft." },
   "paradroid-c64": { "mobyid": 9272, "reviewedAt": "2026-10-18", "note": "C64-Original statt Paradroid 90; direkte ID und Commodore-64-Releases geprüft. Genre bleibt die eigene Klassifikation von MobyGames." },
-  "wing-commander-ms-dos": { "mobyid": 3, "reviewedAt": "2026-10-18", "note": "Erstes Spiel für DOS; direkte ID 3 statt gleichnamigem Kandidaten 63394. Deluxe-ID 4027 wird nicht übernommen." }
+  "wing-commander-ms-dos": { "mobyid": 3, "reviewedAt": "2026-10-18", "note": "Erstes Spiel für DOS; direkte ID 3 statt gleichnamigem Kandidaten 63394. Deluxe-ID 4027 wird nicht übernommen." },
+  "dragon-s-lair-ms-dos": { "mobyid": 1503, "reviewedAt": "2026-11-03", "note": "re.consider behandelt die DOS-Ausgabe von 1993 (ReadySoft Incorporated); die DOS-Ausgabe von 1989 (Sullivan Bluth Interactive Media) scheidet aus." }
 }
