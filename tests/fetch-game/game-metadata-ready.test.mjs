@@ -164,6 +164,35 @@ test("belegte Firmen-Ergänzungen behalten ihre Quelle bis zur Offline-Prüfung"
   await assert.rejects(buildReadyGameMetadata(options), /Ungültige Quelle/u);
 });
 
+test("Entscheidungen ergänzen fehlende Entwicklerangaben mit belegter Quelle", async (t) => {
+  const { options, report } = await fixture(t);
+  const candidate = report.games[0].candidates[0];
+  candidate.releases[0].developer = null;
+  candidate.releases[1].developer = "Original";
+  await writeJson(path.join(options.cacheDir, "local-dump/report.json"), report);
+  options.reviewedDecisions = { game: {
+    mobyid: 10, reviewedAt: "2026-11-03", companies: { developer: "Nachgeprüft" },
+    note: "Entwickler aus den Credits nachgeprüft; der Dump enthält keine Angabe.",
+  } };
+  const record = (await buildReadyGameMetadata(options)).games.find((entry) => entry.gameId === "game");
+  assert.deepEqual(record.data.releases.map((release) => release.developer), ["Nachgeprüft", "Original"]);
+  assert.ok(!("companySource" in record.data.evidence));
+  assert.equal(record.data.quality.basis, "single-source");
+  assert.equal(record.data.identity.basis, "reviewed-dump-decision");
+  options.reviewedDecisions.game.companies.source = { url: "https://example.org/credits/", label: "Credits" };
+  await buildReadyGameMetadata(options);
+  const sourced = (await loadReadyGameMetadata(options)).get("game");
+  assert.deepEqual(sourced.data.evidence.companySource,
+    { url: "https://example.org/credits/", label: "Credits", reviewedAt: "2026-11-03" });
+  assert.equal(sourced.data.quality.basis, "supplemented-source");
+  options.reviewedDecisions.game.companies = { developer: "   " };
+  await assert.rejects(buildReadyGameMetadata(options), /Ungültige Firmen-Ergänzung/u);
+  options.reviewedDecisions.game.companies = { developer: 42 };
+  await assert.rejects(buildReadyGameMetadata(options), /Ungültige Firmen-Ergänzung/u);
+  options.reviewedDecisions.game.companies = { developer: "X", source: { url: "notaurl", label: "x" } };
+  await assert.rejects(buildReadyGameMetadata(options), /Ungültige Firmen-Ergänzung/u);
+});
+
 test("Patrizier erhält das freigegebene Dump-Jahr 1992 ohne Plattformverlust", async () => {
   const record = (await loadReadyGameMetadata()).get("der-patrizier");
   assert.equal(record.data.releaseYear, 1992);

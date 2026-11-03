@@ -56,6 +56,12 @@ export async function buildReadyGameMetadata({
     if (decision) {
       check(Number.isSafeInteger(decision.mobyid) && /^\d{4}-\d{2}-\d{2}$/u.test(decision.reviewedAt)
         && typeof decision.note === "string" && decision.note.trim(), `Ungültige Entscheidung: ${game.id}.`);
+      check(decision.companies === undefined || (typeof decision.companies === "object" && decision.companies !== null
+        && typeof decision.companies.developer === "string" && decision.companies.developer.trim()
+        && (decision.companies.source === undefined || (typeof decision.companies.source === "object"
+          && decision.companies.source !== null && httpUrl(decision.companies.source?.url)
+          && typeof decision.companies.source.label === "string" && decision.companies.source.label.trim()))),
+      `Ungültige Firmen-Ergänzung: ${game.id}.`);
       const candidate = candidates.find((entry) => entry.mobyid === decision.mobyid);
       check(candidate && game.platforms.length > 0
         && game.platforms.every((platform) => candidate.releases.some((release) => platformMatches([platform], release.platform))),
@@ -73,6 +79,12 @@ export async function buildReadyGameMetadata({
     const candidate = candidates.find((entry) => entry.mobyid === selection.mobyid);
     const releases = candidate.releases.filter((release) => selection.matchingReleaseIds.includes(release.mobyreleaseid))
       .map(readyRelease);
+    if (decision?.companies?.developer) {
+      for (const release of releases) if (release.developer === null) release.developer = decision.companies.developer.trim();
+    }
+    // Geprüfte Firmen-Ergänzungen können eine Quelle zitieren; ohne Angabe bleibt der Dump-Beleg.
+    const companySource = candidate.companySource ?? (decision?.companies?.source
+      ? { ...decision.companies.source, reviewedAt: decision.reviewedAt } : null);
     const year = selectedReleaseYear(selection.platforms, releases, decision, game.id);
     return {
       ...base, status: "ready", reason: decision ? "reviewed-source-scoped-data" : "policy-selected-source-scoped-data",
@@ -83,8 +95,8 @@ export async function buildReadyGameMetadata({
         scope: { platforms: selection.platforms, platformBasis: selection.platformBasis },
         evidence: { sourceUrl: `https://www.mobygames.com/game/${candidate.mobyid}/`,
           dumpHash: report.source.sha256, reportHash, importedAt: report.importedAt,
-          ...(candidate.companySource ? { companySource: candidate.companySource } : {}) },
-        quality: { basis: candidate.companySource ? "supplemented-source" : "single-source", usage: "attributed-source-data",
+          ...(companySource ? { companySource } : {}) },
+        quality: { basis: companySource ? "supplemented-source" : "single-source", usage: "attributed-source-data",
           companyIdentities: "reviewed-display-aliases", credits: "not-available" },
         releaseYear: year,
         genres: [...new Set(candidate.genres)], releases,

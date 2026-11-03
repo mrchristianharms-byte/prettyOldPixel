@@ -1,8 +1,8 @@
 {
   "version": 3,
-  "generatedAt": "2026-11-03T10:55:50.226Z",
+  "generatedAt": "2026-11-03T14:21:54.309Z",
   "catalogueHash": "e905b30ae3b3a57dee9fa2ccc799982f25b22f9589a46607c6c97550c80681fa",
-  "decisionsHash": "db6266e8ace8e5e67210dd9e0a4f4e18690d8fd54baa03fc830efed857b05cdb",
+  "decisionsHash": "2d3889ff9169dcc2c8ba978e7935af15702b09bbc2f218b5d74c10cef57f8709",
   "selectionPolicyHash": "c1ab79becbb5258efa667bffbe96df2a3433d2c7f67ba579a9757f37f098a3d4",
   "companyNamesHash": "5cebc68a6e6ea36186db794bed937fbd4efeb1d72f76ead91f9d3f0febede3c7",
   "summary": {
@@ -3736,6 +3736,9 @@
         "Apple II"
       ],
       "selection": {
+        "status": "selected",
+        "reason": "reviewed-dump-decision",
+        "mobyid": 1256,
         "platforms": [
           "Apple II"
         ],
@@ -3743,26 +3746,23 @@
         "consideredIds": [
           1256
         ],
-        "status": "selected",
-        "reason": "unique-title-and-platform",
-        "mobyid": 1256,
+        "identityBasis": "reviewed-dump-decision",
         "matchingReleaseIds": [
           27935,
           92686,
           92687
-        ],
-        "identityBasis": "dump-title-and-platform"
+        ]
       },
       "status": "ready",
-      "reason": "policy-selected-source-scoped-data",
+      "reason": "reviewed-source-scoped-data",
       "data": {
         "identity": {
           "provider": "mobygames",
           "id": 1256,
-          "basis": "dump-title-and-platform",
+          "basis": "reviewed-dump-decision",
           "scope": "game",
-          "reviewedAt": "2026-10-20",
-          "note": "Ausschließlich lokaler Games-Dump: bekannte Plattformen erhalten; bei offener Plattform DOS, dann Amiga, dann C64, dann NES, dann SNES. Verbleibende Mehrdeutigkeit bleibt unverifiziert."
+          "reviewedAt": "2026-11-03",
+          "note": "Entwicklerangabe Richard Garriott vom Kanalbetreiber ergänzt; der lokale Dump enthält für den Titel keine Entwicklerangabe."
         },
         "scope": {
           "platforms": [
@@ -3791,7 +3791,7 @@
             "sourceReleaseId": 27935,
             "platform": "Apple II",
             "year": 1980,
-            "developer": null,
+            "developer": "Richard Garriott",
             "publisher": "California Pacific Computer Co.",
             "sourceDeveloper": "",
             "countries": "United States",
@@ -3801,7 +3801,7 @@
             "sourceReleaseId": 92686,
             "platform": "Apple II",
             "year": 1980,
-            "developer": null,
+            "developer": "Richard Garriott",
             "publisher": null,
             "sourceDeveloper": "",
             "sourcePublisher": "",
@@ -3812,7 +3812,7 @@
             "sourceReleaseId": 92687,
             "platform": "Apple II",
             "year": 1981,
-            "developer": null,
+            "developer": "Richard Garriott",
             "publisher": "California Pacific Computer Co.",
             "sourceDeveloper": "",
             "countries": "United States",
@@ -5850,6 +5850,9 @@
         "C64"
       ],
       "selection": {
+        "status": "selected",
+        "reason": "reviewed-dump-decision",
+        "mobyid": 29107,
         "platforms": [
           "C64"
         ],
@@ -5857,25 +5860,22 @@
         "consideredIds": [
           29107
         ],
-        "status": "selected",
-        "reason": "unique-title-and-platform",
-        "mobyid": 29107,
+        "identityBasis": "reviewed-dump-decision",
         "matchingReleaseIds": [
           78157,
           461637
-        ],
-        "identityBasis": "dump-title-and-platform"
+        ]
       },
       "status": "ready",
-      "reason": "policy-selected-source-scoped-data",
+      "reason": "reviewed-source-scoped-data",
       "data": {
         "identity": {
           "provider": "mobygames",
           "id": 29107,
-          "basis": "dump-title-and-platform",
+          "basis": "reviewed-dump-decision",
           "scope": "game",
-          "reviewedAt": "2026-10-20",
-          "note": "Ausschließlich lokaler Games-Dump: bekannte Plattformen erhalten; bei offener Plattform DOS, dann Amiga, dann C64, dann NES, dann SNES. Verbleibende Mehrdeutigkeit bleibt unverifiziert."
+          "reviewedAt": "2026-11-03",
+          "note": "Entwicklerangabe Chartec vom Kanalbetreiber ergänzt; der lokale Dump enthält für den Titel keine Entwicklerangabe."
         },
         "scope": {
           "platforms": [
@@ -5904,7 +5904,7 @@
             "sourceReleaseId": 78157,
             "platform": "Commodore 64",
             "year": 1984,
-            "developer": null,
+            "developer": "Chartec",
             "publisher": "Virgin",
             "sourceDeveloper": "",
             "sourcePublisher": "Virgin Games, Ltd.",
@@ -5915,7 +5915,7 @@
             "sourceReleaseId": 461637,
             "platform": "Commodore 64",
             "year": 1984,
-            "developer": null,
+            "developer": "Chartec",
             "publisher": "Virgin",
             "sourceDeveloper": "",
             "sourcePublisher": "Virgin Games, Inc.",
@@ -6167,6 +6167,9 @@
         "MS-DOS"
       ],
       "selection": {
+        "status": "selected",
+        "reason": "reviewed-dump-decision",
+        "mobyid": 1537,
         "platforms": [
           "MS-DOS"
         ],
@@ -6174,25 +6177,22 @@
         "consideredIds": [
           1537
         ],
-        "status": "selected",
-        "reason": "unique-title-and-platform",
-        "mobyid": 1537,
+        "identityBasis": "reviewed-dump-decision",
         "matchingReleaseIds": [
           235465,
           267660
-        ],
-        "identityBasis": "dump-title-and-platform"
+        ]
       },
       "status": "ready",
-      "reason": "policy-selected-source-scoped-data",
+      "reason": "reviewed-source-scoped-data",
       "data": {
         "identity": {
           "provider": "mobygames",
           "id": 1537,
-          "basis": "dump-title-and-platform",
+          "basis": "reviewed-dump-decision",
           "scope": "game",
-          "reviewedAt": "2026-10-20",
-          "note": "Ausschließlich lokaler Games-Dump: bekannte Plattformen erhalten; bei offener Plattform DOS, dann Amiga, dann C64, dann NES, dann SNES. Verbleibende Mehrdeutigkeit bleibt unverifiziert."
+          "reviewedAt": "2026-11-03",
+          "note": "Entwicklerangabe MicroProse vom Kanalbetreiber ergänzt; der lokale Dump enthält für den Titel keine Entwicklerangabe."
         },
         "scope": {
           "platforms": [
@@ -6221,7 +6221,7 @@
             "sourceReleaseId": 235465,
             "platform": "DOS",
             "year": 1994,
-            "developer": null,
+            "developer": "MicroProse",
             "publisher": "MicroProse",
             "sourceDeveloper": "",
             "sourcePublisher": "MicroProse Software, Inc.",
@@ -6232,7 +6232,7 @@
             "sourceReleaseId": 267660,
             "platform": "DOS",
             "year": 1995,
-            "developer": null,
+            "developer": "MicroProse",
             "publisher": "MicroProse",
             "sourceDeveloper": "",
             "sourcePublisher": "MicroProse Software, Inc.",
@@ -10774,6 +10774,9 @@
         "C64"
       ],
       "selection": {
+        "status": "selected",
+        "reason": "reviewed-dump-decision",
+        "mobyid": 53055,
         "platforms": [
           "C64"
         ],
@@ -10781,24 +10784,21 @@
         "consideredIds": [
           53055
         ],
-        "status": "selected",
-        "reason": "unique-title-and-platform",
-        "mobyid": 53055,
+        "identityBasis": "reviewed-dump-decision",
         "matchingReleaseIds": [
           149289
-        ],
-        "identityBasis": "dump-title-and-platform"
+        ]
       },
       "status": "ready",
-      "reason": "policy-selected-source-scoped-data",
+      "reason": "reviewed-source-scoped-data",
       "data": {
         "identity": {
           "provider": "mobygames",
           "id": 53055,
-          "basis": "dump-title-and-platform",
+          "basis": "reviewed-dump-decision",
           "scope": "game",
-          "reviewedAt": "2026-10-20",
-          "note": "Ausschließlich lokaler Games-Dump: bekannte Plattformen erhalten; bei offener Plattform DOS, dann Amiga, dann C64, dann NES, dann SNES. Verbleibende Mehrdeutigkeit bleibt unverifiziert."
+          "reviewedAt": "2026-11-03",
+          "note": "Entwicklerangabe Ralf Glau vom Kanalbetreiber ergänzt; der lokale Dump enthält für den Titel keine Entwicklerangabe."
         },
         "scope": {
           "platforms": [
@@ -10827,7 +10827,7 @@
             "sourceReleaseId": 149289,
             "platform": "Commodore 64",
             "year": 1986,
-            "developer": null,
+            "developer": "Ralf Glau",
             "publisher": "ariolasoft GmbH",
             "sourceDeveloper": "",
             "countries": "Germany",
@@ -16286,5 +16286,5 @@
       }
     }
   ],
-  "contentHash": "eff74bb734ee500cfd050df73bb5b08f0e1d123830351feee1b906e7c6e59905"
+  "contentHash": "a84f457e81600dbede8c2661018045a0b908ff7bf510b4fca32e063f28926809"
 }
