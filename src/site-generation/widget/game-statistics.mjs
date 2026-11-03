@@ -48,11 +48,11 @@ function yearChartEntries(stats) {
 
 export function gameStatisticsYearSvg(stats, { href = yearChartHref } = {}) {
   const width = 840;
-  const height = 420;
+  const height = 400;
   const left = 58;
   const right = 22;
   const top = 28;
-  const bottom = 118;
+  const bottom = 98;
   const plotWidth = width - left - right;
   const plotHeight = height - top - bottom;
   const entries = yearChartEntries(stats);
@@ -97,7 +97,6 @@ ${yearTicks.map(({ year, row }) => {
   if (!yearEntriesByYear.has(year)) return label;
   return `<a class="year-chart-link" href="${escapeHtml(href(`spiele/jahr/${year}/`))}" aria-label="Spiele aus dem Erscheinungsjahr ${year} anzeigen">${label}</a>`;
 }).join("")}
-<text class="chart-axis-title" x="${width / 2}" y="${height - 4}" text-anchor="middle">Erscheinungsjahr</text>
 <text class="chart-axis-title" transform="translate(15 ${top + plotHeight / 2}) rotate(-90)" text-anchor="middle">Spiele</text></svg>`;
 }
 
@@ -144,6 +143,13 @@ export function publisherStatisticsSvg(stats, { filters, href } = {}) {
   });
 }
 
+export function developerStatisticsSvg(stats, { filters, href } = {}) {
+  return categoryChartSvg(stats.developers.slice(0, 10), {
+    idPrefix: "developer", title: "Spiele je Entwickler (Top 10)", field: "developer", filters, href,
+    emptyDescription: "Keine freigegebenen Entwicklerangaben vorhanden.",
+  });
+}
+
 export function gameStatisticsMarkup(stats, { href, filters, yearChartHref, showHeading = true }) {
   const chartEntries = yearChartEntries(stats);
   const chartGameCount = chartEntries.reduce((sum, entry) => sum + entry.count, 0);
@@ -169,6 +175,12 @@ ${stats.unknownYearGames.length ? `<p>Erscheinungsjahr unbekannt: ${number(stats
 <p>${number(stats.genreKnown)} von ${number(stats.total)} Spielen haben Genreangaben; ${number(stats.genreUnknown)} ${stats.genreUnknown === 1 ? "Spiel bleibt" : "Spiele bleiben"} ohne bekannte Genreangabe. Ein Spiel kann mehreren Genres zugeordnet sein.</p>
 <p>Viele Spiele teilen sich Genreangaben mit mindestens einem weiteren Spiel.</p>
 ${stats.genres.length ? `<figure class="statistics-chart">${genreStatisticsSvg(stats, { filters, href })}<figcaption>Jedes Spiel wird je Genre höchstens einmal gezählt.</figcaption></figure>` : "<p>Es liegen keine freigegebenen Genreangaben vor.</p>"}</section>
+<section aria-labelledby="statistik-entwickler"><h2 id="statistik-entwickler">Entwickler</h2>
+<p>${number(stats.developerKnown)} von ${number(stats.total)} Spielen haben Entwicklerangaben; ${number(stats.developerUnknown)} ${stats.developerUnknown === 1 ? "Spiel bleibt" : "Spiele bleiben"} ohne bekannte Entwicklerangabe.</p>
+${stats.developers.length ? `<figure class="statistics-chart">${developerStatisticsSvg(stats, { filters, href })}<figcaption>Top 10; je Entwickler wird unabhängig von regionalen Doppelungen jedes Spiel nur einmal gezählt.</figcaption></figure>`
+      : "<p>Es liegen keine freigegebenen Entwicklerangaben vor.</p>"}
+${stats.developerUnknownGames.length ? `<p>Entwicklerangabe unbekannt: ${number(stats.developerUnknownGames.length)} ${stats.developerUnknownGames.length === 1 ? "Spiel" : "Spiele"}.</p>
+<details class="statistics-more"><summary>Spiele ohne bekannte Entwicklerangabe ansehen</summary>${gameList(stats.developerUnknownGames, href)}</details>` : ""}</section>
 <section aria-labelledby="statistik-publisher"><h2 id="statistik-publisher">Publisher</h2>
 <p>${number(stats.publisherKnown)} von ${number(stats.total)} Spielen haben Publisherangaben; ${number(stats.publisherUnknown)} ${stats.publisherUnknown === 1 ? "Spiel bleibt" : "Spiele bleiben"} ohne bekannte Publisherangabe.</p>
 ${stats.publishers.length ? `<figure class="statistics-chart">${publisherStatisticsSvg(stats, { filters, href })}<figcaption>Top 10; je Publisher wird unabhängig von regionalen Doppelungen jedes Spiel nur einmal gezählt.</figcaption></figure>`

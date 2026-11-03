@@ -350,3 +350,11 @@ Bei der Umsetzung sind mindestens folgende Prüfungen erforderlich:
   interne Links und bestehende Build-Größenbudgets werden geprüft.
 - Die Untersuchung dieser ADR ist ein belegter Snapshot, kein Test mit
   dauerhaft festgeschriebener Kataloggröße von 148 Spielen.
+
+
+## Ergänzung vom 2026-11-03: Entwicklerdiagramm
+
+Die Statistikseite ergänzt einen Abschnitt „Entwickler“ analog zum
+Publisher-Abschnitt: Abdeckung der Angaben und Balkendiagramm der Top 10,
+dessen Beschriftungen auf die Entwicklerfilterlisten bzw. bei
+Einzelzuordnungen zur Spieleseite verlinken.

@@ -56,6 +56,7 @@ export function gameStatistics(sourceGames) {
   })).sort((a, b) => a.year - b.year);
   const genreStats = groupedValues(games, "genre");
   const publisherStats = groupedValues(games, "publisher");
+  const developerStats = groupedValues(games, "developer");
   const publisherCounts = new Map(publisherStats.entries.map((entry) => [entry.name, entry]));
   const combinationGroups = new Map();
   for (const game of games) {
@@ -87,6 +88,9 @@ export function gameStatistics(sourceGames) {
     genreConnections: pairMetrics(genreStats.entries),
     publishers: publisherStats.entries, publisherKnown: publisherStats.knownGameIds.size,
     publisherUnknown: games.length - publisherStats.knownGameIds.size,
+    developers: developerStats.entries, developerKnown: developerStats.knownGameIds.size,
+    developerUnknown: games.length - developerStats.knownGameIds.size,
+    developerUnknownGames: sortedGames(games.filter((game) => !developerStats.knownGameIds.has(game.id))),
     publisherConnections: pairMetrics(publisherStats.entries),
     combinations,
   };

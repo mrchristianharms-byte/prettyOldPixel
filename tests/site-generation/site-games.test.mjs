@@ -160,6 +160,10 @@ test("rendert Statistikroute, Quernavigation, Markdown und das lokale Jahres-SVG
   assert.match(statistics.html, /<svg xmlns="http:\/\/www\.w3\.org\/2000\/svg"[^>]*role="img"/u);
   assert.match(statistics.html, /Im Diagramm für 1980–1999 werden 1 Jahr mit mindestens zwei Spielen gezeigt: 2 Spiele/u);
   assert.match(statistics.html, /<a class="year-chart-link" href="\.\.\/jahr\/1990\/"/u);
+  assert.match(statistics.html, /<h2 id="statistik-entwickler">Entwickler<\/h2>/u);
+  assert.match(statistics.html, /<title id="developer-chart-title">Spiele je Entwickler \(Top 10\)<\/title>/u);
+  assert.doesNotMatch(statistics.html, /Entwicklerangabe unbekannt/u);
+  assert.match(statistics.html, /<a href="\.\.\/entwickler\/studio\/"><text class="chart-axis-label"[^>]*>Studio<\/text><\/a>/u);
   assert.match(statistics.html, /<a class="year-chart-link" href="\.\.\/jahr\/1990\/"[^>]*><text class="chart-axis-label"[^>]*>1990<\/text><\/a>/u);
   assert.doesNotMatch(statistics.html, /href="\.\.\/jahr\/1980\/"/u);
   assert.doesNotMatch(statistics.html, /year-statistics/u);

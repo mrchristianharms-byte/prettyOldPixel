@@ -94,6 +94,7 @@ test("Spielestatistiken der Offline-App verlinken die Jahre zu den Jahresfiltern
   assert.match(view.body, /href="#\/spiele\/jahr\/[0-9]+\/"/u);
   assert.match(view.body, /Gemeinsamkeiten zwischen Genre und Publisher/u);
   assert.match(view.body, /aria-current="page">Spielestatistiken/u);
+  assert.match(view.body, /<h2 id="statistik-entwickler">Entwickler<\/h2>/u);
   assert.ok(view.body.includes(`${model.games.length} von ${model.games.length}`));
 });
 

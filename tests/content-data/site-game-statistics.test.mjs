@@ -2,24 +2,24 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { gameStatistics } from "../../src/content-data/game-statistics.mjs";
 import {
-  gameStatisticsMarkup, gameStatisticsYearSvg, genreStatisticsSvg,
-  publisherStatisticsSvg,
+  developerStatisticsSvg, gameStatisticsMarkup, gameStatisticsYearSvg,
+  genreStatisticsSvg, publisherStatisticsSvg,
 } from "../../src/site-generation/widget/game-statistics.mjs";
 
-const game = (id, name, releaseYear, genres, publishers, status = "ready") => ({
+const game = (id, name, releaseYear, genres, publishers, status = "ready", developers = []) => ({
   id, name, route: `spiele/${id}/`, releaseYear,
   metadata: status === "ready" ? {
     status, data: {
       genres,
-      releases: publishers.map((publisher) => ({ publisher })),
+      releases: publishers.map((publisher, index) => ({ publisher, developer: developers[index] ?? null })),
     },
   } : { status, data: null },
 });
 
 const games = [
-  game("a", "Alpha", 1980, ["Action", "Action", "Simulation"], ["Acme", "Acme"]),
-  game("b", "Beta", 1980, ["Action"], ["Acme", "Rival"]),
-  game("c", "Gamma", 1982, ["Action"], ["Rival"]),
+  game("a", "Alpha", 1980, ["Action", "Action", "Simulation"], ["Acme", "Acme"], "ready", ["Devco", "Devco"]),
+  game("b", "Beta", 1980, ["Action"], ["Acme", "Rival"], "ready", ["Devco", "Rivalsoft"]),
+  game("c", "Gamma", 1982, ["Action"], ["Rival"], "ready", ["Rivalsoft"]),
   game("d", "Delta", 1984, ["Puzzle", "Simulation"], []),
   game("e", "Epsilon", null, [], [], "blocked"),
 ];
@@ -44,6 +44,11 @@ test("aggregates each game and metadata value once, preserving unknown and singl
     ["Acme", 2], ["Rival", 2],
   ]);
   assert.deepEqual([statistics.publisherKnown, statistics.publisherUnknown], [3, 2]);
+  assert.deepEqual(statistics.developers.map(({ name, count }) => [name, count]), [
+    ["Devco", 2], ["Rivalsoft", 2],
+  ]);
+  assert.deepEqual([statistics.developerKnown, statistics.developerUnknown], [3, 2]);
+  assert.deepEqual(statistics.developerUnknownGames.map(({ id }) => id), ["d", "e"]);
   assert.deepEqual(statistics.genreConnections, { connectedGames: 4, sharedPairs: 4 });
   assert.deepEqual(statistics.publisherConnections, { connectedGames: 3, sharedPairs: 2 });
   assert.deepEqual(statistics.combinations.map(({ genre, publisher, count }) => [genre, publisher, count]), [
@@ -56,6 +61,7 @@ test("renders explored groups as linked HTML and SVG with accessible zero-based 
   const filters = new Map([
     ["genre", new Map([["Action", { route: "spiele/genre/action/" }]])],
     ["publisher", new Map([["Acme", { route: "spiele/publisher/acme/" }]])],
+    ["developer", new Map([["Devco", { route: "spiele/entwickler/devco/" }]])],
   ]);
   const href = (route) => `/${route}`;
   const html = gameStatisticsMarkup(statistics, {
@@ -67,7 +73,14 @@ test("renders explored groups as linked HTML and SVG with accessible zero-based 
   assert.doesNotMatch(html, /<a href=[^>]*><text class="chart-axis-label"[^>]*>Simulation<\/text>/u);
   assert.match(html, /<a href="\/spiele\/publisher\/acme\/"><text class="chart-axis-label"[^>]*>Acme<\/text><\/a>/u);
   assert.doesNotMatch(html, /Anteil an allen Spielen/u);
+  assert.match(html, /<a href="\/spiele\/entwickler\/devco\/"><text class="chart-axis-label"[^>]*>Devco<\/text><\/a>/u);
+  assert.match(html, /<title id="developer-chart-title">Spiele je Entwickler \(Top 10\)<\/title>/u);
+  assert.match(html, /<figcaption>Top 10; je Entwickler wird unabhängig von regionalen Doppelungen/u);
   assert.match(html, /Gemeinsame Spiele ansehen/u);
+
+  assert.match(html, /Entwicklerangabe unbekannt: 2 Spiele/u);
+  assert.match(html, /Spiele ohne bekannte Entwicklerangabe ansehen/u);
+  assert.match(html, /href="\/spiele\/d\/">Delta<\/a>/u);
   assert.doesNotMatch(html, /Anteil innerhalb des Publishers/u);
   assert.doesNotMatch(html, /SVG direkt öffnen|Spielpaare/u);
   assert.match(html, /<title id="publisher-chart-title">Spiele je Publisher \(Top 10\)<\/title>/u);
@@ -90,6 +103,11 @@ test("renders explored groups as linked HTML and SVG with accessible zero-based 
     /<a href="\/spiele\/genre\/action\/"><text class="chart-axis-label"[^>]*>Action<\/text><\/a>/u);
   assert.match(publisherStatisticsSvg(statistics, { filters, href }),
     /<a href="\/spiele\/publisher\/acme\/"><text class="chart-axis-label"[^>]*>Acme<\/text><\/a>/u);
+
+  assert.match(developerStatisticsSvg(statistics),
+    /<title id="developer-chart-title">Spiele je Entwickler \(Top 10\)<\/title>[\s\S]*Horizontales Balkendiagramm: Devco: 2, Rivalsoft: 2/u);
+  assert.match(developerStatisticsSvg(statistics, { filters, href }),
+    /<a href="\/spiele\/entwickler\/devco\/"><text class="chart-axis-label"[^>]*>Devco<\/text><\/a>/u);
 });
 
 test("limits the year chart to 1980–1999 and omits singleton and out-of-range years", () => {
