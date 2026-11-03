@@ -734,9 +734,6 @@ function renderSectionPages(model, siteConfig, add) {
       const entries = section.entries.slice((page - 1) * config.pageSize, page * config.pageSize);
       const videos = entries.map((entry) => model.videoById.get(entry.videoId));
       const byVideo = new Map(entries.filter((entry) => entry.topic !== undefined).map((entry) => [entry.videoId, entry]));
-      const highlights = previewList(section.id === "retrospektiven"
-        ? entries.map((entry) => entry.topic)
-        : videos.map((video) => video.title));
       let listing;
       if (section.id === "retrospektiven") {
         const groups = new Map();
@@ -750,9 +747,7 @@ function renderSectionPages(model, siteConfig, add) {
       }
       add({
         route, title: `${section.name}${page > 1 ? ` – Seite ${page}` : ""}`,
-        description: previewDescription(section.id === "retrospektiven"
-          ? `re.trospektive: ${highlights} – entdecke die Geschichte klassischer Video- und Computerspiele Folge für Folge.`
-          : `${section.name}: ${highlights} – neue Beiträge zu Retro-Hardware, Technik und Computerkultur.`),
+        description: previewDescription(section.description),
         crumbs: [{ route: "", name: "Startseite" }, { route: section.route, name: section.name },
           ...(page > 1 ? [{ route, name: `Seite ${page}` }] : [])],
         schema: collectionSchema(videos, config, route),
@@ -804,7 +799,7 @@ ${homeOverview(model, config, filters)}`,
   const newsConfig = config.forPage("news/");
   add({
     route: "news/", title: "News – die 20 neuesten Videos",
-    description: previewDescription(`Neue Videos von Pretty Old Pixel: ${previewList(model.news.slice(0, 2).map((video) => video.title))} – Retrospiele, Blätterabende, Hardware und Gespräche aus der Computerkultur.`),
+    description: "Neue Videos von Pretty Old Pixel: die neuesten Beiträge zu Retrospielen, Blätterabenden, Hardware und Gesprächen aus der Computerkultur.",
     crumbs: [root, { route: "news/", name: "News" }],
     schema: collectionSchema(model.news, newsConfig, "news/"),
     body: `<h1>News – die neuesten Videos</h1><p>Neue Videos von Pretty Old Pixel: Retrospiele, Blätterabende, Hardware und Gespräche aus der Welt der Computer- und Videospiele.</p>${videoList(model.news, newsConfig)}`,

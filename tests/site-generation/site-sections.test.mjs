@@ -242,6 +242,24 @@ test("re.consider ordnet Formatvideos automatisch zu und verwendet paginierte Ne
   assert.deepEqual([...render(input, [definition("hardware", 2)]).pages], original);
 });
 
+test("Bereiche und News hinterlegen stabile SEO-Zusammenfassungen ohne Videotitel", () => {
+  const input = fixture(63);
+  input.videos.videos.forEach((video, index) => { video.title = `Spiel ${index} [re.consider]`; });
+  input.videos.videos[62].title = "Anderes Spiel";
+  const { pages } = render(input, [
+    definition("hardware", 2), definition("interviews", 2), definition("retrospektiven", 2),
+  ]);
+  const meta = (route) => pages.get(`${route}index.html`).html.match(/<meta name="description" content="([^"]+)"/u)[1];
+  assert.equal(meta("reconsider/"), "re.consider: Rückblicke und persönliche Einschätzungen zu klassischen Computer- und Videospielen.");
+  assert.equal(meta("sonstiges/"), "Weitere Videos von Pretty Old Pixel: Fundstücke, besondere Aktionen und Gespräche rund um Retrospiele und Computerkultur.");
+  assert.equal(meta("hardware/"), "Retro-Hardware, Restaurationsprojekte und Computergrundlagen von Pretty Old Pixel.");
+  assert.equal(meta("interviews/"), "Gespräche mit Entwicklern, Grafikern und Retro-Akteuren über Computerspiele, Technik und ihre Geschichte.");
+  assert.equal(meta("retrospektiven/"), "re.trospektive: Rückblicke auf die Geschichte der Video- und Computerspiele, nach Themen und Folgen geordnet.");
+  const news = meta("news/");
+  assert.equal(news, "Neue Videos von Pretty Old Pixel: die neuesten Beiträge zu Retrospielen, Blätterabenden, Hardware und Gesprächen aus der Computerkultur.");
+  for (const description of [meta("reconsider/"), news]) assert.ok(!description.includes("Spiel "));
+});
+
 test("beschreibt Themen für Besucher ohne interne Prüf- oder Cachehinweise", () => {
   for (const id of ["hardware", "retrospektiven", "interviews"]) {
     const { pages } = render(fixture(), [definition(id)]);
