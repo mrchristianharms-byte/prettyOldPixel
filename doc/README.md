@@ -591,6 +591,11 @@ nicht automatisch erzeugte Caches:
    Die Originaltitel und Beschreibungen bleiben als Quellen erhalten;
    sie werden nicht durch redaktionell geratene Metadaten ersetzt.
 2. `npm run generate:site` ausführen und die Build-Hinweise prüfen.
+   Fehlen neue Zeitschriftenvideos noch im Blätterabend-Cache, ergänzt das
+   Inhaltsmodell ihre Titelzuordnung mit demselben lokalen Parser. News
+   verlinken dadurch bereits auf Blätterabend und die erkannte Zeitschrift
+   statt auf Sonstiges. Vorhandene Cache-Zuordnungen bleiben maßgeblich;
+   Archivbelege weiterhin über die Blätterabend-Aufbereitung aktualisieren.
    Eine neue Folge in einer bereits bestätigten Spielplaylist wird automatisch
    dem Spiel zugeordnet. Fehlt sie dort, ihre Zugehörigkeit anhand von Titel,
    Beschreibung und Quellplaylist prüfen und erst dann als Zusatzvideo in

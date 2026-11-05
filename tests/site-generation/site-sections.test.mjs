@@ -209,6 +209,32 @@ test("Sonstiges bleibt bei geänderter Quellreihenfolge deterministisch und entf
   assert.ok(!render(fixture(), [definition()]).pages.has("sonstiges/index.html"));
 });
 
+test("News verlinken neue Blätterabende auch bei veraltetem Zeitschriftencache korrekt", () => {
+  const input = fixture(4);
+  input.videos.videos[0].title = "Blätterabendaufzeichnung mit Anna - PC Joker - Sonderheft Adventures - Teil 1";
+  input.videos.videos[1].title = "Blätterabendaufzeichnung - PowerPlay 4...5/88 - Stream 2";
+  input.videos.videos[2].title = "Blätterabend mit unbekannter Zeitschrift";
+  const originalCache = structuredClone(input.magazines);
+  const { model, pages } = render(input, [], { baseUrl: "https://example.org/retro/" });
+  const news = pages.get("news/index.html").html;
+  for (const [index, name, slug] of [[0, "PC Joker", "pc-joker"], [1, "Power Play", "power-play"]]) {
+    const video = model.videoById.get(videoId(index));
+    assert.equal(video.blaetterabend, true);
+    assert.equal(video.magazines[0].name, name);
+    assert.ok(!video.sections.some((section) => section.id === "sonstiges"));
+    assert.ok(news.includes(`href="../zeitschriften/${slug}/">${name}</a>`));
+    assert.ok(pages.has(`zeitschriften/${slug}/index.html`));
+  }
+  assert.ok(news.includes('href="../zeitschriften/">Blätterabend / Zeitschriften</a>'));
+  assert.equal(model.videoById.get(videoId(2)).blaetterabend, true);
+  assert.ok(!model.videoById.get(videoId(2)).sections.some((section) => section.id === "sonstiges"));
+  assert.ok(model.videoById.get(videoId(3)).sections.some((section) => section.id === "sonstiges"));
+  assert.deepEqual(input.magazines, originalCache);
+  input.magazines.videos.push({ id: videoId(0), magazines: [{ name: "Geprüfte Zeitschrift", issue: null }] });
+  const reviewed = render(input, []).model.videoById.get(videoId(0));
+  assert.deepEqual(reviewed.magazines.map((magazine) => magazine.name), ["Geprüfte Zeitschrift"]);
+});
+
 test("re.consider ordnet Formatvideos automatisch zu und verwendet paginierte News-Einträge", () => {
   const input = fixture(63);
   input.videos.videos.forEach((video, index) => {

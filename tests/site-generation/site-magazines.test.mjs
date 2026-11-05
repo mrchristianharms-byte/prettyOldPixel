@@ -135,7 +135,7 @@ test("bündelt Gäste dynamisch nach Handle und verlinkt deren Ausgaben mit pass
   input.videos.videos[1].title = "Blätterabend mit @RetroKompott - PC Games - Teil 2";
   input.videos.videos[2].title = "Blätterabend mit @retrokompott - Power Play";
   input.videos.videos[3].title = "Blätterabend mit Chat-Vote - PC Games";
-  input.videos.videos[4].title = "Blätterabend mit Gast außerhalb des Blätterabends";
+  input.videos.videos[4].title = "Gespräch mit Gast ohne Zeitschriftenbezug";
   input.magazines.videos.pop();
   input.magazines.videos[0].part = 1;
   input.magazines.videos[1].part = 2;
@@ -556,6 +556,7 @@ test("paginiert den Zeitschriftenindex erst ab der 61. Kachel", () => {
     assert.equal(graph(pages.get(route).html)[0].mainEntity.itemListElement.length, count);
   }
   input.magazines.videos.pop();
+  input.videos.videos.pop();
   assert.ok(!render(input).pages.has("zeitschriften/seite/2/index.html"));
 });
 
@@ -899,6 +900,7 @@ test("stellt Heft- und Videometadaten als kompaktes semantisches Raster dar", ()
 test("zeigt bei fehlenden Daten keine leeren Zeitschriftenseiten und übernimmt keine ungeprüften Archivmedien", () => {
   const input = fixture(1);
   input.magazines.videos = [];
+  input.videos.videos[0].title = "Video ohne Zeitschriftenbezug";
   const { pages } = render(input);
   assert.ok(!pages.has("zeitschriften/index.html"));
   assert.ok(!pages.get("index.html").html.includes('href="/prettyOldPixel/zeitschriften/"'));

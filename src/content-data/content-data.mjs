@@ -10,6 +10,7 @@ import { loadReadyGameMetadata } from "../fetch-game/game-metadata-ready.mjs";
 import { structureGameSeries } from "./site-game-series.mjs";
 import { sectionDefinitions } from "../data/data-sections.mjs";
 import { extractVideoDetails } from "./site-video-details.mjs";
+import { extractBlaetterabendVideos } from "../extra-data/generate-blaetterabend.mjs";
 import { magazineGuests } from "./site-magazine-guests.mjs";
 import { loadGameDiscussions } from "./site-game-discussions.mjs";
 import { attachMagazineLogo, loadMagazineLogos } from "../fetch-magazine/kultmags-logos.mjs";
@@ -445,7 +446,10 @@ export function normalizeSources({ videos: videoCache, playlists: playlistCache,
 
   const magazineById = new Map();
   const extractedIds = new Set();
-  for (const raw of magazineCache.videos) {
+  const cachedMagazineIds = new Set(magazineCache.videos.map((video) => video.id));
+  const missingMagazineVideos = extractBlaetterabendVideos(
+    videos.filter((video) => !cachedMagazineIds.has(video.id)));
+  for (const raw of [...magazineCache.videos, ...missingMagazineVideos]) {
     object(raw, "Blätterabend-Video");
     requireValue(typeof raw.id === "string" && /^[A-Za-z0-9_-]{11}$/u.test(raw.id), "Blätterabend: Ungültige Video-ID.");
     requireValue(!extractedIds.has(raw.id), `Blätterabend: Doppelte Video-ID ${raw.id}`);
