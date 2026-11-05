@@ -5,8 +5,8 @@
     "title": "Pretty Old Pixel",
     "url": "https://www.youtube.com/@PrettyOldPixel"
   },
-  "fetchedAt": "2026-11-03T23:59:47.206Z",
-  "lastModified": "2026-11-03T23:59:47.206Z",
+  "fetchedAt": "2026-11-05T00:23:26.144Z",
+  "lastModified": "2026-11-05T00:23:26.144Z",
   "complete": true,
   "playlists": [
     {
@@ -30,7 +30,7 @@
         }
       ],
       "lastModified": "2026-11-03T23:59:47.206Z",
-      "checkedAt": "2026-11-03T23:59:47.206Z"
+      "checkedAt": "2026-11-05T00:23:26.144Z"
     },
     {
       "id": "PLCdHnxdZabN4",
@@ -137,24 +137,30 @@
         }
       ],
       "lastModified": "2026-10-31T22:30:22.943Z",
-      "checkedAt": "2026-11-03T23:59:47.206Z"
+      "checkedAt": "2026-11-05T00:23:26.144Z"
     },
     {
       "id": "PLKAk_zU7LotY",
       "title": "re.play - Ultima Underworld II: Labyrinth of Worlds",
       "description": "",
       "url": "https://www.youtube.com/playlist?list=PLKAk_zU7LotY",
-      "videoCount": 1,
+      "videoCount": 2,
       "videos": [
         {
           "position": 1,
+          "videoId": "eqlwk2CCocE",
+          "title": "Ultima Underworld II [re.play - #2] Die Geschichte von Ultima - Teil 1 [German]",
+          "availability": "listed"
+        },
+        {
+          "position": 2,
           "videoId": "g3qVlBsl_Io",
           "title": "Ultima Underworld II: Labyrinth of Worlds [re.play - #1] Intro und Box [German]",
           "availability": "listed"
         }
       ],
-      "lastModified": "2026-10-28T23:15:04.006Z",
-      "checkedAt": "2026-11-03T23:59:47.206Z"
+      "lastModified": "2026-11-05T00:23:26.144Z",
+      "checkedAt": "2026-11-05T00:23:26.144Z"
     },
     {
       "id": "PLKPrSm4Rptws",
@@ -217,7 +223,7 @@
       "videoCount": 0,
       "videos": [],
       "lastModified": "2026-11-03T23:59:47.206Z",
-      "checkedAt": "2026-11-03T23:59:47.206Z"
+      "checkedAt": "2026-11-05T00:23:26.144Z"
     },
     {
       "id": "PLNceJpv0LbXw",
@@ -424,7 +430,7 @@
         }
       ],
       "lastModified": "2026-10-29T23:18:55.668Z",
-      "checkedAt": "2026-11-03T23:59:47.206Z"
+      "checkedAt": "2026-11-05T00:23:26.144Z"
     },
     {
       "id": "PLZW5k3rtbudo_0dIXa7DsWpwUx53PkV6l",
@@ -12731,7 +12737,7 @@
         }
       ],
       "lastModified": "2026-11-01T22:51:39.530Z",
-      "checkedAt": "2026-11-03T23:59:47.206Z"
+      "checkedAt": "2026-11-05T00:23:26.144Z"
     },
     {
       "id": "PLZW5k3rtbudrGsaQQM4K_wXyL5zzGiVes",
