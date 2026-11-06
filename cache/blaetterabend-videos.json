@@ -6,9 +6,70 @@
     "title": "Pretty Old Pixel",
     "url": "https://www.youtube.com/@PrettyOldPixel"
   },
-  "generatedAt": "2026-10-23T21:32:20.532Z",
-  "count": 248,
+  "generatedAt": "2026-11-05T17:00:19.481Z",
+  "count": 250,
   "videos": [
+    {
+      "id": "ayKvCb3xjtk",
+      "url": "https://www.youtube.com/watch?v=ayKvCb3xjtk",
+      "title": "Blätterabendaufzeichnung mit Anna  - PC Joker - Sonderheft Adventures - Teil 1",
+      "publishedAt": "2026-11-01T18:00:30Z",
+      "durationSeconds": 9373,
+      "magazines": [
+        {
+          "name": "PC Joker",
+          "issue": {
+            "label": "Sonderheft",
+            "number": null,
+            "months": [],
+            "year": null,
+            "special": true
+          },
+          "kultmags": {
+            "match": "issue",
+            "matchedBy": "keyword",
+            "title": "Joker Sonderheft - 04 - Adventures",
+            "pageUrl": "https://www.kultmags.com/mags.php?folder=UEMgSm9rZXIvU29uZGVyaGVmdGU%3D",
+            "readerUrl": "https://reader.kultmags.com/Joker%20Sonderheft%20-%2004%20-%20Adventures",
+            "downloadUrl": "https://www.kultmags.com/PC%20Joker/Sonderhefte/Joker%20Sonderheft%20-%2004%20-%20Adventures.rar",
+            "coverUrl": "https://www.kultmags.com/PC%20Joker/Sonderhefte/Joker%20Sonderheft%20-%2004%20-%20Adventures.rar.jpg"
+          }
+        }
+      ],
+      "part": 1
+    },
+    {
+      "id": "X8JwO_7Ruco",
+      "url": "https://www.youtube.com/watch?v=X8JwO_7Ruco",
+      "title": "Blätterabendaufzeichnung - PowerPlay 4...5/88 - Stream 2",
+      "publishedAt": "2026-10-25T19:00:06Z",
+      "durationSeconds": 6851,
+      "magazines": [
+        {
+          "name": "Power Play",
+          "issue": {
+            "label": "4+5/1988",
+            "number": null,
+            "months": [
+              4,
+              5
+            ],
+            "year": 1988,
+            "special": false
+          },
+          "kultmags": {
+            "match": "issue",
+            "matchedBy": "month",
+            "title": "Power Play 1988-04..05",
+            "pageUrl": "https://www.kultmags.com/mags.php?folder=UG93ZXIgUGxheS8xOTg4",
+            "readerUrl": "https://reader.kultmags.com/Power%20Play%201988-04..05",
+            "downloadUrl": "https://www.kultmags.com/Power%20Play/1988/Power%20Play%201988-04..05.rar",
+            "coverUrl": "https://www.kultmags.com/Power%20Play/1988/Power%20Play%201988-04..05.rar.jpg"
+          }
+        }
+      ],
+      "part": 2
+    },
     {
       "id": "63foHISC8ms",
       "url": "https://www.youtube.com/watch?v=63foHISC8ms",
@@ -2187,30 +2248,24 @@
       "durationSeconds": 9560,
       "magazines": [
         {
-          "name": "PC Power",
-          "issue": null,
-          "kultmags": {
-            "match": "folder",
-            "title": "PC Power",
-            "pageUrl": "https://www.kultmags.com/mags.php?folder=UEMgUG93ZXI%3D"
-          }
-        },
-        {
           "name": "PC Player",
-          "issue": null,
+          "issue": {
+            "label": "7/1998",
+            "number": null,
+            "months": [
+              7
+            ],
+            "year": 1998,
+            "special": false
+          },
           "kultmags": {
-            "match": "folder",
-            "title": "PC-Player",
-            "pageUrl": "https://www.kultmags.com/mags.php?folder=UEMtUGxheWVy"
-          }
-        },
-        {
-          "name": "ASM",
-          "issue": null,
-          "kultmags": {
-            "match": "folder",
-            "title": "ASM",
-            "pageUrl": "https://www.kultmags.com/mags.php?folder=QVNN"
+            "match": "issue",
+            "matchedBy": "month",
+            "title": "PC-Player 1998-07",
+            "pageUrl": "https://www.kultmags.com/mags.php?folder=UEMtUGxheWVyLzE5OTg%3D",
+            "readerUrl": null,
+            "downloadUrl": "https://www.kultmags.com/PC-Player/1998/PC-Player%201998-07.rar",
+            "coverUrl": "https://www.kultmags.com/PC-Player/1998/PC-Player%201998-07.rar.jpg"
           }
         }
       ],
@@ -4623,16 +4678,23 @@
         {
           "name": "Power Play",
           "issue": {
-            "label": "#6",
-            "number": 6,
-            "months": [],
-            "year": null,
+            "label": "8+9/1988",
+            "number": null,
+            "months": [
+              8,
+              9
+            ],
+            "year": 1988,
             "special": false
           },
           "kultmags": {
-            "match": "folder",
-            "title": "Power Play",
-            "pageUrl": "https://www.kultmags.com/mags.php?folder=UG93ZXIgUGxheQ%3D%3D"
+            "match": "issue",
+            "matchedBy": "month",
+            "title": "Power Play 1988-08..09",
+            "pageUrl": "https://www.kultmags.com/mags.php?folder=UG93ZXIgUGxheS8xOTg4",
+            "readerUrl": "https://reader.kultmags.com/Power%20Play%201988-08..09",
+            "downloadUrl": "https://www.kultmags.com/Power%20Play/1988/Power%20Play%201988-08..09.rar",
+            "coverUrl": "https://www.kultmags.com/Power%20Play/1988/Power%20Play%201988-08..09.rar.jpg"
           }
         }
       ],

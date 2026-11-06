@@ -16,6 +16,9 @@ const RETROMAGS_ACE_49_URL = "https://www.retromags.com/gallery/image/30129-ace-
 const CONFIRMED_MAGAZINE_TITLES = new Map([
   ["6R6Go1LhCMI", ["Power Play 10/1990"]],
   ["wcxhTV2oA5U", ["PC Gamer UK 5/94"]],
+  ["X8JwO_7Ruco", ["Power Play 4-5/1988"]],
+  ["bxefCuGdxjg", ["Power Play 8-9/1988"]],
+  ["ycbt2bYtD4c", ["PC Player 7/1998"]],
 ]);
 
 // Longer names must come first so "Amiga Joker" wins over "Amiga".

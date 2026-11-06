@@ -102,6 +102,21 @@ test("wendet bestätigte Heftzuordnungen nur auf die konkrete Video-ID an und er
   assert.deepEqual(videos[1].magazines, []);
 });
 
+test("übernimmt die bestätigten Power-Play-Doppelhefte und PC Player statt der Chat-Vote-Kandidaten", () => {
+  for (const [id, title, name, year, months] of [
+    ["X8JwO_7Ruco", "Blätterabendaufzeichnung - PowerPlay 4...5/88 - Stream 2", "Power Play", 1988, [4, 5]],
+    ["bxefCuGdxjg", "Aufzeichnung - Blätterabend - Power Play #6 [re.read] 25.10.2022 [German/Deutsch]", "Power Play", 1988, [8, 9]],
+    ["ycbt2bYtD4c", "Aufzeichnung - Blätterabend mit Chat-Vote - PC Power / PC Player / ASM", "PC Player", 1998, [7]],
+  ]) {
+    const [video, unconfirmed] = extractBlaetterabendVideos([{ id, title }, { id: "other", title }]);
+    assert.equal(video.title, title);
+    assert.deepEqual(video.magazines, [{ name, issue: {
+      label: `${months.join("+")}/${year}`, number: null, months, year, special: false,
+    } }]);
+    assert.notDeepEqual(unconfirmed.magazines, video.magazines);
+  }
+});
+
 test("ordnet Stream II ausschließlich PC Gamer UK 5/1994 zu", () => {
   const title = "Blätterabend - PC Gamer 5/94 - Top 50 Games Of All Time - Stream II";
   const [video] = extractBlaetterabendVideos([{ id: "wcxhTV2oA5U", title }]);
