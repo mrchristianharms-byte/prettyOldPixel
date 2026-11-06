@@ -106,6 +106,27 @@ test("ordnet die erste aktuelle Folge von Ultima Underworld II der bestätigten 
   assert.ok(!model.warnings.some((warning) => warning.includes("PLKAk_zU7LotY")));
 });
 
+test("ordnet Star Trek: Generations für Windows der ersten aktuellen Playlist-Folge zu", () => {
+  const input = sources(1);
+  const video = input.videos.videos[0];
+  video.id = "X_oKNsvMVqg";
+  video.title = "Star Trek: Generations [re.play - #1] Intro und Box [German]";
+  video.publishedAt = "2026-11-05T18:00:37Z";
+  const playlist = input.playlists.playlists[0];
+  playlist.id = "PLKsmhkv13pEw";
+  playlist.title = "re.play - Star Trek: Generations";
+  playlist.videos[0].videoId = video.id;
+  input.magazines.videos = [];
+
+  const model = normalizeSources(input, { now: Date.parse("2026-11-06T12:00:00Z") });
+  const game = model.games.find((entry) => entry.id === "star-trek-generations-windows");
+  assert.ok(game);
+  assert.deepEqual(game.platforms, ["Windows"]);
+  assert.deepEqual(game.videos, [video.id]);
+  assert.equal(model.videoById.get(video.id).games[0].id, game.id);
+  assert.ok(!model.warnings.some((warning) => warning.includes(playlist.id)));
+});
+
 test("sortiert News numerisch nach Zeitzonen und begrenzt auf 20 eindeutige Videos", () => {
   const input = sources(25);
   input.videos.videos[23].publishedAt = "2020-03-01T01:00:00+02:00";

@@ -62,6 +62,10 @@ Daten. Beschädigte oder veraltete fertige Caches brechen den Build ab.
   als MobyGames-ID 691; Import und Cache-Aufbereitung übernehmen die nach der
   bestehenden Plattformregel ausgewählten DOS-Veröffentlichungen von 1993.
   Die erste aktuelle Folge genügt gemäß der Ein-Video-Regel für eine Spieleseite.
+- `Star Trek: Generations` ist über die geprüfte Playlist `PLKsmhkv13pEw`
+  mit der ersten Folge „Intro und Box“ (`X_oKNsvMVqg`) für Windows zugeordnet.
+  Der lokale Dump liefert MobyGames-ID 699, Erstjahr 1997, die Genres Action
+  und Strategy / tactics sowie Entwickler und Publisher MicroProse.
 - `David Crane's A Boy and His Blob: Trouble on Blobolonia` ist dem NES-Original
   statt dem späteren gleichnamigen Spiel zugeordnet. Die NES-Veröffentlichungen
   im Dump sind mit 1990 datiert; die Nutzerangabe 1989 überschreibt diese

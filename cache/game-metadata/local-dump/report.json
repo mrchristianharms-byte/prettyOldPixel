@@ -1,7 +1,7 @@
 {
   "version": 1,
   "provider": "mobygames-local-dump",
-  "importedAt": "2026-11-03T10:52:46.924Z",
+  "importedAt": "2026-11-06T21:39:30.258Z",
   "source": {
     "fileName": "gdb.sql",
     "sha256": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
@@ -15,8 +15,8 @@
     "mobygames_releases": 510587
   },
   "summary": {
-    "games": 156,
-    "withCandidates": 156,
+    "games": 157,
+    "withCandidates": 157,
     "withoutExactMatch": 0,
     "ambiguous": 39
   },
@@ -590,6 +590,120 @@
               "publabel": "",
               "sourceDeveloper": "",
               "sourcePublisher": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "gameId": "star-trek-generations-windows",
+      "title": "Star Trek: Generations",
+      "platforms": [
+        "Windows"
+      ],
+      "status": "needs-identity-review",
+      "candidates": [
+        {
+          "mobyid": 699,
+          "title": "Star Trek: Generations",
+          "sourceUrl": "https://www.mobygames.com/game/699/",
+          "genres": [
+            "Action",
+            "Strategie"
+          ],
+          "alternativeTitles": [
+            {
+              "title": "Star Trek: Generazioni",
+              "info": "Italian title"
+            }
+          ],
+          "platformMatch": true,
+          "matchingReleaseIds": [
+            25960,
+            100131,
+            126759,
+            344791,
+            451943,
+            451944,
+            597611
+          ],
+          "releases": [
+            {
+              "mobyid": 699,
+              "mobyreleaseid": 25960,
+              "year": 1997,
+              "platform": "Windows",
+              "publisher": "MicroProse",
+              "developer": "MicroProse (Alameda)",
+              "countries": "United States",
+              "publabel": "",
+              "sourcePublisher": "MicroProse Software, Inc."
+            },
+            {
+              "mobyid": 699,
+              "mobyreleaseid": 100131,
+              "year": 1997,
+              "platform": "Windows",
+              "publisher": "MicroProse",
+              "developer": "MicroProse (Alameda)",
+              "countries": "United Kingdom",
+              "publabel": "",
+              "sourcePublisher": "MicroProse Software, Inc."
+            },
+            {
+              "mobyid": 699,
+              "mobyreleaseid": 126759,
+              "year": 1997,
+              "platform": "Windows",
+              "publisher": "MicroProse",
+              "developer": "MicroProse (Alameda)",
+              "countries": "France",
+              "publabel": "",
+              "sourcePublisher": "MicroProse Software, Inc."
+            },
+            {
+              "mobyid": 699,
+              "mobyreleaseid": 344791,
+              "year": 1997,
+              "platform": "Windows",
+              "publisher": "MicroProse",
+              "developer": "MicroProse (Alameda)",
+              "countries": "Germany",
+              "publabel": "",
+              "sourcePublisher": "MicroProse Software, Inc."
+            },
+            {
+              "mobyid": 699,
+              "mobyreleaseid": 451943,
+              "year": 1997,
+              "platform": "Windows",
+              "publisher": "MicroProse",
+              "developer": "MicroProse (Alameda)",
+              "countries": "Italy",
+              "publabel": "",
+              "sourcePublisher": "MicroProse Software, Inc."
+            },
+            {
+              "mobyid": 699,
+              "mobyreleaseid": 451944,
+              "year": 1997,
+              "platform": "Windows",
+              "publisher": "MicroProse",
+              "developer": "MicroProse (Alameda)",
+              "countries": "Spain",
+              "publabel": "",
+              "sourcePublisher": "MicroProse Software, Inc."
+            },
+            {
+              "mobyid": 699,
+              "mobyreleaseid": 597611,
+              "year": 1999,
+              "platform": "Windows",
+              "publisher": "MicroProse",
+              "developer": "MicroProse (Alameda)",
+              "countries": "Germany",
+              "publabel": "",
+              "sourcePublisher": "MicroProse Software, Inc."
             }
           ]
         }

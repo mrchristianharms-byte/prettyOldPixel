@@ -1,8 +1,8 @@
 {
   "version": 2,
   "provider": "mobygames-local-dump-validation",
-  "verifiedAt": "2026-11-03T10:55:49.936Z",
-  "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
+  "verifiedAt": "2026-11-06T21:39:31.559Z",
+  "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
   "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-  "games": 156
+  "games": 157
 }

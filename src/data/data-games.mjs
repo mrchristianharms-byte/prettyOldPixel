@@ -7,6 +7,7 @@ const playlists = [
   ["PLCdHnxdZabN4", "Mission Critical"],
   ["PLKAk_zU7LotY", "Ultima Underworld II: Labyrinth of Worlds"],
   ["PLKPrSm4Rptws", "Ports of Call"],
+  ["PLKsmhkv13pEw", "Star Trek: Generations", "Windows"],
   ["PLNceJpv0LbXw", "Labyrinth"],
   ["PLO77B_AOBv8s", "Wing Commander II"],
   ["PLUrbqDDC9Ei0", "Tom Clancy's EndWar"],

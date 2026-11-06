@@ -1,13 +1,13 @@
 {
   "version": 3,
-  "generatedAt": "2026-11-03T14:21:54.309Z",
-  "catalogueHash": "e905b30ae3b3a57dee9fa2ccc799982f25b22f9589a46607c6c97550c80681fa",
+  "generatedAt": "2026-11-06T21:39:32.716Z",
+  "catalogueHash": "6bd246ed339b7362a58ab139ff2703f9ecaea5faa1ffce82b3c17b71ef0e314e",
   "decisionsHash": "2d3889ff9169dcc2c8ba978e7935af15702b09bbc2f218b5d74c10cef57f8709",
   "selectionPolicyHash": "c1ab79becbb5258efa667bffbe96df2a3433d2c7f67ba579a9757f37f098a3d4",
   "companyNamesHash": "5cebc68a6e6ea36186db794bed937fbd4efeb1d72f76ead91f9d3f0febede3c7",
   "summary": {
-    "games": 156,
-    "ready": 156,
+    "games": 157,
+    "ready": 157,
     "blocked": 0
   },
   "games": [
@@ -51,8 +51,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/1209/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -121,8 +121,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/1651/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -224,8 +224,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/691/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -301,8 +301,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/7390/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -331,6 +331,142 @@
             "developer": "International Software Development Corp.",
             "publisher": "Aegis Development, Inc.",
             "countries": "United States",
+            "publisherLabel": null
+          }
+        ]
+      }
+    },
+    {
+      "gameId": "star-trek-generations-windows",
+      "title": "Star Trek: Generations",
+      "platforms": [
+        "Windows"
+      ],
+      "selection": {
+        "platforms": [
+          "Windows"
+        ],
+        "platformBasis": "catalogue",
+        "consideredIds": [
+          699
+        ],
+        "status": "selected",
+        "reason": "unique-title-and-platform",
+        "mobyid": 699,
+        "matchingReleaseIds": [
+          25960,
+          100131,
+          126759,
+          344791,
+          451943,
+          451944,
+          597611
+        ],
+        "identityBasis": "dump-title-and-platform"
+      },
+      "status": "ready",
+      "reason": "policy-selected-source-scoped-data",
+      "data": {
+        "identity": {
+          "provider": "mobygames",
+          "id": 699,
+          "basis": "dump-title-and-platform",
+          "scope": "game",
+          "reviewedAt": "2026-10-20",
+          "note": "Ausschließlich lokaler Games-Dump: bekannte Plattformen erhalten; bei offener Plattform DOS, dann Amiga, dann C64, dann NES, dann SNES. Verbleibende Mehrdeutigkeit bleibt unverifiziert."
+        },
+        "scope": {
+          "platforms": [
+            "Windows"
+          ],
+          "platformBasis": "catalogue"
+        },
+        "evidence": {
+          "sourceUrl": "https://www.mobygames.com/game/699/",
+          "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
+        },
+        "quality": {
+          "basis": "single-source",
+          "usage": "attributed-source-data",
+          "companyIdentities": "reviewed-display-aliases",
+          "credits": "not-available"
+        },
+        "releaseYear": 1997,
+        "genres": [
+          "Action",
+          "Strategie"
+        ],
+        "releases": [
+          {
+            "sourceReleaseId": 25960,
+            "platform": "Windows",
+            "year": 1997,
+            "developer": "MicroProse (Alameda)",
+            "publisher": "MicroProse",
+            "sourcePublisher": "MicroProse Software, Inc.",
+            "countries": "United States",
+            "publisherLabel": null
+          },
+          {
+            "sourceReleaseId": 100131,
+            "platform": "Windows",
+            "year": 1997,
+            "developer": "MicroProse (Alameda)",
+            "publisher": "MicroProse",
+            "sourcePublisher": "MicroProse Software, Inc.",
+            "countries": "United Kingdom",
+            "publisherLabel": null
+          },
+          {
+            "sourceReleaseId": 126759,
+            "platform": "Windows",
+            "year": 1997,
+            "developer": "MicroProse (Alameda)",
+            "publisher": "MicroProse",
+            "sourcePublisher": "MicroProse Software, Inc.",
+            "countries": "France",
+            "publisherLabel": null
+          },
+          {
+            "sourceReleaseId": 344791,
+            "platform": "Windows",
+            "year": 1997,
+            "developer": "MicroProse (Alameda)",
+            "publisher": "MicroProse",
+            "sourcePublisher": "MicroProse Software, Inc.",
+            "countries": "Germany",
+            "publisherLabel": null
+          },
+          {
+            "sourceReleaseId": 451943,
+            "platform": "Windows",
+            "year": 1997,
+            "developer": "MicroProse (Alameda)",
+            "publisher": "MicroProse",
+            "sourcePublisher": "MicroProse Software, Inc.",
+            "countries": "Italy",
+            "publisherLabel": null
+          },
+          {
+            "sourceReleaseId": 451944,
+            "platform": "Windows",
+            "year": 1997,
+            "developer": "MicroProse (Alameda)",
+            "publisher": "MicroProse",
+            "sourcePublisher": "MicroProse Software, Inc.",
+            "countries": "Spain",
+            "publisherLabel": null
+          },
+          {
+            "sourceReleaseId": 597611,
+            "platform": "Windows",
+            "year": 1999,
+            "developer": "MicroProse (Alameda)",
+            "publisher": "MicroProse",
+            "sourcePublisher": "MicroProse Software, Inc.",
+            "countries": "Germany",
             "publisherLabel": null
           }
         ]
@@ -379,8 +515,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/12175/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -462,8 +598,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/823/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -580,8 +716,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/49906/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -659,8 +795,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/681/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -837,8 +973,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/1558/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -1008,8 +1144,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/1812/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -1120,8 +1256,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/2510/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -1193,8 +1329,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/1743/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -1294,8 +1430,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/3420/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -1410,8 +1546,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/2336/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -1512,8 +1648,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/7501/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -1591,8 +1727,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/2637/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -1667,8 +1803,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/10260/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -1751,8 +1887,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/1419/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -1874,8 +2010,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/1068/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -1985,8 +2121,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/6257/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -2058,8 +2194,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/1418/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -2179,8 +2315,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/5108/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -2305,8 +2441,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/10573/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -2422,8 +2558,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/512/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -2558,8 +2694,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/11270/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -2639,8 +2775,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/688/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -2750,8 +2886,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/181/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -2834,8 +2970,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/340/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -2954,8 +3090,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/3433/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -3071,8 +3207,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/1169/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -3164,8 +3300,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/3066/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -3273,8 +3409,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/3244/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -3347,8 +3483,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/598/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -3484,8 +3620,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/2071/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -3648,8 +3784,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/1993/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -3773,8 +3909,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/1256/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -3938,8 +4074,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/10072/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -4136,8 +4272,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/636/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -4299,8 +4435,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/7470/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -4395,8 +4531,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/891/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -4564,8 +4700,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/1655/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -4647,8 +4783,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/23891/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -4725,8 +4861,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/5786/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -4817,8 +4953,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/521/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -4995,8 +5131,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/2906/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -5065,8 +5201,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/5078/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -5169,8 +5305,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/835/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -5249,8 +5385,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/4934/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -5348,8 +5484,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/585/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -5518,8 +5654,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/401/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -5620,8 +5756,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/5084/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -5769,8 +5905,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/3/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -5886,8 +6022,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/29107/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -5965,8 +6101,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/214/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -6036,8 +6172,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/11293/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -6115,8 +6251,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/11726/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -6203,8 +6339,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/1537/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -6285,8 +6421,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/610/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -6371,8 +6507,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/2123/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -6484,8 +6620,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/10070/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -6588,8 +6724,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/1038/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -6743,8 +6879,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/5241/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -6835,8 +6971,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/200/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -6936,8 +7072,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/482/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -7025,8 +7161,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/70876/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -7096,8 +7232,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/307/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -7187,8 +7323,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/1365/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -7277,8 +7413,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/13708/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -7347,8 +7483,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/14618/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -7431,8 +7567,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/495/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -7568,8 +7704,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/490/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -7686,8 +7822,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/7879/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -7784,8 +7920,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/10545/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -7882,8 +8018,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/10921/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -7966,8 +8102,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/1171/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -8078,8 +8214,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/9272/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -8171,8 +8307,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/5505/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -8317,8 +8453,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/56113/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -8387,8 +8523,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/992/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -8471,8 +8607,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/543/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -8619,8 +8755,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/51858/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -8705,8 +8841,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/394/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -8880,8 +9016,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/745/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -9021,8 +9157,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/17105/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -9101,8 +9237,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/14566/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -9175,8 +9311,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/511/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -9279,8 +9415,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/1929/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -9368,8 +9504,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/10090/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -9467,8 +9603,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/28/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -9559,8 +9695,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/386/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -9761,8 +9897,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/8606/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -9864,8 +10000,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/7299/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -9989,8 +10125,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/361/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -10087,8 +10223,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/5481/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -10192,8 +10328,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/2165/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -10297,8 +10433,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/1876/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -10448,8 +10584,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/308/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -10564,8 +10700,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/862/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -10674,8 +10810,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/1499/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -10809,8 +10945,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/53055/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -10879,8 +11015,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/1595/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -10968,8 +11104,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/425/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -11125,8 +11261,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/8276/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -11237,8 +11373,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/19932/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -11322,8 +11458,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/1980/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -11403,8 +11539,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/23779/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -11493,8 +11629,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/9241/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -11590,8 +11726,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/952/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -11772,8 +11908,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/687/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -11852,8 +11988,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/24845/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -11924,8 +12060,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/179/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -12034,8 +12170,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/50/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -12146,8 +12282,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/241/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -12281,8 +12417,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/21773/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -12349,8 +12485,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/1071/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -12418,8 +12554,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/8623/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -12493,8 +12629,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/675/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -12631,8 +12767,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/13022/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -12749,8 +12885,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/27730/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -12841,8 +12977,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/8085/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -12928,8 +13064,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/466/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -13010,8 +13146,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/765/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -13118,8 +13254,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/6166/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -13210,8 +13346,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/519/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -13326,8 +13462,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/4037/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -13461,8 +13597,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/11980/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -13551,8 +13687,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/258/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -13668,8 +13804,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/4223/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -13762,8 +13898,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/1215/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -13833,8 +13969,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/613/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -13929,8 +14065,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/848/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -14008,8 +14144,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/10123/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -14099,8 +14235,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/1488/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -14180,8 +14316,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/1681/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -14263,8 +14399,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/4226/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -14355,8 +14491,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/697/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -14461,8 +14597,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/11591/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -14569,8 +14705,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/39651/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -14651,8 +14787,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/1511/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -14754,8 +14890,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/6943/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -14856,8 +14992,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/8786/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -14924,8 +15060,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/3146/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -15001,8 +15137,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/5091/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -15145,8 +15281,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/1737/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -15260,8 +15396,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/690/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -15381,8 +15517,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/5949/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -15531,8 +15667,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/112651/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z",
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z",
           "companySource": {
             "url": "https://store.steampowered.com/app/342560/Airships_Conquer_the_Skies/",
             "label": "Steam",
@@ -15606,8 +15742,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/48091/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -15687,8 +15823,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/10773/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -15766,8 +15902,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/1503/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -15834,8 +15970,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/32135/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -15906,8 +16042,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/10150/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -16010,8 +16146,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/19278/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -16082,8 +16218,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/787/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -16180,8 +16316,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/31581/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -16258,8 +16394,8 @@
         "evidence": {
           "sourceUrl": "https://www.mobygames.com/game/143640/",
           "dumpHash": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
-          "reportHash": "bc7a1e89da6eb8c49ac9cd4bd7e9a5e24a7a6d658122834cff1a4b7ae496a17a",
-          "importedAt": "2026-11-03T10:52:46.924Z"
+          "reportHash": "39f4b21cc83af183f5f3ed53af1681c940eef24eab1b5d162ee09c6d4cc4f9d6",
+          "importedAt": "2026-11-06T21:39:30.258Z"
         },
         "quality": {
           "basis": "single-source",
@@ -16286,5 +16422,5 @@
       }
     }
   ],
-  "contentHash": "a84f457e81600dbede8c2661018045a0b908ff7bf510b4fca32e063f28926809"
+  "contentHash": "7e2b95e9bd8efa8c47acb3828be80812e436b4a4174522495785814046dd909d"
 }
