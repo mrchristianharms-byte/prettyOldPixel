@@ -5,8 +5,8 @@
     "title": "Pretty Old Pixel",
     "url": "https://www.youtube.com/@PrettyOldPixel"
   },
-  "fetchedAt": "2026-11-06T00:18:29.666Z",
-  "lastModified": "2026-11-06T00:18:29.666Z",
+  "fetchedAt": "2026-11-06T23:44:39.419Z",
+  "lastModified": "2026-11-06T23:44:39.419Z",
   "complete": true,
   "playlists": [
     {
@@ -30,7 +30,7 @@
         }
       ],
       "lastModified": "2026-11-03T23:59:47.206Z",
-      "checkedAt": "2026-11-05T00:23:26.144Z"
+      "checkedAt": "2026-11-06T23:44:39.419Z"
     },
     {
       "id": "PLCdHnxdZabN4",
@@ -137,7 +137,7 @@
         }
       ],
       "lastModified": "2026-10-31T22:30:22.943Z",
-      "checkedAt": "2026-11-05T00:23:26.144Z"
+      "checkedAt": "2026-11-06T23:44:39.419Z"
     },
     {
       "id": "PLKAk_zU7LotY",
@@ -160,7 +160,7 @@
         }
       ],
       "lastModified": "2026-11-05T00:23:26.144Z",
-      "checkedAt": "2026-11-06T00:18:29.666Z"
+      "checkedAt": "2026-11-06T23:44:39.419Z"
     },
     {
       "id": "PLKPrSm4Rptws",
@@ -213,7 +213,7 @@
         }
       ],
       "lastModified": "2026-10-21T07:25:20.246Z",
-      "checkedAt": "2026-11-03T23:59:47.206Z"
+      "checkedAt": "2026-11-06T23:44:39.419Z"
     },
     {
       "id": "PLKsmhkv13pEw",
@@ -230,48 +230,54 @@
         }
       ],
       "lastModified": "2026-11-06T00:18:29.666Z",
-      "checkedAt": "2026-11-06T00:18:29.666Z"
+      "checkedAt": "2026-11-06T23:44:39.419Z"
     },
     {
       "id": "PLNceJpv0LbXw",
       "title": "re.play - Labyrinth",
       "description": "",
       "url": "https://www.youtube.com/playlist?list=PLNceJpv0LbXw",
-      "videoCount": 5,
+      "videoCount": 6,
       "videos": [
         {
           "position": 1,
+          "videoId": "j-H4uGAZ5Q0",
+          "title": "Labyrinth [re.play - #6] Ludo und Sir Didymus - neue alte Freunde  [German/Deutsch]",
+          "availability": "listed"
+        },
+        {
+          "position": 2,
           "videoId": "SyTedfpuc1I",
           "title": "Labyrinth [re.play - #5] Der Besuch beim weisen Mann - und seinem Vogel [German/Deutsch]",
           "availability": "listed"
         },
         {
-          "position": 2,
+          "position": 3,
           "videoId": "oiIlEZpgywc",
           "title": "Labyrinth [re.play - #4] Neustart mit Sarah [German/Deutsch]",
           "availability": "listed"
         },
         {
-          "position": 3,
+          "position": 4,
           "videoId": "EzKTDHW19oE",
           "title": "Labyrinth [re.play - #3] Der misslungene Start im Labyrinth [German/Deutsch]",
           "availability": "listed"
         },
         {
-          "position": 4,
+          "position": 5,
           "videoId": "F8RpGsRAw3A",
           "title": "Labyrinth [re.play - #2] Tutorial - 1. Schritte [German/Deutsch]",
           "availability": "listed"
         },
         {
-          "position": 5,
+          "position": 6,
           "videoId": "90oZYIlcIRQ",
           "title": "Labyrinth [re.play - #1] Intro und Unboxing [German/Deutsch]",
           "availability": "listed"
         }
       ],
-      "lastModified": "2026-10-17T11:02:44.151Z",
-      "checkedAt": "2026-10-27T22:58:11.653Z"
+      "lastModified": "2026-11-06T23:44:39.419Z",
+      "checkedAt": "2026-11-06T23:44:39.419Z"
     },
     {
       "id": "PLO77B_AOBv8s",
@@ -360,7 +366,7 @@
         }
       ],
       "lastModified": "2026-10-21T20:25:08.802Z",
-      "checkedAt": "2026-11-03T23:59:47.206Z"
+      "checkedAt": "2026-11-06T23:44:39.419Z"
     },
     {
       "id": "PLUrbqDDC9Ei0",
@@ -437,7 +443,7 @@
         }
       ],
       "lastModified": "2026-10-29T23:18:55.668Z",
-      "checkedAt": "2026-11-05T00:23:26.144Z"
+      "checkedAt": "2026-11-06T23:44:39.419Z"
     },
     {
       "id": "PLZW5k3rtbudo_0dIXa7DsWpwUx53PkV6l",
@@ -4932,7 +4938,7 @@
         }
       ],
       "lastModified": "2026-10-27T22:58:11.653Z",
-      "checkedAt": "2026-11-03T23:59:47.206Z"
+      "checkedAt": "2026-11-06T23:44:39.419Z"
     },
     {
       "id": "PLZW5k3rtbudpGgkzpDmKmzUQuZtmD8Oz4",
@@ -6941,7 +6947,7 @@
       "videoCount": 0,
       "videos": [],
       "lastModified": "2026-10-21T20:25:08.802Z",
-      "checkedAt": "2026-11-03T23:59:47.206Z"
+      "checkedAt": "2026-11-06T23:44:39.419Z"
     },
     {
       "id": "PLZW5k3rtbudq2jSfF1FVnYZIrbbsmwhod",
@@ -9263,7 +9269,7 @@
         }
       ],
       "lastModified": "2026-10-21T20:25:08.802Z",
-      "checkedAt": "2026-11-03T23:59:47.206Z"
+      "checkedAt": "2026-11-06T23:44:39.419Z"
     },
     {
       "id": "PLZW5k3rtbudqL_S3q1GAmZvgMZ2T2tOEi",
@@ -12744,7 +12750,7 @@
         }
       ],
       "lastModified": "2026-11-01T22:51:39.530Z",
-      "checkedAt": "2026-11-05T00:23:26.144Z"
+      "checkedAt": "2026-11-06T23:44:39.419Z"
     },
     {
       "id": "PLZW5k3rtbudrGsaQQM4K_wXyL5zzGiVes",
