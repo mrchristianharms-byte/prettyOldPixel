@@ -5,10 +5,18 @@
     "title": "Pretty Old Pixel",
     "url": "https://www.youtube.com/@PrettyOldPixel"
   },
-  "lastModified": "2026-11-04T18:00:25Z",
-  "fetchedAt": "2026-11-05T00:23:25.971Z",
+  "lastModified": "2026-11-05T18:00:37Z",
+  "fetchedAt": "2026-11-06T00:18:29.446Z",
   "complete": true,
   "videos": [
+    {
+      "id": "X_oKNsvMVqg",
+      "title": "Star Trek: Generations [re.play - #1] Intro und Box [German]",
+      "description": "Spiel: Star Trek: Generations\nPublisher: MicroProse Software, Inc.\nEntwickler: MicroProse (Alameda)\nReleasedatum: 1997\nSysteme: Windows 9X\n\nPlaylist: https://www.youtube.com/playlist?list=PLKsmhkv13pEw\n\nJeden Dienstag und Freitag ab 20 Uhr auf Twitch.tv/PrettyOldPixel",
+      "duration": "PT19M9S",
+      "durationSeconds": 1149,
+      "publishedAt": "2026-11-05T18:00:37Z"
+    },
     {
       "id": "eqlwk2CCocE",
       "title": "Ultima Underworld II [re.play - #2] Die Geschichte von Ultima - Teil 1 [German]",

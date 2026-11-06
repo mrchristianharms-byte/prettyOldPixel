@@ -5,8 +5,8 @@
     "title": "Pretty Old Pixel",
     "url": "https://www.youtube.com/@PrettyOldPixel"
   },
-  "fetchedAt": "2026-11-05T00:23:26.144Z",
-  "lastModified": "2026-11-05T00:23:26.144Z",
+  "fetchedAt": "2026-11-06T00:18:29.666Z",
+  "lastModified": "2026-11-06T00:18:29.666Z",
   "complete": true,
   "playlists": [
     {
@@ -160,7 +160,7 @@
         }
       ],
       "lastModified": "2026-11-05T00:23:26.144Z",
-      "checkedAt": "2026-11-05T00:23:26.144Z"
+      "checkedAt": "2026-11-06T00:18:29.666Z"
     },
     {
       "id": "PLKPrSm4Rptws",
@@ -220,10 +220,17 @@
       "title": "re.play - Star Trek: Generations",
       "description": "",
       "url": "https://www.youtube.com/playlist?list=PLKsmhkv13pEw",
-      "videoCount": 0,
-      "videos": [],
-      "lastModified": "2026-11-03T23:59:47.206Z",
-      "checkedAt": "2026-11-05T00:23:26.144Z"
+      "videoCount": 1,
+      "videos": [
+        {
+          "position": 1,
+          "videoId": "X_oKNsvMVqg",
+          "title": "Star Trek: Generations [re.play - #1] Intro und Box [German]",
+          "availability": "listed"
+        }
+      ],
+      "lastModified": "2026-11-06T00:18:29.666Z",
+      "checkedAt": "2026-11-06T00:18:29.666Z"
     },
     {
       "id": "PLNceJpv0LbXw",
