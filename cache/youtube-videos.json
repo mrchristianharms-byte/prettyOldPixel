@@ -5,10 +5,18 @@
     "title": "Pretty Old Pixel",
     "url": "https://www.youtube.com/@PrettyOldPixel"
   },
-  "lastModified": "2026-11-06T18:00:38Z",
-  "fetchedAt": "2026-11-07T22:46:51.186Z",
+  "lastModified": "2026-11-08T18:00:23Z",
+  "fetchedAt": "2026-11-08T22:54:30.694Z",
   "complete": true,
   "videos": [
+    {
+      "id": "I7IQ5KtWxPw",
+      "title": "Blätterabendaufzeichnung - PC Xtreme - Teil 1",
+      "description": "00:00:00 - Intro\n00:05:00 - Vorgespräch\n00:40:00 - Blätterabend",
+      "duration": "PT2H29M51S",
+      "durationSeconds": 8991,
+      "publishedAt": "2026-11-08T18:00:23Z"
+    },
     {
       "id": "j-H4uGAZ5Q0",
       "title": "Labyrinth [re.play - #6] Ludo und Sir Didymus - neue alte Freunde  [German/Deutsch]",
