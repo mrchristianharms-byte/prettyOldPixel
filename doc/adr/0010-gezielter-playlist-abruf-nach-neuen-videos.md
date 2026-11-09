@@ -1,6 +1,10 @@
 # ADR 0010: Gezielter Playlist-Abruf nach neuen Videos
 
-- Status: angenommen.
+- Status: Abgeschlossen.
+- Regelstand: Es gelten die [Vorrang- und Abschlussregeln](README.md).
+  Die gezielten Läufe ersetzen die pauschale vollständige Playlist-Prüfung
+  aus ADR 0003 nur bei den hier definierten Voraussetzungen; vollständige
+  Abgleiche bleiben möglich.
 - Datum: 2026-10-26.
 - Umfang: `fetch:playlists`, `fetch:all` und der Workflow `Update YouTube caches`;
   Videoabruf siehe [ADR 0001](0001-youtube-metadaten-ohne-offizielle-api.md).

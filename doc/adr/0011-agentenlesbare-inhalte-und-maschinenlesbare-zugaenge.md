@@ -1,7 +1,18 @@
 # ADR 0011: Agentenlesbare Inhalte und maschinenlesbare Zugänge
 
-- Status: statische Maßnahmen lokal umgesetzt und geprüft; Veröffentlichung
-  und Edge-Content-Negotiation ausstehend.
+- Status: Abgeschlossen.
+- Abschluss: Der Auftraggeber hat diese ADR auf einem echten iPhone erfolgreich
+  getestet und als „OK“ abgenommen. Gerät, iOS-Version und einzelne Messwerte
+  wurden nicht angegeben; die Bestätigung ist keine eigenständige technische
+  Prüfung von Cloudflare-Headern, Content-Negotiation oder Scannerergebnissen.
+- Regelstand: Es gelten die [Vorrang- und Abschlussregeln](README.md).
+  Statischer Markdown-Export, Agenteneinstieg und Read-only-API sind der
+  abgeschlossene Umfang. Edge-Negotiation, Content Signals, optionale
+  Bildfallbacks und nicht belegte Live-Discovery-Nachprüfungen sind keine
+  Abschlussbedingungen. Historische fehlgeschlagene Scans bleiben historische
+  Belege; weder erfolgreiche Nachscans noch aktivierte Edge-Regeln werden
+  durch den Abschluss behauptet. Zusätzliche Aktivierungen benötigen eine
+  gesonderte Entscheidung.
 - Datum: 2026-10-30.
 - Aktuelle Grundlage: [Is-Agentic-Scan für prettyoldpixel.com](https://is-agentic.com/scan/prettyoldpixel.com),
   gescannt am 30.10.2026 um 16:52:01.725 UTC (17:52 Uhr MEZ).
@@ -117,7 +128,7 @@ bestätigt. Eine Prüfung der Cache-Isolation zwischen zwei erfolgreichen
 Repräsentationen ist erst nach funktionierender Markdown-Ausgabe sinnvoll.
 Es wurden bei dieser Nachprüfung keine Cloudflare-Einstellungen geändert.
 
-## Entscheidungsvorschlag
+## Entscheidung
 
 ### Umsetzungsstand nach Freigabe am 30.10.2026
 

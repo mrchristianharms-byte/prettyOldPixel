@@ -1,6 +1,15 @@
 # ADR: Wiederverwendbare Widgets und Komponenten
 
-**Status:** Angenommen
+**Status:** Abgeschlossen
+
+## Aktueller Regelstand
+
+Es gelten die [Vorrang- und Abschlussregeln](README.md). ADR 0009 erlaubt
+browserfähige Wiederverwendung in der getrennten App. ADR 0013 präzisiert die
+Asset-Regel: gekapselte Inline-Styles und das lokale Prozessskript sind für
+das Prozessdiagramm ausdrücklich zulässig. Gemeinsame Formatierungshelfer,
+Widgets und Seitenkomposition bleiben getrennte Zuständigkeiten.
+
 **Datum:** 2026-10-17
 **Entscheider:** Christian Harms
 **Grundlagen:** [ADR 0002](0002-statische-seiten-seo-und-performance.md),

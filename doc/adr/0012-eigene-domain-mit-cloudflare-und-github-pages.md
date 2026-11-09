@@ -1,7 +1,13 @@
 # ADR 0012: Eigene Domain mit Cloudflare und GitHub Pages
 
-- Status: umgesetzt; eigene Domain, Cloudflare-Proxy und HTTPS live bestätigt.
-  Separate Betreiber- und Offline-App-Prüfungen bleiben offen.
+- Status: Abgeschlossen.
+- Regelstand: Es gelten die [Vorrang- und Abschlussregeln](README.md).
+  Domain, Proxy und HTTPS sind gemäß dem unten dokumentierten Live-Stand
+  abgenommen. Fehlende separate Dashboard-/Betreiberbestätigungen und
+  Geräteprüfungen sind akzeptierte Nachweisgrenzen, keine offenen
+  Abschlussbedingungen. Insbesondere wird Full (strict) nicht allein aus
+  erfolgreichem HTTPS als bestätigt abgeleitet. Bestehende Cache-Regeln bleiben
+  unverändert; zusätzliche Edge-Funktionen sind nicht automatisch freigegeben.
 - Datum: 2026-10-30.
 - Ergänzt [ADR 0002](0002-statische-seiten-seo-und-performance.md) und
   [ADR 0011](0011-agentenlesbare-inhalte-und-maschinenlesbare-zugaenge.md).

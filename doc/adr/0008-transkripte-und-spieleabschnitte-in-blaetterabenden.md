@@ -1,6 +1,26 @@
 # ADR 0008: Transkripte und Spieleabschnitte in Blätterabenden
 
-**Status:** Vorgeschlagen; Bestandsaufnahme und Zielarchitektur
+**Status:** Abgeschlossen
+
+## Aktueller Regelstand
+
+Es gelten die [Vorrang- und Abschlussregeln](README.md). Die Analyse eines
+Transkripts bzw. die Spieleerkennung darf mit jedem geeigneten LLM über eine
+OpenAI-kompatible API erfolgen, lokal oder bei einem externen Anbieter.
+Ollama ist eine Option, keine Voraussetzung; OpenRouter ist ein konfigurierbarer
+Standard, keine Anbieterbindung. Mit der bewussten Anbieterwahl ist die dafür
+notwendige Übermittlung der Transkripttexte erlaubt. Zugangsdaten bleiben lokal
+bzw. in der Laufzeitkonfiguration; Kosten, Berechtigung und Datenschutz liegen
+beim Betreiber. Das führt keine Modellanfragen im Build oder Browser ein und
+ersetzt den öffentlichen Untertitelabruf nicht durch eine neue Audio-Pipeline.
+
+Verbindlich ist die implementierte Freigabe der gesamten Analyseliste eines
+Videos über `status: "reviewed"`, nicht ein zusätzliches Prüffeld pro Abschnitt.
+Die nachfolgenden Vergleichsläufe, Referenzentwürfe und Evaluationsziele sind
+historische Untersuchungen bzw. mögliche Folgearbeiten. Nicht belegte
+Qualitätsziele werden nicht als erreicht behauptet und blockieren den Abschluss
+nicht; ungeprüfte Modellvorschläge bleiben von der Veröffentlichung getrennt.
+
 **Datum:** 2026-10-22
 **Entscheider:** Christian Harms
 **Kontext:** Verlässliche Sprungmarken zu zusammenhängenden Spielebesprechungen.
@@ -127,7 +147,7 @@ Modellaufruf und gültiges JSON automatisch korrekte Abschnitte ergeben:
 - Englischsprachige oder andere Untertitel passen nicht ohne Weiteres zum
   derzeit deutsch ausgerichteten Analyseprompt.
 
-## Vorgeschlagene Entscheidung
+## Entscheidung
 
 ### Pipeline erhalten, Veröffentlichung um eine Freigabe ergänzen
 
@@ -151,17 +171,19 @@ Veröffentlichung wird eine verbindliche Qualitätsprüfung vorgesehen:
    zusätzlichen Nachbarkontext prüfen, statt pauschal jedes gesamte Video in
    einen immer längeren Modellprompt zu geben. Nicht zusammenhängende
    Wiederaufnahmen dürfen nicht verschmolzen werden.
-4. **Freigabe pro Abschnitt:** Titel, Beginn, Ende und Quellenbeleg prüfen.
-   Unklare Ergebnisse zurückstellen oder verwerfen. Fehlende Endzeiten nicht
+4. **Prüfung aller Abschnitte, Freigabe pro Video:** Titel, Beginn, Ende und
+   Quellenbeleg jedes Abschnitts prüfen, unklare Ergebnisse zurückstellen oder
+   verwerfen. Die Freigabe gilt anschließend für die gesamte bereinigte
+   Analyseliste des Videos (`status: "reviewed"`). Fehlende Endzeiten nicht
    erfinden; für eine freigegebene Besprechung ist eine belegte Grenze nötig.
 5. **Veröffentlichung strikt trennen:** Standardmäßig nur freigegebene
    Abschnitte anzeigen. Ungeprüfte Vorschläge höchstens in einer ausdrücklich
    aktivierten lokalen Vorschau darstellen, nicht als reguläre Sprungmarken.
    Der Build bleibt offline und führt keine Modellanfragen aus.
 
-Diese Freigaberegel ist ein **Ziel**, noch nicht das aktuelle Verhalten.
-Ein Review-Werkzeug und die Trennung von Vorschlags- und Veröffentlichungsdaten
-sind als Folgeimplementierung erforderlich.
+Die Freigaberegel ist umgesetzt (siehe Umsetzungsstand): Der Build übernimmt
+nur `reviewed`-Analysen; ungeprüfte Vorschläge sind auf die lokale Vorschau
+beschränkt. Ein zusätzliches Review-Werkzeug ist keine Abschlussbedingung.
 
 ### Qualität vor flächendeckender Verarbeitung messen
 
@@ -462,10 +484,10 @@ Offen:
 | Themenwechsel über Embeddings / Textsegmentierung | Modellunabhängige Hinweise auf Themenblöcke | Gleiche Domäne und Abschweifungen erschweren Grenzen; Spielidentität und Besprechungsart bleiben zusätzliche Aufgaben. Als Hilfssignal erproben. |
 | Lokale Spracherkennung aus Audio | Alternative bei fehlenden oder unbrauchbaren Untertiteln | Zusätzlicher Download, Rechenaufwand und ASR-Fehler; nur bei zulässigem Medienzugriff und als gesonderter, nachvollziehbarer Quellpfad. Kein automatisches Umgehen von Zugriffsbeschränkungen. |
 | OCR / visuelle Erkennung der gezeigten Heftseiten | Kann Spieltitel und Seitenwechsel stützen | Videodownload und Bildverarbeitung aufwendig; sichtbare Seite ist nicht zwingend Gesprächsthema. Spätere Ergänzung, nicht Voraussetzung. |
-| Externer Modellanbieter | Möglicherweise andere Modellqualität und weniger lokale Hardware | Keine garantierte Verbesserung; Datenübertragung, Berechtigung und Kosten gesondert entscheiden. Aktuell technisch gesperrt und nicht nötig. |
+| Externer Modellanbieter | Freie Modellwahl und weniger lokale Hardware | Erlaubt über OpenAI-kompatible APIs. Der Betreiber wählt Anbieter und Modell bewusst und verantwortet Datenübertragung, Berechtigung und Kosten; Qualität bleibt zu prüfen. |
 | Vollständig manuelle Kapitelpflege | Hohe kontrollierbare Qualität für wenige Videos | Hoher Arbeitsaufwand; sinnvoll als Referenz und Rückfalloption. |
 
-Empfohlen ist zunächst **bestehende Untertitel + lokale Fensteranalyse +
+Empfohlen ist **bestehende Untertitel + Fensteranalyse mit frei gewähltem LLM +
 gezielte Grenzprüfung + menschliche Freigabe**. Kandidatensuche und größere
 Kontextfenster sind vergleichbare Optimierungen, keine neue Gesamtarchitektur.
 Eigene ASR und visuelle Analyse sind erst nach Messung der verbleibenden
@@ -474,7 +496,8 @@ Fehlerursachen gerechtfertigt.
 ## Folgen und nächste Schritte
 
 - Keine Modell- oder Transkriptanfragen beim Seitenaufruf oder Website-Build.
-- Keine Übermittlung von Transkripten an externe Modellanbieter.
+- Bei bewusst gewähltem externen LLM dürfen Transkripttexte an dessen
+  OpenAI-kompatible API übermittelt werden; ein lokales Modell bleibt optional.
 - Wiederverwendbare Quellcaches und versionierte Ergebnisse bleiben erhalten.
 - Ein technisch gültiger Datensatz wird nicht mit einem inhaltlich geprüften
   gleichgesetzt; Präzision hat vor möglichst vielen Sprungmarken Vorrang.

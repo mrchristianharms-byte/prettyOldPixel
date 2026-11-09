@@ -1,6 +1,20 @@
 # ADR: Seitenstruktur und Zuordnung von Videos zu Inhaltsbereichen
 
-**Status:** Vorgeschlagen
+**Status:** Abgeschlossen
+
+## Aktueller Regelstand
+
+Es gelten die [Vorrang- und Abschlussregeln](README.md). ADR 0007 erweitert
+die Katalogzugänge, ADR 0010 ersetzt die pauschale vollständige Playlist-Prüfung
+bei jedem Folgelauf, ADR 0014 ergänzt Statistiken. Nach ADR 0015 sind neben
+der regulären Zwei-Video-Schwelle ausdrücklich bestätigte Einzelspiele
+(`confirmedSingle`) und die zeitlich begrenzte Ausnahme für neue bestätigte
+Playlist-Reihen zulässig. Eigenständige re.consider-Detailseiten bleiben neben
+Spieleseiten erhalten. Frühere gegenteilige Aussagen und entsprechende
+Prüfkriterien weiter unten sind insoweit ersetzt. Historische Bestandszahlen
+und Seitenübersichten sind keine vollständige Beschreibung heutiger Routen;
+frühere offene Schritte sind keine offenen Abschlussbedingungen.
+
 **Datum:** 2026-10-17
 **Entscheider:** Christian Harms
 **Kontext:** Thematische Erschließung der Videos für Besucher und Suchmaschinen.

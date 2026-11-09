@@ -1,6 +1,12 @@
 # ADR 0014: Spielestatistiken für re.play
 
-- Status: angenommen und implementiert; Auswertungen werden beim Build dynamisch aus dem aktuellen Inhaltsmodell erzeugt.
+- Status: Abgeschlossen.
+- Regelstand: Es gelten die [Vorrang- und Abschlussregeln](README.md).
+  Die Statistik einschließlich des Entwicklerdiagramms wird beim Build aus
+  dem aktuellen Inhaltsmodell erzeugt. ADR 0015 erweitert diese Grundgesamtheit
+  um bestätigte re.consider-Einzelspiele. Die folgenden Zahlen sind historische
+  Snapshots und keine festgeschriebenen Produktionswerte; die Abnahmeliste
+  dokumentiert Prüfkriterien, keine offenen Abschlussbedingungen.
 - Datum: 2026-11-01.
 - Ergänzt [ADR 0006](0006-spielemetadaten-aus-lokalem-games-dump.md),
   [ADR 0007](0007-kataloguebersichten-und-erweiterte-navigation.md) und

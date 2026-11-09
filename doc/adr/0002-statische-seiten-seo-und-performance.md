@@ -1,6 +1,20 @@
 # ADR: Statische Seiten mit minimalem JavaScript, SEO und kurzen Ladezeiten
 
-**Status:** Vorgeschlagen
+**Status:** Abgeschlossen
+
+## Aktueller Regelstand
+
+Es gelten die [Vorrang- und Abschlussregeln](README.md). Pauschale Aussagen
+weiter unten sind wie folgt präzisiert: ADR 0007 erlaubt das lokale
+Spieltabellen-Skript, ADR 0009 die getrennte JSON-App, ADR 0011 Build-Abhängigkeiten
+und Agentenausgaben, ADR 0012 die Produktionsdomain, ADR 0013 das Prozessskript
+und gekapselte Diagrammstyles und ADR 0014 Statistikseiten.
+ADR 0015 erlaubt bestätigte Einzelspiele sowie eigenständige
+re.consider-Detailseiten neben Spieleseiten. Die Zwei-Video-Schwelle und
+„keine Videoseiten“ gelten daher nicht ausnahmslos. Historische Seitenbäume
+sind keine abschließenden Listen heutiger Routen. Frühere ausstehende Prüfungen
+sind akzeptierte Nachweisgrenzen, keine offenen Abschlussbedingungen.
+
 **Datum:** 2026-10-17
 **Entscheider:** Christian Harms
 **Kontext:** Veröffentlichung des Video-, Zeitschriften- und Spielekatalogs auf GitHub Pages.

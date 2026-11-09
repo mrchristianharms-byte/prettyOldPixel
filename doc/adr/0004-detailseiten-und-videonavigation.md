@@ -1,6 +1,17 @@
 # ADR: Detailseiten, Videonavigation und fortlaufende Wiedergabe
 
-**Status:** Vorgeschlagen; Seitenstruktur durch Nutzerentscheidung korrigiert
+**Status:** Abgeschlossen
+
+## Aktueller Regelstand
+
+Es gelten die [Vorrang- und Abschlussregeln](README.md). ADR 0015 präzisiert
+die Spielequalifikation um bestätigte Einzelspiele und erhält die zeitlich
+begrenzte Ausnahme für neue bestätigte Playlist-Reihen. Sie erlaubt ausdrücklich
+eigenständige re.consider-Detailseiten und Wiedergabe sowohl dort als auch auf
+der Spieleseite. Die nachfolgenden pauschalen Verbote separater Videoseiten
+und die ausnahmslose Zwei-Video-Schwelle sind insoweit ersetzt; ein allgemeiner
+Videogesamtkatalog wird dadurch nicht eingeführt.
+
 **Datum:** 2026-10-17
 **Entscheider:** Christian Harms
 **Grundlagen:** [ADR 0002](0002-statische-seiten-seo-und-performance.md) und

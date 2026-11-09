@@ -1,6 +1,10 @@
 # ADR 0006: Spielemetadaten ausschließlich aus lokalem Games-Dump
 
-- Status: angenommen.
+- Status: Abgeschlossen.
+- Regelstand: Es gelten die [Vorrang- und Abschlussregeln](README.md).
+  Der Steam-Nachtrag unten ersetzt die ausschließliche Dump-Regel nur für die
+  dort ausdrücklich belegten Firmenangaben von Airships. ADR 0008 vereinheitlicht
+  den Titelindex; ADR 0015 erweitert Katalog und Metadatenimport.
 - Umfang: Spielmetadaten einschließlich Erscheinungsjahren; keine Änderung an
   Video-, Transkript- oder Zeitschriftenquellen.
 

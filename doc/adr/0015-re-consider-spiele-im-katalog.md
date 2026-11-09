@@ -1,7 +1,15 @@
 # ADR 0015: re.consider-Spiele in Spieleliste und Statistiken
 
-- Status: angenommen und umgesetzt; Katalogdefinitionen, Metadatenimport
-  (Stand 2026-11-03) und erhaltene re.consider-Detailseiten sind geprüft.
+- Status: Abgeschlossen.
+- Regelstand: Es gelten die [Vorrang- und Abschlussregeln](README.md).
+  Option A zusammen mit dem Seitenerhalt aus Option C ist entschieden, nicht
+  nur empfohlen. Diese ADR präzisiert ADR 0002–0004: `confirmedSingle` erlaubt
+  bestätigte Ein-Video-Spiele unabhängig vom Alter; die zeitlich begrenzte
+  Ausnahme für neue bestätigte Playlist-Reihen bleibt bestehen. Eigenständige
+  re.consider-Detailseiten und parallele Wiedergabe auf Spieleseiten sind
+  ausdrücklich erlaubt. Die Statistiken aus ADR 0014 erfassen diese Spiele mit.
+  Die nachfolgende Problembeschreibung dokumentiert den Zustand vor Umsetzung;
+  der Umsetzungsstand am Ende hält das erreichte Ergebnis fest.
 - Datum: 2026-11-03.
 - Ergänzt [ADR 0006](0006-spielemetadaten-aus-lokalem-games-dump.md),
   [ADR 0007](0007-kataloguebersichten-und-erweiterte-navigation.md) und

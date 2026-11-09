@@ -1,6 +1,15 @@
 # ADR: YouTube-Kanal-Metadaten ohne offizielle API laden
 
-**Status:** Vorgeschlagen
+**Status:** Abgeschlossen
+
+## Aktueller Regelstand
+
+Es gelten die [Vorrang- und Abschlussregeln](README.md). ADR 0010 präzisiert
+den Playlist-Abruf; ADR 0013 dokumentiert den optionalen offiziellen API-Zugriff.
+Die Abhängigkeitsfreiheit betrifft diesen anonymen Abrufpfad, nicht den gesamten
+Build. Die unten genannten offenen Punkte sind historische Verbesserungsoptionen
+und akzeptierte Betriebsgrenzen, keine offenen Abschlussbedingungen.
+
 **Datum:** 2026-10-16 (überarbeitet 2026-10-17)
 **Entscheider:** Christian Harms
 **Kontext:** Export aller Video-Metadaten eines YouTube-Kanals in ein lokales System, ohne YouTube-Data-API-Key.

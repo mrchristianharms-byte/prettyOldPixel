@@ -1,6 +1,18 @@
 # ADR 0009: Offlinefähige Web-App für das iPhone
 
-**Status:** Angenommen; implementiert, Abnahme auf echtem iPhone ausstehend
+**Status:** Abgeschlossen
+
+## Aktueller Regelstand und Abschluss
+
+Es gelten die [Vorrang- und Abschlussregeln](README.md). Die separate JSON-App
+und der gemeinsame Inhalts-Loader sind verbindlich. Die früher dokumentierten
+fehlenden Geräte-, Speicher- und Startzeitnachweise werden als Nachweisgrenzen
+akzeptiert und sind keine offenen Abschlussbedingungen. Die nachfolgenden
+Abnahmepläne und Messungen bleiben historische Belege, keine neu ausgeführten
+Tests. Die ausdrücklich gemeldete erfolgreiche iPhone-Abnahme betrifft ADR 0011;
+sie wird nicht ohne weitere Angaben als Erfüllung dieser gesamten Prüfliste
+gewertet.
+
 **Datum:** 2026-10-23
 **Entscheider:** Christian Harms
 **Kontext:** Eine separate Offline-App erzeugt ihre Ansichten lokal aus JSON;

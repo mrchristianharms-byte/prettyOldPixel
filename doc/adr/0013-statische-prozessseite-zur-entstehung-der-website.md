@@ -1,7 +1,14 @@
 # ADR 0013: Statische Prozessseite zur Entstehung der Website
 
-- Status: angenommen; Prozessseite, SVG und Animationen lokal implementiert
-  und geprüft; Veröffentlichung ausstehend.
+- Status: Abgeschlossen.
+- Regelstand: Es gelten die [Vorrang- und Abschlussregeln](README.md).
+  Das lokale Prozessskript und gekapselte Diagrammstyles präzisieren die
+  allgemeinen Website-/Asset-Regeln aus ADR 0002 und 0005. Die drei Ausgaben
+  werden gemeinsam veröffentlicht; der optionale offizielle YouTube-API-Zugriff
+  ergänzt den anonymen Weg aus ADR 0001. Frühere Deployment-Vorbehalte unten
+  beschreiben den damaligen Prüfstand und sind keine offenen Abschlussbedingungen.
+  Eine neue Live-Abnahme wird damit nicht behauptet; spätere Katalogerweiterungen
+  aus ADR 0014 und 0015 ändern illustrative historische Dateimengen nicht.
 - Datum: 2026-10-30.
 - Ergänzt [ADR 0002](0002-statische-seiten-seo-und-performance.md),
   [ADR 0010](0010-gezielter-playlist-abruf-nach-neuen-videos.md),

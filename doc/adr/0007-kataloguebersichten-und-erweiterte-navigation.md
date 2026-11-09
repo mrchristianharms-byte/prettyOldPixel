@@ -1,6 +1,15 @@
 # ADR 0007: Katalogübersichten und erweiterte Navigation
 
-**Status:** Angenommen; nachträgliche Dokumentation der bestehenden Umsetzung
+**Status:** Abgeschlossen
+
+## Aktueller Regelstand
+
+Es gelten die [Vorrang- und Abschlussregeln](README.md). Die lokale,
+progressive Spieltabelle präzisiert das frühere Null-JavaScript-Ziel für
+Übersichten aus ADR 0002. ADR 0014 ergänzt Statistikzugänge; ADR 0015 erweitert
+den qualifizierten Spielebestand um bestätigte Einzelspiele. Statische
+Inhalte und Fallback-Navigation bleiben verbindlich.
+
 **Datum:** 2026-10-22
 **Entscheider:** Christian Harms
 **Kontext:** Bessere Orientierung in den Zeitschriften- und Spielekatalogen.
