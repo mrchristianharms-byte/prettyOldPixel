@@ -5,8 +5,8 @@
     "title": "Pretty Old Pixel",
     "url": "https://www.youtube.com/@PrettyOldPixel"
   },
-  "fetchedAt": "2026-11-08T22:54:30.891Z",
-  "lastModified": "2026-11-08T22:54:30.891Z",
+  "fetchedAt": "2026-11-11T00:04:11.400Z",
+  "lastModified": "2026-11-11T00:04:11.400Z",
   "complete": true,
   "playlists": [
     {
@@ -30,7 +30,7 @@
         }
       ],
       "lastModified": "2026-11-03T23:59:47.206Z",
-      "checkedAt": "2026-11-08T22:54:30.891Z"
+      "checkedAt": "2026-11-11T00:04:11.400Z"
     },
     {
       "id": "PLCdHnxdZabN4",
@@ -137,7 +137,7 @@
         }
       ],
       "lastModified": "2026-10-31T22:30:22.943Z",
-      "checkedAt": "2026-11-06T23:44:39.419Z"
+      "checkedAt": "2026-11-11T00:04:11.400Z"
     },
     {
       "id": "PLKAk_zU7LotY",
@@ -160,60 +160,66 @@
         }
       ],
       "lastModified": "2026-11-05T00:23:26.144Z",
-      "checkedAt": "2026-11-08T22:54:30.891Z"
+      "checkedAt": "2026-11-11T00:04:11.400Z"
     },
     {
       "id": "PLKPrSm4Rptws",
       "title": "re.play - Ports of Call",
       "description": "",
       "url": "https://www.youtube.com/playlist?list=PLKPrSm4Rptws",
-      "videoCount": 7,
+      "videoCount": 8,
       "videos": [
         {
           "position": 1,
+          "videoId": "cTlLvbz7n0s",
+          "title": "Ports of Call [re.play - #8] Die Multiplayer-Partie mit Selmar [German/Deutsch]",
+          "availability": "listed"
+        },
+        {
+          "position": 2,
           "videoId": "PjtS58grwiw",
           "title": "Ports of Call [re.play - #7] Der Griff zur Seeherrschaft [German/Deutsch]",
           "availability": "listed"
         },
         {
-          "position": 2,
+          "position": 3,
           "videoId": "bvf27Rs6-lQ",
           "title": "Ports of Call [re.play - #6] Auf Kurs! [German/Deutsch]",
           "availability": "listed"
         },
         {
-          "position": 3,
+          "position": 4,
           "videoId": "9447w0rqO5g",
           "title": "Ports of Call [re.play - #5] Der Neuanfang [German/Deutsch]",
           "availability": "listed"
         },
         {
-          "position": 4,
+          "position": 5,
           "videoId": "CskyMesAyBo",
           "title": "Ports of Call [re.play - #4] Pleiten, Pech und Pannen [German/Deutsch]",
           "availability": "listed"
         },
         {
-          "position": 5,
+          "position": 6,
           "videoId": "HXjtWbFsmVA",
           "title": "Ports of Call [re.play - #3] Die 1. Partie - Vom Pech verfolgt [German/Deutsch]",
           "availability": "listed"
         },
         {
-          "position": 6,
+          "position": 7,
           "videoId": "QwK8aDIXRD4",
           "title": "Ports of Call [re.play - #2] Tutorial - 1. Schritte [German/Deutsch]",
           "availability": "listed"
         },
         {
-          "position": 7,
+          "position": 8,
           "videoId": "se0wLaIULAQ",
           "title": "Ports of Call [re.play - #1] Intro und Unboxing [German/Deutsch]",
           "availability": "listed"
         }
       ],
-      "lastModified": "2026-10-21T07:25:20.246Z",
-      "checkedAt": "2026-11-06T23:44:39.419Z"
+      "lastModified": "2026-11-11T00:04:11.400Z",
+      "checkedAt": "2026-11-11T00:04:11.400Z"
     },
     {
       "id": "PLKsmhkv13pEw",
@@ -230,7 +236,7 @@
         }
       ],
       "lastModified": "2026-11-06T00:18:29.666Z",
-      "checkedAt": "2026-11-08T22:54:30.891Z"
+      "checkedAt": "2026-11-11T00:04:11.400Z"
     },
     {
       "id": "PLNceJpv0LbXw",
@@ -277,7 +283,7 @@
         }
       ],
       "lastModified": "2026-11-06T23:44:39.419Z",
-      "checkedAt": "2026-11-08T22:54:30.891Z"
+      "checkedAt": "2026-11-11T00:04:11.400Z"
     },
     {
       "id": "PLO77B_AOBv8s",
@@ -366,7 +372,7 @@
         }
       ],
       "lastModified": "2026-10-21T20:25:08.802Z",
-      "checkedAt": "2026-11-06T23:44:39.419Z"
+      "checkedAt": "2026-11-11T00:04:11.400Z"
     },
     {
       "id": "PLUrbqDDC9Ei0",
@@ -443,7 +449,7 @@
         }
       ],
       "lastModified": "2026-10-29T23:18:55.668Z",
-      "checkedAt": "2026-11-06T23:44:39.419Z"
+      "checkedAt": "2026-11-11T00:04:11.400Z"
     },
     {
       "id": "PLZW5k3rtbudo_0dIXa7DsWpwUx53PkV6l",
@@ -4938,7 +4944,7 @@
         }
       ],
       "lastModified": "2026-10-27T22:58:11.653Z",
-      "checkedAt": "2026-11-06T23:44:39.419Z"
+      "checkedAt": "2026-11-11T00:04:11.400Z"
     },
     {
       "id": "PLZW5k3rtbudpGgkzpDmKmzUQuZtmD8Oz4",
@@ -6947,7 +6953,7 @@
       "videoCount": 0,
       "videos": [],
       "lastModified": "2026-10-21T20:25:08.802Z",
-      "checkedAt": "2026-11-06T23:44:39.419Z"
+      "checkedAt": "2026-11-11T00:04:11.400Z"
     },
     {
       "id": "PLZW5k3rtbudq2jSfF1FVnYZIrbbsmwhod",
@@ -9269,7 +9275,7 @@
         }
       ],
       "lastModified": "2026-10-21T20:25:08.802Z",
-      "checkedAt": "2026-11-06T23:44:39.419Z"
+      "checkedAt": "2026-11-11T00:04:11.400Z"
     },
     {
       "id": "PLZW5k3rtbudqL_S3q1GAmZvgMZ2T2tOEi",
@@ -12756,7 +12762,7 @@
         }
       ],
       "lastModified": "2026-11-08T22:54:30.891Z",
-      "checkedAt": "2026-11-08T22:54:30.891Z"
+      "checkedAt": "2026-11-11T00:04:11.400Z"
     },
     {
       "id": "PLZW5k3rtbudrGsaQQM4K_wXyL5zzGiVes",
