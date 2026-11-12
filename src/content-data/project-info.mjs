@@ -8,6 +8,7 @@ export const projectLinks = [
   { url: "https://prettyoldpixel.de/", label: "Pretty Old Pixel – Website und Kontakt", description: "Weitere Informationen und Kontaktmöglichkeiten zu Pretty Old Pixel." },
   { url: "https://www.youtube.com/@PrettyOldPixel", label: "YouTube-Kanal Pretty Old Pixel", description: "Originalvideos zu Retrospielen, Zeitschriften, Hardware und Gesprächen." },
   { url: "https://www.twitch.tv/prettyoldpixel", label: "Twitch-Kanal Pretty Old Pixel", description: "Livestreams von Pretty Old Pixel.", aboutOnly: true },
+  { url: "https://discord.gg/7Gkh4XxVu", label: "Discord-Server von Pretty Old Pixel", description: "Community-Server zum Kanal: Austausch und Hinweise zu Videos.", contactOnly: true },
 ];
 
 export const externalContentNotice = "Links zu externen Inhalten sind mit dem Symbol ↗ und einem zugänglichen Hinweis gekennzeichnet. Die verlinkten Websites werden erst beim Öffnen des Links aufgerufen. Verwendete Logos und Markenicons dienen der Zuordnung zu den jeweiligen Zeitschriften, Quellen und Diensten. Sie sind als statische Dateien dieser Website oder direkt im Seitencode eingebunden und laden selbst keine Inhalte von den Anbietern nach. Marken- und Kennzeichenrechte bleiben bei den jeweiligen Rechteinhabern. Für YouTube-Vorschaubilder und aktivierte Player gelten die gesonderten Hinweise zu direkten Verbindungen mit YouTube.";

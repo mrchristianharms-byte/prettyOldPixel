@@ -191,6 +191,7 @@ ${start + 60 < videos.length ? link(`${base}seite/${page + 1}/`, "Nächste Seite
 <h2>Weiterführende Links</h2>
 ${itemList([
     ...projectLinks.filter((entry) => !entry.aboutOnly || info.route === "about/")
+      .filter((entry) => !entry.contactOnly || info.route === "contact/")
       .map((entry) => `${externalLink(entry.url, entry.label)}: ${e(entry.description)}`),
     `${link(siteProcess.route, "So entsteht diese Website")}: Das Zusammenspiel von GitHub Actions, GitHub Pages, Cloudflare und YouTube.`,
   ])}` };

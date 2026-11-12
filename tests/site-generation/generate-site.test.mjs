@@ -136,6 +136,23 @@ test("beschreibt Websiteidentität und verlinkt quellengestützte Projekt- und K
   }
 });
 
+test("zeigt den Discord-Server nur in der Linkliste der erzeugten Kontaktseite", async (t) => {
+  const options = await setup(t, fixture(1));
+  await generateSite(options);
+  const contact = await readFile(path.join(options.outputDirectory, "contact/index.html"), "utf8");
+  const about = await readFile(path.join(options.outputDirectory, "about/index.html"), "utf8");
+  const links = (html) => html.match(/<h2>Weiterführende Links<\/h2>\s*<ul>([\s\S]*?)<\/ul>/u)[1];
+  const discord = '<li><a href="https://discord.gg/7Gkh4XxVu" rel="external">Discord-Server von Pretty Old Pixel <span aria-hidden="true">↗</span><span class="visually-hidden"> (externe Website)</span></a>: Community-Server zum Kanal: Austausch und Hinweise zu Videos.</li>';
+  assert.doesNotMatch(about, /discord\.gg/u);
+  assert.equal((links(about).match(/<li>/gu) ?? []).length, 4);
+  for (const url of ["https://prettyoldpixel.de/", "https://www.youtube.com/@PrettyOldPixel", "https://www.twitch.tv/prettyoldpixel", "../so-entsteht-die-seite/"]) {
+    assert.ok(links(about).includes(`href="${url}"`), url);
+  }
+  assert.ok(links(contact).includes(discord));
+  assert.equal((links(contact).match(/<li>/gu) ?? []).length, 4);
+  assert.doesNotMatch(links(contact), /twitch\.tv/u);
+});
+
 test("entfernt Startseite nur aus der Hauptnavigation und behält Markenlink und Brotkrümel", () => {
   const { pages, config } = render(issueFixture());
   for (const { html, route } of pages.values()) {

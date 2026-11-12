@@ -118,6 +118,50 @@ Daten. Beschädigte oder veraltete fertige Caches brechen den Build ab.
   der Cache-Hash sichert auch diese Katalogfreigaben. Sammlungen ändern weder
   das Hauptjahr noch die Plattformzählung der Startseite.
 
+## Neue Spielkandidaten aus YouTube
+
+```sh
+npm run fetch:all
+npm run dev:collect:game-candidates
+# Optional: -- --index /pfad/index.json.gz --cache-dir /pfad/cache
+```
+
+Der lokale Offline-Schritt liest einen vollständigen Video-Cache und die
+Playlist-Mitgliedschaften. Er prüft alle bisher unzugeordneten Videos, auch
+historische, statt vom flüchtigen `new-video-ids`-Output eines Abrufs abhängig
+zu sein. So gehen nach unterbrochenen Abrufen keine Videos verloren. Videos
+bestätigter Spielplaylists, explizite Zusatzvideos und Ausschlüsse werden
+übersprungen. Genau eine nichtleere `Spiel:`-Zeile dient als Titelquelle;
+Videotitel, Teilüberschriften und phonetische Ähnlichkeit genügen nicht.
+
+Die bestehende Titelindexsuche wird auf vollständige Titel und Aliasse
+beschränkt. Genau eine unterschiedliche MobyGames-ID erzeugt einen Kandidaten
+in `cache/game-metadata/new-candidates.json` mit Titel, Erstjahr und Belegen
+(Video-ID, Beschreibungstitel, Dump-Hash des Index). Mehrere passende IDs,
+fehlende Treffer und fehlende Titel stehen unter `unresolved` und im Log.
+Sie werden beim nächsten Lauf erneut geprüft. Vorhandene Kandidaten und ihre
+Belege werden nicht überschrieben; neue Video-Belege kommen ohne Duplikate
+hinzu. Wiederholungsläufe mit gleichen Eingaben erzeugen dieselbe Ausgabe.
+Alte Kandidaten bleiben als Prüfhistorie erhalten, auch nach Katalogfreigabe;
+Änderungen am Index ersetzen frühere Belege nicht automatisch. Die Datei
+speichert die Kanal-ID; ein Kanalwechsel bricht ab statt Daten zu vermischen.
+Ein fehlender/veralteter Index oder unvollständiger Video-Cache bricht vor dem
+Schreiben ab. Die Ausgabe wird atomar ersetzt.
+
+Beispiel: `Spiel: Star Trek Generations` findet MobyGames-ID 699 auch ohne
+Doppelpunkt und ohne Star-Trek-Eintrag im Katalog. Der Regressionstest verwendet
+einen kleinen Index und ausdrücklich einen leeren Katalog. Im echten Bestand
+ist das Video bereits über seine bestätigte Playlist zugeordnet und wird
+übersprungen.
+
+Dies ist nur ein Vorschlagsschritt: weder `src/data/data-games.mjs` noch
+`ready.json` werden geändert. Kandidaten fachlich prüfen, Plattform und
+Videozuordnung im Katalog bestätigen und danach Import, Verifikation und
+`dev:prepare:game-metadata` ausführen. Eine direkte automatische Übernahme
+in den veröffentlichten Katalog ist damit nicht implementiert. Der Schritt
+läuft ausschließlich lokal, nicht in `fetch:all`, GitHub Actions oder dem
+Websitebuild. Er benötigt keine Transkripte, Modelle oder Netzwerkzugriffe.
+
 ## Anzeige und Pflege
 
 Spieleseiten zeigen ein kompaktes Profil mit Genre, Entwickler, Publisher und

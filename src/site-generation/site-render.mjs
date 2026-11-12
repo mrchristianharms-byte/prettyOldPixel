@@ -837,7 +837,9 @@ ${homeOverview(model, config, filters)}`,
         isPartOf: { "@id": `${config.href("", info.route)}#website` } },
       body: `<h1>${escapeHtml(info.title)}</h1>${info.paragraphs.map((text) => `<p>${escapeHtml(text)}</p>`).join("\n")}
 <h2>Weiterführende Links</h2>
-<ul>${projectLinks.filter((entry) => !entry.aboutOnly || info.route === "about/").map((entry) => `<li>${externalLink(entry.url, entry.label)}: ${escapeHtml(entry.description)}</li>`).join("\n")}
+<ul>${projectLinks.filter((entry) => !entry.aboutOnly || info.route === "about/")
+  .filter((entry) => !entry.contactOnly || info.route === "contact/")
+  .map((entry) => `<li>${externalLink(entry.url, entry.label)}: ${escapeHtml(entry.description)}</li>`).join("\n")}
 <li><a href="${config.href(siteProcess.route, info.route)}">So entsteht diese Website</a>: Das Zusammenspiel von GitHub Actions, GitHub Pages, Cloudflare und YouTube.</li></ul>`,
     });
   }

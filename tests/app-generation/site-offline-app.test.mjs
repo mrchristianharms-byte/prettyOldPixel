@@ -159,6 +159,21 @@ test("Spielefilter und Sortierung funktionieren auf demselben Datenstand", () =>
   assert.doesNotMatch(gameTableBody([hostile], data), /<script>/u);
 });
 
+test("zeigt den Discord-Server nur in der Linkliste der App-Kontaktseite", () => {
+  const contact = renderView(data, { route: "contact/" }).body;
+  const about = renderView(data, { route: "about/" }).body;
+  const links = (html) => html.match(/<h2>Weiterführende Links<\/h2>\s*<ul>([\s\S]*?)<\/ul>/u)[1];
+  const discord = '<li><a href="https://discord.gg/7Gkh4XxVu" rel="external">Discord-Server von Pretty Old Pixel <span aria-hidden="true">↗</span><span class="visually-hidden"> (externe Website)</span></a>: Community-Server zum Kanal: Austausch und Hinweise zu Videos.</li>';
+  assert.doesNotMatch(about, /discord\.gg/u);
+  assert.equal((links(about).match(/<li>/gu) ?? []).length, 4);
+  for (const url of ["https://prettyoldpixel.de/", "https://www.youtube.com/@PrettyOldPixel", "https://www.twitch.tv/prettyoldpixel", "#/so-entsteht-die-seite/"]) {
+    assert.ok(links(about).includes(`href="${url}"`), url);
+  }
+  assert.ok(links(contact).includes(discord));
+  assert.equal((links(contact).match(/<li>/gu) ?? []).length, 4);
+  assert.doesNotMatch(links(contact), /twitch\.tv/u);
+});
+
 test("App-Texte verwenden klare Spielangaben und die korrekte Einzahl", () => {
   const about = renderView(data, { route: "about/" });
   assert.match(about.body, /https:\/\/www\.twitch\.tv\/prettyoldpixel/u);

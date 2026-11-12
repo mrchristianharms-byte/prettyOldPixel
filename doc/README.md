@@ -600,7 +600,15 @@ nicht automatisch erzeugte Caches:
    dem Spiel zugeordnet. Fehlt sie dort, ihre Zugehörigkeit anhand von Titel,
    Beschreibung und Quellplaylist prüfen und erst dann als Zusatzvideo in
    `src/data/data-games.mjs` aufnehmen. Bekannte Ausschlüsse bleiben bestehen.
-3. Bei einem **neuen Spieltitel** eine eigene bestätigte Spielidentität in
+3. Nach einem YouTube-Update kann lokal `npm run dev:collect:game-candidates`
+   die `Spiel:`-Zeilen unzugeordneter Videos gegen den großen Titelindex prüfen.
+   Eindeutige vollständige Titel/Aliasse werden mit MobyGames-ID, Erstjahr,
+   Video-ID und Index-Hash in `cache/game-metadata/new-candidates.json` gesammelt.
+   Das ist eine **Prüfdatei**, keine Veröffentlichung oder direkte Übernahme in
+   `ready.json`. Mehrdeutige oder fehlende Treffer bleiben dort unter `unresolved`.
+   Der Schritt läuft nicht in GitHub Actions und benötigt den lokalen Titelindex.
+   [Details und Wiederholungsläufe](game-metadata-implementation.md#neue-spielkandidaten-aus-youtube).
+   Bei einem **neuen Spieltitel** eine eigene bestätigte Spielidentität in
    `src/data/data-games.mjs` anlegen: kanonischer Name, gegebenenfalls Plattform,
    Quellplaylist oder explizit geprüfte `videoIds` sowie belegte Aliasse.
    Eine Playlist ist bei einer vollständig manuell bestätigten Videoreihe
