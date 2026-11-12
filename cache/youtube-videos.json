@@ -5,10 +5,18 @@
     "title": "Pretty Old Pixel",
     "url": "https://www.youtube.com/@PrettyOldPixel"
   },
-  "lastModified": "2026-11-10T18:00:22Z",
-  "fetchedAt": "2026-11-11T00:04:11.186Z",
+  "lastModified": "2026-11-11T18:00:38Z",
+  "fetchedAt": "2026-11-12T01:33:21.886Z",
   "complete": true,
   "videos": [
+    {
+      "id": "7lSMVfCtNr4",
+      "title": "Ultima Underworld II [re.play - #3] Die Geschichte von Ultima - Teil 2 [German]",
+      "description": "Spiel: Ultima Underworld II: Labyrinth of Worlds\nPublisher: ORIGIN Systems, Inc.\nEntwickler: Looking Glass Technologies, Inc.\nReleasedatum: 1993\nSysteme: MS-DOS, FM-Towns, PC-98\n\nLink zu  ⁨@Steinwallen⁩  Ultima 7 Playthrough: https://www.youtube.com/playlist?list=PL1jjPcfEsu2W2h4AOL5eCNWfQauXP9U45   \n\nPlaylist: https://www.youtube.com/playlist?list=PLUrbqDDC9Ei0\n\nJeden Dienstag und Freitag ab 20 Uhr auf Twitch.tv/PrettyOldPixel",
+      "duration": "PT26M46S",
+      "durationSeconds": 1606,
+      "publishedAt": "2026-11-11T18:00:38Z"
+    },
     {
       "id": "cTlLvbz7n0s",
       "title": "Ports of Call [re.play - #8] Die Multiplayer-Partie mit Selmar [German/Deutsch]",
