@@ -2,19 +2,22 @@ import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { parseEnv } from "node:util";
 import {
-  createYoutubeScraper,
+  createYoutubeSources,
+  syncYoutube as syncSharedYoutube,
+} from "../shared/fetch-youtube.mjs";
+import { YOUTUBE_API_KEY_VARIABLE } from "../shared/youtube-data-api.mjs";
+import {
   parseChannelHandle,
   syncYoutubeVideos as syncVideos,
   writeNewVideosOutput,
 } from "./fetch-youtube-videos.mjs";
 import {
-  createPlaylistScraper,
-  orderByLastUpdate,
   parseVideoIds,
   playlistCacheReady,
   syncYoutubePlaylists as syncPlaylists,
 } from "./fetch-youtube-playlists.mjs";
-import { createYoutubeDataApi, YOUTUBE_API_KEY_VARIABLE } from "./youtube-data-api.mjs";
+
+export { createYoutubeSources };
 
 const defaultEnvFile = fileURLToPath(new URL("../../.env", import.meta.url));
 
@@ -38,47 +41,6 @@ function youtubeAccessMessage(origin) {
     : `YouTube-Abruf: anonyme Fetch-Skripte über öffentliche YouTube-Seiten (${YOUTUBE_API_KEY_VARIABLE} nicht gesetzt).`;
 }
 
-function apiPlaylists(api) {
-  return {
-    async channelPlaylists(handle) {
-      const channel = await api.channel(handle);
-      return { channel, entries: await api.channelPlaylists(channel.id) };
-    },
-    // The API cannot sort playlists, so the cached change dates decide.
-    async* recentPlaylists(handle, oldById, channelId) {
-      const entries = await api.channelPlaylists(channelId ?? (await api.channel(handle)).id);
-      yield* orderByLastUpdate(entries, oldById);
-    },
-    async playlist(entry) {
-      const videos = (await api.playlistItems(entry.id)).map((video, index) => ({ position: index + 1, ...video }));
-      return {
-        id: entry.id,
-        title: entry.title,
-        description: entry.description ?? "",
-        url: `https://www.youtube.com/playlist?list=${encodeURIComponent(entry.id)}`,
-        videoCount: videos.length,
-        videos,
-      };
-    },
-  };
-}
-
-export function createYoutubeSources({
-  apiKey = null,
-  fetchImpl = fetch,
-  log = console.log,
-  sleep = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds)),
-} = {}) {
-  const options = { fetchImpl, log, sleep };
-  const videos = apiKey ? createYoutubeDataApi({ ...options, apiKey }) : createYoutubeScraper(options);
-  const playlists = apiKey ? apiPlaylists(videos) : createPlaylistScraper(options);
-  const label = apiKey ? "YouTube Data API v3" : "anonymer Abruf öffentlicher YouTube-Seiten";
-  return {
-    videos: { ...videos, label },
-    playlists: { ...playlists, mode: videos.mode, label },
-  };
-}
-
 export async function syncYoutubeVideos(options) {
   return syncVideos({ ...options, source: createYoutubeSources(options).videos });
 }
@@ -87,25 +49,22 @@ export async function syncYoutubePlaylists(options) {
   return syncPlaylists({ ...options, source: createYoutubeSources(options).playlists });
 }
 
-// Playlists only change with new uploads, so a complete playlist cache is kept when no video was added;
-// otherwise the playlist run only searches until the new videos are found.
 export async function syncYoutube({
-  channel,
-  apiKey = null,
-  fetchImpl = fetch,
-  sleep,
-  log = console.log,
+  videosCacheFile = fileURLToPath(new URL("../../cache/youtube-videos.json", import.meta.url)),
+  playlistsCacheFile = fileURLToPath(new URL("../../cache/youtube-playlists.json", import.meta.url)),
   videos = syncVideos,
   playlists = syncPlaylists,
   playlistsReady = playlistCacheReady,
+  ...options
 }) {
-  const sources = createYoutubeSources({ apiKey, fetchImpl, sleep, log });
-  const videoResult = await videos({ channel, source: sources.videos, log });
-  if (videoResult.newVideos === 0 && await playlistsReady(channel)) {
-    log("Keine neuen Videos; Playlist-Abruf übersprungen.");
-    return { videos: videoResult, playlists: null };
-  }
-  return { videos: videoResult, playlists: await playlists({ channel, source: sources.playlists, log, newVideoIds: videoResult.newVideoIds ?? [] }) };
+  return syncSharedYoutube({
+    ...options,
+    videosCacheFile,
+    playlistsCacheFile,
+    videos,
+    playlists,
+    playlistsReady,
+  });
 }
 
 export async function startYoutubeCli(task, {

@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { execFile } from "node:child_process";
-import { cp, mkdir, mkdtemp, readFile, realpath, rm, writeFile } from "node:fs/promises";
+import { cp, mkdtemp, readFile, realpath, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
@@ -80,8 +80,7 @@ test("alle drei CLI-Einstiege verwenden die zentrale Auswahl mit und ohne API-Ke
   const directory = await realpath(await mkdtemp(path.join(tmpdir(), "youtube-cli-routing-")));
   try {
     await cp(new URL("../../src/fetch-channel/", import.meta.url), path.join(directory, "src/fetch-channel"), { recursive: true });
-    await mkdir(path.join(directory, "src/shared"), { recursive: true });
-    await cp(new URL("../../src/shared/archive-cache.mjs", import.meta.url), path.join(directory, "src/shared/archive-cache.mjs"));
+    await cp(new URL("../../src/shared/", import.meta.url), path.join(directory, "src/shared"), { recursive: true });
     await cp(new URL("../../src/fetch-youtube.mjs", import.meta.url), path.join(directory, "src/fetch-youtube.mjs"));
     const preload = `
       globalThis.fetch = async (url, init) => {
