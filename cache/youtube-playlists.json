@@ -5,8 +5,8 @@
     "title": "Pretty Old Pixel",
     "url": "https://www.youtube.com/@PrettyOldPixel"
   },
-  "fetchedAt": "2026-11-13T00:28:13.995Z",
-  "lastModified": "2026-11-13T00:28:13.995Z",
+  "fetchedAt": "2026-11-14T00:21:10.867Z",
+  "lastModified": "2026-11-14T00:21:10.867Z",
   "complete": true,
   "playlists": [
     {
@@ -14,23 +14,29 @@
       "title": "re.play - Wizardry: Proving Grounds of the Mad Overlord",
       "description": "",
       "url": "https://www.youtube.com/playlist?list=PLAvthCnzW8Bs",
-      "videoCount": 2,
+      "videoCount": 3,
       "videos": [
         {
           "position": 1,
-          "videoId": "y99Akilq6pw",
-          "title": "Wizardry I [re.play - #1] Tutorial und 1. Schritte [German/Deutsch]",
+          "videoId": "UOAZQWDd_XE",
+          "title": "Wizardry I [re.play - #3] Ein Massaker [German/Deutsch]",
           "availability": "listed"
         },
         {
           "position": 2,
+          "videoId": "y99Akilq6pw",
+          "title": "Wizardry I [re.play - #2] Tutorial und 1. Schritte [German/Deutsch]",
+          "availability": "listed"
+        },
+        {
+          "position": 3,
           "videoId": "eXRHHZ8l_Jc",
           "title": "Wizardry I - Proving Grounds of the Mad Overlord [re.play - #1] Intro und Unboxing [German/Deutsch]",
           "availability": "listed"
         }
       ],
-      "lastModified": "2026-11-03T23:59:47.206Z",
-      "checkedAt": "2026-11-11T00:04:11.400Z"
+      "lastModified": "2026-11-14T00:21:10.867Z",
+      "checkedAt": "2026-11-14T00:21:10.867Z"
     },
     {
       "id": "PLCdHnxdZabN4",
@@ -166,7 +172,7 @@
         }
       ],
       "lastModified": "2026-11-12T01:33:22.041Z",
-      "checkedAt": "2026-11-13T00:28:13.995Z"
+      "checkedAt": "2026-11-14T00:21:10.867Z"
     },
     {
       "id": "PLKPrSm4Rptws",
@@ -225,7 +231,7 @@
         }
       ],
       "lastModified": "2026-11-11T00:04:11.400Z",
-      "checkedAt": "2026-11-13T00:28:13.995Z"
+      "checkedAt": "2026-11-14T00:21:10.867Z"
     },
     {
       "id": "PLKsmhkv13pEw",
@@ -248,7 +254,7 @@
         }
       ],
       "lastModified": "2026-11-13T00:28:13.995Z",
-      "checkedAt": "2026-11-13T00:28:13.995Z"
+      "checkedAt": "2026-11-14T00:21:10.867Z"
     },
     {
       "id": "PLNceJpv0LbXw",
@@ -295,7 +301,7 @@
         }
       ],
       "lastModified": "2026-11-06T23:44:39.419Z",
-      "checkedAt": "2026-11-13T00:28:13.995Z"
+      "checkedAt": "2026-11-14T00:21:10.867Z"
     },
     {
       "id": "PLO77B_AOBv8s",
@@ -12774,7 +12780,7 @@
         }
       ],
       "lastModified": "2026-11-08T22:54:30.891Z",
-      "checkedAt": "2026-11-13T00:28:13.995Z"
+      "checkedAt": "2026-11-14T00:21:10.867Z"
     },
     {
       "id": "PLZW5k3rtbudrGsaQQM4K_wXyL5zzGiVes",
