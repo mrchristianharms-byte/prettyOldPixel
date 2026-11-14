@@ -16,6 +16,7 @@ export async function generateCss({
     content: [path.join(directory, "**/*.mjs"), path.join(directory, "*.js")],
     css: [{ raw: original }],
     variables: true,
+    keyframes: true,
     safelist: {
       standard: [":root", ":host", "html", "body", "data-theme", "light", "dark", /^h[1-6]$/u],
       // Preserve compound pseudo-only rules such as Pico's heading spacing.

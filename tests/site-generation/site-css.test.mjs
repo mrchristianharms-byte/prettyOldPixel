@@ -21,6 +21,11 @@ test("reduziert die übertragenen CSS-Bytes um mindestens 30 Prozent ohne Build-
   }
 });
 
+test("entfernt ungenutzte Framework-Animationen für Reserve beim gzip-Budget", () => {
+  const keyframes = [...reduced.matchAll(/@(?:-webkit-)?keyframes\s+([\w-]+)/gu)].map((match) => match[1]);
+  assert.deepEqual(keyframes, []);
+});
+
 test("erhält Themen, responsive Regeln, Überschriftenabstände und interaktive Zustände", () => {
   for (const selector of ["[data-theme=light]", "[data-theme=dark]", "prefers-color-scheme:dark",
     ":focus", ":checked", "[disabled]", "details", "summary", "table", "~:is(h1,h2,h3,h4,h5,h6)"]) {
