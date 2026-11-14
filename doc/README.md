@@ -1117,9 +1117,13 @@ Spieljahr und summierte Videolängen.
   damit Layout, Darstellung und Bedienbarkeit auch ohne JavaScript erhalten bleiben.
   Nach Template- oder Browserzustandsänderungen `dev:generate:css` und `dev:test`
   ausführen; der Reproduzierbarkeitstest erkennt eine veraltete CSS-Fassung.
-  Die Produktionstests begrenzen das aktuelle Bundle auf weniger als 12.000 Bytes
-  gzip und verlangen mindestens 30 Prozent weniger gzip-Bytes als mit dem
-  vollständigen Framework. Das allgemeine harte Build-Budget bleibt bei 20 KiB.
+  Produktionstests und Build begrenzen das Bundle auf 12 KiB gzip für die
+  15 bestehenden Widgets plus 1 KiB je zusätzlichem Widget. Tabelle und Budget
+  stehen gemeinsam in `src/site-generation/widget/css-budget.mjs`; dort sind
+  Widget-Selektoren und gemeinsame Layoutregeln zugeordnet. Das Budgetmodul
+  selbst zählt nicht als Widget. Tests prüfen die vollständige Widget-Liste und
+  CSS-Klassenzuordnung sowie mindestens 30 Prozent weniger gzip-Bytes als mit
+  dem vollständigen Framework.
   PurgeCSS ist ausschließlich eine lokale Entwicklungsabhängigkeit; der
   Seitenbuild führt es nicht aus. Der Parser-Override in `package.json` verwendet
   die korrigierte `postcss-selector-parser`-Version ab 7.1.6 statt der
@@ -1172,8 +1176,10 @@ Spieljahr und summierte Videolängen.
   Fehlende Beschreibungen sind zulässig. Videos mit unbekanntem Datum bleiben auf
   bestätigten Themenseiten sichtbar; zukünftige Videos werden nicht veröffentlicht.
 - Der Build prüft alle internen Links und Fragmente, Canonicals, JSON-LD sowie
-  die Budgets von 20 KiB gzip CSS, 5 KiB gzip eigenem JavaScript und
-  50 KiB gzip HTML je Seite. Auch lange Reihen müssen diese Budgets einhalten.
+  das CSS-Budget aus `src/site-generation/widget/css-budget.mjs` (12 KiB gzip
+  für 15 Basis-Widgets plus 1 KiB je zusätzlichem Widget), 5 KiB gzip eigenes
+  JavaScript und 50 KiB gzip HTML je Seite. Auch lange Reihen müssen diese
+  Budgets einhalten.
 - Ein frisches, geprüftes Ausgabeverzeichnis ersetzt die vorherige Ausgabe;
   entfernte Seiten bleiben nicht liegen. Identische Dateien werden einschließlich
   Dateizeit übernommen. Bei ungültigen Quellen bleibt die bestehende Website
@@ -1211,8 +1217,10 @@ Spieljahr und summierte Videolängen.
 Automatisierte Tests prüfen Freigabe, API-Ladefehler/Timeouts, Kapitelsprünge,
 Opt-in/Opt-out, API-`ENDED`-Ereignisse, undatierte Folgen, Reihenende,
 Autoplay-Blockierung, Zurücksetzen und veraltete API-Rückmeldungen.
-Build-Prüfungen kontrollieren interne Links, JSON-LD und die unveränderten
-Budgets (20 KiB CSS, 5 KiB eigenes JavaScript, 50 KiB HTML, jeweils gzip).
+Build-Prüfungen kontrollieren interne Links, JSON-LD und die Budgets:
+CSS 12 KiB gzip für 15 Basis-Widgets plus 1 KiB je zusätzlichem Widget gemäß
+`src/site-generation/widget/css-budget.mjs`, unverändert 5 KiB eigenes
+JavaScript und 50 KiB HTML je Seite (jeweils gzip).
 Browserprüfungen ergänzen Desktop/Mobil, Netzabrufe und den Ohne-JavaScript-Fallback.
 
 Lokaler Prüfstand für Player-Stand `917343c` vom 17.10.2026:

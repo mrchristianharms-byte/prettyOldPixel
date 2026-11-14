@@ -85,7 +85,10 @@ Die Links im [ADR-Index](doc/adr/README.md) führen zu allen Entscheidungen.
 - **Komponenten wiederverwenden:** Formatierung in `site-format.mjs`,
   Escaping/HTML-Hilfen in `site-html.mjs`, interne Videoziele in
   `site-video-links.mjs`, Markup in `widget/`, Auswahl und Komposition im
-  Renderer. Widgets importieren nicht den Renderer. Browserwiederverwendung
+  Renderer. Neue Widgets in `src/site-generation/widget/css-budget.mjs`
+  eintragen; die Liste erhöht das CSS-gzip-Budget automatisch um 1 KiB je
+  zusätzlichem Widget (12 KiB für die 15 Basis-Widgets).
+  Widgets importieren nicht den Renderer. Browserwiederverwendung
   darf keine Node.js-/Build-Abhängigkeiten in die App ziehen.
 - **Belege statt Erfindungen:** Originaltitel und Beschreibungen erhalten.
   Unbekannte Metadaten bleiben unbekannt; Playlistnamen, Modellkonfidenz

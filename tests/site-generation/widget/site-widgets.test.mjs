@@ -109,6 +109,7 @@ test("Videoinformationen behalten Kapitel, Partner, Beschreibung und benachbarte
     mentionedChannels: [{ label: "Gast & Demo", url: "https://www.youtube.com/@demo" }],
   }, config, { index: 1, total: 3, previous: { id: "previous" }, next: { id: "next" } });
   assert.ok(html.includes('data-video-panel data-dated="true"'));
+  assert.ok(html.includes('data-video-title="Spiel &amp; &lt;Demo&gt;"'));
   assert.ok(html.includes("Video 2/3: Spiel &amp; &lt;Demo&gt;"));
   assert.ok(html.includes('data-chapter-seconds="60"'));
   assert.ok(html.includes("1:00 · Start &amp; Demo"));
@@ -132,11 +133,26 @@ test("Video-Widget enthält genau einen Player und alle gemeinsamen Bedienelemen
   assert.ok(html.includes('title="YouTube-Video: Spiel &amp; &lt;Demo&gt;"'));
   assert.ok(html.includes("srcdoc="));
   assert.ok(!html.includes('<iframe class="video-player" src='));
-  for (const attribute of ["data-player-reset", "data-auto-next", "data-player-external", "data-player-play", "data-player-preview-note"]) {
+  for (const attribute of ["data-player-enable", "data-auto-start", "data-auto-next", "data-player-external", "data-player-play", "data-player-preview-note"]) {
     assert.equal((html.match(new RegExp(attribute, "gu")) ?? []).length, 1);
   }
+  assert.ok(html.includes('<p class="player-title" data-player-title>Spiel &amp; &lt;Demo&gt;</p>'));
+  assert.ok(html.indexOf('data-player-title') < html.indexOf('data-player-controls'));
+  assert.ok(html.indexOf('</iframe>') < html.indexOf('data-player-title'));
   assert.ok(html.includes(`href="${video.url}" rel="external"`));
-  assert.ok(html.includes('>Auf YouTube ansehen und liken <span aria-hidden="true">↗</span>'));
+  assert.ok(html.includes('class="visually-hidden">Auf YouTube ansehen und liken</span>'));
+  assert.equal((html.match(/role="switch"/gu) ?? []).length, 3);
+  for (const id of ["player-enable", "player-auto-next", "player-auto-start"]) {
+    const input = html.match(new RegExp(`<input id="${id}"[^>]+>`, "u"))[0];
+    assert.ok(input.includes('aria-label="'));
+    assert.ok(input.includes('aria-description="'));
+    assert.ok(input.includes('disabled'));
+    assert.ok(!input.includes('checked'));
+  }
+  for (const label of html.matchAll(/<label class="player-setting"[^>]*>(.*?)<\/label>/gu)) {
+    assert.equal(label[1].replace(/<[^>]*>/gu, "").trim(), "");
+    assert.ok(label[0].includes('title="'));
+  }
   assert.ok(html.includes("data-auto-next disabled"));
   assert.ok(playerPoster(video).includes(`href="${video.embedUrl}" rel="external"`));
   assert.ok(playerPoster(video).includes('alt="Videovorschau: Spiel &amp; &lt;Demo&gt;"'));

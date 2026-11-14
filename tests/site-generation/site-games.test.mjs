@@ -518,7 +518,7 @@ test("verlinkt gemeinsame Genres, Entwickler und Publisher nur für mindestens z
   const single = renderModel(model).pages;
   assert.ok(![...single.keys()].some((file) => /^spiele\/(?:genre|entwickler|publisher)\//u.test(file)));
   const information = single.get("spiele/game-00/index.html").html
-    .match(/<section aria-label="Zusätzliche Spielinformationen">([\s\S]*?)<\/section>/u)[1];
+    .match(/<section aria-label="Zusätzliche Spielinformationen" class="game-info">([\s\S]*?)<\/section>/u)[1];
   assert.match(information, /<dt>Entwickler<\/dt><dd>Studio<\/dd>/u);
   assert.match(information, /<dt>Publisher<\/dt><dd>Publisher \(Budget\)<\/dd>/u);
   assert.ok(!information.includes("../genre/") && !information.includes("../entwickler/") && !information.includes("../publisher/"));
@@ -701,7 +701,7 @@ test("bindet konsolidierte Metadaten im echten Offline-Modell ein und zeigt Quel
     assert.equal(game.releaseYear, game.metadata.data?.releaseYear ?? null);
     assert.equal(game.releaseYearSource, game.releaseYear === null ? null : game.metadata.data.evidence.sourceUrl);
     const information = pages.get(`${game.route}index.html`).html
-      .match(/<section aria-label="Zusätzliche Spielinformationen">([\s\S]*?)<\/section>/u)[1];
+      .match(/<section aria-label="Zusätzliche Spielinformationen" class="game-info">([\s\S]*?)<\/section>/u)[1];
     const externalUrls = [];
     for (const [, url] of information.matchAll(/href="([^"]+)"/gu)) {
       if (/^https:/u.test(url)) externalUrls.push(url);

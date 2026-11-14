@@ -223,7 +223,7 @@ test("veröffentlicht Clip-Metadaten mit echten Zeitlinks, Grenzen und sichtbare
     }
     assert.equal(html.includes('data-auto-next disabled'), videos.length > 1);
     const controls = html.match(/<div class="player-controls meta"[^>]*>[\s\S]*?<\/div>/u)[0];
-    assert.ok(controls.includes("data-player-reset hidden"));
+    assert.ok(controls.includes("data-player-enable disabled"));
     assert.equal(controls.includes("data-auto-next disabled"), videos.length > 1);
     assert.ok(controls.includes('data-player-external'));
     assert.ok(!html.includes("YouTube-Player hier aktivieren"));
@@ -231,7 +231,7 @@ test("veröffentlicht Clip-Metadaten mit echten Zeitlinks, Grenzen und sichtbare
     assert.ok(html.includes(`<noscript><p><a href="https://www.youtube.com/watch?v=${id}"`));
     assert.ok(!controls.includes("data-player-controls hidden"));
     assert.equal((html.match(/data-video-widget/gu) ?? []).length, 1);
-    assert.equal((html.match(/data-player-reset/gu) ?? []).length, 1);
+    assert.equal((html.match(/data-player-enable/gu) ?? []).length, 1);
     assert.ok(!html.includes('data-auto-next checked'));
   }
   const unknown = rendered("00:00 Intro\n01:30 Gameplay", null).pages.get("spiele/ein-spiel/index.html").html;
@@ -249,12 +249,12 @@ test("setzt dasselbe Video-Widget genau einmal auf jeder Playerseite ein", () =>
     assert.equal(count, html.includes("<iframe ") ? 1 : 0, file);
     if (!count) continue;
     const widget = html.match(/<div class="detail-player" data-video-widget>[\s\S]*?<\/div><\/div>/u)[0];
-    for (const selector of ["data-player-reset", "data-player-external", "data-player-play"]) {
+    for (const selector of ["data-player-enable", "data-player-external", "data-player-play"]) {
       assert.equal((widget.match(new RegExp(selector, "gu")) ?? []).length, 1, `${file}: ${selector}`);
     }
     const videoCount = (html.match(/data-video-panel /gu) ?? []).length;
     assert.equal(widget.includes("data-auto-next"), videoCount > 1, file);
-    widgets.push(widget.replace(/<label><input type="checkbox" data-auto-next disabled> Nächste Folge automatisch<\/label>/u, ""));
+    widgets.push(widget.replace(/<label class="player-setting" title="Nächste Folge automatisch[^"]*">[\s\S]*?<\/label>/u, ""));
   }
   assert.equal(widgets.length, 2);
   assert.equal(widgets[0], widgets[1]);

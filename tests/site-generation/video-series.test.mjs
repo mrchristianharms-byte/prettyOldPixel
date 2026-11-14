@@ -6,6 +6,12 @@ import { runInNewContext } from "node:vm";
 const script = await readFile(new URL("../../src/site-generation/video-series.js", import.meta.url), "utf8");
 const preferenceKey = "pretty-old-pixel:youtube-player-enabled";
 const autoNextKey = "pretty-old-pixel:youtube-auto-next";
+const autoStartKey = "pretty-old-pixel:youtube-auto-start";
+
+function toggle(element, checked) {
+  element.checked = checked;
+  element.dispatchEvent(new Event("change"));
+}
 const flush = () => new Promise((resolve) => setImmediate(resolve));
 
 class Element extends EventTarget {
@@ -37,7 +43,8 @@ function click(element, modifiers = {}) {
 
 function setup({ values = new Map(), storage, hash = "", search = "", videoIds = ["first", "second", "third"], undated = [], apiFails = false, playerReady = true, timestampSeconds = "90" } = {}) {
   const posterLink = new Element();
-  const reset = new Element();
+  const enable = new Element();
+  const autoStart = new Element();
   const notice = new Element();
   const preferenceNote = new Element();
   const previewNote = new Element();
@@ -46,6 +53,7 @@ function setup({ values = new Map(), storage, hash = "", search = "", videoIds =
   const manualPlay = new Element();
   const controls = new Element();
   const externalVideo = new Element();
+  const playerTitle = new Element();
   const hint = new Element();
   const menu = new Element();
   const events = new EventTarget();
@@ -82,7 +90,7 @@ function setup({ values = new Map(), storage, hash = "", search = "", videoIds =
     panel.id = `video-${id}`;
     panel.dataset = {
       poster: `poster-${id}`, playerUrl: `https://www.youtube-nocookie.com/embed/${id}`,
-      videoUrl: `https://www.youtube.com/watch?v=${id}`,
+      videoUrl: `https://www.youtube.com/watch?v=${id}`, videoTitle: `Titel <${id}>`,
       ...(undated.includes(index) ? {} : { dated: "true" }),
     };
     const chapterLink = new Element();
@@ -116,11 +124,12 @@ function setup({ values = new Map(), storage, hash = "", search = "", videoIds =
     })[selector],
     querySelector: (selector) => ({
       iframe: slot.player, ".episode-menu": menu,
-      "[data-player-reset]": reset, "[data-player-notice]": notice,
+      "[data-player-notice]": notice,
+      "[data-player-enable]": enable, "[data-auto-start]": autoStart,
       "[data-player-preference-note]": preferenceNote, "[data-auto-next]": autoNext,
       "[data-player-preview-note]": previewNote,
       "[data-player-play]": manualPlay, "[data-player-controls]": controls,
-      "[data-player-external] a": externalVideo,
+      "[data-player-external] a": externalVideo, "[data-player-title]": playerTitle,
     })[selector],
     classList: { add() {} },
   };
@@ -179,8 +188,8 @@ function setup({ values = new Map(), storage, hash = "", search = "", videoIds =
   return {
     get player() { return slot.player; },
     get api() { return instances.at(-1); },
-    posterLink, reset, notice, preferenceNote, previewNote, values, panels, warnings,
-    autoNext, manualPlay, controls, externalVideo, hint, chapterLinks, requests, calls, instances, location, links, window, menu, list,
+    posterLink, enable, autoStart, notice, preferenceNote, previewNote, values, panels, warnings,
+    autoNext, manualPlay, controls, externalVideo, playerTitle, hint, chapterLinks, requests, calls, instances, location, links, window, menu, list,
     expire: () => { for (const callback of [...timers.values()]) callback(); },
     select: (index, eventName = "hashchange") => {
       location.hash = `#${panels[index].id}`;
@@ -189,6 +198,97 @@ function setup({ values = new Map(), storage, hash = "", search = "", videoIds =
     activate: async () => { click(posterLink); await flush(); },
   };
 }
+
+test("YouTube-Schalter aktiviert und widerruft die Freigabe; Autostart bleibt davon abhängig", async () => {
+  const state = setup({ values: new Map([[autoStartKey, "true"]]) });
+  assert.equal(state.enable.checked, false);
+  assert.equal(state.enable.disabled, false);
+  assert.equal(state.autoStart.disabled, true);
+  assert.equal(state.autoStart.checked, false);
+  assert.deepEqual(state.requests, []);
+  toggle(state.enable, true);
+  await flush();
+  assert.equal(state.values.get(preferenceKey), "true");
+  assert.equal(state.enable.checked, true);
+  assert.equal(state.autoStart.disabled, false);
+  assert.equal(state.autoStart.checked, true);
+  assert.deepEqual(state.calls, [["play"]]);
+  const old = state.api;
+  toggle(state.enable, false);
+  assert.equal(state.values.has(preferenceKey), false);
+  assert.equal(state.player.src, "");
+  assert.equal(state.autoStart.disabled, true);
+  assert.equal(state.autoStart.checked, false);
+  assert.equal(state.values.get(autoStartKey), "true");
+  old.emit("onReady");
+  assert.deepEqual(state.calls, [["play"], ["destroy"]]);
+});
+
+test("Autostart ist separat opt-in, startet beim Einschalten und merkt Ein und Aus", async () => {
+  const state = setup();
+  await state.activate();
+  assert.equal(state.autoStart.checked, false);
+  toggle(state.autoStart, true);
+  assert.equal(state.values.get(autoStartKey), "true");
+  assert.deepEqual(state.calls, [["play"]]);
+  state.select(1);
+  assert.deepEqual(state.calls.at(-1), ["load", "second"]);
+  const next = setup({ values: state.values });
+  await flush();
+  assert.deepEqual(next.calls, [["play"]]);
+  toggle(next.autoStart, false);
+  next.select(1);
+  assert.deepEqual(next.calls.at(-1), ["cue", "second"]);
+  const off = setup({ values: state.values });
+  await flush();
+  assert.deepEqual(off.calls, []);
+});
+
+test("Ausschalten während des Ladens verhindert einen ausstehenden Autostart", async () => {
+  const values = new Map([[preferenceKey, "true"], [autoStartKey, "true"]]);
+  const state = setup({ values, playerReady: false });
+  await flush();
+  assert.equal(state.autoStart.disabled, false);
+  toggle(state.autoStart, false);
+  state.api.emit("onReady");
+  assert.deepEqual(state.calls, []);
+  assert.equal(values.get(autoStartKey), "false");
+  const revoked = setup({ values: new Map([[preferenceKey, "true"], [autoStartKey, "true"]]), playerReady: false });
+  await flush();
+  const old = revoked.api;
+  toggle(revoked.enable, false);
+  old.emit("onReady");
+  assert.deepEqual(revoked.calls, [["destroy"]]);
+});
+
+test("meldet Speicherfehler beim Autostart und behält die Auswahl auf dieser Seite", async () => {
+  const state = setup({ storage: {
+    getItem: (key) => key === preferenceKey ? "true" : null,
+    setItem: () => { throw new Error("Storage full"); },
+    removeItem() {},
+  } });
+  await flush();
+  toggle(state.autoStart, true);
+  assert.equal(state.autoStart.checked, true);
+  assert.equal(state.notice.hidden, false);
+  assert.equal(state.warnings.length, 1);
+  assert.deepEqual(state.calls, [["play"]]);
+});
+
+test("Autostart respektiert Zeitmarken und Browserblockaden ohne erneute Startversuche", async () => {
+  const values = new Map([[preferenceKey, "true"], [autoStartKey, "true"]]);
+  const state = setup({ values, hash: "#video-second", search: "?t=90" });
+  await flush();
+  assert.equal(state.calls[0][0], "cue");
+  assert.equal(state.calls[0][1].startSeconds, 90);
+  assert.deepEqual(state.calls[1], ["play"]);
+  state.api.emit("onAutoplayBlocked");
+  assert.equal(state.autoStart.checked, false);
+  assert.equal(state.manualPlay.hidden, false);
+  assert.equal(values.get(autoStartKey), "true");
+  state.select(0);
+  assert.deepEqual(state.calls.at(-1), ["cue", "first"]);
+});
 
 test("markiert Hash-Einstiege und hält aktive Folgen in langen Listen sichtbar", () => {
   const videoIds = Array.from({ length: 60 }, (_, index) => `part-${index}`);
@@ -213,7 +313,7 @@ test("lädt ohne Aktivierung keine API und nur Vorschaubilder, auch bei Fragment
   const state = setup();
   assert.equal(state.player.src, "");
   assert.equal(state.player.srcdoc, "poster-first");
-  assert.equal(state.reset.hidden, true);
+  assert.equal(state.enable.checked, false);
   assert.equal(state.preferenceNote.hidden, false);
   assert.equal(state.previewNote.hidden, false);
   state.select(1);
@@ -230,15 +330,21 @@ test("lädt ohne Aktivierung keine API und nur Vorschaubilder, auch bei Fragment
 test("aktualisiert den YouTube-Link bei Auswahl, Zurücknavigation und automatischer Folge", async () => {
   const state = setup();
   assert.equal(state.externalVideo.href, "https://www.youtube.com/watch?v=first");
+  assert.equal(state.playerTitle.textContent, "Titel <first>");
   state.select(2);
+  assert.equal(state.playerTitle.textContent, "Titel <third>");
   assert.equal(state.externalVideo.href, "https://www.youtube.com/watch?v=third");
   state.select(0, "popstate");
+  assert.equal(state.playerTitle.textContent, "Titel <first>");
   assert.equal(state.externalVideo.href, "https://www.youtube.com/watch?v=first");
   await state.activate();
   state.autoNext.checked = true;
   state.api.emit("onStateChange", 1);
   state.api.emit("onStateChange", 0);
   assert.equal(state.externalVideo.href, "https://www.youtube.com/watch?v=second");
+  assert.equal(state.playerTitle.textContent, "Titel <second>");
+  const direct = setup({ hash: "#video-third" });
+  assert.equal(direct.playerTitle.textContent, "Titel <third>");
 });
 
 test("merkt Ein- und Ausschalten der Folgenfortsetzung über Seitenaufrufe ohne Startautoplay", async () => {
@@ -272,7 +378,7 @@ test("ändert gespeicherte Folgenauswahl nicht bei Sicherheitsstopps und Aktivie
   state.api.emit("onAutoplayBlocked");
   assert.equal(state.autoNext.checked, false);
   assert.equal(values.get(autoNextKey), "true");
-  click(state.reset);
+  toggle(state.enable, false);
   assert.equal(values.has(preferenceKey), false);
   assert.equal(values.get(autoNextKey), "true");
   state.player.dispatchEvent(new Event("load"));
@@ -310,7 +416,7 @@ test("merkt Aktivierung und lädt spätere Seiten sowie Fragmente ohne Autoplay"
   assert.equal(url.searchParams.get("enablejsapi"), "1");
   assert.equal(url.searchParams.get("origin"), "https://example.com");
   assert.equal(url.searchParams.has("autoplay"), false);
-  assert.equal(state.reset.hidden, false);
+  assert.equal(state.enable.checked, true);
   state.select(1);
   assert.deepEqual(state.calls, [["cue", "second"]]);
   assert.equal(state.autoNext.checked, false);
@@ -395,11 +501,11 @@ test("setzt Aktivierung zurück, zerstört den alten Player und verhindert spät
   const old = state.api;
   state.select(1);
   state.autoNext.checked = true;
-  click(state.reset);
+  toggle(state.enable, false);
   assert.equal(state.values.has(preferenceKey), false);
   assert.equal(state.player.src, "");
   assert.equal(state.player.srcdoc, "poster-second");
-  assert.equal(state.reset.hidden, true);
+  assert.equal(state.enable.checked, false);
   assert.equal(state.previewNote.hidden, false);
   assert.equal(state.autoNext.checked, false);
   old.emit("onReady");
@@ -423,7 +529,7 @@ test("meldet gesperrten Speicher, API-Ladefehler und nicht antwortende Player ex
   await state.activate();
   assert.equal(new URL(state.player.src).pathname, "/embed/first");
   assert.equal(state.warnings.length, 2);
-  click(state.reset);
+  toggle(state.enable, false);
   assert.equal(state.player.src, "");
   assert.equal(state.warnings.length, 3);
   const failed = setup({ apiFails: true });
@@ -550,7 +656,7 @@ test("ignoriert überholte API-Initialisierung bei schneller Auswahl oder Zurüc
   assert.equal(state.requests.length, 1);
   const reset = setup();
   click(reset.posterLink);
-  click(reset.reset);
+  toggle(reset.enable, false);
   await flush();
   assert.equal(reset.instances.length, 0);
   assert.equal(reset.player.src, "");

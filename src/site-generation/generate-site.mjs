@@ -12,6 +12,7 @@ import { generateAiBot } from "../ai-bot-generation/generate-ai-bot.mjs";
 import { generalPageAliases } from "../content-data/project-info.mjs";
 import { gameStatistics } from "../content-data/game-statistics.mjs";
 import { gameStatisticsYearSvg } from "./widget/game-statistics.mjs";
+import { cssGzipBudget } from "./widget/css-budget.mjs";
 
 const projectRoot = path.resolve(fileURLToPath(new URL("../../", import.meta.url)));
 const hash = (content) => createHash("sha256").update(content).digest("hex");
@@ -31,7 +32,7 @@ export function validateSite(pages, assets, config) {
   const cssGzip = [...assets.entries()].filter(([file]) => !file.startsWith("app/") && file.endsWith(".css"))
     .reduce((sum, [, content]) => sum + gzipSync(content).length, 0);
   let jsGzip = 0;
-  if (cssGzip > 20 * 1024) throw new Error(`CSS überschreitet 20 KiB gzip: ${cssGzip} Bytes.`);
+  if (cssGzip > cssGzipBudget) throw new Error(`CSS überschreitet ${cssGzipBudget / 1024} KiB gzip: ${cssGzip} Bytes.`);
   for (const [file, page] of pages) {
     const bytes = gzipSync(page.html).length;
     maxHtmlGzip = Math.max(bytes, maxHtmlGzip);

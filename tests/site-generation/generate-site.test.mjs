@@ -7,6 +7,7 @@ import test from "node:test";
 import { gzipSync } from "node:zlib";
 import { generateSite, validateSite } from "../../src/site-generation/generate-site.mjs";
 import { createSiteConfig } from "../../src/site-generation/site-config.mjs";
+import { cssGzipBudget } from "../../src/site-generation/widget/css-budget.mjs";
 import { normalizeSources, loadContentData } from "../../src/content-data/content-data.mjs";
 import { descriptionHtml, jsonLd, renderSite } from "../../src/site-generation/site-render.mjs";
 
@@ -170,7 +171,7 @@ test("eigene Seitentexte verwenden keine förmliche Ansprache oder veraltete Abs
   for (const [file, { html }] of pages) {
     assert.doesNotMatch(html, /\b(?:Ihnen|Ihre[nmrse]*)\b|(?:[Ww]ählen|[Öö]ffnen|[Ss]tarten|[Nn]utzen|[Ee]ntdecken|[Kk]önnen|[Ff]inden) Sie\b|Abschlußgespräch/u, file);
   }
-  assert.match(pages.get("privacy/index.html").html, /wenn du „YouTube-Player aktivieren“ wählst/u);
+  assert.match(pages.get("privacy/index.html").html, /wenn du den Schalter „YouTube-Aktivierung“ einschaltest oder im Vorschaubild „YouTube-Player aktivieren“ wählst/u);
   assert.match(pages.get("404.html").html, /findest du die Videos/u);
 });
 
@@ -529,7 +530,7 @@ test("lädt vor Aktivierung keinen YouTube-Player und dokumentiert den aktuellen
   assert.ok(html.includes('srcdoc="'));
   assert.ok(html.includes('name="issue-player"'));
   assert.ok(html.includes('name="issue-player"'));
-  assert.ok(html.includes('data-player-reset hidden'));
+  assert.ok(html.includes('data-player-enable disabled'));
   assert.ok(html.includes('data-video-widget'));
   assert.ok(html.includes('data-player-notice role="status" hidden'));
   assert.ok(html.includes('data-player-url="https://www.youtube-nocookie.com/embed/b0000000000"'));
@@ -540,7 +541,7 @@ test("lädt vor Aktivierung keinen YouTube-Player und dokumentiert den aktuellen
   assert.equal((html.match(/data-video-panel /gu) ?? []).length, 2);
   assert.ok(html.includes("keine Beschreibung vorhanden"));
   const privacy = pages.get("privacy/index.html").html;
-  for (const text of ["nicht kommerziell", "GitHub Pages", "Auslieferung und Schutz über Cloudflare", "Externe Inhalte und Logos", "Symbol ↗", "statische Dateien", "Marken- und Kennzeichenrechte", "IP-Adresse", "Standardvertragsklauseln", "keine Cloudflare Web Analytics", "i.ytimg.com", "youtube-nocookie.com", "offizielle YouTube-IFrame-API", "Nächste Folge automatisch", "Local Storage", "YouTube-Aktivierung zurücksetzen", "Session Storage"]) {
+  for (const text of ["nicht kommerziell", "GitHub Pages", "Auslieferung und Schutz über Cloudflare", "Externe Inhalte und Logos", "Symbol ↗", "statische Dateien", "Marken- und Kennzeichenrechte", "IP-Adresse", "Standardvertragsklauseln", "keine Cloudflare Web Analytics", "i.ytimg.com", "youtube-nocookie.com", "offizielle YouTube-IFrame-API", "Nächste Folge automatisch", "Local Storage", "YouTube-Aktivierung", "Automatisch starten", "Autostart", "Session Storage"]) {
     assert.ok(privacy.includes(text), text);
   }
   for (const url of ["https://www.cloudflare.com/de-de/privacypolicy/", "https://www.cloudflare.com/de-de/trust-hub/gdpr/", "https://developers.cloudflare.com/fundamentals/reference/policies-compliances/cloudflare-cookies/"]) {
@@ -617,6 +618,27 @@ test("validiert defekte Links, Fragmente und HTML-/CSS-Budgets als Build-Fehler"
   assert.throws(() => validateSite(pages, assets, config), /HTML überschreitet/u);
 });
 
+test("akzeptiert CSS genau am gzip-Budget und lehnt ein Byte darüber ab", () => {
+  const { pages, assets, config } = render();
+  assets.set("assets/site.css", "");
+  const noise = Buffer.concat(Array.from({ length: Math.ceil(cssGzipBudget / 32) }, (_, index) =>
+    createHash("sha256").update(`css-budget-${index}`).digest()));
+  const samples = new Map();
+  for (let length = cssGzipBudget - 100; length <= cssGzipBudget; length += 1) {
+    const content = noise.subarray(0, length);
+    samples.set(gzipSync(content).length, content);
+  }
+  for (const bytes of [cssGzipBudget, cssGzipBudget + 1]) {
+    assert.ok(samples.has(bytes), `Testdaten für ${bytes} Bytes gzip fehlen.`);
+  }
+  assets.set("assets/site.css", samples.get(cssGzipBudget));
+  assert.equal(validateSite(pages, assets, config).cssGzip, cssGzipBudget);
+  assets.set("assets/site.css", samples.get(cssGzipBudget + 1));
+  assert.throws(() => validateSite(pages, assets, config), {
+    message: `CSS überschreitet ${cssGzipBudget / 1024} KiB gzip: ${cssGzipBudget + 1} Bytes.`,
+  });
+});
+
 test("baut offline mit Produktionsdomain, Sitemap und Inhalts-Manifest; übernimmt unveränderte Dateien", async (t) => {
   const options = await setup(t);
   const originalFetch = globalThis.fetch;
@@ -625,7 +647,7 @@ test("baut offline mit Produktionsdomain, Sitemap und Inhalts-Manifest; übernim
   const first = await generateSite(options);
   assert.equal(first.pages, 61);
   assert.equal(first.reused, 0);
-  assert.ok(first.cssGzip < 12000);
+  assert.ok(first.cssGzip <= cssGzipBudget);
   assert.ok(first.jsGzip <= 5 * 1024);
   const favicon = await readFile(path.join(options.outputDirectory, "favicon.webp"));
   assert.deepEqual(favicon, await readFile(new URL("../../src/site-generation/assets/favicon.webp", import.meta.url)));

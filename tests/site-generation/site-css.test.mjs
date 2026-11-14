@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { gzipSync } from "node:zlib";
 import test from "node:test";
+import { cssGzipBudget } from "../../src/site-generation/widget/css-budget.mjs";
 
 const vendor = new URL("../../src/site-generation/vendor/", import.meta.url);
 const original = await readFile(new URL("pico-2.1.1.min.css", vendor), "utf8");
@@ -12,7 +13,7 @@ test("reduziert die übertragenen CSS-Bytes um mindestens 30 Prozent ohne Build-
   const before = gzipSync(`${original}\n${custom}`).length;
   const after = gzipSync(`${reduced}\n${custom}`).length;
   assert.ok(after <= before * .7, `${before} → ${after} Bytes gzip`);
-  assert.ok(after < 12000, `${after} Bytes gzip`);
+  assert.ok(after <= cssGzipBudget, `${after} Bytes gzip`);
   assert.match(reduced, /Pico CSS/u);
   assert.doesNotMatch(reduced, /sourceMappingURL|@import/u);
   for (const selector of ["[data-tooltip]", "dialog{", "progress{"]) {
@@ -25,6 +26,10 @@ test("erhält Themen, responsive Regeln, Überschriftenabstände und interaktive
     ":focus", ":checked", "[disabled]", "details", "summary", "table", "~:is(h1,h2,h3,h4,h5,h6)"]) {
     assert.ok(reduced.includes(selector), `Benötigte Regel fehlt: ${selector}`);
   }
+  assert.match(custom, /\.game-info\s*\{[^}]*border:\s*1px solid var\(--pico-muted-border-color\)[^}]*background:\s*var\(--pico-code-background-color\)/u);
+  assert.match(custom, /\.player-toolbar,\s*\.player-controls,\s*\.player-setting\s*\{[^}]*flex-wrap:\s*wrap/u);
+  assert.match(custom, /\.player-title\s*\{[^}]*text-align:\s*left/u);
+  assert.match(custom, /\.player-controls\s*\{[^}]*justify-content:\s*flex-end[^}]*margin-left:\s*auto/u);
   for (const [, name] of custom.matchAll(/var\((--[\w-]+)/gu)) {
     assert.ok(reduced.includes(`${name}:`) || custom.includes(`${name}:`), `CSS-Variable fehlt: ${name}`);
   }

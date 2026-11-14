@@ -29,7 +29,8 @@ for (const series of document.querySelectorAll("[data-video-series]")) {
   const links = [...series.querySelectorAll("[data-video-link]")];
   let player = series.querySelector("iframe");
   const menu = series.querySelector(".episode-menu");
-  const reset = series.querySelector("[data-player-reset]");
+  const enable = series.querySelector("[data-player-enable]");
+  const autoStart = series.querySelector("[data-auto-start]");
   const notice = series.querySelector("[data-player-notice]");
   const preferenceNote = series.querySelector("[data-player-preference-note]");
   const previewNote = series.querySelector("[data-player-preview-note]");
@@ -37,9 +38,11 @@ for (const series of document.querySelectorAll("[data-video-series]")) {
   const manualPlay = series.querySelector("[data-player-play]");
   const controls = series.querySelector("[data-player-controls]");
   const externalVideo = series.querySelector("[data-player-external] a");
+  const playerTitle = series.querySelector("[data-player-title]");
   const hints = [...series.querySelectorAll("[data-chapter-hint]")];
   const preferenceKey = "pretty-old-pixel:youtube-player-enabled";
   const autoNextKey = "pretty-old-pixel:youtube-auto-next";
+  const autoStartKey = "pretty-old-pixel:youtube-auto-start";
   const narrow = matchMedia("(max-width: 767px)");
   let active;
   let enabled = false;
@@ -50,6 +53,8 @@ for (const series of document.querySelectorAll("[data-video-series]")) {
   let readyTimer;
   let pendingSeek;
   let autoNextEnabled = false;
+  let autoStartEnabled = false;
+  let startRequested = false;
 
   function timestampAddress(panel, seconds, replace = false) {
     const url = new URL(location.href);
@@ -72,6 +77,7 @@ for (const series of document.querySelectorAll("[data-video-series]")) {
   try {
     enabled = localStorage.getItem(preferenceKey) === "true";
     if (autoNext) autoNextEnabled = localStorage.getItem(autoNextKey) === "true";
+    autoStartEnabled = localStorage.getItem(autoStartKey) === "true";
   } catch (error) {
     storageError(error);
   }
@@ -79,8 +85,15 @@ for (const series of document.querySelectorAll("[data-video-series]")) {
   const videoId = (panel) => panel.id.slice("video-".length);
   const plainClick = (event) => event.button === 0 && !event.ctrlKey && !event.metaKey && !event.shiftKey && !event.altKey;
 
+  function syncActivation() {
+    enable.checked = enabled;
+    autoStart.disabled = !enabled;
+    autoStart.checked = enabled && autoStartEnabled;
+  }
+
   function apiAvailable(value) {
     ready = value;
+    syncActivation();
     if (autoNext) {
       autoNext.disabled = !value;
       autoNext.checked = value && autoNextEnabled;
@@ -102,6 +115,9 @@ for (const series of document.querySelectorAll("[data-video-series]")) {
   }
 
   function blocked() {
+    startRequested = false;
+    autoStartEnabled = false;
+    autoStart.checked = false;
     if (autoNext) autoNext.checked = false;
     manualPlay.hidden = false;
     report("Die Wiedergabe wurde vom Browser blockiert. Bitte starte das Video manuell.");
@@ -124,6 +140,7 @@ for (const series of document.querySelectorAll("[data-video-series]")) {
                 }
                 pendingSeek = undefined;
               }
+              if (startRequested) startPlayback();
             }
           },
           onStateChange: (event) => {
@@ -172,11 +189,12 @@ for (const series of document.querySelectorAll("[data-video-series]")) {
   }
 
   function loadPlayer(panel, autoplay = false) {
-    reset.hidden = false;
+    startRequested = autoplay || autoStartEnabled;
+    syncActivation();
     previewNote.hidden = true;
     if (ready) {
       try {
-        if (autoplay) controller.loadVideoById(videoId(panel));
+        if (startRequested) controller.loadVideoById(videoId(panel));
         else controller.cueVideoById(videoId(panel));
         return;
       } catch (error) {
@@ -193,9 +211,7 @@ for (const series of document.querySelectorAll("[data-video-series]")) {
     attachApi(revision);
   }
 
-  function activate(event) {
-    if (!plainClick(event)) return;
-    event.preventDefault();
+  function activate() {
     if (enabled) return;
     enabled = true;
     try {
@@ -208,7 +224,11 @@ for (const series of document.querySelectorAll("[data-video-series]")) {
   }
 
   function connectPoster() {
-    player.contentDocument?.querySelector("a")?.addEventListener("click", activate);
+    player.contentDocument?.querySelector("a")?.addEventListener("click", (event) => {
+      if (!plainClick(event)) return;
+      event.preventDefault();
+      activate();
+    });
   }
 
   for (const panel of panels) {
@@ -230,6 +250,8 @@ for (const series of document.querySelectorAll("[data-video-series]")) {
       });
     }
   }
+  enable.disabled = false;
+  apiAvailable(false);
   player.addEventListener("load", connectPoster);
   preferenceNote.hidden = false;
   controls.hidden = false;
@@ -241,15 +263,32 @@ for (const series of document.querySelectorAll("[data-video-series]")) {
       storageError(error);
     }
   });
-  manualPlay.addEventListener("click", () => {
+  function startPlayback() {
     if (!ready) return;
+    startRequested = false;
     try {
       controller.playVideo();
     } catch (error) {
       report("Das Video konnte nicht gestartet werden. Nutze die Wiedergabetaste im Player oder den YouTube-Link.", error);
     }
+  }
+  manualPlay.addEventListener("click", startPlayback);
+  autoStart.addEventListener("change", () => {
+    if (!enabled) return;
+    autoStartEnabled = autoStart.checked;
+    startRequested = autoStartEnabled;
+    try {
+      localStorage.setItem(autoStartKey, String(autoStartEnabled));
+    } catch (error) {
+      storageError(error);
+    }
+    if (startRequested) startPlayback();
   });
-  reset.addEventListener("click", () => {
+  enable.addEventListener("change", () => {
+    if (enable.checked) {
+      activate();
+      return;
+    }
     try {
       localStorage.removeItem(preferenceKey);
     } catch (error) {
@@ -257,13 +296,13 @@ for (const series of document.querySelectorAll("[data-video-series]")) {
     }
     enabled = false;
     played = false;
+    startRequested = false;
     pendingSeek = undefined;
     revision += 1;
     if (controller) replacePlayer();
     apiAvailable(false);
     player.removeAttribute("src");
     player.srcdoc = active.dataset.poster;
-    reset.hidden = true;
     previewNote.hidden = false;
     manualPlay.hidden = true;
   });
@@ -284,6 +323,7 @@ for (const series of document.querySelectorAll("[data-video-series]")) {
     if (panel === active) return;
     const previous = active;
     active = panel;
+    playerTitle.textContent = panel.dataset.videoTitle;
     if (externalVideo) externalVideo.href = panel.dataset.videoUrl;
     pendingSeek = undefined;
     if (!previous && location.hash === `#${panel.id}`) {

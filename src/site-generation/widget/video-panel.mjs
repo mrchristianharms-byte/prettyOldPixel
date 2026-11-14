@@ -40,7 +40,7 @@ ${archiveLinks(magazine.archives)}</section>`).join("")}</section>`;
 
 export function videoPanel(video, config, { index, total, previous, next, game, entry, run }) {
   const description = video.descriptionWithoutChapters ?? video.description;
-  return `<article id="video-${video.id}" data-video-panel${video.publishedAt ? ' data-dated="true"' : ""} data-player-url="${video.embedUrl}" data-video-url="${escapeHtml(video.url)}" data-poster="${escapeHtml(playerPoster(video))}" tabindex="-1">
+  return `<article id="video-${video.id}" data-video-panel${video.publishedAt ? ' data-dated="true"' : ""} data-player-url="${video.embedUrl}" data-video-url="${escapeHtml(video.url)}" data-video-title="${escapeHtml(video.title)}" data-poster="${escapeHtml(playerPoster(video))}" tabindex="-1">
 <h2>Video ${index + 1}/${total}: ${escapeHtml(video.title)}</h2>
 ${metadata([
   ["Veröffentlicht", videoDate(video)],

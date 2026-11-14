@@ -83,6 +83,7 @@ h1, h2, h3, h4, h5, h6 { font-size: clamp(1.05rem, 1.8vw, 1.25rem); line-height:
 .video-list h2, .video-list h3, .video-list h4 { grid-column: 1 / -1; margin-bottom: 0; }
 .video-list p:last-child { margin-bottom: 0; }
 .meta, .site-footer { color: var(--pico-muted-color); font-size: .9rem; }
+.game-info { padding: 1rem; border: 1px solid var(--pico-muted-border-color); background: var(--pico-code-background-color); }
 .detail-meta { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: .4rem clamp(.35rem, 1vw, 1.25rem); margin-block: .6rem 1rem; font-size: .85rem; line-height: 1.4; }
 .detail-meta > div { min-width: 0; overflow-wrap: anywhere; }
 .detail-meta dt { color: var(--pico-muted-color); font-size: .75rem; font-weight: 400; }
@@ -169,12 +170,12 @@ h1, h2, h3, h4, h5, h6 { font-size: clamp(1.05rem, 1.8vw, 1.25rem); line-height:
 @media (min-width: 768px) {
   .detail-page .video-player { height: auto; max-height: none; }
 }
-.player-reset { width: auto; margin: 0; padding: 0; border: 0; border-radius: 0; background: none; color: var(--pico-primary); font: inherit; text-decoration: underline; }
-.player-controls { margin-block: .35rem .5rem; }
-.player-controls:not([hidden]) { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem 1rem; }
-.player-controls label { margin: 0; font-size: .8rem; }
-.player-controls button { font-size: .8rem; }
-.player-controls button:not(.player-reset) { width: auto; margin: .25rem 0; padding: .3rem .6rem; }
+.player-toolbar, .player-controls, .player-setting { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; }
+.player-title { flex: 1 20rem; min-width: 0; margin: 0; text-align: left; }
+.player-controls { justify-content: flex-end; margin-left: auto; }
+.player-setting { min-height: 2.75rem; margin: 0; }
+.player-setting input { margin: 0; }
+.player-controls a { min-width: 2.75rem; min-height: 2.75rem; }
 .description { max-width: 80ch; }
 .description p { white-space: pre-wrap; }
 .pagination { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .8rem; margin-block: 1.5rem; }

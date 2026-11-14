@@ -1,6 +1,6 @@
 # Quellstruktur: Umbau in Fachverzeichnisse
 
-Stand: 30.10.2026.
+Stand: 12.11.2026.
 
 Zurück zum [Projekteinstieg](../README.md) oder zur
 [Funktionsreferenz](README.md).
@@ -31,6 +31,7 @@ src/
 ├── generate-site.mjs
 ├── content-data/       # einziger Loader fuer Website und Offline-App
 ├── app-generation/    # JSON-Export, Browser-Ansichten und Service Worker
+├── ai-bot-generation/ # Markdown, Inhalts-API und Agentenhinweise
 ├── site-generation/
 │   ├── generate-site.mjs
 │   ├── site-*.mjs
@@ -52,13 +53,14 @@ src/
 |---|---|
 | [`content-data/`](../src/content-data/) | Gemeinsamer Einstieg `loadContentData` liest Caches und Bestandsdaten, validiert und normalisiert sie einschließlich Spielemetadaten, Abschnitten, Gästen und Logos. Keine Abhängigkeit von einem der beiden Renderer. |
 | [`app-generation/`](../src/app-generation/) | Kompakter JSON-Export, App-Hülle und browserfähige Ansichten, Hash-Routing, Offline-Speicherung und Updates. Liest keine Inhalts-Caches selbst. |
+| [`ai-bot-generation/`](../src/ai-bot-generation/) | Agentengenerierung für Markdown-Fassungen, eine statische Inhalts-API und Agentenhinweise aus dem Inhaltsmodell und den Seiten. |
 | [`site-generation/`](../src/site-generation/) | Gemeinsamer Build-Aufruf, Website-Konfiguration, HTML-Rendering und Formatierung. `widget/` enthält die gemeinsamen HTML-Komponenten; Styles, Browser-Skripte und vendiertes Pico CSS einschließlich Lizenz liegen beim Generator, Bilder in `assets/`. |
 | [`fetch-channel/`](../src/fetch-channel/) | YouTube-Videos und Playlists sowie deren gemeinsamer Abruf. Die Implementierungen heißen weiterhin `fetch-youtube-videos.mjs`, `fetch-youtube-playlists.mjs` und `fetch-youtube.mjs`; `youtube-data-api.mjs` kapselt die YouTube Data API v3, die bei gesetztem `GOOGLE_YT_DATA_API_KEY` statt des anonymen Abrufs verwendet wird. |
 | [`fetch-magazine/`](../src/fetch-magazine/) | Zeitschriftenarchive von Kultmags, Reetroz, PC Games Database und AMR, gemeinsamer Archivabruf und Logoverarbeitung. PC Games Database gehört hierher, weil das Modul den GameStar-Heftkatalog verarbeitet. |
-| [`fetch-game/`](../src/fetch-game/) | Lokale Spielemetadaten-Pipeline: SQL-Dump einmal in den Titelindex lesen, Katalog daraus importieren, Titel und Plattformen abgleichen, Firmennamen vereinheitlichen, Ergebnisse verifizieren, nutzbare Metadaten und Prüfberichte erzeugen. Der Ordnername bedeutet keinen automatischen Internetabruf. |
-| [`extra-data/`](../src/extra-data/) | Transkripte abrufen, Spielebesprechungen daraus analysieren und Blätterabend-Zuordnungen aus lokalen Caches erzeugen. |
+| [`fetch-game/`](../src/fetch-game/) | Lokale Spielemetadaten-Pipeline: `sql-dump-reader.mjs` liest SQL-Dumps, `build-game-title-index.mjs` erstellt den Titelindex und `game-title-index.mjs` lädt ihn. `import-game-dump.mjs` importiert den Katalog, `game-dump-matching.mjs` gleicht Titel und Plattformen ab und `game-company-names.mjs` vereinheitlicht Firmennamen. `verify-game-dump.mjs` verifiziert Ergebnisse, `game-metadata-ready.mjs` bereitet nutzbare Metadaten auf, `generate-game-metadata-review.mjs` erzeugt Prüfberichte und `new-game-candidates.mjs` sammelt Spielkandidaten aus Videobeschreibungen. Der Ordnername bedeutet keinen automatischen Internetabruf. |
+| [`extra-data/`](../src/extra-data/) | `fetch-youtube-transcripts.mjs` ruft Transkripte ab, `generate-games-from-transcript.mjs` analysiert Spielebesprechungen und `transcript-game-candidates.mjs` sucht dafür Titelkandidaten. `evaluate-game-discussions.mjs` bewertet Analysen anhand lokaler Referenzen; `generate-blaetterabend.mjs` erzeugt Blätterabend-Zuordnungen aus lokalen Caches. |
 | [`data/`](../src/data/) | Dauerhaft gepflegte Spiel- und Themenkataloge, Gastkanäle sowie JSON-Entscheidungen und Auswahlregeln für den Spiele-Dump. Keine generierten Caches. |
-| [`shared/`](../src/shared/) | `archive-cache.mjs` mit gemeinsam genutzten Cache-, JSON-, HTTP- und Wiederholungshilfen. |
+| [`shared/`](../src/shared/) | `archive-cache.mjs` enthält gemeinsam genutzte Cache-, JSON-, HTTP- und Wiederholungshilfen; `http-url.mjs` prüft HTTP- und HTTPS-URLs. |
 
 ### Teststruktur
 
@@ -129,6 +131,8 @@ Scriptpfade haben sich geändert.
 | `dev:fetch:transcripts` | `src/extra-data/fetch-youtube-transcripts.mjs` |
 | `dev:generate:blaetterabend` | `src/extra-data/generate-blaetterabend.mjs` |
 | `dev:generate:games-from-transcript` | `src/extra-data/generate-games-from-transcript.mjs` |
+| `dev:evaluate:game-discussions` | `src/extra-data/evaluate-game-discussions.mjs` |
+| `dev:collect:game-candidates` | `src/fetch-game/new-game-candidates.mjs` |
 | `dev:build:game-title-index` | `src/fetch-game/build-game-title-index.mjs` |
 | `dev:import:game-dump` | `src/fetch-game/import-game-dump.mjs` |
 | `dev:verify:game-dump` | `src/fetch-game/verify-game-dump.mjs` |
@@ -154,7 +158,11 @@ ohne zusätzlichen Starter unter `src/`.
 6. Dasselbe Modell geht an den HTML-Renderer und an
    [`generateApp`](../src/app-generation/generate-app.mjs). Der App-Generator
    exportiert JSON und erzeugt seine Browser-Dateien ohne eigene Inhaltsabrufe.
-7. Der gemeinsame Build schreibt Website und App in dasselbe Staging-Verzeichnis
+   Anschließend erzeugt
+   [`generateAiBot`](../src/ai-bot-generation/generate-ai-bot.mjs) aus Modell und
+   Seiten die Markdown-Fassungen, die statische Inhalts-API und `llms.txt`.
+   Diese Agentengenerierung ist Teil des Websitebuilds und läuft offline.
+7. Der gemeinsame Build schreibt Website, App und Agentendateien in dasselbe Staging-Verzeichnis
    und ersetzt `docs/` erst nach erfolgreicher Generierung. Die Website liegt
    unter den bisherigen Routen, die App unter `docs/app/`.
 
@@ -237,9 +245,12 @@ der Offline-Build und GitHub Actions lesen sie ohne PurgeCSS-Installation.
 
 Quellen: [YouTube-Workflow](../.github/workflows/fetch-youtube.yml) und
 [Pages-Workflow](../.github/workflows/pages.yml).
-Beide Workflows verzichten auf npm-Installation, `yt-dlp`, Modellserver und
-die lokale `sharp`-Konvertierung. Checkout, Actions-Caches, Push,
-Artefaktübertragung und Deployment benötigen GitHub-Netzwerkzugriff.
+Der YouTube-Workflow verzichtet auf npm-Installation; der Pages-Workflow
+installiert Produktionsabhängigkeiten mit `npm ci --ignore-scripts --omit=dev`
+vor Tests und Seitengenerierung. Beide Workflows verzichten auf `yt-dlp`,
+Modellserver und die lokale `sharp`-Konvertierung. Checkout,
+Abhängigkeitsinstallation, Actions-Caches, Push, Artefaktübertragung und
+Deployment benötigen Netzwerkzugriff.
 „Offline“ bezeichnet hier die Tests und die eigentliche Seitengenerierung,
 nicht den gesamten Actions-Job.
 
@@ -253,7 +264,9 @@ nicht den gesamten Actions-Job.
 | `dev:fetch:transcripts` | Ja | Nein | YouTube über `yt-dlp` und HTTP |
 | `dev:generate:blaetterabend` | Ja | Nein | Keines; lokale Caches |
 | `dev:generate:css` | Ja | Nein | Keines; lokale Templates und vendiertes CSS, installierte Entwicklungsabhängigkeiten erforderlich. |
-| `dev:import:game-dump`, `dev:verify:game-dump`, `dev:prepare:game-metadata`, `dev:review:games` | Ja | Nein | Keines; lokaler Dump und Metadaten |
+| `dev:build:game-title-index`, `dev:import:game-dump`, `dev:verify:game-dump`, `dev:prepare:game-metadata`, `dev:review:games` | Ja | Nein | Keines; lokaler Dump und Metadaten |
+| `dev:collect:game-candidates` | Ja | Nein | Keines; lokale Video- und Playlist-Caches, Spielkatalog und Titelindex |
+| `dev:evaluate:game-discussions` | Ja | Nein | Keines; lokale Referenz- und Analysedateien |
 | `dev:generate:games-from-transcript` | Ja | Nein | Lokale Modell-API; kein externer LLM-Endpunkt. Modell muss vorher vorhanden sein. |
 | `generate:site` | Ja | Pages-Workflow | Keines; lokale Caches und Assets |
 | `test` | Ja | Pages-Workflow | Keines; HTTP in Tests simuliert |
@@ -289,13 +302,22 @@ Beim Umbau und der anschließenden Funktionsprüfung wurden zusätzlich geprüft
   keine neuen oder geänderten Inhalte, nur aktualisierte Abruf-/Prüfzeitstempel.
 - Datenloader: 147 Spiele mit Metadaten, 30 Zeitschriften und 53 Logoassets.
 - `npm run generate:site`: 665 HTML-Seiten; 728 von 728 Dateien unverändert übernommen.
-- `npm test`: 239 Tests bestanden.
-- `npm run dev:test`: 390 Tests bestanden.
-- Alle 15 ausführbaren npm-Targetpfade vorhanden und syntaktisch gültig.
 
-Diese Zahlen sind eine Momentaufnahme vom 20.10.2026, keine festen
-Sollwerte für künftige Inhalte. Die bestehenden Datenhinweise zu unklaren
-Ausgaben und fehlenden Erscheinungsjahren sind keine Import- oder Pfadfehler.
-Weitere Archiv-/Transkriptabrufe, ein vollständiger SQL-Import und eine
-LLM-Analyse wurden bei dieser Live-Prüfung nicht gestartet; dafür wurden
-die automatisierten Funktions- und CLI-Tests ausgeführt.
+Diese Angaben stammen aus der Momentaufnahme vom 20.10.2026 und wurden
+bei der Dokumentationsaktualisierung nicht erneut erhoben.
+
+Die erneute Prüfung am 12.11.2026 ergab:
+
+- `npm test`: 355 von 355 Tests bestanden.
+- `npm run dev:test`: 549 von 550 Tests bestanden, ein Test fehlgeschlagen.
+  Betroffen ist „meldet eine leere Auswahl ohne Abrufe oder ungültige
+  Prozentanzeige“ in `tests/extra-data/fetch-youtube-transcripts.test.mjs`:
+  Der Lauf meldet einen fehlgeschlagenen Transkriptabruf. Der Fehler tritt
+  auch beim isolierten Testlauf auf; Code und Tests wurden nicht geändert.
+- Alle 19 ausführbaren npm-Targetpfade vorhanden und syntaktisch gültig.
+
+Die Zahlen sind keine festen Sollwerte für künftige Inhalte. Die bestehenden
+Datenhinweise zu unklaren Ausgaben und fehlenden Erscheinungsjahren sind keine
+Import- oder Pfadfehler. Weitere Archiv-/Transkriptabrufe, ein vollständiger
+SQL-Import und eine LLM-Analyse wurden bei den Prüfungen nicht gestartet;
+dafür wurden die automatisierten Funktions- und CLI-Tests ausgeführt.
