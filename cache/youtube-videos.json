@@ -5,10 +5,18 @@
     "title": "Pretty Old Pixel",
     "url": "https://www.youtube.com/@PrettyOldPixel"
   },
-  "lastModified": "2026-11-13T18:00:26Z",
-  "fetchedAt": "2026-11-14T22:59:23.782Z",
+  "lastModified": "2026-11-15T18:00:23Z",
+  "fetchedAt": "2026-11-15T23:23:51.806Z",
   "complete": true,
   "videos": [
+    {
+      "id": "I9nWUuwS76I",
+      "title": "Datensicherung von Disketten - Teil 2 [re.ware #11]",
+      "description": "00:00:00 - Intro\n00:05:00 - Inhalte\n00:10:00 - Greaseweazle\n00:13:00 - Gehäusedruck und Laufwerksinstallation\n00:19:00 - Software und Datensicherung\n00:33:00 - FloppoScope Datenvisualisierung und mehr\n\nLink zu Teil 1:\nhttps://youtu.be/UMUCVO8kbCo\n\nHier die Links zu den im Video besprochenen Themen:\nhttps://www.printables.com/model/727435-greaseweazle-v441-gehause\nhttps://www.thingiverse.com/thing:4876846\nhttps://github.com/0ldStaph/FloppoScope\nhttps://github.com/hobbo91/ferriteweazle",
+      "duration": "PT38M50S",
+      "durationSeconds": 2330,
+      "publishedAt": "2026-11-15T18:00:23Z"
+    },
     {
       "id": "UOAZQWDd_XE",
       "title": "Wizardry I [re.play - #3] Ein Massaker [German/Deutsch]",
