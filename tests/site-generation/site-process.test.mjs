@@ -3,7 +3,7 @@ import test from "node:test";
 import { readFile } from "node:fs/promises";
 import { runInNewContext } from "node:vm";
 import { siteProcess, processNodes, processEdges, processColors, processConnections } from "../../src/content-data/site-process.mjs";
-import { processDiagram } from "../../src/site-generation/widget/process-diagram.mjs";
+import { processDiagram, processExplanation } from "../../src/site-generation/widget/process-diagram.mjs";
 import { loadContentData } from "../../src/content-data/content-data.mjs";
 import { createSiteConfig } from "../../src/site-generation/site-config.mjs";
 import { renderSite } from "../../src/site-generation/site-render.mjs";
@@ -47,7 +47,7 @@ test("Prozessgrafik trennt Daten, Trigger, Quellen und lokale Speicher", () => {
   assert.doesNotMatch(diagram, /<script|<iframe|<img|<use|<image/u);
   const nodes = new Map(processNodes.map((node) => [node[0], node]));
   assert.ok(nodes.get("db")[1] < nodes.get("youtube")[1]);
-  assert.ok(nodes.get("visitor")[2] > Math.max(...processNodes.filter(([id]) => id !== "visitor").map((node) => node[2])));
+  assert.ok(nodes.get("visitor")[2] >= Math.max(...processNodes.filter(([id]) => id !== "visitor").map((node) => node[2])));
   assert.ok(nodes.get("visitor")[1] > nodes.get("pages")[1]);
   for (const node of processNodes) assert.ok(processColors[node[5]]);
   for (const edge of processEdges) {
@@ -138,6 +138,63 @@ test("deklarative Animation hat korrekte Intervalle, endlichen Push und vollstä
   assert.doesNotMatch(diagram, /[^\n]*process-youtube[^\n]*visibility:hidden/u);
   assert.match(diagram, /:checked ~ \.process-scroll \* \{ animation-play-state:paused !important/u);
   assert.match(diagram, /prefers-reduced-motion:reduce[\s\S]*animation:none !important; opacity:0 !important/u);
+});
+
+test("Streaming führt nach jeder Seitenantwort direkt zur Nocookie-Quelle unter GitHub Pages", () => {
+  const diagram = processDiagram();
+  const nodes = new Map(processNodes.map((node) => [node[0], node]));
+  const source = nodes.get("youtube-embed");
+  const pages = nodes.get("pages");
+  const visitor = nodes.get("visitor");
+  assert.equal(source[1], pages[1]);
+  assert.equal(source[2], visitor[2]);
+  assert.equal(source[2] - pages[2] - pages[4], 50);
+  assert.equal(source[5], "yt");
+  assert.equal(source[6], "youtube");
+  assert.ok(source.includes("youtube-nocookie.com"));
+  const stream = processEdges.find((edge) => edge.id === "visitor-stream");
+  const response = processEdges.find((edge) => edge.id === "visitor-response");
+  assert.deepEqual(processConnections[stream.id], ["visitor", "youtube-embed"]);
+  assert.equal(stream.d, `M${visitor[1]} ${visitor[2] + visitor[4] / 2}H${source[1] + source[3]}`);
+  assert.equal(stream.color, "yt");
+  assert.equal(stream.label, "Streaming");
+  assert.ok(stream.streamCache > response.cacheResponse + 0.6);
+  assert.ok(stream.streamOrigin > response.origin + 0.6);
+  const pulses = [...diagram.matchAll(/<circle[^>]*class="process-pulse process-origin"[^>]*style="([^"]+)"/gu)]
+    .map(([, style]) => style).filter((style) => style.includes(`offset-path:path('${stream.d}')`));
+  assert.equal(pulses.length, 2);
+  assert.ok(pulses[0].includes(`animation-delay:${stream.streamCache}s`));
+  assert.ok(pulses[1].includes(`animation-delay:${stream.streamOrigin}s`));
+  assert.match(diagram, /data-process-highlight="youtube-embed"[^>]*animation-delay:2\.3s/u);
+  assert.match(diagram, /data-process-highlight="youtube-embed"[^>]*animation-delay:7\.1s/u);
+  assert.ok(siteProcess.legend.some((item) => item.includes("youtube-nocookie.com") && item.includes("Player aktiviert")));
+});
+
+test("technische Erklärung beschreibt Datenpflege, Aktualisierung und statische Veröffentlichung", () => {
+  const [sources, updates, publishing] = siteProcess.flows.map((flow) => flow.items.join(" "));
+  assert.match(sources, /redaktionell gepflegte Zuordnungen/u);
+  assert.match(sources, /Dateien.*kein laufender Datenbankserver/u);
+  assert.match(updates, /Metadaten.*keine Videodateien/u);
+  assert.match(updates, /täglich.*nicht in Echtzeit/u);
+  assert.match(updates, /fetch:playlists ruft.*neue Videos.*force_playlists/u);
+  assert.match(updates, /Ausgabe.*fehlt/u);
+  assert.match(updates, /workflow_run/u);
+  assert.match(publishing, /npm test.*npm run generate:site/u);
+  assert.match(publishing, /HTML-Seiten.*vor dem Besuch/u);
+  assert.match(publishing, /YouTube.*Magazinarchive.*nicht abgefragt/u);
+  assert.match(publishing, /app\/.*Service Worker.*Internetverbindung/u);
+  assert.match(publishing, /Markdown.*llms\.txt.*api\/v1\//u);
+  assert.match(publishing, /Artefakt.*GitHub Pages/u);
+});
+
+test("technische Auslieferungsbeschreibung unterscheidet CDN-Cache, Vorschaubilder und Player", () => {
+  const delivery = siteProcess.flows[3].items.join(" ");
+  assert.match(delivery, /Zwischenspeicher \(Cache\).*GitHub Pages.*Ursprungsserver \(Origin\)/u);
+  assert.match(delivery, /HTML-Seiten.*Cache/u);
+  assert.match(delivery, /wiederherstellen.*versionierte CSS- und JavaScript-Dateien/u);
+  assert.match(delivery, /youtube-nocookie\.com.*Freigabe/u);
+  assert.match(delivery, /Vorschaubilder.*i\.ytimg\.com.*vor der Player-Aktivierung/u);
+  assert.doesNotMatch(processExplanation(), /Animation|simuliert|Streaming-Pfeil|neu.-Markierung/u);
 });
 
 test("Prozessseite und Diensteverweise funktionieren in Website, Markdown und Offline-App", async () => {

@@ -175,6 +175,7 @@ h1, h2, h3, h4, h5, h6 { font-size: clamp(1.05rem, 1.8vw, 1.25rem); line-height:
 .player-controls { justify-content: flex-end; margin-left: auto; }
 .player-setting { min-height: 2.75rem; margin: 0; }
 .player-setting input { margin: 0; }
+.inline-icon { display: inline-block; width: 1.25em; height: 1.25em; vertical-align: -.3em; }
 .player-controls a { min-width: 2.75rem; min-height: 2.75rem; }
 .description { max-width: 80ch; }
 .description p { white-space: pre-wrap; }

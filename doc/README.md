@@ -53,7 +53,8 @@ standardmäßig aufgeklappt.
 
 `so-entsteht-die-seite/` dokumentiert Quellenpflege, lokale Zuordnungen,
 YouTube-Cachedateien, beide GitHub-Actions-Workflows sowie die gemeinsame
-Auslieferung von Website, App und Agentendaten über GitHub Pages/Cloudflare.
+Auslieferung von Website, App und Agentendaten über GitHub Pages/Cloudflare
+samt direktem Video-Streaming über `youtube-nocookie.com` nach Seitenabruf und Player-Freigabe.
 Projekt- und Datenschutzhinweise verlinken diese Seite.
 
 Das lokale SVG zeigt GitHub-, Cloudflare-, YouTube- und Node.js-Icons

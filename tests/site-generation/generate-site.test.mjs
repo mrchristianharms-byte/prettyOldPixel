@@ -71,6 +71,48 @@ test("enthält auf allen Seiten und in eingebetteten Player-Vorschauen nicht lee
   assert.ok(posters > 0);
 });
 
+test("Datenschutz nennt Video- und Archivquellen als Linkliste", () => {
+  const { pages } = render(fixture(1));
+  const privacy = pages.get("privacy/index.html").html;
+  const section = privacy.match(/<h2>Videoinformationen<\/h2>([\s\S]*?)<h2>/u)?.[1];
+  assert.ok(section, "Abschnitt Videoinformationen vorhanden");
+  const list = section.match(/<ul>([\s\S]*?)<\/ul>/u)?.[1];
+  assert.ok(list, "Quellen stehen als Liste im Abschnitt Videoinformationen");
+  const entries = [...list.matchAll(/<li>([\s\S]*?)<\/li>/gu)].map(([, entry]) => entry);
+  const sources = [
+    ["https://www.youtube.com/@PrettyOldPixel", "YouTube-Kanal Pretty Old Pixel"],
+    ["https://www.kultmags.com/", "Kultmags"],
+    ["https://reetroz.com/", "reetroz"],
+    ["https://www.pcgamesdatabase.de/", "PC Games Database"],
+    ["https://amr.abime.net/", "Amiga Magazine Rack (AMR)"],
+    ["https://www.retromags.com/", "RetroMags"],
+  ];
+  assert.equal(entries.length, sources.length);
+  for (const [index, [url, label]] of sources.entries()) {
+    assert.ok(entries[index].includes(`<a href="${url}" rel="external">${label} `), label);
+  }
+});
+
+test("Datenschutz zeigt die drei Player-Symbole bei ihren Erklärungen", () => {
+  const { pages } = render(fixture(1));
+  const privacy = pages.get("privacy/index.html").html;
+  const section = privacy.match(/<h2>YouTube-Player<\/h2>([\s\S]*?)<h2>/u)?.[1];
+  assert.ok(section, "Abschnitt YouTube-Player vorhanden");
+  const symbols = [
+    ["YouTube-Aktivierung", '<path d="M12 3v9m-5-7a9 9 0 1 0 10 0"/>'],
+    ["Nächste Folge automatisch", '<path d="m4 5 9 7-9 7V5Zm10 0 8 7-8 7V5Z"/>'],
+    ["Automatisch starten", '<path d="m7 4 14 8-14 8V4Z"/>'],
+  ];
+  for (const [label, path] of symbols) {
+    const index = section.indexOf(`${path}</svg> „${label}“`);
+    assert.ok(index > 0, `${label}: Originalsymbol direkt vor der Bezeichnung`);
+    const opening = section.lastIndexOf("<svg", index);
+    assert.ok(section.slice(opening, index).startsWith('<svg class="inline-icon"'), label);
+    assert.ok(section.slice(opening, index).includes('aria-hidden="true"'), `${label}: dekoratives Symbol nicht doppelt vorgelesen`);
+  }
+  assert.equal((section.match(/class="inline-icon"/gu) ?? []).length, symbols.length);
+});
+
 test("alte allgemeine Seiten leiten auf englische Pfade außerhalb der Sitemap weiter", async (t) => {
   const options = await setup(t, fixture(1));
   for (const baseUrl of ["https://prettyoldpixel.com/", "https://example.org/projekt/"]) {
@@ -171,7 +213,7 @@ test("eigene Seitentexte verwenden keine förmliche Ansprache oder veraltete Abs
   for (const [file, { html }] of pages) {
     assert.doesNotMatch(html, /\b(?:Ihnen|Ihre[nmrse]*)\b|(?:[Ww]ählen|[Öö]ffnen|[Ss]tarten|[Nn]utzen|[Ee]ntdecken|[Kk]önnen|[Ff]inden) Sie\b|Abschlußgespräch/u, file);
   }
-  assert.match(pages.get("privacy/index.html").html, /wenn du den Schalter „YouTube-Aktivierung“ einschaltest oder im Vorschaubild „YouTube-Player aktivieren“ wählst/u);
+  assert.match(pages.get("privacy/index.html").html, /wenn du den Schalter <svg class="inline-icon"[^>]*>.*?<\/svg> „YouTube-Aktivierung“ einschaltest oder im Vorschaubild „YouTube-Player aktivieren“ wählst/u);
   assert.match(pages.get("404.html").html, /findest du die Videos/u);
 });
 

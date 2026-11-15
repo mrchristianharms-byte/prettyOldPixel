@@ -16,7 +16,7 @@ export const widgetCssRules = [
   { file: "theme-toggle.mjs", selectors: [".theme-toggle", ".theme-moon", ".theme-sun"] },
   { file: "video-entry.mjs", selectors: [".video-list", ".video-entry-thumbnail", ".video-entry-content", ".topics", ".meta"] },
   { file: "video-panel.mjs", selectors: ["[data-video-panel]", "[data-video-panel][hidden]", ".description", ".topics", ".meta"] },
-  { file: "video.mjs", selectors: [".detail-player", ".video-player", ".player-toolbar", ".player-controls", ".player-setting", ".player-title", ".meta", ".archive-icon"] },
+  { file: "video.mjs", selectors: [".detail-player", ".video-player", ".player-toolbar", ".player-controls", ".player-setting", ".player-title", ".inline-icon", ".meta", ".archive-icon"] },
 ];
 
 // Page composition and shared helpers emitted outside the rendering widgets.

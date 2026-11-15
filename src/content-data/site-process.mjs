@@ -6,36 +6,39 @@ export const siteProcess = {
   introduction: "Diese Website besteht aus statischen Seiten, die bei Änderungen automatisch neu generiert werden. Aus Quellcode, lokalen Zuordnungen und YouTube-Daten entstehen HTML-Seiten, eine Offline-App und maschinenlesbare Inhalte. GitHub Actions übernehmen die Generierung und Veröffentlichung, aber Besucher erhalten die fertigen Dateien über Cloudflare und GitHub Pages.",
   legend: [
     "Besucher: Alle 3 Sekunden wird ein Seitenaufruf simuliert. Jeder zweite führt zum Ursprungsserver (Origin) bei GitHub Pages.",
+    "Streaming: Nach abgeschlossener Seitenantwort folgt ein Streaming-Pfeil vom Besucher auf YouTube (youtube-nocookie.com, sofern der Player aktiviert wurde).",
     "Entwicklung: Nach 5 Sekunden wird einmalig ein git push simuliert.",
     "YouTube: Alle 20 Sekunden zeigt ein Beispiel die Aktualisierung – Fetch-Action aktivieren → YouTube abrufen → Cachedateien schreiben.",
     "Darstellung: Boxen werden kurz hervorgehoben, neue Daten erscheinen vorübergehend grün.",
     "Dabei werden keine echten Anfragen gesendet oder Deployments gestartet. Der tatsächliche automatische YouTube-Abruf erfolgt täglich.",
   ],
   flows: [
-    { title: "F1 · Entwicklung und lokale Daten", items: [
-      "Manuelle Magazin-Fetches zur Referenzierung von Blätterabend-Videos laufen über dev:fetch:archives, bei Bedarf auch über dev:fetch:gamestar und dev:fetch:amiga-action. Danach werden die Zuordnungen geprüft.",
-      "Die lokale Zuordnungsdatenbank besteht aus Dateien. Sie verknüpfen Magazine mit Heften und Spiele mit Playlists. Dafür läuft kein Datenbankserver. Spielezuordnungen werden manuell bestätigt; vorbereitete Spielemetadaten ergänzen den Bestand.",
-      "Quellcode und geprüfte Daten gelangen per Commit und git push in den Branch main des Repositorys. Dieser git push startet die Site-Action.",
+    { title: "F1 · Entwicklung und Datenpflege", items: [
+      "Die Grundlage bilden automatisch abgerufene Informationen und redaktionell gepflegte Zuordnungen. YouTube liefert Angaben zu Videos und Playlists; die Zuordnungen legen fest, welches Video zu welchem Spiel oder welcher Zeitschriftenausgabe gehört. Neue Spiele werden nicht allein durch einen YouTube-Abruf in den Katalog aufgenommen.",
+      "Informationen aus Magazinarchiven werden bei Bedarf lokal mit Abrufskripten eingelesen. „Fetch“ bedeutet hier: Daten von einer externen Quelle herunterladen und für die weitere Verarbeitung speichern. Dafür gibt es dev:fetch:archives sowie ergänzend dev:fetch:gamestar und dev:fetch:amiga-action. Anschließend werden die Zuordnungen geprüft.",
+      "Die lokale Zuordnungsdatenbank besteht aus Dateien, nicht aus einem Datenbankdienst. Magazin- und Heftzuordnungen stehen unter anderem in cache/blaetterabend-videos.json, bestätigte Spiel- und Playlistzuordnungen in src/data/data-games.mjs. Vorbereitete Spielemetadaten ergänzen beispielsweise Erscheinungsjahr und Genre. Dafür ist kein laufender Datenbankserver nötig.",
+      "Quellcode und geprüfte Daten werden gemeinsam mit Git versioniert. Ein Commit hält einen Änderungsstand fest; git push überträgt ihn in das Repository, also das Projektarchiv auf GitHub. Änderungen am Hauptzweig main starten automatisch die Prüfung und Veröffentlichung der Website.",
     ] },
     { title: "F2 · YouTube und Cache-Aktualisierung", items: [
-      "Die im Diagramm als fetch:videos bezeichnete GitHub Action gehört zum Workflow „Update YouTube caches“. Er läuft täglich, nicht über einen YouTube-Webhook. Aktualisierungen in Echtzeit sind nicht garantiert.",
-      "fetch:videos erkennt neue öffentliche Video-IDs. fetch:playlists läuft bei neuen Videos, fehlenden Ausgabedateien oder aktivierter Option force_playlists. Der Abruf erfolgt wahlweise über die offizielle API oder anonym ohne API-Schlüssel.",
-      "Die Daten werden in cache/youtube-videos.json und cache/youtube-playlists.json gespeichert. Der Bot erstellt nur für geänderte Dateien einen Commit und überträgt ihn per git push. Neue Spiele werden dabei nicht automatisch redaktionell zugeordnet.",
-      "Nach erfolgreichem Abschluss startet site:generation über workflow_run, auch wenn sich keine Daten geändert haben.",
+      "GitHub Actions führt automatisierte Abläufe, sogenannte Workflows, auf GitHub aus. Der Workflow „Update YouTube caches“ fragt den Kanal zeitgesteuert täglich ab und lässt sich auch manuell starten. YouTube meldet neue Videos nicht direkt an diese Website. Sie erscheinen deshalb erst nach Abruf und Veröffentlichung, nicht in Echtzeit.",
+      "Der Schritt npm run fetch:videos liest öffentliche Metadaten wie Titel, Beschreibung, Veröffentlichungsdatum und Laufzeit ein, aber keine Videodateien. Ist ein API-Schlüssel hinterlegt, nutzt er die offizielle YouTube-Datenschnittstelle; andernfalls liest er öffentlich zugängliche YouTube-Seiten ohne Anmeldung aus.",
+      "Der anschließende Schritt fetch:playlists ruft Playlist-Daten ab, wenn neue Videos erkannt wurden oder der Abruf mit force_playlists ausdrücklich angefordert wurde. Auch wenn die Ausgabe zur Anzahl neuer Videos fehlt, läuft er. Reine Playlist-Änderungen ohne neue Uploads werden daher nicht bei jedem täglichen Lauf erfasst.",
+      "Die Ergebnisse stehen als strukturierte JSON-Dateien in cache/youtube-videos.json und cache/youtube-playlists.json. Diese Caches sind gespeicherte Arbeitskopien der Quelldaten, aus denen der Generator später den Katalog aufbaut. Nur wenn sich ihr Inhalt ändert, erstellt der GitHub-Actions-Bot einen Commit und überträgt ihn nach main.",
+      "Nach erfolgreichem Abschluss startet GitHub über das Ereignis workflow_run den Veröffentlichungsworkflow – auch dann, wenn keine Cachedatei geändert wurde. Entscheidend ist dieser erfolgreiche Abschluss, nicht der Bot-Commit. Schlägt der Abruf fehl, wird darüber keine neue Veröffentlichung angestoßen.",
     ] },
     { title: "F3 · Generierung und Veröffentlichung", items: [
-      "Die im Diagramm als site:generation bezeichnete GitHub Action gehört zum Workflow „Deploy to GitHub Pages“. Die Generierung läuft mit npm run generate:site. Weitere Auslöser sind ein git push auf main oder ein manueller Workflow-Start.",
-      "Der Ablauf ist test → build → deploy. Der Build verwendet denselben Commit, der zuvor getestet wurde. Nach einem Fetch-Lauf wird der aktuelle main-Stand getestet. Fehler verhindern eine neue Veröffentlichung.",
-      "Node.js erzeugt drei gleichrangige Ausgaben: site/ (HTML und Assets), app/ (Offline-App) und ai-bot/ (Markdown, llms.txt, API und Katalog). Das Diagramm zeigt logische Zweige, keine drei parallel gestarteten Workflows.",
-      "Alle Ausgaben werden in einem docs/-Artefakt gebündelt und auf GitHub Pages veröffentlicht. Sie werden nicht als generierter Git-Commit gespeichert. Die öffentliche Domain ist prettyoldpixel.com.",
-      "Der Build liest vorbereitete lokale Daten, ohne YouTube oder Magazinarchive abzurufen. site/ und ai-bot/ sind Diagrammbezeichnungen, keine zusätzlichen öffentlichen Verzeichnisse.",
-      "Gerundete Größenordnung des aktuellen Builds: rund 610 HTML-Seiten beziehungsweise 680 Website-Dateien mit Assets, 90 App-Dateien und 620 Agentendateien. Die Mengen ändern sich mit dem Katalog.",
+      "Der Workflow „Deploy to GitHub Pages“ startet nach einem Push auf main, nach einem erfolgreichen YouTube-Abruf oder manuell. Zuerst prüft npm test den ausgewählten Projektstand. Erst danach erzeugt npm run generate:site die Ausgabe aus genau diesem getesteten Commit. Schlägt die Prüfung oder Generierung fehl, wird kein neuer Stand veröffentlicht.",
+      "Beim Build, also dem Erzeugen der fertigen Dateien, führt Node.js die vorbereiteten Daten in einem gemeinsamen Inhaltsmodell zusammen. Daraus entstehen vollständige HTML-Seiten schon vor dem Besuch, dazu Stylesheets, JavaScript, Bilder und eine Sitemap. YouTube und Magazinarchive werden dabei nicht abgefragt. Ein Seitenaufruf muss daher weder den Katalog neu berechnen noch auf diese Quellen warten.",
+      "Aus demselben Inhaltsmodell entsteht unter app/ die Offline-App. Ein Service Worker, ein Hintergrundskript im Browser, speichert die App und ihre Katalogdaten nach der Einrichtung auf dem Gerät. Damit lässt sich der Katalog auch offline durchsuchen; Videos und externe Quellen benötigen weiterhin eine Internetverbindung.",
+      "Zusätzlich entstehen Markdown-Fassungen der Seiten, llms.txt als Einstieg für KI-Werkzeuge und eine Datenschnittstelle unter api/v1/. Diese API liefert vorbereitete JSON-Dateien statt Antworten eines laufenden API-Servers. Website, App und maschinenlesbare Ausgabe verwenden somit denselben Datenstand.",
+      "Alle Ausgaben landen im Build-Verzeichnis docs/. GitHub bündelt sie zu einem Artefakt, einem Paket fertiger Dateien, und veröffentlicht dieses auf GitHub Pages. Die erzeugten Seiten werden nicht als neuer Git-Commit ins Repository geschrieben. Die Bezeichnungen site/ und ai-bot/ stehen für Ausgabearten; sie sind keine zusätzlichen öffentlichen Verzeichnisse.",
     ] },
     { title: "F4 · Besucher und Auslieferung", items: [
-      "Seitenaufrufe laufen über HTTPS an prettyoldpixel.com, dann über Cloudflare und bei Bedarf weiter zu GitHub Pages. Antworten nehmen den umgekehrten Weg. Cloudflare dient als vorgeschalteter Proxy und als Content Delivery Network (CDN).",
-      "Die Animation zeigt abwechselnd eine Antwort aus dem Cloudflare-Cache und einen Abruf beim Ursprungsserver (Origin) von GitHub Pages. Jeder zweite simulierte Aufruf erreicht den Origin. Dieses Verhältnis ist ein Beispiel und keine gemessene Cache-Trefferquote.",
-      "Videos bleiben auf YouTube. Erst nach Player-Aktivierung verbindet sich der Browser direkt mit YouTube, nicht über einen Video-Proxy bei GitHub Pages.",
-      "Die animierten Pfeile und die grüne „neu“-Markierung veranschaulichen den Ablauf. Sie zeigen keinen Live-Status. Du kannst die Animation pausieren oder reduzierte Bewegung im Betriebssystem aktivieren.",
+      "Wenn du prettyoldpixel.com öffnest, sendet dein Browser eine verschlüsselte HTTPS-Anfrage an Cloudflare. Der Dienst ist als Proxy vorgeschaltet: Er nimmt die Anfrage entgegen und liefert die Antwort zurück. Die dauerhaft veröffentlichten Dateien liegen bei GitHub Pages, nicht in GitHub Actions; für einen Seitenbesuch wird kein Workflow gestartet.",
+      "Cloudflare kann geeignete Dateien in einem Zwischenspeicher (Cache) auf weltweit verteilten Servern vorhalten. Dieses Netz heißt Content Delivery Network (CDN). Ist eine passende, noch gültige Kopie vorhanden, kann Cloudflare direkt antworten. Andernfalls wird die Datei von GitHub Pages, dem Ursprungsserver (Origin), geholt und über Cloudflare an den Browser weitergegeben.",
+      "Ob eine Seite aus dem Cache kommt, bestimmen Cache-Regeln und Antwort-Header. Bei einem dokumentierten Test wurden die Startseite und Spieleübersicht nicht aus dem Cloudflare-Cache beantwortet; das Favicon dagegen schon. Damit zwischengespeicherte HTML-Seiten nach einer Veröffentlichung ihre Dateien weiterhin finden, kann der Workflow frühere Assets aus einem GitHub-Actions-Cache wiederherstellen. Der Generator übernimmt daraus bestimmte versionierte CSS- und JavaScript-Dateien in die neue Veröffentlichung. Neue Seiten verwenden die aktuellen Dateiversionen.",
+      "Die Videos selbst liegen weder auf GitHub Pages noch laufen sie über den Proxy von Cloudflare. Der eingebettete YouTube-Player wird über youtube-nocookie.com geladen, sobald du die Freigabe erteilst oder eine gespeicherte Freigabe gilt. Danach bezieht der Browser Player und Videostream direkt von YouTube/Google. Für Kapitelsprünge und das Erkennen des Videoendes lädt er zusätzlich die YouTube-IFrame-API von www.youtube.com. Der erweiterte Datenschutzmodus verhindert nicht, dass Daten an den Anbieter übertragen werden.",
+      "Vorschaubilder werden unabhängig davon direkt von i.ytimg.com geladen und können daher schon vor der Player-Aktivierung eine Verbindung zu YouTube/Google herstellen. Die Freigabe betrifft den Player, nicht sämtliche externen Bildabrufe. Sie wird im Browser gespeichert; automatisches Abspielen ist eine getrennte, standardmäßig ausgeschaltete Einstellung der Website.",
     ] },
   ],
 };
@@ -63,6 +66,7 @@ export const processConnections = {
   "origin-response": ["pages", "cloudflare"],
   "visitor-get": ["visitor", "cloudflare"],
   "visitor-response": ["cloudflare", "visitor"],
+  "visitor-stream": ["visitor", "youtube-embed"],
 };
 
 export const processNodes = [
@@ -80,6 +84,7 @@ export const processNodes = [
   ["ai", 687.5, 755, 165, 60, "build", "file", "ai-bot/", "Markdown · API"],
   ["artifact", 405, 865, 330, 60, "build", "cache", "Gemeinsames docs/-Artefakt", "upload → deploy"],
   ["pages", 405, 975, 330, 60, "web", "github", "github.io Pages", "Origin"],
+  ["youtube-embed", 405, 1085, 330, 60, "yt", "youtube", "YouTube-Quelle", "youtube-nocookie.com"],
   ["cloudflare", 870, 975, 330, 60, "web", "cloudflare", "Cloudflare · Proxy / CDN", "prettyoldpixel.com"],
   ["visitor", 870, 1085, 330, 60, "web", "visitor", "Besucher", "Browser · HTTPS"],
 ];
@@ -105,4 +110,5 @@ export const processEdges = [
   { id: "origin-response", d: "M735 990H870", color: "web", label: "", x: 802, y: 965, origin: 4.8 },
   { id: "visitor-get", d: "M950 1085V1035", color: "web", label: "GET", x: 920, y: 1065, visitor: 0 },
   { id: "visitor-response", d: "M1100 1035V1085", color: "web", label: "", x: 1140, y: 1065, cacheResponse: 1, origin: 5.8 },
+  { id: "visitor-stream", d: "M870 1115H735", color: "yt", label: "Streaming", x: 802, y: 1105, streamCache: 1.7, streamOrigin: 6.5 },
 ];

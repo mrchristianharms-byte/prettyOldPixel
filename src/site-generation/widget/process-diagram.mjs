@@ -50,7 +50,7 @@ const styles = `
 .process-svg .process-node-detail { font-size:12px }
 .process-svg .process-node > rect { fill:var(--pico-background-color) }
 .process-svg .process-node-dev > rect,.process-svg .process-node-archive > rect,.process-svg .process-node-db > rect,.process-svg .process-node-push > rect { fill:color-mix(in srgb,var(--process-dev) 15%,var(--pico-background-color)) }
-.process-svg .process-node-youtube > rect,.process-svg .process-node-fetch > rect,.process-svg .process-node-cache > rect { fill:color-mix(in srgb,var(--process-yt) 15%,var(--pico-background-color)) }
+.process-svg .process-node-youtube > rect,.process-svg .process-node-youtube-embed > rect,.process-svg .process-node-fetch > rect,.process-svg .process-node-cache > rect { fill:color-mix(in srgb,var(--process-yt) 15%,var(--pico-background-color)) }
 .process-svg .process-node-pages > rect { fill:color-mix(in srgb,var(--process-web) 15%,var(--pico-background-color)) }
 .process-svg .process-node > .process-active { fill:var(--process-yt) }
 .process-svg .process-edge-label { font-size:13px; paint-order:stroke; stroke:var(--pico-background-color); stroke-width:5px; stroke-linejoin:round }
@@ -101,7 +101,7 @@ export function processDiagram() {
 <div class="process-scroll" tabindex="0" role="region" aria-label="Prozessdiagramm, bei Bedarf horizontal scrollen">
 <svg class="process-svg" viewBox="0 0 1280 1190" role="group" aria-labelledby="process-title process-desc">
 <title id="process-title">${escapeHtml(siteProcess.title)}</title>
-<desc id="process-desc">Links stehen die manuelle Entwicklung und die Zuordnungsdaten, rechts YouTube und die Cache-Aktualisierung. Beide Wege führen über GitHub Actions zur Generierung von Website, App und Agentendaten für GitHub Pages. Besucher greifen unten rechts über Cloudflare zu. Ausführliche Erklärungen folgen unter dem Diagramm.</desc>
+<desc id="process-desc">Links stehen die manuelle Entwicklung und die Zuordnungsdaten, rechts YouTube und die Cache-Aktualisierung. Beide Wege führen über GitHub Actions zur Generierung von Website, App und Agentendaten für GitHub Pages. Besucher greifen unten rechts über Cloudflare zu und verbinden sich nach Seitenabruf und Freigabe direkt mit der YouTube-Quelle (youtube-nocookie.com) unter GitHub Pages. Ausführliche Erklärungen folgen unter dem Diagramm.</desc>
 <defs>${Object.keys(processColors).map((name) => `<marker id="process-arrow-${name}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--process-${name})"/></marker>`).join("")}</defs>
 <text x="160" y="30" class="process-lane">F1 · ENTWICKLUNG / MANUELL</text>
 <text x="720" y="30" class="process-lane">F2 · YOUTUBE / AUTOMATISCH</text>
@@ -115,7 +115,7 @@ ${lines.map((line, i) => `<text x="${x + 46}" y="${y + 24 + i * 19}" class="${i 
 ${id === "fetch" ? `<rect class="process-active" x="${x}" y="${y}" width="${w}" height="${h}" rx="10" style="animation-delay:20s" aria-hidden="true"/>` : ""}
 ${["dev", "archive"].includes(id) ? `<foreignObject x="${x + 8}" y="${y + 10}" width="30" height="30"><button xmlns="http://www.w3.org/1999/xhtml" type="button" class="process-play" data-process-play="${id}" aria-label="${id === "dev" ? "Entwicklungsablauf" : "Magazin-Fetch"} manuell animieren" title="Animation starten"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4 20 12 7 20Z" fill="currentColor"/></svg></button></foreignObject>` : ""}
 </g>`).join("")}
-${processEdges.map((edge) => `${edge.push !== undefined ? renderPulse(edge, "once", edge.push) : ""}${edge.yt !== undefined ? renderPulse(edge, "youtube", edge.yt) : ""}${edge.visitor !== undefined ? renderPulse(edge, "visitor", edge.visitor) : ""}${edge.origin !== undefined ? renderPulse(edge, "origin", edge.origin) : ""}${edge.cacheResponse !== undefined ? renderPulse(edge, "origin", edge.cacheResponse) : ""}`).join("")}
+${processEdges.map((edge) => `${edge.push !== undefined ? renderPulse(edge, "once", edge.push) : ""}${edge.yt !== undefined ? renderPulse(edge, "youtube", edge.yt) : ""}${edge.visitor !== undefined ? renderPulse(edge, "visitor", edge.visitor) : ""}${edge.origin !== undefined ? renderPulse(edge, "origin", edge.origin) : ""}${edge.cacheResponse !== undefined ? renderPulse(edge, "origin", edge.cacheResponse) : ""}${edge.streamCache !== undefined ? renderPulse(edge, "origin", edge.streamCache) : ""}${edge.streamOrigin !== undefined ? renderPulse(edge, "origin", edge.streamOrigin) : ""}`).join("")}
 ${processNodes.filter(([id]) => ["html", "app", "ai", "pages", "cache"].includes(id)).map(([id, x, y, w, h]) =>
     `${id === "cache" ? "" : fresh(x, y, w, h, "once", id === "pages" ? 10.8 : 8.2)}${fresh(x, y, w, h, "youtube", id === "cache" ? 22.6 : id === "pages" ? 28.8 : 26.2)}`).join("")}
 <g class="process-manual" aria-hidden="true"></g>
