@@ -20,6 +20,15 @@ function setup() {
       platforms: JSON.stringify(platforms), genres: JSON.stringify(genres),
     },
     hidden: false,
+    querySelector(query) {
+      if (query === ".game-table-company:nth-of-type(1)") {
+        return { textContent: "Publisher: Test Publisher" };
+      }
+      if (query === ".game-table-company:nth-of-type(2)") {
+        return { textContent: "Entwickler: Test Developer" };
+      }
+      return null;
+    },
   }));
   const control = (value) => ({
     value,

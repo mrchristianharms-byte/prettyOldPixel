@@ -92,7 +92,7 @@ function gamesView(games, model, table = false, route = "spiele/") {
 ${gamePageNavigation(route, appHref)}
 <form id="app-game-filters"><label>System<select name="platform">${options(games.flatMap(platforms), "Alle Systeme")}<option value="__unknown__">System unbekannt</option></select></label>
 <label>Genre<select name="genre">${options(games.flatMap((game) => gameData(game).genres ?? []), "Alle Genres")}<option value="__unknown__">Genre unbekannt</option></select></label>
-<label>Spieletitel<input type="search" name="search" placeholder="Spiel suchen"></label><button type="reset" aria-label="Filter zurücksetzen" title="Filter zurücksetzen">↺</button></form>
+<label>Spiele suchen<input type="search" name="search" placeholder="Spiel suchen"></label><button type="reset" aria-label="Filter zurücksetzen" title="Filter zurücksetzen">↺</button></form>
 <p id="app-game-count" role="status">${games.length} von ${count(games.length, "Spiel", "Spielen")}</p>
 ${table ? `<div class="overflow-auto" role="region" aria-label="Spieletabelle" tabindex="0"><table class="app-game-table"><thead><tr>
 ${[["video", "Erstvideo"], ["title", "Titel"], ["release", "Jahr"]].map(([key, label]) => `<th scope="col" aria-sort="${key === "video" ? "descending" : "none"}"><button data-sort="${key}">${label} ↕</button></th>`).join("")}

@@ -18,7 +18,7 @@ export function gameTable(rows, config, intro = "") {
 <label for="game-genre">Genre<select id="game-genre" data-game-genre>
 <option value="">Alle Genres</option>${options(rows.flatMap((row) => row.genres))}<option value="__unknown__">Genre unbekannt</option>
 </select></label>
-<label for="game-search">Spieletitel<input type="search" id="game-search" data-game-search placeholder="Spiel suchen"></label>
+<label for="game-search">Spiele suchen<input type="search" id="game-search" data-game-search placeholder="Spiel suchen"></label>
 <button type="button" class="secondary" data-game-reset aria-label="Filter zurücksetzen" title="Filter zurücksetzen"><span aria-hidden="true">↺</span></button></fieldset>
 </div>
 </div>
