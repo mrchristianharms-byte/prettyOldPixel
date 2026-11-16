@@ -433,9 +433,13 @@ keine externen Ressourcen oder Laufzeit-JavaScript.
 
 ### Hardware, Retrospektiven und Gespräche
 
-- `/hardware/` enthält derzeit 14 geprüfte Hardwarebeiträge, neueste zuerst:
+- `/hardware/` enthält geprüfte Hardwarebeiträge sowie automatisch alle
+  öffentlichen Videos mit der eigenständigen Formatkennung `re.ware` im Titel,
+  unabhängig von Groß-/Kleinschreibung, neueste zuerst. Dazu gehören
   Gerätevorstellungen, Restaurationsprojekte, PC-Grundlagen und Bastelstreams.
-  Es gibt keine Unterseiten nach Gerät, Hersteller oder Jahr.
+  Explizite Zuordnungen und Ausschlüsse haben Vorrang; automatische Treffer
+  erhalten keine erfundenen Themenangaben. Es gibt keine Unterseiten nach
+  Gerät, Hersteller oder Jahr.
 - `/retrospektiven/` enthält die Format-Einleitung und zwölf Beiträge zur
   Geschichte der Flugsimulationen, gruppiert nach Thema und geprüfter
   Folgenreihenfolge. Die zwei Originaltitel mit `#11` bleiben unverändert;
@@ -477,7 +481,8 @@ keine externen Ressourcen oder Laufzeit-JavaScript.
   älteren Formaten (`olderFormat`), ohne sichtbaren Trenner. Titel, Beschreibungen und bestätigte
   Playlist-Mitgliedschaften wurden hierfür geprüft. Änderungen der
   Playlist-Mitgliedschaft allein erzeugen keine ungeprüften Zuordnungen.
-  Neue Titel-/Playlist-Kandidaten werden beim Build als Prüfhinweis gemeldet.
+  Nicht automatisch zugeordnete Titel-/Playlist-Kandidaten werden beim Build
+  als Prüfhinweis gemeldet.
   Fehlen bestätigte Beiträge im öffentlichen Cache, werden sie ausgelassen
   und bei vorhandenem Quellplaylist-Kontext ausdrücklich gemeldet.
 - Der Verpackungsbeitrag `bwVnfQJ-WEw` ist manuell re.ware (Hardware)

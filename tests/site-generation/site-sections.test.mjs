@@ -295,9 +295,72 @@ test("beschreibt Themen für Besucher ohne interne Prüf- oder Cachehinweise", (
   }
 });
 
-test("ordnet nur geprüfte IDs zu und meldet neue Titel-/Playlist-Kandidaten", () => {
+test("ordnet re.ware-Folgen anhand der Formatkennung zu und respektiert manuelle Daten und Ausschlüsse", () => {
+  const input = fixture(9);
+  const titles = [
+    "Datensicherung von Disketten - Teil 2 [re.ware #11]",
+    "Neue Folge [RE.WARE - #12]",
+    "re.ware - manuell geprüft",
+    "re.ware - ausgeschlossen",
+    "Ein Blick auf re.warehouse",
+    "Neues zu pre.ware",
+    "Hardware im Überblick",
+    "Playlist-Kandidat",
+    "Folge reXware",
+  ];
+  input.videos.videos.forEach((video, index) => { video.title = titles[index]; });
+  input.videos.videos[0].id = "I9nWUuwS76I";
+  input.playlists.playlists = [{
+    id: "PL-test", title: "Hardware", videos: [{ videoId: videoId(7), position: 1, availability: "listed" }],
+  }];
+  const section = definition("hardware", 0);
+  section.videos = [{ id: videoId(2), topic: "Geprüftes Thema", note: "Eigener Hinweis" }];
+  section.excludedVideoIds = [videoId(3)];
+  const { model, pages, config } = render(input, [section]);
+  const entries = model.sections.find((item) => item.id === "hardware").entries;
+  assert.deepEqual(entries.map((entry) => entry.videoId), [videoId(2), videoId(1), "I9nWUuwS76I"]);
+  assert.equal(entries[0].topic, "Geprüftes Thema");
+  assert.equal(entries[0].note, "Eigener Hinweis");
+  assert.equal(entries.filter((entry) => entry.videoId === videoId(2)).length, 1);
+  for (const id of ["I9nWUuwS76I", videoId(1), videoId(2)]) {
+    const video = model.videoById.get(id);
+    assert.ok(video.sections.some((item) => item.id === "hardware"));
+    assert.ok(!video.sections.some((item) => item.id === "sonstiges"));
+    assert.ok(!model.warnings.some((warning) => warning.includes(`hardware/${id}`)));
+  }
+  for (const index of [3, 4, 5, 6, 7, 8]) {
+    assert.deepEqual(model.videoById.get(videoId(index)).sections.map((item) => item.id), ["sonstiges"]);
+  }
+  assert.ok(!model.warnings.some((warning) => warning.includes(`hardware/${videoId(3)}`)));
+  for (const index of [6, 7]) {
+    assert.ok(model.warnings.some((warning) => warning.includes(`hardware/${videoId(index)}`)));
+  }
+  const video = model.videoById.get("I9nWUuwS76I");
+  assert.equal(video.detailRoute, "hardware/datensicherung-von-disketten-teil-2-re-ware-11/");
+  assert.ok(pages.get("hardware/index.html").html.includes(videoListEntry(video, config.forPage("hardware/"))));
+  assert.ok(pages.get("news/index.html").html.includes(`href="../${video.detailRoute}#video-${video.id}"`));
+  assert.ok(!pages.has(`sonstiges/${slugify(video.title)}/index.html`));
+  input.videos.videos.reverse();
+  assert.deepEqual([...render(input, [section]).pages], [...pages]);
+});
+
+test("ordnet die neue re.ware-Folge aus dem YouTube-Cache als Hardware ein", async () => {
+  const cache = JSON.parse(await readFile("cache/youtube-videos.json", "utf8"));
+  const cachedVideo = cache.videos.find((video) => video.id === "I9nWUuwS76I");
+  assert.ok(cachedVideo);
+  const input = fixture(1);
+  input.videos.videos = [cachedVideo];
+  const model = normalizeSources(input, { games: [], now: Date.parse("2026-11-16T00:00:00Z") });
+  const video = model.videoById.get(cachedVideo.id);
+  assert.ok(video.sections.some((section) => section.id === "hardware"));
+  assert.ok(!video.sections.some((section) => section.id === "sonstiges"));
+  assert.equal(video.detailRoute, "hardware/datensicherung-von-disketten-teil-2-re-ware-11/");
+  assert.ok(!model.warnings.some((warning) => warning.includes(`hardware/${video.id}`)));
+});
+
+test("meldet ungeprüfte Hardware-/Playlist-Kandidaten statt sie automatisch zuzuordnen", () => {
   const input = fixture();
-  input.videos.videos[1].title = "re.ware - ungeprüft";
+  input.videos.videos[1].title = "Hardware - ungeprüft";
   input.videos.videos[2].title = "Spieleverpackungen";
   input.playlists.playlists = [{
     id: "PL-test", title: "re.ware", videos: input.videos.videos.slice(1).map((video, index) => ({
@@ -472,7 +535,7 @@ test("prüft die echten kuratierten Zuordnungen und die doppelte Originalnummer 
   const cache = path.resolve(import.meta.dirname, "../../cache");
   const model = await loadContentData(cache);
   assert.deepEqual(model.sections.filter((section) => ["hardware", "retrospektiven", "interviews"].includes(section.id)).map((section) => [section.id, section.entries.length]),
-    [["hardware", 15], ["retrospektiven", 21], ["interviews", 8]]);
+    [["hardware", 16], ["retrospektiven", 21], ["interviews", 8]]);
   const other = model.sections.find((section) => section.id === "sonstiges");
   assert.ok(other.entries.length > 0);
   assert.deepEqual(other.entries.map((entry) => entry.videoId),

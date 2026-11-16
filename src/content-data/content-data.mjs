@@ -277,6 +277,15 @@ function normalizeGames(definitions, playlists, videoById, warnings, now) {
   return games.sort((a, b) => a.name.localeCompare(b.name, "de") || a.id.localeCompare(b.id, "en"));
 }
 
+function addHardwareFormatVideos(videoById, assignedIds, excludedVideoIds, entries) {
+  for (const video of videoById.values()) {
+    if (/\bre\.ware\b/iu.test(video.title) && !assignedIds.has(video.id) && !excludedVideoIds.includes(video.id)) {
+      assignedIds.add(video.id);
+      entries.push({ videoId: video.id });
+    }
+  }
+}
+
 function normalizeSections(definitions, videoById, playlists, warnings) {
   requireValue(Array.isArray(definitions), "Bereichszuordnungen: Liste erwartet.");
   const sections = [];
@@ -320,6 +329,7 @@ function normalizeSections(definitions, videoById, playlists, warnings) {
         order: assignment.order ?? null, note: assignment.note ?? "",
       });
     }
+    if (id === "hardware") addHardwareFormatVideos(videoById, assignedIds, excludedVideoIds, entries);
     if (id === "retrospektiven") {
       const vietnam = [...videoById.values()].filter((video) => /^\s*Themenblock\s+Vietnam\b/iu.test(video.title)
         && !assignedIds.has(video.id) && !excludedVideoIds.includes(video.id)).sort(chronological);
