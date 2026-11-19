@@ -5,10 +5,18 @@
     "title": "Pretty Old Pixel",
     "url": "https://www.youtube.com/@PrettyOldPixel"
   },
-  "lastModified": "2026-11-15T18:00:23Z",
-  "fetchedAt": "2026-11-18T01:37:51.481Z",
+  "lastModified": "2026-11-18T18:30:15Z",
+  "fetchedAt": "2026-11-19T01:14:27.397Z",
   "complete": true,
   "videos": [
+    {
+      "id": "9WAwhlY584U",
+      "title": "Ultima Underworld II [re.play - #4] Der Avatar entsteht [German]",
+      "description": "Spiel: Ultima Underworld II: Labyrinth of Worlds\nPublisher: ORIGIN Systems, Inc.\nEntwickler: Looking Glass Technologies, Inc.\nReleasedatum: 1993\nSysteme: MS-DOS, FM-Towns, PC-98\n\nLink zu  ⁨@Steinwallen⁩  Ultima 7 Playthrough: https://www.youtube.com/playlist?list=PL1jjPcfEsu2W2h4AOL5eCNWfQauXP9U45   \n\nPlaylist: https://www.youtube.com/playlist?list=PLUrbqDDC9Ei0\n\nJeden Dienstag und Freitag ab 20 Uhr auf Twitch.tv/PrettyOldPixel",
+      "duration": "PT1H9M26S",
+      "durationSeconds": 4166,
+      "publishedAt": "2026-11-18T18:30:15Z"
+    },
     {
       "id": "I9nWUuwS76I",
       "title": "Datensicherung von Disketten - Teil 2 [re.ware #11]",
