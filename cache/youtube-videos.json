@@ -5,10 +5,18 @@
     "title": "Pretty Old Pixel",
     "url": "https://www.youtube.com/@PrettyOldPixel"
   },
-  "lastModified": "2026-11-18T18:30:15Z",
-  "fetchedAt": "2026-11-19T01:14:27.397Z",
+  "lastModified": "2026-11-19T18:00:32Z",
+  "fetchedAt": "2026-11-20T01:16:51.815Z",
   "complete": true,
   "videos": [
+    {
+      "id": "Z_UKTajsvvQ",
+      "title": "Star Trek: Generations [re.play - #3] Mit Lösung - Armagosa Stellar Observatory - Riker [German]",
+      "description": "Spiel: Star Trek: Generations\nPublisher: MicroProse Software, Inc.\nEntwickler: MicroProse (Alameda)\nReleasedatum: 1997\nSysteme: Windows 9X\n\nPlaylist: https://www.youtube.com/playlist?list=PLKsmhkv13pEw\n\nJeden Dienstag und Freitag ab 20 Uhr auf Twitch.tv/PrettyOldPixel",
+      "duration": "PT28M46S",
+      "durationSeconds": 1726,
+      "publishedAt": "2026-11-19T18:00:32Z"
+    },
     {
       "id": "9WAwhlY584U",
       "title": "Ultima Underworld II [re.play - #4] Der Avatar entsteht [German]",

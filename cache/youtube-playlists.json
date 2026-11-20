@@ -5,8 +5,8 @@
     "title": "Pretty Old Pixel",
     "url": "https://www.youtube.com/@PrettyOldPixel"
   },
-  "fetchedAt": "2026-11-19T01:14:27.558Z",
-  "lastModified": "2026-11-19T01:14:27.558Z",
+  "fetchedAt": "2026-11-20T01:16:51.996Z",
+  "lastModified": "2026-11-20T01:16:51.996Z",
   "complete": true,
   "playlists": [
     {
@@ -36,7 +36,7 @@
         }
       ],
       "lastModified": "2026-11-14T00:21:10.867Z",
-      "checkedAt": "2026-11-19T01:14:27.558Z"
+      "checkedAt": "2026-11-20T01:16:51.996Z"
     },
     {
       "id": "PLCdHnxdZabN4",
@@ -178,7 +178,7 @@
         }
       ],
       "lastModified": "2026-11-19T01:14:27.558Z",
-      "checkedAt": "2026-11-19T01:14:27.558Z"
+      "checkedAt": "2026-11-20T01:16:51.996Z"
     },
     {
       "id": "PLKPrSm4Rptws",
@@ -244,23 +244,29 @@
       "title": "re.play - Star Trek: Generations",
       "description": "",
       "url": "https://www.youtube.com/playlist?list=PLKsmhkv13pEw",
-      "videoCount": 2,
+      "videoCount": 3,
       "videos": [
         {
           "position": 1,
+          "videoId": "Z_UKTajsvvQ",
+          "title": "Star Trek: Generations [re.play - #3] Mit Lösung - Armagosa Stellar Observatory - Riker [German]",
+          "availability": "listed"
+        },
+        {
+          "position": 2,
           "videoId": "y6A6QEB36Gw",
           "title": "Star Trek: Generations [re.play - #2] Armagosa Stellar Observatory - Riker [German]",
           "availability": "listed"
         },
         {
-          "position": 2,
+          "position": 3,
           "videoId": "X_oKNsvMVqg",
           "title": "Star Trek: Generations [re.play - #1] Intro und Box [German]",
           "availability": "listed"
         }
       ],
-      "lastModified": "2026-11-13T00:28:13.995Z",
-      "checkedAt": "2026-11-19T01:14:27.558Z"
+      "lastModified": "2026-11-20T01:16:51.996Z",
+      "checkedAt": "2026-11-20T01:16:51.996Z"
     },
     {
       "id": "PLNceJpv0LbXw",
@@ -6623,7 +6629,7 @@
         }
       ],
       "lastModified": "2026-11-15T23:23:52.185Z",
-      "checkedAt": "2026-11-19T01:14:27.558Z"
+      "checkedAt": "2026-11-20T01:16:51.996Z"
     },
     {
       "id": "PLZW5k3rtbudpZXtUiaBQ0DlyyIdFYM3xE",
