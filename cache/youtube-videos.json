@@ -5,10 +5,18 @@
     "title": "Pretty Old Pixel",
     "url": "https://www.youtube.com/@PrettyOldPixel"
   },
-  "lastModified": "2026-11-19T18:00:32Z",
-  "fetchedAt": "2026-11-20T01:16:51.815Z",
+  "lastModified": "2026-11-20T18:00:09Z",
+  "fetchedAt": "2026-11-21T00:49:12.678Z",
   "complete": true,
   "videos": [
+    {
+      "id": "69m9aSeJAu0",
+      "title": "RMS Titanic [re.play - #1] Intro und Unboxing [German/Deutsch]",
+      "description": "Der Anfang eines jeden re.plays. Das Intro und das Unboxing des Spiels mit vielen Hintergrundinformationen. Viel Spaß beim Anschauen!\n\n00:00:00 Intro\n00:01:42 Unboxing\n00:10:10 Schlussworte\n\nSpiel: RMS Titanic\nPublisher: Electric Dreams Software\nEntwickler:  Oxford Digital Enterprises Ltd.\nReleasedatum: 1986\nSysteme: C64\n \nJeden Montag und (fast) jeden Freitag ab 20 Uhr auf Twitch.tv/PrettyOldPixel",
+      "duration": "PT11M13S",
+      "durationSeconds": 673,
+      "publishedAt": "2026-11-20T18:00:09Z"
+    },
     {
       "id": "Z_UKTajsvvQ",
       "title": "Star Trek: Generations [re.play - #3] Mit Lösung - Armagosa Stellar Observatory - Riker [German]",

@@ -5,8 +5,8 @@
     "title": "Pretty Old Pixel",
     "url": "https://www.youtube.com/@PrettyOldPixel"
   },
-  "fetchedAt": "2026-11-20T01:16:51.996Z",
-  "lastModified": "2026-11-20T01:16:51.996Z",
+  "fetchedAt": "2026-11-21T00:49:12.884Z",
+  "lastModified": "2026-11-21T00:49:12.884Z",
   "complete": true,
   "playlists": [
     {
@@ -144,6 +144,23 @@
       ],
       "lastModified": "2026-10-31T22:30:22.943Z",
       "checkedAt": "2026-11-15T23:23:52.185Z"
+    },
+    {
+      "id": "PLdcuPIKUpZJQ",
+      "title": "re.play - RMS Titanic",
+      "description": "",
+      "url": "https://www.youtube.com/playlist?list=PLdcuPIKUpZJQ",
+      "videoCount": 1,
+      "videos": [
+        {
+          "position": 1,
+          "videoId": "69m9aSeJAu0",
+          "title": "RMS Titanic [re.play - #1] Intro und Unboxing [German/Deutsch]",
+          "availability": "listed"
+        }
+      ],
+      "lastModified": "2026-11-21T00:49:12.884Z",
+      "checkedAt": "2026-11-21T00:49:12.884Z"
     },
     {
       "id": "PLKAk_zU7LotY",
