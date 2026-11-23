@@ -5,10 +5,18 @@
     "title": "Pretty Old Pixel",
     "url": "https://www.youtube.com/@PrettyOldPixel"
   },
-  "lastModified": "2026-11-20T18:00:09Z",
-  "fetchedAt": "2026-11-21T23:48:50.504Z",
+  "lastModified": "2026-11-22T18:00:11Z",
+  "fetchedAt": "2026-11-23T00:19:23.159Z",
   "complete": true,
   "videos": [
+    {
+      "id": "_zs5BPTKbKI",
+      "title": "Blätterabendaufzeichnung - PC Xtreme - Teil 2",
+      "description": "00:00:00 - Intro\n00:05:00 - Vorgespräch\n00:48:30 - Blätterabend",
+      "duration": "PT2H13M55S",
+      "durationSeconds": 8035,
+      "publishedAt": "2026-11-22T18:00:11Z"
+    },
     {
       "id": "69m9aSeJAu0",
       "title": "RMS Titanic [re.play - #1] Intro und Unboxing [German/Deutsch]",
