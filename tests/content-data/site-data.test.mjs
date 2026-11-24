@@ -127,6 +127,27 @@ test("ordnet Star Trek: Generations für Windows der ersten aktuellen Playlist-F
   assert.ok(!model.warnings.some((warning) => warning.includes(playlist.id)));
 });
 
+test("ordnet RMS Titanic für C64 der ersten aktuellen Playlist-Folge zu", () => {
+  const input = sources(1);
+  const video = input.videos.videos[0];
+  video.id = "69m9aSeJAu0";
+  video.title = "RMS Titanic [re.play - #1] Intro und Unboxing [German/Deutsch]";
+  video.publishedAt = "2026-11-20T18:00:09Z";
+  const playlist = input.playlists.playlists[0];
+  playlist.id = "PLdcuPIKUpZJQ";
+  playlist.title = "re.play - RMS Titanic";
+  playlist.videos[0].videoId = video.id;
+  input.magazines.videos = [];
+
+  const model = normalizeSources(input, { now: Date.parse("2026-11-21T12:00:00Z") });
+  const game = model.games.find((entry) => entry.id === "rms-titanic-c64");
+  assert.ok(game);
+  assert.deepEqual(game.platforms, ["C64"]);
+  assert.deepEqual(game.videos, [video.id]);
+  assert.equal(model.videoById.get(video.id).games[0].id, game.id);
+  assert.ok(!model.warnings.some((warning) => warning.includes(playlist.id)));
+});
+
 test("sortiert News numerisch nach Zeitzonen und begrenzt auf 20 eindeutige Videos", () => {
   const input = sources(25);
   input.videos.videos[23].publishedAt = "2020-03-01T01:00:00+02:00";

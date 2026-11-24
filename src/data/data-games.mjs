@@ -11,6 +11,7 @@ const playlists = [
   ["PLNceJpv0LbXw", "Labyrinth"],
   ["PLO77B_AOBv8s", "Wing Commander II"],
   ["PLUrbqDDC9Ei0", "Tom Clancy's EndWar"],
+  ["PLdcuPIKUpZJQ", "RMS Titanic", "C64"],
   ["PLZW5k3rtbudo_0dIXa7DsWpwUx53PkV6l", "System Shock", "MS-DOS"],
   ["PLZW5k3rtbudo-FSCHU6A66Y-wzGxtOasR", "Mega Man 3", "NES"],
   ["PLZW5k3rtbudo1IwIn79DXIn1w_CK4EOcH", "Silent Service", "C64"],
@@ -203,6 +204,7 @@ const aliases = {
   "wing-commander-ii": ["Wing Commander II: Vengeance of the Kilrathi"],
   "a-boy-and-his-blob-nes": ["A Boy and His Blob: Trouble on Blobolonia",
     "David Crane's A Boy and His Blob: Trouble on Blobolonia"],
+  "rms-titanic-c64": ["R. M. S. Titanic", "Titanic: The Recovery Mission"],
 };
 
 // Videobeschreibungen und freigegebene Dump-Zuordnungen; IDs und Routen bleiben erhalten.

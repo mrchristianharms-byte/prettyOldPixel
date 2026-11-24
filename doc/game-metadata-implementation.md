@@ -66,6 +66,12 @@ Daten. Beschädigte oder veraltete fertige Caches brechen den Build ab.
   mit der ersten Folge „Intro und Box“ (`X_oKNsvMVqg`) für Windows zugeordnet.
   Der lokale Dump liefert MobyGames-ID 699, Erstjahr 1997, die Genres Action
   und Strategy / tactics sowie Entwickler und Publisher MicroProse.
+- `RMS Titanic` ist über die geprüfte Playlist `PLdcuPIKUpZJQ`
+  mit der ersten Folge „Intro und Unboxing“ (`69m9aSeJAu0`) für C64 zugeordnet.
+  Der lokale Dump liefert MobyGames-ID 26235 (`Titanic: The Recovery Mission`,
+  Alternativtitel `R. M. S. Titanic`), Erstjahr 1986, die Genres Action und
+  Simulation sowie Entwickler Oxford Digital Enterprises Ltd. und Publisher
+  Electric Dreams Software.
 - `David Crane's A Boy and His Blob: Trouble on Blobolonia` ist dem NES-Original
   statt dem späteren gleichnamigen Spiel zugeordnet. Die NES-Veröffentlichungen
   im Dump sind mit 1990 datiert; die Nutzerangabe 1989 überschreibt diese

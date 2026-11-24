@@ -1,7 +1,7 @@
 {
   "version": 1,
   "provider": "mobygames-local-dump",
-  "importedAt": "2026-11-06T21:39:30.258Z",
+  "importedAt": "2026-11-23T12:52:09.731Z",
   "source": {
     "fileName": "gdb.sql",
     "sha256": "5403b49b7e1449e762f418e8d1edb9bcc6713383cf2e135335aacb58ce4c6e62",
@@ -15,8 +15,8 @@
     "mobygames_releases": 510587
   },
   "summary": {
-    "games": 157,
-    "withCandidates": 157,
+    "games": 158,
+    "withCandidates": 158,
     "withoutExactMatch": 0,
     "ambiguous": 39
   },
@@ -1507,6 +1507,58 @@
               "publisher": "Ubisoft Entertainment SA",
               "developer": "Funatics Software GmbH",
               "countries": "United Kingdom",
+              "publabel": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "gameId": "rms-titanic-c64",
+      "title": "RMS Titanic",
+      "platforms": [
+        "C64"
+      ],
+      "status": "needs-identity-review",
+      "candidates": [
+        {
+          "mobyid": 26235,
+          "title": "Titanic: The Recovery Mission",
+          "sourceUrl": "https://www.mobygames.com/game/26235/",
+          "genres": [
+            "Action",
+            "Simulation"
+          ],
+          "alternativeTitles": [
+            {
+              "title": "R. M. S. Titanic",
+              "info": "UK & In-game title"
+            }
+          ],
+          "platformMatch": true,
+          "matchingReleaseIds": [
+            265090,
+            70545
+          ],
+          "releases": [
+            {
+              "mobyid": 26235,
+              "mobyreleaseid": 265090,
+              "year": 1986,
+              "platform": "Commodore 64",
+              "publisher": "Electric Dreams Software",
+              "developer": "Oxford Digital Enterprises Ltd.",
+              "countries": "United Kingdom",
+              "publabel": ""
+            },
+            {
+              "mobyid": 26235,
+              "mobyreleaseid": 70545,
+              "year": 1987,
+              "platform": "Commodore 64",
+              "publisher": "Electric Dreams Software",
+              "developer": "Oxford Digital Enterprises Ltd.",
+              "countries": "United States,  Canada",
               "publabel": ""
             }
           ]
