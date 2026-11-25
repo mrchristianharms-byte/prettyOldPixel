@@ -5,8 +5,8 @@
     "title": "Pretty Old Pixel",
     "url": "https://www.youtube.com/@PrettyOldPixel"
   },
-  "fetchedAt": "2026-11-23T00:19:23.356Z",
-  "lastModified": "2026-11-23T00:19:23.356Z",
+  "fetchedAt": "2026-11-25T03:03:27.593Z",
+  "lastModified": "2026-11-25T03:03:27.593Z",
   "complete": true,
   "playlists": [
     {
@@ -36,7 +36,7 @@
         }
       ],
       "lastModified": "2026-11-14T00:21:10.867Z",
-      "checkedAt": "2026-11-23T00:19:23.356Z"
+      "checkedAt": "2026-11-25T03:03:27.593Z"
     },
     {
       "id": "PLCdHnxdZabN4",
@@ -160,7 +160,7 @@
         }
       ],
       "lastModified": "2026-11-21T00:49:12.884Z",
-      "checkedAt": "2026-11-23T00:19:23.356Z"
+      "checkedAt": "2026-11-25T03:03:27.593Z"
     },
     {
       "id": "PLKAk_zU7LotY",
@@ -195,7 +195,7 @@
         }
       ],
       "lastModified": "2026-11-19T01:14:27.558Z",
-      "checkedAt": "2026-11-23T00:19:23.356Z"
+      "checkedAt": "2026-11-25T03:03:27.593Z"
     },
     {
       "id": "PLKPrSm4Rptws",
@@ -254,7 +254,7 @@
         }
       ],
       "lastModified": "2026-11-11T00:04:11.400Z",
-      "checkedAt": "2026-11-23T00:19:23.356Z"
+      "checkedAt": "2026-11-25T03:03:27.593Z"
     },
     {
       "id": "PLKsmhkv13pEw",
@@ -283,54 +283,60 @@
         }
       ],
       "lastModified": "2026-11-20T01:16:51.996Z",
-      "checkedAt": "2026-11-23T00:19:23.356Z"
+      "checkedAt": "2026-11-25T03:03:27.593Z"
     },
     {
       "id": "PLNceJpv0LbXw",
       "title": "re.play - Labyrinth",
       "description": "",
       "url": "https://www.youtube.com/playlist?list=PLNceJpv0LbXw",
-      "videoCount": 6,
+      "videoCount": 7,
       "videos": [
         {
           "position": 1,
+          "videoId": "vHcgJGRhNt8",
+          "title": "Labyrinth [re.play - #7] Dead End im Labyrinth [German/Deutsch]",
+          "availability": "listed"
+        },
+        {
+          "position": 2,
           "videoId": "j-H4uGAZ5Q0",
           "title": "Labyrinth [re.play - #6] Ludo und Sir Didymus - neue alte Freunde  [German/Deutsch]",
           "availability": "listed"
         },
         {
-          "position": 2,
+          "position": 3,
           "videoId": "SyTedfpuc1I",
           "title": "Labyrinth [re.play - #5] Der Besuch beim weisen Mann - und seinem Vogel [German/Deutsch]",
           "availability": "listed"
         },
         {
-          "position": 3,
+          "position": 4,
           "videoId": "oiIlEZpgywc",
           "title": "Labyrinth [re.play - #4] Neustart mit Sarah [German/Deutsch]",
           "availability": "listed"
         },
         {
-          "position": 4,
+          "position": 5,
           "videoId": "EzKTDHW19oE",
           "title": "Labyrinth [re.play - #3] Der misslungene Start im Labyrinth [German/Deutsch]",
           "availability": "listed"
         },
         {
-          "position": 5,
+          "position": 6,
           "videoId": "F8RpGsRAw3A",
           "title": "Labyrinth [re.play - #2] Tutorial - 1. Schritte [German/Deutsch]",
           "availability": "listed"
         },
         {
-          "position": 6,
+          "position": 7,
           "videoId": "90oZYIlcIRQ",
           "title": "Labyrinth [re.play - #1] Intro und Unboxing [German/Deutsch]",
           "availability": "listed"
         }
       ],
-      "lastModified": "2026-11-06T23:44:39.419Z",
-      "checkedAt": "2026-11-15T23:23:52.185Z"
+      "lastModified": "2026-11-25T03:03:27.593Z",
+      "checkedAt": "2026-11-25T03:03:27.593Z"
     },
     {
       "id": "PLO77B_AOBv8s",
@@ -6646,7 +6652,7 @@
         }
       ],
       "lastModified": "2026-11-15T23:23:52.185Z",
-      "checkedAt": "2026-11-23T00:19:23.356Z"
+      "checkedAt": "2026-11-25T03:03:27.593Z"
     },
     {
       "id": "PLZW5k3rtbudpZXtUiaBQ0DlyyIdFYM3xE",
@@ -12821,7 +12827,7 @@
         }
       ],
       "lastModified": "2026-11-23T00:19:23.356Z",
-      "checkedAt": "2026-11-23T00:19:23.356Z"
+      "checkedAt": "2026-11-25T03:03:27.593Z"
     },
     {
       "id": "PLZW5k3rtbudrGsaQQM4K_wXyL5zzGiVes",
